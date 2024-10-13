@@ -1,6 +1,7 @@
 package com.example.lostandfound;
 
 import android.os.Bundle;
+import android.widget.FrameLayout;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -14,6 +15,8 @@ import com.example.lostandfound.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity {
 
+    private BottomNavigationView bottomNavigationView;
+    private FrameLayout frameLayout;
     private ActivityMainBinding binding;
 
     @Override

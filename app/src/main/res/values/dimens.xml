@@ -1,5 +1,22 @@
 <resources>
     <!-- Default screen margins, per the Android Design guidelines. -->
-    <dimen name="activity_horizontal_margin">16dp</dimen>
-    <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="title_font_size"> 20sp </dimen>
+    <dimen name = "content_font_size"> 15sp </dimen>
+
+    <dimen name = "title_margin"> 20dp </dimen>
+    <dimen name = "content_margin"> 12dp </dimen>
+    <dimen name = "content_margin_half"> 6dp </dimen>
+
+    <dimen name = "status_circle_size"> 10dp </dimen>
+    <dimen name = "image_button_size"> 48dp </dimen>
+    <dimen name = "toggle_button_size"> 30dp </dimen>
+
+    <dimen name = "bottom_view_height">70dp</dimen>
+    <dimen name="toolbar_height">48dp</dimen>
+
+    <dimen name="corner_radius"> 24dp </dimen>
+    <dimen name="corner_radius_small"> 12dp </dimen>
+
+    <dimen name="dropdown_width">180dp</dimen>
+    <dimen name="line_thickness">1dp</dimen>
 </resources>
