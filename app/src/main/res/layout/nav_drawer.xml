@@ -32,6 +32,42 @@
             android:layout_marginStart="@dimen/content_margin"
             app:layout_constraintTop_toTopOf="parent"
             app:tint="@color/white" />
+
+        <ImageView
+            android:id="@+id/nav_drawer_profile_image"
+            android:layout_width="@dimen/profile_image_size"
+            android:layout_height="@dimen/profile_image_size"
+            android:src="@drawable/profile_icon"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="@dimen/title_margin"
+            app:layout_constraintBottom_toTopOf="@id/nav_drawer_name"
+            android:layout_marginBottom="@dimen/content_margin_half" />
+
+        <TextView
+            android:id="@+id/nav_drawer_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Name"
+            android:textStyle="bold"
+            android:textColor="@color/onPrimary"
+            android:textSize="@dimen/title_font_size"
+            app:layout_constraintBottom_toTopOf="@id/nav_drawer_email"
+            android:layout_marginStart="@dimen/title_margin"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginBottom="@dimen/content_margin_half" />
+
+        <TextView
+            android:id="@+id/nav_drawer_email"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="uXXXXXXX@live.warwick.ac.uk"
+            android:textColor="@color/onPrimary"
+            android:textSize="@dimen/content_font_size"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginStart="@dimen/title_margin"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginBottom="@dimen/content_margin" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 
