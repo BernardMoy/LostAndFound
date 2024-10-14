@@ -28,6 +28,17 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
+                <ImageButton
+                    android:id="@+id/drawer_menu_button"
+                    android:layout_width="@dimen/image_button_size"
+                    android:layout_height="@dimen/image_button_size"
+                    android:background="@android:color/transparent"
+                    android:src="@drawable/menu_icon"
+                    app:layout_constraintStart_toStartOf="parent"
+                    android:layout_marginStart="@dimen/content_margin"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent" />
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -85,6 +96,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:itemTextColor="@color/onBackground" />
+        app:itemTextColor="@color/onBackground"
+        tools:visibility="gone"/>
 
 </androidx.drawerlayout.widget.DrawerLayout>
