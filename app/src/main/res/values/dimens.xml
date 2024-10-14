@@ -19,4 +19,6 @@
 
     <dimen name="dropdown_width">180dp</dimen>
     <dimen name="line_thickness">1dp</dimen>
+
+    <dimen name="nav_bar_color_height">200dp</dimen>
 </resources>
