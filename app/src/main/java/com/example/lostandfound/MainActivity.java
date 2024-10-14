@@ -6,6 +6,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -31,6 +32,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private DrawerLayout drawerLayout;
     private ImageButton drawerMenuButton;
+    private ImageButton closeDrawerButton;
     private ActionBarDrawerToggle toggle;
 
     @Override
@@ -59,12 +61,27 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         // set the menu button to open up the drawer
         drawerLayout = findViewById(R.id.drawer_layout);
+
         drawerMenuButton = findViewById(R.id.drawer_menu_button);
         drawerMenuButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (!drawerLayout.isDrawerOpen(GravityCompat.START)){
                     drawerLayout.open();
+                }
+            }
+        });
+
+        // set up button to close drawer
+        NavigationView navigationView = findViewById(R.id.nav_drawer_view);
+        LinearLayout navHeader = (LinearLayout) navigationView.getHeaderView(0);
+
+        closeDrawerButton = navHeader.findViewById(R.id.drawer_close_button);
+        closeDrawerButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (drawerLayout.isDrawerOpen(GravityCompat.START)){
+                    drawerLayout.close();
                 }
             }
         });

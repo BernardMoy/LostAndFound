@@ -23,7 +23,7 @@
             app:layout_constraintBottom_toBottomOf="parent"/>
 
         <ImageButton
-            android:id="@+id/drawer_menu_button"
+            android:id="@+id/drawer_close_button"
             android:layout_width="@dimen/image_button_size"
             android:layout_height="@dimen/image_button_size"
             android:background="@android:color/transparent"
