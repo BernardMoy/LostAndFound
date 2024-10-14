@@ -1,6 +1,7 @@
 package com.example.lostandfound;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
@@ -81,8 +82,29 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             @Override
             public void onClick(View view) {
                 if (drawerLayout.isDrawerOpen(GravityCompat.START)){
-                    drawerLayout.close();
+                    drawerLayout.closeDrawer(GravityCompat.START);
                 }
+            }
+        });
+
+        // set on click listeners for the items in the nav view
+        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                int clickedId = item.getItemId();
+
+                if (clickedId == R.id.nav_drawer_lost_history){
+                    Log.d("Clicked", "Lost");
+
+                } else if (clickedId == R.id.nav_drawer_found_history) {
+                    Log.d("Clicked", "Found");
+
+                }
+
+                // close the drawer after an item is clicked
+                drawerLayout.closeDrawer(GravityCompat.START);
+
+                return true;
             }
         });
 

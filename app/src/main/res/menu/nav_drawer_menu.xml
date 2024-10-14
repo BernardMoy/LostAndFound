@@ -3,25 +3,31 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:showIn = "navigation_view">
 
-    <group
-        android:checkableBehavior="single">
-
-        <item
-            android:id="@+id/nav_drawer_a"
-            android:icon="@drawable/home_icon"
-            android:title="A" />
-
-        <item
-            android:id="@+id/nav_drawer_b"
-            android:icon="@drawable/settings_icon"
-            android:title="B" />
-
-    </group>
-
     <item
-        android:title="Profile">
+        android:title="History">
 
         <menu>
+            <item
+                android:id="@+id/nav_drawer_lost_history"
+                android:icon="@drawable/question_mark_icon"
+                android:title="Items you lost" />
+
+            <item
+                android:id="@+id/nav_drawer_found_history"
+                android:icon="@drawable/check_icon"
+                android:title="Items you found" />
+        </menu>
+    </item>
+
+    <item
+        android:title="Settings">
+
+        <menu>
+            <item
+                android:id="@+id/nav_drawer_settings"
+                android:icon="@drawable/settings_icon"
+                android:title="Settings" />
+
             <item
                 android:id="@+id/nav_drawer_profile"
                 android:icon="@drawable/account_icon"
