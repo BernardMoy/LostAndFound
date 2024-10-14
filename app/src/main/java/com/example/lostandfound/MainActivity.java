@@ -1,5 +1,6 @@
 package com.example.lostandfound;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
@@ -99,6 +100,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 } else if (clickedId == R.id.nav_drawer_found_history) {
                     Log.d("Clicked", "Found");
 
+                } else if (clickedId == R.id.nav_drawer_profile){
+                    // start profile activity
+                    Intent i = new Intent(MainActivity.this, ProfileActivity.class);
+                    startActivity(i);
                 }
 
                 // close the drawer after an item is clicked

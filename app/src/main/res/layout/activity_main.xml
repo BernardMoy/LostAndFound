@@ -34,6 +34,7 @@
                     android:layout_height="@dimen/image_button_size"
                     android:background="@android:color/transparent"
                     android:src="@drawable/menu_icon"
+                    app:tint="@color/white"
                     app:layout_constraintStart_toStartOf="parent"
                     android:layout_marginStart="@dimen/content_margin"
                     app:layout_constraintTop_toTopOf="parent"
