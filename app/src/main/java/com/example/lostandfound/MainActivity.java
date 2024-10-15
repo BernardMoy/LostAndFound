@@ -104,6 +104,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     // start profile activity
                     Intent i = new Intent(MainActivity.this, ProfileActivity.class);
                     startActivity(i);
+
+                } else if (clickedId == R.id.nav_drawer_settings){
+                    // start settings activity
+                    Intent i = new Intent(MainActivity.this, SettingsActivity.class);
+                    startActivity(i);
                 }
 
                 // close the drawer after an item is clicked

@@ -11,6 +11,10 @@
         <item name="colorOnSecondary">@color/onSecondary</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
+
+        <!-- Background color -->
+        <item name="android:windowBackground">@color/backgroundColor</item>
+
         <!-- Customize your theme here. -->
     </style>
 </resources>

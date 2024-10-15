@@ -5,17 +5,16 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ProfileActivity">
+    tools:context=".SettingsActivity">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="?attr/colorPrimary"
+        android:background="@color/backgroundColor"
         app:layout_constraintTop_toTopOf="parent"
         app:contentInsetStart="0dp"
-        app:contentInsetStartWithNavigation= "0dp"
-        app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+        app:contentInsetStartWithNavigation= "0dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -31,13 +30,13 @@
                 android:layout_marginStart="@dimen/content_margin"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:tint="@color/white" />
+                app:tint="@color/onBackground" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/white"
-                android:text="Your profile"
+                android:textColor="@color/onBackground"
+                android:text="Settings"
                 android:textStyle="bold"
                 android:textSize="@dimen/title_font_size"
                 app:layout_constraintStart_toStartOf="parent"
@@ -47,6 +46,6 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-    </androidx.appcompat.widget.Toolbar>
+    </androidx.appcompat.widget.Toolbar>>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
