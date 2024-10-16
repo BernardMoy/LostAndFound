@@ -2,8 +2,9 @@
     <string name="app_name">LostAndFound</string>
     <string name="title_home">Home</string>
     <string name="title_search">Search</string>
+    <string name="title_lost">Lost</string>
+    <string name="title_found">Found</string>
     <string name="title_chat">Chat</string>
-    <string name="title_notifications">Notifications</string>
     <string name="navigation_drawer_open">Open drawer</string>
     <string name="navigation_drawer_close">Close drawer</string>
 </resources>

@@ -1,4 +1,4 @@
-package com.example.lostandfound.ui.notifications;
+package com.example.lostandfound.ui.lost;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -10,21 +10,21 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.example.lostandfound.databinding.FragmentNotificationsBinding;
+import com.example.lostandfound.databinding.FragmentLostBinding;
 
-public class NotificationsFragment extends Fragment {
+public class LostFragment extends Fragment {
 
-    private FragmentNotificationsBinding binding;
+    private FragmentLostBinding binding;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        NotificationsViewModel notificationsViewModel =
-                new ViewModelProvider(this).get(NotificationsViewModel.class);
+        LostViewModel notificationsViewModel =
+                new ViewModelProvider(this).get(LostViewModel.class);
 
-        binding = FragmentNotificationsBinding.inflate(inflater, container, false);
+        binding = FragmentLostBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        final TextView textView = binding.textNotifications;
+        final TextView textView = binding.textLost;
         notificationsViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
         return root;
     }
