@@ -94,13 +94,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 int clickedId = item.getItemId();
 
-                if (clickedId == R.id.nav_drawer_lost_history){
-                    Log.d("Clicked", "Lost");
-
-                } else if (clickedId == R.id.nav_drawer_found_history) {
-                    Log.d("Clicked", "Found");
-
-                } else if (clickedId == R.id.nav_drawer_profile){
+                if (clickedId == R.id.nav_drawer_profile){
                     // start profile activity
                     Intent i = new Intent(MainActivity.this, ProfileActivity.class);
                     startActivity(i);

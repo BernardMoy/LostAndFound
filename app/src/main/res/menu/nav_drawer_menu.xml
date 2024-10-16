@@ -4,18 +4,18 @@
     tools:showIn = "navigation_view">
 
     <item
-        android:title="History">
+        android:title="Items">
 
         <menu>
             <item
-                android:id="@+id/nav_drawer_lost_history"
-                android:icon="@drawable/question_mark_icon"
-                android:title="Items you lost" />
+                android:id="@+id/nav_drawer_recents"
+                android:icon="@drawable/recent_icon"
+                android:title="Recently viewed items" />
 
             <item
-                android:id="@+id/nav_drawer_found_history"
-                android:icon="@drawable/check_icon"
-                android:title="Items you found" />
+                android:id="@+id/nav_drawer_bookmark"
+                android:icon="@drawable/bookmark_icon"
+                android:title="Bookmarked items" />
         </menu>
     </item>
 
@@ -37,6 +37,12 @@
                 android:id="@+id/nav_drawer_logout"
                 android:icon="@drawable/logout_icon"
                 android:title="Logout" />
+
+            <item
+                android:id="@+id/nav_drawer_report"
+                android:icon="@drawable/error_icon"
+                android:title="Report an issue with the app" />
+
         </menu>
     </item>
 
