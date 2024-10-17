@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.Animation;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 
@@ -35,7 +36,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private DrawerLayout drawerLayout;
     private ImageButton drawerMenuButton;
     private ImageButton closeDrawerButton;
-    private ActionBarDrawerToggle toggle;
+
+    private boolean isMenuExpanded;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -115,11 +117,39 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         });
 
+        // set up expand and shrink menu visuals
+        isMenuExpanded = false;
+        binding.floatingActionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (!isMenuExpanded){
+                    expandMenu();
+
+                } else {
+                    collapseMenu();
+
+                }
+            }
+        });
+
+
+
 
     }
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         return false;
+    }
+
+    // methods to set up animation to open and close the floating action button
+    public void expandMenu(){
+        isMenuExpanded = true;
+    }
+
+    public void collapseMenu(){
+        isMenuExpanded = false;
+
+        binding.foundFloatingActionButton.animate().translationY(300);
     }
 }

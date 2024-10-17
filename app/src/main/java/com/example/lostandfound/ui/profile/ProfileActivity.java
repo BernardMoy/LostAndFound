@@ -71,6 +71,8 @@ public class ProfileActivity extends AppCompatActivity {
             public void onClick(View view) {
                 profileViewModel.updateCount(
                         profileViewModel.getCount().getValue() + 1
+
+                        // update --> Value being observed --> textView updated.
                 );
             }
         });
