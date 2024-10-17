@@ -46,5 +46,14 @@ public class ProfileActivity extends AppCompatActivity {
                 getOnBackPressedDispatcher().onBackPressed();
             }
         });
+
+
+        // button to test view model
+        binding.testButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                profileViewModel.printLog();
+            }
+        });
     }
 }
