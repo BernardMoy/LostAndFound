@@ -69,7 +69,68 @@
             app:navGraph="@navigation/mobile_navigation" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/floatingActionButton"
+            android:id="@+id/lost_floating_action_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/content_margin"
+            android:layout_marginBottom="@dimen/content_margin"
+            android:clickable="true"
+            android:focusable="true"
+            android:contentDescription="Add new lost item"
+            app:backgroundTint="@color/secondaryColor"
+            app:layout_constraintBottom_toTopOf="@id/found_floating_action_button"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:srcCompat="@drawable/question_mark_icon"
+            app:tint = "@color/white"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/content_margin"
+            android:layout_marginEnd="@dimen/content_margin"
+            android:text="@string/lost_text"
+            app:layout_constraintEnd_toStartOf="@id/lost_floating_action_button"
+            app:layout_constraintTop_toTopOf="@id/lost_floating_action_button"
+            app:layout_constraintBottom_toBottomOf="@id/lost_floating_action_button"
+            android:textSize="@dimen/content_font_size"
+            android:textColor="@color/secondaryColorVariant"
+            android:textStyle="bold"
+            android:background="@drawable/secondary_color_variant_background"
+            />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/found_floating_action_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/content_margin"
+            android:layout_marginBottom="@dimen/content_margin"
+            android:clickable="true"
+            android:focusable="true"
+            android:contentDescription="Add new found item"
+            app:backgroundTint="@color/secondaryColor"
+            app:layout_constraintBottom_toTopOf="@id/floating_action_button"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:srcCompat="@drawable/check_icon"
+            app:tint = "@color/white"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/content_margin"
+            android:layout_marginEnd="@dimen/content_margin"
+            android:text="@string/found_text"
+            app:layout_constraintEnd_toStartOf="@id/found_floating_action_button"
+            app:layout_constraintTop_toTopOf="@id/found_floating_action_button"
+            app:layout_constraintBottom_toBottomOf="@id/found_floating_action_button"
+            android:textSize="@dimen/content_font_size"
+            android:textColor="@color/secondaryColorVariant"
+            android:textStyle="bold"
+            android:background="@drawable/secondary_color_variant_background"
+            />
+
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/floating_action_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/content_margin"

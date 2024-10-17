@@ -13,11 +13,13 @@ import androidx.appcompat.widget.Toolbar;
 
 import com.example.lostandfound.ui.profile.ProfileActivity;
 import com.example.lostandfound.ui.settings.SettingsActivity;
+import com.example.lostandfound.ui.settings.SettingsViewModel;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -41,6 +43,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
+        // set up main model
+        MainViewModel mainViewModel = new ViewModelProvider(this).get(MainViewModel.class);
 
         // Set toolbar as the topActionbar
         Toolbar toolbar = findViewById(R.id.toolbar);
