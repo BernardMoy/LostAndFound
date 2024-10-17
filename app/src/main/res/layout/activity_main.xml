@@ -70,20 +70,22 @@
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/lost_floating_action_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="@dimen/floating_button_size"
+            android:layout_height="@dimen/floating_button_size"
+            app:fabCustomSize="@dimen/floating_button_size"
             android:layout_marginEnd="@dimen/content_margin"
             android:layout_marginBottom="@dimen/content_margin"
             android:clickable="true"
             android:focusable="true"
             android:contentDescription="Add new lost item"
             app:backgroundTint="@color/secondaryColor"
-            app:layout_constraintBottom_toTopOf="@id/found_floating_action_button"
+            app:layout_constraintBottom_toTopOf="@id/nav_view"
             app:layout_constraintEnd_toEndOf="parent"
             app:srcCompat="@drawable/question_mark_icon"
             app:tint = "@color/white"/>
 
         <TextView
+            android:id="@+id/lost_button_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="@dimen/content_margin"
@@ -100,20 +102,22 @@
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/found_floating_action_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="@dimen/floating_button_size"
+            android:layout_height="@dimen/floating_button_size"
+            app:fabCustomSize="@dimen/floating_button_size"
             android:layout_marginEnd="@dimen/content_margin"
             android:layout_marginBottom="@dimen/content_margin"
             android:clickable="true"
             android:focusable="true"
             android:contentDescription="Add new found item"
             app:backgroundTint="@color/secondaryColor"
-            app:layout_constraintBottom_toTopOf="@id/floating_action_button"
+            app:layout_constraintBottom_toTopOf="@id/nav_view"
             app:layout_constraintEnd_toEndOf="parent"
             app:srcCompat="@drawable/check_icon"
             app:tint = "@color/white"/>
 
         <TextView
+            android:id="@+id/found_button_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="@dimen/content_margin"
@@ -131,8 +135,9 @@
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/floating_action_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="@dimen/floating_button_size"
+            android:layout_height="@dimen/floating_button_size"
+            app:fabCustomSize="@dimen/floating_button_size"
             android:layout_marginEnd="@dimen/content_margin"
             android:layout_marginBottom="@dimen/content_margin"
             android:clickable="true"

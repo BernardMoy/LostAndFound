@@ -119,6 +119,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         // set up expand and shrink menu visuals
         isMenuExpanded = false;
+
+        binding.foundFloatingActionButton.setEnabled(false);
+        binding.lostFloatingActionButton.setEnabled(false);
+
+        binding.foundFloatingActionButton.animate().alpha(0f);
+        binding.lostFloatingActionButton.animate().alpha(0f);
+        binding.foundButtonText.animate().alpha(0f);
+        binding.lostButtonText.animate().alpha(0f);
+
         binding.floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -145,11 +154,51 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     // methods to set up animation to open and close the floating action button
     public void expandMenu(){
         isMenuExpanded = true;
+
+        // get dimensions in the form of dp, they do not have to be converted to px.
+        float firstButtonDistance = -(getResources().getDimension(R.dimen.floating_button_size) + getResources().getDimension(R.dimen.content_margin));
+        float secondButtonDistance = firstButtonDistance * 2;
+
+        // enable the buttons
+        binding.lostFloatingActionButton.setEnabled(true);
+        binding.foundFloatingActionButton.setEnabled(true);
+
+        // translate the buttons upwards
+        binding.foundFloatingActionButton.animate().translationY(firstButtonDistance);
+        binding.foundButtonText.animate().translationY(firstButtonDistance);
+        binding.lostFloatingActionButton.animate().translationY(secondButtonDistance);
+        binding.lostButtonText.animate().translationY(secondButtonDistance);
+
+        // set alpha to be visible
+        binding.foundFloatingActionButton.animate().alpha(1f);
+        binding.foundButtonText.animate().alpha(1f);
+        binding.lostFloatingActionButton.animate().alpha(1f);
+        binding.lostButtonText.animate().alpha(1f);
+
+        // change the drawable on the floating button
+        binding.floatingActionButton.setImageResource(R.drawable.cross_icon);
     }
 
     public void collapseMenu(){
         isMenuExpanded = false;
 
-        binding.foundFloatingActionButton.animate().translationY(300);
+        // disable the buttons
+        binding.lostFloatingActionButton.setEnabled(false);
+        binding.foundFloatingActionButton.setEnabled(false);
+
+        // translate the buttons downwards
+        binding.foundFloatingActionButton.animate().translationY(0);
+        binding.foundButtonText.animate().translationY(0);
+        binding.lostFloatingActionButton.animate().translationY(0);
+        binding.lostButtonText.animate().translationY(0);
+
+        // set alpha to be invisible
+        binding.foundFloatingActionButton.animate().alpha(0f);
+        binding.foundButtonText.animate().alpha(0f);
+        binding.lostFloatingActionButton.animate().alpha(0f);
+        binding.lostButtonText.animate().alpha(0f);
+
+        // change the drawable on the floating button
+        binding.floatingActionButton.setImageResource(R.drawable.add_icon);
     }
 }
