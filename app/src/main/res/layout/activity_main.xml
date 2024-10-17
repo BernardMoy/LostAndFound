@@ -52,6 +52,33 @@
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"/>
 
+                <ImageView
+                    android:id="@+id/toolbar_notifications_icon"
+                    android:layout_width="@dimen/profile_image_size_small"
+                    android:layout_height="@dimen/profile_image_size_small"
+                    android:src="@drawable/notifications_icon"
+                    android:layout_marginEnd="@dimen/content_margin"
+                    app:layout_constraintEnd_toStartOf="@id/toolbar_profile_icon"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:tint="@color/backgroundColor" />
+
+                <com.google.android.material.imageview.ShapeableImageView
+                    android:id="@+id/toolbar_profile_icon"
+                    android:layout_width="@dimen/profile_image_size_small"
+                    android:layout_height="@dimen/profile_image_size_small"
+                    android:src="@drawable/profile_icon"
+                    android:scaleType="centerCrop"
+                    app:strokeWidth="@dimen/stroke_width"
+                    app:strokeColor="@color/primaryColorVariant"
+                    android:layout_marginEnd="@dimen/content_margin"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:shapeAppearanceOverlay="@style/circularImageView"/>
+
+
+
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </androidx.appcompat.widget.Toolbar>
