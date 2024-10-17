@@ -16,7 +16,7 @@
             android:name=".SettingsActivity"
             android:exported="false" />
         <activity
-            android:name=".ProfileActivity"
+            android:name=".ui.profile.ProfileActivity"
             android:exported="false" />
         <activity
             android:name=".MainActivity"
