@@ -33,15 +33,18 @@
             app:layout_constraintTop_toTopOf="parent"
             app:tint="@color/white" />
 
-        <ImageView
-            android:id="@+id/nav_drawer_profile_image"
+        <com.google.android.material.imageview.ShapeableImageView
             android:layout_width="@dimen/profile_image_size"
             android:layout_height="@dimen/profile_image_size"
             android:src="@drawable/profile_icon"
+            android:scaleType="centerCrop"
+            app:strokeWidth="@dimen/stroke_width"
+            app:strokeColor="@color/primaryColorVariant"
             app:layout_constraintStart_toStartOf="parent"
             android:layout_marginStart="@dimen/title_margin"
             app:layout_constraintBottom_toTopOf="@id/nav_drawer_name"
-            android:layout_marginBottom="@dimen/content_margin_half" />
+            android:layout_marginBottom="@dimen/content_margin_half"
+            app:shapeAppearanceOverlay="@style/circularImageView"/>
 
         <TextView
             android:id="@+id/nav_drawer_name"

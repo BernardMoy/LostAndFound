@@ -23,4 +23,6 @@
     <dimen name="nav_bar_color_height">200dp</dimen>
 
     <dimen name="profile_image_size">64dp</dimen>
+
+    <dimen name="stroke_width">1dp</dimen>
 </resources>
