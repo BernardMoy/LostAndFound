@@ -115,6 +115,7 @@
             android:id="@+id/lost_button_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:alpha="0"
             android:padding="@dimen/content_margin"
             android:layout_marginEnd="@dimen/content_margin"
             android:text="@string/lost_text"
@@ -145,6 +146,7 @@
 
         <TextView
             android:id="@+id/found_button_text"
+            android:alpha="0"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="@dimen/content_margin"

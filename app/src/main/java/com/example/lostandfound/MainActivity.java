@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.view.animation.Animation;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -118,15 +119,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         });
 
         // set up expand and shrink menu visuals
+        // the alpha value is set in the XML to be initially 0
         isMenuExpanded = false;
 
         binding.foundFloatingActionButton.setEnabled(false);
         binding.lostFloatingActionButton.setEnabled(false);
-
-        binding.foundFloatingActionButton.animate().alpha(0f);
-        binding.lostFloatingActionButton.animate().alpha(0f);
-        binding.foundButtonText.animate().alpha(0f);
-        binding.lostButtonText.animate().alpha(0f);
 
         binding.floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
