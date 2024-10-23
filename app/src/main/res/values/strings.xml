@@ -16,5 +16,5 @@
     <string name="login_title">Welcome back!</string>
     <string name="login_description">Please log in with your university email to continue.</string>
     <string name="register_title">Create an account</string>
-    <string name="register_description">Only your names will be visible to others.</string>
+    <string name="register_description">Only your name will be visible to others.</string>
 </resources>
