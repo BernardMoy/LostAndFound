@@ -138,7 +138,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         });
 
-
+        // Open profile activity when the profile icon is clicked
+        binding.toolbarProfileIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(MainActivity.this, ProfileActivity.class);
+                startActivity(i);
+            }
+        });
 
 
     }

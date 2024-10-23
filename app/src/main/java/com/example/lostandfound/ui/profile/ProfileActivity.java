@@ -48,33 +48,5 @@ public class ProfileActivity extends AppCompatActivity {
             }
         });
 
-
-
-        /*
-        set up observer for count (Test): When that count get changed,
-        change the textview's value to match the new count
-         */
-        profileViewModel.getCount().observe(this, new Observer<Integer>() {
-            @Override
-            public void onChanged(Integer integer) {
-                // change the value displayed in the test textview
-                binding.count.setText(String.valueOf(integer));
-            }
-        });
-
-        /*
-        set the on click listener for the button.
-        The button would only update the value stored in the view model
-         */
-        binding.testButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                profileViewModel.updateCount(
-                        profileViewModel.getCount().getValue() + 1
-
-                        // update --> Value being observed --> textView updated.
-                );
-            }
-        });
     }
 }

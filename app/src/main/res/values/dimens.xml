@@ -1,5 +1,6 @@
 <resources>
     <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="header_font_size"> 25sp </dimen>
     <dimen name="title_font_size"> 20sp </dimen>
     <dimen name = "content_font_size"> 15sp </dimen>
 
@@ -24,6 +25,8 @@
     <dimen name="nav_bar_color_height">200dp</dimen>
 
     <dimen name="profile_image_size">64dp</dimen>
+
+    <dimen name="profile_image_size_large">96dp</dimen>
 
     <dimen name="stroke_width">1dp</dimen>
 
