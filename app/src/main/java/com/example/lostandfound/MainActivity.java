@@ -13,6 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.widget.Toolbar;
 
+import com.example.lostandfound.ui.login.LoginActivity;
 import com.example.lostandfound.ui.profile.ProfileActivity;
 import com.example.lostandfound.ui.settings.SettingsActivity;
 import com.example.lostandfound.ui.settings.SettingsViewModel;
@@ -138,7 +139,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         });
 
-        // Open profile activity when the profile icon is clicked
+        // Start profile activity when the profile icon is clicked
         binding.toolbarProfileIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -147,6 +148,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         });
 
+        // Start log in activity when the log in button is clicked
+        binding.loginButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(MainActivity.this, LoginActivity.class);
+                startActivity(i);
+            }
+        });
 
     }
 

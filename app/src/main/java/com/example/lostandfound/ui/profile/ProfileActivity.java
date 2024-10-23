@@ -18,7 +18,6 @@ import com.example.lostandfound.databinding.ActivityProfileBinding;
 public class ProfileActivity extends AppCompatActivity {
 
     private ActivityProfileBinding binding;
-    private ImageButton backButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
