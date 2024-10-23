@@ -27,7 +27,7 @@
                 android:layout_width="@dimen/image_button_size"
                 android:layout_height="@dimen/image_button_size"
                 android:background="@android:color/transparent"
-                android:src="@drawable/back_icon"
+                android:src="@drawable/left_arrow_icon"
                 app:layout_constraintStart_toStartOf="parent"
                 android:layout_marginStart="@dimen/content_margin"
                 app:layout_constraintTop_toTopOf="parent"
@@ -120,7 +120,141 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Your personal info"
+        android:text="Your personal information"
+        android:textColor="@color/gray"
+        android:layout_marginStart="@dimen/content_margin"
+        android:layout_marginBottom="@dimen/content_margin"
+        android:layout_marginTop="@dimen/content_margin"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@drawable/item_background_white"
+        android:layout_marginStart="@dimen/title_margin"
+        android:layout_marginEnd="@dimen/title_margin"
+        android:padding="@dimen/content_margin_half">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/item_background_white"
+            android:paddingStart="@dimen/content_margin"
+            android:paddingEnd="@dimen/content_margin">
+
+            <ImageView
+                android:id="@+id/first_name_icon"
+                android:layout_width="@dimen/profile_image_size_small"
+                android:layout_height="@dimen/profile_image_size_small"
+                android:src="@drawable/person_icon"
+                android:contentDescription="Username"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:tint="@color/gray" />
+
+            <TextView
+                android:id="@+id/first_name_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="First name"
+                android:textSize="@dimen/content_font_size"
+                android:textColor="@color/gray"
+                android:layout_marginStart="@dimen/title_margin"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toTopOf="@id/first_name"
+                app:layout_constraintStart_toEndOf="@id/first_name_icon" />
+
+            <TextView
+                android:id="@+id/first_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/title_font_size"
+                android:text="Bernard"
+                android:layout_marginTop="@dimen/content_margin_half"
+                android:textColor="@color/black"
+                android:layout_marginStart="@dimen/title_margin"
+                app:layout_constraintTop_toBottomOf="@id/first_name_title"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@id/first_name_icon" />
+
+            <ImageButton
+                android:id="@+id/edit_first_name_button"
+                android:layout_width="@dimen/image_button_size"
+                android:layout_height="@dimen/image_button_size"
+                android:src="@drawable/edit_icon"
+                android:background="@android:color/transparent"
+                app:tint = "@color/gray"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <include layout="@layout/separator_line" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/item_background_white"
+            android:paddingStart="@dimen/content_margin"
+            android:paddingEnd="@dimen/content_margin">
+
+            <ImageView
+                android:id="@+id/last_name_icon"
+                android:layout_width="@dimen/profile_image_size_small"
+                android:layout_height="@dimen/profile_image_size_small"
+                android:src="@drawable/person_icon"
+                android:contentDescription="Username"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:tint="@color/gray" />
+
+            <TextView
+                android:id="@+id/last_name_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Last name"
+                android:textSize="@dimen/content_font_size"
+                android:textColor="@color/gray"
+                android:layout_marginStart="@dimen/title_margin"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toTopOf="@id/last_name"
+                app:layout_constraintStart_toEndOf="@id/last_name_icon" />
+
+            <TextView
+                android:id="@+id/last_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/title_font_size"
+                android:text="Moy"
+                android:layout_marginTop="@dimen/content_margin_half"
+                android:textColor="@color/black"
+                android:layout_marginStart="@dimen/title_margin"
+                app:layout_constraintTop_toBottomOf="@id/last_name_title"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@id/last_name_icon" />
+
+            <ImageButton
+                android:id="@+id/edit_last_name_button"
+                android:layout_width="@dimen/image_button_size"
+                android:layout_height="@dimen/image_button_size"
+                android:src="@drawable/edit_icon"
+                android:background="@android:color/transparent"
+                app:tint = "@color/gray"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Actions"
         android:textColor="@color/gray"
         android:layout_marginStart="@dimen/content_margin"
         android:layout_marginBottom="@dimen/content_margin"
@@ -129,14 +263,18 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@drawable/item_background_white"
+        android:padding="@dimen/content_margin_half"
+        android:paddingStart="@dimen/content_margin"
+        android:paddingEnd="@dimen/content_margin"
         android:layout_marginStart="@dimen/title_margin"
         android:layout_marginEnd="@dimen/title_margin">
 
         <ImageView
-            android:id="@+id/profile_user_name"
+            android:id="@+id/change_password_icon"
             android:layout_width="@dimen/profile_image_size_small"
             android:layout_height="@dimen/profile_image_size_small"
-            android:src="@drawable/person_icon"
+            android:src="@drawable/refresh_icon"
             android:contentDescription="Username"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -144,37 +282,22 @@
             app:tint="@color/gray" />
 
         <TextView
-            android:id="@+id/profile_first_name_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="First name"
-            android:textSize="@dimen/content_font_size"
-            android:textColor="@color/gray"
-            android:layout_marginStart="@dimen/title_margin"
-            android:layout_marginTop="@dimen/content_margin_half"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toTopOf="@id/profile_first_name"
-            app:layout_constraintStart_toEndOf="@id/profile_user_name" />
-
-        <TextView
-            android:id="@+id/profile_first_name"
+            android:id="@+id/change_password_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="@dimen/title_font_size"
-            android:text="Bernard"
-            android:layout_marginTop="@dimen/content_margin_half"
-            android:layout_marginBottom="@dimen/content_margin_half"
+            android:text="Change password"
             android:textColor="@color/black"
             android:layout_marginStart="@dimen/title_margin"
-            app:layout_constraintTop_toBottomOf="@id/profile_first_name_title"
+            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@id/profile_user_name" />
+            app:layout_constraintStart_toEndOf="@id/change_password_icon" />
 
         <ImageButton
-            android:id="@+id/edit_first_name_button"
+            android:id="@+id/change_password_button"
             android:layout_width="@dimen/image_button_size"
             android:layout_height="@dimen/image_button_size"
-            android:src="@drawable/edit_icon"
+            android:src="@drawable/right_arrow_icon"
             android:background="@android:color/transparent"
             app:tint = "@color/gray"
             app:layout_constraintTop_toTopOf="parent"

@@ -8,7 +8,7 @@
     <color name="secondaryColorVariant">#1B73B8</color>
     <color name="onSecondary">#FFFFFF</color>
 
-    <color name="backgroundColor">#F8F8F8</color>
+    <color name="backgroundColor">#F6F6F6</color>
     <color name="onBackground">#1C7A7A</color>
 
     <color name="error"> #F5425D </color>
