@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.settings.SettingsActivity">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/backgroundColor"
+        app:layout_constraintTop_toTopOf="parent"
+        app:contentInsetStart="0dp"
+        app:contentInsetStartWithNavigation= "0dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageButton
+                android:id="@+id/back_button"
+                android:layout_width="@dimen/image_button_size"
+                android:layout_height="@dimen/image_button_size"
+                android:background="@android:color/transparent"
+                android:src="@drawable/left_arrow_icon"
+                app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginStart="@dimen/content_margin"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:tint="@color/onBackground" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.appcompat.widget.Toolbar>
+
+    <ImageView
+        android:layout_gravity="center_horizontal"
+        android:gravity="center_vertical"
+        android:layout_width="@dimen/profile_image_size_large"
+        android:layout_height="@dimen/profile_image_size_large"
+        android:src="@mipmap/ic_launcher"
+        android:layout_marginTop="@dimen/title_margin"
+        android:layout_marginBottom="@dimen/title_margin"
+        app:layout_constraintTop_toBottomOf="@id/toolbar"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@drawable/item_background_white"
+        android:layout_marginStart="@dimen/title_margin"
+        android:layout_marginEnd="@dimen/title_margin"
+        android:padding="@dimen/content_margin">
+
+        <TextView
+            android:layout_gravity="center_horizontal"
+            android:gravity="center_vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Welcome back"
+            android:textStyle="bold"
+            android:textColor="@color/black"
+            android:textSize="@dimen/header_font_size"
+            android:layout_marginTop="@dimen/content_margin"
+            />
+
+        <TextView
+            android:layout_gravity="center_horizontal"
+            android:gravity="center_vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Please log in with your university email to continue."
+            android:textColor="@color/gray"
+            android:textSize="@dimen/content_font_size"
+            android:layout_marginTop="@dimen/content_margin"
+            android:layout_marginBottom="@dimen/content_margin"
+            />
+
+        <EditText
+            android:id="@+id/login_email"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="@dimen/title_font_size"
+            android:drawableStart="@drawable/email_icon"
+            android:drawableTint="@color/gray"
+            android:background="@drawable/item_background_light_gray"
+            android:textSize="@dimen/content_font_size"
+            android:textColor="@color/black"
+            android:inputType="textEmailAddress"
+            android:padding="@dimen/content_margin"
+            android:autofillHints="emailAddress"
+            android:hint="Email address (@warwick.ac.uk)"
+            android:textColorHint="@color/gray"
+
+            android:drawablePadding="@dimen/content_margin"
+            android:layout_marginStart = "@dimen/content_margin"
+            android:layout_marginEnd="@dimen/content_margin"
+            android:layout_marginTop="@dimen/content_margin"
+            android:layout_marginBottom="@dimen/content_margin_half"/>
+
+        <EditText
+            android:id="@+id/login_password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="@dimen/title_font_size"
+            android:drawableStart="@drawable/lock_icon"
+            android:drawableTint="@color/gray"
+            android:background="@drawable/item_background_light_gray"
+            android:textSize="@dimen/content_font_size"
+            android:textColor="@color/black"
+            android:inputType="textPassword"
+            android:padding="@dimen/content_margin"
+            android:autofillHints="password"
+            android:textColorHint="@color/gray"
+            android:hint="Password"
+
+            android:drawablePadding="@dimen/content_margin"
+            android:layout_marginStart = "@dimen/content_margin"
+            android:layout_marginEnd="@dimen/content_margin"
+            android:layout_marginTop="@dimen/content_margin_half"
+            android:layout_marginBottom="@dimen/content_margin"/>
+
+
+        <TextView
+            android:id="@+id/forgot_password"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center_vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Forgot password?"
+            android:textColor="@color/gray"
+            android:textSize="@dimen/content_font_size"
+            android:layout_marginTop="@dimen/content_margin"
+            android:layout_marginBottom="@dimen/content_margin"
+            />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/login_button"
+            android:layout_gravity="center_horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:minHeight="0dp"
+            android:padding="@dimen/content_margin"
+            android:paddingStart="@dimen/header_margin"
+            android:paddingEnd="@dimen/header_margin"
+            android:text="Login"
+            android:textSize="@dimen/title_font_size"
+            android:textColor="@color/white"
+            android:background="@drawable/rectangle_gradient_button"
+            android:textAllCaps="false"
+            android:layout_marginTop="@dimen/content_margin"
+            android:layout_marginBottom="@dimen/content_margin" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_gravity="center_horizontal"
+        android:gravity="center"
+        android:layout_marginTop="@dimen/title_margin"
+        android:layoutDirection="ltr">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="New user?"
+            android:textColor="@color/gray"
+            android:textSize="@dimen/content_font_size"
+            android:layout_marginEnd="@dimen/content_margin_half"
+            />
+
+        <TextView
+            android:id="@+id/register"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Register here"
+            android:textColor="@color/primaryColorVariant"
+            android:textStyle="bold"
+            android:textSize="@dimen/content_font_size"
+            android:layout_marginStart="@dimen/content_margin_half"
+            />
+
+    </LinearLayout>
+
+
+</LinearLayout>

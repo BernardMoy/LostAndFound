@@ -53,7 +53,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:background="@drawable/rectangle_gradient">
+        android:background="@drawable/rectangle_gradient_top">
 
         <FrameLayout
             android:layout_width="wrap_content"
