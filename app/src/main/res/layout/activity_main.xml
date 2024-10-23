@@ -52,30 +52,60 @@
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"/>
 
-                <ImageView
-                    android:id="@+id/toolbar_notifications_icon"
-                    android:layout_width="@dimen/profile_image_size_small"
-                    android:layout_height="@dimen/profile_image_size_small"
-                    android:src="@drawable/notifications_icon"
-                    android:layout_marginEnd="@dimen/content_margin"
-                    app:layout_constraintEnd_toStartOf="@id/toolbar_profile_icon"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:tint="@color/backgroundColor" />
-
-                <com.google.android.material.imageview.ShapeableImageView
-                    android:id="@+id/toolbar_profile_icon"
-                    android:layout_width="@dimen/profile_image_size_small"
-                    android:layout_height="@dimen/profile_image_size_small"
-                    android:src="@drawable/profile_icon"
-                    android:scaleType="centerCrop"
-                    app:strokeWidth="@dimen/stroke_width"
-                    app:strokeColor="@color/primaryColorVariant"
+                <!-- Notification and profile icon: Displayed when logged in -->
+                <LinearLayout
+                    android:id="@+id/profile_and_notifications_icon"
+                    android:orientation="horizontal"
+                    android:gravity="end"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_marginEnd="@dimen/content_margin"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:shapeAppearanceOverlay="@style/circularImageView"/>
+                    app:layout_constraintBottom_toBottomOf="parent" >
+
+                    <ImageView
+                        android:id="@+id/toolbar_notifications_icon"
+                        android:layout_width="@dimen/profile_image_size_small"
+                        android:layout_height="@dimen/profile_image_size_small"
+                        android:src="@drawable/notifications_icon"
+                        android:layout_marginEnd="@dimen/content_margin"
+                        app:tint="@color/backgroundColor" />
+
+                    <com.google.android.material.imageview.ShapeableImageView
+                        android:id="@+id/toolbar_profile_icon"
+                        android:layout_width="@dimen/profile_image_size_small"
+                        android:layout_height="@dimen/profile_image_size_small"
+                        android:src="@drawable/profile_icon"
+                        android:scaleType="centerCrop"
+                        app:strokeWidth="@dimen/stroke_width"
+                        app:strokeColor="@color/primaryColorVariant"
+                        app:shapeAppearanceOverlay="@style/circularImageView"/>
+
+                </LinearLayout>
+
+                <!-- Login button: Displayed when not logged in -->
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/login_button"
+
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:minHeight="0dp"
+
+                    android:padding="@dimen/content_margin_half"
+                    android:paddingStart="@dimen/content_margin"
+                    android:paddingEnd="@dimen/content_margin"
+
+                    android:text="Login"
+                    android:textSize="@dimen/content_font_size"
+                    android:textColor="@color/primaryColor"
+                    android:background="@drawable/item_background_white"
+                    android:layout_marginEnd="@dimen/content_margin"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:textAllCaps="false"
+                    app:layout_constraintBottom_toBottomOf="parent" />
+
 
 
 
@@ -208,6 +238,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:itemTextColor="@color/onBackground"
-        tools:visibility="visible"/>
+        tools:visibility="gone"/>
 
 </androidx.drawerlayout.widget.DrawerLayout>

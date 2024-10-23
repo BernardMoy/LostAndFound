@@ -260,50 +260,56 @@
         android:layout_marginBottom="@dimen/content_margin"
         android:layout_marginTop="@dimen/content_margin"/>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:orientation="vertical"
         android:background="@drawable/item_background_white"
-        android:padding="@dimen/content_margin_half"
-        android:paddingStart="@dimen/content_margin"
-        android:paddingEnd="@dimen/content_margin"
         android:layout_marginStart="@dimen/title_margin"
-        android:layout_marginEnd="@dimen/title_margin">
+        android:layout_marginEnd="@dimen/title_margin"
+        android:padding="@dimen/content_margin_half">
 
-        <ImageView
-            android:id="@+id/change_password_icon"
-            android:layout_width="@dimen/profile_image_size_small"
-            android:layout_height="@dimen/profile_image_size_small"
-            android:src="@drawable/refresh_icon"
-            android:contentDescription="Username"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:tint="@color/gray" />
-
-        <TextView
-            android:id="@+id/change_password_title"
-            android:layout_width="wrap_content"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="@dimen/title_font_size"
-            android:text="Change password"
-            android:textColor="@color/black"
-            android:layout_marginStart="@dimen/title_margin"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@id/change_password_icon" />
+            android:background="@drawable/item_background_white"
+            android:paddingStart="@dimen/content_margin"
+            android:paddingEnd="@dimen/content_margin">
 
-        <ImageButton
-            android:id="@+id/change_password_button"
-            android:layout_width="@dimen/image_button_size"
-            android:layout_height="@dimen/image_button_size"
-            android:src="@drawable/right_arrow_icon"
-            android:background="@android:color/transparent"
-            app:tint = "@color/gray"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+            <ImageView
+                android:id="@+id/change_password_icon"
+                android:layout_width="@dimen/profile_image_size_small"
+                android:layout_height="@dimen/profile_image_size_small"
+                android:src="@drawable/lock_icon"
+                android:contentDescription="Username"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:tint="@color/gray" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            <TextView
+                android:id="@+id/change_password_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/title_font_size"
+                android:text="Change password"
+                android:textColor="@color/black"
+                android:layout_marginStart="@dimen/title_margin"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@id/change_password_icon" />
 
+            <ImageButton
+                android:id="@+id/change_password_button"
+                android:layout_width="@dimen/image_button_size"
+                android:layout_height="@dimen/image_button_size"
+                android:src="@drawable/right_arrow_icon"
+                android:background="@android:color/transparent"
+                app:tint = "@color/gray"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </LinearLayout>
 </LinearLayout>
