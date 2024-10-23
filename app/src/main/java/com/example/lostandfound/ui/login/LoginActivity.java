@@ -1,5 +1,7 @@
 package com.example.lostandfound.ui.login;
 
+import android.content.Intent;
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
@@ -14,6 +16,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.example.lostandfound.R;
 import com.example.lostandfound.databinding.ActivityLoginBinding;
 import com.example.lostandfound.databinding.ActivitySettingsBinding;
+import com.example.lostandfound.ui.register.RegisterActivity;
 import com.example.lostandfound.ui.register.RegisterViewModel;
 import com.example.lostandfound.ui.settings.SettingsViewModel;
 
@@ -44,6 +47,19 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 getOnBackPressedDispatcher().onBackPressed();
+            }
+        });
+
+        // set underlined text for the register and forgot password textview
+        binding.register.setPaintFlags(binding.register.getPaintFlags() |   Paint.UNDERLINE_TEXT_FLAG);
+        binding.forgotPassword.setPaintFlags(binding.register.getPaintFlags() |   Paint.UNDERLINE_TEXT_FLAG);
+
+        // start register activity when the register text is clicked
+        binding.register.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(LoginActivity.this, RegisterActivity.class);
+                startActivity(i);
             }
         });
     }

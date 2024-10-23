@@ -96,7 +96,7 @@
                     android:paddingStart="@dimen/content_margin"
                     android:paddingEnd="@dimen/content_margin"
 
-                    android:text="Login"
+                    android:text="Log in"
                     android:textSize="@dimen/content_font_size"
                     android:textColor="@color/primaryColor"
                     android:background="@drawable/item_background_white"
