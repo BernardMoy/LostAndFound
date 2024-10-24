@@ -160,7 +160,11 @@
             android:layout_marginTop="@dimen/content_margin_half"
             android:layout_marginBottom="@dimen/content_margin_half"/>
 
-
+        <ProgressBar
+            android:id="@+id/progress_bar"
+            android:visibility="gone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/register_button"
