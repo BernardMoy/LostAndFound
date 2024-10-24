@@ -15,6 +15,7 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.example.lostandfound.Email;
 import com.example.lostandfound.Password;
 import com.example.lostandfound.R;
 import com.example.lostandfound.databinding.ActivityLoginBinding;
@@ -66,17 +67,90 @@ public class RegisterActivity extends AppCompatActivity {
         });
 
         // set up viewmodel observer for first, last name error, and email and password error
+        registerViewModel.getFirstNameError().observe(this, new Observer<String>() {
+            @Override
+            public void onChanged(String s) {
+                if (s.isEmpty()){
+                    // change the background of the firstName field
+                    binding.registerFirstName.setBackgroundResource(R.drawable.item_background_light_gray);
+
+                    // if the firstName error is empty, set view to be gone
+                    binding.firstNameError.setVisibility(View.GONE);
+
+                } else {
+                    // change the background of the firstName field
+                    binding.registerFirstName.setBackgroundResource(R.drawable.item_background_light_gray_error);
+
+                    // display the firstName error
+                    binding.firstNameError.setVisibility(View.VISIBLE);
+                    binding.firstNameError.setText(s);
+
+                }
+            }
+        });
+
+        registerViewModel.getLastNameError().observe(this, new Observer<String>() {
+            @Override
+            public void onChanged(String s) {
+                if (s.isEmpty()){
+                    // change the background of the lastName field
+                    binding.registerLastName.setBackgroundResource(R.drawable.item_background_light_gray);
+
+                    // if the lastName error is empty, set view to be gone
+                    binding.lastNameError.setVisibility(View.GONE);
+
+                } else {
+                    // change the background of the lastName field
+                    binding.registerLastName.setBackgroundResource(R.drawable.item_background_light_gray_error);
+
+                    // display the lastName error
+                    binding.lastNameError.setVisibility(View.VISIBLE);
+                    binding.lastNameError.setText(s);
+
+                }
+            }
+        });
+
+        registerViewModel.getEmailError().observe(this, new Observer<String>() {
+            @Override
+            public void onChanged(String s) {
+                if (s.isEmpty()){
+                    // change the background of the email field
+                    binding.registerEmail.setBackgroundResource(R.drawable.item_background_light_gray);
+
+                    // if the email error is empty, set view to be gone
+                    binding.emailError.setVisibility(View.GONE);
+
+                } else {
+                    // change the background of the email field
+                    binding.registerEmail.setBackgroundResource(R.drawable.item_background_light_gray_error);
+
+                    // display the email error
+                    binding.emailError.setVisibility(View.VISIBLE);
+                    binding.emailError.setText(s);
+
+                }
+            }
+        });
+
         registerViewModel.getPasswordError().observe(this, new Observer<String>() {
             @Override
             public void onChanged(String s) {
                 if (s.isEmpty()){
+                    // change the background of the password field
+                    binding.registerPassword.setBackgroundResource(R.drawable.item_background_light_gray);
+
                     // if the password error is empty, set view to be gone
                     binding.passwordError.setVisibility(View.GONE);
 
                 } else {
+                    // change the background of the password field
+                    binding.registerPassword.setBackgroundResource(R.drawable.item_background_light_gray_error);
+
                     // display the password error
                     binding.passwordError.setVisibility(View.VISIBLE);
                     binding.passwordError.setText(s);
+
                 }
             }
         });
@@ -85,8 +159,6 @@ public class RegisterActivity extends AppCompatActivity {
         binding.registerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // set the progress bar to be visible
-                binding.progressBar.setVisibility(View.VISIBLE);
 
                 // get the first name, last name, email and password that user entered
                 String firstName = binding.registerFirstName.getText().toString();
@@ -94,16 +166,49 @@ public class RegisterActivity extends AppCompatActivity {
                 String email = binding.registerEmail.getText().toString();
                 String password = binding.registerPassword.getText().toString();
 
-                // validate password
-                Password pw = new Password();
+                // reset all error fields
+                registerViewModel.setFirstNameError("");
+                registerViewModel.setLastNameError("");
+                registerViewModel.setEmailError("");
+                registerViewModel.setPasswordError("");
 
-                registerViewModel.setPasswordError("A");
+                // validate first name
+                if (firstName.isEmpty()){
+                    registerViewModel.setFirstNameError(getResources().getString(R.string.first_name_empty_error));
+                    return;
+                }
+
+                // validate last name
+                if (lastName.isEmpty()){
+                    registerViewModel.setLastNameError(getResources().getString(R.string.last_name_empty_error));
+                    return;
+                }
+
+                // validate email
+                Email em = new Email(RegisterActivity.this);
+                String emailError = em.validateEmail(email);
+                if (emailError != null){
+                    registerViewModel.setEmailError(emailError);
+                    return;
+                }
+
+                // validate password
+                Password pw = new Password(RegisterActivity.this);
+                String passwordError = pw.validatePassword(password);
+                if (passwordError != null){
+                    registerViewModel.setPasswordError(passwordError);
+                    return;
+                }
 
                 // hash password
                 String hashedPassword = pw.generateHash(password);
                 if (hashedPassword.isEmpty()){
                     Toast.makeText(RegisterActivity.this, "Error while hashing password", Toast.LENGTH_SHORT).show();
                 }
+
+
+                // set the progress bar to be visible
+                binding.progressBar.setVisibility(View.VISIBLE);
 
                 // Authenticate with firebase using user's email and hashed passwords
                 mAuth.createUserWithEmailAndPassword(email, hashedPassword)
@@ -115,10 +220,11 @@ public class RegisterActivity extends AppCompatActivity {
                                 binding.progressBar.setVisibility(View.GONE);
 
                                 if (task.isSuccessful()) {
+                                    // Account successfully created
                                     Toast.makeText(RegisterActivity.this, "Account successfully created", Toast.LENGTH_SHORT).show();
 
                                 } else {
-                                    // If sign in fails, display a message to the user.
+                                    // Account failed to create
                                     Toast.makeText(RegisterActivity.this, "Authentication failed", Toast.LENGTH_SHORT).show();
                                 }
                             }

@@ -17,4 +17,19 @@
     <string name="login_description">Please log in with your university email to continue.</string>
     <string name="register_title">Create an account</string>
     <string name="register_description">Only your name will be visible to others.</string>
+
+    <!-- Error messages during registeration -->
+    <string name="first_name_empty_error">First name cannot be empty</string>
+    <string name="last_name_empty_error">Last name cannot be empty</string>
+
+    <string name="email_empty_error">Email cannot be empty</string>
+    <string name="email_end_string">\@warwick.ac.uk</string>
+    <string name="email_not_uni_error">Please register with your university email (@warwick.ac.uk)</string>
+
+    <string name="password_empty_error">Password cannot be empty</string>
+    <string name="password_too_short_error">Password must be at least 8 characters long</string>
+    <string name="password_no_uppercase_or_lowercase_error">Password must have at least one uppercase and lowercase character</string>
+    <string name="password_no_number_error">Password must have at least one numerical character</string>
+    <string name="password_no_special_characters_error">Password must have at least one special character</string>
+
 </resources>

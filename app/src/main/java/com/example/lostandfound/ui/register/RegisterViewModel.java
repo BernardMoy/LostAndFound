@@ -27,6 +27,18 @@ public class RegisterViewModel extends ViewModel {
         return passwordError;
     }
 
+    public void setFirstNameError(String error){
+        this.firstNameError.setValue(error);
+    }
+
+    public void setLastNameError(String error){
+        this.lastNameError.setValue(error);
+    }
+
+    public void setEmailError(String error){
+        this.emailError.setValue(error);
+    }
+
     public void setPasswordError(String error){
         this.passwordError.setValue(error);
     }
