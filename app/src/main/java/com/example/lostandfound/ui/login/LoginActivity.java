@@ -62,5 +62,16 @@ public class LoginActivity extends AppCompatActivity {
                 startActivity(i);
             }
         });
+
+        // set function for log in button
+        binding.loginButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // get the input email and password
+                String email = binding.loginEmail.getText().toString();
+                String password = binding.loginPassword.getText().toString();
+
+            }
+        });
     }
 }
