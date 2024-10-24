@@ -12,8 +12,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.example.lostandfound.Password;
 import com.example.lostandfound.R;
 import com.example.lostandfound.databinding.ActivityLoginBinding;
 import com.example.lostandfound.databinding.ActivityRegisterBinding;
@@ -63,6 +65,21 @@ public class RegisterActivity extends AppCompatActivity {
             }
         });
 
+        // set up viewmodel observer for first, last name error, and email and password error
+        registerViewModel.getPasswordError().observe(this, new Observer<String>() {
+            @Override
+            public void onChanged(String s) {
+                if (s.isEmpty()){
+                    // if the password error is empty, set view to be gone
+                    binding.passwordError.setVisibility(View.GONE);
+
+                } else {
+                    // display the password error
+                    binding.passwordError.setVisibility(View.VISIBLE);
+                    binding.passwordError.setText(s);
+                }
+            }
+        });
 
         // button to register user to database
         binding.registerButton.setOnClickListener(new View.OnClickListener() {
@@ -76,17 +93,16 @@ public class RegisterActivity extends AppCompatActivity {
                 String lastName = binding.registerLastName.getText().toString();
                 String email = binding.registerEmail.getText().toString();
                 String password = binding.registerPassword.getText().toString();
-                String hashedPassword = "";
 
-                // hash the password using SHA-256
-                try{
-                    MessageDigest digest = MessageDigest.getInstance("SHA-256");
-                    byte[] hash = digest.digest(password.getBytes(StandardCharsets.UTF_8));
-                    hashedPassword = Base64.getEncoder().encodeToString(hash);
+                // validate password
+                Password pw = new Password();
 
-                } catch (NoSuchAlgorithmException e){
-                    Toast.makeText(RegisterActivity.this, "Error while handling password", Toast.LENGTH_SHORT).show();
-                    return;
+                registerViewModel.setPasswordError("A");
+
+                // hash password
+                String hashedPassword = pw.generateHash(password);
+                if (hashedPassword.isEmpty()){
+                    Toast.makeText(RegisterActivity.this, "Error while hashing password", Toast.LENGTH_SHORT).show();
                 }
 
                 // Authenticate with firebase using user's email and hashed passwords

@@ -47,7 +47,9 @@
         android:layout_marginStart="@dimen/title_margin"
         android:layout_marginTop="@dimen/title_margin"
         android:layout_marginEnd="@dimen/title_margin"
-        android:padding="@dimen/content_margin">
+        android:padding="@dimen/title_margin"
+        android:paddingStart="@dimen/header_margin"
+        android:paddingEnd="@dimen/header_margin">
 
         <TextView
             android:layout_gravity="center_horizontal"
@@ -90,10 +92,18 @@
             android:textColorHint="@color/gray"
 
             android:drawablePadding="@dimen/content_margin"
-            android:layout_marginStart = "@dimen/content_margin"
-            android:layout_marginEnd="@dimen/content_margin"
             android:layout_marginTop="@dimen/content_margin_half"
             android:layout_marginBottom="@dimen/content_margin_half"/>
+
+        <TextView
+            android:id="@+id/first_name_error"
+            android:visibility="gone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textStyle="italic"
+            android:textSize="@dimen/content_font_size"
+            android:text = "First name warning"
+            android:textColor="@color/error" />
 
         <EditText
             android:id="@+id/register_last_name"
@@ -112,10 +122,19 @@
             android:textColorHint="@color/gray"
 
             android:drawablePadding="@dimen/content_margin"
-            android:layout_marginStart = "@dimen/content_margin"
-            android:layout_marginEnd="@dimen/content_margin"
             android:layout_marginTop="@dimen/content_margin_half"
             android:layout_marginBottom="@dimen/content_margin_half"/>
+
+        <TextView
+            android:id="@+id/last_name_error"
+            android:visibility="gone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textStyle="italic"
+            android:textSize="@dimen/content_font_size"
+            android:text = "Last name warning"
+            android:textColor="@color/error" />
+
         <EditText
             android:id="@+id/register_email"
             android:layout_width="match_parent"
@@ -133,10 +152,18 @@
             android:textColorHint="@color/gray"
 
             android:drawablePadding="@dimen/content_margin"
-            android:layout_marginStart = "@dimen/content_margin"
-            android:layout_marginEnd="@dimen/content_margin"
             android:layout_marginTop="@dimen/content_margin_half"
             android:layout_marginBottom="@dimen/content_margin_half"/>
+
+        <TextView
+            android:id="@+id/email_error"
+            android:visibility="gone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textStyle="italic"
+            android:textSize="@dimen/content_font_size"
+            android:text="Email warning"
+            android:textColor="@color/error" />
 
         <EditText
             android:id="@+id/register_password"
@@ -155,13 +182,22 @@
             android:hint="Password"
 
             android:drawablePadding="@dimen/content_margin"
-            android:layout_marginStart = "@dimen/content_margin"
-            android:layout_marginEnd="@dimen/content_margin"
             android:layout_marginTop="@dimen/content_margin_half"
             android:layout_marginBottom="@dimen/content_margin_half"/>
 
+        <TextView
+            android:id="@+id/password_error"
+            android:visibility="gone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textStyle="italic"
+            android:textSize="@dimen/content_font_size"
+            android:text="Password warning"
+            android:textColor="@color/error" />
+
         <ProgressBar
             android:id="@+id/progress_bar"
+            android:layout_gravity="center_horizontal"
             android:visibility="gone"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
