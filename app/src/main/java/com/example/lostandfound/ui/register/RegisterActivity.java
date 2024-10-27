@@ -9,6 +9,7 @@ import android.widget.Toast;
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -37,7 +38,7 @@ import java.util.Base64;
 public class RegisterActivity extends AppCompatActivity {
 
     private ActivityRegisterBinding binding;
-    FirebaseAuth mAuth;
+    private FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,106 +70,17 @@ public class RegisterActivity extends AppCompatActivity {
         });
 
         // set up viewmodel observer for first, last name error, and email and password error
-        registerViewModel.getFirstNameError().observe(this, new Observer<String>() {
+        registerViewModel.getRegisterError().observe(this, new Observer<String>() {
             @Override
             public void onChanged(String s) {
                 if (s.isEmpty()){
-                    // change the background of the firstName field
-                    binding.registerFirstName.setBackgroundResource(R.drawable.item_background_light_gray);
-
-                    // if the firstName error is empty, set view to be gone
-                    binding.firstNameError.setVisibility(View.GONE);
+                    // set the view to be gone
+                    binding.registerError.setVisibility(View.GONE);
 
                 } else {
-                    // change the background of the firstName field
-                    binding.registerFirstName.setBackgroundResource(R.drawable.item_background_light_gray_error);
-
-                    // display the firstName error
-                    binding.firstNameError.setVisibility(View.VISIBLE);
-                    binding.firstNameError.setText(s);
-
-                }
-            }
-        });
-
-        registerViewModel.getLastNameError().observe(this, new Observer<String>() {
-            @Override
-            public void onChanged(String s) {
-                if (s.isEmpty()){
-                    // change the background of the lastName field
-                    binding.registerLastName.setBackgroundResource(R.drawable.item_background_light_gray);
-
-                    // if the lastName error is empty, set view to be gone
-                    binding.lastNameError.setVisibility(View.GONE);
-
-                } else {
-                    // change the background of the lastName field
-                    binding.registerLastName.setBackgroundResource(R.drawable.item_background_light_gray_error);
-
-                    // display the lastName error
-                    binding.lastNameError.setVisibility(View.VISIBLE);
-                    binding.lastNameError.setText(s);
-
-                }
-            }
-        });
-
-        registerViewModel.getEmailError().observe(this, new Observer<String>() {
-            @Override
-            public void onChanged(String s) {
-                if (s.isEmpty()){
-                    // change the background of the email field
-                    binding.registerEmail.setBackgroundResource(R.drawable.item_background_light_gray);
-
-                    // if the email error is empty, set view to be gone
-                    binding.emailError.setVisibility(View.GONE);
-
-                } else {
-                    // change the background of the email field
-                    binding.registerEmail.setBackgroundResource(R.drawable.item_background_light_gray_error);
-
-                    // display the email error
-                    binding.emailError.setVisibility(View.VISIBLE);
-                    binding.emailError.setText(s);
-
-                }
-            }
-        });
-
-        registerViewModel.getPasswordError().observe(this, new Observer<String>() {
-            @Override
-            public void onChanged(String s) {
-                if (s.isEmpty()){
-                    // change the background of the password field
-                    binding.registerPassword.setBackgroundResource(R.drawable.item_background_light_gray);
-
-                    // if the password error is empty, set view to be gone
-                    binding.passwordError.setVisibility(View.GONE);
-
-                } else {
-                    // change the background of the password field
-                    binding.registerPassword.setBackgroundResource(R.drawable.item_background_light_gray_error);
-
-                    // display the password error
-                    binding.passwordError.setVisibility(View.VISIBLE);
-                    binding.passwordError.setText(s);
-
-                }
-            }
-        });
-
-        registerViewModel.getEmailExistsError().observe(this, new Observer<String>() {
-            @Override
-            public void onChanged(String s) {
-                if (s.isEmpty()){
-                    // if the email exists error is empty, set view to be gone
-                    binding.emailExistsError.setVisibility(View.GONE);
-
-                } else {
-                    // display the email exists error
-                    binding.emailExistsError.setVisibility(View.VISIBLE);
-                    binding.emailExistsError.setText(s);
-
+                    // display the error
+                    binding.registerError.setText(s);
+                    binding.registerError.setVisibility(View.VISIBLE);
                 }
             }
         });
@@ -184,22 +96,27 @@ public class RegisterActivity extends AppCompatActivity {
                 String email = binding.registerEmail.getText().toString();
                 String password = binding.registerPassword.getText().toString();
 
-                // reset all error fields
-                registerViewModel.setFirstNameError("");
-                registerViewModel.setLastNameError("");
-                registerViewModel.setEmailError("");
-                registerViewModel.setPasswordError("");
-                registerViewModel.setEmailExistsError("");
+                // reset error field
+                registerViewModel.setRegisterError("");
+
+                // reset all background fields
+                binding.registerFirstName.setBackgroundResource(R.drawable.item_background_light_gray);
+                binding.registerLastName.setBackgroundResource(R.drawable.item_background_light_gray);
+                binding.registerEmail.setBackgroundResource(R.drawable.item_background_light_gray);
+                binding.registerPassword.setBackgroundResource(R.drawable.item_background_light_gray);
+
 
                 // validate first name
                 if (firstName.isEmpty()){
-                    registerViewModel.setFirstNameError(getResources().getString(R.string.first_name_empty_error));
+                    registerViewModel.setRegisterError(getResources().getString(R.string.first_name_empty_error));
+                    binding.registerFirstName.setBackgroundResource(R.drawable.item_background_light_gray_error);
                     return;
                 }
 
                 // validate last name
                 if (lastName.isEmpty()){
-                    registerViewModel.setLastNameError(getResources().getString(R.string.last_name_empty_error));
+                    registerViewModel.setRegisterError(getResources().getString(R.string.last_name_empty_error));
+                    binding.registerLastName.setBackgroundResource(R.drawable.item_background_light_gray_error);
                     return;
                 }
 
@@ -207,7 +124,8 @@ public class RegisterActivity extends AppCompatActivity {
                 Email em = new Email(RegisterActivity.this);
                 String emailError = em.validateEmail(email);
                 if (emailError != null){
-                    registerViewModel.setEmailError(emailError);
+                    registerViewModel.setRegisterError(emailError);
+                    binding.registerEmail.setBackgroundResource(R.drawable.item_background_light_gray_error);
                     return;
                 }
 
@@ -215,7 +133,8 @@ public class RegisterActivity extends AppCompatActivity {
                 Password pw = new Password(RegisterActivity.this);
                 String passwordError = pw.validatePassword(password);
                 if (passwordError != null){
-                    registerViewModel.setPasswordError(passwordError);
+                    registerViewModel.setRegisterError(passwordError);
+                    binding.registerPassword.setBackgroundResource(R.drawable.item_background_light_gray_error);
                     return;
                 }
 
@@ -239,7 +158,9 @@ public class RegisterActivity extends AppCompatActivity {
                                 } else {
                                     // check if this is due to email already exists
                                     if (task.getException() != null && task.getException() instanceof FirebaseAuthUserCollisionException){
-                                        registerViewModel.setEmailExistsError(getResources().getString(R.string.email_exists_error));
+                                        registerViewModel.setRegisterError(getResources().getString(R.string.email_exists_error));
+                                        binding.registerEmail.setBackgroundResource(R.drawable.item_background_light_gray_error);
+                                        binding.registerPassword.setBackgroundResource(R.drawable.item_background_light_gray_error);
 
                                     } else {
                                         // Account failed to create due to other reasons

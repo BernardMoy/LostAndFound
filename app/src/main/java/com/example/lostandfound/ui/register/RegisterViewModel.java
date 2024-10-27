@@ -5,50 +5,14 @@ import androidx.lifecycle.ViewModel;
 
 public class RegisterViewModel extends ViewModel {
 
-    // store the first name, last name, email and password error message
-    private MutableLiveData<String> firstNameError = new MutableLiveData<>();
-    private MutableLiveData<String> lastNameError = new MutableLiveData<>();
-    private MutableLiveData<String> emailError = new MutableLiveData<>();
-    private MutableLiveData<String> passwordError = new MutableLiveData<>();
-    private MutableLiveData<String> emailExistsError = new MutableLiveData<>();
+    // store the textview used to display error
+    private final MutableLiveData<String> registerError = new MutableLiveData<>();
 
-    public MutableLiveData<String> getFirstNameError() {
-        return firstNameError;
+    public MutableLiveData<String> getRegisterError(){
+        return this.registerError;
     }
 
-    public MutableLiveData<String> getLastNameError() {
-        return lastNameError;
-    }
-
-    public MutableLiveData<String> getEmailError() {
-        return emailError;
-    }
-
-    public MutableLiveData<String> getPasswordError() {
-        return passwordError;
-    }
-
-    public MutableLiveData<String> getEmailExistsError(){
-        return emailExistsError;
-    }
-
-    public void setFirstNameError(String error){
-        this.firstNameError.setValue(error);
-    }
-
-    public void setLastNameError(String error){
-        this.lastNameError.setValue(error);
-    }
-
-    public void setEmailError(String error){
-        this.emailError.setValue(error);
-    }
-
-    public void setPasswordError(String error){
-        this.passwordError.setValue(error);
-    }
-
-    public void setEmailExistsError(String error) {
-        this.emailExistsError.setValue(error);
+    public void setRegisterError(String s){
+        this.registerError.setValue(s);
     }
 }

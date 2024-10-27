@@ -140,6 +140,23 @@
 
 
         <TextView
+            android:id="@+id/login_error"
+            android:layout_gravity="start"
+            android:gravity="center_vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/item_background_error"
+            android:text="Login error"
+            android:textColor="@color/error_dark"
+            android:textSize="@dimen/content_font_size"
+
+            android:padding="@dimen/content_margin"
+            android:paddingStart="@dimen/title_margin"
+            android:paddingEnd="@dimen/title_margin"
+            android:layout_margin = "@dimen/content_margin"
+            />
+
+        <TextView
             android:id="@+id/forgot_password"
             android:layout_gravity="center_horizontal"
             android:gravity="center_vertical"
@@ -151,6 +168,13 @@
             android:layout_marginTop="@dimen/content_margin"
             android:layout_marginBottom="@dimen/content_margin"
             />
+
+        <ProgressBar
+            android:id="@+id/progress_bar"
+            android:layout_gravity="center_horizontal"
+            android:visibility="gone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/login_button"

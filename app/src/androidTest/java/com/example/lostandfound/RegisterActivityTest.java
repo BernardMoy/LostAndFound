@@ -49,7 +49,7 @@ public class RegisterActivityTest {
         onView(withId(R.id.register_button)).perform(click());
 
         // verify that the correct error message is displayed
-        onView(withId(R.id.first_name_error)).check(matches(withText(R.string.first_name_empty_error)));
+        onView(withId(R.id.register_error)).check(matches(withText(R.string.first_name_empty_error)));
 
     }
 }
