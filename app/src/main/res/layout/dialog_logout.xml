@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="@dimen/dialog_width"
+    android:layout_height="wrap_content"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    app:cornerRadius = "@dimen/corner_radius"
+    android:padding="@dimen/content_margin"
+    android:background="@color/backgroundColor">
+
+    <ImageView
+        android:layout_width="@dimen/content_image_size"
+        android:layout_height="@dimen/content_image_size"
+        android:src="@drawable/logout_icon"
+        app:tint="@color/primaryColor" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/title_font_size"
+        android:gravity="center_horizontal"
+        android:textColor = "@color/black"
+        android:text="Are you sure you want to log out?"
+        android:paddingStart="@dimen/content_margin"
+        android:paddingEnd="@dimen/content_margin"
+        android:layout_marginBottom="@dimen/content_margin"
+        android:layout_marginTop="@dimen/content_margin"/>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/cancel_dialog_button"
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:minHeight="0dp"
+
+            android:padding="@dimen/content_margin"
+
+            android:text="Cancel"
+            android:textSize="@dimen/content_font_size"
+            android:textColor="@color/secondaryColorVariant"
+            android:background="@drawable/item_background_secondary_outline"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/login_dialog_button"
+            app:layout_constraintTop_toTopOf="parent"
+            android:textAllCaps="false"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/login_dialog_button"
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:minHeight="0dp"
+
+            android:padding="@dimen/content_margin"
+
+            android:text="Log out"
+            android:textSize="@dimen/content_font_size"
+            android:textColor="@color/white"
+            android:background="@drawable/rectangle_gradient_button"
+            android:textAllCaps="false"
+
+            app:layout_constraintStart_toEndOf="@id/cancel_dialog_button"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</LinearLayout>
