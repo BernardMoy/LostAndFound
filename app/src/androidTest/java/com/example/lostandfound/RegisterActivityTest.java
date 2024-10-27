@@ -35,6 +35,7 @@ public class RegisterActivityTest {
 
     @Test
     public void testFirstNameEmptyError(){
+        // modify test input data here
         String firstName = "";
         String lastName = validLastName;
         String email = validEmail;

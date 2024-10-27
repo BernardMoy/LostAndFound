@@ -39,6 +39,7 @@ import androidx.navigation.ui.NavigationUI;
 import com.example.lostandfound.databinding.ActivityMainBinding;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.FirebaseDatabase;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -178,6 +179,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return false;
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        updateUserDisplayedData();
+    }
+
     // methods to set up animation to open and close the floating action button
     public void expandMenu(){
         isMenuExpanded = true;
@@ -264,10 +272,33 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 editor.clear();
                 editor.apply();
 
+                // update displayed user data
+                updateUserDisplayedData();
+
                 Toast.makeText(MainActivity.this, "Logged out successfully", Toast.LENGTH_SHORT).show();
             }
         });
 
         dialog.show();
+    }
+
+    // method to update user's data depending on whether they are logged in
+    public void updateUserDisplayedData(){
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+        if (user != null) {
+            // user is signed in
+            binding.loginButton.setEnabled(false);
+            binding.loginButton.setVisibility(View.GONE);
+            binding.profileAndNotificationsIcons.setEnabled(true);
+            binding.profileAndNotificationsIcons.setVisibility(View.VISIBLE);
+
+        } else {
+            // No user is signed in
+            binding.profileAndNotificationsIcons.setEnabled(false);
+            binding.profileAndNotificationsIcons.setVisibility(View.GONE);
+            binding.loginButton.setEnabled(true);
+            binding.loginButton.setVisibility(View.VISIBLE);
+        }
     }
 }
