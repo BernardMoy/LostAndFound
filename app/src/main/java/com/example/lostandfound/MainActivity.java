@@ -2,6 +2,7 @@ package com.example.lostandfound;
 
 import android.app.Dialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -255,6 +256,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 // log out user here
                 FirebaseAuth mAuth = FirebaseAuth.getInstance();
                 mAuth.signOut();
+
+                // reset sharedpreferences
+                SharedPreferences sharedPreferences = getSharedPreferences("Users", MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                // clear user data
+                editor.clear();
+                editor.apply();
 
                 Toast.makeText(MainActivity.this, "Logged out successfully", Toast.LENGTH_SHORT).show();
             }
