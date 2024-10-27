@@ -106,27 +106,37 @@
             android:layout_marginTop="@dimen/content_margin_half"
             android:layout_marginBottom="@dimen/content_margin_half"/>
 
-        <EditText
-            android:id="@+id/login_password"
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:minHeight="@dimen/title_font_size"
-            android:drawableStart="@drawable/lock_icon"
-            android:drawableTint="@color/gray"
-            android:background="@drawable/item_background_light_gray"
-            android:textSize="@dimen/content_font_size"
-            android:textColor="@color/black"
-            android:inputType="textPassword"
-            android:padding="@dimen/content_margin"
-            android:autofillHints="password"
-            android:textColorHint="@color/gray"
-            android:hint="Password"
-
-            android:drawablePadding="@dimen/content_margin"
+            app:passwordToggleEnabled="true"
+            app:boxBackgroundMode = "none"
             android:layout_marginStart = "@dimen/content_margin"
             android:layout_marginEnd="@dimen/content_margin"
             android:layout_marginTop="@dimen/content_margin_half"
-            android:layout_marginBottom="@dimen/content_margin_half"/>
+            android:layout_marginBottom="@dimen/content_margin_half"
+            app:hintEnabled="false"
+            >
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/login_password"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:minHeight="@dimen/title_font_size"
+                android:drawableStart="@drawable/lock_icon"
+                android:drawableTint="@color/gray"
+                android:background="@drawable/item_background_light_gray"
+                android:textSize="@dimen/content_font_size"
+                android:textColor="@color/black"
+                android:padding="@dimen/content_margin"
+                android:textColorHint="@color/gray"
+                android:hint="Password"
+                android:inputType="textPassword"
+                android:drawablePadding="@dimen/content_margin"
+
+                />
+
+        </com.google.android.material.textfield.TextInputLayout>
 
 
         <TextView
