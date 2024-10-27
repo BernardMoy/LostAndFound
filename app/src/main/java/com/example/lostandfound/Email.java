@@ -15,7 +15,7 @@ public class Email {
         if (email.isEmpty()){
             return ctx.getString(R.string.email_empty_error);
 
-        } else if (!email.endsWith(ctx.getString(R.string.email_end_string))){
+        } else if (!email.contains("@") || !email.endsWith(ctx.getString(R.string.email_end_string))){
             return ctx.getString(R.string.email_not_uni_error);
         }
 
