@@ -1,6 +1,7 @@
 package com.example.lostandfound.ui.login;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.util.Log;
@@ -111,6 +112,9 @@ public class LoginActivity extends AppCompatActivity {
                 binding.loginEmail.setBackgroundResource(R.drawable.item_background_light_gray);
                 binding.loginPassword.setBackgroundResource(R.drawable.item_background_light_gray);
 
+                // reset error field
+                loginViewModel.setLoginError("");
+
                 // check if the user is already logged in
                 FirebaseUser user = mAuth.getCurrentUser();
                 if (user != null){
@@ -153,11 +157,16 @@ public class LoginActivity extends AppCompatActivity {
                                                 String firstName = documentSnapshot.getString("firstName");
                                                 String lastName = documentSnapshot.getString("lastName");
 
-                                                Log.d("FIRSTNAME", firstName);
+                                                // Save the extra user credentials (First, last name, avatar) in sharedpreferences
+                                                SharedPreferences sharedPreferences = getSharedPreferences("Users", MODE_PRIVATE);
+                                                SharedPreferences.Editor editor = sharedPreferences.edit();
+                                                editor.putString("firstName", firstName);
+                                                editor.putString("lastName", lastName);
+                                                editor.apply();
 
                                                 // Display log in successful message
                                                 Toast.makeText(LoginActivity.this, "Login successful", Toast.LENGTH_SHORT).show();
-                                                
+
                                                 // exit activity
                                                 getOnBackPressedDispatcher().onBackPressed();
 
