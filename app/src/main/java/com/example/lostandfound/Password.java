@@ -20,6 +20,7 @@ public class Password {
     }
 
     // method to generate password hash
+    /*
     public String generateHash(String password){
         String hashedPassword = "";
 
@@ -39,6 +40,7 @@ public class Password {
     public boolean validateHash(String password, String hashedPassword){
         return true;
     }
+     */
 
     // method to validate password format and return error message, or null if successful
     public String validatePassword(String password){

@@ -219,17 +219,12 @@ public class RegisterActivity extends AppCompatActivity {
                     return;
                 }
 
-                // hash password
-                String hashedPassword = pw.generateHash(password);
-                if (hashedPassword.isEmpty()){
-                    Toast.makeText(RegisterActivity.this, "Error while hashing password", Toast.LENGTH_SHORT).show();
-                }
 
                 // set the progress bar to be visible
                 binding.progressBar.setVisibility(View.VISIBLE);
 
                 // Authenticate with firebase using user's email and hashed passwords
-                mAuth.createUserWithEmailAndPassword(email, hashedPassword)
+                mAuth.createUserWithEmailAndPassword(email, password)
                         .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
