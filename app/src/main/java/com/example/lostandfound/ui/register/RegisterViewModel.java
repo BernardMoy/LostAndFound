@@ -10,6 +10,7 @@ public class RegisterViewModel extends ViewModel {
     private MutableLiveData<String> lastNameError = new MutableLiveData<>();
     private MutableLiveData<String> emailError = new MutableLiveData<>();
     private MutableLiveData<String> passwordError = new MutableLiveData<>();
+    private MutableLiveData<String> emailExistsError = new MutableLiveData<>();
 
     public MutableLiveData<String> getFirstNameError() {
         return firstNameError;
@@ -27,6 +28,10 @@ public class RegisterViewModel extends ViewModel {
         return passwordError;
     }
 
+    public MutableLiveData<String> getEmailExistsError(){
+        return emailExistsError;
+    }
+
     public void setFirstNameError(String error){
         this.firstNameError.setValue(error);
     }
@@ -41,5 +46,9 @@ public class RegisterViewModel extends ViewModel {
 
     public void setPasswordError(String error){
         this.passwordError.setValue(error);
+    }
+
+    public void setEmailExistsError(String error) {
+        this.emailExistsError.setValue(error);
     }
 }

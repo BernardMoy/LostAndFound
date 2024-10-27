@@ -25,7 +25,9 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.SignInMethodQueryResult;
 
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
@@ -155,6 +157,22 @@ public class RegisterActivity extends AppCompatActivity {
             }
         });
 
+        registerViewModel.getEmailExistsError().observe(this, new Observer<String>() {
+            @Override
+            public void onChanged(String s) {
+                if (s.isEmpty()){
+                    // if the email exists error is empty, set view to be gone
+                    binding.emailExistsError.setVisibility(View.GONE);
+
+                } else {
+                    // display the email exists error
+                    binding.emailExistsError.setVisibility(View.VISIBLE);
+                    binding.emailExistsError.setText(s);
+
+                }
+            }
+        });
+
         // button to register user to database
         binding.registerButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -171,6 +189,7 @@ public class RegisterActivity extends AppCompatActivity {
                 registerViewModel.setLastNameError("");
                 registerViewModel.setEmailError("");
                 registerViewModel.setPasswordError("");
+                registerViewModel.setEmailExistsError("");
 
                 // validate first name
                 if (firstName.isEmpty()){
@@ -206,7 +225,6 @@ public class RegisterActivity extends AppCompatActivity {
                     Toast.makeText(RegisterActivity.this, "Error while hashing password", Toast.LENGTH_SHORT).show();
                 }
 
-
                 // set the progress bar to be visible
                 binding.progressBar.setVisibility(View.VISIBLE);
 
@@ -224,8 +242,14 @@ public class RegisterActivity extends AppCompatActivity {
                                     Toast.makeText(RegisterActivity.this, "Account successfully created", Toast.LENGTH_SHORT).show();
 
                                 } else {
-                                    // Account failed to create
-                                    Toast.makeText(RegisterActivity.this, "Authentication failed", Toast.LENGTH_SHORT).show();
+                                    // check if this is due to email already exists
+                                    if (task.getException() != null && task.getException() instanceof FirebaseAuthUserCollisionException){
+                                        registerViewModel.setEmailExistsError(getResources().getString(R.string.email_exists_error));
+
+                                    } else {
+                                        // Account failed to create due to other reasons
+                                        Toast.makeText(RegisterActivity.this, "Authentication failed", Toast.LENGTH_SHORT).show();
+                                    }
                                 }
                             }
                         });
