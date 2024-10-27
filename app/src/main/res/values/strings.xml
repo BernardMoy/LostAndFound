@@ -31,5 +31,6 @@
     <string name="password_no_uppercase_or_lowercase_error">Password must have at least one uppercase and lowercase character</string>
     <string name="password_no_number_error">Password must have at least one numerical character</string>
     <string name="password_no_special_characters_error">Password must have at least one special character</string>
+    <string name="email_exists_error">An account with this email already exists, please login.</string>
 
 </resources>

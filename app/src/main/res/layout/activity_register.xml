@@ -195,6 +195,17 @@
             android:text="Password warning"
             android:textColor="@color/error" />
 
+        <TextView
+            android:id="@+id/email_exists_error"
+            android:visibility="gone"
+            android:layout_gravity="center_horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textStyle="italic"
+            android:textSize="@dimen/content_font_size"
+            android:text="Email exists warning"
+            android:textColor="@color/secondaryColorVariant" />
+
         <ProgressBar
             android:id="@+id/progress_bar"
             android:layout_gravity="center_horizontal"
