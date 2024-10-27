@@ -149,6 +149,7 @@
             android:text="Login error"
             android:textColor="@color/error_dark"
             android:textSize="@dimen/content_font_size"
+            android:visibility="gone"
 
             android:padding="@dimen/content_margin"
             android:paddingStart="@dimen/title_margin"

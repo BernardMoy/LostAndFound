@@ -3,14 +3,17 @@ package com.example.lostandfound.ui.login;
 import android.content.Intent;
 import android.graphics.Paint;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.lostandfound.R;
@@ -19,7 +22,11 @@ import com.example.lostandfound.databinding.ActivitySettingsBinding;
 import com.example.lostandfound.ui.register.RegisterActivity;
 import com.example.lostandfound.ui.register.RegisterViewModel;
 import com.example.lostandfound.ui.settings.SettingsViewModel;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -69,6 +76,22 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
+        // set up viewmodel observer for the login errors
+        loginViewModel.getLoginError().observe(this, new Observer<String>() {
+            @Override
+            public void onChanged(String s) {
+                if (s.isEmpty()){
+                    // set the view to be gone
+                    binding.loginError.setVisibility(View.GONE);
+
+                } else {
+                    // display the error
+                    binding.loginError.setText(s);
+                    binding.loginError.setVisibility(View.VISIBLE);
+                }
+            }
+        });
+
         // set function for log in button
         binding.loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -77,8 +100,52 @@ public class LoginActivity extends AppCompatActivity {
                 String email = binding.loginEmail.getText().toString();
                 String password = binding.loginPassword.getText().toString();
 
+                // reset all boxes backgrounds
+                binding.loginEmail.setBackgroundResource(R.drawable.item_background_light_gray);
+                binding.loginPassword.setBackgroundResource(R.drawable.item_background_light_gray);
+
+                // check if the user is already logged in
+                FirebaseUser user = mAuth.getCurrentUser();
+                if (user != null){
+                    loginViewModel.setLoginError(getResources().getString(R.string.invalid_login_error));
+                    return;
+                }
+
+                // check if email or password empty
+                if (email.isEmpty()) {
+                    loginViewModel.setLoginError(getResources().getString(R.string.email_empty_error));
+                    binding.loginEmail.setBackgroundResource(R.drawable.item_background_light_gray_error);
+                    return;
+                }
+
+                if (password.isEmpty()){
+                    loginViewModel.setLoginError(getResources().getString(R.string.password_empty_error));
+                    binding.loginPassword.setBackgroundResource(R.drawable.item_background_light_gray_error);
+                    return;
+                }
+
                 // set the progress bar to be visible
                 binding.progressBar.setVisibility(View.VISIBLE);
+
+                // login with user
+                mAuth.signInWithEmailAndPassword(email, password)
+                        .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                            @Override
+                            public void onComplete(@NonNull Task<AuthResult> task) {
+                                binding.progressBar.setVisibility(View.GONE);
+                                
+                                if (task.isSuccessful()) {
+                                    // Sign in success, update UI with the signed-in user's information
+                                    FirebaseUser user = mAuth.getCurrentUser();
+
+                                } else {
+                                    // If sign in fails, display a message to the user.
+                                    loginViewModel.setLoginError(getResources().getString(R.string.email_or_password_incorrect_error));
+                                    binding.loginEmail.setBackgroundResource(R.drawable.item_background_light_gray_error);
+                                    binding.loginPassword.setBackgroundResource(R.drawable.item_background_light_gray_error);
+                                }
+                            }
+                        });
 
 
             }
