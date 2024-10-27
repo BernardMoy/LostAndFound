@@ -95,16 +95,6 @@
             android:layout_marginTop="@dimen/content_margin_half"
             android:layout_marginBottom="@dimen/content_margin_half"/>
 
-        <TextView
-            android:id="@+id/first_name_error"
-            android:visibility="gone"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textStyle="italic"
-            android:textSize="@dimen/content_font_size"
-            android:text = "First name warning"
-            android:textColor="@color/error" />
-
         <EditText
             android:id="@+id/register_last_name"
             android:layout_width="match_parent"
@@ -125,16 +115,6 @@
             android:layout_marginTop="@dimen/content_margin_half"
             android:layout_marginBottom="@dimen/content_margin_half"/>
 
-        <TextView
-            android:id="@+id/last_name_error"
-            android:visibility="gone"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textStyle="italic"
-            android:textSize="@dimen/content_font_size"
-            android:text = "Last name warning"
-            android:textColor="@color/error" />
-
         <EditText
             android:id="@+id/register_email"
             android:layout_width="match_parent"
@@ -154,16 +134,6 @@
             android:drawablePadding="@dimen/content_margin"
             android:layout_marginTop="@dimen/content_margin_half"
             android:layout_marginBottom="@dimen/content_margin_half"/>
-
-        <TextView
-            android:id="@+id/email_error"
-            android:visibility="gone"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textStyle="italic"
-            android:textSize="@dimen/content_font_size"
-            android:text="Email warning"
-            android:textColor="@color/error" />
         
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
@@ -195,27 +165,24 @@
 
         </com.google.android.material.textfield.TextInputLayout>
 
-
         <TextView
-            android:id="@+id/password_error"
+            android:id="@+id/register_error"
             android:visibility="gone"
-            android:layout_width="wrap_content"
+            android:layout_gravity="start"
+            android:gravity="center_vertical"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textStyle="italic"
+            android:background="@drawable/item_background_error"
+            android:text="Register error"
+            android:textColor="@color/error_dark"
             android:textSize="@dimen/content_font_size"
-            android:text="Password warning"
-            android:textColor="@color/error" />
 
-        <TextView
-            android:id="@+id/email_exists_error"
-            android:visibility="gone"
-            android:layout_gravity="center_horizontal"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textStyle="italic"
-            android:textSize="@dimen/content_font_size"
-            android:text="Email exists warning"
-            android:textColor="@color/secondaryColorVariant" />
+            android:padding="@dimen/content_margin"
+            android:paddingStart="@dimen/title_margin"
+            android:paddingEnd="@dimen/title_margin"
+            android:layout_marginTop="@dimen/content_margin_half"
+            android:layout_marginBottom="@dimen/content_margin_half"
+            />
 
         <ProgressBar
             android:id="@+id/progress_bar"

@@ -12,6 +12,8 @@
     <color name="onBackground">#1C7A7A</color>
 
     <color name="error"> #F5425D </color>
+    <color name="error_dark">#7C2633</color>
+    <color name="error_light">#EDB4BD</color>
 
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>

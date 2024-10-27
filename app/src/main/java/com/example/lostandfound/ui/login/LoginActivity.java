@@ -19,10 +19,13 @@ import com.example.lostandfound.databinding.ActivitySettingsBinding;
 import com.example.lostandfound.ui.register.RegisterActivity;
 import com.example.lostandfound.ui.register.RegisterViewModel;
 import com.example.lostandfound.ui.settings.SettingsViewModel;
+import com.google.firebase.auth.FirebaseAuth;
 
 public class LoginActivity extends AppCompatActivity {
 
     private ActivityLoginBinding binding;
+
+    private FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +38,9 @@ public class LoginActivity extends AppCompatActivity {
         binding = ActivityLoginBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
         setContentView(view);
+
+        // get instance for firebase auth
+        mAuth = FirebaseAuth.getInstance();
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -70,6 +76,10 @@ public class LoginActivity extends AppCompatActivity {
                 // get the input email and password
                 String email = binding.loginEmail.getText().toString();
                 String password = binding.loginPassword.getText().toString();
+
+                // set the progress bar to be visible
+                binding.progressBar.setVisibility(View.VISIBLE);
+
 
             }
         });
