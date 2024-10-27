@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
@@ -23,16 +24,21 @@ import com.example.lostandfound.ui.register.RegisterActivity;
 import com.example.lostandfound.ui.register.RegisterViewModel;
 import com.example.lostandfound.ui.settings.SettingsViewModel;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 public class LoginActivity extends AppCompatActivity {
 
     private ActivityLoginBinding binding;
 
     private FirebaseAuth mAuth;
+    private FirebaseFirestore db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +54,7 @@ public class LoginActivity extends AppCompatActivity {
 
         // get instance for firebase auth
         mAuth = FirebaseAuth.getInstance();
+        db = FirebaseFirestore.getInstance();
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -135,11 +142,32 @@ public class LoginActivity extends AppCompatActivity {
                                 binding.progressBar.setVisibility(View.GONE);
 
                                 if (task.isSuccessful()) {
-                                    // Sign in success, update UI with the signed-in user's information
+                                    // Sign in success
                                     FirebaseUser user = mAuth.getCurrentUser();
 
-                                    // exit activity
-                                    getOnBackPressedDispatcher().onBackPressed();
+                                    // get user's other info from the db
+                                    db.collection("users").document(email).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                        @Override
+                                        public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                            if (documentSnapshot.exists()){
+                                                String firstName = documentSnapshot.getString("firstName");
+                                                String lastName = documentSnapshot.getString("lastName");
+
+                                                Log.d("FIRSTNAME", firstName);
+
+                                                // exit activity
+                                                getOnBackPressedDispatcher().onBackPressed();
+
+                                            } else {
+                                                Toast.makeText(LoginActivity.this, "Error fetching user information", Toast.LENGTH_SHORT).show();
+                                            }
+                                        }
+                                    }).addOnFailureListener(new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception e) {
+                                            Toast.makeText(LoginActivity.this, "Error fetching user information", Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
 
                                 } else {
                                     // If sign in fails, display a message to the user.

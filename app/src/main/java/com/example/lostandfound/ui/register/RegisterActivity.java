@@ -166,21 +166,18 @@ public class RegisterActivity extends AppCompatActivity {
                                     // add the data to database where email is the id
                                     User user = new User(firstName, lastName, email);
 
-                                    db.collection("user").document(email).set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    db.collection("users").document(email).set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
                                         @Override
                                         public void onSuccess(Void unused) {
-
+                                            // Account successfully created (Added to auth db and user firestore)
+                                            Toast.makeText(RegisterActivity.this, "Account successfully created", Toast.LENGTH_SHORT).show();
                                         }
                                     }).addOnFailureListener(new OnFailureListener() {
                                         @Override
                                         public void onFailure(@NonNull Exception e) {
                                             Toast.makeText(RegisterActivity.this, "Account creation failed", Toast.LENGTH_SHORT).show();
-                                            return;
                                         }
                                     });
-
-                                    // Account successfully created
-                                    Toast.makeText(RegisterActivity.this, "Account successfully created", Toast.LENGTH_SHORT).show();
 
                                 } else {
                                     // check if this is due to email already exists
