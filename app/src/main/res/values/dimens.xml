@@ -32,4 +32,7 @@
     <dimen name="stroke_width">1dp</dimen>
 
     <dimen name="floating_button_size">56dp</dimen>
+
+    <dimen name="content_image_size"> 50dp </dimen>
+    <dimen name="dialog_width"> 250dp </dimen>
 </resources>
