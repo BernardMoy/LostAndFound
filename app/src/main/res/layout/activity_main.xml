@@ -54,7 +54,7 @@
 
                 <!-- Notification and profile icon: Displayed when logged in -->
                 <LinearLayout
-                    android:id="@+id/profile_and_notifications_icon"
+                    android:id="@+id/profile_and_notifications_icons"
                     android:orientation="horizontal"
                     android:gravity="end"
                     android:layout_width="wrap_content"

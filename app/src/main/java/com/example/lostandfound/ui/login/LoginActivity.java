@@ -162,6 +162,7 @@ public class LoginActivity extends AppCompatActivity {
                                                 SharedPreferences.Editor editor = sharedPreferences.edit();
                                                 editor.putString("firstName", firstName);
                                                 editor.putString("lastName", lastName);
+                                                editor.putString("email", email);
                                                 editor.apply();
 
                                                 // Display log in successful message
