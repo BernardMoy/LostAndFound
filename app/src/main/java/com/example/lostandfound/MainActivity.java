@@ -30,6 +30,7 @@ import androidx.navigation.ui.NavigationUI;
 
 import com.example.lostandfound.databinding.ActivityMainBinding;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
