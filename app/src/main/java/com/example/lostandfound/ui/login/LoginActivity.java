@@ -133,10 +133,13 @@ public class LoginActivity extends AppCompatActivity {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 binding.progressBar.setVisibility(View.GONE);
-                                
+
                                 if (task.isSuccessful()) {
                                     // Sign in success, update UI with the signed-in user's information
                                     FirebaseUser user = mAuth.getCurrentUser();
+
+                                    // exit activity
+                                    getOnBackPressedDispatcher().onBackPressed();
 
                                 } else {
                                     // If sign in fails, display a message to the user.

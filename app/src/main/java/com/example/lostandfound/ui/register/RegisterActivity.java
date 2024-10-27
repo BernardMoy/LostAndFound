@@ -21,14 +21,20 @@ import com.example.lostandfound.Password;
 import com.example.lostandfound.R;
 import com.example.lostandfound.databinding.ActivityLoginBinding;
 import com.example.lostandfound.databinding.ActivityRegisterBinding;
+import com.example.lostandfound.ui.User;
 import com.example.lostandfound.ui.settings.SettingsViewModel;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.SignInMethodQueryResult;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
@@ -39,6 +45,8 @@ public class RegisterActivity extends AppCompatActivity {
 
     private ActivityRegisterBinding binding;
     private FirebaseAuth mAuth;
+
+    private FirebaseFirestore db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +62,9 @@ public class RegisterActivity extends AppCompatActivity {
 
         // get instance for firebase auth
         mAuth = FirebaseAuth.getInstance();
+
+        // init database
+        db = FirebaseFirestore.getInstance();
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -152,6 +163,22 @@ public class RegisterActivity extends AppCompatActivity {
                                 binding.progressBar.setVisibility(View.GONE);
 
                                 if (task.isSuccessful()) {
+                                    // add the data to database where email is the id
+                                    User user = new User(firstName, lastName, email);
+
+                                    db.collection("user").document(email).set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        @Override
+                                        public void onSuccess(Void unused) {
+
+                                        }
+                                    }).addOnFailureListener(new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception e) {
+                                            Toast.makeText(RegisterActivity.this, "Account creation failed", Toast.LENGTH_SHORT).show();
+                                            return;
+                                        }
+                                    });
+
                                     // Account successfully created
                                     Toast.makeText(RegisterActivity.this, "Account successfully created", Toast.LENGTH_SHORT).show();
 
@@ -164,7 +191,7 @@ public class RegisterActivity extends AppCompatActivity {
 
                                     } else {
                                         // Account failed to create due to other reasons
-                                        Toast.makeText(RegisterActivity.this, "Authentication failed", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(RegisterActivity.this, "Account creation failed", Toast.LENGTH_SHORT).show();
                                     }
                                 }
                             }
