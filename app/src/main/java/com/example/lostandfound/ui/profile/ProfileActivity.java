@@ -48,4 +48,15 @@ public class ProfileActivity extends AppCompatActivity {
         });
 
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        updateUserDisplayedData();
+    }
+
+    public void updateUserDisplayedData(){
+
+    }
 }

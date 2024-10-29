@@ -13,6 +13,7 @@ import android.view.animation.Animation;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -51,6 +52,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private ImageButton closeDrawerButton;
 
     private boolean isMenuExpanded;
+
+    private NavigationView navigationView;
+    private LinearLayout navHeader;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,8 +97,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         });
 
         // set up button to close drawer
-        NavigationView navigationView = findViewById(R.id.nav_drawer_view);
-        LinearLayout navHeader = (LinearLayout) navigationView.getHeaderView(0);
+        navigationView = findViewById(R.id.nav_drawer_view);
+        navHeader = (LinearLayout) navigationView.getHeaderView(0);
 
         closeDrawerButton = navHeader.findViewById(R.id.drawer_close_button);
         closeDrawerButton.setOnClickListener(new View.OnClickListener() {
@@ -282,7 +286,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         dialog.show();
     }
 
-    // method to update user's data depending on whether they are logged in
+    // method to update the displayed data depending on whether they are logged in
     public void updateUserDisplayedData(){
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
@@ -293,8 +297,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             binding.profileAndNotificationsIcons.setEnabled(true);
             binding.profileAndNotificationsIcons.setVisibility(View.VISIBLE);
 
+            // get data from sharedpreferences
+            SharedPreferences sharedPreferences = getSharedPreferences("Users", MODE_PRIVATE);
+            String firstName = sharedPreferences.getString("firstName", null);
+            String lastName = sharedPreferences.getString("lastName", null);
+            String email = sharedPreferences.getString("email", null);
+            String displayedName = firstName + " " + lastName;
+
+            // display the data in different parts of the application
+            // nav drawer on the left
+            ((TextView) navHeader.findViewById(R.id.nav_drawer_name)).setText(displayedName);
+            ((TextView) navHeader.findViewById(R.id.nav_drawer_email)).setText(email);
+
         } else {
-            // No user is signed in
+            // user is not signed in
             binding.profileAndNotificationsIcons.setEnabled(false);
             binding.profileAndNotificationsIcons.setVisibility(View.GONE);
             binding.loginButton.setEnabled(true);
