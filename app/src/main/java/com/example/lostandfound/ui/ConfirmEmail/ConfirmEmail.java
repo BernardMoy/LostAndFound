@@ -37,5 +37,11 @@ public class ConfirmEmail extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        // set listeners to change the background of the codes when selected
+
+
+        // select the first edittext
+        binding.code1.requestFocus();
     }
 }
