@@ -16,6 +16,8 @@ googleGmsGoogleServices = "4.4.2"
 firebaseAuth = "23.1.0"
 firebaseDatabase = "21.0.0"
 firebaseFirestore = "25.1.1"
+jakarta-mail = "2.0.1"
+jakarta-activation = "2.0.1"
 
 [libraries]
 junit = { group = "junit", name = "junit", version.ref = "junit" }
@@ -33,6 +35,10 @@ activity = { group = "androidx.activity", name = "activity", version.ref = "acti
 firebase-auth = { group = "com.google.firebase", name = "firebase-auth", version.ref = "firebaseAuth" }
 firebase-database = { group = "com.google.firebase", name = "firebase-database", version.ref = "firebaseDatabase" }
 firebase-firestore = { group = "com.google.firebase", name = "firebase-firestore", version.ref = "firebaseFirestore" }
+jakarta-mail = { group = "com.sun.mail", name = "jakarta.mail", version.ref = "jakarta-mail" }
+jakarta-activation = { group = "com.sun.activation", name = "jakarta.activation", version.ref = "jakarta-activation" }
+
+
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

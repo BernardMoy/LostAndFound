@@ -30,8 +30,15 @@ android {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
     }
+
     buildFeatures {
         viewBinding = true
+    }
+
+    packaging {
+        resources {
+            excludes += listOf("META-INF/NOTICE.md", "META-INF/LICENSE.md")
+        }
     }
 }
 
@@ -48,6 +55,8 @@ dependencies {
     implementation(libs.firebase.auth)
     implementation(libs.firebase.database)
     implementation(libs.firebase.firestore)
+    implementation(libs.jakarta.mail);
+    implementation(libs.jakarta.activation);
     testImplementation(libs.junit)
     testImplementation (libs.mockito.core)
     androidTestImplementation(libs.ext.junit)

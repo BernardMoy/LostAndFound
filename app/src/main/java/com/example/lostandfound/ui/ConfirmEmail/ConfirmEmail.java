@@ -3,6 +3,7 @@ package com.example.lostandfound.ui.ConfirmEmail;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 
@@ -13,6 +14,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.example.lostandfound.EmailSender;
 import com.example.lostandfound.R;
 import com.example.lostandfound.databinding.ActivityConfirmEmailBinding;
 import com.example.lostandfound.databinding.ActivityProfileBinding;
@@ -56,6 +58,16 @@ public class ConfirmEmail extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 getOnBackPressedDispatcher().onBackPressed();
+            }
+        });
+
+
+        // button to confirm email
+        binding.confirmEmailButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                EmailSender emailSender = new EmailSender("u2256784@live.warwick.ac.uk");
+                emailSender.sendEmail(ConfirmEmail.this);
             }
         });
     }
