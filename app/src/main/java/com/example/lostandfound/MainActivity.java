@@ -8,23 +8,19 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
-import android.view.animation.Animation;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.widget.Toolbar;
 
 import com.example.lostandfound.databinding.DialogLogoutBinding;
+import com.example.lostandfound.ui.ConfirmEmail.ConfirmEmail;
 import com.example.lostandfound.ui.login.LoginActivity;
 import com.example.lostandfound.ui.profile.ProfileActivity;
 import com.example.lostandfound.ui.settings.SettingsActivity;
-import com.example.lostandfound.ui.settings.SettingsViewModel;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -41,7 +37,6 @@ import com.example.lostandfound.databinding.ActivityMainBinding;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.FirebaseDatabase;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -175,6 +170,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 startActivity(i);
             }
         });
+
+
+
+        // OPEN ACTIVItY
+        Intent i = new Intent(MainActivity.this, ConfirmEmail.class);
+        startActivity(i);
 
     }
 
