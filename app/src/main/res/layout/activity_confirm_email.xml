@@ -242,7 +242,7 @@
                 android:layout_height="wrap_content" />
 
             <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/confirm_button"
+                android:id="@+id/confirm_email_button"
                 android:layout_gravity="center_horizontal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
