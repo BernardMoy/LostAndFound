@@ -35,4 +35,7 @@
 
     <string name="email_or_password_incorrect_error"> The email or password provided is incorrect. If you don\'t have an account, please register below. </string>
     <string name="invalid_login_error"> You are already logged in. Please log out first.</string>
+
+    <string name="confirm_email_title">Confirm your email</string>
+    <string name="confirm_email_description">Please enter the 6-digit verificiation code we have sent to your email address.</string>
 </resources>
