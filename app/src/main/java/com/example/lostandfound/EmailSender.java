@@ -5,6 +5,11 @@ import android.content.Context;
 import android.util.Log;
 import android.widget.Toast;
 
+import androidx.core.content.res.ResourcesCompat;
+
+import com.google.firebase.BuildConfig;
+
+import java.security.SecureRandom;
 import java.util.Arrays;
 import java.util.Properties;
 import java.util.concurrent.ExecutorService;
@@ -22,6 +27,7 @@ import jakarta.mail.internet.MimeMessage;
 import jakarta.mail.internet.MimeMultipart;
 
 public class EmailSender {
+    private Context ctx;
     private String emailAddress;
     private MimeMessage mimeMessage;
     private Session newSession;
@@ -39,6 +45,8 @@ public class EmailSender {
 
     // main method to send email
     public void sendEmail(Context ctx){
+        this.ctx = ctx;
+
         ((Activity) ctx).runOnUiThread(() -> {
             executorService.submit(this::sendEmailInBackground);
         });
@@ -46,25 +54,22 @@ public class EmailSender {
 
     // method to send email to the stored emailAddress. Return true when email is sent successfully
     private boolean sendEmailInBackground(){
-        String subject = "Confirm your email";
-        String body = "OWO";
+        String subject = ctx.getString(R.string.confirm_email_subject);
 
-        String fromEmail = "lostfoundapp3@gmail.com";
-        String fromPassword = "srtx rvkp lpyc kwos";
-        String emailHost = "smtp.gmail.com";
+        // the body of the email, including the generated code
+        String code = generateVerificationCode();
+        String body = code + " " + ctx.getString(R.string.confirm_email_body);
+
+        String fromEmail = ctx.getString(R.string.sender_email);
+        String fromPassword = ctx.getString(R.string.sender_password);
+        String emailHost = ctx.getString(R.string.sender_host);
 
         // set up contents of the mime message
         try{
             mimeMessage.addRecipient(Message.RecipientType.TO, new InternetAddress(emailAddress));
             mimeMessage.setSubject(subject);
 
-            MimeBodyPart bodyPart = new MimeBodyPart();
-            bodyPart.setContent(body, "html/text");
-
-            MimeMultipart multiPart = new MimeMultipart();
-            multiPart.addBodyPart(bodyPart);
-
-            mimeMessage.setContent(multiPart);
+            mimeMessage.setText(body);
 
             // Send email with Transport object
             Transport transport = newSession.getTransport("smtp");
@@ -72,7 +77,8 @@ public class EmailSender {
             transport.sendMessage(mimeMessage, mimeMessage.getAllRecipients());
 
         } catch (MessagingException e){
-            Log.d("EMAIL BUG", e.getMessage());
+            // display failed sending email message
+            Toast.makeText(ctx, "Email sending failed", Toast.LENGTH_SHORT).show();
             return false;
         }
 
@@ -82,12 +88,20 @@ public class EmailSender {
 
     private void setUpProperties(){
         Properties properties = System.getProperties();
-        properties.put("mail.smtp.port", "587");
+        properties.put("mail.smtp.port", "587");      // 587 for outlook emails
         properties.put("mail.smtp.auth", true);
         properties.put("mail.smtp.starttls.enable", true);
 
         newSession = Session.getDefaultInstance(properties, null);
 
         mimeMessage = new MimeMessage(newSession);
+    }
+
+    // method to generate a 6 digit verification code
+    private String generateVerificationCode(){
+        SecureRandom secureRandom = new SecureRandom();
+        int code = 100000 + secureRandom.nextInt(900000);  // ensure 100000 <= code <= 999999
+
+        return String.valueOf(code);
     }
 }
