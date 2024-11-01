@@ -1,7 +1,10 @@
 package com.example.lostandfound.ui.ConfirmEmail;
 
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
+import android.widget.EditText;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -38,10 +41,45 @@ public class ConfirmEmail extends AppCompatActivity {
             return insets;
         });
 
-        // set listeners to change the background of the codes when selected
-
+        // set listeners to move focus when an edittext is filled
+        setTextFocusChanger(binding.code1, binding.code2);
+        setTextFocusChanger(binding.code2, binding.code3);
+        setTextFocusChanger(binding.code3, binding.code4);
+        setTextFocusChanger(binding.code4, binding.code5);
+        setTextFocusChanger(binding.code5, binding.code6);
 
         // select the first edittext
         binding.code1.requestFocus();
+
+        // back button
+        binding.backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                getOnBackPressedDispatcher().onBackPressed();
+            }
+        });
+    }
+
+    // this method causes whenever edittext1 is filled with text, the focus is changed to edittext2
+    public void setTextFocusChanger(EditText editText1, EditText editText2){
+        editText1.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                if (charSequence.length() > 0){
+                    // if have text, set focus to edittext2
+                    editText2.requestFocus();
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
     }
 }
