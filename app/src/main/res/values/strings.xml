@@ -38,4 +38,15 @@
 
     <string name="confirm_email_title">Confirm your email</string>
     <string name="confirm_email_description">Please enter the 6-digit verificiation code we have sent to your email address.</string>
+
+
+
+    <!-- Variables used for sending emails -->
+    <string name="sender_host">smtp.gmail.com</string>
+    <string name="confirm_email_subject">"Lost and Found app - Please confirm your email"</string>
+    <string name="confirm_email_body">is your verification code.</string>
+
+    <!-- Securely store these variables -->
+    <string name="sender_email">lostfoundapp3@gmail.com</string>
+    <string name="sender_password">srtx rvkp lpyc kwos</string>
 </resources>
