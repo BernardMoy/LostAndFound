@@ -37,7 +37,7 @@
     <string name="invalid_login_error"> You are already logged in. Please log out first.</string>
 
     <string name="confirm_email_title">Confirm your email</string>
-    <string name="confirm_email_description">Please enter the 6-digit verificiation code we have sent to your email address.</string>
+    <string name="confirm_email_description">Please enter the 6-digit verificiation code we have sent to:</string>
 
 
 

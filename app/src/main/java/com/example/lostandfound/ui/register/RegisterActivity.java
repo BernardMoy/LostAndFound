@@ -1,5 +1,6 @@
 package com.example.lostandfound.ui.register;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -17,10 +18,12 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.lostandfound.Email;
+import com.example.lostandfound.EmailSender;
 import com.example.lostandfound.Password;
 import com.example.lostandfound.R;
 import com.example.lostandfound.databinding.ActivityLoginBinding;
 import com.example.lostandfound.databinding.ActivityRegisterBinding;
+import com.example.lostandfound.ui.ConfirmEmail.ConfirmEmail;
 import com.example.lostandfound.ui.User;
 import com.example.lostandfound.ui.settings.SettingsViewModel;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -44,6 +47,7 @@ import java.util.Base64;
 public class RegisterActivity extends AppCompatActivity {
 
     private ActivityRegisterBinding binding;
+    private RegisterViewModel registerViewModel;
     private FirebaseAuth mAuth;
 
     private FirebaseFirestore db;
@@ -54,7 +58,7 @@ public class RegisterActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
 
         // set up view model
-        RegisterViewModel registerViewModel = new ViewModelProvider(this).get(RegisterViewModel.class);
+        registerViewModel = new ViewModelProvider(this).get(RegisterViewModel.class);
 
         binding = ActivityRegisterBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
@@ -149,51 +153,64 @@ public class RegisterActivity extends AppCompatActivity {
                     return;
                 }
 
+                Intent i = new Intent(RegisterActivity.this, ConfirmEmail.class);
+                // pass the user data to the new intent
+                i.putExtra("first_name", firstName);
+                i.putExtra("last_name", lastName);
+                i.putExtra("email", email);
+                i.putExtra("password", password);
 
-                // set the progress bar to be visible
-                binding.progressBar.setVisibility(View.VISIBLE);
-
-                // Authenticate with firebase using user's email and hashed passwords
-                mAuth.createUserWithEmailAndPassword(email, password)
-                        .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                            @Override
-                            public void onComplete(@NonNull Task<AuthResult> task) {
-
-                                // set progress bar to be gone
-                                binding.progressBar.setVisibility(View.GONE);
-
-                                if (task.isSuccessful()) {
-                                    // add the data to database where email is the id
-                                    User user = new User(firstName, lastName, email);
-
-                                    db.collection("users").document(email).set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
-                                        @Override
-                                        public void onSuccess(Void unused) {
-                                            // Account successfully created (Added to auth db and user firestore)
-                                            Toast.makeText(RegisterActivity.this, "Account successfully created", Toast.LENGTH_SHORT).show();
-                                        }
-                                    }).addOnFailureListener(new OnFailureListener() {
-                                        @Override
-                                        public void onFailure(@NonNull Exception e) {
-                                            Toast.makeText(RegisterActivity.this, "Account creation failed", Toast.LENGTH_SHORT).show();
-                                        }
-                                    });
-
-                                } else {
-                                    // check if this is due to email already exists
-                                    if (task.getException() != null && task.getException() instanceof FirebaseAuthUserCollisionException){
-                                        registerViewModel.setRegisterError(getResources().getString(R.string.email_exists_error));
-                                        binding.registerEmail.setBackgroundResource(R.drawable.item_background_light_gray_error);
-                                        binding.registerPassword.setBackgroundResource(R.drawable.item_background_light_gray_error);
-
-                                    } else {
-                                        // Account failed to create due to other reasons
-                                        Toast.makeText(RegisterActivity.this, "Account creation failed", Toast.LENGTH_SHORT).show();
-                                    }
-                                }
-                            }
-                        });
+                startActivity(i);
+                finish();   // closes current activity
             }
         });
+    }
+
+
+    // register the user and add it to firebase.
+    private void registerUser(String firstName, String lastName, String email, String password){
+        // set the progress bar to be visible
+        binding.progressBar.setVisibility(View.VISIBLE);
+
+        // Authenticate with firebase using user's email and hashed passwords
+        mAuth.createUserWithEmailAndPassword(email, password)
+                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+
+                        // set progress bar to be gone
+                        binding.progressBar.setVisibility(View.GONE);
+
+                        if (task.isSuccessful()) {
+                            // add the data to database where email is the id
+                            User user = new User(firstName, lastName, email);
+
+                            db.collection("users").document(email).set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void unused) {
+                                    // Account successfully created (Added to auth db and user firestore)
+                                    Toast.makeText(RegisterActivity.this, "Account successfully created", Toast.LENGTH_SHORT).show();
+                                }
+                            }).addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Toast.makeText(RegisterActivity.this, "Account creation failed", Toast.LENGTH_SHORT).show();
+                                }
+                            });
+
+                        } else {
+                            // check if this is due to email already exists
+                            if (task.getException() != null && task.getException() instanceof FirebaseAuthUserCollisionException){
+                                registerViewModel.setRegisterError(getResources().getString(R.string.email_exists_error));
+                                binding.registerEmail.setBackgroundResource(R.drawable.item_background_light_gray_error);
+                                binding.registerPassword.setBackgroundResource(R.drawable.item_background_light_gray_error);
+
+                            } else {
+                                // Account failed to create due to other reasons
+                                Toast.makeText(RegisterActivity.this, "Account creation failed", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    }
+                });
     }
 }
