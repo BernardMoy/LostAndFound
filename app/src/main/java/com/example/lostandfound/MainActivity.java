@@ -299,7 +299,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             binding.profileAndNotificationsIcons.setVisibility(View.VISIBLE);
 
             // get data from sharedpreferences
-            SharedPreferences sharedPreferences = getSharedPreferences("Users", MODE_PRIVATE);
+            SharedPreferences sharedPreferences = getSharedPreferences("User", MODE_PRIVATE);
             String firstName = sharedPreferences.getString("firstName", null);
             String lastName = sharedPreferences.getString("lastName", null);
             String email = sharedPreferences.getString("email", null);

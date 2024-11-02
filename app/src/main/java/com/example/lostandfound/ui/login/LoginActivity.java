@@ -158,7 +158,7 @@ public class LoginActivity extends AppCompatActivity {
                                                 String lastName = documentSnapshot.getString("lastName");
 
                                                 // Save the extra user credentials (First, last name, avatar) in sharedpreferences
-                                                SharedPreferences sharedPreferences = getSharedPreferences("Users", MODE_PRIVATE);
+                                                SharedPreferences sharedPreferences = getSharedPreferences("User", MODE_PRIVATE);
                                                 SharedPreferences.Editor editor = sharedPreferences.edit();
                                                 editor.putString("firstName", firstName);
                                                 editor.putString("lastName", lastName);

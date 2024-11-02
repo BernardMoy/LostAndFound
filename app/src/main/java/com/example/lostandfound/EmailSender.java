@@ -2,6 +2,7 @@ package com.example.lostandfound;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -11,6 +12,7 @@ import com.google.firebase.BuildConfig;
 
 import java.security.SecureRandom;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Properties;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -33,6 +35,11 @@ public class EmailSender {
     private Session newSession;
     private ExecutorService executorService;
 
+    // cooldown time (in mills) for sending emails
+    private final long EMAIL_COOLDOWN = 60000;   // 1 minute
+
+
+    // Create email sender object where emailAddress is the recipient
     public EmailSender(String emailAddress){
         this.emailAddress = emailAddress;
 
@@ -43,10 +50,9 @@ public class EmailSender {
         executorService = Executors.newSingleThreadExecutor();
     }
 
-    // main method to send email
+    // main method to send email, and return true if user is not in cooldown.
     public void sendEmail(Context ctx){
         this.ctx = ctx;
-
         ((Activity) ctx).runOnUiThread(() -> {
             executorService.submit(this::sendEmailInBackground);
         });
@@ -56,7 +62,7 @@ public class EmailSender {
     private boolean sendEmailInBackground(){
         String subject = ctx.getString(R.string.confirm_email_subject);
 
-        // the body of the email, including the generated code
+        // generate the code for the body of the email
         String code = generateVerificationCode();
         String body = code + " " + ctx.getString(R.string.confirm_email_body);
 
@@ -97,11 +103,45 @@ public class EmailSender {
         mimeMessage = new MimeMessage(newSession);
     }
 
-    // method to generate a 6 digit verification code
+    // method to generate a 6 digit verification code and update the sharedpreferences data
     private String generateVerificationCode(){
         SecureRandom secureRandom = new SecureRandom();
         int code = 100000 + secureRandom.nextInt(900000);  // ensure 100000 <= code <= 999999
 
+        // hash the generated code
+        Hasher hasher = new Hasher();
+        String hashedCode = hasher.hash(String.valueOf(code));
+
+        // update shared preferences data
+        long currentTime = Calendar.getInstance().getTimeInMillis();
+
+        SharedPreferences sharedPreferences = ctx.getSharedPreferences("User_verification", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString("code", hashedCode);
+        editor.putLong("timeStamp", currentTime);
+        editor.putString("email", emailAddress);
+        editor.apply();
+
+
         return String.valueOf(code);
+    }
+
+    // check if the user is currently in cooldown. If yes, they cannot generate another email.
+    private boolean isUserInCooldown(){
+        SharedPreferences sharedPreferences = ctx.getSharedPreferences("User_verification", Context.MODE_PRIVATE);
+
+        // get the email from sharedpreferences
+        String storedEmail = sharedPreferences.getString("email", null);
+        if (storedEmail == null || !storedEmail.equals(emailAddress)){
+            // no emails are stored, or a different email is previously used
+            return false;
+
+        } else {
+            // check if timestamp is at least 1 minute ago
+            long prevTimeStamp = sharedPreferences.getLong("timeStamp", 0);
+            long currentTimeStamp = Calendar.getInstance().getTimeInMillis();
+
+            return (currentTimeStamp - prevTimeStamp < EMAIL_COOLDOWN);
+        }
     }
 }
