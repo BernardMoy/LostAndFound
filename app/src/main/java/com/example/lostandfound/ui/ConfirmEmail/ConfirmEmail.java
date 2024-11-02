@@ -8,6 +8,7 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -72,9 +73,6 @@ public class ConfirmEmail extends AppCompatActivity {
             }
         });
 
-        // set underlined text for the resend text
-        binding.resend.setPaintFlags(binding.resend.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
-
         // get the passed email and modify the displayed field
         intent = getIntent();
         if (intent.hasExtra("email")){
@@ -94,14 +92,33 @@ public class ConfirmEmail extends AppCompatActivity {
         });
 
 
-        // button to confirm email
+        // button to verify email
         binding.confirmEmailButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                EmailSender emailSender = new EmailSender("u2256784@live.warwick.ac.uk");
-                emailSender.sendEmail(ConfirmEmail.this);
+
             }
         });
+
+
+
+        // set underlined text for the resend text
+        binding.resend.setPaintFlags(binding.resend.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+
+        // make the resend text send email
+        binding.resend.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                boolean success = sendEmail();
+                if (success){
+                    Toast.makeText(ConfirmEmail.this, "Email sent successfully", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+
+        // send email whenever this activity starts
+        sendEmail();
     }
 
     // this method causes whenever edittext1 is filled with text, the focus is changed to edittext2
@@ -125,5 +142,26 @@ public class ConfirmEmail extends AppCompatActivity {
 
             }
         });
+    }
+
+    // method to send email to the email in the passed indent
+    private boolean sendEmail(){
+        if (!intent.hasExtra("email")){
+            Toast.makeText(ConfirmEmail.this, "Email address not found", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        String email = intent.getStringExtra("email");
+        EmailSender emailSender = new EmailSender(ConfirmEmail.this, email);
+
+        // check if the user is in cooldown
+        if (emailSender.isUserInCooldown()){
+            Toast.makeText(ConfirmEmail.this, "Please wait for 1 minute before re-sending the email.", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        // send email
+        emailSender.sendEmail();
+        return true;
     }
 }

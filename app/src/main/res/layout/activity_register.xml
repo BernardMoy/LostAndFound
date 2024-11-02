@@ -212,7 +212,7 @@
                 android:padding="@dimen/content_margin"
                 android:paddingStart="@dimen/header_margin"
                 android:paddingEnd="@dimen/header_margin"
-                android:text="Register and Log in"
+                android:text="Register"
                 android:textSize="@dimen/title_font_size"
                 android:textColor="@color/white"
                 android:background="@drawable/rectangle_gradient_button"

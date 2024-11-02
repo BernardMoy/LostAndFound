@@ -72,8 +72,8 @@ public class LoginActivity extends AppCompatActivity {
         });
 
         // set underlined text for the register and forgot password textview
-        binding.register.setPaintFlags(binding.register.getPaintFlags() |   Paint.UNDERLINE_TEXT_FLAG);
-        binding.forgotPassword.setPaintFlags(binding.register.getPaintFlags() |   Paint.UNDERLINE_TEXT_FLAG);
+        binding.register.setPaintFlags(binding.register.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+        binding.forgotPassword.setPaintFlags(binding.register.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
 
         // start register activity when the register text is clicked
         binding.register.setOnClickListener(new View.OnClickListener() {
