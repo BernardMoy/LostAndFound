@@ -171,12 +171,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 startActivity(i);
             }
         });
-
-
-        // OPEN ACTIVItY
-        Intent i = new Intent(MainActivity.this, ConfirmEmail.class);
-        startActivity(i);
-
     }
 
     @Override

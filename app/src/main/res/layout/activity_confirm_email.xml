@@ -89,6 +89,21 @@
                 android:paddingEnd="@dimen/content_margin"
                 />
 
+            <TextView
+                android:id="@+id/recipient_email_address"
+                android:layout_gravity="center_horizontal"
+                android:gravity="center_horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Empty email address"
+                android:textStyle="bold"
+                android:textColor="@color/gray"
+                android:textSize="@dimen/content_font_size"
+                android:layout_marginBottom="@dimen/content_margin"
+                android:paddingStart="@dimen/content_margin"
+                android:paddingEnd="@dimen/content_margin"
+                />
+
             <HorizontalScrollView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -216,7 +231,7 @@
 
 
             <TextView
-                android:id="@+id/confirm_error"
+                android:id="@+id/verification_error"
                 android:visibility="gone"
                 android:layout_gravity="start"
                 android:gravity="center_vertical"
@@ -241,6 +256,39 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 
+            <LinearLayout
+                android:id="@+id/resend_linear_layout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_gravity="center_horizontal"
+                android:gravity="center"
+                android:layoutDirection="ltr"
+                android:layout_marginTop="@dimen/title_margin"
+                android:layout_marginBottom="@dimen/title_margin">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Didn't receive?"
+                    android:textColor="@color/gray"
+                    android:textSize="@dimen/content_font_size"
+                    android:layout_marginEnd="@dimen/content_margin_half"
+                    />
+
+                <TextView
+                    android:id="@+id/resend"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Resend email"
+                    android:textColor="@color/primaryColorVariant"
+                    android:textStyle="bold"
+                    android:textSize="@dimen/content_font_size"
+                    android:layout_marginStart="@dimen/content_margin_half"
+                    />
+
+            </LinearLayout>
+
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/confirm_email_button"
                 android:layout_gravity="center_horizontal"
@@ -250,7 +298,7 @@
                 android:padding="@dimen/content_margin"
                 android:paddingStart="@dimen/header_margin"
                 android:paddingEnd="@dimen/header_margin"
-                android:text="Confirm email"
+                android:text="Verify email"
                 android:textSize="@dimen/title_font_size"
                 android:textColor="@color/white"
                 android:background="@drawable/rectangle_gradient_button"

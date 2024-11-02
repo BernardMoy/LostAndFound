@@ -1,5 +1,7 @@
 package com.example.lostandfound.ui.ConfirmEmail;
 
+import android.content.Intent;
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -12,6 +14,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.lostandfound.EmailSender;
@@ -23,14 +26,17 @@ import com.example.lostandfound.ui.profile.ProfileViewModel;
 public class ConfirmEmail extends AppCompatActivity {
 
     private ActivityConfirmEmailBinding binding;
+    private ConfirmEmailViewModel confirmEmailViewModel;
+
+    private Intent intent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
 
-        // set up profile view model
-        ProfileViewModel profileViewModel = new ViewModelProvider(this).get(ProfileViewModel.class);
+        // set up confirm email view model
+        confirmEmailViewModel = new ViewModelProvider(this).get(ConfirmEmailViewModel.class);
 
         // inflate binding
         binding = ActivityConfirmEmailBinding.inflate(getLayoutInflater());
@@ -49,6 +55,32 @@ public class ConfirmEmail extends AppCompatActivity {
         setTextFocusChanger(binding.code3, binding.code4);
         setTextFocusChanger(binding.code4, binding.code5);
         setTextFocusChanger(binding.code5, binding.code6);
+
+        // set up viewmodel observer fo verification error
+        confirmEmailViewModel.getVerificationError().observe(this, new Observer<String>() {
+            @Override
+            public void onChanged(String s) {
+                if (s.isEmpty()){
+                    // set the view to be gone
+                    binding.verificationError.setVisibility(View.GONE);
+
+                } else {
+                    // display the error
+                    binding.verificationError.setText(s);
+                    binding.verificationError.setVisibility(View.VISIBLE);
+                }
+            }
+        });
+
+        // set underlined text for the resend text
+        binding.resend.setPaintFlags(binding.resend.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+
+        // get the passed email and modify the displayed field
+        intent = getIntent();
+        if (intent.hasExtra("email")){
+            binding.recipientEmailAddress.setText(intent.getStringExtra("email"));
+        }
+
 
         // select the first edittext
         binding.code1.requestFocus();
