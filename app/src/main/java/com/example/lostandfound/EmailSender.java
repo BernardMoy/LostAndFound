@@ -40,7 +40,8 @@ public class EmailSender {
 
 
     // Create email sender object where emailAddress is the recipient
-    public EmailSender(String emailAddress){
+    public EmailSender(Context ctx, String emailAddress){
+        this.ctx = ctx;
         this.emailAddress = emailAddress;
 
         // set up properties when the object is being created
@@ -51,8 +52,7 @@ public class EmailSender {
     }
 
     // main method to send email, and return true if user is not in cooldown.
-    public void sendEmail(Context ctx){
-        this.ctx = ctx;
+    public void sendEmail(){
         ((Activity) ctx).runOnUiThread(() -> {
             executorService.submit(this::sendEmailInBackground);
         });
@@ -127,7 +127,7 @@ public class EmailSender {
     }
 
     // check if the user is currently in cooldown. If yes, they cannot generate another email.
-    private boolean isUserInCooldown(){
+    public boolean isUserInCooldown(){
         SharedPreferences sharedPreferences = ctx.getSharedPreferences("User_verification", Context.MODE_PRIVATE);
 
         // get the email from sharedpreferences
