@@ -3,6 +3,7 @@ package com.example.lostandfound;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
 import android.widget.Toast;
 
 import java.security.SecureRandom;
@@ -52,45 +53,68 @@ public class EmailSender {
         db = new FirestoreManager(ctx);
     }
 
-    // main method to send email, and return true if user is not in cooldown.
-    public void sendEmail() {
-        ((Activity) ctx).runOnUiThread(() -> {
-            executorService.submit(this::sendEmailInBackground);
+
+    // method to send email to the stored emailAddress.
+    public void sendEmail(boolean isRegenerated) {
+
+        // get the data from firestore with user's current email
+        db.getValue(COLLECTION_NAME, emailAddress, new FirestoreManager.Callback<Map<String, Object>>() {
+            @Override
+            public void onComplete(Map<String, Object> result) {
+                if (result == null){
+                    return;
+                }
+
+                // check if the last email sent is not within 1 minute
+                storedTimeStamp = (long) result.get("timestamp");   // get the stored timestamp from db
+                long currentTimeStamp = Calendar.getInstance().getTimeInMillis();
+                if (currentTimeStamp - storedTimeStamp <= EMAIL_COOLDOWN){
+                    Toast.makeText(ctx, "Please wait for 1 minute before sending another email.", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+
+                // begin sending email and generate code in a separate thread
+                ExecutorService executor = Executors.newSingleThreadExecutor();
+                executor.execute(() -> {
+                    String subject = ctx.getString(R.string.confirm_email_subject);
+
+                    // generate the code for the body of the email
+                    String code = generateVerificationCode();
+                    String body = code + " " + ctx.getString(R.string.confirm_email_body);
+
+                    String fromEmail = ctx.getString(R.string.sender_email);
+                    String fromPassword = ctx.getString(R.string.sender_password);
+                    String emailHost = ctx.getString(R.string.sender_host);
+
+                    // set up contents of the mime message
+                    try {
+                        mimeMessage.addRecipient(Message.RecipientType.TO, new InternetAddress(emailAddress));
+                        mimeMessage.setSubject(subject);
+
+                        mimeMessage.setText(body);
+
+                        // Send email with Transport object
+                        Transport transport = newSession.getTransport("smtp");
+                        transport.connect(emailHost, fromEmail, fromPassword);
+                        transport.sendMessage(mimeMessage, mimeMessage.getAllRecipients());
+
+                        // display successful message
+                        if (isRegenerated){
+                            ((Activity) ctx).runOnUiThread(() ->
+                                    Toast.makeText(ctx, "A new confirmation email has been sent.", Toast.LENGTH_SHORT).show()
+                            );
+                        }
+
+                    } catch (MessagingException e) {
+                        // display failed sending email message
+                        ((Activity) ctx).runOnUiThread(() ->
+                                Toast.makeText(ctx, "Email sending failed", Toast.LENGTH_SHORT).show()
+                        );
+                    }
+                });
+            }
         });
-    }
-
-    // method to send email to the stored emailAddress. Return true when email is sent successfully
-    private boolean sendEmailInBackground() {
-        String subject = ctx.getString(R.string.confirm_email_subject);
-
-        // generate the code for the body of the email
-        String code = generateVerificationCode();
-        String body = code + " " + ctx.getString(R.string.confirm_email_body);
-
-        String fromEmail = ctx.getString(R.string.sender_email);
-        String fromPassword = ctx.getString(R.string.sender_password);
-        String emailHost = ctx.getString(R.string.sender_host);
-
-        // set up contents of the mime message
-        try {
-            mimeMessage.addRecipient(Message.RecipientType.TO, new InternetAddress(emailAddress));
-            mimeMessage.setSubject(subject);
-
-            mimeMessage.setText(body);
-
-            // Send email with Transport object
-            Transport transport = newSession.getTransport("smtp");
-            transport.connect(emailHost, fromEmail, fromPassword);
-            transport.sendMessage(mimeMessage, mimeMessage.getAllRecipients());
-
-        } catch (MessagingException e) {
-            // display failed sending email message
-            Toast.makeText(ctx, "Email sending failed", Toast.LENGTH_SHORT).show();
-            return false;
-        }
-
-
-        return true;
     }
 
     // method to set up mail sending properties, which is to an outlook account
@@ -127,28 +151,5 @@ public class EmailSender {
 
         // return the original (unhashed) code
         return String.valueOf(code);
-    }
-
-    // check if the user is currently in the 1 minute cooldown. If yes, they cannot receive another email.
-    // This method should be checked in another activity that calls the send email method.
-    public boolean isUserInCooldown() {
-        SharedPreferences sharedPreferences = ctx.getSharedPreferences("User_verification", Context.MODE_PRIVATE);
-
-        // get the data from firestore with user's current email
-        db.getValue(COLLECTION_NAME, emailAddress, new FirestoreManager.Callback<Map<String, Object>>() {
-            @Override
-            public void onComplete(Map<String, Object> result) {
-                if (result != null) {
-                    storedTimeStamp = (long) result.get("timestamp");
-
-                } else {
-                    storedTimeStamp = 0;
-                }
-            }
-        });
-
-        // check if timestamp is at least 1 minute ago
-        long currentTimeStamp = Calendar.getInstance().getTimeInMillis();
-        return (currentTimeStamp - storedTimeStamp < EMAIL_COOLDOWN);
     }
 }
