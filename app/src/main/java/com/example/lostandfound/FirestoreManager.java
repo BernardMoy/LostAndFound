@@ -10,6 +10,9 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class FirestoreManager {
 
     private Context ctx;
@@ -42,8 +45,9 @@ public class FirestoreManager {
         });
     }
 
-    // method to return the value, given a collection and a key, or null if the collection or key does not exist
-    public void getValue(String collection, String key, Callback<Object> callback){
+    // method to return a map of values, given a collection and a key, or null if the collection or key does not exist
+    // null values need to be checked before casting
+    public void getValue(String collection, String key, Callback<Map<String, Object>> callback){
 
         db.collection(collection).document(key).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override

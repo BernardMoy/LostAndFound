@@ -3,30 +3,21 @@ package com.example.lostandfound;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.util.Log;
 import android.widget.Toast;
 
-import androidx.core.content.res.ResourcesCompat;
-
-import com.google.firebase.BuildConfig;
-
 import java.security.SecureRandom;
-import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import jakarta.mail.Message;
 import jakarta.mail.MessagingException;
-import jakarta.mail.NoSuchProviderException;
 import jakarta.mail.Session;
 import jakarta.mail.Transport;
-import jakarta.mail.internet.AddressException;
 import jakarta.mail.internet.InternetAddress;
-import jakarta.mail.internet.MimeBodyPart;
 import jakarta.mail.internet.MimeMessage;
-import jakarta.mail.internet.MimeMultipart;
 
 public class EmailSender {
     private Context ctx;
@@ -35,15 +26,19 @@ public class EmailSender {
     private Session newSession;
     private ExecutorService executorService;
 
+    private FirestoreManager db;
+
     // cooldown time (in mills) for sending emails
     private final long EMAIL_COOLDOWN = 60000;   // 1 minute
 
-    // time that the verification code is valid
-    private final long VALID_TIME = 600000;   // 10 minutes
+
+    // the collection name used to store user code data
+    private final String COLLECTION_NAME = "user_verifications";
+    private long storedTimeStamp = 0;
 
 
     // Create email sender object where emailAddress is the recipient
-    public EmailSender(Context ctx, String emailAddress){
+    public EmailSender(Context ctx, String emailAddress) {
         this.ctx = ctx;
         this.emailAddress = emailAddress;
 
@@ -52,17 +47,20 @@ public class EmailSender {
 
         // set up executor service
         executorService = Executors.newSingleThreadExecutor();
+
+        // set up firestore manager
+        db = new FirestoreManager(ctx);
     }
 
     // main method to send email, and return true if user is not in cooldown.
-    public void sendEmail(){
+    public void sendEmail() {
         ((Activity) ctx).runOnUiThread(() -> {
             executorService.submit(this::sendEmailInBackground);
         });
     }
 
     // method to send email to the stored emailAddress. Return true when email is sent successfully
-    private boolean sendEmailInBackground(){
+    private boolean sendEmailInBackground() {
         String subject = ctx.getString(R.string.confirm_email_subject);
 
         // generate the code for the body of the email
@@ -74,7 +72,7 @@ public class EmailSender {
         String emailHost = ctx.getString(R.string.sender_host);
 
         // set up contents of the mime message
-        try{
+        try {
             mimeMessage.addRecipient(Message.RecipientType.TO, new InternetAddress(emailAddress));
             mimeMessage.setSubject(subject);
 
@@ -85,7 +83,7 @@ public class EmailSender {
             transport.connect(emailHost, fromEmail, fromPassword);
             transport.sendMessage(mimeMessage, mimeMessage.getAllRecipients());
 
-        } catch (MessagingException e){
+        } catch (MessagingException e) {
             // display failed sending email message
             Toast.makeText(ctx, "Email sending failed", Toast.LENGTH_SHORT).show();
             return false;
@@ -95,7 +93,8 @@ public class EmailSender {
         return true;
     }
 
-    private void setUpProperties(){
+    // method to set up mail sending properties, which is to an outlook account
+    private void setUpProperties() {
         Properties properties = System.getProperties();
         properties.put("mail.smtp.port", "587");      // 587 for outlook emails
         properties.put("mail.smtp.auth", true);
@@ -106,8 +105,8 @@ public class EmailSender {
         mimeMessage = new MimeMessage(newSession);
     }
 
-    // method to generate a 6 digit verification code and update the sharedpreferences data
-    private String generateVerificationCode(){
+    // method to generate a 6 digit verification code and update the database data
+    private String generateVerificationCode() {
         SecureRandom secureRandom = new SecureRandom();
         int code = 100000 + secureRandom.nextInt(900000);  // ensure 100000 <= code <= 999999
 
@@ -115,64 +114,41 @@ public class EmailSender {
         Hasher hasher = new Hasher();
         String hashedCode = hasher.hash(String.valueOf(code));
 
-        // update shared preferences data
+        // update data in database
         long currentTime = Calendar.getInstance().getTimeInMillis();
+        VerificationData data = new VerificationData(hashedCode, currentTime);
 
-        SharedPreferences sharedPreferences = ctx.getSharedPreferences("User_verification", Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString("code", hashedCode);
-        editor.putLong("timeStamp", currentTime);
-        editor.putString("email", emailAddress);
-        editor.apply();
+        db.put(COLLECTION_NAME, emailAddress, data, new FirestoreManager.Callback<Boolean>() {
+            @Override
+            public void onComplete(Boolean result) {
 
+            }
+        });
 
+        // return the original (unhashed) code
         return String.valueOf(code);
     }
 
-    // check if the user is currently in cooldown. If yes, they cannot receive another email.
+    // check if the user is currently in the 1 minute cooldown. If yes, they cannot receive another email.
     // This method should be checked in another activity that calls the send email method.
-    public boolean isUserInCooldown(){
+    public boolean isUserInCooldown() {
         SharedPreferences sharedPreferences = ctx.getSharedPreferences("User_verification", Context.MODE_PRIVATE);
 
-        // get the email from sharedpreferences
-        String storedEmail = sharedPreferences.getString("email", null);
-        if (storedEmail == null || !storedEmail.equals(emailAddress)){
-            // no emails are stored, or a different email is previously used
-            return false;
+        // get the data from firestore with user's current email
+        db.getValue(COLLECTION_NAME, emailAddress, new FirestoreManager.Callback<Map<String, Object>>() {
+            @Override
+            public void onComplete(Map<String, Object> result) {
+                if (result != null) {
+                    storedTimeStamp = (long) result.get("timestamp");
 
-        } else {
-            // check if timestamp is at least 1 minute ago
-            long prevTimeStamp = sharedPreferences.getLong("timeStamp", 0);
-            long currentTimeStamp = Calendar.getInstance().getTimeInMillis();
-
-            return (currentTimeStamp - prevTimeStamp < EMAIL_COOLDOWN);
-        }
-    }
-
-    // verify if a code given to a user is valid. The code need to be generated in the last 10 minutes
-    public boolean verifyCode(String code){
-        SharedPreferences sharedPreferences = ctx.getSharedPreferences("User_verification", Context.MODE_PRIVATE);
-
-        // get the email from sharedpreferences
-        String storedEmail = sharedPreferences.getString("email", null);
-        if (storedEmail == null || !storedEmail.equals(emailAddress)) {
-            // no emails are stored, or a different email is previously used
-            return false;
-
-        } else {
-            // check if code is generated more than 10 mins ago
-            long prevTimeStamp = sharedPreferences.getLong("timeStamp", 0);
-            long currentTimeStamp = Calendar.getInstance().getTimeInMillis();
-
-            if (currentTimeStamp - prevTimeStamp > VALID_TIME){
-                Toast.makeText(ctx, "This code has expired. Please generate another one", Toast.LENGTH_SHORT).show();
-                return false;
+                } else {
+                    storedTimeStamp = 0;
+                }
             }
+        });
 
-            // verify the code with the stored hashed code
-            String storedHashCode = sharedPreferences.getString("code", "");
-            Hasher hasher = new Hasher();
-            return hasher.compareHash(code, storedHashCode);
-        }
+        // check if timestamp is at least 1 minute ago
+        long currentTimeStamp = Calendar.getInstance().getTimeInMillis();
+        return (currentTimeStamp - storedTimeStamp < EMAIL_COOLDOWN);
     }
 }

@@ -15,6 +15,7 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.lostandfound.Email;
+import com.example.lostandfound.FirestoreManager;
 import com.example.lostandfound.Password;
 import com.example.lostandfound.R;
 import com.example.lostandfound.databinding.ActivityRegisterBinding;
@@ -35,7 +36,7 @@ public class RegisterActivity extends AppCompatActivity {
     private RegisterViewModel registerViewModel;
     private FirebaseAuth mAuth;
 
-    private FirebaseFirestore db;
+    private FirestoreManager db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,8 +53,9 @@ public class RegisterActivity extends AppCompatActivity {
         // get instance for firebase auth
         mAuth = FirebaseAuth.getInstance();
 
-        // init database
-        db = FirebaseFirestore.getInstance();
+        // set up the firestore manager
+        db = new FirestoreManager(RegisterActivity.this);
+
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -168,18 +170,12 @@ public class RegisterActivity extends AppCompatActivity {
 
                         if (task.isSuccessful()) {
                             // add the data to database where email is the id
-                            UserData user = new UserData(firstName, lastName, email);
+                            UserData data = new UserData(firstName, lastName);
 
-                            db.collection("users").document(email).set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
+                            db.put("user", email, data, new FirestoreManager.Callback<Boolean>() {
                                 @Override
-                                public void onSuccess(Void unused) {
-                                    // Account successfully created (Added to auth db and user firestore)
-                                    Toast.makeText(RegisterActivity.this, "Account successfully created", Toast.LENGTH_SHORT).show();
-                                }
-                            }).addOnFailureListener(new OnFailureListener() {
-                                @Override
-                                public void onFailure(@NonNull Exception e) {
-                                    Toast.makeText(RegisterActivity.this, "Account creation failed", Toast.LENGTH_SHORT).show();
+                                public void onComplete(Boolean result) {
+
                                 }
                             });
 
