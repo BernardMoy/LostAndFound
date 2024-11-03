@@ -19,15 +19,28 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.lostandfound.EmailSender;
+import com.example.lostandfound.FirestoreManager;
+import com.example.lostandfound.Hasher;
 import com.example.lostandfound.R;
+import com.example.lostandfound.VerificationData;
 import com.example.lostandfound.databinding.ActivityConfirmEmailBinding;
 import com.example.lostandfound.databinding.ActivityProfileBinding;
 import com.example.lostandfound.ui.profile.ProfileViewModel;
+
+import java.util.Calendar;
+import java.util.Map;
 
 public class ConfirmEmail extends AppCompatActivity {
 
     private ActivityConfirmEmailBinding binding;
     private ConfirmEmailViewModel confirmEmailViewModel;
+
+    private FirestoreManager db;
+    private String storedHashedCode = "";
+    private long storedTimeStamp = 0;
+
+    // time that the verification code is valid
+    private final long VALID_TIME = 600000;   // 10 minutes
 
     private Intent intent;
 
@@ -49,6 +62,9 @@ public class ConfirmEmail extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        // set up db
+        db = new FirestoreManager(ConfirmEmail.this);
 
         // set listeners to move focus when an edittext is filled
         setTextFocusChanger(binding.code1, binding.code2);
@@ -117,6 +133,34 @@ public class ConfirmEmail extends AppCompatActivity {
         });
 
 
+        // method to verify the code when the verify button is pressed
+        binding.confirmEmailButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // extract the string
+                String code = "000000";
+                StringBuilder builder = new StringBuilder(code);
+                builder.setCharAt(0, binding.code1.getText().charAt(0));
+                builder.setCharAt(1, binding.code2.getText().charAt(0));
+                builder.setCharAt(2, binding.code3.getText().charAt(0));
+                builder.setCharAt(3, binding.code4.getText().charAt(0));
+                builder.setCharAt(4, binding.code5.getText().charAt(0));
+                builder.setCharAt(5, binding.code6.getText().charAt(0));
+
+                // verify the code
+                boolean success = verifyCode(code);
+
+                if (!success){
+                    confirmEmailViewModel.setVerificationError("The code entered was invalid.");
+                    return;
+                }
+
+                // create the user if successful
+                createUser();
+            }
+        });
+
+
         // send email whenever this activity starts
         sendEmail();
     }
@@ -165,9 +209,47 @@ public class ConfirmEmail extends AppCompatActivity {
         return true;
     }
 
-    // method to verify the code
 
+    // method to verify if a code is valid, and it is only valid if it is generated within last 10 minutes
+    public boolean verifyCode(String code){
 
+        // get the passed email
+        if (!intent.hasExtra("email")) {
+            confirmEmailViewModel.setVerificationError("The email address is not valid.");
+            return false;
+        }
+        String emailAddress = intent.getStringExtra("email");
+
+        db.getValue("user_verifications", emailAddress, new FirestoreManager.Callback<Map<String, Object>>() {
+                    @Override
+                    public void onComplete(Map<String, Object> result) {
+                        if (result != null){
+                            storedHashedCode = (String) result.get("code");
+                            storedTimeStamp = (long) result.get("timestamp");
+
+                        } else {
+                            storedHashedCode = "-1";
+                            storedTimeStamp = 0;
+                        }
+                    }
+                });
+
+        // check if timestamp is within last 10 mins
+        long currentTimeStamp = Calendar.getInstance().getTimeInMillis();
+
+        if (currentTimeStamp - storedTimeStamp > VALID_TIME) {
+            Toast.makeText(ConfirmEmail.this, "This code has expired, please generate another one", Toast.LENGTH_SHORT).show();
+            return false;
+
+        } else {
+            // if timestamp is within last 10 mins, check if the hash codes match
+            Hasher hasher = new Hasher();
+            return hasher.compareHash(code, storedHashedCode);
+        }
+    }
 
     // method to create the user, add to Firebase auth and db, and exit activity
+    public void createUser(){
+
+    }
 }
