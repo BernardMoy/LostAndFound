@@ -164,4 +164,10 @@ public class ConfirmEmail extends AppCompatActivity {
         emailSender.sendEmail();
         return true;
     }
+
+    // method to verify the code
+
+
+
+    // method to create the user, add to Firebase auth and db, and exit activity
 }
