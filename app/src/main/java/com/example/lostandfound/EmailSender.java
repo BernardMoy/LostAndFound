@@ -38,6 +38,9 @@ public class EmailSender {
     // cooldown time (in mills) for sending emails
     private final long EMAIL_COOLDOWN = 60000;   // 1 minute
 
+    // time that the verification code is valid
+    private final long VALID_TIME = 600000;   // 10 minutes
+
 
     // Create email sender object where emailAddress is the recipient
     public EmailSender(Context ctx, String emailAddress){
@@ -126,7 +129,8 @@ public class EmailSender {
         return String.valueOf(code);
     }
 
-    // check if the user is currently in cooldown. If yes, they cannot generate another email.
+    // check if the user is currently in cooldown. If yes, they cannot receive another email.
+    // This method should be checked in another activity that calls the send email method.
     public boolean isUserInCooldown(){
         SharedPreferences sharedPreferences = ctx.getSharedPreferences("User_verification", Context.MODE_PRIVATE);
 
@@ -142,6 +146,33 @@ public class EmailSender {
             long currentTimeStamp = Calendar.getInstance().getTimeInMillis();
 
             return (currentTimeStamp - prevTimeStamp < EMAIL_COOLDOWN);
+        }
+    }
+
+    // verify if a code given to a user is valid. The code need to be generated in the last 10 minutes
+    public boolean verifyCode(String code){
+        SharedPreferences sharedPreferences = ctx.getSharedPreferences("User_verification", Context.MODE_PRIVATE);
+
+        // get the email from sharedpreferences
+        String storedEmail = sharedPreferences.getString("email", null);
+        if (storedEmail == null || !storedEmail.equals(emailAddress)) {
+            // no emails are stored, or a different email is previously used
+            return false;
+
+        } else {
+            // check if code is generated more than 10 mins ago
+            long prevTimeStamp = sharedPreferences.getLong("timeStamp", 0);
+            long currentTimeStamp = Calendar.getInstance().getTimeInMillis();
+
+            if (currentTimeStamp - prevTimeStamp > VALID_TIME){
+                Toast.makeText(ctx, "This code has expired. Please generate another one", Toast.LENGTH_SHORT).show();
+                return false;
+            }
+
+            // verify the code with the stored hashed code
+            String storedHashCode = sharedPreferences.getString("code", "");
+            Hasher hasher = new Hasher();
+            return hasher.compareHash(code, storedHashCode);
         }
     }
 }

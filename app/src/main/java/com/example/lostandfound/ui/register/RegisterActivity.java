@@ -2,15 +2,12 @@ package com.example.lostandfound.ui.register;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
-import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.res.ResourcesCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -18,14 +15,11 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.lostandfound.Email;
-import com.example.lostandfound.EmailSender;
 import com.example.lostandfound.Password;
 import com.example.lostandfound.R;
-import com.example.lostandfound.databinding.ActivityLoginBinding;
 import com.example.lostandfound.databinding.ActivityRegisterBinding;
 import com.example.lostandfound.ui.ConfirmEmail.ConfirmEmail;
-import com.example.lostandfound.ui.User;
-import com.example.lostandfound.ui.settings.SettingsViewModel;
+import com.example.lostandfound.UserData;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -33,16 +27,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.auth.SignInMethodQueryResult;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.FirebaseFirestore;
-
-import java.nio.charset.StandardCharsets;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.util.Base64;
 
 public class RegisterActivity extends AppCompatActivity {
 
@@ -183,7 +168,7 @@ public class RegisterActivity extends AppCompatActivity {
 
                         if (task.isSuccessful()) {
                             // add the data to database where email is the id
-                            User user = new User(firstName, lastName, email);
+                            UserData user = new UserData(firstName, lastName, email);
 
                             db.collection("users").document(email).set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override

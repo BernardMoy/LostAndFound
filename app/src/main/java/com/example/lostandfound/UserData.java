@@ -1,15 +1,13 @@
-package com.example.lostandfound.ui;
+package com.example.lostandfound;
 
-public class User {
+public class UserData {
 
     private String firstName;
     private String lastName;
-    private String email;
 
-    public User(String firstName, String lastName, String email) {
+    public UserData(String firstName, String lastName) {
         this.firstName = firstName;
         this.lastName = lastName;
-        this.email = email;
     }
 
     public String getFirstName() {
@@ -26,13 +24,5 @@ public class User {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
     }
 }
