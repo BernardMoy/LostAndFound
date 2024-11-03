@@ -138,12 +138,24 @@ public class ConfirmEmail extends AppCompatActivity {
                 // extract the string
                 String code = "000000";
                 StringBuilder builder = new StringBuilder(code);
-                builder.setCharAt(0, binding.code1.getText().charAt(0));
-                builder.setCharAt(1, binding.code2.getText().charAt(0));
-                builder.setCharAt(2, binding.code3.getText().charAt(0));
-                builder.setCharAt(3, binding.code4.getText().charAt(0));
-                builder.setCharAt(4, binding.code5.getText().charAt(0));
-                builder.setCharAt(5, binding.code6.getText().charAt(0));
+                if (binding.code1.getText().length() > 0){
+                    builder.setCharAt(0, binding.code1.getText().charAt(0));
+                }
+                if (binding.code2.getText().length() > 0){
+                    builder.setCharAt(1, binding.code2.getText().charAt(0));
+                }
+                if (binding.code3.getText().length() > 0){
+                    builder.setCharAt(2, binding.code3.getText().charAt(0));
+                }
+                if (binding.code4.getText().length() > 0){
+                    builder.setCharAt(3, binding.code4.getText().charAt(0));
+                }
+                if (binding.code5.getText().length() > 0){
+                    builder.setCharAt(4, binding.code5.getText().charAt(0));
+                }
+                if (binding.code6.getText().length() > 0){
+                    builder.setCharAt(5, binding.code6.getText().charAt(0));
+                }
 
                 code = builder.toString();
 
@@ -173,6 +185,26 @@ public class ConfirmEmail extends AppCompatActivity {
                 if (charSequence.length() > 0){
                     // if have text, set focus to edittext2
                     editText2.requestFocus();
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+
+        editText2.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                if (charSequence.length() == 0){
+                    // if no text, set focus to edittext1
+                    editText1.requestFocus();
                 }
             }
 
