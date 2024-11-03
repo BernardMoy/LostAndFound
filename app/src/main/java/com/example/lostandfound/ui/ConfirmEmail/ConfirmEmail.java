@@ -125,10 +125,8 @@ public class ConfirmEmail extends AppCompatActivity {
         binding.resend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                boolean success = sendEmail();
-                if (success){
-                    Toast.makeText(ConfirmEmail.this, "Email sent successfully", Toast.LENGTH_SHORT).show();
-                }
+                sendEmail(true);
+
             }
         });
 
@@ -147,22 +145,19 @@ public class ConfirmEmail extends AppCompatActivity {
                 builder.setCharAt(4, binding.code5.getText().charAt(0));
                 builder.setCharAt(5, binding.code6.getText().charAt(0));
 
-                // verify the code
-                boolean success = verifyCode(code);
+                code = builder.toString();
 
-                if (!success){
-                    confirmEmailViewModel.setVerificationError("The code entered was invalid.");
-                    return;
-                }
+                // reset verification error
+                confirmEmailViewModel.setVerificationError("");
 
-                // create the user if successful
-                createUser();
+                // verify the code and create user if successful
+                verifyCodeAndCreateUser(code);
             }
         });
 
 
         // send email whenever this activity starts
-        sendEmail();
+        sendEmail(false);
     }
 
     // this method causes whenever edittext1 is filled with text, the focus is changed to edittext2
@@ -189,63 +184,60 @@ public class ConfirmEmail extends AppCompatActivity {
     }
 
     // method to send email to the email in the passed indent
-    private boolean sendEmail(){
+    private void sendEmail(boolean isRegenerated){
         if (!intent.hasExtra("email")){
             Toast.makeText(ConfirmEmail.this, "Email address not found", Toast.LENGTH_SHORT).show();
-            return false;
+            return;
         }
 
         String email = intent.getStringExtra("email");
         EmailSender emailSender = new EmailSender(ConfirmEmail.this, email);
 
-        // check if the user is in cooldown
-        if (emailSender.isUserInCooldown()){
-            Toast.makeText(ConfirmEmail.this, "Please wait for 1 minute before re-sending the email.", Toast.LENGTH_SHORT).show();
-            return false;
-        }
-
         // send email
-        emailSender.sendEmail();
-        return true;
+        emailSender.sendEmail(isRegenerated);
     }
 
 
-    // method to verify if a code is valid, and it is only valid if it is generated within last 10 minutes
-    public boolean verifyCode(String code){
+    // method to verify if a code is valid, and it is only valid if it is generated within last 10 minutes.
+    // if a code is valid, it will create the user
+    public void verifyCodeAndCreateUser(String code){
 
         // get the passed email
         if (!intent.hasExtra("email")) {
             confirmEmailViewModel.setVerificationError("The email address is not valid.");
-            return false;
+            return;
         }
         String emailAddress = intent.getStringExtra("email");
 
         db.getValue("user_verifications", emailAddress, new FirestoreManager.Callback<Map<String, Object>>() {
-                    @Override
-                    public void onComplete(Map<String, Object> result) {
-                        if (result != null){
-                            storedHashedCode = (String) result.get("code");
-                            storedTimeStamp = (long) result.get("timestamp");
+            @Override
+            public void onComplete(Map<String, Object> result) {
+                if (result == null){
+                    return;
+                }
 
-                        } else {
-                            storedHashedCode = "-1";
-                            storedTimeStamp = 0;
-                        }
-                    }
-                });
+                storedHashedCode = (String) result.get("code");
+                storedTimeStamp = (long) result.get("timestamp");
 
-        // check if timestamp is within last 10 mins
-        long currentTimeStamp = Calendar.getInstance().getTimeInMillis();
+                // check if timestamp is within last 10 mins
+                long currentTimeStamp = Calendar.getInstance().getTimeInMillis();
 
-        if (currentTimeStamp - storedTimeStamp > VALID_TIME) {
-            Toast.makeText(ConfirmEmail.this, "This code has expired, please generate another one", Toast.LENGTH_SHORT).show();
-            return false;
+                if (currentTimeStamp - storedTimeStamp > VALID_TIME) {
+                    Toast.makeText(ConfirmEmail.this, "This code has expired, please generate another one", Toast.LENGTH_SHORT).show();
+                    return;
+                }
 
-        } else {
-            // if timestamp is within last 10 mins, check if the hash codes match
-            Hasher hasher = new Hasher();
-            return hasher.compareHash(code, storedHashedCode);
-        }
+                // check if user's code is valid
+                Hasher hasher = new Hasher();
+                if (!hasher.compareHash(code, storedHashedCode)) {
+                    confirmEmailViewModel.setVerificationError("The code entered was invalid.");
+                    return;
+                }
+
+                // create user
+                createUser();
+            }
+        });
     }
 
     // method to create the user, add to Firebase auth and db, and exit activity
