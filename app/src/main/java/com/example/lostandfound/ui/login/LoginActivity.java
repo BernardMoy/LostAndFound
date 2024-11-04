@@ -195,4 +195,18 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        // check if current user exists
+        if (mAuth.getCurrentUser() != null){
+            // finish activity if current user exists
+            // They are not supposed to be able to log in
+            // This also exists the activity after returning to this page from registeration
+            finish();
+        }
+
+    }
 }

@@ -11,6 +11,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -22,10 +23,17 @@ import com.example.lostandfound.EmailSender;
 import com.example.lostandfound.FirestoreManager;
 import com.example.lostandfound.Hasher;
 import com.example.lostandfound.R;
+import com.example.lostandfound.UserData;
 import com.example.lostandfound.VerificationData;
 import com.example.lostandfound.databinding.ActivityConfirmEmailBinding;
 import com.example.lostandfound.databinding.ActivityProfileBinding;
 import com.example.lostandfound.ui.profile.ProfileViewModel;
+import com.example.lostandfound.ui.register.RegisterActivity;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 
 import java.util.Calendar;
 import java.util.Map;
@@ -38,6 +46,8 @@ public class ConfirmEmail extends AppCompatActivity {
     private FirestoreManager db;
     private String storedHashedCode = "";
     private long storedTimeStamp = 0;
+
+    private FirebaseAuth mAuth;
 
     // time that the verification code is valid
     private final long VALID_TIME = 600000;   // 10 minutes
@@ -65,6 +75,10 @@ public class ConfirmEmail extends AppCompatActivity {
 
         // set up db
         db = new FirestoreManager(ConfirmEmail.this);
+
+        // get instance for firebase auth
+        mAuth = FirebaseAuth.getInstance();
+
 
         // set listeners to move focus when an edittext is filled
         setTextFocusChanger(binding.code1, binding.code2);
@@ -267,13 +281,68 @@ public class ConfirmEmail extends AppCompatActivity {
                 }
 
                 // create user
-                createUser();
+                registerUser();
             }
         });
     }
 
     // method to create the user, add to Firebase auth and db, and exit activity
-    public void createUser(){
+    // register the user and add it to firebase.
+    private void registerUser(){
+        String firstName = "";
+        String lastName = "";
+        String email = "";
 
+        // get data from intent
+        if (!intent.hasExtra("first_name")){
+            Toast.makeText(ConfirmEmail.this, "Error fetching first name", Toast.LENGTH_SHORT).show();
+        }
+        if (!intent.hasExtra("last_name")){
+            Toast.makeText(ConfirmEmail.this, "Error fetching last name", Toast.LENGTH_SHORT).show();
+        }
+        if (!intent.hasExtra("email")){
+            Toast.makeText(ConfirmEmail.this, "Error fetching email", Toast.LENGTH_SHORT).show();
+        }
+        if (!intent.hasExtra("password")){
+            Toast.makeText(ConfirmEmail.this, "Error fetching password", Toast.LENGTH_SHORT).show();
+        }
+
+
+        // set the progress bar to be visible
+        binding.progressBar.setVisibility(View.VISIBLE);
+
+        // Authenticate with firebase using user's email and hashed passwords
+        mAuth.createUserWithEmailAndPassword(intent.getStringExtra("email"), intent.getStringExtra("password"))
+                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+
+                        // set progress bar to be gone
+                        binding.progressBar.setVisibility(View.GONE);
+
+                        if (task.isSuccessful()) {
+                            // add the data to database where email is the id
+                            UserData data = new UserData(intent.getStringExtra("first_name"), intent.getStringExtra("last_name"));
+
+                            db.put("user", intent.getStringExtra("email"), data, new FirestoreManager.Callback<Boolean>() {
+                                @Override
+                                public void onComplete(Boolean result) {
+                                    if (!result){
+                                        Toast.makeText(ConfirmEmail.this, "Error adding user to the database", Toast.LENGTH_SHORT).show();
+                                    }
+
+
+                                    // task successful code executes here
+                                    Toast.makeText(ConfirmEmail.this, "Account successfully created", Toast.LENGTH_SHORT).show();
+                                    finish();
+                                }
+                            });
+
+                        } else {
+                            Toast.makeText(ConfirmEmail.this, "Account creation failed", Toast.LENGTH_SHORT).show();
+
+                        }
+                    }
+                });
     }
 }
