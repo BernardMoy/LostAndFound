@@ -34,7 +34,6 @@ public class RegisterActivity extends AppCompatActivity {
 
     private ActivityRegisterBinding binding;
     private RegisterViewModel registerViewModel;
-    private FirebaseAuth mAuth;
 
     private FirestoreManager db;
 
@@ -49,9 +48,6 @@ public class RegisterActivity extends AppCompatActivity {
         binding = ActivityRegisterBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
         setContentView(view);
-
-        // get instance for firebase auth
-        mAuth = FirebaseAuth.getInstance();
 
         // set up the firestore manager
         db = new FirestoreManager(RegisterActivity.this);
@@ -151,47 +147,5 @@ public class RegisterActivity extends AppCompatActivity {
                 finish();   // closes current activity
             }
         });
-    }
-
-
-    // register the user and add it to firebase.
-    private void registerUser(String firstName, String lastName, String email, String password){
-        // set the progress bar to be visible
-        binding.progressBar.setVisibility(View.VISIBLE);
-
-        // Authenticate with firebase using user's email and hashed passwords
-        mAuth.createUserWithEmailAndPassword(email, password)
-                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-
-                        // set progress bar to be gone
-                        binding.progressBar.setVisibility(View.GONE);
-
-                        if (task.isSuccessful()) {
-                            // add the data to database where email is the id
-                            UserData data = new UserData(firstName, lastName);
-
-                            db.put("user", email, data, new FirestoreManager.Callback<Boolean>() {
-                                @Override
-                                public void onComplete(Boolean result) {
-
-                                }
-                            });
-
-                        } else {
-                            // check if this is due to email already exists
-                            if (task.getException() != null && task.getException() instanceof FirebaseAuthUserCollisionException){
-                                registerViewModel.setRegisterError(getResources().getString(R.string.email_exists_error));
-                                binding.registerEmail.setBackgroundResource(R.drawable.item_background_light_gray_error);
-                                binding.registerPassword.setBackgroundResource(R.drawable.item_background_light_gray_error);
-
-                            } else {
-                                // Account failed to create due to other reasons
-                                Toast.makeText(RegisterActivity.this, "Account creation failed", Toast.LENGTH_SHORT).show();
-                            }
-                        }
-                    }
-                });
     }
 }
