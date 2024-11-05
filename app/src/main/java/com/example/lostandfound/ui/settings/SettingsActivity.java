@@ -1,8 +1,10 @@
 package com.example.lostandfound.ui.settings;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -44,6 +46,21 @@ public class SettingsActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 getOnBackPressedDispatcher().onBackPressed();
+            }
+        });
+
+
+
+        // temporary button to remove all shared prefs
+        binding.clearTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // get the users shared pref data
+                SharedPreferences sharedPreferences = getSharedPreferences("users", MODE_PRIVATE);
+                sharedPreferences.edit().clear().apply();
+
+                // display toast msg
+                Toast.makeText(SettingsActivity.this, "Data cleared", Toast.LENGTH_SHORT).show();
             }
         });
 
