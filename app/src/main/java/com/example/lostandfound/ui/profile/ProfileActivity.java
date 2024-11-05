@@ -1,19 +1,28 @@
 package com.example.lostandfound.ui.profile;
 
+import android.app.Dialog;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.example.lostandfound.MainActivity;
 import com.example.lostandfound.R;
 import com.example.lostandfound.databinding.ActivityProfileBinding;
+import com.example.lostandfound.databinding.DialogLogoutBinding;
+import com.google.firebase.auth.FirebaseAuth;
 
 public class ProfileActivity extends AppCompatActivity {
 
@@ -47,16 +56,64 @@ public class ProfileActivity extends AppCompatActivity {
             }
         });
 
+        // button to log out the user
+        binding.logoutLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                logout();
+            }
+        });
+
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-
-        updateUserDisplayedData();
     }
 
-    public void updateUserDisplayedData(){
+    // method to log the user out
+    public void logout(){
+        Dialog dialog = new Dialog(ProfileActivity.this);
+        dialog.setContentView(R.layout.dialog_logout);
+        dialog.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        dialog.getWindow().setBackgroundDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.dialog_background, null));
+        dialog.setCancelable(true);
 
+        // load the dialog binding
+        DialogLogoutBinding dialogLogoutBinding = DialogLogoutBinding.inflate(LayoutInflater.from(dialog.getContext()));
+        dialog.setContentView(dialogLogoutBinding.getRoot());
+
+        dialogLogoutBinding.cancelDialogButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+
+        dialogLogoutBinding.loginDialogButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+
+                // log out user here
+                FirebaseAuth mAuth = FirebaseAuth.getInstance();
+                mAuth.signOut();
+
+                // reset sharedpreferences
+                SharedPreferences sharedPreferences = getSharedPreferences("Users", MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                // clear user data
+                editor.clear();
+                editor.apply();
+
+
+                Toast.makeText(ProfileActivity.this, "Logged out successfully", Toast.LENGTH_SHORT).show();
+
+                // finish activity
+                finish();
+            }
+        });
+
+        dialog.show();
     }
 }

@@ -321,7 +321,7 @@ public class ConfirmEmail extends AppCompatActivity {
                             // add the firstname and lastname data to database where email is the id
                             UserData data = new UserData(intent.getStringExtra("first_name"), intent.getStringExtra("last_name"));
 
-                            db.put("user", intent.getStringExtra("email"), data, new FirestoreManager.Callback<Boolean>() {
+                            db.put("users", intent.getStringExtra("email"), data, new FirestoreManager.Callback<Boolean>() {
                                 @Override
                                 public void onComplete(Boolean result) {
                                     if (!result){
