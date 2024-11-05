@@ -61,18 +61,17 @@ public class EmailSender {
         db.getValue(COLLECTION_NAME, emailAddress, new FirestoreManager.Callback<Map<String, Object>>() {
             @Override
             public void onComplete(Map<String, Object> result) {
-                if (result == null){
-                    return;
-                }
 
                 // check if the last email sent is not within 1 minute
-                storedTimeStamp = (long) result.get("timestamp");   // get the stored timestamp from db
-                long currentTimeStamp = Calendar.getInstance().getTimeInMillis();
-                if (currentTimeStamp - storedTimeStamp <= EMAIL_COOLDOWN){
-                    Toast.makeText(ctx, "Please wait for 1 minute before sending another email.", Toast.LENGTH_SHORT).show();
-                    return;
+                // if there is a record of the user previously generating an email
+                if (result != null){
+                    storedTimeStamp = (long) result.get("timestamp");   // get the stored timestamp from db
+                    long currentTimeStamp = Calendar.getInstance().getTimeInMillis();
+                    if (currentTimeStamp - storedTimeStamp <= EMAIL_COOLDOWN){
+                        Toast.makeText(ctx, "Please wait for 1 minute before sending another email.", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
                 }
-
 
                 // begin sending email and generate code in a separate thread
                 ExecutorService executor = Executors.newSingleThreadExecutor();

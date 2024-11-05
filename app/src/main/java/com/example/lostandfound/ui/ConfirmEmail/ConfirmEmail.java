@@ -289,9 +289,6 @@ public class ConfirmEmail extends AppCompatActivity {
     // method to create the user, add to Firebase auth and db, and exit activity
     // register the user and add it to firebase.
     private void registerUser(){
-        String firstName = "";
-        String lastName = "";
-        String email = "";
 
         // get data from intent
         if (!intent.hasExtra("first_name")){
@@ -321,7 +318,7 @@ public class ConfirmEmail extends AppCompatActivity {
                         binding.progressBar.setVisibility(View.GONE);
 
                         if (task.isSuccessful()) {
-                            // add the data to database where email is the id
+                            // add the firstname and lastname data to database where email is the id
                             UserData data = new UserData(intent.getStringExtra("first_name"), intent.getStringExtra("last_name"));
 
                             db.put("user", intent.getStringExtra("email"), data, new FirestoreManager.Callback<Boolean>() {
@@ -331,14 +328,19 @@ public class ConfirmEmail extends AppCompatActivity {
                                         Toast.makeText(ConfirmEmail.this, "Error adding user to the database", Toast.LENGTH_SHORT).show();
                                     }
 
-
                                     // task successful code executes here
                                     Toast.makeText(ConfirmEmail.this, "Account successfully created", Toast.LENGTH_SHORT).show();
                                     finish();
                                 }
                             });
 
+                        } else if (task.getException() instanceof FirebaseAuthUserCollisionException) {
+                            // check if this is due to an account with same email already exists
+                            Toast.makeText(ConfirmEmail.this, "An account with the same email already exists, please log in.", Toast.LENGTH_SHORT).show();
+                            finish();
+
                         } else {
+                            // failed due to other reasons
                             Toast.makeText(ConfirmEmail.this, "Account creation failed", Toast.LENGTH_SHORT).show();
 
                         }
