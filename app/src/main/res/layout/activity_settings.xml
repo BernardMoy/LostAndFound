@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".ui.settings.SettingsActivity">
 
     <androidx.appcompat.widget.Toolbar
@@ -46,6 +47,58 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-    </androidx.appcompat.widget.Toolbar>>
+    </androidx.appcompat.widget.Toolbar>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintTop_toBottomOf="@id/toolbar"
+            android:layout_marginStart="@dimen/content_margin"
+            android:layout_marginTop="@dimen/content_margin"
+            android:layout_marginBottom="@dimen/content_margin"
+            android:layout_marginEnd="@dimen/content_margin"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="APP DATA"
+                android:textSize="@dimen/content_font_size"
+                android:textColor="@color/primaryColorVariant"
+                android:layout_marginTop="@dimen/content_margin"
+                android:layout_marginBottom="@dimen/content_margin"
+                android:textStyle="bold" />
+
+            <include layout="@layout/separator_line" />
+
+            <TextView
+                android:id="@+id/clear_textView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Delete users shared preferences data"
+                android:textSize="@dimen/content_font_size"
+                android:drawableEnd="@drawable/right_arrow_icon"
+                android:drawableTint="@color/primaryColorVariant"
+                android:textColor = "@color/black"
+                android:layout_marginTop="@dimen/content_margin"
+                android:layout_marginBottom="@dimen/content_margin"
+                android:paddingTop="@dimen/content_margin"
+                android:paddingBottom="@dimen/content_margin"/>
+
+
+            <include layout="@layout/separator_line" />
+
+
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</LinearLayout>
