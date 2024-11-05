@@ -36,6 +36,7 @@ public class RegisterActivity extends AppCompatActivity {
     private RegisterViewModel registerViewModel;
 
     private FirestoreManager db;
+    private FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +52,9 @@ public class RegisterActivity extends AppCompatActivity {
 
         // set up the firestore manager
         db = new FirestoreManager(RegisterActivity.this);
+
+        // set up firebase auth
+        mAuth = FirebaseAuth.getInstance();
 
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
