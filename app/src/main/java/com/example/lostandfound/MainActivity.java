@@ -122,9 +122,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     Intent i = new Intent(MainActivity.this, SettingsActivity.class);
                     startActivity(i);
 
-                } else if (clickedId == R.id.nav_drawer_logout){
-                    // log out the user
-                    logout();
                 }
 
                 // close the drawer after an item is clicked
@@ -236,50 +233,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         binding.floatingActionButton.setImageResource(R.drawable.add_icon);
     }
 
-    // method to log the user out
-    public void logout(){
-        Dialog dialog = new Dialog(MainActivity.this);
-        dialog.setContentView(R.layout.dialog_logout);
-        dialog.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        dialog.getWindow().setBackgroundDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.dialog_background, null));
-        dialog.setCancelable(true);
-
-        // load the dialog binding
-        DialogLogoutBinding dialogLogoutBinding = DialogLogoutBinding.inflate(LayoutInflater.from(dialog.getContext()));
-        dialog.setContentView(dialogLogoutBinding.getRoot());
-
-        dialogLogoutBinding.cancelDialogButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dialog.dismiss();
-            }
-        });
-
-        dialogLogoutBinding.loginDialogButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dialog.dismiss();
-
-                // log out user here
-                FirebaseAuth mAuth = FirebaseAuth.getInstance();
-                mAuth.signOut();
-
-                // reset sharedpreferences
-                SharedPreferences sharedPreferences = getSharedPreferences("Users", MODE_PRIVATE);
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                // clear user data
-                editor.clear();
-                editor.apply();
-
-                // update displayed user data
-                updateUserDisplayedData();
-
-                Toast.makeText(MainActivity.this, "Logged out successfully", Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        dialog.show();
-    }
 
     // method to update the displayed data depending on whether they are logged in
     public void updateUserDisplayedData(){
