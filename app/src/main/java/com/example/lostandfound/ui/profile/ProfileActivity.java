@@ -128,10 +128,10 @@ public class ProfileActivity extends AppCompatActivity {
         String firstName = sharedPreferences.getString("first_name", "");
         String lastName = sharedPreferences.getString("last_name", "");
 
-        String name = firstName + ' ' + lastName;
+        String displayedName = firstName + ' ' + lastName;
 
         // update the displayed names and emails
-        binding.profileDisplayName.setText(name);
+        binding.profileDisplayName.setText(displayedName);
         binding.profileEmail.setText(email);
     }
 }

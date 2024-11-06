@@ -240,6 +240,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         if (user != null) {
             // user is signed in
+            // hide the log in button
             binding.loginButton.setEnabled(false);
             binding.loginButton.setVisibility(View.GONE);
             binding.profileAndNotificationsIcons.setEnabled(true);
@@ -247,18 +248,28 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
             // get data from sharedpreferences
             SharedPreferences sharedPreferences = getSharedPreferences("User", MODE_PRIVATE);
-            String firstName = sharedPreferences.getString("firstName", null);
-            String lastName = sharedPreferences.getString("lastName", null);
-            String email = sharedPreferences.getString("email", null);
+            String firstName = sharedPreferences.getString("first_name", "");
+            String lastName = sharedPreferences.getString("last_name", "");
+            String email = sharedPreferences.getString("email", "");
             String displayedName = firstName + " " + lastName;
 
             // display the data in different parts of the application
+            // make the linear layout visible
+            navHeader.findViewById(R.id.user_info_linear_layout).setVisibility(View.VISIBLE);
+            navHeader.findViewById(R.id.not_logged_in_textview).setVisibility(View.GONE);
+
             // nav drawer on the left
             ((TextView) navHeader.findViewById(R.id.nav_drawer_name)).setText(displayedName);
             ((TextView) navHeader.findViewById(R.id.nav_drawer_email)).setText(email);
 
         } else {
             // user is not signed in
+
+            // make the linear layout not visible
+            navHeader.findViewById(R.id.user_info_linear_layout).setVisibility(View.GONE);
+            navHeader.findViewById(R.id.not_logged_in_textview).setVisibility(View.VISIBLE);
+
+            // show the login button
             binding.profileAndNotificationsIcons.setEnabled(false);
             binding.profileAndNotificationsIcons.setVisibility(View.GONE);
             binding.loginButton.setEnabled(true);
