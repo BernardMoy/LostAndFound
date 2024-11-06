@@ -1,6 +1,7 @@
 package com.example.lostandfound.ui.ConfirmEmail;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.text.Editable;
@@ -327,6 +328,15 @@ public class ConfirmEmail extends AppCompatActivity {
                                     if (!result){
                                         Toast.makeText(ConfirmEmail.this, "Error adding user to the database", Toast.LENGTH_SHORT).show();
                                     }
+
+                                    // Save the extra user credentials (First, last name, email, avatar) in sharedpreferences
+                                    SharedPreferences sharedPreferences = getSharedPreferences("User", MODE_PRIVATE);
+                                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                                    editor.putString("first_name", intent.getStringExtra("first_name"));
+                                    editor.putString("last_name", intent.getStringExtra("last_name"));
+                                    editor.putString("email", intent.getStringExtra("email"));
+                                    editor.apply();
+
 
                                     // task successful code executes here
                                     Toast.makeText(ConfirmEmail.this, "Account successfully created", Toast.LENGTH_SHORT).show();

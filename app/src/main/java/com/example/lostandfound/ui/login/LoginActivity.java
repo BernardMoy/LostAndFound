@@ -157,11 +157,11 @@ public class LoginActivity extends AppCompatActivity {
                                                 String firstName = documentSnapshot.getString("firstName");
                                                 String lastName = documentSnapshot.getString("lastName");
 
-                                                // Save the extra user credentials (First, last name, avatar) in sharedpreferences
+                                                // Save the extra user credentials (First, last name, email, avatar) in sharedpreferences
                                                 SharedPreferences sharedPreferences = getSharedPreferences("User", MODE_PRIVATE);
                                                 SharedPreferences.Editor editor = sharedPreferences.edit();
-                                                editor.putString("firstName", firstName);
-                                                editor.putString("lastName", lastName);
+                                                editor.putString("first_name", firstName);
+                                                editor.putString("last_name", lastName);
                                                 editor.putString("email", email);
                                                 editor.apply();
 
