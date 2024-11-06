@@ -14,13 +14,16 @@
         android:layout_height="@dimen/nav_bar_color_height" >
 
         <ImageView
+            android:id="@+id/rectangle_background"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:src="@drawable/rectangle"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"/>
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0" />
 
         <ImageButton
             android:id="@+id/drawer_close_button"
@@ -33,43 +36,63 @@
             app:layout_constraintTop_toTopOf="parent"
             app:tint="@color/white" />
 
-        <com.google.android.material.imageview.ShapeableImageView
-            android:layout_width="@dimen/profile_image_size"
-            android:layout_height="@dimen/profile_image_size"
-            android:src="@drawable/profile_icon"
-            android:scaleType="centerCrop"
-            app:strokeWidth="@dimen/stroke_width"
-            app:strokeColor="@color/primaryColorVariant"
-            app:layout_constraintStart_toStartOf="parent"
+        <LinearLayout
+            android:id="@+id/user_info_linear_layout"
+            android:visibility="gone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
             android:layout_marginStart="@dimen/title_margin"
-            app:layout_constraintBottom_toTopOf="@id/nav_drawer_name"
-            android:layout_marginBottom="@dimen/content_margin_half"
-            app:shapeAppearanceOverlay="@style/circularImageView"/>
+            android:layout_marginEnd="@dimen/title_margin"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/drawer_close_button">
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:layout_width="@dimen/profile_image_size"
+                android:layout_height="@dimen/profile_image_size"
+                android:src="@drawable/profile_icon"
+                android:scaleType="centerCrop"
+                app:strokeWidth="@dimen/stroke_width"
+                app:strokeColor="@color/primaryColorVariant"
+                app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginTop="@dimen/content_margin"
+                android:layout_marginBottom="@dimen/content_margin_half"
+                app:shapeAppearanceOverlay="@style/circularImageView"/>
+
+            <TextView
+                android:id="@+id/nav_drawer_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Name"
+                android:textStyle="bold"
+                android:textColor="@color/onPrimary"
+                android:textSize="@dimen/title_font_size"
+                android:layout_marginBottom="@dimen/content_margin_half" />
+
+            <TextView
+                android:id="@+id/nav_drawer_email"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="u0000000@live.warwick.ac.uk"
+                android:textColor="@color/onPrimary"
+                android:textSize="@dimen/content_font_size"
+                android:layout_marginBottom="@dimen/content_margin" />
+        </LinearLayout>
 
         <TextView
-            android:id="@+id/nav_drawer_name"
-            android:layout_width="wrap_content"
+            android:id="@+id/not_logged_in_textview"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Name"
-            android:textStyle="bold"
-            android:textColor="@color/onPrimary"
+            android:layout_marginStart="@dimen/title_margin"
+            android:layout_marginEnd="@dimen/title_margin"
+            android:text="You are not signed in."
+            android:textColor="@color/white"
             android:textSize="@dimen/title_font_size"
-            app:layout_constraintBottom_toTopOf="@id/nav_drawer_email"
-            android:layout_marginStart="@dimen/title_margin"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@+id/rectangle_background"
             app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginBottom="@dimen/content_margin_half" />
+            android:layout_marginBottom="@dimen/content_margin"/>
 
-        <TextView
-            android:id="@+id/nav_drawer_email"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="uXXXXXXX@live.warwick.ac.uk"
-            android:textColor="@color/onPrimary"
-            android:textSize="@dimen/content_font_size"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_marginStart="@dimen/title_margin"
-            app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginBottom="@dimen/content_margin" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
