@@ -69,6 +69,8 @@ public class ProfileActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+
+        updateDisplayedData();
     }
 
     // method to log the user out
@@ -100,7 +102,7 @@ public class ProfileActivity extends AppCompatActivity {
                 mAuth.signOut();
 
                 // reset sharedpreferences
-                SharedPreferences sharedPreferences = getSharedPreferences("Users", MODE_PRIVATE);
+                SharedPreferences sharedPreferences = getSharedPreferences("User", MODE_PRIVATE);
                 SharedPreferences.Editor editor = sharedPreferences.edit();
                 // clear user data
                 editor.clear();
@@ -115,5 +117,21 @@ public class ProfileActivity extends AppCompatActivity {
         });
 
         dialog.show();
+    }
+
+
+    // method to update user data displayed on screen
+    public void updateDisplayedData(){
+        // get data from sharedpref
+        SharedPreferences sharedPreferences = getSharedPreferences("User", MODE_PRIVATE);
+        String email = sharedPreferences.getString("email", "");
+        String firstName = sharedPreferences.getString("first_name", "");
+        String lastName = sharedPreferences.getString("last_name", "");
+
+        String name = firstName + ' ' + lastName;
+
+        // update the displayed names and emails
+        binding.profileDisplayName.setText(name);
+        binding.profileEmail.setText(email);
     }
 }
