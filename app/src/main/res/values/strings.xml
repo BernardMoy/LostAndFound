@@ -40,7 +40,6 @@
     <string name="confirm_email_description">Please enter the 6-digit verificiation code we have sent to:</string>
 
 
-
     <!-- Variables used for sending emails -->
     <string name="sender_host">smtp.gmail.com</string>
     <string name="confirm_email_subject">"Lost and Found app - Please confirm your email"</string>
