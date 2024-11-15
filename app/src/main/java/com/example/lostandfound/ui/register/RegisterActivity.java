@@ -3,10 +3,8 @@ package com.example.lostandfound.ui.register;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -14,29 +12,14 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.example.lostandfound.Email;
-import com.example.lostandfound.FirestoreManager;
-import com.example.lostandfound.Password;
 import com.example.lostandfound.R;
 import com.example.lostandfound.databinding.ActivityRegisterBinding;
 import com.example.lostandfound.ui.ConfirmEmail.ConfirmEmail;
-import com.example.lostandfound.UserData;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseAuthUserCollisionException;
-import com.google.firebase.firestore.FirebaseFirestore;
 
 public class RegisterActivity extends AppCompatActivity {
 
     private ActivityRegisterBinding binding;
     private RegisterViewModel registerViewModel;
-
-    private FirestoreManager db;
-    private FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,12 +32,6 @@ public class RegisterActivity extends AppCompatActivity {
         binding = ActivityRegisterBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
         setContentView(view);
-
-        // set up the firestore manager
-        db = new FirestoreManager(RegisterActivity.this);
-
-        // set up firebase auth
-        mAuth = FirebaseAuth.getInstance();
 
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
@@ -109,37 +86,30 @@ public class RegisterActivity extends AppCompatActivity {
 
 
                 // validate first name
-                if (firstName.isEmpty()){
-                    registerViewModel.setRegisterError(getResources().getString(R.string.first_name_empty_error));
+                if (!registerViewModel.validateFirstName(firstName)){
                     binding.registerFirstName.setBackgroundResource(R.drawable.item_background_light_gray_error);
                     return;
                 }
 
                 // validate last name
-                if (lastName.isEmpty()){
-                    registerViewModel.setRegisterError(getResources().getString(R.string.last_name_empty_error));
+                if (!registerViewModel.validateLastName(lastName)){
                     binding.registerLastName.setBackgroundResource(R.drawable.item_background_light_gray_error);
                     return;
                 }
 
                 // validate email
-                Email em = new Email(RegisterActivity.this);
-                String emailError = em.validateEmail(email);
-                if (emailError != null){
-                    registerViewModel.setRegisterError(emailError);
+                if (!registerViewModel.validateEmail(email)){
                     binding.registerEmail.setBackgroundResource(R.drawable.item_background_light_gray_error);
                     return;
                 }
 
                 // validate password
-                Password pw = new Password(RegisterActivity.this);
-                String passwordError = pw.validatePassword(password);
-                if (passwordError != null){
-                    registerViewModel.setRegisterError(passwordError);
+                if (!registerViewModel.validatePassword(password)){
                     binding.registerPassword.setBackgroundResource(R.drawable.item_background_light_gray_error);
                     return;
                 }
 
+                // if all tests pass, start confirm email intent
                 Intent i = new Intent(RegisterActivity.this, ConfirmEmail.class);
                 // pass the user data to the new intent
                 i.putExtra("first_name", firstName);
