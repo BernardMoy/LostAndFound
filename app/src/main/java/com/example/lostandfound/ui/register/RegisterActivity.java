@@ -3,6 +3,7 @@ package com.example.lostandfound.ui.register;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -76,14 +77,7 @@ public class RegisterActivity extends AppCompatActivity {
                 String password = binding.registerPassword.getText().toString();
 
                 // reset error field
-                registerViewModel.setRegisterError("");
-
-                // reset all background fields
-                binding.registerFirstName.setBackgroundResource(R.drawable.item_background_light_gray);
-                binding.registerLastName.setBackgroundResource(R.drawable.item_background_light_gray);
-                binding.registerEmail.setBackgroundResource(R.drawable.item_background_light_gray);
-                binding.registerPassword.setBackgroundResource(R.drawable.item_background_light_gray);
-
+                resetErrorFields();
 
                 // validate first name
                 if (!registerViewModel.validateFirstName(firstName)){
@@ -121,5 +115,17 @@ public class RegisterActivity extends AppCompatActivity {
                 finish();   // closes current activity
             }
         });
+    }
+
+    // method to reset all error fields, to prevent inconsistent error indicators
+    private void resetErrorFields(){
+        // reset error value
+        registerViewModel.setRegisterError("");
+
+        // reset all background fields
+        binding.registerFirstName.setBackgroundResource(R.drawable.item_background_light_gray);
+        binding.registerLastName.setBackgroundResource(R.drawable.item_background_light_gray);
+        binding.registerEmail.setBackgroundResource(R.drawable.item_background_light_gray);
+        binding.registerPassword.setBackgroundResource(R.drawable.item_background_light_gray);
     }
 }
