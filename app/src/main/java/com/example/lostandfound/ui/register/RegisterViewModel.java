@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel;
 public class RegisterViewModel extends ViewModel {
 
     // store the textview used to display error
-    private final MutableLiveData<String> registerError = new MutableLiveData<>();
+    private final MutableLiveData<String> registerError = new MutableLiveData<>("");
 
     public MutableLiveData<String> getRegisterError(){
         return this.registerError;
@@ -68,8 +68,8 @@ public class RegisterViewModel extends ViewModel {
             setRegisterError("Password must have at least one numerical character");
             return false;
 
-        } else if (!password.matches("[a-zA-Z0-9 ]*")){
-            // password does not have special character
+        } else if (password.matches("[a-zA-Z0-9 ]*")){
+            // if password matches that regex, password does not have special character
             setRegisterError("Password must have at least one special character");
             return false;
         }

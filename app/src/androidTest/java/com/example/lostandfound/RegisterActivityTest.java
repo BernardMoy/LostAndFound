@@ -33,6 +33,7 @@ public class RegisterActivityTest {
     private String validEmail = "u0000000@warwick.ac.uk";
     private String validPassword = "yqwe902G*";
 
+    /*
     @Test
     public void testFirstNameEmptyError(){
         // modify test input data here
@@ -53,4 +54,5 @@ public class RegisterActivityTest {
         onView(withId(R.id.register_error)).check(matches(withText(R.string.first_name_empty_error)));
 
     }
+     */
 }

@@ -55,10 +55,11 @@ dependencies {
     implementation(libs.firebase.auth)
     implementation(libs.firebase.database)
     implementation(libs.firebase.firestore)
-    implementation(libs.jakarta.mail);
-    implementation(libs.jakarta.activation);
+    implementation(libs.jakarta.mail)
+    implementation(libs.jakarta.activation)
     testImplementation(libs.junit)
     testImplementation (libs.mockito.core)
+    testImplementation (libs.coreTesting)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
 }
