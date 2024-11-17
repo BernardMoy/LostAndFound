@@ -40,6 +40,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
     private FirebaseFirestore db;
+    private LoginViewModel loginViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,7 +48,7 @@ public class LoginActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
 
         // set up view model
-        LoginViewModel loginViewModel = new ViewModelProvider(this).get(LoginViewModel.class);
+        loginViewModel = new ViewModelProvider(this).get(LoginViewModel.class);
 
         binding = ActivityLoginBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
@@ -104,17 +105,6 @@ public class LoginActivity extends AppCompatActivity {
         binding.loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // get the input email and password
-                String email = binding.loginEmail.getText().toString();
-                String password = binding.loginPassword.getText().toString();
-
-                // reset all boxes backgrounds
-                binding.loginEmail.setBackgroundResource(R.drawable.item_background_light_gray);
-                binding.loginPassword.setBackgroundResource(R.drawable.item_background_light_gray);
-
-                // reset error field
-                loginViewModel.setLoginError("");
-
                 // check if the user is already logged in
                 FirebaseUser user = mAuth.getCurrentUser();
                 if (user != null){
@@ -122,13 +112,21 @@ public class LoginActivity extends AppCompatActivity {
                     return;
                 }
 
-                // check if email or password empty
+                // get the input email and password
+                String email = binding.loginEmail.getText().toString();
+                String password = binding.loginPassword.getText().toString();
+
+                // reset error fields
+                resetErrorFields();
+
+                // validate email
                 if (email.isEmpty()) {
                     loginViewModel.setLoginError(getResources().getString(R.string.email_empty_error));
                     binding.loginEmail.setBackgroundResource(R.drawable.item_background_light_gray_error);
                     return;
                 }
 
+                // validate password
                 if (password.isEmpty()){
                     loginViewModel.setLoginError(getResources().getString(R.string.password_empty_error));
                     binding.loginPassword.setBackgroundResource(R.drawable.item_background_light_gray_error);
@@ -194,6 +192,16 @@ public class LoginActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    // method to reset all error fields, to prevent inconsistent error indicators
+    private void resetErrorFields(){
+        // reset error value
+        loginViewModel.setLoginError("");
+
+        // reset all background fields
+        binding.loginEmail.setBackgroundResource(R.drawable.item_background_light_gray);
+        binding.loginPassword.setBackgroundResource(R.drawable.item_background_light_gray);
     }
 
     @Override
