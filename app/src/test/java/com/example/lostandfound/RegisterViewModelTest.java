@@ -19,10 +19,10 @@ import java.util.logging.Handler;
 public class RegisterViewModelTest {
 
     // these are valid inputs
-    private String validFirstName = "FirstName";
-    private String validLastName = "LastName";
-    private String validEmail = "u0000000@warwick.ac.uk";
-    private String validPassword = "yqwe902G*";
+    private static final String VALID_FIRST_NAME = "FirstName";
+    private static final String VALID_LAST_NAME = "LastName";
+    private static final String VALID_EMAIL = "u0000000@warwick.ac.uk";
+    private static final String VALID_PASSWORD = "yqwe902G*";
 
     private RegisterViewModel viewModel;
 
@@ -44,7 +44,7 @@ public class RegisterViewModelTest {
         assertEquals("First name cannot be empty", viewModel.getRegisterError().getValue());
 
         // test for the valid input
-        assertTrue(viewModel.validateFirstName(validFirstName));
+        assertTrue(viewModel.validateFirstName(VALID_FIRST_NAME));
     }
 
     @Test
@@ -54,7 +54,7 @@ public class RegisterViewModelTest {
         assertEquals("Last name cannot be empty", viewModel.getRegisterError().getValue());
 
         // test for the valid input
-        assertTrue(viewModel.validateLastName(validLastName));
+        assertTrue(viewModel.validateLastName(VALID_LAST_NAME));
     }
 
     @Test
@@ -73,7 +73,7 @@ public class RegisterViewModelTest {
 
 
         // test for the valid input
-        assertTrue(viewModel.validateEmail(validEmail));
+        assertTrue(viewModel.validateEmail(VALID_EMAIL));
     }
 
     @Test
@@ -101,7 +101,7 @@ public class RegisterViewModelTest {
 
 
         // test for the valid input
-        assertTrue(viewModel.validatePassword(validPassword));
+        assertTrue(viewModel.validatePassword(VALID_PASSWORD));
     }
 
 }
