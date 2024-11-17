@@ -18,8 +18,8 @@ import java.util.logging.Handler;
 public class LoginViewModelTest {
 
     // these are valid inputs
-    private String validEmail = "u0000000@warwick.ac.uk";
-    private String validPassword = "yqwe902G*";
+    private static final String VALID_EMAIL = "u0000000@warwick.ac.uk";
+    private static final String VALID_PASSWORD = "yqwe902G*";
 
     private LoginViewModel viewModel;
 
@@ -49,7 +49,7 @@ public class LoginViewModelTest {
 
 
         // test for the valid input
-        assertTrue(viewModel.validateEmail(validEmail));
+        assertTrue(viewModel.validateEmail(VALID_EMAIL));
     }
 
     @Test
@@ -77,7 +77,7 @@ public class LoginViewModelTest {
 
 
         // test for the valid input
-        assertTrue(viewModel.validatePassword(validPassword));
+        assertTrue(viewModel.validatePassword(VALID_PASSWORD));
     }
 
 }
