@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/backgroundColor"
+        app:layout_constraintTop_toTopOf="parent"
+        app:contentInsetStart="0dp"
+        app:contentInsetStartWithNavigation= "0dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageButton
+                android:id="@+id/back_button"
+                android:src="@drawable/left_arrow_icon"
+                app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginStart="@dimen/content_margin"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:tint="@color/onBackground"
+                android:contentDescription="back"
+                style="@style/imageButton"/>
+
+            <TextView
+                android:text="Notifications"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                style="@style/toolbarTitle"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.appcompat.widget.Toolbar>
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <!-- Top aligned scrollview, allowing scroll when screen is too short -->
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_margin = "@dimen/title_margin">
+
+                <TextView
+                    android:text="Gray bold content"
+                    android:layout_marginTop="@dimen/content_margin"
+                    android:layout_marginBottom="@dimen/content_margin"
+                    style="@style/grayBoldContent" />
+
+                <TextView
+                    android:id="@+id/color_theme"
+                    android:text="Color theme"
+                    app:drawableStartCompat="@drawable/color_icon"
+                    android:layout_marginTop="@dimen/content_margin_half"
+                    android:layout_marginBottom="@dimen/content_margin_half"
+                    android:padding="@dimen/content_margin"
+                    style="@style/action"
+                    />
+
+
+            </LinearLayout>
+
+        </ScrollView>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>
