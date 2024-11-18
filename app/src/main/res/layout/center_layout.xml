@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/backgroundColor"
+        app:contentInsetStart="0dp"
+        app:contentInsetStartWithNavigation="0dp"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageButton
+                android:id="@+id/back_button"
+                android:src="@drawable/left_arrow_icon"
+                app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginStart="@dimen/content_margin"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:tint="@color/onBackground"
+                android:contentDescription="back"
+                style="@style/imageButton"/>
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.appcompat.widget.Toolbar>
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <!-- Centered scrollview, allowing scroll when screen is too short -->
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginStart="@dimen/header_margin"
+            android:layout_marginEnd="@dimen/header_margin"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:paddingBottom="@dimen/centering_margin"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_gravity="start"
+                    android:text="Header"
+                    android:layout_marginTop="@dimen/content_margin"
+                    style="@style/blackBoldHeader"
+                    />
+
+                <TextView
+                    android:layout_gravity="start"
+                    android:text="description"
+                    android:layout_marginTop="@dimen/content_margin"
+                    android:layout_marginBottom="@dimen/content_margin"
+                    style="@style/grayContent"
+                    />
+
+                <EditText
+                    android:id="@+id/text_box"
+                    android:layout_width="match_parent"
+                    android:drawableStart="@drawable/person_icon"
+                    android:hint="Text box"
+                    android:layout_marginTop="@dimen/content_margin_half"
+                    android:layout_marginBottom="@dimen/content_margin_half"
+                    style="@style/inputField"/>
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/button"
+                    android:layout_marginTop="@dimen/content_margin"
+                    android:text="Button"
+                    style="@style/colorButton" />
+
+            </LinearLayout>
+        </ScrollView>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>
