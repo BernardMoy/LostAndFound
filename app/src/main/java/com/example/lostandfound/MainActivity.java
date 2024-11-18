@@ -14,7 +14,11 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
 
+import com.example.lostandfound.ui.ActivityLog.ActivityLogActivity;
 import com.example.lostandfound.ui.Login.LoginActivity;
+import com.example.lostandfound.ui.NewFound.NewFoundActivity;
+import com.example.lostandfound.ui.NewLost.NewLostActivity;
+import com.example.lostandfound.ui.Notifications.NotificationsActivity;
 import com.example.lostandfound.ui.Profile.ProfileActivity;
 import com.example.lostandfound.ui.ReportIssue.ReportIssueActivity;
 import com.example.lostandfound.ui.Settings.SettingsActivity;
@@ -117,12 +121,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     navView.setSelectedItemId(R.id.navigation_chat);
 
                 } else if (clickedId == R.id.nav_drawer_notifications){
+                    Intent i = new Intent(MainActivity.this, NotificationsActivity.class);
+                    startActivity(i);
 
                 } else if (clickedId == R.id.nav_drawer_new_lost){
+                    Intent i = new Intent(MainActivity.this, NewLostActivity.class);
+                    startActivity(i);
 
                 } else if (clickedId == R.id.nav_drawer_new_found){
+                    Intent i = new Intent(MainActivity.this, NewFoundActivity.class);
+                    startActivity(i);
 
                 } else if (clickedId == R.id.nav_drawer_activity_log){
+                    Intent i = new Intent(MainActivity.this, ActivityLogActivity.class);
+                    startActivity(i);
 
                 } else if (clickedId == R.id.nav_drawer_settings){
                     // start Settings activity
@@ -163,6 +175,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             @Override
             public void onClick(View view) {
                 collapseMenu();
+                Intent i = new Intent(MainActivity.this, NewLostActivity.class);
+                startActivity(i);
             }
         });
 
@@ -170,6 +184,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             @Override
             public void onClick(View view) {
                 collapseMenu();
+                Intent i = new Intent(MainActivity.this, NewFoundActivity.class);
+                startActivity(i);
             }
         });
 
