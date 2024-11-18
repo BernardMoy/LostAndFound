@@ -266,20 +266,9 @@
 
                 <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/verify_email_button"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:minHeight="0dp"
-                    android:padding="@dimen/content_margin"
-                    android:paddingStart="@dimen/header_margin"
-                    android:paddingEnd="@dimen/header_margin"
-                    android:text="Verify email"
-                    android:textSize="@dimen/title_font_size"
-                    android:textColor="@color/white"
-                    android:background="@drawable/rectangle_gradient_button"
-                    android:textAllCaps="false"
                     android:layout_marginTop="@dimen/content_margin"
-                    android:layout_marginBottom="@dimen/content_margin" />
+                    android:text="Verify Email"
+                    style="@style/colorButton" />
 
             </LinearLayout>
 

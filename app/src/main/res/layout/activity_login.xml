@@ -78,22 +78,12 @@
                 <EditText
                     android:id="@+id/login_email"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:minHeight="@dimen/title_font_size"
                     android:drawableStart="@drawable/email_icon"
-                    android:drawableTint="@color/gray"
-                    android:background="@drawable/item_background_light_gray"
-                    android:textSize="@dimen/content_font_size"
-                    android:textColor="@color/black"
-                    android:inputType="textEmailAddress"
-                    android:padding="@dimen/content_margin"
-                    android:autofillHints="emailAddress"
                     android:hint="Email address (@warwick.ac.uk)"
-                    android:textColorHint="@color/gray"
-
-                    android:drawablePadding="@dimen/content_margin"
+                    android:inputType="textEmailAddress"
                     android:layout_marginTop="@dimen/content_margin_half"
-                    android:layout_marginBottom="@dimen/content_margin_half"/>
+                    android:layout_marginBottom="@dimen/content_margin_half"
+                    style="@style/inputField"/>
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="match_parent"
@@ -161,18 +151,9 @@
 
                 <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/login_button"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
                     android:layout_marginTop="@dimen/content_margin"
-                    android:background="@drawable/rectangle_gradient_button"
-                    android:padding="@dimen/content_margin"
-                    android:paddingStart="@dimen/header_margin"
-                    android:paddingEnd="@dimen/header_margin"
                     android:text="Log in"
-                    android:textAllCaps="false"
-                    android:textColor="@color/white"
-                    android:textSize="@dimen/title_font_size" />
+                    style="@style/colorButton" />
 
                 <LinearLayout
                     android:id="@+id/register_linear_layout"
