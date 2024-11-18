@@ -27,14 +27,12 @@
 
         <ImageButton
             android:id="@+id/drawer_close_button"
-            android:layout_width="@dimen/image_button_size"
-            android:layout_height="@dimen/image_button_size"
-            android:background="@android:color/transparent"
             android:src="@drawable/cross_icon"
             app:layout_constraintStart_toStartOf="parent"
             android:layout_marginStart="@dimen/content_margin"
             app:layout_constraintTop_toTopOf="parent"
-            app:tint="@color/white" />
+            app:tint="@color/white"
+            style="@style/imageButton"/>
 
         <LinearLayout
             android:id="@+id/user_info_linear_layout"
@@ -87,7 +85,7 @@
             app:layout_constraintBottom_toBottomOf="@+id/rectangle_background"
             app:layout_constraintStart_toStartOf="parent"
             android:layout_marginBottom="@dimen/content_margin"
-            style="@style/whiteTitle"/>
+            style="@style/whiteBoldTitle"/>
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

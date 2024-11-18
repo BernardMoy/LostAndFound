@@ -1,6 +1,4 @@
-package com.example.lostandfound.ui.profile;
-
-import android.util.Log;
+package com.example.lostandfound.ui.Profile;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;

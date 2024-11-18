@@ -1,4 +1,4 @@
-package com.example.lostandfound.ui.settings;
+package com.example.lostandfound.ui.Settings;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -14,9 +14,7 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.lostandfound.R;
-import com.example.lostandfound.databinding.ActivityProfileBinding;
 import com.example.lostandfound.databinding.ActivitySettingsBinding;
-import com.example.lostandfound.ui.profile.ProfileViewModel;
 
 public class SettingsActivity extends AppCompatActivity {
 
@@ -28,7 +26,7 @@ public class SettingsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
 
-        // set up settings model
+        // set up Settings model
         SettingsViewModel settingsViewModel = new ViewModelProvider(this).get(SettingsViewModel.class);
 
         binding = ActivitySettingsBinding.inflate(getLayoutInflater());

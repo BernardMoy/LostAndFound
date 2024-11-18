@@ -1,4 +1,4 @@
-package com.example.lostandfound.ui.register;
+package com.example.lostandfound.ui.Register;
 
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -42,7 +42,7 @@ public class RegisterViewModel extends ViewModel {
             return false;
 
         } else if (!email.contains("@") || !email.endsWith("warwick.ac.uk")){
-            setRegisterError("Please register with your university email (@warwick.ac.uk)");
+            setRegisterError("Please Register with your university email (@warwick.ac.uk)");
             return false;
         }
         return true;

@@ -1,4 +1,4 @@
-package com.example.lostandfound.ui.login;
+package com.example.lostandfound.ui.Login;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -18,7 +18,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.lostandfound.R;
 import com.example.lostandfound.databinding.ActivityLoginBinding;
-import com.example.lostandfound.ui.register.RegisterActivity;
+import com.example.lostandfound.ui.Register.RegisterActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -67,11 +67,11 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        // set underlined text for the register and forgot password textview
+        // set underlined text for the Register and forgot password textview
         binding.register.setPaintFlags(binding.register.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
         binding.forgotPassword.setPaintFlags(binding.register.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
 
-        // start register activity when the register text is clicked
+        // start Register activity when the Register text is clicked
         binding.register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -80,7 +80,7 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        // set up viewmodel observer for the login errors
+        // set up viewmodel observer for the Login errors
         loginViewModel.getLoginError().observe(this, new Observer<String>() {
             @Override
             public void onChanged(String s) {
@@ -131,7 +131,7 @@ public class LoginActivity extends AppCompatActivity {
                 // set the progress bar to be visible
                 binding.progressBar.setVisibility(View.VISIBLE);
 
-                // login with user
+                // Login with user
                 mAuth.signInWithEmailAndPassword(email, password)
                         .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                             @Override

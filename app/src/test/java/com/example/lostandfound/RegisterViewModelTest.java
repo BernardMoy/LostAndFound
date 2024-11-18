@@ -6,14 +6,13 @@ import static org.junit.Assert.assertTrue;
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
 
-import com.example.lostandfound.ui.register.RegisterViewModel;
+import com.example.lostandfound.ui.Register.RegisterViewModel;
 
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.mockito.Mockito;
 
-import java.time.Instant;
 import java.util.logging.Handler;
 
 public class RegisterViewModelTest {
@@ -64,11 +63,11 @@ public class RegisterViewModelTest {
         assertEquals("Email cannot be empty", viewModel.getRegisterError().getValue());
 
         assertFalse(viewModel.validateEmail("eeeeeeewarwick.ac.uk"));
-        assertEquals("Please register with your university email (@warwick.ac.uk)",
+        assertEquals("Please Register with your university email (@warwick.ac.uk)",
                 viewModel.getRegisterError().getValue());
 
         assertFalse(viewModel.validateEmail("eeeeeee@gmail.com"));
-        assertEquals("Please register with your university email (@warwick.ac.uk)",
+        assertEquals("Please Register with your university email (@warwick.ac.uk)",
                 viewModel.getRegisterError().getValue());
 
 

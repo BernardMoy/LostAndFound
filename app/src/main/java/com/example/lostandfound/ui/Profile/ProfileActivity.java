@@ -1,12 +1,12 @@
-package com.example.lostandfound.ui.profile;
+package com.example.lostandfound.ui.Profile;
 
 import android.app.Dialog;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -15,26 +15,26 @@ import androidx.core.content.res.ResourcesCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.example.lostandfound.MainActivity;
 import com.example.lostandfound.R;
 import com.example.lostandfound.databinding.ActivityProfileBinding;
 import com.example.lostandfound.databinding.DialogLogoutBinding;
+import com.example.lostandfound.ui.EditProfile.EditProfileActivity;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class ProfileActivity extends AppCompatActivity {
 
     private ActivityProfileBinding binding;
+    private ProfileViewModel profileViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
 
-        // set up profile view model
-        ProfileViewModel profileViewModel = new ViewModelProvider(this).get(ProfileViewModel.class);
+        // set up Profile view model
+        profileViewModel = new ViewModelProvider(this).get(ProfileViewModel.class);
 
         // inflate binding
         binding = ActivityProfileBinding.inflate(getLayoutInflater());
@@ -65,6 +65,16 @@ public class ProfileActivity extends AppCompatActivity {
             }
         });
         */
+
+
+        // button to open edit profile activity
+        binding.editProfileButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(ProfileActivity.this, EditProfileActivity.class);
+                startActivity(i);
+            }
+        });
     }
 
     @Override

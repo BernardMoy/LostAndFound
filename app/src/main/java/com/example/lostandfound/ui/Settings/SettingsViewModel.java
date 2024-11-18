@@ -1,4 +1,4 @@
-package com.example.lostandfound.ui.settings;
+package com.example.lostandfound.ui.Settings;
 
 import androidx.lifecycle.ViewModel;
 

@@ -12,9 +12,9 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
 
-import com.example.lostandfound.ui.login.LoginActivity;
-import com.example.lostandfound.ui.profile.ProfileActivity;
-import com.example.lostandfound.ui.settings.SettingsActivity;
+import com.example.lostandfound.ui.Login.LoginActivity;
+import com.example.lostandfound.ui.Profile.ProfileActivity;
+import com.example.lostandfound.ui.Settings.SettingsActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -105,12 +105,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 int clickedId = item.getItemId();
 
                 if (clickedId == R.id.nav_drawer_profile){
-                    // start profile activity
+                    // start Profile activity
                     Intent i = new Intent(MainActivity.this, ProfileActivity.class);
                     startActivity(i);
 
                 } else if (clickedId == R.id.nav_drawer_settings){
-                    // start settings activity
+                    // start Settings activity
                     Intent i = new Intent(MainActivity.this, SettingsActivity.class);
                     startActivity(i);
 
@@ -143,7 +143,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         });
 
-        // Start profile activity when the profile icon is clicked
+        // Start Profile activity when the Profile icon is clicked
         binding.toolbarProfileIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -261,7 +261,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             navHeader.findViewById(R.id.user_info_linear_layout).setVisibility(View.GONE);
             navHeader.findViewById(R.id.not_logged_in_textview).setVisibility(View.VISIBLE);
 
-            // show the login button
+            // show the Login button
             binding.profileAndNotificationsIcons.setEnabled(false);
             binding.profileAndNotificationsIcons.setVisibility(View.GONE);
             binding.loginButton.setEnabled(true);

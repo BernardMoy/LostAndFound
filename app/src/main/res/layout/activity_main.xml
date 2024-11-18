@@ -52,7 +52,7 @@
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"/>
 
-                <!-- Notification and profile icon: Displayed when logged in -->
+                <!-- Notification and Profile icon: Displayed when logged in -->
                 <LinearLayout
                     android:id="@+id/profile_and_notifications_icons"
                     android:orientation="horizontal"

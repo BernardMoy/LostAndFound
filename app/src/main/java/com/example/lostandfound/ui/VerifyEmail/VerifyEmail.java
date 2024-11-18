@@ -228,7 +228,7 @@ public class VerifyEmail extends AppCompatActivity {
     // method to send email to the email in the passed indent
     private void sendEmail(boolean isRegenerated){
         if (!intent.hasExtra("email")){
-            Toast.makeText(VerifyEmail.this, "Email address not found", Toast.LENGTH_SHORT).show();
+            Toast.makeText(VerifyEmail.this, "Email address not Found", Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -283,7 +283,7 @@ public class VerifyEmail extends AppCompatActivity {
     }
 
     // method to create the user, add to Firebase auth and db, and exit activity
-    // register the user and add it to firebase.
+    // Register the user and add it to firebase.
     private void registerUser(){
 
         // get data from intent

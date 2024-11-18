@@ -18,7 +18,7 @@
         <!-- Customize your theme here. -->
     </style>
 
-    <!-- For cropping the profile icon into a circle -->
+    <!-- For cropping the Profile icon into a circle -->
     <style name="circularImageView">
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">50%</item>
@@ -95,7 +95,15 @@
         <item name="android:textColor">@color/black</item>
     </style>
 
-    <style name="grayTitle">
+    <style name="blackBoldTitle">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">@dimen/title_font_size</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="grayBoldTitle">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textSize">@dimen/title_font_size</item>
@@ -111,7 +119,7 @@
         <item name="android:textStyle">bold</item>
     </style>
 
-    <style name="whiteTitle">
+    <style name="whiteBoldTitle">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textSize">@dimen/title_font_size</item>
