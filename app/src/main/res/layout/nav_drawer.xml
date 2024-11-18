@@ -59,22 +59,15 @@
 
             <TextView
                 android:id="@+id/nav_drawer_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
                 android:text="Name"
-                android:textStyle="bold"
-                android:textColor="@color/onPrimary"
-                android:textSize="@dimen/title_font_size"
-                android:layout_marginBottom="@dimen/content_margin_half" />
+                android:layout_marginBottom="@dimen/content_margin_half"
+                style="@style/whiteBoldTitle"/>
 
             <TextView
                 android:id="@+id/nav_drawer_email"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
                 android:text="u0000000@live.warwick.ac.uk"
-                android:textColor="@color/onPrimary"
-                android:textSize="@dimen/content_font_size"
-                android:layout_marginBottom="@dimen/content_margin" />
+                android:layout_marginBottom="@dimen/content_margin"
+                style="@style/whiteContent"/>
         </LinearLayout>
 
         <TextView
