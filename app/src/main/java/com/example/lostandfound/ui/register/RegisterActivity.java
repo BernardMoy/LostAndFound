@@ -80,25 +80,25 @@ public class RegisterActivity extends AppCompatActivity {
 
                 // validate first name
                 if (!registerViewModel.validateFirstName(firstName)){
-                    binding.registerFirstName.setBackgroundResource(R.drawable.item_background_light_gray_error);
+                    binding.registerFirstName.setBackgroundResource(R.drawable.background_light_gray_error);
                     return;
                 }
 
                 // validate last name
                 if (!registerViewModel.validateLastName(lastName)){
-                    binding.registerLastName.setBackgroundResource(R.drawable.item_background_light_gray_error);
+                    binding.registerLastName.setBackgroundResource(R.drawable.background_light_gray_error);
                     return;
                 }
 
                 // validate email
                 if (!registerViewModel.validateEmail(email)){
-                    binding.registerEmail.setBackgroundResource(R.drawable.item_background_light_gray_error);
+                    binding.registerEmail.setBackgroundResource(R.drawable.background_light_gray_error);
                     return;
                 }
 
                 // validate password
                 if (!registerViewModel.validatePassword(password)){
-                    binding.registerPassword.setBackgroundResource(R.drawable.item_background_light_gray_error);
+                    binding.registerPassword.setBackgroundResource(R.drawable.background_light_gray_error);
                     return;
                 }
 
@@ -122,9 +122,9 @@ public class RegisterActivity extends AppCompatActivity {
         registerViewModel.setRegisterError("");
 
         // reset all background fields
-        binding.registerFirstName.setBackgroundResource(R.drawable.item_background_light_gray);
-        binding.registerLastName.setBackgroundResource(R.drawable.item_background_light_gray);
-        binding.registerEmail.setBackgroundResource(R.drawable.item_background_light_gray);
-        binding.registerPassword.setBackgroundResource(R.drawable.item_background_light_gray);
+        binding.registerFirstName.setBackgroundResource(R.drawable.background_light_gray_selector);
+        binding.registerLastName.setBackgroundResource(R.drawable.background_light_gray_selector);
+        binding.registerEmail.setBackgroundResource(R.drawable.background_light_gray_selector);
+        binding.registerPassword.setBackgroundResource(R.drawable.background_light_gray_selector);
     }
 }

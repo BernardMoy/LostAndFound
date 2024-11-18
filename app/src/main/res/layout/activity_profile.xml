@@ -24,15 +24,14 @@
 
             <ImageButton
                 android:id="@+id/back_button"
-                android:layout_width="@dimen/image_button_size"
-                android:layout_height="@dimen/image_button_size"
-                android:background="@android:color/transparent"
                 android:src="@drawable/left_arrow_icon"
                 app:layout_constraintStart_toStartOf="parent"
                 android:layout_marginStart="@dimen/content_margin"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:tint="@color/white" />
+                app:tint="@color/white"
+                android:contentDescription="back"
+                style="@style/imageButton"/>
 
             <TextView
                 android:text="Your profile"
@@ -127,7 +126,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:background="@drawable/item_background_white"
+        android:background="@drawable/background_white"
         android:layout_marginStart="@dimen/title_margin"
         android:layout_marginEnd="@dimen/title_margin"
         android:padding="@dimen/content_margin_half">
@@ -135,7 +134,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/item_background_white"
+            android:background="@drawable/background_white"
             android:paddingStart="@dimen/content_margin"
             android:paddingEnd="@dimen/content_margin">
 
@@ -193,7 +192,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/item_background_white"
+            android:background="@drawable/background_white"
             android:paddingStart="@dimen/content_margin"
             android:paddingEnd="@dimen/content_margin">
 
@@ -261,7 +260,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:background="@drawable/item_background_white"
+        android:background="@drawable/background_white"
         android:layout_marginStart="@dimen/title_margin"
         android:layout_marginEnd="@dimen/title_margin"
         android:padding="@dimen/content_margin_half">
@@ -269,7 +268,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/item_background_white"
+            android:background="@drawable/background_white"
             android:paddingStart="@dimen/content_margin"
             android:paddingEnd="@dimen/content_margin">
 
@@ -315,7 +314,7 @@
             android:id="@+id/logout_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/item_background_white"
+            android:background="@drawable/background_white"
             android:paddingStart="@dimen/content_margin"
             android:paddingEnd="@dimen/content_margin">
 

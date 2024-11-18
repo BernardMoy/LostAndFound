@@ -4,9 +4,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Paint;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
-import android.widget.ImageButton;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -20,10 +18,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.lostandfound.R;
 import com.example.lostandfound.databinding.ActivityLoginBinding;
-import com.example.lostandfound.databinding.ActivitySettingsBinding;
 import com.example.lostandfound.ui.register.RegisterActivity;
-import com.example.lostandfound.ui.register.RegisterViewModel;
-import com.example.lostandfound.ui.settings.SettingsViewModel;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -122,14 +117,14 @@ public class LoginActivity extends AppCompatActivity {
                 // validate email
                 if (email.isEmpty()) {
                     loginViewModel.setLoginError(getResources().getString(R.string.email_empty_error));
-                    binding.loginEmail.setBackgroundResource(R.drawable.item_background_light_gray_error);
+                    binding.loginEmail.setBackgroundResource(R.drawable.background_light_gray_error);
                     return;
                 }
 
                 // validate password
                 if (password.isEmpty()){
                     loginViewModel.setLoginError(getResources().getString(R.string.password_empty_error));
-                    binding.loginPassword.setBackgroundResource(R.drawable.item_background_light_gray_error);
+                    binding.loginPassword.setBackgroundResource(R.drawable.background_light_gray_error);
                     return;
                 }
 
@@ -183,8 +178,8 @@ public class LoginActivity extends AppCompatActivity {
                                 } else {
                                     // If sign in fails, display a message to the user.
                                     loginViewModel.setLoginError(getResources().getString(R.string.email_or_password_incorrect_error));
-                                    binding.loginEmail.setBackgroundResource(R.drawable.item_background_light_gray_error);
-                                    binding.loginPassword.setBackgroundResource(R.drawable.item_background_light_gray_error);
+                                    binding.loginEmail.setBackgroundResource(R.drawable.background_light_gray_error);
+                                    binding.loginPassword.setBackgroundResource(R.drawable.background_light_gray_error);
                                 }
                             }
                         });
@@ -200,8 +195,8 @@ public class LoginActivity extends AppCompatActivity {
         loginViewModel.setLoginError("");
 
         // reset all background fields
-        binding.loginEmail.setBackgroundResource(R.drawable.item_background_light_gray);
-        binding.loginPassword.setBackgroundResource(R.drawable.item_background_light_gray);
+        binding.loginEmail.setBackgroundResource(R.drawable.background_light_gray_selector);
+        binding.loginPassword.setBackgroundResource(R.drawable.background_light_gray_selector);
     }
 
     @Override
