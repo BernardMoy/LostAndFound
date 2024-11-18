@@ -1,5 +1,7 @@
 package com.example.lostandfound;
 
+import static android.app.PendingIntent.getActivity;
+
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -42,7 +44,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private boolean isMenuExpanded;
 
-    private NavigationView navigationView;
+    private NavigationView navigationDrawer;
     private LinearLayout navHeader;
 
     @Override
@@ -60,9 +62,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setSupportActionBar(toolbar);
 
 
-        BottomNavigationView navView = findViewById(R.id.nav_view);
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
+        BottomNavigationView navView = findViewById(R.id.nav_view);
         AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
                 R.id.navigation_home, R.id.navigation_lost, R.id.navigation_found, R.id.navigation_search, R.id.navigation_chat)
                 .setOpenableLayout(drawerLayout)
@@ -86,8 +88,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         });
 
         // set up button to close drawer
-        navigationView = findViewById(R.id.nav_drawer_view);
-        navHeader = (LinearLayout) navigationView.getHeaderView(0);
+        navigationDrawer = findViewById(R.id.nav_drawer_view);
+        navHeader = (LinearLayout) navigationDrawer.getHeaderView(0);
 
         closeDrawerButton = navHeader.findViewById(R.id.drawer_close_button);
         closeDrawerButton.setOnClickListener(new View.OnClickListener() {
@@ -100,20 +102,41 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         });
 
         // set on click listeners for the items in the nav view
-        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+        navigationDrawer.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 int clickedId = item.getItemId();
 
-                if (clickedId == R.id.nav_drawer_profile){
-                    // start Profile activity
-                    Intent i = new Intent(MainActivity.this, ProfileActivity.class);
-                    startActivity(i);
+                if (clickedId == R.id.nav_drawer_my_lost){
+                    navView.setSelectedItemId(R.id.navigation_lost);
+
+                } else if (clickedId == R.id.nav_drawer_my_found){
+                    navView.setSelectedItemId(R.id.navigation_found);
+
+                } else if (clickedId == R.id.nav_drawer_chat){
+                    navView.setSelectedItemId(R.id.navigation_chat);
+
+                } else if (clickedId == R.id.nav_drawer_notifications){
+
+                } else if (clickedId == R.id.nav_drawer_new_lost){
+
+                } else if (clickedId == R.id.nav_drawer_new_found){
+
+                } else if (clickedId == R.id.nav_drawer_activity_log){
 
                 } else if (clickedId == R.id.nav_drawer_settings){
                     // start Settings activity
                     Intent i = new Intent(MainActivity.this, SettingsActivity.class);
                     startActivity(i);
+
+                } else if (clickedId == R.id.nav_drawer_profile){
+                    // start Profile activity
+                    Intent i = new Intent(MainActivity.this, ProfileActivity.class);
+                    startActivity(i);
+
+                } else if (clickedId == R.id.nav_drawer_take_a_tour){
+
+                } else if (clickedId == R.id.nav_drawer_how_it_works){
 
                 } else if (clickedId == R.id.nav_drawer_report_an_issue){
                     // start report issue activity
@@ -135,6 +158,22 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         binding.foundFloatingActionButton.setEnabled(false);
         binding.lostFloatingActionButton.setEnabled(false);
 
+        // listeners for the lost and found buttons
+        binding.lostFloatingActionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                collapseMenu();
+            }
+        });
+
+        binding.foundFloatingActionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                collapseMenu();
+            }
+        });
+
+        // listener for the + button
         binding.floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
