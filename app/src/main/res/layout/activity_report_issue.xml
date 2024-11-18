@@ -2,10 +2,11 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    tools:context=".ui.Profile.ProfileActivity">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
@@ -32,7 +33,7 @@
                 style="@style/imageButton"/>
 
             <TextView
-                android:text="Title"
+                android:text="Report an issue"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -40,7 +41,6 @@
                 style="@style/toolbarTitle"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
-
     </androidx.appcompat.widget.Toolbar>
 
 
@@ -57,27 +57,51 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_margin = "@dimen/title_margin">
+                android:orientation="vertical">
 
-                <TextView
-                    android:text="Gray bold content"
-                    android:layout_marginTop="@dimen/content_margin"
-                    android:layout_marginBottom="@dimen/content_margin"
-                    style="@style/grayBoldContent" />
+                <!-- Bottom actions and displays area -->
+                <!-- For account details -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_margin = "@dimen/title_margin">
 
-                <TextView
-                    android:id="@+id/color_theme"
-                    android:text="Color theme"
-                    app:drawableStartCompat="@drawable/color_icon"
-                    android:layout_marginTop="@dimen/content_margin_half"
-                    android:layout_marginBottom="@dimen/content_margin_half"
-                    android:padding="@dimen/content_margin"
-                    style="@style/action"
-                    />
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Description"
+                        android:layout_marginTop="@dimen/content_margin_half"
+                        android:layout_marginBottom="@dimen/content_margin_half"
+                        style="@style/grayBoldContent" />
+
+                    <EditText
+                        android:id="@+id/description"
+                        android:layout_width="match_parent"
+                        android:hint="Can you describe the bug / issue that occured?"
+                        android:layout_marginTop="@dimen/content_margin_half"
+                        android:layout_marginBottom="@dimen/content_margin_half"
+                        style="@style/inputFieldMultiLine"/>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Add an image"
+                        android:layout_marginTop="@dimen/title_margin"
+                        android:layout_marginBottom="@dimen/content_margin_half"
+                        style="@style/primaryVariantBoldContent" />
+
+                    <androidx.appcompat.widget.AppCompatButton
+                        android:id="@+id/submit_button"
+                        android:layout_marginTop="@dimen/content_margin"
+                        android:text="Submit"
+                        style="@style/colorButton" />
+
+                </LinearLayout>
 
 
             </LinearLayout>
+
 
         </ScrollView>
 

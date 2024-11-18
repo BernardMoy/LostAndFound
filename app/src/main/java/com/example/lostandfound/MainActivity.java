@@ -14,6 +14,7 @@ import androidx.appcompat.widget.Toolbar;
 
 import com.example.lostandfound.ui.Login.LoginActivity;
 import com.example.lostandfound.ui.Profile.ProfileActivity;
+import com.example.lostandfound.ui.ReportIssue.ReportIssueActivity;
 import com.example.lostandfound.ui.Settings.SettingsActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -114,6 +115,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     Intent i = new Intent(MainActivity.this, SettingsActivity.class);
                     startActivity(i);
 
+                } else if (clickedId == R.id.nav_drawer_report_an_issue){
+                    // start report issue activity
+                    Intent i = new Intent(MainActivity.this, ReportIssueActivity.class);
+                    startActivity(i);
                 }
 
                 // close the drawer after an item is clicked
