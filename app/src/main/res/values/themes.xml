@@ -169,6 +169,17 @@
         <item name="android:autofillHints">text</item>
     </style>
 
+    <style name="errorField">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">@dimen/content_font_size</item>
+        <item name="android:textColor">@color/error_dark</item>
+        <item name="android:background">@drawable/background_error</item>
+        <item name="android:padding">@dimen/content_margin</item>
+        <item name="android:paddingStart">@dimen/title_margin</item>
+        <item name="android:paddingEnd">@dimen/title_margin</item>
+    </style>
+
 
     <!-- For buttons -->
     <style name="colorButton">

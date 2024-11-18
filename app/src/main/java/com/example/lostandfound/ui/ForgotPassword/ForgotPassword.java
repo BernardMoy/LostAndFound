@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.lostandfound.R;
@@ -35,6 +36,22 @@ public class ForgotPassword extends AppCompatActivity {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
+        });
+
+        // set up viewmodel observer for the Login errors
+        forgotPasswordViewModel.getForgotPasswordError().observe(this, new Observer<String>() {
+            @Override
+            public void onChanged(String s) {
+                if (s.isEmpty()){
+                    // set the view to be gone
+                    binding.forgotPasswordError.setVisibility(View.GONE);
+
+                } else {
+                    // display the error
+                    binding.forgotPasswordError.setText(s);
+                    binding.forgotPasswordError.setVisibility(View.VISIBLE);
+                }
+            }
         });
     }
 }
