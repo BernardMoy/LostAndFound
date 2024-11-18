@@ -52,7 +52,7 @@ public class SettingsActivity extends AppCompatActivity {
 
 
         // temporary button to remove all shared prefs
-        binding.clearTextView.setOnClickListener(new View.OnClickListener() {
+        binding.deleteUsersSharedPreferencesData.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 // get the users shared pref data

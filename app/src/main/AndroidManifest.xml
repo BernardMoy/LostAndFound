@@ -16,7 +16,7 @@
             android:name=".ui.ForgotPassword.ForgotPassword"
             android:exported="false" />
         <activity
-            android:name=".ui.ConfirmEmail.ConfirmEmail"
+            android:name=".ui.VerifyEmail.VerifyEmail"
             android:exported="false" />
         <activity
             android:name=".ui.register.RegisterActivity"

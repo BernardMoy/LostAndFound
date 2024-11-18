@@ -1,9 +1,9 @@
-package com.example.lostandfound.ui.ConfirmEmail;
+package com.example.lostandfound.ui.VerifyEmail;
 
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-public class ConfirmEmailViewModel extends ViewModel {
+public class VerifyEmailViewModel extends ViewModel {
 
     // store the textview used to display error
     private final MutableLiveData<String> verificationError = new MutableLiveData<>("");

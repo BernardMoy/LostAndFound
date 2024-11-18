@@ -62,24 +62,17 @@
 
                 <TextView
                     android:layout_gravity="start"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
                     android:text="@string/register_title"
-                    android:textStyle="bold"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/header_font_size"
                     android:layout_marginTop="@dimen/content_margin"
+                    style="@style/header"
                     />
 
                 <TextView
                     android:layout_gravity="start"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
                     android:text="@string/register_description"
-                    android:textColor="@color/gray"
-                    android:textSize="@dimen/content_font_size"
                     android:layout_marginTop="@dimen/content_margin"
                     android:layout_marginBottom="@dimen/content_margin"
+                    style="@style/grayContent"
                     />
 
                 <EditText
@@ -175,12 +168,9 @@
 
                 <TextView
                     android:layout_gravity="start"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
                     android:textAlignment="textStart"
                     android:text="Your password must have at least 8 characters, different cases, a number and a special character"
-                    android:textColor="@color/gray"
-                    android:textSize="@dimen/content_font_size"
+                    style="@style/grayContent"
                     />
 
                 <TextView

@@ -81,17 +81,13 @@
 
         <TextView
             android:id="@+id/not_logged_in_textview"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/title_margin"
             android:layout_marginEnd="@dimen/title_margin"
             android:text="You are not signed in."
-            android:textColor="@color/white"
-            android:textSize="@dimen/title_font_size"
-            android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="@+id/rectangle_background"
             app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginBottom="@dimen/content_margin"/>
+            android:layout_marginBottom="@dimen/content_margin"
+            style="@style/whiteTitle"/>
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

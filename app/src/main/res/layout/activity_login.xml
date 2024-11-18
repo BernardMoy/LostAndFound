@@ -62,24 +62,17 @@
 
                 <TextView
                     android:layout_gravity="start"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
                     android:text="@string/login_title"
-                    android:textStyle="bold"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/header_font_size"
                     android:layout_marginTop="@dimen/content_margin"
+                    style="@style/header"
                     />
 
                 <TextView
                     android:layout_gravity="start"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
                     android:text="@string/login_description"
-                    android:textColor="@color/gray"
-                    android:textSize="@dimen/content_font_size"
                     android:layout_marginTop="@dimen/content_margin"
                     android:layout_marginBottom="@dimen/content_margin"
+                    style="@style/grayContent"
                     />
 
                 <EditText
@@ -134,13 +127,10 @@
 
                 <TextView
                     android:id="@+id/forgot_password"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
                     android:text="Forgot password?"
-                    android:textColor="@color/gray"
-                    android:textSize="@dimen/content_font_size"
                     android:layout_marginTop="@dimen/content_margin_half"
                     android:layout_marginBottom="@dimen/content_margin_half"
+                    style="@style/grayContent"
                     />
 
                 <TextView
@@ -196,23 +186,16 @@
                     android:layout_marginBottom="@dimen/title_margin">
 
                     <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
                         android:text="New user?"
-                        android:textColor="@color/gray"
-                        android:textSize="@dimen/content_font_size"
                         android:layout_marginEnd="@dimen/content_margin_half"
+                        style="@style/grayContent"
                         />
 
                     <TextView
                         android:id="@+id/register"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
                         android:text="Register here"
-                        android:textColor="@color/primaryColorVariant"
-                        android:textStyle="bold"
-                        android:textSize="@dimen/content_font_size"
                         android:layout_marginStart="@dimen/content_margin_half"
+                        style="@style/primaryVariantBoldContent"
                         />
 
                 </LinearLayout>

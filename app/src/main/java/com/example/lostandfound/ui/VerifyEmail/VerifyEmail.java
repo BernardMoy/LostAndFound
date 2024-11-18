@@ -1,4 +1,4 @@
-package com.example.lostandfound.ui.ConfirmEmail;
+package com.example.lostandfound.ui.VerifyEmail;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -6,7 +6,6 @@ import android.graphics.Paint;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -25,11 +24,7 @@ import com.example.lostandfound.FirestoreManager;
 import com.example.lostandfound.Hasher;
 import com.example.lostandfound.R;
 import com.example.lostandfound.UserData;
-import com.example.lostandfound.VerificationData;
-import com.example.lostandfound.databinding.ActivityConfirmEmailBinding;
-import com.example.lostandfound.databinding.ActivityProfileBinding;
-import com.example.lostandfound.ui.profile.ProfileViewModel;
-import com.example.lostandfound.ui.register.RegisterActivity;
+import com.example.lostandfound.databinding.ActivityVerifyEmailBinding;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -39,10 +34,10 @@ import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import java.util.Calendar;
 import java.util.Map;
 
-public class ConfirmEmail extends AppCompatActivity {
+public class VerifyEmail extends AppCompatActivity {
 
-    private ActivityConfirmEmailBinding binding;
-    private ConfirmEmailViewModel confirmEmailViewModel;
+    private ActivityVerifyEmailBinding binding;
+    private VerifyEmailViewModel verifyEmailViewModel;
 
     private FirestoreManager db;
     private String storedHashedCode = "";
@@ -60,11 +55,11 @@ public class ConfirmEmail extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
 
-        // set up confirm email view model
-        confirmEmailViewModel = new ViewModelProvider(this).get(ConfirmEmailViewModel.class);
+        // set up verify email view model
+        verifyEmailViewModel = new ViewModelProvider(this).get(VerifyEmailViewModel.class);
 
         // inflate binding
-        binding = ActivityConfirmEmailBinding.inflate(getLayoutInflater());
+        binding = ActivityVerifyEmailBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
         setContentView(view);
 
@@ -75,7 +70,7 @@ public class ConfirmEmail extends AppCompatActivity {
         });
 
         // set up db
-        db = new FirestoreManager(ConfirmEmail.this);
+        db = new FirestoreManager(VerifyEmail.this);
 
         // get instance for firebase auth
         mAuth = FirebaseAuth.getInstance();
@@ -89,7 +84,7 @@ public class ConfirmEmail extends AppCompatActivity {
         setTextFocusChanger(binding.code5, binding.code6);
 
         // set up viewmodel observer fo verification error
-        confirmEmailViewModel.getVerificationError().observe(this, new Observer<String>() {
+        verifyEmailViewModel.getVerificationError().observe(this, new Observer<String>() {
             @Override
             public void onChanged(String s) {
                 if (s.isEmpty()){
@@ -124,7 +119,7 @@ public class ConfirmEmail extends AppCompatActivity {
 
 
         // button to verify email
-        binding.confirmEmailButton.setOnClickListener(new View.OnClickListener() {
+        binding.verifyEmailButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
@@ -147,7 +142,7 @@ public class ConfirmEmail extends AppCompatActivity {
 
 
         // method to verify the code when the verify button is pressed
-        binding.confirmEmailButton.setOnClickListener(new View.OnClickListener() {
+        binding.verifyEmailButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 // extract the string
@@ -175,7 +170,7 @@ public class ConfirmEmail extends AppCompatActivity {
                 code = builder.toString();
 
                 // reset verification error
-                confirmEmailViewModel.setVerificationError("");
+                verifyEmailViewModel.setVerificationError("");
 
                 // verify the code and create user if successful
                 verifyCodeAndCreateUser(code);
@@ -233,12 +228,12 @@ public class ConfirmEmail extends AppCompatActivity {
     // method to send email to the email in the passed indent
     private void sendEmail(boolean isRegenerated){
         if (!intent.hasExtra("email")){
-            Toast.makeText(ConfirmEmail.this, "Email address not found", Toast.LENGTH_SHORT).show();
+            Toast.makeText(VerifyEmail.this, "Email address not found", Toast.LENGTH_SHORT).show();
             return;
         }
 
         String email = intent.getStringExtra("email");
-        EmailSender emailSender = new EmailSender(ConfirmEmail.this, email);
+        EmailSender emailSender = new EmailSender(VerifyEmail.this, email);
 
         // send email
         emailSender.sendEmail(isRegenerated);
@@ -251,7 +246,7 @@ public class ConfirmEmail extends AppCompatActivity {
 
         // get the passed email
         if (!intent.hasExtra("email")) {
-            confirmEmailViewModel.setVerificationError("The email address is not valid.");
+            verifyEmailViewModel.setVerificationError("The email address is not valid.");
             return;
         }
         String emailAddress = intent.getStringExtra("email");
@@ -270,14 +265,14 @@ public class ConfirmEmail extends AppCompatActivity {
                 long currentTimeStamp = Calendar.getInstance().getTimeInMillis();
 
                 if (currentTimeStamp - storedTimeStamp > VALID_TIME) {
-                    Toast.makeText(ConfirmEmail.this, "This code has expired, please generate another one", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(VerifyEmail.this, "This code has expired, please generate another one", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
                 // check if user's code is valid
                 Hasher hasher = new Hasher();
                 if (!hasher.compareHash(code, storedHashedCode)) {
-                    confirmEmailViewModel.setVerificationError("The code entered was invalid.");
+                    verifyEmailViewModel.setVerificationError("The code entered was invalid.");
                     return;
                 }
 
@@ -293,16 +288,16 @@ public class ConfirmEmail extends AppCompatActivity {
 
         // get data from intent
         if (!intent.hasExtra("first_name")){
-            Toast.makeText(ConfirmEmail.this, "Error fetching first name", Toast.LENGTH_SHORT).show();
+            Toast.makeText(VerifyEmail.this, "Error fetching first name", Toast.LENGTH_SHORT).show();
         }
         if (!intent.hasExtra("last_name")){
-            Toast.makeText(ConfirmEmail.this, "Error fetching last name", Toast.LENGTH_SHORT).show();
+            Toast.makeText(VerifyEmail.this, "Error fetching last name", Toast.LENGTH_SHORT).show();
         }
         if (!intent.hasExtra("email")){
-            Toast.makeText(ConfirmEmail.this, "Error fetching email", Toast.LENGTH_SHORT).show();
+            Toast.makeText(VerifyEmail.this, "Error fetching email", Toast.LENGTH_SHORT).show();
         }
         if (!intent.hasExtra("password")){
-            Toast.makeText(ConfirmEmail.this, "Error fetching password", Toast.LENGTH_SHORT).show();
+            Toast.makeText(VerifyEmail.this, "Error fetching password", Toast.LENGTH_SHORT).show();
         }
 
 
@@ -326,7 +321,7 @@ public class ConfirmEmail extends AppCompatActivity {
                                 @Override
                                 public void onComplete(Boolean result) {
                                     if (!result){
-                                        Toast.makeText(ConfirmEmail.this, "Error adding user to the database", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(VerifyEmail.this, "Error adding user to the database", Toast.LENGTH_SHORT).show();
                                     }
 
                                     // Save the extra user credentials (First, last name, email, avatar) in sharedpreferences
@@ -339,19 +334,19 @@ public class ConfirmEmail extends AppCompatActivity {
 
 
                                     // task successful code executes here
-                                    Toast.makeText(ConfirmEmail.this, "Account successfully created", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(VerifyEmail.this, "Account successfully created", Toast.LENGTH_SHORT).show();
                                     finish();
                                 }
                             });
 
                         } else if (task.getException() instanceof FirebaseAuthUserCollisionException) {
                             // check if this is due to an account with same email already exists
-                            Toast.makeText(ConfirmEmail.this, "An account with the same email already exists, please log in.", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(VerifyEmail.this, "An account with the same email already exists, please log in.", Toast.LENGTH_SHORT).show();
                             finish();
 
                         } else {
                             // failed due to other reasons
-                            Toast.makeText(ConfirmEmail.this, "Account creation failed", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(VerifyEmail.this, "Account creation failed", Toast.LENGTH_SHORT).show();
 
                         }
                     }
