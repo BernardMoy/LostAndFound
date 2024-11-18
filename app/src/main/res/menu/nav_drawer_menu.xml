@@ -89,7 +89,7 @@
                 android:icon="@drawable/info_icon"
                 android:title="How it works" />
             <item
-                android:id="@+id/nav_drawer_repor_an_issue"
+                android:id="@+id/nav_drawer_report_an_issue"
                 android:icon="@drawable/error_icon"
                 android:title="Report an issue with the app" />
         </menu>
