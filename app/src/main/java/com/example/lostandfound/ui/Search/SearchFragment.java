@@ -1,4 +1,4 @@
-package com.example.lostandfound.ui.search;
+package com.example.lostandfound.ui.Search;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;

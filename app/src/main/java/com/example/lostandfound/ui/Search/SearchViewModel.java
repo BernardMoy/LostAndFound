@@ -1,16 +1,16 @@
-package com.example.lostandfound.ui.found;
+package com.example.lostandfound.ui.Search;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-public class FoundViewModel extends ViewModel {
+public class SearchViewModel extends ViewModel {
 
     private final MutableLiveData<String> mText;
 
-    public FoundViewModel() {
+    public SearchViewModel() {
         mText = new MutableLiveData<>();
-        mText.setValue("This is found fragment");
+        mText.setValue("This is Search fragment");
     }
 
     public LiveData<String> getText() {

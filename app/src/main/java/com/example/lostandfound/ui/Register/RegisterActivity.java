@@ -1,4 +1,4 @@
-package com.example.lostandfound.ui.register;
+package com.example.lostandfound.ui.Register;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -64,7 +64,7 @@ public class RegisterActivity extends AppCompatActivity {
             }
         });
 
-        // button to register user to database
+        // button to Register user to database
         binding.registerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

@@ -6,7 +6,7 @@ import static org.junit.Assert.assertTrue;
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
 
-import com.example.lostandfound.ui.login.LoginViewModel;
+import com.example.lostandfound.ui.Login.LoginViewModel;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -40,11 +40,11 @@ public class LoginViewModelTest {
         assertEquals("Email cannot be empty", viewModel.getLoginError().getValue());
 
         assertFalse(viewModel.validateEmail("eeeeeeewarwick.ac.uk"));
-        assertEquals("Please register with your university email (@warwick.ac.uk)",
+        assertEquals("Please Register with your university email (@warwick.ac.uk)",
                 viewModel.getLoginError().getValue());
 
         assertFalse(viewModel.validateEmail("eeeeeee@gmail.com"));
-        assertEquals("Please register with your university email (@warwick.ac.uk)",
+        assertEquals("Please Register with your university email (@warwick.ac.uk)",
                 viewModel.getLoginError().getValue());
 
 

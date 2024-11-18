@@ -1,4 +1,4 @@
-package com.example.lostandfound.ui.chat;
+package com.example.lostandfound.ui.Chat;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -11,7 +11,6 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.lostandfound.databinding.FragmentChatBinding;
-import com.example.lostandfound.ui.chat.ChatViewModel;
 
 public class ChatFragment extends Fragment {
 
@@ -19,7 +18,7 @@ public class ChatFragment extends Fragment {
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        com.example.lostandfound.ui.chat.ChatViewModel chatViewModel =
+        com.example.lostandfound.ui.Chat.ChatViewModel chatViewModel =
                 new ViewModelProvider(this).get(ChatViewModel.class);
 
         binding = FragmentChatBinding.inflate(inflater, container, false);

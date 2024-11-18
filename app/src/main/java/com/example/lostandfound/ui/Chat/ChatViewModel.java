@@ -1,16 +1,16 @@
-package com.example.lostandfound.ui.search;
+package com.example.lostandfound.ui.Chat;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-public class SearchViewModel extends ViewModel {
+public class ChatViewModel extends ViewModel {
 
     private final MutableLiveData<String> mText;
 
-    public SearchViewModel() {
+    public ChatViewModel() {
         mText = new MutableLiveData<>();
-        mText.setValue("This is search fragment");
+        mText.setValue("This is Chat fragment");
     }
 
     public LiveData<String> getText() {

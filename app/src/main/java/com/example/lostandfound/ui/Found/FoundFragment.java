@@ -1,4 +1,4 @@
-package com.example.lostandfound.ui.home;
+package com.example.lostandfound.ui.Found;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -10,20 +10,22 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.example.lostandfound.databinding.FragmentHomeBinding;
+import com.example.lostandfound.databinding.FragmentFoundBinding;
 
-public class HomeFragment extends Fragment {
+public class FoundFragment extends Fragment {
 
-    private FragmentHomeBinding binding;
+    private FragmentFoundBinding binding;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        HomeViewModel homeViewModel =
-                new ViewModelProvider(this).get(HomeViewModel.class);
+        FoundViewModel foundViewModel =
+                new ViewModelProvider(this).get(FoundViewModel.class);
 
-        binding = FragmentHomeBinding.inflate(inflater, container, false);
+        binding = FragmentFoundBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
+        final TextView textView = binding.textFound;
+        foundViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
         return root;
     }
 

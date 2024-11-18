@@ -12,11 +12,10 @@
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="?attr/colorPrimary"
+        android:background="@color/backgroundColor"
         app:layout_constraintTop_toTopOf="parent"
         app:contentInsetStart="0dp"
-        app:contentInsetStartWithNavigation= "0dp"
-        app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+        app:contentInsetStartWithNavigation= "0dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -29,18 +28,17 @@
                 android:layout_marginStart="@dimen/content_margin"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:tint="@color/white"
+                app:tint="@color/onBackground"
                 android:contentDescription="back"
                 style="@style/imageButton"/>
 
             <TextView
-                android:text="My profile"
-                android:textColor="@color/white"
+                android:text="Edit Profile"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
-                style="@style/whiteBoldTitle"/>
+                style="@style/toolbarTitle"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.appcompat.widget.Toolbar>
@@ -60,76 +58,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
-
-                <!-- Top background color area -->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:background="@drawable/button_gradient_top">
-
-                    <FrameLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        android:layout_marginTop="@dimen/title_margin"
-                        android:layout_marginBottom="@dimen/content_margin"
-                        android:layout_gravity="center_horizontal">
-
-                        <com.google.android.material.imageview.ShapeableImageView
-                            android:id="@+id/profile_image"
-                            android:layout_gravity="center_horizontal"
-                            android:layout_width="@dimen/profile_image_size_large"
-                            android:layout_height="@dimen/profile_image_size_large"
-                            android:scaleType="centerCrop"
-                            android:src="@drawable/profile_icon"
-                            app:shapeAppearanceOverlay="@style/circularImageView"
-                            app:strokeColor="@color/white"
-                            app:strokeWidth="2dp" />
-
-                        <com.google.android.material.floatingactionbutton.FloatingActionButton
-                            android:id="@+id/change_profile_image"
-                            android:layout_width="@dimen/image_button_size"
-                            android:layout_height="@dimen/image_button_size"
-                            android:src="@drawable/add_icon"
-                            app:fabCustomSize="@dimen/image_button_size"
-                            android:clickable="true"
-                            android:focusable="true"
-                            android:contentDescription="Change profile image"
-                            app:backgroundTint="@color/white"
-                            app:layout_constraintBottom_toTopOf="@id/nav_view"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:srcCompat="@drawable/add_icon"
-                            app:tint = "@color/secondaryColorVariant"
-                            android:layout_gravity="bottom|end" />
-                    </FrameLayout>
-
-                    <TextView
-                        android:id="@+id/profile_display_name"
-                        android:layout_gravity="center_horizontal"
-                        android:text="Display name"
-                        android:layout_marginBottom="@dimen/content_margin"
-                        style="@style/whiteHeader"
-                        />
-
-                    <TextView
-                        android:id="@+id/profile_email"
-                        android:layout_gravity="center_horizontal"
-                        android:text="u0000000@warwick.ac.uk"
-                        android:layout_marginBottom="@dimen/content_margin"
-                        style="@style/whiteContent"
-                        />
-
-                    <androidx.appcompat.widget.AppCompatButton
-                        android:id="@+id/edit_profile_button"
-                        android:layout_marginBottom="@dimen/title_margin"
-                        android:text="Edit profile"
-                        android:textSize="@dimen/content_font_size"
-                        style="@style/whiteButton" />
-
-
-                </LinearLayout>
 
                 <!-- Bottom actions and displays area -->
                 <!-- For account details -->
@@ -161,7 +89,6 @@
                             android:paddingEnd="@dimen/image_button_size"
                             android:background="@android:color/transparent"
                             android:text="First name"
-                            android:enabled="false"
                             android:inputType="text"
                             style="@style/blackContent"/>
                     </com.google.android.material.textfield.TextInputLayout>
@@ -182,7 +109,6 @@
                             android:paddingEnd="@dimen/image_button_size"
                             android:background="@android:color/transparent"
                             android:text="Last name"
-                            android:enabled="false"
                             android:inputType="text"
                             style="@style/blackContent"/>
                     </com.google.android.material.textfield.TextInputLayout>
@@ -194,6 +120,8 @@
                         android:layout_height="wrap_content"
                         app:boxStrokeWidth="0dp"
                         app:startIconDrawable="@drawable/email_icon"
+                        app:endIconDrawable="@drawable/lock_icon"
+                        app:endIconMode="custom"
                         android:hint="Email">
 
                         <com.google.android.material.textfield.TextInputEditText
@@ -210,37 +138,24 @@
 
                     <include layout="@layout/separator_line" />
 
-                    <!-- For actions -->
                     <TextView
+                        android:layout_gravity="center_horizontal"
+                        android:gravity="center_horizontal"
+                        android:padding="@dimen/title_margin"
+                        android:layout_marginStart="@dimen/header_margin"
+                        android:layout_marginEnd="@dimen/header_margin"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Actions"
+                        android:text="Only your avatar and name would be visible to others."
+                        android:layout_marginTop="@dimen/content_margin_half"
+                        android:layout_marginBottom="@dimen/content_margin_half"
+                        style="@style/grayContent" />
+
+                    <androidx.appcompat.widget.AppCompatButton
+                        android:id="@+id/save_button"
                         android:layout_marginTop="@dimen/content_margin"
-                        android:layout_marginBottom="@dimen/content_margin_half"
-                        style="@style/grayBoldContent" />
-
-                    <TextView
-                        android:id="@+id/change_password"
-                        android:text="Change password"
-                        app:drawableStartCompat="@drawable/lock_icon"
-                        android:layout_marginTop="@dimen/content_margin_half"
-                        android:layout_marginBottom="@dimen/content_margin_half"
-                        android:padding="@dimen/content_margin"
-                        style="@style/action"
-                        />
-
-                    <TextView
-                        android:id="@+id/disable_account"
-                        android:text="Disable account"
-                        android:textColor="@color/error"
-                        app:drawableStartCompat="@drawable/error_icon"
-                        android:layout_marginTop="@dimen/content_margin_half"
-                        android:layout_marginBottom="@dimen/content_margin_half"
-                        android:padding="@dimen/content_margin"
-                        style="@style/action"
-                        app:drawableTint="@color/error" />
-
-                    <include layout="@layout/separator_line" />
+                        android:text="Save"
+                        style="@style/colorButton" />
 
                 </LinearLayout>
 

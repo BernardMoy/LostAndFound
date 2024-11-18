@@ -1,31 +1,28 @@
-package com.example.lostandfound.ui.lost;
+package com.example.lostandfound.ui.Home;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.example.lostandfound.databinding.FragmentLostBinding;
+import com.example.lostandfound.databinding.FragmentHomeBinding;
 
-public class LostFragment extends Fragment {
+public class HomeFragment extends Fragment {
 
-    private FragmentLostBinding binding;
+    private FragmentHomeBinding binding;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        LostViewModel notificationsViewModel =
-                new ViewModelProvider(this).get(LostViewModel.class);
+        HomeViewModel homeViewModel =
+                new ViewModelProvider(this).get(HomeViewModel.class);
 
-        binding = FragmentLostBinding.inflate(inflater, container, false);
+        binding = FragmentHomeBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        final TextView textView = binding.textLost;
-        notificationsViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
         return root;
     }
 
