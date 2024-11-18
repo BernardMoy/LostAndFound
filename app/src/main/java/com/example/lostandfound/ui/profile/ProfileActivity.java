@@ -57,13 +57,14 @@ public class ProfileActivity extends AppCompatActivity {
         });
 
         // button to log out the user
+        /*
         binding.logoutLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 logout();
             }
         });
-
+        */
     }
 
     @Override

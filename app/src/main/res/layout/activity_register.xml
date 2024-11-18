@@ -63,7 +63,7 @@
                     android:layout_gravity="start"
                     android:text="@string/register_title"
                     android:layout_marginTop="@dimen/content_margin"
-                    style="@style/header"
+                    style="@style/blackBoldHeader"
                     />
 
                 <TextView
@@ -120,7 +120,7 @@
                         android:minHeight="@dimen/title_font_size"
                         android:drawableStart="@drawable/lock_icon"
                         android:drawableTint="@color/gray"
-                        android:background="@drawable/background_light_gray"
+                        android:background="@drawable/background_light_gray_selector"
                         android:textSize="@dimen/content_font_size"
                         android:textColor="@color/black"
                         android:padding="@dimen/content_margin"

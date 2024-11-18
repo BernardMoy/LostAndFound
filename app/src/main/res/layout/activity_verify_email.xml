@@ -63,7 +63,7 @@
                     android:layout_gravity="start"
                     android:text="@string/verify_email_title"
                     android:layout_marginTop="@dimen/content_margin"
-                    style="@style/header"
+                    style="@style/blackBoldHeader"
                     />
 
                 <TextView
