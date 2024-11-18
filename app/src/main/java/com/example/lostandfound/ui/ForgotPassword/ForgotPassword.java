@@ -11,9 +11,7 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.lostandfound.R;
-import com.example.lostandfound.databinding.ActivityConfirmEmailBinding;
 import com.example.lostandfound.databinding.ActivityForgotPasswordBinding;
-import com.example.lostandfound.ui.ConfirmEmail.ConfirmEmailViewModel;
 
 public class ForgotPassword extends AppCompatActivity {
 

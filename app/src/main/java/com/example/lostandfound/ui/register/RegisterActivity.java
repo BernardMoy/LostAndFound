@@ -3,7 +3,6 @@ package com.example.lostandfound.ui.register;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -15,7 +14,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.lostandfound.R;
 import com.example.lostandfound.databinding.ActivityRegisterBinding;
-import com.example.lostandfound.ui.ConfirmEmail.ConfirmEmail;
+import com.example.lostandfound.ui.VerifyEmail.VerifyEmail;
 
 public class RegisterActivity extends AppCompatActivity {
 
@@ -104,7 +103,7 @@ public class RegisterActivity extends AppCompatActivity {
                 }
 
                 // if all tests pass, start confirm email intent
-                Intent i = new Intent(RegisterActivity.this, ConfirmEmail.class);
+                Intent i = new Intent(RegisterActivity.this, VerifyEmail.class);
                 // pass the user data to the new intent
                 i.putExtra("first_name", firstName);
                 i.putExtra("last_name", lastName);
