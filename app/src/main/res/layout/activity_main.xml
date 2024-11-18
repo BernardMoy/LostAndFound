@@ -237,7 +237,6 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:itemTextColor="@color/onBackground"
-        tools:visibility="gone"/>
+        app:itemTextColor="@color/onBackground" />
 
 </androidx.drawerlayout.widget.DrawerLayout>
