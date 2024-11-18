@@ -78,8 +78,9 @@
                     <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        app:boxStrokeWidth="0dp"
+                        app:boxStrokeWidth="1dp"
                         app:startIconDrawable="@drawable/person_icon"
+                        android:layout_marginTop="@dimen/content_margin_half"
                         android:hint="First name">
 
                         <com.google.android.material.textfield.TextInputEditText
@@ -93,13 +94,13 @@
                             style="@style/blackContent"/>
                     </com.google.android.material.textfield.TextInputLayout>
 
-                    <include layout="@layout/separator_line" />
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        app:boxStrokeWidth="0dp"
+                        app:boxStrokeWidth="1dp"
                         app:startIconDrawable="@drawable/person_icon"
+                        android:layout_marginTop="@dimen/content_margin_half"
                         android:hint="Last name">
 
                         <com.google.android.material.textfield.TextInputEditText
@@ -113,7 +114,6 @@
                             style="@style/blackContent"/>
                     </com.google.android.material.textfield.TextInputLayout>
 
-                    <include layout="@layout/separator_line" />
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
@@ -121,6 +121,7 @@
                         app:boxStrokeWidth="0dp"
                         app:startIconDrawable="@drawable/email_icon"
                         app:endIconDrawable="@drawable/lock_icon"
+                        android:layout_marginTop="@dimen/content_margin_half"
                         app:endIconMode="custom"
                         android:hint="Email">
 
