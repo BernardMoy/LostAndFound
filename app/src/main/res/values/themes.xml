@@ -151,13 +151,19 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:minHeight">@dimen/title_font_size</item>
         <item name="android:drawableTint">@color/gray</item>
-        <item name="android:background">@drawable/item_background_light_gray</item>
+        <item name="android:background">@drawable/background_light_gray_selector</item>
         <item name="android:textSize">@dimen/content_font_size</item>
         <item name="android:textColor">@color/black</item>
         <item name="android:drawablePadding">@dimen/content_margin</item>
         <item name="android:padding">@dimen/content_margin</item>
         <item name="android:textColorHint">@color/gray</item>
         <item name="android:autofillHints">text</item>
+    </style>
+
+    <style name="imageButton">
+        <item name="android:layout_width">@dimen/image_button_size</item>
+        <item name="android:layout_height">@dimen/image_button_size</item>
+        <item name="android:background">@android:color/transparent</item>
     </style>
 
 </resources>

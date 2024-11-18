@@ -22,15 +22,14 @@
 
             <ImageButton
                 android:id="@+id/back_button"
-                android:layout_width="@dimen/image_button_size"
-                android:layout_height="@dimen/image_button_size"
-                android:layout_marginStart="@dimen/content_margin"
-                android:background="@android:color/transparent"
                 android:src="@drawable/left_arrow_icon"
-                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginStart="@dimen/content_margin"
                 app:layout_constraintTop_toTopOf="parent"
-                app:tint="@color/onBackground" />
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:tint="@color/onBackground"
+                android:contentDescription="back"
+                style="@style/imageButton"/>
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -102,7 +101,7 @@
                         android:minHeight="@dimen/title_font_size"
                         android:drawableStart="@drawable/lock_icon"
                         android:drawableTint="@color/gray"
-                        android:background="@drawable/item_background_light_gray"
+                        android:background="@drawable/background_light_gray"
                         android:textSize="@dimen/content_font_size"
                         android:textColor="@color/black"
                         android:padding="@dimen/content_margin"
@@ -130,7 +129,7 @@
                     android:gravity="center_vertical"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/item_background_error"
+                    android:background="@drawable/background_error"
                     android:text="Login error"
                     android:textColor="@color/error_dark"
                     android:textSize="@dimen/content_font_size"
