@@ -4,10 +4,9 @@
     tools:showIn = "navigation_view">
 
     <item
-        android:title="Items">
-
+        android:title="Menu">
         <menu>
-            <item
+            <!-- <item
                 android:id="@+id/nav_drawer_recents"
                 android:icon="@drawable/recent_icon"
                 android:title="Recently viewed items" />
@@ -15,30 +14,84 @@
             <item
                 android:id="@+id/nav_drawer_bookmark"
                 android:icon="@drawable/bookmark_icon"
-                android:title="Bookmarked items" />
+                android:title="Bookmarked items" /> -->
+
+            <item
+                android:id="@+id/nav_drawer_my_lost"
+                android:icon="@drawable/question_mark_icon"
+                android:title="My lost items" />
+
+            <item
+                android:id="@+id/nav_drawer_my_found"
+                android:icon="@drawable/check_icon"
+                android:title="My found items" />
+
+            <item
+                android:id="@+id/nav_drawer_chat"
+                android:icon="@drawable/chat_icon"
+                android:title="My chats" />
+
+            <item
+                android:id="@+id/nav_drawer_notifications"
+                android:icon="@drawable/notifications_icon"
+                android:title="My notifications" />
+        </menu>
+    </item>
+
+    <item
+        android:title="Create">
+        <menu>
+            <item
+                android:id="@+id/nav_drawer_new_lost"
+                android:icon="@drawable/add_icon"
+                android:title="New lost item entry" />
+            <item
+                android:id="@+id/nav_drawer_new_found"
+                android:icon="@drawable/add_icon"
+                android:title="New found item entry" />
+        </menu>
+    </item>
+
+    <item
+        android:title="Activity">
+        <menu>
+            <item
+                android:id="@+id/nav_drawer_activity_log"
+                android:icon="@drawable/document_icon"
+                android:title="Activity log" />
+
         </menu>
     </item>
 
     <item
         android:title="Settings">
-
         <menu>
             <item
                 android:id="@+id/nav_drawer_settings"
                 android:icon="@drawable/settings_icon"
-                android:title="Settings" />
-
+                android:title="App settings" />
             <item
                 android:id="@+id/nav_drawer_profile"
                 android:icon="@drawable/account_icon"
                 android:title="Your profile" />
+        </menu>
+    </item>
 
-
+    <item
+        android:title="Help">
+        <menu>
             <item
-                android:id="@+id/nav_drawer_report"
+                android:id="@+id/nav_drawer_take_a_tour"
+                android:icon="@drawable/video_icon"
+                android:title="Take a tour" />
+            <item
+                android:id="@+id/nav_drawer_how_it_works"
+                android:icon="@drawable/info_icon"
+                android:title="How it works" />
+            <item
+                android:id="@+id/nav_drawer_report_an_issue"
                 android:icon="@drawable/error_icon"
                 android:title="Report an issue with the app" />
-
         </menu>
     </item>
 

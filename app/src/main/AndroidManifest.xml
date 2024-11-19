@@ -13,28 +13,62 @@
         android:theme="@style/Theme.LostAndFound"
         tools:targetApi="31">
         <activity
+            android:name=".ui.NewFound.NewFoundActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:windowSoftInputMode="adjustPan"
+            android:exported="false" />
+        <activity
+            android:name=".ui.NewLost.NewLostActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:windowSoftInputMode="adjustPan"
+            android:exported="false" />
+        <activity
+            android:name=".ui.ActivityLog.ActivityLogActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:windowSoftInputMode="adjustPan"
+            android:exported="false" />
+        <activity
+            android:name=".ui.Notifications.NotificationsActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:windowSoftInputMode="adjustPan"
+            android:exported="false" />
+        <activity
+            android:name=".ui.ReportIssue.ReportIssueActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:windowSoftInputMode="adjustPan"
+            android:exported="false" />
+        <activity
+            android:name=".ui.EditProfile.EditProfileActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:windowSoftInputMode="adjustPan"
+            android:exported="false" />
+        <activity
             android:name=".ui.ForgotPassword.ForgotPassword"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:windowSoftInputMode="adjustPan"
             android:exported="false" />
         <activity
-            android:name=".ui.ConfirmEmail.ConfirmEmail"
+            android:name=".ui.VerifyEmail.VerifyEmail"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:windowSoftInputMode="adjustPan"
             android:exported="false" />
         <activity
-            android:name=".ui.register.RegisterActivity"
+            android:name=".ui.Register.RegisterActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:exported="false"
             android:windowSoftInputMode="adjustPan" />
         <activity
-            android:name=".ui.login.LoginActivity"
+            android:name=".ui.Login.LoginActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:exported="false"
             android:windowSoftInputMode="adjustPan" />
         <activity
-            android:name=".ui.settings.SettingsActivity"
+            android:name=".ui.Settings.SettingsActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:exported="false"
             android:windowSoftInputMode="adjustPan" />
         <activity
-            android:name=".ui.profile.ProfileActivity"
+            android:name=".ui.Profile.ProfileActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:exported="false"
             android:windowSoftInputMode="adjustPan" />

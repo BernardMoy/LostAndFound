@@ -27,14 +27,12 @@
 
         <ImageButton
             android:id="@+id/drawer_close_button"
-            android:layout_width="@dimen/image_button_size"
-            android:layout_height="@dimen/image_button_size"
-            android:background="@android:color/transparent"
             android:src="@drawable/cross_icon"
             app:layout_constraintStart_toStartOf="parent"
             android:layout_marginStart="@dimen/content_margin"
             app:layout_constraintTop_toTopOf="parent"
-            app:tint="@color/white" />
+            app:tint="@color/white"
+            style="@style/imageButton"/>
 
         <LinearLayout
             android:id="@+id/user_info_linear_layout"
@@ -61,37 +59,26 @@
 
             <TextView
                 android:id="@+id/nav_drawer_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
                 android:text="Name"
-                android:textStyle="bold"
-                android:textColor="@color/onPrimary"
-                android:textSize="@dimen/title_font_size"
-                android:layout_marginBottom="@dimen/content_margin_half" />
+                android:layout_marginBottom="@dimen/content_margin_half"
+                style="@style/whiteBoldTitle"/>
 
             <TextView
                 android:id="@+id/nav_drawer_email"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
                 android:text="u0000000@live.warwick.ac.uk"
-                android:textColor="@color/onPrimary"
-                android:textSize="@dimen/content_font_size"
-                android:layout_marginBottom="@dimen/content_margin" />
+                android:layout_marginBottom="@dimen/content_margin"
+                style="@style/whiteContent"/>
         </LinearLayout>
 
         <TextView
             android:id="@+id/not_logged_in_textview"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/title_margin"
             android:layout_marginEnd="@dimen/title_margin"
             android:text="You are not signed in."
-            android:textColor="@color/white"
-            android:textSize="@dimen/title_font_size"
-            android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="@+id/rectangle_background"
             app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginBottom="@dimen/content_margin"/>
+            android:layout_marginBottom="@dimen/content_margin"
+            style="@style/whiteBoldTitle"/>
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
