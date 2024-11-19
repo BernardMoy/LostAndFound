@@ -9,6 +9,10 @@ import java.security.NoSuchAlgorithmException;
 // class to hash an String with SHA256
 public class Hasher {
 
+    private Hasher(){
+
+    }
+
     // hash a string using SHA-256, and return its hash.
     public static String hash(String text){
         try{

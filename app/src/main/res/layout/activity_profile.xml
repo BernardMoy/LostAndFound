@@ -220,6 +220,16 @@
                         style="@style/grayBoldContent" />
 
                     <TextView
+                        android:id="@+id/log_out"
+                        android:text="Log out"
+                        app:drawableStartCompat="@drawable/logout_icon"
+                        android:layout_marginTop="@dimen/content_margin_half"
+                        android:layout_marginBottom="@dimen/content_margin_half"
+                        android:padding="@dimen/content_margin"
+                        style="@style/action"
+                        />
+
+                    <TextView
                         android:id="@+id/change_password"
                         android:text="Change password"
                         app:drawableStartCompat="@drawable/lock_icon"
