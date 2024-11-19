@@ -57,14 +57,53 @@ public class ProfileActivity extends AppCompatActivity {
         });
 
         // button to log out the user
-        /*
-        binding.logoutLayout.setOnClickListener(new View.OnClickListener() {
+        binding.logOut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                logout();
+                Dialog dialog = new Dialog(ProfileActivity.this);
+                dialog.setContentView(R.layout.dialog_logout);
+                dialog.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                dialog.getWindow().setBackgroundDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.dialog_background, null));
+                dialog.setCancelable(true);
+
+                // load the dialog binding
+                DialogLogoutBinding dialogLogoutBinding = DialogLogoutBinding.inflate(LayoutInflater.from(dialog.getContext()));
+                dialog.setContentView(dialogLogoutBinding.getRoot());
+
+                dialogLogoutBinding.cancelDialogButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        dialog.dismiss();
+                    }
+                });
+
+                dialogLogoutBinding.confirmDialogButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        dialog.dismiss();
+
+                        // log out user here
+                        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+                        mAuth.signOut();
+
+                        // reset sharedpreferences for User
+                        SharedPreferences sharedPreferences = getSharedPreferences("User", MODE_PRIVATE);
+                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                        // clear user data
+                        editor.clear();
+                        editor.apply();
+
+
+                        Toast.makeText(ProfileActivity.this, "Logged out successfully", Toast.LENGTH_SHORT).show();
+
+                        // finish activity
+                        finish();
+                    }
+                });
+
+                dialog.show();
             }
         });
-        */
 
 
         // button to open edit profile activity
@@ -82,52 +121,6 @@ public class ProfileActivity extends AppCompatActivity {
         super.onResume();
 
         updateDisplayedData();
-    }
-
-    // method to log the user out
-    public void logout(){
-        Dialog dialog = new Dialog(ProfileActivity.this);
-        dialog.setContentView(R.layout.dialog_logout);
-        dialog.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        dialog.getWindow().setBackgroundDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.dialog_background, null));
-        dialog.setCancelable(true);
-
-        // load the dialog binding
-        DialogLogoutBinding dialogLogoutBinding = DialogLogoutBinding.inflate(LayoutInflater.from(dialog.getContext()));
-        dialog.setContentView(dialogLogoutBinding.getRoot());
-
-        dialogLogoutBinding.cancelDialogButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dialog.dismiss();
-            }
-        });
-
-        dialogLogoutBinding.loginDialogButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dialog.dismiss();
-
-                // log out user here
-                FirebaseAuth mAuth = FirebaseAuth.getInstance();
-                mAuth.signOut();
-
-                // reset sharedpreferences
-                SharedPreferences sharedPreferences = getSharedPreferences("User", MODE_PRIVATE);
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                // clear user data
-                editor.clear();
-                editor.apply();
-
-
-                Toast.makeText(ProfileActivity.this, "Logged out successfully", Toast.LENGTH_SHORT).show();
-
-                // finish activity
-                finish();
-            }
-        });
-
-        dialog.show();
     }
 
 
