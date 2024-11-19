@@ -55,6 +55,7 @@ public class EmailSender {
 
 
     // method to send email to the stored emailAddress.
+    // param isRegenerated: If true, this will generate a toast message when email is sent
     public void sendEmail(boolean isRegenerated) {
 
         // get the data from firestore with user's current email
@@ -82,15 +83,29 @@ public class EmailSender {
                     String code = generateVerificationCode();
                     String body = code + " " + ctx.getString(R.string.confirm_email_body);
 
+                    // hash the generated code and update data in the database
+                    String hashedCode = Hasher.hash(code);
+                    long currentTime = Calendar.getInstance().getTimeInMillis();
+                    VerificationData data = new VerificationData(hashedCode, currentTime);   // class to store the hashed code and current time
+
+                    // store the key as the email address, value as the code and time
+                    db.put(COLLECTION_NAME, emailAddress, data, new FirestoreManager.Callback<Boolean>() {
+                        @Override
+                        public void onComplete(Boolean result) {
+                            if (!result){
+                                Toast.makeText(ctx, "Error loading verification code", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
+
+                    // set up contents of the mime message
                     String fromEmail = ctx.getString(R.string.sender_email);
                     String fromPassword = ctx.getString(R.string.sender_password);
                     String emailHost = ctx.getString(R.string.sender_host);
 
-                    // set up contents of the mime message
                     try {
                         mimeMessage.addRecipient(Message.RecipientType.TO, new InternetAddress(emailAddress));
                         mimeMessage.setSubject(subject);
-
                         mimeMessage.setText(body);
 
                         // Send email with Transport object
@@ -133,22 +148,6 @@ public class EmailSender {
         SecureRandom secureRandom = new SecureRandom();
         int code = 100000 + secureRandom.nextInt(900000);  // ensure 100000 <= code <= 999999
 
-        // hash the generated code
-        Hasher hasher = new Hasher();
-        String hashedCode = hasher.hash(String.valueOf(code));
-
-        // update data in database
-        long currentTime = Calendar.getInstance().getTimeInMillis();
-        VerificationData data = new VerificationData(hashedCode, currentTime);
-
-        db.put(COLLECTION_NAME, emailAddress, data, new FirestoreManager.Callback<Boolean>() {
-            @Override
-            public void onComplete(Boolean result) {
-
-            }
-        });
-
-        // return the original (unhashed) code
         return String.valueOf(code);
     }
 }

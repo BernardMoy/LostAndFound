@@ -117,17 +117,6 @@ public class VerifyEmail extends AppCompatActivity {
             }
         });
 
-
-        // button to verify email
-        binding.verifyEmailButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-            }
-        });
-
-
-
         // set underlined text for the resend text
         binding.resend.setPaintFlags(binding.resend.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
 
@@ -239,7 +228,6 @@ public class VerifyEmail extends AppCompatActivity {
         emailSender.sendEmail(isRegenerated);
     }
 
-
     // method to verify if a code is valid, and it is only valid if it is generated within last 10 minutes.
     // if a code is valid, it will create the user
     public void verifyCodeAndCreateUser(String code){
@@ -270,8 +258,7 @@ public class VerifyEmail extends AppCompatActivity {
                 }
 
                 // check if user's code is valid
-                Hasher hasher = new Hasher();
-                if (!hasher.compareHash(code, storedHashedCode)) {
+                if (!Hasher.compareHash(code, storedHashedCode)) {
                     verifyEmailViewModel.setVerificationError("The code entered was invalid.");
                     return;
                 }
@@ -342,6 +329,7 @@ public class VerifyEmail extends AppCompatActivity {
                         } else if (task.getException() instanceof FirebaseAuthUserCollisionException) {
                             // check if this is due to an account with same email already exists
                             Toast.makeText(VerifyEmail.this, "An account with the same email already exists, please log in.", Toast.LENGTH_SHORT).show();
+                            // exit activity
                             finish();
 
                         } else {
