@@ -5,8 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context=".ui.settings.SettingsActivity">
+    android:orientation="vertical">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
@@ -23,15 +22,14 @@
 
             <ImageButton
                 android:id="@+id/back_button"
-                android:layout_width="@dimen/image_button_size"
-                android:layout_height="@dimen/image_button_size"
-                android:layout_marginStart="@dimen/content_margin"
-                android:background="@android:color/transparent"
                 android:src="@drawable/left_arrow_icon"
-                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginStart="@dimen/content_margin"
                 app:layout_constraintTop_toTopOf="parent"
-                app:tint="@color/onBackground" />
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:tint="@color/onBackground"
+                android:contentDescription="back"
+                style="@style/imageButton"/>
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -62,63 +60,37 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="start"
+                    android:layout_gravity="start"
                     android:text="Header"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/header_font_size"
-                    android:textStyle="bold"
-                    android:layout_marginBottom="@dimen/title_margin" />
+                    android:layout_marginTop="@dimen/content_margin"
+                    style="@style/blackBoldHeader"
+                    />
 
                 <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="start"
-                    android:layout_marginBottom="@dimen/header_margin"
-                    android:text="Header description"
-                    android:textColor="@color/gray"
-                    android:textSize="@dimen/content_font_size" />
+                    android:layout_gravity="start"
+                    android:text="description"
+                    android:layout_marginTop="@dimen/content_margin"
+                    android:layout_marginBottom="@dimen/content_margin"
+                    style="@style/grayContent"
+                    />
 
                 <EditText
-                    android:id="@+id/forgot_password_email"
+                    android:id="@+id/text_box"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/content_margin"
-                    android:autofillHints="emailAddress"
-                    android:background="@drawable/item_background_darker_gray_outline"
-                    android:drawableStart="@drawable/email_icon"
-                    android:drawablePadding="@dimen/content_margin"
-                    android:drawableTint="@color/gray"
-                    android:hint="Email address (@warwick.ac.uk)"
-                    android:inputType="textEmailAddress"
-
-                    android:minHeight="@dimen/title_font_size"
-                    android:padding="@dimen/content_margin"
-                    android:textColor="@color/black"
-                    android:textColorHint="@color/gray"
-                    android:textSize="@dimen/content_font_size" />
+                    android:drawableStart="@drawable/person_icon"
+                    android:hint="Text box"
+                    android:layout_marginTop="@dimen/content_margin_half"
+                    android:layout_marginBottom="@dimen/content_margin_half"
+                    style="@style/inputField"/>
 
                 <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/button"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
                     android:layout_marginTop="@dimen/content_margin"
-                    android:background="@drawable/rectangle_gradient_button"
-                    android:padding="@dimen/content_margin"
-                    android:paddingStart="@dimen/header_margin"
-                    android:paddingEnd="@dimen/header_margin"
                     android:text="Button"
-                    android:textAllCaps="false"
-                    android:textColor="@color/white"
-                    android:textSize="@dimen/title_font_size" />
+                    style="@style/colorButton" />
 
             </LinearLayout>
         </ScrollView>
 
-
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-
 </LinearLayout>

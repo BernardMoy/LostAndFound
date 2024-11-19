@@ -52,7 +52,7 @@
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"/>
 
-                <!-- Notification and profile icon: Displayed when logged in -->
+                <!-- Notification and Profile icon: Displayed when logged in -->
                 <LinearLayout
                     android:id="@+id/profile_and_notifications_icons"
                     android:orientation="horizontal"
@@ -99,7 +99,7 @@
                     android:text="Log in"
                     android:textSize="@dimen/content_font_size"
                     android:textColor="@color/primaryColor"
-                    android:background="@drawable/item_background_white"
+                    android:background="@drawable/background_white"
                     android:layout_marginEnd="@dimen/content_margin"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
@@ -237,7 +237,6 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:itemTextColor="@color/onBackground"
-        tools:visibility="gone"/>
+        app:itemTextColor="@color/onBackground" />
 
 </androidx.drawerlayout.widget.DrawerLayout>

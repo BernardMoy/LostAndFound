@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".ui.settings.SettingsActivity">
+    tools:context=".ui.Settings.SettingsActivity">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
@@ -23,27 +23,22 @@
 
             <ImageButton
                 android:id="@+id/back_button"
-                android:layout_width="@dimen/image_button_size"
-                android:layout_height="@dimen/image_button_size"
-                android:background="@android:color/transparent"
                 android:src="@drawable/left_arrow_icon"
                 app:layout_constraintStart_toStartOf="parent"
                 android:layout_marginStart="@dimen/content_margin"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:tint="@color/onBackground" />
+                app:tint="@color/onBackground"
+                android:contentDescription="back"
+                style="@style/imageButton"/>
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/onBackground"
                 android:text="Settings"
-                android:textStyle="bold"
-                android:textSize="@dimen/title_font_size"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"/>
+                app:layout_constraintBottom_toBottomOf="parent"
+                style="@style/toolbarTitle"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -58,42 +53,137 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            app:layout_constraintTop_toBottomOf="@id/toolbar"
-            android:layout_marginStart="@dimen/content_margin"
-            android:layout_marginTop="@dimen/content_margin"
-            android:layout_marginBottom="@dimen/content_margin"
-            android:layout_marginEnd="@dimen/content_margin"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent">
+            android:layout_margin = "@dimen/title_margin">
+
 
             <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="APP DATA"
-                android:textSize="@dimen/content_font_size"
-                android:textColor="@color/primaryColorVariant"
+                android:text="Appearance"
                 android:layout_marginTop="@dimen/content_margin"
                 android:layout_marginBottom="@dimen/content_margin"
-                android:textStyle="bold" />
-
-            <include layout="@layout/separator_line" />
+                style="@style/grayBoldContent" />
 
             <TextView
-                android:id="@+id/clear_textView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:id="@+id/color_theme"
+                android:text="Color theme"
+                app:drawableStartCompat="@drawable/color_icon"
+                android:layout_marginTop="@dimen/content_margin_half"
+                android:layout_marginBottom="@dimen/content_margin_half"
+                android:padding="@dimen/content_margin"
+                style="@style/action"
+                />
+
+            <TextView
+                android:id="@+id/day_night_mode"
+                android:text="Day / night mode"
+                app:drawableStartCompat="@drawable/day_icon"
+                android:layout_marginTop="@dimen/content_margin_half"
+                android:layout_marginBottom="@dimen/content_margin_half"
+                android:padding="@dimen/content_margin"
+                style="@style/action"
+                />
+
+            <TextView
+                android:id="@+id/font_size"
+                android:text="Font size"
+                app:drawableStartCompat="@drawable/text_icon"
+                android:layout_marginTop="@dimen/content_margin_half"
+                android:layout_marginBottom="@dimen/content_margin_half"
+                android:padding="@dimen/content_margin"
+                style="@style/action"
+                />
+
+
+            <include layout="@layout/separator_line" />
+            <TextView
+                android:text="Permissions"
+                android:layout_marginTop="@dimen/content_margin"
+                android:layout_marginBottom="@dimen/content_margin"
+                style="@style/grayBoldContent" />
+
+            <TextView
+                android:id="@+id/push_notifications"
+                android:text="Push notifications"
+                app:drawableStartCompat="@drawable/notifications_icon"
+                android:layout_marginTop="@dimen/content_margin_half"
+                android:layout_marginBottom="@dimen/content_margin_half"
+                android:padding="@dimen/content_margin"
+                style="@style/action"
+                />
+
+            <TextView
+                android:id="@+id/location"
+                android:text="Location"
+                app:drawableStartCompat="@drawable/location_icon"
+                android:layout_marginTop="@dimen/content_margin_half"
+                android:layout_marginBottom="@dimen/content_margin_half"
+                android:padding="@dimen/content_margin"
+                style="@style/action"
+                />
+
+            <include layout="@layout/separator_line" />
+            <TextView
+                android:text="Profile"
+                android:layout_marginTop="@dimen/content_margin"
+                android:layout_marginBottom="@dimen/content_margin"
+                style="@style/grayBoldContent" />
+
+            <TextView
+                android:id="@+id/profile_settings"
+                android:text="Profile settings"
+                app:drawableStartCompat="@drawable/person_icon"
+                android:layout_marginTop="@dimen/content_margin_half"
+                android:layout_marginBottom="@dimen/content_margin_half"
+                android:padding="@dimen/content_margin"
+                style="@style/action"
+                />
+
+            <include layout="@layout/separator_line" />
+            <TextView
+                android:text="About the app"
+                android:layout_marginTop="@dimen/content_margin"
+                android:layout_marginBottom="@dimen/content_margin"
+                style="@style/grayBoldContent" />
+
+            <TextView
+                android:id="@+id/about"
+                android:text="About"
+                app:drawableStartCompat="@drawable/info_icon"
+                android:layout_marginTop="@dimen/content_margin_half"
+                android:layout_marginBottom="@dimen/content_margin_half"
+                android:padding="@dimen/content_margin"
+                style="@style/action"
+                />
+
+            <TextView
+                android:id="@+id/report_a_problem"
+                android:text="Report a problem with the app"
+                app:drawableStartCompat="@drawable/error_icon"
+                android:layout_marginTop="@dimen/content_margin_half"
+                android:layout_marginBottom="@dimen/content_margin_half"
+                android:padding="@dimen/content_margin"
+                style="@style/action"
+                />
+
+            <include layout="@layout/separator_line" />
+            <TextView
+                android:text="App data"
+                android:layout_marginTop="@dimen/content_margin"
+                android:layout_marginBottom="@dimen/content_margin"
+                style="@style/grayBoldContent" />
+
+
+            <TextView
+                android:id="@+id/delete_users_shared_preferences_data"
                 android:text="Delete users shared preferences data"
-                android:textSize="@dimen/content_font_size"
-                android:drawableEnd="@drawable/right_arrow_icon"
-                android:drawableTint="@color/primaryColorVariant"
-                android:textColor = "@color/black"
-                android:layout_marginTop="@dimen/content_margin"
-                android:layout_marginBottom="@dimen/content_margin"
-                android:paddingTop="@dimen/content_margin"
-                android:paddingBottom="@dimen/content_margin"/>
-
+                app:drawableStartCompat="@drawable/delete_icon"
+                android:layout_marginTop="@dimen/content_margin_half"
+                android:layout_marginBottom="@dimen/content_margin_half"
+                android:padding="@dimen/content_margin"
+                style="@style/action"
+                />
 
             <include layout="@layout/separator_line" />
+
 
 
 

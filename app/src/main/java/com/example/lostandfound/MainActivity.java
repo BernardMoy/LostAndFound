@@ -1,31 +1,30 @@
 package com.example.lostandfound;
 
-import android.app.Dialog;
+import static android.app.PendingIntent.getActivity;
+
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
 
-import com.example.lostandfound.databinding.DialogLogoutBinding;
-import com.example.lostandfound.ui.ConfirmEmail.ConfirmEmail;
-import com.example.lostandfound.ui.login.LoginActivity;
-import com.example.lostandfound.ui.profile.ProfileActivity;
-import com.example.lostandfound.ui.settings.SettingsActivity;
+import com.example.lostandfound.ui.ActivityLog.ActivityLogActivity;
+import com.example.lostandfound.ui.Login.LoginActivity;
+import com.example.lostandfound.ui.NewFound.NewFoundActivity;
+import com.example.lostandfound.ui.NewLost.NewLostActivity;
+import com.example.lostandfound.ui.Notifications.NotificationsActivity;
+import com.example.lostandfound.ui.Profile.ProfileActivity;
+import com.example.lostandfound.ui.ReportIssue.ReportIssueActivity;
+import com.example.lostandfound.ui.Settings.SettingsActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.res.ResourcesCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.lifecycle.ViewModelProvider;
@@ -49,7 +48,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private boolean isMenuExpanded;
 
-    private NavigationView navigationView;
+    private NavigationView navigationDrawer;
     private LinearLayout navHeader;
 
     @Override
@@ -67,9 +66,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setSupportActionBar(toolbar);
 
 
-        BottomNavigationView navView = findViewById(R.id.nav_view);
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
+        BottomNavigationView navView = findViewById(R.id.nav_view);
         AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
                 R.id.navigation_home, R.id.navigation_lost, R.id.navigation_found, R.id.navigation_search, R.id.navigation_chat)
                 .setOpenableLayout(drawerLayout)
@@ -93,8 +92,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         });
 
         // set up button to close drawer
-        navigationView = findViewById(R.id.nav_drawer_view);
-        navHeader = (LinearLayout) navigationView.getHeaderView(0);
+        navigationDrawer = findViewById(R.id.nav_drawer_view);
+        navHeader = (LinearLayout) navigationDrawer.getHeaderView(0);
 
         closeDrawerButton = navHeader.findViewById(R.id.drawer_close_button);
         closeDrawerButton.setOnClickListener(new View.OnClickListener() {
@@ -107,21 +106,54 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         });
 
         // set on click listeners for the items in the nav view
-        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+        navigationDrawer.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 int clickedId = item.getItemId();
 
-                if (clickedId == R.id.nav_drawer_profile){
-                    // start profile activity
-                    Intent i = new Intent(MainActivity.this, ProfileActivity.class);
+                if (clickedId == R.id.nav_drawer_my_lost){
+                    navView.setSelectedItemId(R.id.navigation_lost);
+
+                } else if (clickedId == R.id.nav_drawer_my_found){
+                    navView.setSelectedItemId(R.id.navigation_found);
+
+                } else if (clickedId == R.id.nav_drawer_chat){
+                    navView.setSelectedItemId(R.id.navigation_chat);
+
+                } else if (clickedId == R.id.nav_drawer_notifications){
+                    Intent i = new Intent(MainActivity.this, NotificationsActivity.class);
+                    startActivity(i);
+
+                } else if (clickedId == R.id.nav_drawer_new_lost){
+                    Intent i = new Intent(MainActivity.this, NewLostActivity.class);
+                    startActivity(i);
+
+                } else if (clickedId == R.id.nav_drawer_new_found){
+                    Intent i = new Intent(MainActivity.this, NewFoundActivity.class);
+                    startActivity(i);
+
+                } else if (clickedId == R.id.nav_drawer_activity_log){
+                    Intent i = new Intent(MainActivity.this, ActivityLogActivity.class);
                     startActivity(i);
 
                 } else if (clickedId == R.id.nav_drawer_settings){
-                    // start settings activity
+                    // start Settings activity
                     Intent i = new Intent(MainActivity.this, SettingsActivity.class);
                     startActivity(i);
 
+                } else if (clickedId == R.id.nav_drawer_profile){
+                    // start Profile activity
+                    Intent i = new Intent(MainActivity.this, ProfileActivity.class);
+                    startActivity(i);
+
+                } else if (clickedId == R.id.nav_drawer_take_a_tour){
+
+                } else if (clickedId == R.id.nav_drawer_how_it_works){
+
+                } else if (clickedId == R.id.nav_drawer_report_an_issue){
+                    // start report issue activity
+                    Intent i = new Intent(MainActivity.this, ReportIssueActivity.class);
+                    startActivity(i);
                 }
 
                 // close the drawer after an item is clicked
@@ -138,6 +170,26 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         binding.foundFloatingActionButton.setEnabled(false);
         binding.lostFloatingActionButton.setEnabled(false);
 
+        // listeners for the lost and found buttons
+        binding.lostFloatingActionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                collapseMenu();
+                Intent i = new Intent(MainActivity.this, NewLostActivity.class);
+                startActivity(i);
+            }
+        });
+
+        binding.foundFloatingActionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                collapseMenu();
+                Intent i = new Intent(MainActivity.this, NewFoundActivity.class);
+                startActivity(i);
+            }
+        });
+
+        // listener for the + button
         binding.floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -151,7 +203,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         });
 
-        // Start profile activity when the profile icon is clicked
+        // Start Profile activity when the Profile icon is clicked
         binding.toolbarProfileIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -269,7 +321,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             navHeader.findViewById(R.id.user_info_linear_layout).setVisibility(View.GONE);
             navHeader.findViewById(R.id.not_logged_in_textview).setVisibility(View.VISIBLE);
 
-            // show the login button
+            // show the Login button
             binding.profileAndNotificationsIcons.setEnabled(false);
             binding.profileAndNotificationsIcons.setVisibility(View.GONE);
             binding.loginButton.setEnabled(true);

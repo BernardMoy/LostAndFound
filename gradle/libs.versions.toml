@@ -18,6 +18,7 @@ firebaseDatabase = "21.0.0"
 firebaseFirestore = "25.1.1"
 jakarta-mail = "2.0.1"
 jakarta-activation = "2.0.1"
+core-testing = "2.2.0"
 
 [libraries]
 junit = { group = "junit", name = "junit", version.ref = "junit" }
@@ -37,6 +38,8 @@ firebase-database = { group = "com.google.firebase", name = "firebase-database",
 firebase-firestore = { group = "com.google.firebase", name = "firebase-firestore", version.ref = "firebaseFirestore" }
 jakarta-mail = { group = "com.sun.mail", name = "jakarta.mail", version.ref = "jakarta-mail" }
 jakarta-activation = { group = "com.sun.activation", name = "jakarta.activation", version.ref = "jakarta-activation" }
+coreTesting = { group = "androidx.arch.core", name = "core-testing", version.ref = "core-testing" }
+
 
 
 

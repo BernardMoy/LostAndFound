@@ -12,19 +12,9 @@
     <string name="lost_text">I have lost an item</string>
     <string name="found_text">I have found an item</string>
 
-    <!-- For the titles displayed on the log in page -->
-    <string name="login_title">Welcome back!</string>
-    <string name="login_description">Please log in with your university email to continue.</string>
-    <string name="register_title">Create an account</string>
-    <string name="register_description">Only your name will be visible to others.</string>
-
-    <!-- Error messages during registeration -->
-    <string name="first_name_empty_error">First name cannot be empty</string>
-    <string name="last_name_empty_error">Last name cannot be empty</string>
-
+    <!-- Error messages during registration -->
     <string name="email_empty_error">Email cannot be empty</string>
     <string name="email_end_string">warwick.ac.uk</string>
-    <string name="email_not_uni_error">Please register with your university email (@warwick.ac.uk)</string>
 
     <string name="password_empty_error">Password cannot be empty</string>
     <string name="password_too_short_error">Password must be at least 8 characters long</string>
@@ -36,9 +26,21 @@
     <string name="email_or_password_incorrect_error"> The email or password provided is incorrect. If you don\'t have an account, please register below. </string>
     <string name="invalid_login_error"> You are already logged in. Please log out first.</string>
 
-    <string name="confirm_email_title">Confirm your email</string>
-    <string name="confirm_email_description">Please enter the 6-digit verificiation code we have sent to:</string>
+    <!-- Login activity -->
+    <string name="login_title">Welcome back!</string>
+    <string name="login_description">Please log in with your university email to continue.</string>
 
+    <!-- Register activity -->
+    <string name="register_title">Create an account</string>
+    <string name="register_description">Only your name will be visible to others.</string>
+
+    <!-- VerifyEmail activity -->
+    <string name="verify_email_title">Verify your email</string>
+    <string name="verify_email_description">Please enter the 6-digit verification code we have sent to:</string>
+
+    <!-- Forgot password activity -->
+    <string name="forgot_password_title"> Forgot password </string>
+    <string name="forgot_password_description"> Please enter your email that is used to register your account. </string>
 
     <!-- Variables used for sending emails -->
     <string name="sender_host">smtp.gmail.com</string>
