@@ -14,7 +14,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.lostandfound.R;
 import com.example.lostandfound.databinding.ActivityRegisterBinding;
-import com.example.lostandfound.ui.VerifyEmail.VerifyEmail;
+import com.example.lostandfound.ui.VerifyEmail.VerifyEmailActivity;
 
 public class RegisterActivity extends AppCompatActivity {
 
@@ -103,7 +103,7 @@ public class RegisterActivity extends AppCompatActivity {
                 }
 
                 // if all tests pass, start confirm email intent
-                Intent i = new Intent(RegisterActivity.this, VerifyEmail.class);
+                Intent i = new Intent(RegisterActivity.this, VerifyEmailActivity.class);
                 // pass the user data to the new intent
                 i.putExtra("first_name", firstName);
                 i.putExtra("last_name", lastName);
