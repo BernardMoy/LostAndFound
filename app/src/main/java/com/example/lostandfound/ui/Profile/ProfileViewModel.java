@@ -1,8 +1,13 @@
 package com.example.lostandfound.ui.Profile;
 
+import android.content.Context;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
+
+import com.example.lostandfound.FirebaseAuthManager;
+import com.example.lostandfound.UserLoginCallback;
 
 public class ProfileViewModel extends ViewModel {
 
@@ -22,6 +27,19 @@ public class ProfileViewModel extends ViewModel {
 
     public void updateCount(int newCount){
         count.setValue(newCount);
+    }
+
+
+    // method to validate if user is already logged in
+    public boolean isUserSignedIn(Context ctx){
+        FirebaseAuthManager firebaseAuthManager = new FirebaseAuthManager(ctx);
+        return firebaseAuthManager.isUserLoggedIn();
+    }
+
+    // method to logout user
+    public void logoutUser(Context ctx){
+        FirebaseAuthManager firebaseAuthManager = new FirebaseAuthManager(ctx);
+        firebaseAuthManager.logoutUser();
     }
 
 }

@@ -32,9 +32,6 @@ import com.google.firebase.firestore.FirebaseFirestore;
 public class LoginActivity extends AppCompatActivity {
 
     private ActivityLoginBinding binding;
-
-    private FirebaseAuth mAuth;
-    private FirebaseFirestore db;
     private LoginViewModel loginViewModel;
 
     @Override
@@ -48,10 +45,6 @@ public class LoginActivity extends AppCompatActivity {
         binding = ActivityLoginBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
         setContentView(view);
-
-        // get instance for firebase auth
-        mAuth = FirebaseAuth.getInstance();
-        db = FirebaseFirestore.getInstance();
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -100,30 +93,21 @@ public class LoginActivity extends AppCompatActivity {
         binding.loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // check if the user is already logged in
-                FirebaseUser user = mAuth.getCurrentUser();
-                if (user != null){
-                    loginViewModel.setLoginError(getResources().getString(R.string.invalid_login_error));
-                    return;
-                }
+                // reset error fields
+                resetErrorFields();
 
                 // get the input email and password
                 String email = binding.loginEmail.getText().toString();
                 String password = binding.loginPassword.getText().toString();
 
-                // reset error fields
-                resetErrorFields();
-
                 // validate email
-                if (email.isEmpty()) {
-                    loginViewModel.setLoginError(getResources().getString(R.string.email_empty_error));
+                if (!loginViewModel.validateEmail(email)) {
                     binding.loginEmail.setBackgroundResource(R.drawable.background_light_gray_error);
                     return;
                 }
 
                 // validate password
-                if (password.isEmpty()){
-                    loginViewModel.setLoginError(getResources().getString(R.string.password_empty_error));
+                if (!loginViewModel.validatePassword(password)) {
                     binding.loginPassword.setBackgroundResource(R.drawable.background_light_gray_error);
                     return;
                 }
@@ -132,59 +116,14 @@ public class LoginActivity extends AppCompatActivity {
                 binding.progressBar.setVisibility(View.VISIBLE);
 
                 // Login with user
-                mAuth.signInWithEmailAndPassword(email, password)
-                        .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                            @Override
-                            public void onComplete(@NonNull Task<AuthResult> task) {
-                                binding.progressBar.setVisibility(View.GONE);
+                loginViewModel.loginUser(LoginActivity.this, email, password);
 
-                                if (task.isSuccessful()) {
-                                    // Sign in success
-                                    FirebaseUser user = mAuth.getCurrentUser();
-
-                                    // get user's other info from the db
-                                    db.collection("users").document(email).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                                        @Override
-                                        public void onSuccess(DocumentSnapshot documentSnapshot) {
-                                            if (documentSnapshot.exists()){
-                                                String firstName = documentSnapshot.getString("firstName");
-                                                String lastName = documentSnapshot.getString("lastName");
-
-                                                // Save the extra user credentials (First, last name, email, avatar) in sharedpreferences
-                                                SharedPreferences sharedPreferences = getSharedPreferences("User", MODE_PRIVATE);
-                                                SharedPreferences.Editor editor = sharedPreferences.edit();
-                                                editor.putString("first_name", firstName);
-                                                editor.putString("last_name", lastName);
-                                                editor.putString("email", email);
-                                                editor.apply();
-
-                                                // Display log in successful message
-                                                Toast.makeText(LoginActivity.this, "Login successful", Toast.LENGTH_SHORT).show();
-
-                                                // exit activity
-                                                getOnBackPressedDispatcher().onBackPressed();
-
-                                            } else {
-                                                Toast.makeText(LoginActivity.this, "Error fetching user information", Toast.LENGTH_SHORT).show();
-                                            }
-                                        }
-                                    }).addOnFailureListener(new OnFailureListener() {
-                                        @Override
-                                        public void onFailure(@NonNull Exception e) {
-                                            Toast.makeText(LoginActivity.this, "Error fetching user information", Toast.LENGTH_SHORT).show();
-                                        }
-                                    });
-
-                                } else {
-                                    // If sign in fails, display a message to the user.
-                                    loginViewModel.setLoginError(getResources().getString(R.string.email_or_password_incorrect_error));
-                                    binding.loginEmail.setBackgroundResource(R.drawable.background_light_gray_error);
-                                    binding.loginPassword.setBackgroundResource(R.drawable.background_light_gray_error);
-                                }
-                            }
-                        });
-
-
+                // if sign in successful, current user would not be null
+                if (loginViewModel.isUserSignedIn(LoginActivity.this)){
+                    // finish activity and display message
+                    Toast.makeText(LoginActivity.this, "Signed in successfully", Toast.LENGTH_SHORT).show();
+                    finish();
+                }
             }
         });
     }
@@ -204,10 +143,10 @@ public class LoginActivity extends AppCompatActivity {
         super.onResume();
 
         // check if current user exists
-        if (mAuth.getCurrentUser() != null){
+        if (loginViewModel.isUserSignedIn(LoginActivity.this)){
             // finish activity if current user exists
             // They are not supposed to be able to log in
-            // This also exists the activity after returning to this page from registeration
+            // This also exists the activity after returning to this page from registration
             finish();
         }
 

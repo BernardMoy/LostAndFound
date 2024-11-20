@@ -24,7 +24,6 @@
     <string name="email_exists_error">An account with this email already exists, please login.</string>
 
     <string name="email_or_password_incorrect_error"> The email or password provided is incorrect. If you don\'t have an account, please register below. </string>
-    <string name="invalid_login_error"> You are already logged in. Please log out first.</string>
 
     <!-- Login activity -->
     <string name="login_title">Welcome back!</string>

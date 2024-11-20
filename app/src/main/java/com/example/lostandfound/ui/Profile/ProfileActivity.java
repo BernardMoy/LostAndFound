@@ -82,18 +82,8 @@ public class ProfileActivity extends AppCompatActivity {
                     public void onClick(View view) {
                         dialog.dismiss();
 
-                        // log out user here
-                        FirebaseAuth mAuth = FirebaseAuth.getInstance();
-                        mAuth.signOut();
-
-                        // reset sharedpreferences for User
-                        SharedPreferences sharedPreferences = getSharedPreferences("User", MODE_PRIVATE);
-                        SharedPreferences.Editor editor = sharedPreferences.edit();
-                        // clear user data
-                        editor.clear();
-                        editor.apply();
-
-
+                        // logout user here
+                        profileViewModel.logoutUser(ProfileActivity.this);
                         Toast.makeText(ProfileActivity.this, "Logged out successfully", Toast.LENGTH_SHORT).show();
 
                         // finish activity
