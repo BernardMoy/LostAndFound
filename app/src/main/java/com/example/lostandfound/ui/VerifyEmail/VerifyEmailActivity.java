@@ -36,7 +36,6 @@ public class VerifyEmailActivity extends AppCompatActivity {
 
     private ActivityVerifyEmailBinding binding;
     private VerifyEmailViewModel verifyEmailViewModel;
-    private FirebaseAuth mAuth;
     private Intent intent;
     private String emailAddress;
 
@@ -66,10 +65,6 @@ public class VerifyEmailActivity extends AppCompatActivity {
                 getOnBackPressedDispatcher().onBackPressed();
             }
         });
-
-
-        // get instance for firebase auth
-        mAuth = FirebaseAuth.getInstance();
 
         // set listeners to move focus when an edittext is filled
         setTextFocusChanger(binding.code1, binding.code2);
@@ -125,6 +120,9 @@ public class VerifyEmailActivity extends AppCompatActivity {
         binding.verifyEmailButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                // set progress bar to be visible
+                binding.progressBar.setVisibility(View.VISIBLE);
+
                 // extract the string
                 String code = "000000";
                 StringBuilder builder = new StringBuilder(code);
@@ -166,10 +164,18 @@ public class VerifyEmailActivity extends AppCompatActivity {
                                     new UserCreationCallback() {
                                         @Override
                                         public void onUserCreated(String error) {
-                                            if (error.isEmpty()){
-                                                Toast.makeText(VerifyEmailActivity.this, "Account successfully created", Toast.LENGTH_SHORT).show();
-                                                finish();
+                                            // hide progress bar
+                                            binding.progressBar.setVisibility(View.GONE);
+
+                                            // if there is an error, exit function
+                                            if (!error.isEmpty()) {
+                                                return;
                                             }
+
+                                            // If no error, display message and exit
+                                            Toast.makeText(VerifyEmailActivity.this, "Account successfully created", Toast.LENGTH_SHORT).show();
+                                            finish();
+
                                         }
                                     });
                         }
