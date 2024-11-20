@@ -4,6 +4,7 @@ import android.content.Context;
 
 import java.security.SecureRandom;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.Map;
 
 public class VerificationCodeManager {
@@ -31,7 +32,7 @@ public class VerificationCodeManager {
     // method to generate a new verification code for the user, and return the code
     // only generates code if the last one is generated within 1 minute
     public void generateNewVerificationCode(CodeGenerationCallback codeGenerationCallback){
-        db.getValue(COLLECTION_NAME, emailAddress, new FirestoreManager.Callback<Map<String, Object>>() {
+        db.get(COLLECTION_NAME, emailAddress, new FirestoreManager.Callback<Map<String, Object>>() {
             @Override
             public void onComplete(Map<String, Object> result) {
                 // if user has generated a code before, check it
@@ -50,7 +51,10 @@ public class VerificationCodeManager {
                 String code = generateSixDigitCode();
                 String hashedCode = Hasher.hash(code);
                 long currentTime = Calendar.getInstance().getTimeInMillis();
-                VerificationData data = new VerificationData(hashedCode, currentTime);   // class to encapsulate the hashed code and current time
+
+                Map<String, Object> data = new HashMap<>();
+                data.put("hashedCode", hashedCode);
+                data.put("timestamp", currentTime);
 
                 // Update / create the entry in the database
                 db.put(COLLECTION_NAME, emailAddress, data, new FirestoreManager.Callback<Boolean>() {
@@ -72,7 +76,7 @@ public class VerificationCodeManager {
     // method to validate user's verification code
     public void validateVerificationCode(String givenCode, CodeVerificationCallback codeVerificationCallback){
         // get the code from user database
-        db.getValue("user_verifications", emailAddress, new FirestoreManager.Callback<Map<String, Object>>() {
+        db.get("user_verifications", emailAddress, new FirestoreManager.Callback<Map<String, Object>>() {
             @Override
             public void onComplete(Map<String, Object> result) {
                 if (result == null) {
@@ -90,7 +94,7 @@ public class VerificationCodeManager {
                 }
 
                 // check if user's code is valid
-                String storedHashedCode = (String) result.get("code");
+                String storedHashedCode = (String) result.get("hashedCode");
                 if (!Hasher.compareHash(givenCode, storedHashedCode)){
                     codeVerificationCallback.onCodeVerified("Invalid verification code");
                     return;

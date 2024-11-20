@@ -210,27 +210,6 @@
                 </HorizontalScrollView>
 
 
-
-                <TextView
-                    android:id="@+id/verification_error"
-                    android:visibility="gone"
-                    android:layout_gravity="start"
-                    android:gravity="center_vertical"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/background_error"
-                    android:text="Confirm error"
-                    android:textColor="@color/error_dark"
-                    android:textSize="@dimen/content_font_size"
-
-                    android:padding="@dimen/content_margin"
-                    android:paddingStart="@dimen/title_margin"
-                    android:paddingEnd="@dimen/title_margin"
-                    android:layout_marginTop="@dimen/content_margin_half"
-                    android:layout_marginBottom="@dimen/content_margin_half"
-                    />
-
-
                 <LinearLayout
                     android:id="@+id/resend_linear_layout"
                     android:layout_width="wrap_content"
@@ -255,6 +234,17 @@
                         />
 
                 </LinearLayout>
+
+                <TextView
+                    android:id="@+id/verification_error"
+                    android:visibility="gone"
+                    android:layout_gravity="start"
+                    android:gravity="center_vertical"
+                    android:text="Verification error"
+                    android:layout_marginTop="@dimen/content_margin_half"
+                    android:layout_marginBottom="@dimen/content_margin_half"
+                    style="@style/errorField"
+                    />
 
                 <ProgressBar
                     android:id="@+id/progress_bar"
