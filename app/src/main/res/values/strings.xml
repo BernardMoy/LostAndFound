@@ -34,7 +34,7 @@
     <string name="register_title">Create an account</string>
     <string name="register_description">Only your name will be visible to others.</string>
 
-    <!-- VerifyEmail activity -->
+    <!-- VerifyEmailActivity activity -->
     <string name="verify_email_title">Verify your email</string>
     <string name="verify_email_description">Please enter the 6-digit verification code we have sent to:</string>
 
@@ -44,8 +44,6 @@
 
     <!-- Variables used for sending emails -->
     <string name="sender_host">smtp.gmail.com</string>
-    <string name="confirm_email_subject">"Lost and Found app - Please confirm your email"</string>
-    <string name="confirm_email_body">is your verification code.</string>
 
     <!-- Securely store these variables -->
     <string name="sender_email">lostfoundapp3@gmail.com</string>
