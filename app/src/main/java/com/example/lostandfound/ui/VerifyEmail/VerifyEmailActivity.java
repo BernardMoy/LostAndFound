@@ -1,7 +1,6 @@
 package com.example.lostandfound.ui.VerifyEmail;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.text.Editable;
@@ -11,7 +10,6 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -21,16 +19,8 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.lostandfound.CodeVerificationCallback;
 import com.example.lostandfound.UserCreationCallback;
-import com.example.lostandfound.VerificationCodeManager;
-import com.example.lostandfound.FirestoreManager;
 import com.example.lostandfound.R;
-import com.example.lostandfound.UserData;
 import com.example.lostandfound.databinding.ActivityVerifyEmailBinding;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 
 public class VerifyEmailActivity extends AppCompatActivity {
 
@@ -77,7 +67,7 @@ public class VerifyEmailActivity extends AppCompatActivity {
         verifyEmailViewModel.getVerificationError().observe(this, new Observer<String>() {
             @Override
             public void onChanged(String s) {
-                if (s.isEmpty()){
+                if (s.isEmpty()) {
                     // set the view to be gone
                     binding.verificationError.setVisibility(View.GONE);
 
@@ -94,7 +84,7 @@ public class VerifyEmailActivity extends AppCompatActivity {
         if (!intent.hasExtra("email")
                 || !intent.hasExtra("first_name")
                 || !intent.hasExtra("first_name")
-                || !intent.hasExtra("first_name")){
+                || !intent.hasExtra("first_name")) {
             Toast.makeText(VerifyEmailActivity.this, "Missing required user parameters", Toast.LENGTH_SHORT).show();
             finish();
         }
@@ -126,22 +116,22 @@ public class VerifyEmailActivity extends AppCompatActivity {
                 // extract the string
                 String code = "000000";
                 StringBuilder builder = new StringBuilder(code);
-                if (binding.code1.getText().length() > 0){
+                if (binding.code1.getText().length() > 0) {
                     builder.setCharAt(0, binding.code1.getText().charAt(0));
                 }
-                if (binding.code2.getText().length() > 0){
+                if (binding.code2.getText().length() > 0) {
                     builder.setCharAt(1, binding.code2.getText().charAt(0));
                 }
-                if (binding.code3.getText().length() > 0){
+                if (binding.code3.getText().length() > 0) {
                     builder.setCharAt(2, binding.code3.getText().charAt(0));
                 }
-                if (binding.code4.getText().length() > 0){
+                if (binding.code4.getText().length() > 0) {
                     builder.setCharAt(3, binding.code4.getText().charAt(0));
                 }
-                if (binding.code5.getText().length() > 0){
+                if (binding.code5.getText().length() > 0) {
                     builder.setCharAt(4, binding.code5.getText().charAt(0));
                 }
-                if (binding.code6.getText().length() > 0){
+                if (binding.code6.getText().length() > 0) {
                     builder.setCharAt(5, binding.code6.getText().charAt(0));
                 }
 
@@ -153,33 +143,39 @@ public class VerifyEmailActivity extends AppCompatActivity {
                 // verify the code and create user if successful
                 verifyEmailViewModel.validateVerificationCode(VerifyEmailActivity.this, emailAddress, code, new CodeVerificationCallback() {
                     @Override
-                    public void onCodeVerified(String code) {
-                        if (code.isEmpty()){
-                            // create user
-                            verifyEmailViewModel.createUser(VerifyEmailActivity.this,
-                                    intent.getStringExtra("first_name"),
-                                    intent.getStringExtra("last_name"),
-                                    emailAddress,
-                                    intent.getStringExtra("password"),
-                                    new UserCreationCallback() {
-                                        @Override
-                                        public void onUserCreated(String error) {
-                                            // hide progress bar
-                                            binding.progressBar.setVisibility(View.GONE);
+                    public void onCodeVerified(String error) {
 
-                                            // if there is an error, exit function
-                                            if (!error.isEmpty()) {
-                                                return;
-                                            }
-
-                                            // If no error, display message and exit
-                                            Toast.makeText(VerifyEmailActivity.this, "Account successfully created", Toast.LENGTH_SHORT).show();
-                                            finish();
-
-                                        }
-                                    });
+                        if (!error.isEmpty()) {
+                            binding.progressBar.setVisibility(View.GONE);
+                            return;
                         }
+
+                        // create user if no errors
+                        verifyEmailViewModel.createUser(VerifyEmailActivity.this,
+                                intent.getStringExtra("first_name"),
+                                intent.getStringExtra("last_name"),
+                                emailAddress,
+                                intent.getStringExtra("password"),
+                                new UserCreationCallback() {
+                                    @Override
+                                    public void onUserCreated(String error) {
+
+                                        // hide progress bar
+                                        binding.progressBar.setVisibility(View.GONE);
+
+                                        // if there is an error, exit function
+                                        if (!error.isEmpty()) {
+                                            return;
+                                        }
+
+                                        // If no error, display message and exit
+                                        Toast.makeText(VerifyEmailActivity.this, "Account successfully created", Toast.LENGTH_SHORT).show();
+                                        finish();
+
+                                    }
+                                });
                     }
+
                 });
             }
         });
@@ -189,18 +185,20 @@ public class VerifyEmailActivity extends AppCompatActivity {
     }
 
     // this method causes whenever edittext1 is filled with text, the focus is changed to edittext2
-    public void setTextFocusChanger(EditText editText1, EditText editText2){
+    public void setTextFocusChanger(EditText editText1, EditText editText2) {
         editText1.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
             }
+
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                if (charSequence.length() > 0){
+                if (charSequence.length() > 0) {
                     // if have text, set focus to edittext2
                     editText2.requestFocus();
                 }
             }
+
             @Override
             public void afterTextChanged(Editable editable) {
             }
@@ -210,13 +208,15 @@ public class VerifyEmailActivity extends AppCompatActivity {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
             }
+
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                if (charSequence.length() == 0){
+                if (charSequence.length() == 0) {
                     // if no text, set focus to edittext1
                     editText1.requestFocus();
                 }
             }
+
             @Override
             public void afterTextChanged(Editable editable) {
             }

@@ -15,6 +15,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.auth.FirebaseUser;
 
+import java.util.HashMap;
 import java.util.Map;
 
 public class FirebaseAuthManager {
@@ -35,7 +36,9 @@ public class FirebaseAuthManager {
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()){
                     // add the firstname and lastname data to database where email is the id
-                    UserData data = new UserData(firstName, lastName);
+                    Map<String, Object> data = new HashMap<>();
+                    data.put("firstName", firstName);
+                    data.put("lastName", lastName);
 
                     // add the data to firestore db
                     db.put("users", email, data, new FirestoreManager.Callback<Boolean>() {
@@ -80,7 +83,7 @@ public class FirebaseAuthManager {
                 if (task.isSuccessful()){
                     // sign in successful
                     // get other parameters given the user email
-                    db.getValue("users", emailAddress, new FirestoreManager.Callback<Map<String, Object>>() {
+                    db.get("users", emailAddress, new FirestoreManager.Callback<Map<String, Object>>() {
                         @Override
                         public void onComplete(Map<String, Object> result) {
                             if (result == null){

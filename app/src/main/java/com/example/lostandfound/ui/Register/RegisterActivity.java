@@ -68,7 +68,6 @@ public class RegisterActivity extends AppCompatActivity {
         binding.registerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 // get the first name, last name, email and password that user entered
                 String firstName = binding.registerFirstName.getText().toString();
                 String lastName = binding.registerLastName.getText().toString();
