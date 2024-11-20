@@ -17,6 +17,7 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.lostandfound.R;
+import com.example.lostandfound.UserLoginCallback;
 import com.example.lostandfound.databinding.ActivityLoginBinding;
 import com.example.lostandfound.ui.Register.RegisterActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -116,14 +117,25 @@ public class LoginActivity extends AppCompatActivity {
                 binding.progressBar.setVisibility(View.VISIBLE);
 
                 // Login with user
-                loginViewModel.loginUser(LoginActivity.this, email, password);
+                loginViewModel.loginUser(LoginActivity.this, email, password, new UserLoginCallback() {
+                    @Override
+                    public void onUserSignedIn(String error) {
+                        // hide the progress bar once operation is completed
+                        binding.progressBar.setVisibility(View.GONE);
 
-                // if sign in successful, current user would not be null
-                if (loginViewModel.isUserSignedIn(LoginActivity.this)){
-                    // finish activity and display message
-                    Toast.makeText(LoginActivity.this, "Signed in successfully", Toast.LENGTH_SHORT).show();
-                    finish();
-                }
+                        // if there is an error, exit function
+                        if (!error.isEmpty()) {
+                            return;
+                        }
+
+                        // if sign in successful, current user would not be null
+                        if (loginViewModel.isUserSignedIn(LoginActivity.this)){
+                            // finish activity and display message
+                            Toast.makeText(LoginActivity.this, "Signed in successfully", Toast.LENGTH_SHORT).show();
+                            finish();
+                        }
+                    }
+                });
             }
         });
     }

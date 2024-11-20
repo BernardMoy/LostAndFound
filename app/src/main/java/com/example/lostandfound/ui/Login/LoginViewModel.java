@@ -49,15 +49,19 @@ public class LoginViewModel extends ViewModel {
     }
 
     // method to log in user
-    public void loginUser(Context ctx, String emailAddress, String password){
+    public void loginUser(Context ctx, String emailAddress, String password, UserLoginCallback callback){
         FirebaseAuthManager firebaseAuthManager = new FirebaseAuthManager(ctx);
         firebaseAuthManager.loginUser(emailAddress, password, new UserLoginCallback() {
             @Override
             public void onUserSignedIn(String error) {
                 if (!error.isEmpty()){
                     setLoginError(error);
+                    callback.onUserSignedIn(error);
                     return;
                 }
+
+                // no errors
+                callback.onUserSignedIn("");
             }
         });
     }
