@@ -18,6 +18,7 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.lostandfound.R;
+import com.example.lostandfound.SharedPreferencesNames;
 import com.example.lostandfound.databinding.ActivityProfileBinding;
 import com.example.lostandfound.databinding.DialogLogoutBinding;
 import com.example.lostandfound.ui.EditProfile.EditProfileActivity;
@@ -117,10 +118,10 @@ public class ProfileActivity extends AppCompatActivity {
     // method to update user data displayed on screen
     public void updateDisplayedData(){
         // get data from sharedpref
-        SharedPreferences sharedPreferences = getSharedPreferences("User", MODE_PRIVATE);
-        String email = sharedPreferences.getString("email", "");
-        String firstName = sharedPreferences.getString("first_name", "");
-        String lastName = sharedPreferences.getString("last_name", "");
+        SharedPreferences sharedPreferences = getSharedPreferences(SharedPreferencesNames.NAME_USERS, MODE_PRIVATE);
+        String email = sharedPreferences.getString(SharedPreferencesNames.USER_EMAIL, "");
+        String firstName = sharedPreferences.getString(SharedPreferencesNames.USER_FIRSTNAME, "");
+        String lastName = sharedPreferences.getString(SharedPreferencesNames.USER_LASTNAME, "");
 
         String displayedName = firstName + ' ' + lastName;
 

@@ -4,7 +4,6 @@ import static android.content.Context.MODE_PRIVATE;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
@@ -37,8 +36,8 @@ public class FirebaseAuthManager {
                 if (task.isSuccessful()){
                     // add the firstname and lastname data to database where email is the id
                     Map<String, Object> data = new HashMap<>();
-                    data.put("firstName", firstName);
-                    data.put("lastName", lastName);
+                    data.put(FirestoreNames.USERS_FIRSTNAME, firstName);
+                    data.put(FirestoreNames.USERS_LASTNAME, lastName);
 
                     // add the data to firestore db
                     db.put("users", email, data, new FirestoreManager.Callback<Boolean>() {
@@ -50,11 +49,11 @@ public class FirebaseAuthManager {
                             }
 
                             // Save the extra user credentials (First, last name, email, avatar) in sharedpreferences
-                            SharedPreferences sharedPreferences = ctx.getSharedPreferences("User", MODE_PRIVATE);
+                            SharedPreferences sharedPreferences = ctx.getSharedPreferences("user", MODE_PRIVATE);
                             SharedPreferences.Editor editor = sharedPreferences.edit();
-                            editor.putString("first_name", firstName);
-                            editor.putString("last_name", lastName);
-                            editor.putString("email", email);
+                            editor.putString(SharedPreferencesNames.USER_FIRSTNAME, firstName);
+                            editor.putString(SharedPreferencesNames.USER_LASTNAME, lastName);
+                            editor.putString(SharedPreferencesNames.USER_EMAIL, email);
                             editor.apply();
 
                             // task successful code executes here
@@ -90,15 +89,15 @@ public class FirebaseAuthManager {
                                 callback.onUserSignedIn("User not found in the database");
                                 return;
                             }
-                            String firstName = (String) result.get("firstName");
-                            String lastName = (String) result.get("lastName");
+                            String firstName = (String) result.get(FirestoreNames.USERS_FIRSTNAME);
+                            String lastName = (String) result.get(FirestoreNames.USERS_LASTNAME);
 
                             // save the extra user credentials into shared preferences
-                            SharedPreferences sharedPreferences = ctx.getSharedPreferences("User", MODE_PRIVATE);
+                            SharedPreferences sharedPreferences = ctx.getSharedPreferences(SharedPreferencesNames.NAME_USERS, MODE_PRIVATE);
                             SharedPreferences.Editor editor = sharedPreferences.edit();
-                            editor.putString("first_name", firstName);
-                            editor.putString("last_name", lastName);
-                            editor.putString("email", emailAddress);
+                            editor.putString(SharedPreferencesNames.USER_FIRSTNAME, firstName);
+                            editor.putString(SharedPreferencesNames.USER_LASTNAME, lastName);
+                            editor.putString(SharedPreferencesNames.USER_EMAIL, emailAddress);
                             editor.apply();
 
                             // exit with no errors

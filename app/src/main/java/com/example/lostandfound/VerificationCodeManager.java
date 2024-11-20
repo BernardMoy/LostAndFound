@@ -12,7 +12,6 @@ public class VerificationCodeManager {
     private String emailAddress;
     private FirestoreManager db;
 
-    private static final String COLLECTION_NAME = "user_verifications";
     private static final int EMAIL_COOLDOWN = 60000;    // 1 minute
     private static final int VALID_TIME = 600000;    // 10 minutes
 
@@ -32,13 +31,13 @@ public class VerificationCodeManager {
     // method to generate a new verification code for the user, and return the code
     // only generates code if the last one is generated within 1 minute
     public void generateNewVerificationCode(CodeGenerationCallback codeGenerationCallback){
-        db.get(COLLECTION_NAME, emailAddress, new FirestoreManager.Callback<Map<String, Object>>() {
+        db.get(FirestoreNames.COLLECTION_USER_VERIFICATIONS, emailAddress, new FirestoreManager.Callback<Map<String, Object>>() {
             @Override
             public void onComplete(Map<String, Object> result) {
                 // if user has generated a code before, check it
                 if (result != null){
                     // check if the last code generated is within 1 minute from database given the current email
-                    long storedTimeStamp = (long) result.get("timestamp");
+                    long storedTimeStamp = (long) result.get(FirestoreNames.USER_VERIFICATIONS_TIMESTAMP);
                     long currentTimeStamp = Calendar.getInstance().getTimeInMillis();
                     if (currentTimeStamp - storedTimeStamp <= EMAIL_COOLDOWN){
                         // the last code is generated within the last minute
@@ -53,11 +52,11 @@ public class VerificationCodeManager {
                 long currentTime = Calendar.getInstance().getTimeInMillis();
 
                 Map<String, Object> data = new HashMap<>();
-                data.put("hashedCode", hashedCode);
-                data.put("timestamp", currentTime);
+                data.put(FirestoreNames.USER_VERIFICATIONS_HASHEDCODE, hashedCode);
+                data.put(FirestoreNames.USER_VERIFICATIONS_TIMESTAMP, currentTime);
 
                 // Update / create the entry in the database
-                db.put(COLLECTION_NAME, emailAddress, data, new FirestoreManager.Callback<Boolean>() {
+                db.put(FirestoreNames.COLLECTION_USER_VERIFICATIONS, emailAddress, data, new FirestoreManager.Callback<Boolean>() {
                     @Override
                     public void onComplete(Boolean result) {
                         if (!result){
@@ -76,7 +75,7 @@ public class VerificationCodeManager {
     // method to validate user's verification code
     public void validateVerificationCode(String givenCode, CodeVerificationCallback codeVerificationCallback){
         // get the code from user database
-        db.get("user_verifications", emailAddress, new FirestoreManager.Callback<Map<String, Object>>() {
+        db.get(FirestoreNames.COLLECTION_USER_VERIFICATIONS, emailAddress, new FirestoreManager.Callback<Map<String, Object>>() {
             @Override
             public void onComplete(Map<String, Object> result) {
                 if (result == null) {
@@ -86,7 +85,7 @@ public class VerificationCodeManager {
                 }
 
                 // check if the code is generated within the valid time
-                long storedTimeStamp = (long) result.get("timestamp");
+                long storedTimeStamp = (long) result.get(FirestoreNames.USER_VERIFICATIONS_TIMESTAMP);
                 long currentTimeStamp = Calendar.getInstance().getTimeInMillis();
                 if (currentTimeStamp - storedTimeStamp > VALID_TIME) {
                     codeVerificationCallback.onCodeVerified("The code has expired, please generate a new verification code");
@@ -94,7 +93,7 @@ public class VerificationCodeManager {
                 }
 
                 // check if user's code is valid
-                String storedHashedCode = (String) result.get("hashedCode");
+                String storedHashedCode = (String) result.get(FirestoreNames.USER_VERIFICATIONS_HASHEDCODE);
                 if (!Hasher.compareHash(givenCode, storedHashedCode)){
                     codeVerificationCallback.onCodeVerified("Invalid verification code");
                     return;

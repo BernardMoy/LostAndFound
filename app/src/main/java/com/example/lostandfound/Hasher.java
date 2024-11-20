@@ -7,11 +7,9 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 // class to hash an String with SHA256
-public class Hasher {
+public final class Hasher {
 
-    private Hasher(){
-
-    }
+    private Hasher(){}
 
     // hash a string using SHA-256, and return its hash.
     public static String hash(String text){
