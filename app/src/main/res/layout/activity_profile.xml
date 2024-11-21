@@ -24,13 +24,13 @@
 
             <ImageButton
                 android:id="@+id/back_button"
-                android:src="@drawable/left_arrow_icon"
+                android:src="@drawable/back_icon"
                 app:layout_constraintStart_toStartOf="parent"
                 android:layout_marginStart="@dimen/content_margin"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:tint="@color/white"
-                android:contentDescription="back"
+                android:contentDescription="Return to previous page"
                 style="@style/imageButton"/>
 
             <TextView
