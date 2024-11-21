@@ -18,7 +18,7 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
+            android:background="@color/backgroundColor"
             app:layout_constraintTop_toTopOf="parent"
             app:contentInsetStart="0dp"
             app:contentInsetStartWithNavigation= "0dp"
@@ -30,27 +30,21 @@
 
                 <ImageButton
                     android:id="@+id/drawer_menu_button"
-                    android:layout_width="@dimen/image_button_size"
-                    android:layout_height="@dimen/image_button_size"
-                    android:background="@android:color/transparent"
                     android:src="@drawable/menu_icon"
-                    app:tint="@color/white"
+                    app:tint="@color/onBackground"
                     app:layout_constraintStart_toStartOf="parent"
                     android:layout_marginStart="@dimen/content_margin"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent" />
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    style="@style/imageButton"/>
 
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/white"
                     android:text="@string/app_name"
-                    android:textStyle="bold"
-                    android:textSize="@dimen/title_font_size"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"/>
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    style="@style/toolbarTitle"/>
 
                 <!-- Notification and Profile icon: Displayed when logged in -->
                 <LinearLayout
@@ -98,20 +92,18 @@
 
                     android:text="Log in"
                     android:textSize="@dimen/content_font_size"
-                    android:textColor="@color/primaryColor"
-                    android:background="@drawable/background_white"
+                    android:textColor="@color/white"
+                    android:background="@drawable/background_primary"
                     android:layout_marginEnd="@dimen/content_margin"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     android:textAllCaps="false"
                     app:layout_constraintBottom_toBottomOf="parent" />
 
-
-
-
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </androidx.appcompat.widget.Toolbar>
+
 
         <fragment
             android:id="@+id/nav_host_fragment_activity_main"
