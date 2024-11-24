@@ -64,7 +64,7 @@
                         android:layout_height="@dimen/profile_image_size_small"
                         android:src="@drawable/notifications_icon"
                         android:layout_marginEnd="@dimen/content_margin"
-                        app:tint="@color/backgroundColor" />
+                        app:tint="@color/onBackground" />
 
                     <com.google.android.material.imageview.ShapeableImageView
                         android:id="@+id/toolbar_profile_icon"
@@ -219,6 +219,7 @@
 
 
     <com.google.android.material.navigation.NavigationView
+        tools:visibility="gone"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:id="@+id/nav_drawer_view"
