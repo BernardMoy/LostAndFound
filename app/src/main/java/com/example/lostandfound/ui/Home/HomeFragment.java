@@ -56,6 +56,8 @@ public class HomeFragment extends Fragment {
         ArrayList<LostItem> lostItemList = new ArrayList<>();
         lostItemList.add(item1);
         lostItemList.add(item2);
+        lostItemList.add(item2);
+        lostItemList.add(item2);
 
         // set up the recycler view for displaying recently lost items
         binding.recentlyLostItemsRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));

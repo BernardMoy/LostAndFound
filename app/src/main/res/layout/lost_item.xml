@@ -2,8 +2,11 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:background="@drawable/background_darker_gray_status"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_marginTop="@dimen/content_margin_half"
+    android:layout_marginBottom="@dimen/content_margin_half"
     android:padding="@dimen/content_margin"
     android:paddingStart="@dimen/title_margin"
     android:paddingEnd="@dimen/title_margin">
