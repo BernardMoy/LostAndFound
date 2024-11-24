@@ -203,6 +203,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         });
 
+        // start notification activity when the notif icon is clicked
+        binding.toolbarNotificationsIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(MainActivity.this, NotificationsActivity.class);
+                startActivity(i);
+            }
+        });
+
         // Start Profile activity when the Profile icon is clicked
         binding.toolbarProfileIcon.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -299,10 +308,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             binding.profileAndNotificationsIcons.setVisibility(View.VISIBLE);
 
             // get data from sharedpreferences
-            SharedPreferences sharedPreferences = getSharedPreferences("User", MODE_PRIVATE);
-            String firstName = sharedPreferences.getString("first_name", "");
-            String lastName = sharedPreferences.getString("last_name", "");
-            String email = sharedPreferences.getString("email", "");
+            SharedPreferences sharedPreferences = getSharedPreferences(SharedPreferencesNames.NAME_USERS, MODE_PRIVATE);
+            String firstName = sharedPreferences.getString(SharedPreferencesNames.USER_FIRSTNAME, "");
+            String lastName = sharedPreferences.getString(SharedPreferencesNames.USER_LASTNAME, "");
+            String email = sharedPreferences.getString(SharedPreferencesNames.USER_EMAIL, "");
             String displayedName = firstName + " " + lastName;
 
             // display the data in different parts of the application

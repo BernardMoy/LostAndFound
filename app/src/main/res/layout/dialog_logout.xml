@@ -32,42 +32,21 @@
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/cancel_dialog_button"
-
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:minHeight="0dp"
-
-            android:padding="@dimen/content_margin"
-
             android:text="Cancel"
-            android:textSize="@dimen/content_font_size"
-            android:textColor="@color/secondaryColorVariant"
-            android:background="@drawable/button_white_outline"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toStartOf="@id/confirm_dialog_button"
             app:layout_constraintTop_toTopOf="parent"
-            android:textAllCaps="false"
-            app:layout_constraintBottom_toBottomOf="parent" />
+            app:layout_constraintBottom_toBottomOf="parent"
+            style="@style/outlineButton_small"/>
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/confirm_dialog_button"
-
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:minHeight="0dp"
-
-            android:padding="@dimen/content_margin"
-
             android:text="Log out"
-            android:textSize="@dimen/content_font_size"
-            android:textColor="@color/white"
-            android:background="@drawable/button_gradient"
-            android:textAllCaps="false"
-
             app:layout_constraintStart_toEndOf="@id/cancel_dialog_button"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
+            style="@style/colorButton_small"
             />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

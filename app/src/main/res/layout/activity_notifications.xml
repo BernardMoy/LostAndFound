@@ -14,7 +14,7 @@
         android:background="@color/backgroundColor"
         app:layout_constraintTop_toTopOf="parent"
         app:contentInsetStart="0dp"
-        app:contentInsetStartWithNavigation= "0dp">
+        app:contentInsetStartWithNavigation="0dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -29,7 +29,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:tint="@color/onBackground"
                 android:contentDescription="Return to previous page"
-                style="@style/imageButton"/>
+                style="@style/imageButton" />
 
             <TextView
                 android:text="Notifications"
@@ -37,49 +37,36 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
-                style="@style/toolbarTitle"/>
+                style="@style/toolbarTitle" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.appcompat.widget.Toolbar>
 
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tabLayout"
+        android:background="@android:color/transparent"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
 
-        <!-- Top aligned scrollview, allowing scroll when screen is too short -->
-        <ScrollView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+        <com.google.android.material.tabs.TabItem
+            android:text="Matching items"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_margin = "@dimen/title_margin">
+        <com.google.android.material.tabs.TabItem
+            android:text="Messages"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
 
-                <TextView
-                    android:text="Gray bold content"
-                    android:layout_marginTop="@dimen/content_margin"
-                    android:layout_marginBottom="@dimen/content_margin"
-                    style="@style/grayBoldContent" />
+    </com.google.android.material.tabs.TabLayout>
 
-                <TextView
-                    android:id="@+id/color_theme"
-                    android:text="Color theme"
-                    app:drawableStartCompat="@drawable/color_icon"
-                    android:layout_marginTop="@dimen/content_margin_half"
-                    android:layout_marginBottom="@dimen/content_margin_half"
-                    android:padding="@dimen/content_margin"
-                    style="@style/action"
-                    />
+    <include layout="@layout/separator_line" />
 
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/viewPager2"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 
-            </LinearLayout>
-
-        </ScrollView>
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
 </LinearLayout>

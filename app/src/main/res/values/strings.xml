@@ -47,4 +47,6 @@
     <!-- Securely store these variables -->
     <string name="sender_email">lostfoundapp3@gmail.com</string>
     <string name="sender_password">srtx rvkp lpyc kwos</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
