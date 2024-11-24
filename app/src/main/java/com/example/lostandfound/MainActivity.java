@@ -114,8 +114,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 if (clickedId == R.id.nav_drawer_my_lost){
                     navView.setSelectedItemId(R.id.navigation_lost);
 
-                } else if (clickedId == R.id.nav_drawer_my_found){
+                } else if (clickedId == R.id.nav_drawer_my_found) {
                     navView.setSelectedItemId(R.id.navigation_found);
+
+                } else if (clickedId == R.id.nav_drawer_search) {
+                    navView.setSelectedItemId(R.id.navigation_search);
 
                 } else if (clickedId == R.id.nav_drawer_chat){
                     navView.setSelectedItemId(R.id.navigation_chat);
