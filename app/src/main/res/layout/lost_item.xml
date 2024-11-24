@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="@dimen/content_margin"
+    android:paddingStart="@dimen/title_margin"
+    android:paddingEnd="@dimen/title_margin">
+
+    <TextView
+        android:id="@+id/matches"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="0 matching items found"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        style="@style/primaryVariantBoldContent" />
+
+    <TextView
+        android:id="@+id/name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Item name"
+        app:layout_constraintTop_toBottomOf="@id/matches"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="@dimen/content_margin_half"
+        style="@style/blackBoldContent"/>
+
+    <TextView
+        android:id="@+id/id"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="#000000"
+        app:layout_constraintTop_toBottomOf="@id/matches"
+        app:layout_constraintStart_toEndOf="@id/name"
+        android:layout_marginStart="@dimen/content_margin"
+        android:layout_marginTop="@dimen/content_margin_half"
+        style="@style/grayContent"/>
+
+    <TextView
+        android:id="@+id/timeReported"
+        style="@style/grayContent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="0 days ago"
+        app:layout_constraintTop_toTopOf="@+id/name"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <TextView
+        android:id="@+id/category"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Category: Cat"
+        app:layout_constraintTop_toBottomOf="@id/name"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="@dimen/content_margin_half"
+        style="@style/grayContent" />
+
+    <TextView
+        android:id="@+id/timeLost"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Date: 23-11-2024"
+        app:layout_constraintTop_toBottomOf="@id/category"
+        app:layout_constraintStart_toStartOf="parent"
+        style="@style/grayContent" />
+
+    <TextView
+        android:id="@+id/location"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Location: Loc"
+        app:layout_constraintTop_toBottomOf="@id/timeLost"
+        app:layout_constraintStart_toStartOf="parent"
+        style="@style/grayContent" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
