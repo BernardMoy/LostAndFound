@@ -105,4 +105,26 @@ public class FirestoreManager {
             }
         });
     }
+
+    /**
+     * Deletes data from the firestore database when given a key
+     *
+     * @param collection collection name
+     * @param key key of items in the collection
+     * @param callback return true if successful, false otherwise. It returns successful even when the data does not exist
+     */
+    public void delete(String collection, String key, Callback<Boolean> callback){
+        db.collection(collection).document(key).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void unused) {
+                callback.onComplete(true);
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(ctx, "Error deleting information from database", Toast.LENGTH_SHORT).show();
+                callback.onComplete(false);
+            }
+        });
+    }
 }
