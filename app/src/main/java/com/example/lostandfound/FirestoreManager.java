@@ -1,6 +1,7 @@
 package com.example.lostandfound;
 
 import android.content.Context;
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -30,7 +31,7 @@ public class FirestoreManager {
     // method to put a collection, key, value pair into the db
 
     /**
-     * Method to put new data to the database
+     * Method to put new data to the database, or update data to put new value to database
      *
      * @param collection collection name
      * @param key key of items in the collection
@@ -82,29 +83,6 @@ public class FirestoreManager {
         });
     }
 
-
-    /**
-     * Updates data from the firestore database
-     *
-     * @param collection collection name
-     * @param key key of items in the collection
-     * @param newValue a map storing the new values
-     * @param callback return true if successful, false otherwise
-     */
-    public void update(String collection, String key, Map<String, Object> newValue, Callback<Boolean> callback){
-        db.collection(collection).document(key).update(newValue).addOnSuccessListener(new OnSuccessListener<Void>() {
-            @Override
-            public void onSuccess(Void unused) {
-                callback.onComplete(true);
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Toast.makeText(ctx, "Error updating information to database", Toast.LENGTH_SHORT).show();
-                callback.onComplete(false);
-            }
-        });
-    }
 
     /**
      * Deletes data from the firestore database when given a key
