@@ -29,7 +29,6 @@ import java.util.concurrent.TimeUnit;
 public class FirestoreManagerTest {
 
     private String COLLECTION = "test_collection";
-    private Context ctx;
     private FirestoreManager firestoreManager;
     private FirebaseFirestore firestore;
 
@@ -37,11 +36,8 @@ public class FirestoreManagerTest {
 
     @Before
     public void setUp() throws InterruptedException{
-        // get context
-        ctx = InstrumentationRegistry.getInstrumentation().getContext();
-
         // Create firestore manager
-        firestoreManager = new FirestoreManager(ctx);
+        firestoreManager = new FirestoreManager();
 
         // Create instance of firestore
         firestore = FirebaseFirestore.getInstance();
@@ -74,11 +70,16 @@ public class FirestoreManagerTest {
 
     // clear all entries present in the collection after the tests
     @After
-    public void tearDown(){
-        firestore.collection(COLLECTION).document("testGet").delete();
-        firestore.collection(COLLECTION).document("testPut").delete();
-        firestore.collection(COLLECTION).document("testUpdate").delete();
-        firestore.collection(COLLECTION).document("testDelete").delete();
+    public void tearDown() throws InterruptedException{
+        final CountDownLatch latch = new CountDownLatch(4);
+        firestore.collection(COLLECTION).document("testGet").delete().addOnCompleteListener(task -> latch.countDown());
+        firestore.collection(COLLECTION).document("testPut").delete().addOnCompleteListener(task -> latch.countDown());
+        firestore.collection(COLLECTION).document("testUpdate").delete().addOnCompleteListener(task -> latch.countDown());
+        firestore.collection(COLLECTION).document("testDelete").delete().addOnCompleteListener(task -> latch.countDown());
+
+        // wait for all operations to finish
+        latch.await();
+
     }
 
 
