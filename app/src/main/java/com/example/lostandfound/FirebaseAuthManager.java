@@ -22,6 +22,7 @@ public class FirebaseAuthManager {
     private FirebaseAuth mAuth;      // stores emails and passwords
     private FirestoreManager db;     // stores emails to Userdata(firstName and lastName)
 
+
     public FirebaseAuthManager(Context ctx){
         this.ctx = ctx;
         mAuth = FirebaseAuth.getInstance();
@@ -29,7 +30,7 @@ public class FirebaseAuthManager {
     }
 
     // method to create user with email and password
-    public void createUser(String firstName, String lastName, String email, String password, UserCreationCallback callback){
+    public void createUser(String firstName, String lastName, String email, String password, ErrorCallback callback){
         mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
@@ -44,7 +45,7 @@ public class FirebaseAuthManager {
                         @Override
                         public void onComplete(Boolean result) {
                             if (!result){
-                                callback.onUserCreated("Error adding user to the database");
+                                callback.onComplete("Error adding user to the database");
                                 return;
                             }
 
@@ -57,17 +58,17 @@ public class FirebaseAuthManager {
                             editor.apply();
 
                             // task successful code executes here
-                            callback.onUserCreated("");
+                            callback.onComplete("");
                         }
                     });
 
                 } else if (task.getException() instanceof FirebaseAuthUserCollisionException) {
                     // check if this is due to an account with same email already exists
-                    callback.onUserCreated("An account with the same email already exists, please log in.");
+                    callback.onComplete("An account with the same email already exists, please log in.");
 
                 } else {
                     // failed due to other reasons
-                    callback.onUserCreated("Account creation failed");
+                    callback.onComplete("Account creation failed");
                 }
             }
         });
@@ -75,7 +76,7 @@ public class FirebaseAuthManager {
 
 
     // method to login with user credentials
-    public void loginUser(String emailAddress, String password, UserLoginCallback callback){
+    public void loginUser(String emailAddress, String password, ErrorCallback callback){
         mAuth.signInWithEmailAndPassword(emailAddress, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
@@ -86,7 +87,7 @@ public class FirebaseAuthManager {
                         @Override
                         public void onComplete(Map<String, Object> result) {
                             if (result == null){
-                                callback.onUserSignedIn("User not found in the database");
+                                callback.onComplete("User not found in the database");
                                 return;
                             }
                             String firstName = (String) result.get(FirestoreNames.USERS_FIRSTNAME);
@@ -101,13 +102,13 @@ public class FirebaseAuthManager {
                             editor.apply();
 
                             // exit with no errors
-                            callback.onUserSignedIn("");
+                            callback.onComplete("");
                         }
                     });
 
                 } else {
                     // sign in with the given credentials fails
-                    callback.onUserSignedIn("The provided user credentials are incorrect");
+                    callback.onComplete("The provided user credentials are incorrect");
                 }
             }
         });

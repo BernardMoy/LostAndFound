@@ -17,9 +17,9 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.example.lostandfound.CodeVerificationCallback;
-import com.example.lostandfound.UserCreationCallback;
+import com.example.lostandfound.ErrorCallback;
 import com.example.lostandfound.R;
+import com.example.lostandfound.VerificationCodeManager;
 import com.example.lostandfound.databinding.ActivityVerifyEmailBinding;
 
 public class VerifyEmailActivity extends AppCompatActivity {
@@ -141,9 +141,9 @@ public class VerifyEmailActivity extends AppCompatActivity {
                 verifyEmailViewModel.setVerificationError("");
 
                 // verify the code and create user if successful
-                verifyEmailViewModel.validateVerificationCode(VerifyEmailActivity.this, emailAddress, code, new CodeVerificationCallback() {
+                verifyEmailViewModel.validateVerificationCode(VerifyEmailActivity.this, emailAddress, code, new ErrorCallback() {
                     @Override
-                    public void onCodeVerified(String error) {
+                    public void onComplete(String error){
 
                         if (!error.isEmpty()) {
                             binding.progressBar.setVisibility(View.GONE);
@@ -156,9 +156,9 @@ public class VerifyEmailActivity extends AppCompatActivity {
                                 intent.getStringExtra("last_name"),
                                 emailAddress,
                                 intent.getStringExtra("password"),
-                                new UserCreationCallback() {
+                                new ErrorCallback() {
                                     @Override
-                                    public void onUserCreated(String error) {
+                                    public void onComplete(String error) {
 
                                         // hide progress bar
                                         binding.progressBar.setVisibility(View.GONE);

@@ -7,7 +7,6 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.example.lostandfound.FirebaseAuthManager;
-import com.example.lostandfound.UserLoginCallback;
 
 public class ProfileViewModel extends ViewModel {
 

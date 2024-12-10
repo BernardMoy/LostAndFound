@@ -1,14 +1,12 @@
 package com.example.lostandfound.ui.Login;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -16,19 +14,11 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.example.lostandfound.ErrorCallback;
+import com.example.lostandfound.FirebaseAuthManager;
 import com.example.lostandfound.R;
-import com.example.lostandfound.UserLoginCallback;
 import com.example.lostandfound.databinding.ActivityLoginBinding;
 import com.example.lostandfound.ui.Register.RegisterActivity;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -117,9 +107,9 @@ public class LoginActivity extends AppCompatActivity {
                 binding.progressBar.setVisibility(View.VISIBLE);
 
                 // Login with user
-                loginViewModel.loginUser(LoginActivity.this, email, password, new UserLoginCallback() {
+                loginViewModel.loginUser(LoginActivity.this, email, password, new ErrorCallback() {
                     @Override
-                    public void onUserSignedIn(String error) {
+                    public void onComplete(String error) {
                         // hide the progress bar once operation is completed
                         binding.progressBar.setVisibility(View.GONE);
 

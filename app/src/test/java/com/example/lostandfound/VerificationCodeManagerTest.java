@@ -63,7 +63,7 @@ public class VerificationCodeManagerTest {
 
         // code generation should be successful, returning no errors
         final CountDownLatch latch = new CountDownLatch(1);
-        verificationCodeManager.generateNewVerificationCode(new CodeGenerationCallback() {
+        verificationCodeManager.generateNewVerificationCode(new VerificationCodeManager.CodeGenerationCallback() {
             @Override
             public void onCodeGenerated(String error, String code) {
                 assertEquals("", error);
@@ -102,7 +102,7 @@ public class VerificationCodeManagerTest {
 
         // code generation should be successful, returning no errors
         final CountDownLatch latch = new CountDownLatch(1);
-        verificationCodeManager.generateNewVerificationCode(new CodeGenerationCallback() {
+        verificationCodeManager.generateNewVerificationCode(new VerificationCodeManager.CodeGenerationCallback() {
             @Override
             public void onCodeGenerated(String error, String code) {
                 assertEquals("", error);
@@ -143,7 +143,7 @@ public class VerificationCodeManagerTest {
 
         // code generation should be successful, returning no errors
         final CountDownLatch latch = new CountDownLatch(1);
-        verificationCodeManager.generateNewVerificationCode(new CodeGenerationCallback() {
+        verificationCodeManager.generateNewVerificationCode(new VerificationCodeManager.CodeGenerationCallback() {
             @Override
             public void onCodeGenerated(String error, String code) {
                 assertEquals("Please wait for 1 minute before generating another code", error);
@@ -177,9 +177,9 @@ public class VerificationCodeManagerTest {
 
         // provide the correct verification code
         final CountDownLatch latch = new CountDownLatch(1);
-        verificationCodeManager.validateVerificationCode("328334", new CodeVerificationCallback() {
+        verificationCodeManager.validateVerificationCode("328334", new ErrorCallback() {
             @Override
-            public void onCodeVerified(String error) {
+            public void onComplete(String error) {
                 assertEquals("", error);     // no errors
                 latch.countDown();
             }
@@ -211,9 +211,9 @@ public class VerificationCodeManagerTest {
 
         // provide the correct verification code
         final CountDownLatch latch = new CountDownLatch(1);
-        verificationCodeManager.validateVerificationCode("328314", new CodeVerificationCallback() {
+        verificationCodeManager.validateVerificationCode("328314", new ErrorCallback() {
             @Override
-            public void onCodeVerified(String error) {
+            public void onComplete(String error) {
                 assertEquals("Invalid verification code", error);     // no errors
                 latch.countDown();
             }
@@ -245,9 +245,9 @@ public class VerificationCodeManagerTest {
 
         // provide the correct verification code
         final CountDownLatch latch = new CountDownLatch(1);
-        verificationCodeManager.validateVerificationCode("328334", new CodeVerificationCallback() {
+        verificationCodeManager.validateVerificationCode("328334", new ErrorCallback() {
             @Override
-            public void onCodeVerified(String error) {
+            public void onComplete(String error) {
                 assertEquals("The code has expired, please generate a new verification code", error);     // no errors
                 latch.countDown();
             }
