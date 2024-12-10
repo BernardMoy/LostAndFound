@@ -15,9 +15,14 @@ public class VerificationCodeManager {
     private static final int EMAIL_COOLDOWN = 60000;    // 1 minute
     private static final int VALID_TIME = 600000;    // 10 minutes
 
-    public VerificationCodeManager(Context ctx, String emailAddress){
+    public VerificationCodeManager(String emailAddress){
         this.emailAddress = emailAddress;
-        db = new FirestoreManager(ctx);
+        this.db = new FirestoreManager();
+    }
+
+    public VerificationCodeManager(String emailAddress, FirestoreManager db){
+        this.emailAddress = emailAddress;
+        this.db = db;
     }
 
     // method to generate a 6 digit verification code and update the database data
