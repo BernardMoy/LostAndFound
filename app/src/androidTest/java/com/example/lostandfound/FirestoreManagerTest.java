@@ -5,9 +5,12 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
+import android.util.Log;
+
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreSettings;
 
 import org.junit.After;
 import org.junit.Before;
@@ -15,10 +18,11 @@ import org.junit.Test;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 
 public class FirestoreManagerTest {
 
-    private final String COLLECTION = "test_collection";
+    private String COLLECTION = "test_collection";
     private FirestoreManager firestoreManager;
     private FirebaseFirestore firestore;
 
@@ -61,7 +65,9 @@ public class FirestoreManagerTest {
     // clear all entries present in the collection after the tests
     @After
     public void tearDown() throws InterruptedException{
+
         final CountDownLatch latch = new CountDownLatch(4);
+
         firestore.collection(COLLECTION).document("testGet").delete().addOnCompleteListener(task -> latch.countDown());
         firestore.collection(COLLECTION).document("testPut").delete().addOnCompleteListener(task -> latch.countDown());
         firestore.collection(COLLECTION).document("testUpdate").delete().addOnCompleteListener(task -> latch.countDown());

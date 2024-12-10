@@ -17,7 +17,12 @@ public class VerificationCodeManager {
 
     public VerificationCodeManager(String emailAddress){
         this.emailAddress = emailAddress;
-        db = new FirestoreManager();
+        this.db = new FirestoreManager();
+    }
+
+    public VerificationCodeManager(String emailAddress, FirestoreManager db){
+        this.emailAddress = emailAddress;
+        this.db = db;
     }
 
     // method to generate a 6 digit verification code and update the database data

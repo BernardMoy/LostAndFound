@@ -48,7 +48,7 @@ public class LoginViewModelTest {
         // test for invalid inputs
         assertFalse(viewModel.validatePassword(""));
         assertEquals("Password cannot be empty", viewModel.getLoginError().getValue());
-        
+
         // test for the valid input
         assertTrue(viewModel.validatePassword(VALID_PASSWORD));
     }
