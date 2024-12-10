@@ -4,19 +4,10 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
-import android.content.Context;
 
-import androidx.annotation.NonNull;
-import androidx.test.platform.app.InstrumentationRegistry;
-
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 
 import org.junit.After;
 import org.junit.Before;
@@ -24,11 +15,10 @@ import org.junit.Test;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.TimeUnit;
 
 public class FirestoreManagerTest {
 
-    private String COLLECTION = "test_collection";
+    private final String COLLECTION = "test_collection";
     private FirestoreManager firestoreManager;
     private FirebaseFirestore firestore;
 
