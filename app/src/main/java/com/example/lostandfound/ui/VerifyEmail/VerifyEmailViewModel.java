@@ -5,11 +5,9 @@ import android.content.Context;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.example.lostandfound.CodeGenerationCallback;
-import com.example.lostandfound.CodeVerificationCallback;
 import com.example.lostandfound.EmailSender;
+import com.example.lostandfound.ErrorCallback;
 import com.example.lostandfound.FirebaseAuthManager;
-import com.example.lostandfound.UserCreationCallback;
 import com.example.lostandfound.VerificationCodeManager;
 
 public class VerifyEmailViewModel extends ViewModel {
@@ -26,11 +24,13 @@ public class VerifyEmailViewModel extends ViewModel {
     }
 
 
+
+
     // method to send an email containing verification code to the user, if the user has not generated another code last min
     public void sendVerificationEmail(Context ctx, String emailAddress, boolean hasToastMessage){
         // generate a new verification code
         VerificationCodeManager verificationCodeManager = new VerificationCodeManager(emailAddress);
-        verificationCodeManager.generateNewVerificationCode(new CodeGenerationCallback() {
+        verificationCodeManager.generateNewVerificationCode(new VerificationCodeManager.CodeGenerationCallback() {
             @Override
             public void onCodeGenerated(String error, String code) {
                 // exit and set error if there is one
@@ -49,36 +49,36 @@ public class VerifyEmailViewModel extends ViewModel {
     }
 
     // method to validate user's entered code
-    public void validateVerificationCode(Context ctx, String emailAddress, String givenCode, CodeVerificationCallback callback){
+    public void validateVerificationCode(Context ctx, String emailAddress, String givenCode, ErrorCallback callback){
         // validate the given code
         VerificationCodeManager verificationCodeManager = new VerificationCodeManager(emailAddress);
-        verificationCodeManager.validateVerificationCode(givenCode, new CodeVerificationCallback() {
+        verificationCodeManager.validateVerificationCode(givenCode, new ErrorCallback() {
             @Override
-            public void onCodeVerified(String error) {
+            public void onComplete(String error){
                 if (!error.isEmpty()){
                     setVerificationError(error);
-                    callback.onCodeVerified(error);
+                    callback.onComplete(error);
                     return;
                 }
 
-                callback.onCodeVerified("");
+                callback.onComplete("");
             }
         });
     }
 
     // method to create user
-    public void createUser(Context ctx, String firstName, String lastName, String emailAddress, String password, UserCreationCallback callback){
+    public void createUser(Context ctx, String firstName, String lastName, String emailAddress, String password, ErrorCallback callback){
         FirebaseAuthManager firebaseAuthManager = new FirebaseAuthManager(ctx);
-        firebaseAuthManager.createUser(firstName, lastName, emailAddress, password, new UserCreationCallback() {
+        firebaseAuthManager.createUser(firstName, lastName, emailAddress, password, new ErrorCallback() {
             @Override
-            public void onUserCreated(String error) {
+            public void onComplete(String error) {
                 if (!error.isEmpty()){
                     setVerificationError(error);
-                    callback.onUserCreated(error);
+                    callback.onComplete(error);
                     return;
                 }
 
-                callback.onUserCreated("");
+                callback.onComplete("");
             }
         });
     }

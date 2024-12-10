@@ -15,6 +15,13 @@ public class VerificationCodeManager {
     private static final int EMAIL_COOLDOWN = 60000;    // 1 minute
     private static final int VALID_TIME = 600000;    // 10 minutes
 
+    public interface CodeGenerationCallback {
+        // if there are errors, code is empty
+        // if there are no errors, error is empty
+        void onCodeGenerated(String error, String code);
+    }
+
+
     public VerificationCodeManager(String emailAddress){
         this.emailAddress = emailAddress;
         this.db = new FirestoreManager();
@@ -78,14 +85,14 @@ public class VerificationCodeManager {
     }
 
     // method to validate user's verification code
-    public void validateVerificationCode(String givenCode, CodeVerificationCallback codeVerificationCallback){
+    public void validateVerificationCode(String givenCode, ErrorCallback codeVerificationCallback){
         // get the code from user database
         db.get(FirestoreNames.COLLECTION_USER_VERIFICATIONS, emailAddress, new FirestoreManager.Callback<Map<String, Object>>() {
             @Override
             public void onComplete(Map<String, Object> result) {
                 if (result == null) {
                     // no codes were generated
-                    codeVerificationCallback.onCodeVerified("Please generate a new verification code");
+                    codeVerificationCallback.onComplete("Please generate a new verification code");
                     return;
                 }
 
@@ -93,19 +100,19 @@ public class VerificationCodeManager {
                 long storedTimeStamp = (long) result.get(FirestoreNames.USER_VERIFICATIONS_TIMESTAMP);
                 long currentTimeStamp = Calendar.getInstance().getTimeInMillis();
                 if (currentTimeStamp - storedTimeStamp > VALID_TIME) {
-                    codeVerificationCallback.onCodeVerified("The code has expired, please generate a new verification code");
+                    codeVerificationCallback.onComplete("The code has expired, please generate a new verification code");
                     return;
                 }
 
                 // check if user's code is valid
                 String storedHashedCode = (String) result.get(FirestoreNames.USER_VERIFICATIONS_HASHEDCODE);
                 if (!Hasher.compareHash(givenCode, storedHashedCode)){
-                    codeVerificationCallback.onCodeVerified("Invalid verification code");
+                    codeVerificationCallback.onComplete("Invalid verification code");
                     return;
                 }
 
                 // everything passes, return true
-                codeVerificationCallback.onCodeVerified("");
+                codeVerificationCallback.onComplete("");
             }
         });
     }

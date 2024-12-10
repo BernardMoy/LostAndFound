@@ -5,8 +5,8 @@ import android.content.Context;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.example.lostandfound.ErrorCallback;
 import com.example.lostandfound.FirebaseAuthManager;
-import com.example.lostandfound.UserLoginCallback;
 
 public class LoginViewModel extends ViewModel {
 
@@ -49,19 +49,19 @@ public class LoginViewModel extends ViewModel {
     }
 
     // method to log in user
-    public void loginUser(Context ctx, String emailAddress, String password, UserLoginCallback callback){
+    public void loginUser(Context ctx, String emailAddress, String password, ErrorCallback callback){
         FirebaseAuthManager firebaseAuthManager = new FirebaseAuthManager(ctx);
-        firebaseAuthManager.loginUser(emailAddress, password, new UserLoginCallback() {
+        firebaseAuthManager.loginUser(emailAddress, password, new ErrorCallback() {
             @Override
-            public void onUserSignedIn(String error) {
+            public void onComplete(String error) {
                 if (!error.isEmpty()){
                     setLoginError(error);
-                    callback.onUserSignedIn(error);
+                    callback.onComplete(error);
                     return;
                 }
 
                 // no errors
-                callback.onUserSignedIn("");
+                callback.onComplete("");
             }
         });
     }
