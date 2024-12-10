@@ -18,14 +18,14 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class FirebaseAuthManager {
-    private Context ctx;
+    private Context ctx;             // ctx required for accessing shared preferences
     private FirebaseAuth mAuth;      // stores emails and passwords
     private FirestoreManager db;     // stores emails to Userdata(firstName and lastName)
 
     public FirebaseAuthManager(Context ctx){
         this.ctx = ctx;
         mAuth = FirebaseAuth.getInstance();
-        db = new FirestoreManager(ctx);
+        db = new FirestoreManager();
     }
 
     // method to create user with email and password

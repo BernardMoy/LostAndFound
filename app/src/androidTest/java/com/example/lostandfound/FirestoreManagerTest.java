@@ -4,19 +4,13 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
-import android.content.Context;
 
-import androidx.annotation.NonNull;
-import androidx.test.platform.app.InstrumentationRegistry;
+import android.util.Log;
 
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.FirebaseFirestoreSettings;
 
 import org.junit.After;
 import org.junit.Before;
@@ -29,7 +23,6 @@ import java.util.concurrent.TimeUnit;
 public class FirestoreManagerTest {
 
     private String COLLECTION = "test_collection";
-    private Context ctx;
     private FirestoreManager firestoreManager;
     private FirebaseFirestore firestore;
 
@@ -37,11 +30,8 @@ public class FirestoreManagerTest {
 
     @Before
     public void setUp() throws InterruptedException{
-        // get context
-        ctx = InstrumentationRegistry.getInstrumentation().getContext();
-
         // Create firestore manager
-        firestoreManager = new FirestoreManager(ctx);
+        firestoreManager = new FirestoreManager();
 
         // Create instance of firestore
         firestore = FirebaseFirestore.getInstance();
@@ -74,11 +64,18 @@ public class FirestoreManagerTest {
 
     // clear all entries present in the collection after the tests
     @After
-    public void tearDown(){
-        firestore.collection(COLLECTION).document("testGet").delete();
-        firestore.collection(COLLECTION).document("testPut").delete();
-        firestore.collection(COLLECTION).document("testUpdate").delete();
-        firestore.collection(COLLECTION).document("testDelete").delete();
+    public void tearDown() throws InterruptedException{
+
+        final CountDownLatch latch = new CountDownLatch(4);
+
+        firestore.collection(COLLECTION).document("testGet").delete().addOnCompleteListener(task -> latch.countDown());
+        firestore.collection(COLLECTION).document("testPut").delete().addOnCompleteListener(task -> latch.countDown());
+        firestore.collection(COLLECTION).document("testUpdate").delete().addOnCompleteListener(task -> latch.countDown());
+        firestore.collection(COLLECTION).document("testDelete").delete().addOnCompleteListener(task -> latch.countDown());
+
+        // wait for all operations to finish
+        latch.await();
+
     }
 
 

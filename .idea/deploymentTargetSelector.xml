@@ -16,7 +16,7 @@
       <SelectionState runConfigName="FirestoreManagerTest">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="testPut()">
+      <SelectionState runConfigName="Tests in 'com.example.lostandfound'">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
     </selectionStates>

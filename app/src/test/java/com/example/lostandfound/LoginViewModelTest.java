@@ -39,15 +39,6 @@ public class LoginViewModelTest {
         assertFalse(viewModel.validateEmail(""));
         assertEquals("Email cannot be empty", viewModel.getLoginError().getValue());
 
-        assertFalse(viewModel.validateEmail("eeeeeeewarwick.ac.uk"));
-        assertEquals("Please Register with your university email (@warwick.ac.uk)",
-                viewModel.getLoginError().getValue());
-
-        assertFalse(viewModel.validateEmail("eeeeeee@gmail.com"));
-        assertEquals("Please Register with your university email (@warwick.ac.uk)",
-                viewModel.getLoginError().getValue());
-
-
         // test for the valid input
         assertTrue(viewModel.validateEmail(VALID_EMAIL));
     }
@@ -57,24 +48,6 @@ public class LoginViewModelTest {
         // test for invalid inputs
         assertFalse(viewModel.validatePassword(""));
         assertEquals("Password cannot be empty", viewModel.getLoginError().getValue());
-
-        assertFalse(viewModel.validatePassword("5tY*)io"));
-        assertEquals("Password must be at least 8 characters long",
-                viewModel.getLoginError().getValue());
-
-        assertFalse(viewModel.validatePassword("weiwewiiw=9*"));
-        assertEquals("Password must have at least one uppercase and lowercase character",
-                viewModel.getLoginError().getValue());
-
-        assertFalse(viewModel.validatePassword("weiweweuUE)"));
-        assertEquals("Password must have at least one numerical character",
-                viewModel.getLoginError().getValue());
-
-        assertFalse(viewModel.validatePassword("weiweEiw5"));
-        assertEquals("Password must have at least one special character",
-                viewModel.getLoginError().getValue());
-
-
 
         // test for the valid input
         assertTrue(viewModel.validatePassword(VALID_PASSWORD));

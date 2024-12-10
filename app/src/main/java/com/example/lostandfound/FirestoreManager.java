@@ -1,6 +1,7 @@
 package com.example.lostandfound;
 
 import android.content.Context;
+import android.os.Build;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -8,6 +9,7 @@ import androidx.annotation.NonNull;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.BuildConfig;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -15,11 +17,9 @@ import java.util.Map;
 
 public class FirestoreManager {
 
-    private Context ctx;
     private FirebaseFirestore db;
 
-    public FirestoreManager(Context ctx){
-        this.ctx = ctx;
+    public FirestoreManager(){
         db = FirebaseFirestore.getInstance();
     }
 
@@ -47,7 +47,6 @@ public class FirestoreManager {
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                Toast.makeText(ctx, "Error adding information to database", Toast.LENGTH_SHORT).show();
                 callback.onComplete(false);
             }
         });
@@ -61,7 +60,7 @@ public class FirestoreManager {
      *
      * @param collection collection name
      * @param key key of items in the collection
-     * @param callback return the values in a map, or null if failed (Need to check)
+     * @param callback return the values in a map, or null if failed or values does not exist
      */
     public void get(String collection, String key, Callback<Map<String, Object>> callback){
         db.collection(collection).document(key).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
@@ -77,7 +76,6 @@ public class FirestoreManager {
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                Toast.makeText(ctx, "Error fetching information from database", Toast.LENGTH_SHORT).show();
                 callback.onComplete(null);
             }
         });
@@ -100,7 +98,6 @@ public class FirestoreManager {
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                Toast.makeText(ctx, "Error deleting information from database", Toast.LENGTH_SHORT).show();
                 callback.onComplete(false);
             }
         });
