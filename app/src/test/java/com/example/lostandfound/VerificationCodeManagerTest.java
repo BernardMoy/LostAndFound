@@ -153,4 +153,106 @@ public class VerificationCodeManagerTest {
         });
         latch.await();
     }
+
+    // method to test success validation of the code (Within time limit and correct)
+    @Test
+    public void testValidateVerificationCodeSuccess() throws InterruptedException{
+        String testEmail = "test@warwick.ac.uk";
+        verificationCodeManager = new VerificationCodeManager(testEmail, mockFirestoreManager);
+
+        // simulate when the get method is used on this email, it returns code adn timestamp = current time - 300 seconds
+        // the user should not be able to generate a new code
+        doAnswer(invocation -> {
+            FirestoreManager.Callback<Map<String, Object>> callback = invocation.getArgument(2);
+
+            Map<String, Object> result = new HashMap<>();
+            result.put(FirestoreNames.USER_VERIFICATIONS_HASHEDCODE, Hasher.hash("328334"));    // stores the hashed code
+            long testTimeStamp = Calendar.getInstance().getTimeInMillis() - 5*60*1000;
+            result.put(FirestoreNames.USER_VERIFICATIONS_TIMESTAMP, testTimeStamp);
+
+            callback.onComplete(result);
+            return null;
+
+        }).when(mockFirestoreManager).get(eq(FirestoreNames.COLLECTION_USER_VERIFICATIONS), eq(testEmail), any(FirestoreManager.Callback.class));
+
+        // provide the correct verification code
+        final CountDownLatch latch = new CountDownLatch(1);
+        verificationCodeManager.validateVerificationCode("328334", new CodeVerificationCallback() {
+            @Override
+            public void onCodeVerified(String error) {
+                assertEquals("", error);     // no errors
+                latch.countDown();
+            }
+        });
+
+        latch.await();
+    }
+
+    // method to test fail validation, due to the time being more than 10 mins ago
+    @Test
+    public void testValidateVerificationCodeFailTime() throws InterruptedException{
+        String testEmail = "test@warwick.ac.uk";
+        verificationCodeManager = new VerificationCodeManager(testEmail, mockFirestoreManager);
+
+        // simulate when the get method is used on this email, it returns code adn timestamp = current time - 5 mins
+        // the user should not be able to generate a new code
+        doAnswer(invocation -> {
+            FirestoreManager.Callback<Map<String, Object>> callback = invocation.getArgument(2);
+
+            Map<String, Object> result = new HashMap<>();
+            result.put(FirestoreNames.USER_VERIFICATIONS_HASHEDCODE, Hasher.hash("328334"));    // stores the hashed code
+            long testTimeStamp = Calendar.getInstance().getTimeInMillis() - 5*60*1000;
+            result.put(FirestoreNames.USER_VERIFICATIONS_TIMESTAMP, testTimeStamp);
+
+            callback.onComplete(result);
+            return null;
+
+        }).when(mockFirestoreManager).get(eq(FirestoreNames.COLLECTION_USER_VERIFICATIONS), eq(testEmail), any(FirestoreManager.Callback.class));
+
+        // provide the correct verification code
+        final CountDownLatch latch = new CountDownLatch(1);
+        verificationCodeManager.validateVerificationCode("328314", new CodeVerificationCallback() {
+            @Override
+            public void onCodeVerified(String error) {
+                assertEquals("Invalid verification code", error);     // no errors
+                latch.countDown();
+            }
+        });
+
+        latch.await();
+    }
+
+    // method to test fail validation, due to the code being incorrect
+    @Test
+    public void testValidateVerificationCodeFailCode() throws InterruptedException{
+        String testEmail = "test@warwick.ac.uk";
+        verificationCodeManager = new VerificationCodeManager(testEmail, mockFirestoreManager);
+
+        // simulate when the get method is used on this email, it returns code adn timestamp = current time - 11 mins
+        // the user should not be able to generate a new code
+        doAnswer(invocation -> {
+            FirestoreManager.Callback<Map<String, Object>> callback = invocation.getArgument(2);
+
+            Map<String, Object> result = new HashMap<>();
+            result.put(FirestoreNames.USER_VERIFICATIONS_HASHEDCODE, Hasher.hash("328334"));    // stores the hashed code
+            long testTimeStamp = Calendar.getInstance().getTimeInMillis() - 11*60*1000;
+            result.put(FirestoreNames.USER_VERIFICATIONS_TIMESTAMP, testTimeStamp);
+
+            callback.onComplete(result);
+            return null;
+
+        }).when(mockFirestoreManager).get(eq(FirestoreNames.COLLECTION_USER_VERIFICATIONS), eq(testEmail), any(FirestoreManager.Callback.class));
+
+        // provide the correct verification code
+        final CountDownLatch latch = new CountDownLatch(1);
+        verificationCodeManager.validateVerificationCode("328334", new CodeVerificationCallback() {
+            @Override
+            public void onCodeVerified(String error) {
+                assertEquals("The code has expired, please generate a new verification code", error);     // no errors
+                latch.countDown();
+            }
+        });
+
+        latch.await();
+    }
 }
