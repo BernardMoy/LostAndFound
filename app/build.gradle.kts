@@ -1,11 +1,13 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.google.gms.google.services)
+    alias(libs.plugins.jetbrains.kotlin.android)
+    alias(libs.plugins.compose.compiler)
 }
 
 android {
     namespace = "com.example.lostandfound"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.example.lostandfound"
@@ -33,12 +35,16 @@ android {
 
     buildFeatures {
         viewBinding = true
+        compose = true
     }
 
     packaging {
         resources {
             excludes += listOf("META-INF/NOTICE.md", "META-INF/LICENSE.md")
         }
+    }
+    kotlinOptions {
+        jvmTarget = "1.8"
     }
 }
 
@@ -57,9 +63,23 @@ dependencies {
     implementation(libs.firebase.firestore)
     implementation(libs.jakarta.mail)
     implementation(libs.jakarta.activation)
+    implementation(libs.core.ktx)
     testImplementation(libs.junit)
     testImplementation (libs.mockito.core)
     testImplementation (libs.coreTesting)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
+
+    val composeBom = platform("androidx.compose:compose-bom:2024.10.01")
+    implementation(composeBom)
+    androidTestImplementation(composeBom)
+
+    implementation ("androidx.compose.runtime:runtime")
+    implementation ("androidx.compose.ui:ui")
+    implementation ("androidx.compose.foundation:foundation")
+    implementation ("androidx.compose.foundation:foundation-layout")
+    implementation ("androidx.compose.material3:material3")
+    implementation ("androidx.compose.runtime:runtime-livedata")
+    implementation ("androidx.compose.ui:ui-tooling")
+
 }

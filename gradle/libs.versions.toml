@@ -19,6 +19,8 @@ firebaseFirestore = "25.1.1"
 jakarta-mail = "2.0.1"
 jakarta-activation = "2.0.1"
 core-testing = "2.2.0"
+kotlin = "2.1.0"
+coreKtx = "1.15.0"
 
 [libraries]
 junit = { group = "junit", name = "junit", version.ref = "junit" }
@@ -39,11 +41,13 @@ firebase-firestore = { group = "com.google.firebase", name = "firebase-firestore
 jakarta-mail = { group = "com.sun.mail", name = "jakarta.mail", version.ref = "jakarta-mail" }
 jakarta-activation = { group = "com.sun.activation", name = "jakarta.activation", version.ref = "jakarta-activation" }
 coreTesting = { group = "androidx.arch.core", name = "core-testing", version.ref = "core-testing" }
-
+core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 
 
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 google-gms-google-services = { id = "com.google.gms.google-services", version.ref = "googleGmsGoogleServices" }
+jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 
