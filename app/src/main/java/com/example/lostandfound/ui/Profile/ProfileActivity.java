@@ -21,6 +21,7 @@ import com.example.lostandfound.R;
 import com.example.lostandfound.SharedPreferencesNames;
 import com.example.lostandfound.databinding.ActivityProfileBinding;
 import com.example.lostandfound.databinding.DialogLogoutBinding;
+import com.example.lostandfound.ui.EditProfile.EditProfileActivity;
 
 public class ProfileActivity extends AppCompatActivity {
 
@@ -99,7 +100,8 @@ public class ProfileActivity extends AppCompatActivity {
         binding.editProfileButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                Intent i = new Intent(ProfileActivity.this, EditProfileActivity.class);
+                startActivity(i);
             }
         });
     }
