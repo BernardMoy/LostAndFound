@@ -43,37 +43,41 @@ import com.example.lostandfound.backToolbar
 class EditProfileActivity : ComponentActivity() { // Use ComponentActivity here
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         setContent {
-            // get the nav controller
-            val navController = rememberNavController()
-
-            Surface {
-                Scaffold(
-                    // top toolbar
-                    topBar = {
-                        backToolbar(title = "Edit Profile", activity = this)
-                    }
-                ){ innerPadding ->
-                    Column(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .padding(paddingValues = innerPadding)
-                    ) {
-                        // content goes here
-                        EditProfileActivityPreview()
-                    }
-                }
-            }
+            EditProfileScreen(activity = this)
         }
     }
 }
 
+// mock activity for previews
+class MockActivity : ComponentActivity()
+
 @Preview(showBackground = true)
 @Composable
-fun EditProfileActivityPreview() {
-    IntroText()
-    incrementButton()
+fun Preview() {
+    EditProfileScreen(activity = MockActivity())
+}
+
+@Composable
+fun EditProfileScreen(activity: ComponentActivity){
+    Surface {
+        Scaffold(
+            // top toolbar
+            topBar = {
+                backToolbar(title = "Edit Profile", activity = activity)
+            }
+        ){ innerPadding ->
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(paddingValues = innerPadding)
+            ) {
+                // content goes here
+                IntroText()
+                incrementButton()
+            }
+        }
+    }
 }
 
 @Composable
