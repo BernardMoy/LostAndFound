@@ -50,6 +50,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.findNavController
 import com.example.lostandfound.backToolbar
+import com.example.lostandfound.ui.theme.ComposeTheme
 
 
 class EditProfileActivity : ComponentActivity() { // Use ComponentActivity here
@@ -85,10 +86,12 @@ fun EditProfileScreen(activity: ComponentActivity){
                     .padding(paddingValues = innerPadding)
                     .padding(dimensionResource(id = R.dimen.content_margin))
             ) {
-                // content goes here
-                Avatar()
-                IntroText()
-                incrementButton()
+                ComposeTheme {
+                    // content goes here
+                    Avatar()
+                    IntroText()
+                    incrementButton()
+                }
             }
         }
     }
@@ -120,7 +123,8 @@ fun Avatar(){
             IconButton(onClick = {
                 // change avatar button
             },
-                modifier = Modifier.size(dimensionResource(id = R.dimen.image_button_size))
+                modifier = Modifier
+                    .size(dimensionResource(id = R.dimen.image_button_size))
                     .clip(CircleShape)
                     .background(MaterialTheme.colorScheme.primary)
                     .align(Alignment.BottomEnd)
@@ -141,7 +145,7 @@ fun IntroText() {
     ) {
 
         Text(text = "Hello Compose",
-            color = Color.Blue,
+            color = MaterialTheme.colorScheme.primary,
             modifier = Modifier
                 .padding(16.dp)
                 .align(Alignment.Start)
