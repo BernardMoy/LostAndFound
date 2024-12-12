@@ -82,5 +82,6 @@ dependencies {
     implementation ("androidx.compose.runtime:runtime-livedata")
     implementation ("androidx.compose.ui:ui-tooling")
     implementation ("androidx.activity:activity-compose:1.3.0-alpha07")
+    implementation("androidx.navigation:navigation-compose: 2.7.6")
 
 }
