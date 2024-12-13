@@ -2,7 +2,7 @@
     <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="header_font_size"> 26sp </dimen>
     <dimen name="title_font_size"> 20sp </dimen>
-    <dimen name = "content_font_size"> 15sp </dimen>
+    <dimen name = "content_font_size"> 16sp </dimen>
 
     <dimen name="centering_margin">84dp</dimen>   <!-- Used to center elements, with compensation for the toolbar height -->
     <dimen name= "header_margin"> 40dp </dimen>
