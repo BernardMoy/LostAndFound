@@ -2,25 +2,20 @@ package com.example.lostandfound.ui.EditProfile
 
 import android.app.Activity
 import android.content.Context
-import android.content.SharedPreferences
 import android.os.Bundle
-import android.view.View
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import com.example.lostandfound.R
 import androidx.activity.compose.setContent
-import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
@@ -48,9 +43,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.lostandfound.BackToolbar
 import com.example.lostandfound.CustomDataField
 import com.example.lostandfound.SharedPreferencesNames
-import com.example.lostandfound.backToolbar
 import com.example.lostandfound.ui.theme.ComposeTheme
 
 
@@ -74,12 +69,15 @@ fun Preview() {
 
 @Composable
 fun EditProfileScreen(activity: ComponentActivity) {
+    // get the local context
+    val context = LocalContext.current
+
     ComposeTheme {
         Surface {
             Scaffold(
                 // top toolbar
                 topBar = {
-                    backToolbar(title = "Edit Profile", activity = activity)
+                    BackToolbar(title = "Edit Profile", activity = activity)
                 }
             ) { innerPadding ->
                 Column(
@@ -90,10 +88,10 @@ fun EditProfileScreen(activity: ComponentActivity) {
                         .verticalScroll(rememberScrollState())   // make screen scrollable
                 ) {
                     // content goes here
-                    Avatar()
-                    EditFields()
+                    Avatar(context)
+                    EditFields(context)
                     ReminderMessage()
-                    SaveButton()
+                    SaveButton(context)
                 }
             }
         }
@@ -101,10 +99,7 @@ fun EditProfileScreen(activity: ComponentActivity) {
 }
 
 @Composable
-fun Avatar(){
-    // get local context
-    val context = LocalContext.current
-
+fun Avatar(context: Context){
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -148,9 +143,8 @@ fun Avatar(){
 }
 
 @Composable
-fun EditFields() {
+fun EditFields(context: Context) {
     // get the first and last name from shared preferences
-    val context = LocalContext.current
     val sp = context.getSharedPreferences(SharedPreferencesNames.NAME_USERS, Context.MODE_PRIVATE)
     val firstName = sp.getString(SharedPreferencesNames.USER_FIRSTNAME, "") ?: ""
     val lastName = sp.getString(SharedPreferencesNames.USER_LASTNAME, "") ?: ""
@@ -192,9 +186,7 @@ fun ReminderMessage(){
 }
 
 @Composable
-fun SaveButton() {
-    val context = LocalContext.current
-
+fun SaveButton(context: Context) {
     Box(
         modifier = Modifier.fillMaxWidth(),
         contentAlignment = Alignment.Center
