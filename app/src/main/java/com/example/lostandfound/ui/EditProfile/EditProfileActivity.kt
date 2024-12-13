@@ -21,6 +21,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
@@ -42,6 +43,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.lostandfound.DataField
 import com.example.lostandfound.backToolbar
 import com.example.lostandfound.ui.theme.ComposeTheme
 
@@ -78,7 +80,7 @@ fun EditProfileScreen(activity: ComponentActivity) {
                     modifier = Modifier
                         .fillMaxSize()
                         .padding(paddingValues = innerPadding)
-                        .padding(dimensionResource(id = R.dimen.content_margin))
+                        .padding(dimensionResource(id = R.dimen.title_margin))
                 ) {
                     // content goes here
                     Avatar()
@@ -137,7 +139,11 @@ fun Avatar(){
 
 @Composable
 fun EditFields() {
-
+    DataField(fieldLabel = "First name",
+        fieldContent = "John doe",
+        isEditable = true,
+        leftIcon = Icons.Default.AccountCircle
+    )
 }
 
 @Composable
