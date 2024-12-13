@@ -25,8 +25,9 @@ private val DarkColorScheme = darkColorScheme(
     onBackground = OnBackgroundDark,
 
     error = Error,
-    surface = DarkGray,      // adjust base on light / dark
-    onSurface = LightGray
+    surface = LightGray,     // adjust base on light / dark
+    onSurface = DarkGray,
+    surfaceVariant = Gray
 )
 
 private val LightColorScheme = lightColorScheme(
@@ -44,8 +45,9 @@ private val LightColorScheme = lightColorScheme(
     onBackground = OnBackgroundLight,
 
     error = Error,
-    surface = LightGray,      // adjust base on light / dark
-    onSurface = DarkGray
+    surface = DarkGray,      // adjust base on light / dark
+    onSurface = White,
+    surfaceVariant = Gray
 )
 
 // "ComposeTheme" is the theme for colors developed in compose
