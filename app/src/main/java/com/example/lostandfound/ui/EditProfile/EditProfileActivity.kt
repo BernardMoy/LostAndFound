@@ -1,5 +1,6 @@
 package com.example.lostandfound.ui.EditProfile
 
+import android.app.Activity
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
@@ -37,6 +38,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -91,6 +93,9 @@ fun EditProfileScreen(activity: ComponentActivity) {
 
 @Composable
 fun Avatar(){
+    // get local context
+    val context = LocalContext.current
+
     Box(
         modifier = Modifier.fillMaxWidth(),
         contentAlignment = Alignment.Center     // align the avatar to center
@@ -114,6 +119,7 @@ fun Avatar(){
 
             IconButton(onClick = {
                 // change avatar button
+                Toast.makeText(context, "Add button clicked", Toast.LENGTH_SHORT).show()
             },
                 modifier = Modifier
                     .size(dimensionResource(id = R.dimen.image_button_size))
@@ -139,14 +145,46 @@ fun ReminderMessage(){
     Text(
         text = "Only your name and avatar would be visible to others.",
         style = MaterialTheme.typography.bodyMedium,
-        color = MaterialTheme.colorScheme.surface,
-        modifier = Modifier.fillMaxWidth(),
+        color = Color.Gray,
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(
+                dimensionResource(id = R.dimen.title_margin),
+            ),
         textAlign = TextAlign.Center   // center text
     )
 }
 
 @Composable
 fun SaveButton() {
+    val context = LocalContext.current
 
+    Box(
+        modifier = Modifier.fillMaxWidth(),
+        contentAlignment = Alignment.Center
+    ){
+        Button(onClick = {
+            // handle save logic here
+
+            // display success toast message
+            Toast.makeText(context, "Profile successfully updated", Toast.LENGTH_SHORT).show()
+
+            // exit activity
+            (context as? Activity)?.finish()  // safe cast and safe call
+
+        }) {
+            Text(text = "Save Profile",
+                style = MaterialTheme.typography.titleMedium,
+                color = MaterialTheme.colorScheme.onPrimary,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.padding(
+                    dimensionResource(id = R.dimen.content_margin),
+                    dimensionResource(id = R.dimen.content_margin_half),
+                    dimensionResource(id = R.dimen.content_margin),
+                    dimensionResource(id = R.dimen.content_margin_half),
+                )
+            )
+        }
+    }
 }
 
