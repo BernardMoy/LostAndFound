@@ -37,6 +37,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -45,8 +46,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.lostandfound.BackToolbar
 import com.example.lostandfound.CustomDataField
+import com.example.lostandfound.FirestoreManager
 import com.example.lostandfound.SharedPreferencesNames
 import com.example.lostandfound.ui.theme.ComposeTheme
+import com.google.firebase.FirebaseApp
 
 
 class EditProfileActivity : ComponentActivity() { // Use ComponentActivity here
@@ -69,9 +72,6 @@ fun Preview() {
 
 @Composable
 fun EditProfileScreen(activity: ComponentActivity) {
-    // get the local context
-    val context = LocalContext.current
-
     ComposeTheme {
         Surface {
             Scaffold(
@@ -88,18 +88,23 @@ fun EditProfileScreen(activity: ComponentActivity) {
                         .verticalScroll(rememberScrollState())   // make screen scrollable
                 ) {
                     // content goes here
-                    Avatar(context)
-                    EditFields(context)
-                    ReminderMessage()
-                    SaveButton(context)
+                    MainContent()
                 }
             }
         }
     }
 }
 
+// content includes avatar, edit fields, reminder message and save button
 @Composable
-fun Avatar(context: Context){
+fun MainContent(){
+    // get the local context
+    val context = LocalContext.current
+
+    // boolean to determine if it is being rendered in preview
+    val inPreview = LocalInspectionMode.current
+
+    // box for avatar
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -140,10 +145,9 @@ fun Avatar(context: Context){
             }
         }
     }
-}
 
-@Composable
-fun EditFields(context: Context) {
+
+    // for the firstname and lastname input field
     // get the first and last name from shared preferences
     val sp = context.getSharedPreferences(SharedPreferencesNames.NAME_USERS, Context.MODE_PRIVATE)
     val firstName = sp.getString(SharedPreferencesNames.USER_FIRSTNAME, "") ?: ""
@@ -168,10 +172,9 @@ fun EditFields(context: Context) {
 
         HorizontalDivider(thickness = 1.dp)
     }
-}
 
-@Composable
-fun ReminderMessage(){
+
+    // reminder message
     Text(
         text = "Only your name and avatar would be visible to others.",
         style = MaterialTheme.typography.bodyMedium,
@@ -183,16 +186,23 @@ fun ReminderMessage(){
             ),
         textAlign = TextAlign.Center   // center text
     )
-}
 
-@Composable
-fun SaveButton(context: Context) {
+
+    // box for save button
     Box(
         modifier = Modifier.fillMaxWidth(),
         contentAlignment = Alignment.Center
     ){
+
         Button(onClick = {
             // handle save logic here
+            // update the data from the firestore database
+            // but only when not in preview to avoid firebase errors
+            if (inPreview) return@Button
+
+            // update user data
+            
+
 
             // display success toast message
             Toast.makeText(context, "Profile successfully updated", Toast.LENGTH_SHORT).show()
@@ -215,4 +225,7 @@ fun SaveButton(context: Context) {
         }
     }
 }
+
+
+
 
