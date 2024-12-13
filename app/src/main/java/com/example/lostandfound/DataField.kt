@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldColors
@@ -34,7 +35,7 @@ fun DataField(
         value = text,
         textStyle = Typography.bodyMedium,   // style for the content
         onValueChange = {
-            text = it
+            text = it   // it refers to the lambda parameter
         },
         label = {
             Text(text = fieldLabel, style = Typography.bodySmall)   // style for the label
@@ -48,7 +49,6 @@ fun DataField(
                 Icon(imageVector = rightIcon, contentDescription = null, tint = Color.Gray)
             }
         },
-        enabled = isEditable,
         modifier = Modifier
             .fillMaxWidth()
             .padding(
@@ -57,9 +57,20 @@ fun DataField(
                 0.dp,
                 dimensionResource(id = R.dimen.content_margin_half)
             ),
+        enabled = isEditable,
         colors = TextFieldDefaults.colors(
+            // for enabled (Editable) text
             unfocusedContainerColor = Color.Transparent,
-            focusedContainerColor = Color.Transparent
+            focusedContainerColor = Color.Transparent,
+
+            // for disabled (non editable) text
+            disabledContainerColor = Color.Transparent,
+            disabledTextColor = MaterialTheme.colorScheme.onBackground,
+
+            // remove the default bottom line
+            focusedIndicatorColor = Color.Transparent,
+            unfocusedIndicatorColor = Color.Transparent,
+            disabledIndicatorColor = Color.Transparent
         )
     )
 }
