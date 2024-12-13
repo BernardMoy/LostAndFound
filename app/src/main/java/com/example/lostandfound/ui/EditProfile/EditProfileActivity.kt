@@ -1,6 +1,8 @@
 package com.example.lostandfound.ui.EditProfile
 
 import android.app.Activity
+import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
@@ -46,7 +48,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.lostandfound.DataField
+import com.example.lostandfound.CustomDataField
+import com.example.lostandfound.SharedPreferencesNames
 import com.example.lostandfound.backToolbar
 import com.example.lostandfound.ui.theme.ComposeTheme
 
@@ -146,10 +149,16 @@ fun Avatar(){
 
 @Composable
 fun EditFields() {
+    // get the first and last name from shared preferences
+    val context = LocalContext.current
+    val sp = context.getSharedPreferences(SharedPreferencesNames.NAME_USERS, Context.MODE_PRIVATE)
+    val firstName = sp.getString(SharedPreferencesNames.USER_FIRSTNAME, "") ?: ""
+    val lastName = sp.getString(SharedPreferencesNames.USER_LASTNAME, "") ?: ""
+
     Column {
         // first name field
-        DataField(fieldLabel = "First name",
-            fieldContent = "John",
+        CustomDataField(fieldLabel = "First name",
+            fieldContent = firstName,
             isEditable = true,
             leftIcon = Icons.Default.AccountCircle
         )
@@ -157,8 +166,8 @@ fun EditFields() {
         HorizontalDivider(thickness = 1.dp)
 
         // last name field
-        DataField(fieldLabel = "Last name",
-            fieldContent = "Doe",
+        CustomDataField(fieldLabel = "Last name",
+            fieldContent = lastName,
             isEditable = true,
             leftIcon = Icons.Default.AccountCircle
         )
