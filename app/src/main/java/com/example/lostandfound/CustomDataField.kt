@@ -1,13 +1,11 @@
 package com.example.lostandfound
 
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
-import androidx.compose.material3.TextFieldColors
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -22,7 +20,7 @@ import androidx.compose.ui.unit.dp
 import com.example.lostandfound.ui.theme.Typography
 
 @Composable
-fun DataField(
+fun CustomDataField(
     fieldLabel: String,
     fieldContent: String,
     isEditable: Boolean,
