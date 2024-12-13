@@ -19,7 +19,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Add
@@ -82,6 +84,7 @@ fun EditProfileScreen(activity: ComponentActivity) {
                         .fillMaxSize()
                         .padding(paddingValues = innerPadding)
                         .padding(dimensionResource(id = R.dimen.title_margin))
+                        .verticalScroll(rememberScrollState())   // make screen scrollable
                 ) {
                     // content goes here
                     Avatar()
@@ -102,7 +105,7 @@ fun Avatar(){
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(dimensionResource(id = R.dimen.title_margin)),
+            .padding(0.dp, 0.dp, 0.dp, dimensionResource(id = R.dimen.title_margin)),
         contentAlignment = Alignment.Center     // align the avatar to center
     ){
         // box for storing the image and the add button
