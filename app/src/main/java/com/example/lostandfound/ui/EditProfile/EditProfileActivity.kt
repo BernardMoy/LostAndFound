@@ -24,6 +24,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.Button
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -99,12 +100,15 @@ fun Avatar(){
     val context = LocalContext.current
 
     Box(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(dimensionResource(id = R.dimen.title_margin)),
         contentAlignment = Alignment.Center     // align the avatar to center
     ){
         // box for storing the image and the add button
         Box(
-            modifier = Modifier.size(dimensionResource(id = R.dimen.profile_image_size_large))
+            modifier = Modifier
+                .size(dimensionResource(id = R.dimen.profile_image_size_large))
         ){
             Image(painter = painterResource(id = R.drawable.profile_icon),
                 contentDescription = "Your avatar",
@@ -139,11 +143,25 @@ fun Avatar(){
 
 @Composable
 fun EditFields() {
-    DataField(fieldLabel = "First name",
-        fieldContent = "John doe",
-        isEditable = true,
-        leftIcon = Icons.Default.AccountCircle
-    )
+    Column {
+        // first name field
+        DataField(fieldLabel = "First name",
+            fieldContent = "John",
+            isEditable = true,
+            leftIcon = Icons.Default.AccountCircle
+        )
+
+        HorizontalDivider(thickness = 1.dp)
+
+        // last name field
+        DataField(fieldLabel = "Last name",
+            fieldContent = "Doe",
+            isEditable = true,
+            leftIcon = Icons.Default.AccountCircle
+        )
+
+        HorizontalDivider(thickness = 1.dp)
+    }
 }
 
 @Composable
@@ -155,7 +173,7 @@ fun ReminderMessage(){
         modifier = Modifier
             .fillMaxWidth()
             .padding(
-                dimensionResource(id = R.dimen.title_margin),
+                dimensionResource(id = R.dimen.header_margin),
             ),
         textAlign = TextAlign.Center   // center text
     )
