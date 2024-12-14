@@ -31,6 +31,10 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.material3.Surface
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -150,15 +154,23 @@ fun MainContent(){
     // for the firstname and lastname input field
     // get the first and last name from shared preferences
     val sp = context.getSharedPreferences(SharedPreferencesNames.NAME_USERS, Context.MODE_PRIVATE)
-    val firstName = sp.getString(SharedPreferencesNames.USER_FIRSTNAME, "") ?: ""
-    val lastName = sp.getString(SharedPreferencesNames.USER_LASTNAME, "") ?: ""
+
+    var firstName by remember { mutableStateOf(
+        sp.getString(SharedPreferencesNames.USER_FIRSTNAME, "") ?: ""
+        )
+    }
+    var lastName by remember { mutableStateOf(
+        sp.getString(SharedPreferencesNames.USER_LASTNAME, "") ?: ""
+        )
+    }
 
     Column {
         // first name field
         CustomDataField(fieldLabel = "First name",
             fieldContent = firstName,
+            leftIcon = Icons.Default.AccountCircle,
             isEditable = true,
-            leftIcon = Icons.Default.AccountCircle
+            onTextChanged = {s -> firstName = s}
         )
 
         HorizontalDivider(thickness = 1.dp)
@@ -166,8 +178,9 @@ fun MainContent(){
         // last name field
         CustomDataField(fieldLabel = "Last name",
             fieldContent = lastName,
+            leftIcon = Icons.Default.AccountCircle,
             isEditable = true,
-            leftIcon = Icons.Default.AccountCircle
+            onTextChanged = {s -> lastName = s}
         )
 
         HorizontalDivider(thickness = 1.dp)
@@ -201,7 +214,7 @@ fun MainContent(){
             if (inPreview) return@Button
 
             // update user data
-            
+
 
 
             // display success toast message
