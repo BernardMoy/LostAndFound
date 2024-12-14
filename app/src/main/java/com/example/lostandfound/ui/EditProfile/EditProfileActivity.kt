@@ -50,6 +50,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.lostandfound.BackToolbar
 import com.example.lostandfound.CustomDataField
+import com.example.lostandfound.ErrorCallback
+import com.example.lostandfound.FirebaseAuthManager
 import com.example.lostandfound.FirestoreManager
 import com.example.lostandfound.SharedPreferencesNames
 import com.example.lostandfound.ui.theme.ComposeTheme
@@ -164,6 +166,8 @@ fun MainContent(){
         )
     }
 
+    val email = sp.getString(SharedPreferencesNames.USER_EMAIL, "") ?: ""
+
     Column {
         // first name field
         CustomDataField(fieldLabel = "First name",
@@ -214,14 +218,26 @@ fun MainContent(){
             if (inPreview) return@Button
 
             // update user data
+            val firebaseAuthManager = FirebaseAuthManager(context)
 
+            // last lambda argument can be out of parenthesis
+            firebaseAuthManager.updateUser(email, firstName, lastName
+            ) { error ->
+                if (error.isEmpty()) {
+                    // no errors
 
+                    // display success toast message
+                    Toast.makeText(context, "Profile successfully updated", Toast.LENGTH_SHORT)
+                        .show()
 
-            // display success toast message
-            Toast.makeText(context, "Profile successfully updated", Toast.LENGTH_SHORT).show()
+                    // exit activity
+                    (context as? Activity)?.finish()  // safe cast and safe call
 
-            // exit activity
-            (context as? Activity)?.finish()  // safe cast and safe call
+                } else {
+                    // display fail toast message
+                    Toast.makeText(context, "Profile update failed", Toast.LENGTH_SHORT).show()
+                }
+            }
 
         }) {
             Text(text = "Save Profile",
