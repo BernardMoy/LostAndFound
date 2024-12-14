@@ -26,14 +26,19 @@ fun CustomDataField(
     isEditable: Boolean,
     leftIcon: ImageVector,
     rightIcon: ImageVector? = null,
+    onTextChanged: ((String) -> Unit)? = null
 ){
+    // mutable field content text
     var text by remember{ mutableStateOf(fieldContent)}
 
     TextField(
-        value = text,
+        value = if (isEditable) text else fieldContent,
         textStyle = Typography.bodyMedium,   // style for the content
-        onValueChange = {
-            text = it   // it refers to the lambda parameter
+        onValueChange = { newText ->
+            if (isEditable){
+                text = newText
+                onTextChanged?.invoke(text)
+            }
         },
         label = {
             Text(text = fieldLabel, style = Typography.bodySmall)   // style for the label
