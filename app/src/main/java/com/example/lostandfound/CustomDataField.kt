@@ -22,22 +22,24 @@ import com.example.lostandfound.ui.theme.Typography
 @Composable
 fun CustomDataField(
     fieldLabel: String,
-    fieldContent: String,
+    fieldContent: String,    // val is passed if not editable, var if editable
     isEditable: Boolean,
     leftIcon: ImageVector,
     rightIcon: ImageVector? = null,
     onTextChanged: ((String) -> Unit)? = null
 ){
     // mutable field content text
-    var text by remember{ mutableStateOf(fieldContent)}
+    var varFieldContent by remember{ mutableStateOf(fieldContent)}
 
     TextField(
-        value = if (isEditable) text else fieldContent,
+        // varFieldContent is a mutable version of field content, that would be used when editable is true
+        // it is used to be passed to the onTextChanged callback function
+        value = if (isEditable) varFieldContent else fieldContent,
         textStyle = Typography.bodyMedium,   // style for the content
         onValueChange = { newText ->
             if (isEditable){
-                text = newText
-                onTextChanged?.invoke(text)
+                varFieldContent = newText
+                onTextChanged?.invoke(varFieldContent)
             }
         },
         label = {
