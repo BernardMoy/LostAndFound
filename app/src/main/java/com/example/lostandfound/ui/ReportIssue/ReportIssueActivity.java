@@ -11,9 +11,7 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.lostandfound.R;
-import com.example.lostandfound.databinding.ActivityEditProfileBinding;
 import com.example.lostandfound.databinding.ActivityReportIssueBinding;
-import com.example.lostandfound.ui.EditProfile.EditProfileViewModel;
 
 public class ReportIssueActivity extends AppCompatActivity {
 
