@@ -96,7 +96,7 @@ fun Tabs(){
     }
 
     // if the pagerstate.currentPage changes, then change the selected index
-    LaunchedEffect(pagerState.currentPage) {
+    LaunchedEffect(pagerState.currentPage, pagerState.isScrollInProgress) {
         // avoid updating the page index during scrolling
         // applies when there are more than 2 tabs
         if (!pagerState.isScrollInProgress){
