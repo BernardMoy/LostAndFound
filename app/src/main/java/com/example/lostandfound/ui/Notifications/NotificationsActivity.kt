@@ -19,6 +19,7 @@ import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
@@ -86,6 +87,21 @@ fun Tabs(){
     // variable to store pager state
     var pagerState = rememberPagerState {
         tabNames.size    // set the initial amount of pages
+    }
+
+    // make the page content change with the tab selected
+    // if the selected tab index changes, then scroll to the corresponding page
+    LaunchedEffect(selectedTabIndex) {
+        pagerState.animateScrollToPage(selectedTabIndex)
+    }
+
+    // if the pagerstate.currentPage changes, then change the selected index
+    LaunchedEffect(pagerState.currentPage) {
+        // avoid updating the page index during scrolling
+        // applies when there are more than 2 tabs
+        if (!pagerState.isScrollInProgress){
+            selectedTabIndex = pagerState.currentPage
+        }
     }
 
     // store the tab row in a column
