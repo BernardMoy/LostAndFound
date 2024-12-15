@@ -50,7 +50,7 @@ public class FirebaseAuthManager {
                             }
 
                             // Save the extra user credentials (First, last name, email, avatar) in sharedpreferences
-                            SharedPreferences sharedPreferences = ctx.getSharedPreferences("user", MODE_PRIVATE);
+                            SharedPreferences sharedPreferences = ctx.getSharedPreferences(SharedPreferencesNames.NAME_USERS, MODE_PRIVATE);
                             SharedPreferences.Editor editor = sharedPreferences.edit();
                             editor.putString(SharedPreferencesNames.USER_FIRSTNAME, firstName);
                             editor.putString(SharedPreferencesNames.USER_LASTNAME, lastName);
@@ -114,12 +114,41 @@ public class FirebaseAuthManager {
         });
     }
 
+    // method to update user credentials
+    public void updateUser(String emailAddress, String newFirstName, String newLastName, ErrorCallback callback){
+
+        // add the firstname and lastname data to database where email is the id
+        Map<String, Object> data = new HashMap<>();
+        data.put(FirestoreNames.USERS_FIRSTNAME, newFirstName);
+        data.put(FirestoreNames.USERS_LASTNAME, newLastName);
+
+        db.put("users", emailAddress, data, new FirestoreManager.Callback<Boolean>() {
+            @Override
+            public void onComplete(Boolean result) {
+                if (!result){
+                    callback.onComplete("Error updating user information");
+                    return;
+                }
+
+                // Save the new user credentials (First, last name, email, avatar) in sharedpreferences
+                SharedPreferences sharedPreferences = ctx.getSharedPreferences(SharedPreferencesNames.NAME_USERS, MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putString(SharedPreferencesNames.USER_FIRSTNAME, newFirstName);
+                editor.putString(SharedPreferencesNames.USER_LASTNAME, newLastName);
+                editor.apply();
+
+                // task successful code executes here
+                callback.onComplete("");
+            }
+        });
+    }
+
     // method to logout
     public void logoutUser(){
         mAuth.signOut();
 
         // reset shared preferences for User
-        SharedPreferences sharedPreferences = ctx.getSharedPreferences("User", MODE_PRIVATE);
+        SharedPreferences sharedPreferences = ctx.getSharedPreferences(SharedPreferencesNames.NAME_USERS, MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
 
         // clear user data

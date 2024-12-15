@@ -22,7 +22,6 @@ import com.example.lostandfound.SharedPreferencesNames;
 import com.example.lostandfound.databinding.ActivityProfileBinding;
 import com.example.lostandfound.databinding.DialogLogoutBinding;
 import com.example.lostandfound.ui.EditProfile.EditProfileActivity;
-import com.google.firebase.auth.FirebaseAuth;
 
 public class ProfileActivity extends AppCompatActivity {
 

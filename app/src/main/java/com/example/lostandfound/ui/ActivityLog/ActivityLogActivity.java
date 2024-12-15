@@ -11,10 +11,7 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.lostandfound.R;
-import com.example.lostandfound.databinding.ActivityEditProfileBinding;
 import com.example.lostandfound.databinding.ActivityLogBinding;
-import com.example.lostandfound.databinding.ActivityLoginBinding;
-import com.example.lostandfound.ui.EditProfile.EditProfileViewModel;
 
 public class ActivityLogActivity extends AppCompatActivity {
 
