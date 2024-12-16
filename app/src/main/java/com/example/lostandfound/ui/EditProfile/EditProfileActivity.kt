@@ -49,6 +49,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.lostandfound.BackToolbar
+import com.example.lostandfound.ButtonType
+import com.example.lostandfound.CustomButton
 import com.example.lostandfound.CustomDataField
 import com.example.lostandfound.ErrorCallback
 import com.example.lostandfound.FirebaseAuthManager
@@ -209,13 +211,15 @@ fun MainContent(){
     Box(
         modifier = Modifier.fillMaxWidth(),
         contentAlignment = Alignment.Center
-    ){
-
-        Button(onClick = {
+    ){  
+        CustomButton(
+            text = "Save Profile",
+            type = ButtonType.FILLED,
+            onClick = {
             // handle save logic here
             // update the data from the firestore database
             // but only when not in preview to avoid firebase errors
-            if (inPreview) return@Button
+            if (inPreview) return@CustomButton
 
             // update user data
             val firebaseAuthManager = FirebaseAuthManager(context)
@@ -239,19 +243,7 @@ fun MainContent(){
                 }
             }
 
-        }) {
-            Text(text = "Save Profile",
-                style = MaterialTheme.typography.titleMedium,
-                color = MaterialTheme.colorScheme.onPrimary,
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier.padding(
-                    dimensionResource(id = R.dimen.content_margin),
-                    dimensionResource(id = R.dimen.content_margin_half),
-                    dimensionResource(id = R.dimen.content_margin),
-                    dimensionResource(id = R.dimen.content_margin_half),
-                )
-            )
-        }
+        })
     }
 }
 
