@@ -9,10 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.lostandfound.R;
-import com.example.lostandfound.databinding.FragmentHomeBinding;
 import com.example.lostandfound.databinding.FragmentMatchingItemsBinding;
-import com.example.lostandfound.ui.Home.HomeViewModel;
 
 public class MatchingItems extends Fragment {
 
