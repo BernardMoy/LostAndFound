@@ -32,6 +32,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -110,8 +111,8 @@ fun MainContent(){
     // boolean to determine if it is being rendered in preview
     val inPreview = LocalInspectionMode.current
 
-    // get the viewmodel
-    val viewModel = EditProfileViewModel()
+    // get the viewmodel: Must be instantiated with the viewModel() method
+    val viewModel: EditProfileViewModel = viewModel()
 
     // box for avatar
     Box(
@@ -195,8 +196,12 @@ fun MainContent(){
 
 
     // error
-    CustomErrortext("e")
-
+    // observe the viewmodel live data of the error
+    val error by viewModel.profileError.observeAsState("")
+    if (error.isNotEmpty()){
+        // display error message only when the live data error is not empty
+        CustomErrortext(text = error)
+    }
 
 
     // reminder message
@@ -226,6 +231,11 @@ fun MainContent(){
             // update the data from the firestore database
             // but only when not in preview to avoid firebase errors
             if (inPreview) return@CustomButton
+
+            // verify the input fields
+            if (!viewModel.validateNames(firstName, lastName)){
+                return@CustomButton
+            }
 
             // update user data
             val firebaseAuthManager = FirebaseAuthManager(context)
