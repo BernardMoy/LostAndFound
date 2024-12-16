@@ -18,11 +18,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material3.Button
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -44,23 +44,21 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.lostandfound.BackToolbar
 import com.example.lostandfound.ButtonType
 import com.example.lostandfound.CustomButton
 import com.example.lostandfound.CustomDataField
-import com.example.lostandfound.ErrorCallback
+import com.example.lostandfound.CustomErrortext
 import com.example.lostandfound.FirebaseAuthManager
-import com.example.lostandfound.FirestoreManager
 import com.example.lostandfound.SharedPreferencesNames
 import com.example.lostandfound.ui.theme.ComposeTheme
-import com.google.firebase.FirebaseApp
 
 
-class EditProfileActivity : ComponentActivity() { // Use ComponentActivity here
+class EditProfileActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -111,6 +109,9 @@ fun MainContent(){
 
     // boolean to determine if it is being rendered in preview
     val inPreview = LocalInspectionMode.current
+
+    // get the viewmodel
+    val viewModel = EditProfileViewModel()
 
     // box for avatar
     Box(
@@ -191,6 +192,11 @@ fun MainContent(){
 
         HorizontalDivider(thickness = 1.dp)
     }
+
+
+    // error
+    CustomErrortext("e")
+
 
 
     // reminder message
