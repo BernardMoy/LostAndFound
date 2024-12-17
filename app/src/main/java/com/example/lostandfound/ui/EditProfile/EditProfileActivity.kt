@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -23,6 +24,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -218,10 +220,29 @@ fun MainContent(viewModel: EditProfileViewModel = viewModel()){
 
 
     // box for save button
+    // isloading state to display the loading animation
+    var isLoading by remember{mutableStateOf(false)}
+
+    // when isLoading changes, functions that uses the variable are re-composed
+    if (isLoading){
+        Box(
+            modifier = Modifier.fillMaxWidth(),
+            contentAlignment = Alignment.Center
+        ){
+            CircularProgressIndicator(
+                modifier = Modifier
+                    .width(dimensionResource(id = R.dimen.image_button_size))
+                    .padding(dimensionResource(id = R.dimen.content_margin_half)),
+                color = MaterialTheme.colorScheme.background,
+                trackColor = MaterialTheme.colorScheme.onPrimaryContainer)
+        }
+    }
+
+
     Box(
         modifier = Modifier.fillMaxWidth(),
         contentAlignment = Alignment.Center
-    ){  
+    ){
         CustomButton(
             text = "Save Profile",
             type = ButtonType.FILLED,
@@ -236,12 +257,19 @@ fun MainContent(viewModel: EditProfileViewModel = viewModel()){
                 return@CustomButton
             }
 
+            // begin button operation
+            isLoading = true
+
             // update user data
             val firebaseAuthManager = FirebaseAuthManager(context)
 
             // last lambda argument can be out of parenthesis
             firebaseAuthManager.updateUser(email, firstName, lastName
             ) { error ->
+                // finish loading
+                isLoading = false
+
+                // handle remaining actions
                 if (error.isEmpty()) {
                     // no errors
 
