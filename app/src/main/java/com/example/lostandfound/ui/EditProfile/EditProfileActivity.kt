@@ -18,11 +18,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material3.Button
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -32,6 +32,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -44,25 +45,24 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.lostandfound.BackToolbar
 import com.example.lostandfound.ButtonType
 import com.example.lostandfound.CustomButton
 import com.example.lostandfound.CustomDataField
-import com.example.lostandfound.ErrorCallback
+import com.example.lostandfound.CustomErrortext
 import com.example.lostandfound.FirebaseAuthManager
-import com.example.lostandfound.FirestoreManager
 import com.example.lostandfound.SharedPreferencesNames
 import com.example.lostandfound.ui.theme.ComposeTheme
-import com.google.firebase.FirebaseApp
 
 
-class EditProfileActivity : ComponentActivity() { // Use ComponentActivity here
+class EditProfileActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         setContent {
             EditProfileScreen(activity = this)
         }
@@ -104,8 +104,9 @@ fun EditProfileScreen(activity: ComponentActivity) {
 }
 
 // content includes avatar, edit fields, reminder message and save button
+// get the view model in the function parameter
 @Composable
-fun MainContent(){
+fun MainContent(viewModel: EditProfileViewModel = viewModel()){
     // get the local context
     val context = LocalContext.current
 
@@ -193,6 +194,15 @@ fun MainContent(){
     }
 
 
+    // error
+    // observe the viewmodel live data of the error
+    val error by viewModel.profileError.observeAsState("")
+    if (error.isNotEmpty()){
+        // display error message only when the live data error is not empty
+        CustomErrortext(text = error)
+    }
+
+
     // reminder message
     Text(
         text = "Only your name and avatar would be visible to others.",
@@ -220,6 +230,11 @@ fun MainContent(){
             // update the data from the firestore database
             // but only when not in preview to avoid firebase errors
             if (inPreview) return@CustomButton
+
+            // verify the input fields
+            if (!viewModel.validateNames(firstName, lastName)){
+                return@CustomButton
+            }
 
             // update user data
             val firebaseAuthManager = FirebaseAuthManager(context)

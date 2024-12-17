@@ -25,6 +25,9 @@ private val DarkColorScheme = darkColorScheme(
     onBackground = OnBackgroundDark,     // this is the color of most text displayed on screen
 
     error = Error,
+    errorContainer = ErrorLight,
+    onErrorContainer = ErrorDark,
+
     surface = BackgroundColorDark,  // adjust based on light / dark
     onSurface = OnBackgroundDark,
     surfaceVariant = Gray
@@ -45,6 +48,9 @@ private val LightColorScheme = lightColorScheme(
     onBackground = OnBackgroundLight,
 
     error = Error,
+    errorContainer = ErrorLight,
+    onErrorContainer = ErrorDark,
+
     surface = BackgroundColorLight,
     onSurface = OnBackgroundLight,
     surfaceVariant = Gray
