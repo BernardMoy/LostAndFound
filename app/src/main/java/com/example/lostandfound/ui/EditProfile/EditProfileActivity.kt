@@ -62,6 +62,7 @@ import com.example.lostandfound.ui.theme.ComposeTheme
 class EditProfileActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         setContent {
             EditProfileScreen(activity = this)
         }
@@ -103,16 +104,14 @@ fun EditProfileScreen(activity: ComponentActivity) {
 }
 
 // content includes avatar, edit fields, reminder message and save button
+// get the view model in the function parameter
 @Composable
-fun MainContent(){
+fun MainContent(viewModel: EditProfileViewModel = viewModel()){
     // get the local context
     val context = LocalContext.current
 
     // boolean to determine if it is being rendered in preview
     val inPreview = LocalInspectionMode.current
-
-    // get the viewmodel: Must be instantiated with the viewModel() method
-    val viewModel: EditProfileViewModel = viewModel()
 
     // box for avatar
     Box(
