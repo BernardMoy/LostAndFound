@@ -1,4 +1,4 @@
-package com.example.lostandfound.ui.Home
+package com.example.lostandfound.ui.Found
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -19,7 +19,7 @@ import com.example.lostandfound.R
 import com.example.lostandfound.ui.EditProfile.EditProfileViewModel
 
 
-class HomeFragment : Fragment() {
+class FoundFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -28,7 +28,7 @@ class HomeFragment : Fragment() {
         val view = ComposeView(requireContext())
         view.apply{
             setContent {
-                HomeFragmentScreen()
+                FoundFragmentScreen()
             }
         }
         return view
@@ -39,11 +39,11 @@ class HomeFragment : Fragment() {
 @Preview(showBackground = true)
 @Composable
 fun Preview() {
-    HomeFragmentScreen()
+    FoundFragmentScreen()
 }
 
 @Composable
-fun HomeFragmentScreen() {
+fun FoundFragmentScreen() {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -55,5 +55,5 @@ fun HomeFragmentScreen() {
 
 @Composable
 fun MainContent(viewModel: EditProfileViewModel = viewModel()){
-    Text(text = "Home fragment")
+    Text(text = "Found fragment")
 }
