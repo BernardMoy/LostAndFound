@@ -52,7 +52,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.lostandfound.BackToolbar
 import com.example.lostandfound.ButtonType
 import com.example.lostandfound.CustomButton
-import com.example.lostandfound.CustomDataField
+import com.example.lostandfound.CustomEditText
 import com.example.lostandfound.CustomErrortext
 import com.example.lostandfound.FirebaseAuthManager
 import com.example.lostandfound.SharedPreferencesNames
@@ -173,7 +173,7 @@ fun MainContent(viewModel: EditProfileViewModel = viewModel()){
 
     Column {
         // first name field
-        CustomDataField(fieldLabel = "First name",
+        CustomEditText(fieldLabel = "First name",
             fieldContent = firstName,
             leftIcon = Icons.Default.AccountCircle,
             isEditable = true,
@@ -183,7 +183,7 @@ fun MainContent(viewModel: EditProfileViewModel = viewModel()){
         HorizontalDivider(thickness = 1.dp)
 
         // last name field
-        CustomDataField(fieldLabel = "Last name",
+        CustomEditText(fieldLabel = "Last name",
             fieldContent = lastName,
             leftIcon = Icons.Default.AccountCircle,
             isEditable = true,

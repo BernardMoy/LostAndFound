@@ -19,7 +19,7 @@ fun CustomErrortext(
 ) {
     // surface is a block for displaying content
     Surface(
-        shape = RoundedCornerShape(dimensionResource(id = R.dimen.corner_radius_small),),
+        shape = RoundedCornerShape(dimensionResource(id = R.dimen.corner_radius_small)),
         color = MaterialTheme.colorScheme.errorContainer,
         modifier = Modifier
             .padding(

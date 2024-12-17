@@ -20,7 +20,7 @@ import androidx.compose.ui.unit.dp
 import com.example.lostandfound.ui.theme.Typography
 
 @Composable
-fun CustomDataField(
+fun CustomEditText(
     fieldLabel: String,
     fieldContent: String,    // val is passed if not editable, var if editable
     isEditable: Boolean,
@@ -56,11 +56,7 @@ fun CustomDataField(
         },
         modifier = Modifier
             .fillMaxWidth()
-            .padding(
-                0.dp,
-                dimensionResource(id = R.dimen.content_margin_half),
-                0.dp,
-                dimensionResource(id = R.dimen.content_margin_half)
+            .padding(horizontal = 0.dp, vertical = dimensionResource(id = R.dimen.content_margin_half)
             ),
         enabled = isEditable,
         colors = TextFieldDefaults.colors(
