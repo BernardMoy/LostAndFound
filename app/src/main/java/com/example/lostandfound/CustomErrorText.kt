@@ -22,12 +22,8 @@ fun CustomErrortext(
         shape = RoundedCornerShape(dimensionResource(id = R.dimen.corner_radius_small)),
         color = MaterialTheme.colorScheme.errorContainer,
         modifier = Modifier
-            .padding(
-                0.dp,
-                dimensionResource(id = R.dimen.title_margin),      // default paddings for this element
-                0.dp,
-                dimensionResource(id = R.dimen.title_margin)
-            ).border(
+            .padding(horizontal = dimensionResource(id = R.dimen.title_margin))
+            .border(
                 width = 1.dp,
                 color = MaterialTheme.colorScheme.onErrorContainer,
                 shape = RoundedCornerShape(dimensionResource(id = R.dimen.corner_radius_small))
