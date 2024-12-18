@@ -5,6 +5,7 @@ import android.content.Context
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
+import androidx.activity.compose.BackHandler
 import com.example.lostandfound.R
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
@@ -93,7 +94,14 @@ fun EditProfileScreen(activity: ComponentActivity) {
             Scaffold(
                 // top toolbar
                 topBar = {
-                    BackToolbar(title = "Edit Profile", activity = activity)
+                    BackToolbar(
+                        title = "Edit Profile",
+                        activity = activity,
+                        backButtonOnClick = {
+                            // override the on back pressed button here
+                            onBackPressed(activity)
+                        }
+                    )
                 }
             ) { innerPadding ->
                 Column(
@@ -115,6 +123,7 @@ fun EditProfileScreen(activity: ComponentActivity) {
 // get the view model in the function parameter
 @Composable
 fun MainContent(viewModel: EditProfileViewModel = viewModel()){
+
     // get the local context
     val context = LocalContext.current
 
@@ -336,6 +345,11 @@ fun AvatarBottomSheet(isSheetOpen: MutableState<Boolean>){
 
         }
     }
+}
+
+// function to override the default activity.finish() when the back button is pressed on the toolbar
+fun onBackPressed(activity: ComponentActivity){
+    
 }
 
 

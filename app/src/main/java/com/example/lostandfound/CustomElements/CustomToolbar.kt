@@ -23,7 +23,8 @@ import com.example.lostandfound.R
 @Composable
 fun BackToolbar(
     title: String,
-    activity: ComponentActivity
+    activity: ComponentActivity,
+    backButtonOnClick: (() -> Unit)? = null   // this is a procedure that executes: It does not return a value
 ) {
 
     CenterAlignedTopAppBar(
@@ -36,15 +37,26 @@ fun BackToolbar(
         },
 
         navigationIcon = {
-            IconButton(onClick = {
-                // implement the logic of back button here
-                activity.finish()
+            if (backButtonOnClick != null){
+                IconButton(onClick = {
+                    // call the on click button that takes in the current activity
+                    backButtonOnClick()
+                }) {
+                    Icon(imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                        contentDescription = "Back")
+                }
 
-            }) {
-                Icon(imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                    contentDescription = "Back")
+            } else {
+                IconButton(onClick = {
+                    // default behaviour is to exit the activity
+                    activity.finish()
+                }) {
+                    Icon(imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                        contentDescription = "Back")
+                }
             }
         },
+
         colors = TopAppBarColors(
             containerColor = Color.Transparent,     // make the toolbar background transparent
             titleContentColor = MaterialTheme.colorScheme.onBackground,    // title text color
