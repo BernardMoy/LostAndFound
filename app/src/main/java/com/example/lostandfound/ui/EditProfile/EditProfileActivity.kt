@@ -25,6 +25,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.outlined.AccountCircle
 import androidx.compose.material.icons.outlined.Add
 import androidx.compose.material.icons.outlined.Cancel
 import androidx.compose.material.icons.outlined.Delete
@@ -232,7 +233,7 @@ fun MainContent(viewModel: EditProfileViewModel = viewModel()){
         // first name field
         CustomEditText(fieldLabel = "First name",
             fieldContent = firstName,
-            leftIcon = Icons.Default.AccountCircle,
+            leftIcon = Icons.Outlined.AccountCircle,
             isEditable = true,
             onTextChanged = {s -> firstName = s}
         )
@@ -242,7 +243,7 @@ fun MainContent(viewModel: EditProfileViewModel = viewModel()){
         // last name field
         CustomEditText(fieldLabel = "Last name",
             fieldContent = lastName,
-            leftIcon = Icons.Default.AccountCircle,
+            leftIcon = Icons.Outlined.AccountCircle,
             isEditable = true,
             onTextChanged = {s -> lastName = s}
         )
