@@ -18,7 +18,7 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.lostandfound.R;
-import com.example.lostandfound.SharedPreferencesNames;
+import com.example.lostandfound.Utility.SharedPreferencesNames;
 import com.example.lostandfound.databinding.ActivityProfileBinding;
 import com.example.lostandfound.databinding.DialogLogoutBinding;
 import com.example.lostandfound.ui.EditProfile.EditProfileActivity;
