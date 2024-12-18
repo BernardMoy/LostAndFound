@@ -10,6 +10,7 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -310,20 +311,28 @@ fun AvatarBottomSheet(isSheetOpen: MutableState<Boolean>){
             containerColor = MaterialTheme.colorScheme.background,
         ) {
             // content of the bottom sheet
-            Box(
-                modifier = Modifier.padding(horizontal = dimensionResource(id = R.dimen.content_margin))
+            Column(
+                modifier = Modifier.padding(horizontal = dimensionResource(id = R.dimen.content_margin)),
+                verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin_half))
             ){
                 CustomActionRow(
                     text = "New avatar",
-                    onClick = { /*TODO*/ },
                     leftIcon = Icons.Outlined.Add,
                     rightIcon = null,
+                    onClick = {
+                        // dismiss the bottom sheet
+                        isSheetOpen.value = false
+                    },
                 )
                 CustomActionRow(
                     text = "Remove avatar",
-                    onClick = { /*TODO*/ },
                     leftIcon = Icons.Outlined.Delete,
                     rightIcon = null,
+                    tint = MaterialTheme.colorScheme.error,
+                    onClick = {
+                        // dismiss the bottom sheet
+                        isSheetOpen.value = false
+                    },
                 )
             }
 

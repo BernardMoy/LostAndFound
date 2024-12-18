@@ -25,6 +25,7 @@ fun CustomActionRow(
     onClick: () -> Unit,     // by default it triggers the redirection when the text row itself is clicked, not just the icon
     leftIcon: ImageVector,
     rightIcon: ImageVector? = Icons.AutoMirrored.Default.KeyboardArrowRight,   // can be null
+    tint: Color = MaterialTheme.colorScheme.onBackground     // tint for both text and the icon
 ) {
     Surface(
         shape = RoundedCornerShape(dimensionResource(id = R.dimen.corner_radius_small)),
@@ -39,10 +40,11 @@ fun CustomActionRow(
         ){
             Icon(imageVector = leftIcon,
                 contentDescription = "Action icon",
-                tint = MaterialTheme.colorScheme.onBackground
+                tint = tint
             )
 
             Text(text = text,
+                color = tint,
                 style = MaterialTheme.typography.bodyMedium,
                 modifier = Modifier
                     .weight(1f)  // fill up all middle space
