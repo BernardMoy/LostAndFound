@@ -1,4 +1,4 @@
-package com.example.lostandfound;
+package com.example.lostandfound.Utility;
 
 public final class FirestoreNames {
     private FirestoreNames(){}
