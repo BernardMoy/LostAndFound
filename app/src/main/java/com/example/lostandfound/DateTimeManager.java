@@ -3,6 +3,9 @@ package com.example.lostandfound;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class DateTimeManager {
 
@@ -15,7 +18,7 @@ public class DateTimeManager {
 
     // Use the epoch time (In seconds)
     public DateTimeManager(long epoch){
-        this.localDateTime = LocalDateTime.ofInstant(Instant.ofEpochSecond(epoch), ZoneId.systemDefault());
+        this.localDateTime = LocalDateTime.ofInstant(Instant.ofEpochSecond(epoch), ZoneId.of("UTC"));   // UTC for no time offsets
     }
 
     // Use the current time
@@ -25,33 +28,36 @@ public class DateTimeManager {
 
     // output epoch time in seconds
     public long getEpoch(){
-        return 0L;
+        ZonedDateTime zonedDateTime = this.localDateTime.atZone(ZoneId.of("UTC"));
+        return zonedDateTime.toEpochSecond();
     }
 
     // get the time in a formatted string
     public String getFormattedString(){
-        return "";
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMM yyyy HH:mm");
+        return formatter.format(this.localDateTime);
     }
 
     // get the integer fields
     public int getYear(){
-        return 0;
+        return this.localDateTime.getYear();
     }
 
     public int getMonth(){
-        return 0;
+        return this.localDateTime.getMonthValue();
     }
 
     public int getDay(){
-        return 0;
+        return this.localDateTime.getDayOfMonth();
     }
 
+    // return hour in 24 hour format
     public int getHour(){
-        return 0;
+        return this.localDateTime.getHour();
     }
 
     public int getMinute(){
-        return 0;
+        return this.localDateTime.getMinute();
     }
 
 }
