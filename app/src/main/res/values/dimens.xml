@@ -15,7 +15,7 @@
     <dimen name = "toggle_button_size"> 30dp </dimen>
     <dimen name="profile_image_size_small">36dp</dimen>
 
-    <dimen name = "bottom_view_height">70dp</dimen>
+    <dimen name ="bottom_view_height">70dp</dimen>
     <dimen name="toolbar_height">48dp</dimen>
 
     <dimen name="corner_radius"> 24dp </dimen>

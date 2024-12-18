@@ -130,8 +130,26 @@ fun EditProfileScreen(activity: ComponentActivity) {
                 icon = Icons.Outlined.Cancel,
                 title = "Discard changes?",
                 content = "All your changes will be lost.",
-                primaryButton = { /*TODO*/ },
-                isDialogShown = isDialogShown
+                confirmButton = {
+                    CustomButton(
+                        text = "Discard",
+                        type = ButtonType.FILLED,
+                        onClick = {
+                            // dismiss the dialog
+                            isDialogShown.value = false
+                            // exit the activity
+                            activity.finish()
+                        })
+                },
+                dismissButton = {
+                    CustomButton(text = "Cancel",
+                        type = ButtonType.OUTLINED,
+                        onClick = {
+                            // dismiss the dialog
+                            isDialogShown.value = false
+                        })
+                },
+                isDialogShown = isDialogShown    // dialog is shown only when the value of isDialogShown is true
             )
         }
     }
