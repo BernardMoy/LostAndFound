@@ -26,6 +26,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.outlined.Add
+import androidx.compose.material.icons.outlined.Cancel
 import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -63,6 +64,7 @@ import com.example.lostandfound.CustomElements.CustomActionRow
 import com.example.lostandfound.CustomElements.CustomButton
 import com.example.lostandfound.CustomElements.CustomEditText
 import com.example.lostandfound.CustomElements.CustomErrortext
+import com.example.lostandfound.CustomElements.CustomTextDialog
 import com.example.lostandfound.FirebaseAuthManager
 import com.example.lostandfound.Utility.SharedPreferencesNames
 import com.example.lostandfound.ui.theme.ComposeTheme
@@ -91,6 +93,13 @@ fun Preview() {
 fun EditProfileScreen(activity: ComponentActivity) {
     ComposeTheme {
         Surface {
+            val isDialogShown = remember { mutableStateOf(false) }
+
+            // open the dialog when the back button on device is pressed
+            BackHandler {
+                isDialogShown.value = true
+            }
+
             Scaffold(
                 // top toolbar
                 topBar = {
@@ -98,8 +107,8 @@ fun EditProfileScreen(activity: ComponentActivity) {
                         title = "Edit Profile",
                         activity = activity,
                         backButtonOnClick = {
-                            // override the on back pressed button here
-                            onBackPressed(activity)
+                            // show the dialog
+                            isDialogShown.value = true
                         }
                     )
                 }
@@ -115,6 +124,15 @@ fun EditProfileScreen(activity: ComponentActivity) {
                     MainContent()
                 }
             }
+
+            // the dialog when the back button is pressed
+            CustomTextDialog(
+                icon = Icons.Outlined.Cancel,
+                title = "Discard changes?",
+                content = "All your changes will be lost.",
+                primaryButton = { /*TODO*/ },
+                isDialogShown = isDialogShown
+            )
         }
     }
 }
@@ -342,15 +360,10 @@ fun AvatarBottomSheet(isSheetOpen: MutableState<Boolean>){
                     },
                 )
             }
-
         }
     }
 }
 
-// function to override the default activity.finish() when the back button is pressed on the toolbar
-fun onBackPressed(activity: ComponentActivity){
-    
-}
 
 
 
