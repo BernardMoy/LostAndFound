@@ -20,27 +20,7 @@ public class DateTimeManagerTest {
     }
 
     @Test
-    public void testGetYear(){
-        assertEquals(YEAR, DateTimeManager.getYear(EPOCH));
-    }
-
-    @Test
-    public void testGetMonth(){
-        assertEquals(MONTH, DateTimeManager.getYear(EPOCH));
-    }
-
-    @Test
-    public void testGetDay(){
-        assertEquals(DAY, DateTimeManager.getYear(EPOCH));
-    }
-
-    @Test
-    public void testGetHour(){
-        assertEquals(HOUR, DateTimeManager.getYear(EPOCH));
-    }
-
-    @Test
-    public void testGetMinute(){
-        assertEquals(MINUTE, DateTimeManager.getYear(EPOCH));
+    public void testGetFormattedString(){
+        assertEquals("18 Jun 2024 17:04", DateTimeManager.getFormattedDate(EPOCH));
     }
 }
