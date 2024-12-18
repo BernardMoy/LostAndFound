@@ -124,8 +124,13 @@ public class ProfileActivity extends AppCompatActivity {
 
         String displayedName = firstName + ' ' + lastName;
 
-        // update the displayed names and emails
+        // update the displayed names and emails above
         binding.profileDisplayName.setText(displayedName);
         binding.profileEmail.setText(email);
+
+        // update the displayed names and emails below
+        binding.firstName.setText(firstName);
+        binding.lastName.setText(lastName);
+        binding.email.setText(email);
     }
 }
