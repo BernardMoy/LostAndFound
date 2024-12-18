@@ -1,6 +1,4 @@
-package com.example.lostandfound;
-
-import android.util.Log;
+package com.example.lostandfound.Utility;
 
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
