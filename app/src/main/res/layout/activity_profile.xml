@@ -88,7 +88,7 @@
                             app:strokeColor="@color/white"
                             app:strokeWidth="2dp" />
 
-                        <com.google.android.material.floatingactionbutton.FloatingActionButton
+                        <!--<com.google.android.material.floatingactionbutton.FloatingActionButton
                             android:id="@+id/change_profile_image"
                             android:layout_width="@dimen/image_button_size"
                             android:layout_height="@dimen/image_button_size"
@@ -102,7 +102,7 @@
                             app:layout_constraintEnd_toEndOf="parent"
                             app:srcCompat="@drawable/add_icon"
                             app:tint = "@color/secondaryColorVariant"
-                            android:layout_gravity="bottom|end" />
+                            android:layout_gravity="bottom|end" /> -->
                     </FrameLayout>
 
                     <TextView

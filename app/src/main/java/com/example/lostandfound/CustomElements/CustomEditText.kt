@@ -1,4 +1,4 @@
-package com.example.lostandfound
+package com.example.lostandfound.CustomElements
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -17,6 +17,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.unit.dp
+import com.example.lostandfound.R
 import com.example.lostandfound.ui.theme.Typography
 
 @Composable
