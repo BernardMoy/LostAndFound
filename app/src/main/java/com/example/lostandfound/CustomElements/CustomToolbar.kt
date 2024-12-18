@@ -1,4 +1,4 @@
-package com.example.lostandfound
+package com.example.lostandfound.CustomElements
 
 import androidx.activity.ComponentActivity
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -17,6 +17,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
+import com.example.lostandfound.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

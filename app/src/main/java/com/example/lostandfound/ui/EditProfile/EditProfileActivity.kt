@@ -19,24 +19,30 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.outlined.Add
+import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.material3.Surface
+import androidx.compose.material3.rememberModalBottomSheetState
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -51,11 +57,12 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.lostandfound.BackToolbar
-import com.example.lostandfound.ButtonType
-import com.example.lostandfound.CustomButton
-import com.example.lostandfound.CustomEditText
-import com.example.lostandfound.CustomErrortext
+import com.example.lostandfound.CustomElements.BackToolbar
+import com.example.lostandfound.CustomElements.ButtonType
+import com.example.lostandfound.CustomElements.CustomActionRow
+import com.example.lostandfound.CustomElements.CustomButton
+import com.example.lostandfound.CustomElements.CustomEditText
+import com.example.lostandfound.CustomElements.CustomErrortext
 import com.example.lostandfound.FirebaseAuthManager
 import com.example.lostandfound.SharedPreferencesNames
 import com.example.lostandfound.ui.theme.ComposeTheme
@@ -115,6 +122,10 @@ fun MainContent(viewModel: EditProfileViewModel = viewModel()){
     // boolean to determine if it is being rendered in preview
     val inPreview = LocalInspectionMode.current
 
+    // the bottom sheet that is displayed at the bottom
+    val isSheetOpen = remember { mutableStateOf(false) }
+    AvatarBottomSheet(isSheetOpen = isSheetOpen)
+
     // box for avatar
     Box(
         modifier = Modifier
@@ -141,8 +152,8 @@ fun MainContent(viewModel: EditProfileViewModel = viewModel()){
             )
 
             IconButton(onClick = {
-                // change avatar button
-                Toast.makeText(context, "Add button clicked", Toast.LENGTH_SHORT).show()
+                // show the bottom sheet when the + button is pressed
+                isSheetOpen.value = true
             },
                 modifier = Modifier
                     .size(dimensionResource(id = R.dimen.image_button_size))
@@ -287,6 +298,36 @@ fun MainContent(viewModel: EditProfileViewModel = viewModel()){
             }
 
         })
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun AvatarBottomSheet(isSheetOpen: MutableState<Boolean>){
+    if (isSheetOpen.value){
+        ModalBottomSheet(
+            onDismissRequest = { isSheetOpen.value = false },
+            containerColor = MaterialTheme.colorScheme.background,
+        ) {
+            // content of the bottom sheet
+            Box(
+                modifier = Modifier.padding(horizontal = dimensionResource(id = R.dimen.content_margin))
+            ){
+                CustomActionRow(
+                    text = "New avatar",
+                    onClick = { /*TODO*/ },
+                    leftIcon = Icons.Outlined.Add,
+                    rightIcon = null,
+                )
+                CustomActionRow(
+                    text = "Remove avatar",
+                    onClick = { /*TODO*/ },
+                    leftIcon = Icons.Outlined.Delete,
+                    rightIcon = null,
+                )
+            }
+
+        }
     }
 }
 

@@ -1,12 +1,9 @@
-package com.example.lostandfound
+package com.example.lostandfound.CustomElements
 
-import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
@@ -20,14 +17,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.dimensionResource
-import androidx.compose.ui.unit.dp
+import com.example.lostandfound.R
 
 @Composable
 fun CustomActionRow(
     text: String,
     onClick: () -> Unit,     // by default it triggers the redirection when the text row itself is clicked, not just the icon
     leftIcon: ImageVector,
-    rightIcon: ImageVector = Icons.AutoMirrored.Default.KeyboardArrowRight,
+    rightIcon: ImageVector? = Icons.AutoMirrored.Default.KeyboardArrowRight,   // can be null
 ) {
     Surface(
         shape = RoundedCornerShape(dimensionResource(id = R.dimen.corner_radius_small)),
@@ -56,9 +53,11 @@ fun CustomActionRow(
                     )
             )
 
-            Icon(imageVector = rightIcon,
-                contentDescription = "Redirect",
-                tint = Color.Gray)
+            if (rightIcon != null) {
+                Icon(imageVector = rightIcon,
+                    contentDescription = "Redirect",
+                    tint = Color.Gray)
+            }
         }
     }
 }

@@ -29,10 +29,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.tooling.preview.Preview
-import com.example.lostandfound.BackToolbar
+import com.example.lostandfound.CustomElements.BackToolbar
 import com.example.lostandfound.R
 import com.example.lostandfound.ui.theme.ComposeTheme
-import com.google.android.material.color.MaterialColors
 
 class NotificationsActivity : ComponentActivity() { // Use ComponentActivity here
     override fun onCreate(savedInstanceState: Bundle?) {
