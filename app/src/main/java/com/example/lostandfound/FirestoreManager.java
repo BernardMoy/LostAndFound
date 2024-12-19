@@ -13,7 +13,13 @@ import com.google.firebase.BuildConfig;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Map;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class FirestoreManager {
 
@@ -27,8 +33,6 @@ public class FirestoreManager {
     public interface Callback<T> {
         void onComplete(T result);
     }
-
-    // method to put a collection, key, value pair into the db
 
     /**
      * Method to put new data to the database, or update data to put new value to database
@@ -51,9 +55,6 @@ public class FirestoreManager {
             }
         });
     }
-
-    // method to return a map of values, given a collection and a key, or null if the collection or key does not exist
-    // null values need to be checked before casting
 
     /**
      * Method to get data from the database when given the collection name and the key name
@@ -102,4 +103,26 @@ public class FirestoreManager {
             }
         });
     }
+
+    /*
+    Designed based on this post:
+    https://stackoverflow.com/questions/50594146/firestore-timeout-for-android
+
+    public boolean hasInternetConnection() {
+        boolean success = false;
+        try {
+            URL url = new URL("https://google.com");
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setConnectTimeout(10000);
+            connection.connect();
+            success = connection.getResponseCode() == 200;
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return success;
+    }
+
+     */
 }

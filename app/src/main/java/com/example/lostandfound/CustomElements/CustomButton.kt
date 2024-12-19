@@ -1,5 +1,6 @@
 package com.example.lostandfound.CustomElements
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -9,6 +10,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.text.font.FontWeight
@@ -30,13 +32,18 @@ fun CustomButton(
             Button(
                 onClick = onClick,
                 colors = ButtonColors(
-                    containerColor = MaterialTheme.colorScheme.primary,     // color of container
+                    containerColor = Color.Transparent,     // color of container
                     contentColor = MaterialTheme.colorScheme.onPrimary,     // color of the text
                     disabledContainerColor = Color.Gray,
-                    disabledContentColor = Color.White
+                    disabledContentColor = Color.White,
                 ),
                 enabled = enabled,
-                shape = RoundedCornerShape(dimensionResource(id = R.dimen.corner_radius))  // make the button have rounded corners
+                shape = RoundedCornerShape(dimensionResource(id = R.dimen.corner_radius)),  // make the button have rounded corners
+                modifier = Modifier.background(
+                    // add the gradient to the background instead of the container color
+                    Brush.horizontalGradient(listOf(MaterialTheme.colorScheme.primary, MaterialTheme.colorScheme.secondary)),
+                    shape = RoundedCornerShape(dimensionResource(id = R.dimen.corner_radius))   // also apply the shape to the background
+                )
             ) {
                 CustomButtonContent(text = text)
             }
