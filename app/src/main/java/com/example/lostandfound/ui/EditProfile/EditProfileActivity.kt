@@ -2,12 +2,17 @@ package com.example.lostandfound.ui.EditProfile
 
 import android.app.Activity
 import android.content.Context
+import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.BackHandler
+import androidx.activity.compose.rememberLauncherForActivityResult
 import com.example.lostandfound.R
 import androidx.activity.compose.setContent
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -59,6 +64,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import coil3.compose.AsyncImage
+import coil3.compose.rememberAsyncImagePainter
 import com.example.lostandfound.CustomElements.BackToolbar
 import com.example.lostandfound.CustomElements.ButtonType
 import com.example.lostandfound.CustomElements.CustomActionRow
@@ -167,9 +174,14 @@ fun MainContent(viewModel: EditProfileViewModel = viewModel()){
     // boolean to determine if it is being rendered in preview
     val inPreview = LocalInspectionMode.current
 
+    // stores the image uri of the user's avatar
+    val imageUri = remember { mutableStateOf<Uri?>(null) }
+
+
     // the bottom sheet that is displayed at the bottom
     val isSheetOpen = remember { mutableStateOf(false) }
-    AvatarBottomSheet(isSheetOpen = isSheetOpen)
+    AvatarBottomSheet(isSheetOpen = isSheetOpen, imageUri = imageUri)
+
 
     // box for avatar
     Box(
@@ -183,18 +195,39 @@ fun MainContent(viewModel: EditProfileViewModel = viewModel()){
             modifier = Modifier
                 .size(dimensionResource(id = R.dimen.profile_image_size_large))
         ){
-            Image(painter = painterResource(id = R.drawable.profile_icon),
-                contentDescription = "Your avatar",
-                modifier = Modifier
-                    .size(dimensionResource(id = R.dimen.profile_image_size_large))
-                    .clip(CircleShape)
-                    .border(
-                        width = 1.dp,
-                        color = MaterialTheme.colorScheme.primary,
-                        shape = CircleShape
-                    ),
-                contentScale = ContentScale.Crop
-            )
+            if (imageUri.value != null) {
+                // display the one selected from gallery
+                AsyncImage(
+                    model = imageUri.value,
+                    contentDescription = "Your avatar",
+                    modifier = Modifier
+                        .size(dimensionResource(id = R.dimen.profile_image_size_large))
+                        .clip(CircleShape)
+                        .border(
+                            width = 1.dp,
+                            color = MaterialTheme.colorScheme.primary,
+                            shape = CircleShape
+                        ),
+                    contentScale = ContentScale.Crop
+                )
+
+            } else {
+                // display the default profile icon
+                Image(
+                    painter = painterResource(id = R.drawable.profile_icon),
+                    contentDescription = "Your avatar",
+                    modifier = Modifier
+                        .size(dimensionResource(id = R.dimen.profile_image_size_large))
+                        .clip(CircleShape)
+                        .border(
+                            width = 1.dp,
+                            color = MaterialTheme.colorScheme.primary,
+                            shape = CircleShape
+                        ),
+                    contentScale = ContentScale.Crop
+                )
+            }
+
 
             IconButton(onClick = {
                 // show the bottom sheet when the + button is pressed
@@ -348,12 +381,23 @@ fun MainContent(viewModel: EditProfileViewModel = viewModel()){
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AvatarBottomSheet(isSheetOpen: MutableState<Boolean>){
+fun AvatarBottomSheet(isSheetOpen: MutableState<Boolean>, imageUri: MutableState<Uri?>){
     if (isSheetOpen.value){
         ModalBottomSheet(
             onDismissRequest = { isSheetOpen.value = false },
             containerColor = MaterialTheme.colorScheme.background,
         ) {
+            // launcher to request image from the device
+            val launcher = rememberLauncherForActivityResult(
+                contract = ActivityResultContracts.PickVisualMedia(),
+                onResult = { uri ->
+                    imageUri.value = uri
+
+                    // close the bottom sheet here after the imageuri value has been set
+                    isSheetOpen.value = false
+                }
+            )
+
             // content of the bottom sheet
             Column(
                 modifier = Modifier.padding(horizontal = dimensionResource(id = R.dimen.content_margin)),
@@ -364,8 +408,10 @@ fun AvatarBottomSheet(isSheetOpen: MutableState<Boolean>){
                     leftIcon = Icons.Outlined.Add,
                     rightIcon = null,
                     onClick = {
-                        // dismiss the bottom sheet
-                        isSheetOpen.value = false
+                        // pick image from the gallery to modify the imageuri (The image that is displayed on screen)
+                        launcher.launch(
+                            PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
+                        )
                     },
                 )
                 CustomActionRow(
