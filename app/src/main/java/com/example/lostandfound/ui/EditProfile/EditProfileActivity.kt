@@ -409,6 +409,9 @@ fun AvatarBottomSheet(isSheetOpen: MutableState<Boolean>, imageUri: MutableState
                     rightIcon = null,
                     tint = MaterialTheme.colorScheme.error,
                     onClick = {
+                        // remove the profile avatar
+                        imageUri.value = null
+
                         // dismiss the bottom sheet
                         isSheetOpen.value = false
                     },
