@@ -69,7 +69,9 @@ public class VerifyEmailViewModel extends ViewModel {
     // method to create user
     public void createUser(Context ctx, String firstName, String lastName, String emailAddress, String password, ErrorCallback callback){
         FirebaseAuthManager firebaseAuthManager = new FirebaseAuthManager(ctx);
-        firebaseAuthManager.createUser(firstName, lastName, emailAddress, password, new ErrorCallback() {
+
+        // initially, the avatar is null (Empty string)
+        firebaseAuthManager.createUser(firstName, lastName, emailAddress, password, "", new ErrorCallback() {
             @Override
             public void onComplete(String error) {
                 if (!error.isEmpty()){

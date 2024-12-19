@@ -1,20 +1,38 @@
 package com.example.lostandfound.Utility
 
 import android.content.Context
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.graphics.ImageDecoder
 import android.net.Uri
-import java.io.ByteArrayOutputStream
+import java.io.File
+import java.io.FileOutputStream
+import kotlin.io.encoding.Base64
+import kotlin.io.encoding.ExperimentalEncodingApi
 
 object ImageManager {
-    fun uriToBitmap(context: Context, imageUri: Uri): ByteArray{
-        val source = ImageDecoder.createSource(context.contentResolver, imageUri)
-        val bitmap = ImageDecoder.decodeBitmap(source)
-        val outputStream = ByteArrayOutputStream()
+    @OptIn(ExperimentalEncodingApi::class)
+    fun uriToString(context: Context, imageUri: Uri?): String{
+        if (imageUri == null){
+            return ""
+        }
 
-        // compress the image
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
-        return outputStream.toByteArray()
+        val byteArray = context.contentResolver.openInputStream(imageUri)?.use { it.buffered().readBytes() }
+
+        // convert byte array to string
+        if (byteArray != null) {
+            return Base64.encode(byteArray)
+        } else {
+            return ""
+        }
+    }
+
+    @OptIn(ExperimentalEncodingApi::class)
+    fun stringToUri(context: Context, string: String): Uri? {
+        val decodedBytes = Base64.decode(string)
+        val avatarFile = File(context.cacheDir, "user_avatar.png")
+        val fileOutputStream = FileOutputStream(avatarFile)
+        fileOutputStream.write(decodedBytes)
+        fileOutputStream.close()
+
+        // Return the URI of the temp file
+        return Uri.fromFile(avatarFile)
     }
 }
