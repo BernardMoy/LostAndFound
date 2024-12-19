@@ -4,7 +4,6 @@ import android.app.Activity
 import android.content.Context
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.BackHandler
@@ -28,7 +27,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.outlined.AccountCircle
 import androidx.compose.material.icons.outlined.Add
@@ -64,7 +62,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import coil3.compose.AsyncImage
 import coil3.compose.rememberAsyncImagePainter
 import com.example.lostandfound.CustomElements.BackToolbar
 import com.example.lostandfound.CustomElements.ButtonType
@@ -73,7 +70,7 @@ import com.example.lostandfound.CustomElements.CustomButton
 import com.example.lostandfound.CustomElements.CustomEditText
 import com.example.lostandfound.CustomElements.CustomErrortext
 import com.example.lostandfound.CustomElements.CustomTextDialog
-import com.example.lostandfound.FirebaseAuthManager
+import com.example.lostandfound.FirebaseManagers.FirebaseAuthManager
 import com.example.lostandfound.Utility.ImageManager
 import com.example.lostandfound.Utility.SharedPreferencesNames
 import com.example.lostandfound.ui.theme.ComposeTheme
@@ -341,7 +338,10 @@ fun MainContent(viewModel: EditProfileViewModel = viewModel()){
             isLoading = true
 
             // update user data
-            val firebaseAuthManager = FirebaseAuthManager(context)
+            val firebaseAuthManager =
+                FirebaseAuthManager(
+                    context
+                )
 
             // last lambda argument can be out of parenthesis
             firebaseAuthManager.updateUser(

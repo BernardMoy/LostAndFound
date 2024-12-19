@@ -86,6 +86,9 @@ dependencies {
     implementation ("androidx.compose.material:material-icons-extended:1.7.6")
     implementation("io.coil-kt.coil3:coil-compose:3.0.4")
 
+    implementation(platform("com.google.firebase:firebase-bom:33.7.0"))
+    implementation("com.google.firebase:firebase-storage")
+
     androidTestImplementation("androidx.compose.ui:ui-test-junit4-android:1.7.6")
     debugImplementation("androidx.compose.ui:ui-test-manifest:1.7.6")
 
