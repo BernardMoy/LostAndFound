@@ -188,7 +188,8 @@ fun MainContent(viewModel: EditProfileViewModel = viewModel()){
     // stores the image uri of the user's avatar
     val imageUri = remember { mutableStateOf<Uri?>(
         // convert the stored string to uri
-        ImageManager.stringToUri(context, sp.getString(SharedPreferencesNames.USER_AVATAR, "") ?: "")
+        if (inPreview) null else
+        ImageManager.stringToUri(context, sp.getString(SharedPreferencesNames.USER_AVATAR, "")?:"")
     ) }
 
 
