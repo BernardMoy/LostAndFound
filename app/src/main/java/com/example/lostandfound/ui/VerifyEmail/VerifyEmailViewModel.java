@@ -7,7 +7,7 @@ import androidx.lifecycle.ViewModel;
 
 import com.example.lostandfound.EmailSender;
 import com.example.lostandfound.ErrorCallback;
-import com.example.lostandfound.FirebaseAuthManager;
+import com.example.lostandfound.FirebaseManagers.FirebaseAuthManager;
 import com.example.lostandfound.VerificationCodeManager;
 
 public class VerifyEmailViewModel extends ViewModel {

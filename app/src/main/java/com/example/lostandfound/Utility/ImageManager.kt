@@ -26,13 +26,16 @@ object ImageManager {
 
     @OptIn(ExperimentalEncodingApi::class)
     fun stringToUri(context: Context, string: String): Uri? {
+        // decode the string of bytearray
         val decodedBytes = Base64.decode(string)
+
+        // store in device's cache memory
         val avatarFile = File(context.cacheDir, "user_avatar.png")
         val fileOutputStream = FileOutputStream(avatarFile)
         fileOutputStream.write(decodedBytes)
         fileOutputStream.close()
 
-        // Return the URI of the temp file
+        // Return the URI from the cache file
         return Uri.fromFile(avatarFile)
     }
 }

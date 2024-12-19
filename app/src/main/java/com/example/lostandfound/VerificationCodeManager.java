@@ -1,5 +1,6 @@
 package com.example.lostandfound;
 
+import com.example.lostandfound.FirebaseManagers.FirestoreManager;
 import com.example.lostandfound.Utility.FirestoreNames;
 import com.example.lostandfound.Utility.Hasher;
 

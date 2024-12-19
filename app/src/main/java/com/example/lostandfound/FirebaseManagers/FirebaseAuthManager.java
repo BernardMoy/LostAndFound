@@ -1,13 +1,13 @@
-package com.example.lostandfound;
+package com.example.lostandfound.FirebaseManagers;
 
 import static android.content.Context.MODE_PRIVATE;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.net.Uri;
 
 import androidx.annotation.NonNull;
 
+import com.example.lostandfound.ErrorCallback;
 import com.example.lostandfound.Utility.FirestoreNames;
 import com.example.lostandfound.Utility.SharedPreferencesNames;
 import com.google.android.gms.tasks.OnCompleteListener;
