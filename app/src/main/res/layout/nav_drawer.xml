@@ -46,6 +46,7 @@
             app:layout_constraintTop_toBottomOf="@id/drawer_close_button">
 
             <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/nav_drawer_profile_icon"
                 android:layout_width="@dimen/profile_image_size"
                 android:layout_height="@dimen/profile_image_size"
                 android:src="@drawable/profile_icon"

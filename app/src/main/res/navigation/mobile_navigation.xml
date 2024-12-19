@@ -8,31 +8,26 @@
     <fragment
         android:id="@+id/navigation_home"
         android:name="com.example.lostandfound.ui.Home.HomeFragment"
-        android:label="@string/title_home"
-        tools:layout="@layout/fragment_home" />
+        android:label="@string/title_home" />
 
     <fragment
         android:id="@+id/navigation_lost"
         android:name="com.example.lostandfound.ui.Lost.LostFragment"
-        android:label="@string/title_lost"
-        tools:layout="@layout/fragment_lost" />
+        android:label="@string/title_lost" />
 
     <fragment
         android:id="@+id/navigation_found"
         android:name="com.example.lostandfound.ui.Found.FoundFragment"
-        android:label="@string/title_found"
-        tools:layout="@layout/fragment_found" />
+        android:label="@string/title_found" />
 
     <fragment
         android:id="@+id/navigation_search"
         android:name="com.example.lostandfound.ui.Search.SearchFragment"
-        android:label="@string/title_search"
-        tools:layout="@layout/fragment_chat" />
+        android:label="@string/title_search" />
 
     <fragment
         android:id="@+id/navigation_chat"
         android:name="com.example.lostandfound.ui.Chat.ChatFragment"
-        android:label="@string/title_chat"
-        tools:layout="@layout/fragment_chat" />
+        android:label="@string/title_chat" />
 
 </navigation>

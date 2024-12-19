@@ -26,6 +26,11 @@ object ImageManager {
 
     @OptIn(ExperimentalEncodingApi::class)
     fun stringToUri(context: Context, string: String): Uri? {
+        // if string is empty, return null
+        if (string == ""){
+            return null
+        }
+
         // decode the string of bytearray
         val decodedBytes = Base64.decode(string)
 
