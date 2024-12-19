@@ -15,7 +15,6 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.lostandfound.ErrorCallback;
-import com.example.lostandfound.FirebaseAuthManager;
 import com.example.lostandfound.R;
 import com.example.lostandfound.databinding.ActivityLoginBinding;
 import com.example.lostandfound.ui.Register.RegisterActivity;

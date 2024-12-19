@@ -13,9 +13,6 @@
         android:theme="@style/Theme.LostAndFound"
         tools:targetApi="31" >
         <activity
-            android:name=".ui.EditProfile.MainActivity"
-            android:exported="false" />
-        <activity
             android:name=".ui.NewFound.NewFoundActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:exported="false"

@@ -6,7 +6,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.example.lostandfound.FirebaseAuthManager;
+import com.example.lostandfound.FirebaseManagers.FirebaseAuthManager;
 
 public class ProfileViewModel extends ViewModel {
 
