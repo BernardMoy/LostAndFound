@@ -74,6 +74,7 @@ import com.example.lostandfound.CustomElements.CustomEditText
 import com.example.lostandfound.CustomElements.CustomErrortext
 import com.example.lostandfound.CustomElements.CustomTextDialog
 import com.example.lostandfound.FirebaseAuthManager
+import com.example.lostandfound.Utility.ImageManager
 import com.example.lostandfound.Utility.SharedPreferencesNames
 import com.example.lostandfound.ui.theme.ComposeTheme
 
@@ -174,8 +175,24 @@ fun MainContent(viewModel: EditProfileViewModel = viewModel()){
     // boolean to determine if it is being rendered in preview
     val inPreview = LocalInspectionMode.current
 
+
+    // get the first and last name from shared preferences
+    val sp = context.getSharedPreferences(SharedPreferencesNames.NAME_USERS, Context.MODE_PRIVATE)
+
+    var firstName by remember { mutableStateOf(
+        sp.getString(SharedPreferencesNames.USER_FIRSTNAME, "") ?: "")
+    }
+    var lastName by remember { mutableStateOf(
+        sp.getString(SharedPreferencesNames.USER_LASTNAME, "") ?: "")
+    }
+
+    val email = sp.getString(SharedPreferencesNames.USER_EMAIL, "") ?: ""
+
     // stores the image uri of the user's avatar
-    val imageUri = remember { mutableStateOf<Uri?>(null) }
+    val imageUri = remember { mutableStateOf<Uri?>(
+        // convert the stored string to uri
+        ImageManager.stringToUri(context, sp.getString(SharedPreferencesNames.USER_AVATAR, "") ?: "")
+    ) }
 
 
     // the bottom sheet that is displayed at the bottom
@@ -235,21 +252,6 @@ fun MainContent(viewModel: EditProfileViewModel = viewModel()){
         }
     }
 
-
-    // for the firstname and lastname input field
-    // get the first and last name from shared preferences
-    val sp = context.getSharedPreferences(SharedPreferencesNames.NAME_USERS, Context.MODE_PRIVATE)
-
-    var firstName by remember { mutableStateOf(
-        sp.getString(SharedPreferencesNames.USER_FIRSTNAME, "") ?: ""
-        )
-    }
-    var lastName by remember { mutableStateOf(
-        sp.getString(SharedPreferencesNames.USER_LASTNAME, "") ?: ""
-        )
-    }
-
-    val email = sp.getString(SharedPreferencesNames.USER_EMAIL, "") ?: ""
 
     Column {
         // first name field
@@ -342,7 +344,12 @@ fun MainContent(viewModel: EditProfileViewModel = viewModel()){
             val firebaseAuthManager = FirebaseAuthManager(context)
 
             // last lambda argument can be out of parenthesis
-            firebaseAuthManager.updateUser(email, firstName, lastName
+            firebaseAuthManager.updateUser(
+                email,
+                firstName,
+                lastName,
+                ImageManager.uriToString(context, imageUri.value)
+
             ) { error ->
                 // finish loading
                 isLoading = false
