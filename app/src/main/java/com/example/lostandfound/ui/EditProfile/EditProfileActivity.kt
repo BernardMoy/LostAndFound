@@ -235,7 +235,7 @@ fun MainContent(viewModel: EditProfileViewModel = viewModel()){
             fieldContent = firstName,
             leftIcon = Icons.Outlined.AccountCircle,
             isEditable = true,
-            onTextChanged = {s -> firstName = s}
+            onTextChanged = {s -> firstName = s},
         )
 
         HorizontalDivider(thickness = 1.dp)

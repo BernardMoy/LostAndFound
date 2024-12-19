@@ -13,7 +13,7 @@
         </DropdownSelection>
         <DialogSelection />
       </SelectionState>
-      <SelectionState runConfigName="Tests in 'com.example.lostandfound'">
+      <SelectionState runConfigName="EditProfileActivityTest">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
     </selectionStates>
