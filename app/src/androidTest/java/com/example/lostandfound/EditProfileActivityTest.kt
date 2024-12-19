@@ -23,7 +23,7 @@ class EditProfileActivityTest {
         }
 
         // add other UI tests here
-        
+
         // assert that the error message is displayed
         composeTestRule.onNodeWithText("Only your name and avatar would be visible to others.").assertIsDisplayed()
     }

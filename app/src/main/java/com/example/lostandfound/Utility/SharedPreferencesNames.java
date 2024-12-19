@@ -10,4 +10,5 @@ public final class SharedPreferencesNames {
     public static final String USER_FIRSTNAME = "firstName";
     public static final String USER_LASTNAME = "lastName";
     public static final String USER_EMAIL = "email";
+    public static final String USER_AVATAR = "avatar";
 }

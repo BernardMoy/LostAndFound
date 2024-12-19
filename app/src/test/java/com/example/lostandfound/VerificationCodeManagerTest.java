@@ -9,6 +9,7 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.mock;
 
+import com.example.lostandfound.FirebaseManagers.FirestoreManager;
 import com.example.lostandfound.Utility.FirestoreNames;
 import com.example.lostandfound.Utility.Hasher;
 

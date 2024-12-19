@@ -11,6 +11,7 @@ import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -18,6 +19,7 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.lostandfound.R;
+import com.example.lostandfound.Utility.ImageManager;
 import com.example.lostandfound.Utility.SharedPreferencesNames;
 import com.example.lostandfound.databinding.ActivityProfileBinding;
 import com.example.lostandfound.databinding.DialogLogoutBinding;
@@ -121,6 +123,7 @@ public class ProfileActivity extends AppCompatActivity {
         String email = sharedPreferences.getString(SharedPreferencesNames.USER_EMAIL, "");
         String firstName = sharedPreferences.getString(SharedPreferencesNames.USER_FIRSTNAME, "");
         String lastName = sharedPreferences.getString(SharedPreferencesNames.USER_LASTNAME, "");
+        String avatar = sharedPreferences.getString(SharedPreferencesNames.USER_AVATAR, "");
 
         String displayedName = firstName + ' ' + lastName;
 
@@ -132,5 +135,12 @@ public class ProfileActivity extends AppCompatActivity {
         binding.firstName.setText(firstName);
         binding.lastName.setText(lastName);
         binding.email.setText(email);
+
+        // update the profile image, or show the default one if avatar is null
+        if (avatar.isEmpty()){
+            binding.profileImage.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.profile_icon));
+        } else {
+            binding.profileImage.setImageURI(ImageManager.INSTANCE.stringToUri(this, avatar));
+        }
     }
 }

@@ -4,6 +4,7 @@ import static android.app.PendingIntent.getActivity;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -14,6 +15,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
 
+import com.example.lostandfound.Utility.ImageManager;
 import com.example.lostandfound.Utility.SharedPreferencesNames;
 import com.example.lostandfound.ui.ActivityLog.ActivityLogActivity;
 import com.example.lostandfound.ui.Login.LoginActivity;
@@ -26,6 +28,7 @@ import com.example.lostandfound.ui.Settings.SettingsActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.lifecycle.ViewModelProvider;
@@ -35,6 +38,7 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.example.lostandfound.databinding.ActivityMainBinding;
+import com.google.android.material.imageview.ShapeableImageView;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -316,6 +320,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             String firstName = sharedPreferences.getString(SharedPreferencesNames.USER_FIRSTNAME, "");
             String lastName = sharedPreferences.getString(SharedPreferencesNames.USER_LASTNAME, "");
             String email = sharedPreferences.getString(SharedPreferencesNames.USER_EMAIL, "");
+            String avatar = sharedPreferences.getString(SharedPreferencesNames.USER_AVATAR, "");
+
             String displayedName = firstName + " " + lastName;
 
             // display the data in different parts of the application
@@ -326,6 +332,23 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             // nav drawer on the left
             ((TextView) navHeader.findViewById(R.id.nav_drawer_name)).setText(displayedName);
             ((TextView) navHeader.findViewById(R.id.nav_drawer_email)).setText(email);
+
+            // get the user's avatar if they are logged in
+            // set the toolbar avatar
+            if (avatar.isEmpty()){
+                binding.toolbarProfileIcon.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.profile_icon));
+            } else {
+                binding.toolbarProfileIcon.setImageURI(ImageManager.INSTANCE.stringToUri(this, avatar));
+            }
+
+            // set the nav drawer avatar
+            if (avatar.isEmpty()){
+                ((ShapeableImageView)navHeader.findViewById(R.id.nav_drawer_profile_icon))
+                        .setImageDrawable(ContextCompat.getDrawable(this, R.drawable.profile_icon));
+            } else {
+                ((ShapeableImageView)navHeader.findViewById(R.id.nav_drawer_profile_icon))
+                        .setImageURI(ImageManager.INSTANCE.stringToUri(this, avatar));
+            }
 
         } else {
             // user is not signed in
