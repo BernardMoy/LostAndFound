@@ -195,38 +195,27 @@ fun MainContent(viewModel: EditProfileViewModel = viewModel()){
             modifier = Modifier
                 .size(dimensionResource(id = R.dimen.profile_image_size_large))
         ){
-            if (imageUri.value != null) {
-                // display the one selected from gallery
-                AsyncImage(
-                    model = imageUri.value,
-                    contentDescription = "Your avatar",
-                    modifier = Modifier
-                        .size(dimensionResource(id = R.dimen.profile_image_size_large))
-                        .clip(CircleShape)
-                        .border(
-                            width = 1.dp,
-                            color = MaterialTheme.colorScheme.primary,
-                            shape = CircleShape
-                        ),
-                    contentScale = ContentScale.Crop
-                )
+            // display the profile icon
+            Image(
+                painter = if (imageUri.value != null) {
+                    // if imageuri is not null, display it as an asyncimagepainter
+                    rememberAsyncImagePainter(model = imageUri.value)
+                } else {
+                    // else, display the default profile icon
+                    painterResource(id = R.drawable.profile_icon)
+                },
 
-            } else {
-                // display the default profile icon
-                Image(
-                    painter = painterResource(id = R.drawable.profile_icon),
-                    contentDescription = "Your avatar",
-                    modifier = Modifier
-                        .size(dimensionResource(id = R.dimen.profile_image_size_large))
-                        .clip(CircleShape)
-                        .border(
-                            width = 1.dp,
-                            color = MaterialTheme.colorScheme.primary,
-                            shape = CircleShape
-                        ),
-                    contentScale = ContentScale.Crop
-                )
-            }
+                contentDescription = "Your avatar",
+                modifier = Modifier
+                    .size(dimensionResource(id = R.dimen.profile_image_size_large))
+                    .clip(CircleShape)
+                    .border(
+                        width = 1.dp,
+                        color = MaterialTheme.colorScheme.primary,
+                        shape = CircleShape
+                    ),
+                contentScale = ContentScale.Crop
+            )
 
 
             IconButton(onClick = {
