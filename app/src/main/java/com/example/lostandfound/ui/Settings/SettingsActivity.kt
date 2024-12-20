@@ -1,5 +1,7 @@
 package com.example.lostandfound.ui.Settings
 
+import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
@@ -14,7 +16,13 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.DarkMode
+import androidx.compose.material.icons.outlined.Delete
+import androidx.compose.material.icons.outlined.Info
+import androidx.compose.material.icons.outlined.LocationOn
+import androidx.compose.material.icons.outlined.Notifications
 import androidx.compose.material.icons.outlined.Palette
+import androidx.compose.material.icons.outlined.Report
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -26,9 +34,11 @@ import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.lostandfound.CustomElements.BackToolbar
 import com.example.lostandfound.CustomElements.CustomActionRow
+import com.example.lostandfound.Utility.SharedPreferencesNames
 import com.example.lostandfound.ui.theme.ComposeTheme
 import com.example.lostandfound.ui.theme.Typography
 
@@ -87,14 +97,20 @@ fun MainContent(viewModel: SettingsViewModel = viewModel()) {
     // boolean to determine if it is being rendered in preview
     val inPreview = LocalInspectionMode.current
 
-    Text(text = "Appearance",
-        style = Typography.bodyMedium,
-        color = Color.Gray,
-        fontWeight = FontWeight.Bold,
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(vertical = dimensionResource(id = R.dimen.content_margin))
-        )
+    Appearance(context = context)
+    HorizontalDivider(thickness = 1.dp)
+    Permissions(context = context)
+    HorizontalDivider(thickness = 1.dp)
+    AboutTheApp(context = context)
+    HorizontalDivider(thickness = 1.dp)
+    Developer(context = context)
+}
+
+@Composable
+fun Appearance(
+    context: Context
+){
+    TitleText(text = "Appearance")
 
     Column (
         verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin_half))
@@ -113,4 +129,87 @@ fun MainContent(viewModel: SettingsViewModel = viewModel()) {
             }
         )
     }
+}
+
+@Composable
+fun Permissions(
+    context: Context
+){
+    TitleText(text = "Permissions")
+    Column (
+        verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin_half))
+    ){
+        CustomActionRow(text = "Notifications",
+            leftIcon = Icons.Outlined.Notifications,
+            onClick = {
+                Toast.makeText(context, "Color theme", Toast.LENGTH_SHORT).show()
+            }
+        )
+
+        CustomActionRow(text = "Location",
+            leftIcon = Icons.Outlined.LocationOn,
+            onClick = {
+                Toast.makeText(context, "Color theme", Toast.LENGTH_SHORT).show()
+            }
+        )
+    }
+}
+
+@Composable
+fun AboutTheApp(
+    context: Context
+){
+    TitleText(text = "About the app")
+    Column (
+        verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin_half))
+    ) {
+        CustomActionRow(text = "About the app",
+            leftIcon = Icons.Outlined.Info,
+            onClick = {
+                Toast.makeText(context, "Color theme", Toast.LENGTH_SHORT).show()
+            }
+        )
+
+        CustomActionRow(text = "Report a problem with the app",
+            leftIcon = Icons.Outlined.Report,
+            onClick = {
+                Toast.makeText(context, "Color theme", Toast.LENGTH_SHORT).show()
+            }
+        )
+    }
+}
+
+@Composable
+fun Developer(
+    context: Context
+){
+    TitleText(text = "Developer settings")
+    Column (
+        verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin_half))
+    ) {
+        CustomActionRow(text = "Delete shared preferences data",
+            leftIcon = Icons.Outlined.Delete,
+            onClick = {
+                // clear shared preferences from each key defined in the names file
+                val sp: SharedPreferences = context.getSharedPreferences(SharedPreferencesNames.NAME_USERS, Context.MODE_PRIVATE)
+                sp.edit().clear().apply()
+
+                Toast.makeText(context, "Shared preferences cleared", Toast.LENGTH_SHORT).show()
+            }
+        )
+    }
+}
+
+@Composable
+fun TitleText(
+    text: String
+){
+    Text(text = text,
+        style = Typography.bodyMedium,
+        color = Color.Gray,
+        fontWeight = FontWeight.Bold,
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = dimensionResource(id = R.dimen.title_margin))
+    )
 }

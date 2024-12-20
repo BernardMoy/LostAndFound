@@ -4,7 +4,6 @@ import static android.app.PendingIntent.getActivity;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -20,7 +19,6 @@ import com.example.lostandfound.Utility.SharedPreferencesNames;
 import com.example.lostandfound.ui.ActivityLog.ActivityLogActivity;
 import com.example.lostandfound.ui.Login.LoginActivity;
 import com.example.lostandfound.ui.NewFound.NewFoundActivity;
-import com.example.lostandfound.ui.NewLost.NewLostActivity;
 import com.example.lostandfound.ui.Notifications.NotificationsActivity;
 import com.example.lostandfound.ui.Profile.ProfileActivity;
 import com.example.lostandfound.ui.ReportIssue.ReportIssueActivity;
