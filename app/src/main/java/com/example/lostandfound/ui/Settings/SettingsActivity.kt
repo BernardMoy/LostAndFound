@@ -38,6 +38,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.lostandfound.CustomElements.BackToolbar
 import com.example.lostandfound.CustomElements.CustomActionRow
+import com.example.lostandfound.CustomElements.CustomGrayTitle
 import com.example.lostandfound.Utility.SharedPreferencesNames
 import com.example.lostandfound.ui.theme.ComposeTheme
 import com.example.lostandfound.ui.theme.Typography
@@ -110,7 +111,7 @@ fun MainContent(viewModel: SettingsViewModel = viewModel()) {
 fun Appearance(
     context: Context
 ){
-    TitleText(text = "Appearance")
+    CustomGrayTitle(text = "Appearance")
 
     Column (
         verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin_half))
@@ -135,7 +136,7 @@ fun Appearance(
 fun Permissions(
     context: Context
 ){
-    TitleText(text = "Permissions")
+    CustomGrayTitle(text = "Permissions")
     Column (
         verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin_half))
     ){
@@ -159,7 +160,7 @@ fun Permissions(
 fun AboutTheApp(
     context: Context
 ){
-    TitleText(text = "About the app")
+    CustomGrayTitle(text = "About the app")
     Column (
         verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin_half))
     ) {
@@ -183,7 +184,7 @@ fun AboutTheApp(
 fun Developer(
     context: Context
 ){
-    TitleText(text = "Developer settings")
+    CustomGrayTitle(text = "Developer settings")
     Column (
         verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin_half))
     ) {
@@ -198,18 +199,4 @@ fun Developer(
             }
         )
     }
-}
-
-@Composable
-fun TitleText(
-    text: String
-){
-    Text(text = text,
-        style = Typography.bodyMedium,
-        color = Color.Gray,
-        fontWeight = FontWeight.Bold,
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(vertical = dimensionResource(id = R.dimen.title_margin))
-    )
 }

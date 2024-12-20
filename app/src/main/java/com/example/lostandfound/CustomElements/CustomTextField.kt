@@ -1,9 +1,11 @@
 package com.example.lostandfound.CustomElements
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
@@ -27,7 +29,8 @@ fun CustomEditText(
     isEditable: Boolean,
     leftIcon: ImageVector,
     rightIcon: ImageVector? = null,
-    onTextChanged: ((String) -> Unit)? = null
+    onTextChanged: ((String) -> Unit)? = null,
+    isError: Boolean = false
 ){
     // mutable field content text
     var varFieldContent by remember{ mutableStateOf(fieldContent)}
@@ -57,9 +60,11 @@ fun CustomEditText(
         },
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 0.dp, vertical = dimensionResource(id = R.dimen.content_margin_half)
+            .padding(
+                horizontal = 0.dp, vertical = dimensionResource(id = R.dimen.content_margin_half)
             ),
         enabled = isEditable,
+        isError = isError,
         colors = TextFieldDefaults.colors(
             // for enabled (Editable) text
             unfocusedContainerColor = Color.Transparent,
@@ -73,6 +78,53 @@ fun CustomEditText(
             focusedIndicatorColor = Color.Transparent,
             unfocusedIndicatorColor = Color.Transparent,
             disabledIndicatorColor = Color.Transparent
+        )
+    )
+}
+
+@Composable
+fun CustomInputField(
+    placeholder: String,
+    fieldContent: String,    // val is passed if not editable, var if editable
+    isEditable: Boolean,
+    onTextChanged: ((String) -> Unit)? = null,
+    isError: Boolean = false,
+    isMultiLine: Boolean = false
+){
+    var varFieldContent by remember{ mutableStateOf(fieldContent)}
+
+    OutlinedTextField(
+        value = varFieldContent,
+        placeholder = {
+            Text(text = placeholder, style = Typography.bodyMedium)
+        },
+        onValueChange = { newText ->
+            if (isEditable){
+                varFieldContent = newText
+                onTextChanged?.invoke(varFieldContent)
+            }
+        },
+        enabled = isEditable,
+        isError = isError,
+        singleLine = !isMultiLine,
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(
+                horizontal = 0.dp, vertical = dimensionResource(id = R.dimen.content_margin_half)
+            ),
+        colors = TextFieldDefaults.colors(
+            // for enabled (Editable) text
+            unfocusedContainerColor = Color.Transparent,
+            focusedContainerColor = Color.Transparent,
+
+            // for disabled (non editable) text
+            disabledContainerColor = Color.Transparent,
+            disabledTextColor = MaterialTheme.colorScheme.onBackground,
+
+            // for the color of the border
+            focusedIndicatorColor = MaterialTheme.colorScheme.primary,
+            unfocusedIndicatorColor = MaterialTheme.colorScheme.onBackground,
+            disabledIndicatorColor = Color.Gray
         )
     )
 }
