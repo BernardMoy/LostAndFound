@@ -12,6 +12,8 @@
 
     <color name="backgroundColor">#F6F6F6</color>
     <color name="onBackground">#4099BC</color>
+    <color name="backgroundColorDark">#1B1B1B</color>
+    <color name="onBackgroundColorDark">#FFFFFF</color>
 
     <color name="error"> #F5425D </color>
     <color name="error_dark">#7C2633</color>
