@@ -69,6 +69,8 @@ import com.example.lostandfound.CustomElements.CustomActionRow
 import com.example.lostandfound.CustomElements.CustomButton
 import com.example.lostandfound.CustomElements.CustomEditText
 import com.example.lostandfound.CustomElements.CustomErrortext
+import com.example.lostandfound.CustomElements.CustomGrayTitle
+import com.example.lostandfound.CustomElements.CustomInputField
 import com.example.lostandfound.CustomElements.CustomTextDialog
 import com.example.lostandfound.FirebaseManagers.FirebaseAuthManager
 import com.example.lostandfound.Utility.ImageManager
@@ -172,8 +174,21 @@ fun MainContent(viewModel: NewLostViewModel = viewModel()) {
     // boolean to determine if it is being rendered in preview
     val inPreview = LocalInspectionMode.current
 
+    val itemName = remember { mutableStateOf("") }
+    ItemName(itemName = itemName)
+}
 
-
+@Composable
+fun ItemName(
+    itemName: MutableState<String>
+){
+    CustomGrayTitle(text = "Name of item")
+    CustomInputField(
+        fieldContent = itemName.value,
+        isEditable = true,
+        onTextChanged = {itemName.value = it},
+        placeholder = "e.g. Bluetooth earbuds"
+    )
 }
 
 
