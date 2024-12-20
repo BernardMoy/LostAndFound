@@ -164,7 +164,7 @@ fun EditProfileScreen(activity: ComponentActivity) {
 // content includes avatar, edit fields, reminder message and save button
 // get the view model in the function parameter
 @Composable
-fun MainContent(viewModel: EditProfileViewModel = viewModel()){
+fun MainContent(viewModel: EditProfileViewModel = viewModel()) {
 
     // get the local context
     val context = LocalContext.current
@@ -176,29 +176,57 @@ fun MainContent(viewModel: EditProfileViewModel = viewModel()){
     // get the first and last name from shared preferences
     val sp = context.getSharedPreferences(SharedPreferencesNames.NAME_USERS, Context.MODE_PRIVATE)
 
-    var firstName by remember { mutableStateOf(
-        sp.getString(SharedPreferencesNames.USER_FIRSTNAME, "") ?: "")
+    val firstName = remember {
+        mutableStateOf(
+            sp.getString(SharedPreferencesNames.USER_FIRSTNAME, "") ?: ""
+        )
     }
-    var lastName by remember { mutableStateOf(
-        sp.getString(SharedPreferencesNames.USER_LASTNAME, "") ?: "")
+    val lastName = remember {
+        mutableStateOf(
+            sp.getString(SharedPreferencesNames.USER_LASTNAME, "") ?: ""
+        )
     }
 
     val email = sp.getString(SharedPreferencesNames.USER_EMAIL, "") ?: ""
 
     // stores the image uri of the user's avatar
-    val imageUri = remember { mutableStateOf<Uri?>(
-        // convert the stored string to uri
-        if (inPreview) null else
-        ImageManager.stringToUri(context, sp.getString(SharedPreferencesNames.USER_AVATAR, "")?:"")
-    ) }
-
+    val imageUri = remember {
+        mutableStateOf<Uri?>(
+            // convert the stored string to uri
+            if (inPreview) null else
+                ImageManager.stringToUri(
+                    context,
+                    sp.getString(SharedPreferencesNames.USER_AVATAR, "") ?: ""
+                )
+        )
+    }
 
     // the bottom sheet that is displayed at the bottom
     val isSheetOpen = remember { mutableStateOf(false) }
     AvatarBottomSheet(isSheetOpen = isSheetOpen, imageUri = imageUri)
 
+    Avatar(imageUri = imageUri, isSheetOpen = isSheetOpen)
+    FirstAndLastNameFields(firstName = firstName, lastName = lastName)
+    ErrorMessage(viewModel = viewModel)
+    ReminderMessage()
+    SaveButton(
+        viewModel = viewModel,
+        inPreview = inPreview,
+        context = context,
+        firstName = firstName,
+        lastName = lastName,
+        email = email,
+        imageUri = imageUri
+    )
 
-    // box for avatar
+}
+
+@Composable
+fun Avatar(
+    imageUri: MutableState<Uri?>,
+    isSheetOpen: MutableState<Boolean>,
+){
+// box for avatar
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -249,40 +277,58 @@ fun MainContent(viewModel: EditProfileViewModel = viewModel()){
             }
         }
     }
+}
 
-
+@Composable
+fun FirstAndLastNameFields(
+    firstName: MutableState<String>,
+    lastName: MutableState<String>
+){
     Column {
         // first name field
         CustomEditText(fieldLabel = "First name",
-            fieldContent = firstName,
+            fieldContent = firstName.value,
             leftIcon = Icons.Outlined.AccountCircle,
             isEditable = true,
-            onTextChanged = {s -> firstName = s},
+            onTextChanged = {firstName.value = it},
         )
 
         HorizontalDivider(thickness = 1.dp)
 
         // last name field
         CustomEditText(fieldLabel = "Last name",
-            fieldContent = lastName,
+            fieldContent = lastName.value,
             leftIcon = Icons.Outlined.AccountCircle,
             isEditable = true,
-            onTextChanged = {s -> lastName = s}
+            onTextChanged = {lastName.value = it}
         )
 
         HorizontalDivider(thickness = 1.dp)
     }
+}
 
 
+@Composable
+fun ErrorMessage(
+    viewModel: EditProfileViewModel
+) {
     // error
     // observe the viewmodel live data of the error
     val error by viewModel.profileError.observeAsState("")
-    if (error.isNotEmpty()){
+    if (error.isNotEmpty()) {
         // display error message only when the live data error is not empty
-        CustomErrortext(text = error)
+        Box(
+            modifier = Modifier.padding(vertical = dimensionResource(id = R.dimen.title_margin))
+        ) {
+            CustomErrortext(text = error)
+        }
     }
+}
 
+@Composable
+fun ReminderMessage(
 
+) {
     // reminder message
     Text(
         text = "Only your name and avatar would be visible to others.",
@@ -295,8 +341,18 @@ fun MainContent(viewModel: EditProfileViewModel = viewModel()){
             ),
         textAlign = TextAlign.Center   // center text
     )
+}
 
-
+@Composable
+fun SaveButton(
+    viewModel: EditProfileViewModel,
+    inPreview: Boolean,
+    context: Context,
+    firstName: MutableState<String>,
+    lastName: MutableState<String>,
+    email: String,
+    imageUri: MutableState<Uri?>
+) {
     // box for save button
     // isloading state to display the loading animation
     var isLoading by remember{mutableStateOf(false)}
@@ -316,7 +372,6 @@ fun MainContent(viewModel: EditProfileViewModel = viewModel()){
         }
     }
 
-
     Box(
         modifier = Modifier.fillMaxWidth(),
         contentAlignment = Alignment.Center
@@ -325,56 +380,54 @@ fun MainContent(viewModel: EditProfileViewModel = viewModel()){
             text = "Save Profile",
             type = ButtonType.FILLED,
             onClick = {
-            // handle save logic here
-            // update the data from the firestore database
-            // but only when not in preview to avoid firebase errors
-            if (inPreview) return@CustomButton
+                // handle save logic here
+                // update the data from the firestore database
+                // but only when not in preview to avoid firebase errors
+                if (inPreview) return@CustomButton
 
-            // verify the input fields
-            if (!viewModel.validateNames(firstName, lastName)){
-                return@CustomButton
-            }
-
-            // begin button operation
-            isLoading = true
-
-            // update user data
-            val firebaseAuthManager =
-                FirebaseAuthManager(
-                    context
-                )
-
-            // last lambda argument can be out of parenthesis
-            firebaseAuthManager.updateUser(
-                email,
-                firstName,
-                lastName,
-                ImageManager.uriToString(context, imageUri.value)
-
-            ) { error ->
-                // finish loading
-                isLoading = false
-
-                // handle remaining actions
-                if (error.isEmpty()) {
-                    // no errors
-
-                    // display success toast message
-                    Toast.makeText(context, "Profile successfully updated", Toast.LENGTH_SHORT)
-                        .show()
-
-                    // exit activity
-                    (context as? Activity)?.finish()  // safe cast and safe call
-
-                } else {
-                    // display fail toast message
-                    Toast.makeText(context, "Profile update failed", Toast.LENGTH_SHORT).show()
+                // verify the input fields
+                if (!viewModel.validateNames(firstName.value, lastName.value)){
+                    return@CustomButton
                 }
-            }
 
-        })
+                // begin button operation
+                isLoading = true
+
+                // update user data
+                val firebaseAuthManager = FirebaseAuthManager(context)
+
+                // last lambda argument can be out of parenthesis
+                firebaseAuthManager.updateUser(
+                    email,
+                    firstName.value,
+                    lastName.value,
+                    ImageManager.uriToString(context, imageUri.value)
+
+                ) { error ->
+                    // finish loading
+                    isLoading = false
+
+                    // handle remaining actions
+                    if (error.isEmpty()) {
+                        // no errors
+
+                        // display success toast message
+                        Toast.makeText(context, "Profile successfully updated", Toast.LENGTH_SHORT)
+                            .show()
+
+                        // exit activity
+                        (context as? Activity)?.finish()  // safe cast and safe call
+
+                    } else {
+                        // display fail toast message
+                        Toast.makeText(context, "Profile update failed", Toast.LENGTH_SHORT).show()
+                    }
+                }
+
+            })
     }
 }
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
