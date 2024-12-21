@@ -1,9 +1,6 @@
 package com.example.lostandfound.CustomElements
 
-import android.app.TimePickerDialog
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -16,6 +13,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TimePicker
+import androidx.compose.material3.TimePickerDefaults
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.material3.rememberTimePickerState
 import androidx.compose.runtime.Composable
@@ -24,9 +22,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.dimensionResource
-import com.example.lostandfound.DateTimeManager
+import com.example.lostandfound.Utility.DateTimeManager
 import com.example.lostandfound.R
 import java.util.Calendar
+import java.util.Locale
 
 @Composable
 fun CustomTextDialog(
@@ -95,7 +94,10 @@ fun CustomDatePickerDialog(
                         val epoch = ((datePickerState.selectedDateMillis ?: 0L )/ 1000L)
 
                         // get the string representation of the date
-                        val manager = DateTimeManager(epoch)
+                        val manager =
+                            DateTimeManager(
+                                epoch
+                            )
                         val dateString = manager.formattedDate
 
                         // update the string variable
@@ -167,7 +169,8 @@ fun CustomTimePickerDialog(
                     type = ButtonType.FILLED,
                     onClick = {
                         // update the string variable
-                        selectedTime.value = "33:33"
+                        val timeString = String.format(locale = Locale.UK, "%02d:%02d", timePickerState.hour, timePickerState.minute)
+                        selectedTime.value = timeString
 
                         // dismiss dialog
                         isDialogShown.value = false
@@ -187,7 +190,10 @@ fun CustomTimePickerDialog(
                 // content goes here
                 TimePicker(
                     state = timePickerState,
-
+                    colors = TimePickerDefaults.colors(
+                        containerColor = MaterialTheme.colorScheme.background,
+                        clockDialColor = MaterialTheme.colorScheme.background
+                    )
                 )
             }
         )
