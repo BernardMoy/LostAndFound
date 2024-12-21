@@ -78,6 +78,9 @@ fun CustomDropdownMenu(
                         onClick = {
                             selectedText = items[index]
                             isExpanded = false
+
+                            // call the custom on item selected function
+                            onItemSelected(text)
                         }
                     )
                 }
