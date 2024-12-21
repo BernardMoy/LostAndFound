@@ -23,7 +23,6 @@ fun CustomErrortext(
         shape = RoundedCornerShape(dimensionResource(id = R.dimen.corner_radius_small)),
         color = MaterialTheme.colorScheme.errorContainer,
         modifier = Modifier
-            .padding(horizontal = dimensionResource(id = R.dimen.title_margin))
             .border(
                 width = 1.dp,
                 color = MaterialTheme.colorScheme.onErrorContainer,
@@ -38,10 +37,8 @@ fun CustomErrortext(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(
-                    dimensionResource(id = R.dimen.title_margin),
-                    dimensionResource(id = R.dimen.content_margin),
-                    dimensionResource(id = R.dimen.title_margin),
-                    dimensionResource(id = R.dimen.content_margin)
+                    vertical = dimensionResource(id = R.dimen.content_margin),
+                    horizontal = dimensionResource(id = R.dimen.title_margin)
                 ),
             textAlign = TextAlign.Start
         )
