@@ -6,10 +6,15 @@ import androidx.lifecycle.ViewModel
 
 class EditProfileViewModel : ViewModel(){
     // mutable live data for first name and last names
+    val firstName: MutableLiveData<String> = MutableLiveData("")
 
     // mutable live data for displaying profile error
     val profileError: MutableLiveData<String> = MutableLiveData("")
 
+    fun setFirstName(s: String){
+        firstName.value = s
+    }
+    
     fun setError(s: String){
         profileError.value = s
     }
