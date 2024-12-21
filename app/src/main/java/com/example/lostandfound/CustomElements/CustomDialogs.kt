@@ -3,18 +3,22 @@ package com.example.lostandfound.CustomElements
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.DatePicker
+import androidx.compose.material3.DatePickerDefaults
+import androidx.compose.material3.DatePickerDialog
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.dimensionResource
-import androidx.compose.ui.window.Dialog
+import com.example.lostandfound.DateTimeManager
 import com.example.lostandfound.R
 
 @Composable
@@ -58,4 +62,64 @@ fun CustomTextDialog(
             dismissButton = dismissButton
         )
     }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun CustomDatePickerDialog(
+    selectedDate: MutableState<String>,
+    isDialogShown: MutableState<Boolean>
+){
+    if (isDialogShown.value) {
+        val datePickerState = rememberDatePickerState()
+
+        DatePickerDialog(
+            onDismissRequest = {
+                // close the dialog
+                isDialogShown.value = false
+            },
+            confirmButton = {
+                CustomButton(
+                    text = "Select",
+                    type = ButtonType.FILLED,
+                    onClick = {
+                        // get the epoch time
+                        val epoch = ((datePickerState.selectedDateMillis ?: 0L )/ 1000L)
+
+                        // get the string representation of the date
+                        val manager = DateTimeManager(epoch)
+                        val dateString = manager.formattedString
+
+                        // update the string variable
+                        selectedDate.value = dateString
+
+                        // dismiss dialog
+                        isDialogShown.value = false
+                    }
+                )
+            },
+            dismissButton = {
+                CustomButton(text = "Cancel",
+                    type = ButtonType.OUTLINED,
+                    onClick = {
+                        // dismiss dialog
+                        isDialogShown.value = false
+                    }
+                )
+            },
+            colors = DatePickerDefaults.colors(
+                containerColor = MaterialTheme.colorScheme.background
+            )
+        ) {
+            DatePicker(state = datePickerState)
+        }
+    }
+}
+
+
+@Composable
+fun CustomTimePickerDialog(
+
+){
+
 }
