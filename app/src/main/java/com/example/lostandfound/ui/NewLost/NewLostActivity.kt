@@ -74,6 +74,7 @@ import com.example.lostandfound.CustomElements.ButtonType
 import com.example.lostandfound.CustomElements.CustomActionRow
 import com.example.lostandfound.CustomElements.CustomActionText
 import com.example.lostandfound.CustomElements.CustomButton
+import com.example.lostandfound.CustomElements.CustomDropdownMenu
 import com.example.lostandfound.CustomElements.CustomEditText
 import com.example.lostandfound.CustomElements.CustomErrortext
 import com.example.lostandfound.CustomElements.CustomGrayTitle
@@ -200,6 +201,8 @@ fun MainContent(viewModel: NewLostViewModel = viewModel()) {
     // Display different input fields
     ItemName(itemName = itemName)
     ItemImage(imageUri = itemImage, launcher = launcher)
+    Category()
+    Subcategory(context = context)
 }
 
 @Composable
@@ -286,60 +289,58 @@ fun ItemImage(
 }
 
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AvatarBottomSheet(isSheetOpen: MutableState<Boolean>, imageUri: MutableState<Uri?>){
-    if (isSheetOpen.value){
-        ModalBottomSheet(
-            onDismissRequest = { isSheetOpen.value = false },
-            containerColor = MaterialTheme.colorScheme.background,
-        ) {
-            // launcher to request image from the device
-            val launcher = rememberLauncherForActivityResult(
-                contract = ActivityResultContracts.PickVisualMedia(),
-                onResult = { uri ->
-                    imageUri.value = uri
+fun Category(
 
-                    // close the bottom sheet here after the imageuri value has been set
-                    isSheetOpen.value = false
-                }
-            )
+){
+    CustomGrayTitle(text = "Select category")
+}
 
-            // content of the bottom sheet
-            Column(
-                modifier = Modifier.padding(horizontal = dimensionResource(id = R.dimen.content_margin)),
-                verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin_half))
-            ){
-                CustomActionRow(
-                    text = "New avatar",
-                    leftIcon = Icons.Outlined.Add,
-                    rightIcon = null,
-                    onClick = {
-                        // pick image from the gallery to modify the imageuri (The image that is displayed on screen)
-                        launcher.launch(
-                            PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
-                        )
-                    },
-                )
-                CustomActionRow(
-                    text = "Remove avatar",
-                    leftIcon = Icons.Outlined.Delete,
-                    rightIcon = null,
-                    tint = MaterialTheme.colorScheme.error,
-                    onClick = {
-                        // remove the profile avatar
-                        imageUri.value = null
-
-                        // dismiss the bottom sheet
-                        isSheetOpen.value = false
-                    },
-                )
-            }
-        }
+@Composable
+fun Subcategory(
+    context: Context
+){
+    CustomGrayTitle(text = "Select subcategory")
+    
+    CustomDropdownMenu(
+        items = listOf<String>("Wallet", "Key", "Watch", "Umbrella", "Eyeglasses")
+    ) {
+        
     }
 }
 
+@Composable
+fun DateAndTime(
 
+){
 
+}
 
+@Composable
+fun Location(
+
+){
+
+}
+
+@Composable
+fun AdditionalDescription(
+
+){
+
+}
+
+@Composable
+fun ReminderMessage(
+
+){
+
+}
+
+@Composable
+fun DoneButton(
+
+){
+
+}
 
