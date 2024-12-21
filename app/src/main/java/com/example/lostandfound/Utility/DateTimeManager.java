@@ -2,68 +2,45 @@ package com.example.lostandfound.Utility;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.ZoneId;
-import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Locale;
 
 public class DateTimeManager {
+    private DateTimeManager(){}
 
-    private LocalDateTime localDateTime;
-
-    // Use the time provided with 5 integers
-    public DateTimeManager(int year, int month, int day, int hour, int minute){
-        this.localDateTime = LocalDateTime.of(year, month, day, hour, minute);
+    // method to get the current hour and minute
+    public static int getCurrentHour(){
+        LocalTime currentTime = LocalTime.now();
+        return currentTime.getHour();
+    }
+    public static int getCurrentMinute(){
+        LocalTime currentTime = LocalTime.now();
+        return currentTime.getMinute();
     }
 
-    // Use the epoch time (In seconds)
-    public DateTimeManager(long epoch){
-        this.localDateTime = LocalDateTime.ofInstant(Instant.ofEpochSecond(epoch), ZoneId.of("UTC"));   // UTC for no time offsets
-    }
+    // the date is stored in epoch in seconds
+    public static String dateToString(long epochSeconds){
+        LocalDateTime localDateTime = LocalDateTime.ofInstant(
+                Instant.ofEpochSecond(epochSeconds),
+                ZoneId.of("UTC")
+        );
 
-    // Use the current time
-    public DateTimeManager(){
-        this.localDateTime = LocalDateTime.now();
-    }
-
-    // output epoch time in seconds
-    public long getEpoch(){
-        ZonedDateTime zonedDateTime = this.localDateTime.atZone(ZoneId.of("UTC"));
-        return zonedDateTime.toEpochSecond();
-    }
-
-    // get the time in a formatted string
-    // extract only the date part
-    public String getFormattedDate(){
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMM yyyy");
-        return formatter.format(this.localDateTime);
+        return formatter.format(localDateTime);
     }
 
-    // extract only the time part in 24h format
-    public String getFormattedTime(){
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
-        return formatter.format(this.localDateTime);
+    // the time is stored in seconds
+    public static String timeToString(int hour, int minute){
+        return String.format(Locale.UK, "%02d:%02d", hour, minute);
     }
 
-    // get the integer fields
-    public int getYear(){
-        return this.localDateTime.getYear();
+    // get the epoch stored in the database: date epoch + time seconds
+    public static long getDateTimeEpoch(long dateEpochSeconds, int hour, int minute){
+        long epochTime = (long) hour *60*60+minute* 60L;
+        return dateEpochSeconds + epochTime;
     }
 
-    public int getMonth(){
-        return this.localDateTime.getMonthValue();
-    }
-
-    public int getDay(){
-        return this.localDateTime.getDayOfMonth();
-    }
-
-    // return hour in 24 hour format
-    public int getHour(){
-        return this.localDateTime.getHour();
-    }
-
-    public int getMinute(){
-        return this.localDateTime.getMinute();
-    }
 
 }
