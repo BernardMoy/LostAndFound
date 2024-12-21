@@ -29,7 +29,8 @@ import kotlinx.coroutines.selects.select
 @Composable
 fun CustomDropdownMenu(
     items: List<String>,      // a list of items to show up in the menu
-    onItemSelected: (String) -> Unit    // function to execute when an item is selected
+    onItemSelected: (String) -> Unit,    // function to execute when an item is selected
+    placeholder: String = "Select an item..."
 ){
     var isExpanded by remember {
         mutableStateOf(false)
@@ -37,7 +38,7 @@ fun CustomDropdownMenu(
 
     var selectedText by remember {
         // the first text that is shown
-        mutableStateOf("Select an item...")
+        mutableStateOf(placeholder)
     }
     Column (
         modifier = Modifier.fillMaxWidth()
@@ -62,7 +63,7 @@ fun CustomDropdownMenu(
                     focusedContainerColor = MaterialTheme.colorScheme.background,
 
                     // the text color is gray for the placeholder
-                    unfocusedTextColor = if (selectedText ==  "Select an item...") Color.Gray else MaterialTheme.colorScheme.onBackground,
+                    unfocusedTextColor = if (selectedText ==  placeholder) Color.Gray else MaterialTheme.colorScheme.onBackground,
                     focusedTextColor = if (selectedText ==  "Select an item...") Color.Gray else MaterialTheme.colorScheme.onBackground,
 
                     unfocusedIndicatorColor = MaterialTheme.colorScheme.onBackground,

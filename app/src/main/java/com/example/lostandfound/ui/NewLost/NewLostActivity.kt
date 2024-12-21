@@ -83,6 +83,7 @@ import com.example.lostandfound.CustomElements.CustomTextDialog
 import com.example.lostandfound.FirebaseManagers.FirebaseAuthManager
 import com.example.lostandfound.Utility.ImageManager
 import com.example.lostandfound.Utility.SharedPreferencesNames
+import com.example.lostandfound.ui.EditProfile.EditProfileViewModel
 import com.example.lostandfound.ui.theme.ComposeTheme
 
 
@@ -203,6 +204,8 @@ fun MainContent(viewModel: NewLostViewModel = viewModel()) {
     ItemImage(imageUri = itemImage, launcher = launcher)
     Category()
     Subcategory(context = context)
+
+    DoneButton()
 }
 
 @Composable
@@ -341,7 +344,38 @@ fun ReminderMessage(
 @Composable
 fun DoneButton(
 
-){
+) {
+    // box for save button
+    // isloading state to display the loading animation
+    var isLoading by remember{mutableStateOf(false)}
 
+    // when isLoading changes, functions that uses the variable are re-composed
+    if (isLoading){
+        Box(
+            modifier = Modifier.fillMaxWidth(),
+            contentAlignment = Alignment.Center
+        ){
+            CircularProgressIndicator(
+                modifier = Modifier
+                    .width(dimensionResource(id = R.dimen.image_button_size))
+                    .padding(dimensionResource(id = R.dimen.content_margin_half)),
+                color = MaterialTheme.colorScheme.background,
+                trackColor = MaterialTheme.colorScheme.onPrimaryContainer)
+        }
+    }
+
+    Box(
+        modifier = Modifier.fillMaxWidth(),
+        contentAlignment = Alignment.Center
+    ){
+        CustomButton(
+            text = "Done",
+            type = ButtonType.FILLED,
+            onClick = {
+
+            }
+        )
+    }
 }
+
 
