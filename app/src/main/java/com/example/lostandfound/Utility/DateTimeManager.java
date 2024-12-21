@@ -4,6 +4,7 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 
@@ -40,6 +41,16 @@ public class DateTimeManager {
     public static long getDateTimeEpoch(long dateEpochSeconds, int hour, int minute){
         long epochTime = (long) hour *60*60+minute* 60L;
         return dateEpochSeconds + epochTime;
+    }
+
+    // method to check whether an epoch datetime is greater than the current time
+    public static boolean isTimeInFuture(long dateTimeEpochSeconds){
+        LocalDateTime currentDateTime = LocalDateTime.now();
+        ZonedDateTime zonedCurrentDateTime = currentDateTime.atZone(ZoneId.of("UTC"));
+        long currentEpoch = zonedCurrentDateTime.toEpochSecond();
+
+        // check if the given time is greater than the current time
+        return dateTimeEpochSeconds > currentEpoch;
     }
 
 

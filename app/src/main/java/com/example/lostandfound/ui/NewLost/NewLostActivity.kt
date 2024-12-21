@@ -35,6 +35,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -48,6 +49,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -193,6 +195,10 @@ fun MainContent(viewModel: NewLostViewModel = viewModel()) {
         mutableStateOf(false)
     }
 
+    val additionalDescription = remember {
+        mutableStateOf("")
+    }
+
     // Display different input fields
     ItemName(itemName = itemName)
     ItemImage(imageUri = itemImage, launcher = launcher)
@@ -205,6 +211,8 @@ fun MainContent(viewModel: NewLostViewModel = viewModel()) {
         isTimeDialogShown = isTimeDialogShown
     )
 
+    AdditionalDescription(description = additionalDescription)
+    ReminderMessage()
     DoneButton()
 }
 
@@ -346,16 +354,33 @@ fun Location(
 
 @Composable
 fun AdditionalDescription(
-
+    description: MutableState<String>
 ){
-
+    CustomGrayTitle(text = "Additional description")
+    CustomInputField(
+        fieldContent = description.value,
+        isEditable = true,
+        onTextChanged = {description.value = it},
+        placeholder = "What should be noted of about your item?",
+        isMultiLine = true
+    )
 }
 
 @Composable
 fun ReminderMessage(
 
 ){
-
+    Text(
+        text = "Reminder message goes here.",
+        style = MaterialTheme.typography.bodyMedium,
+        color = Color.Gray,
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(
+                dimensionResource(id = R.dimen.header_margin),
+            ),
+        textAlign = TextAlign.Center   // center text
+    )
 }
 
 @Composable
