@@ -2,6 +2,7 @@ package com.example.lostandfound.CustomElements
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.DatePicker
@@ -88,7 +89,7 @@ fun CustomDatePickerDialog(
 
                         // get the string representation of the date
                         val manager = DateTimeManager(epoch)
-                        val dateString = manager.formattedString
+                        val dateString = manager.formattedDate
 
                         // update the string variable
                         selectedDate.value = dateString
@@ -109,9 +110,20 @@ fun CustomDatePickerDialog(
             },
             colors = DatePickerDefaults.colors(
                 containerColor = MaterialTheme.colorScheme.background
-            )
+            ),
         ) {
-            DatePicker(state = datePickerState)
+            // for the date picker above the calendar
+            // the edit (pen button) is set to be disabled here
+            DatePicker(
+                state = datePickerState,
+                showModeToggle = false,
+                title = {
+                    Text(
+                        text = "Date of lost item",
+                        modifier = Modifier.padding(dimensionResource(id = R.dimen.title_margin))
+                    )
+                }
+            )
         }
     }
 }

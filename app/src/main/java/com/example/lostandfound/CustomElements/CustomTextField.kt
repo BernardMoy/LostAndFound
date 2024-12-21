@@ -144,12 +144,16 @@ fun CustomDatePickerTextField(
     isDialogShown: MutableState<Boolean>,
     placeholder: String
 ){
+
     Column {
         // the text field to prompt user to open date picker
         OutlinedTextField(
             value = selectedDate.value,
             placeholder = {
-                Text(text = placeholder, style = Typography.bodyMedium, color = Color.Gray)
+                Text(text = placeholder,
+                    style = Typography.bodyMedium,
+                    color = Color.Gray
+                )
             },
             onValueChange = { newText ->
                 selectedDate.value = newText
@@ -162,7 +166,8 @@ fun CustomDatePickerTextField(
                 .padding(
                     horizontal = 0.dp,
                     vertical = dimensionResource(id = R.dimen.content_margin_half)
-                ).clickable {
+                )
+                .clickable {
                     // when the text field is clicked, open the dialog
                     isDialogShown.value = true
                 },
@@ -173,15 +178,15 @@ fun CustomDatePickerTextField(
                 disabledContainerColor = Color.Transparent,
 
                 // for the color of the border
-                focusedIndicatorColor = MaterialTheme.colorScheme.primary,
-                unfocusedIndicatorColor = MaterialTheme.colorScheme.onBackground,
-                disabledIndicatorColor = Color.Gray
+                disabledIndicatorColor = MaterialTheme.colorScheme.onBackground,
+
+                // for the text color that is not placeholder
+                disabledTextColor = MaterialTheme.colorScheme.onBackground
             ),
             trailingIcon = {
                 Icon(imageVector = Icons.Outlined.CalendarMonth, contentDescription = "Pick a date", tint = MaterialTheme.colorScheme.onBackground)
             },
         )
-
 
         // if isDialogShown is true, show the date selection dialog
         CustomDatePickerDialog(
