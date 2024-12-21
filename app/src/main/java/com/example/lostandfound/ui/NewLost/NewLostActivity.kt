@@ -83,6 +83,7 @@ import com.example.lostandfound.CustomElements.CustomDropdownMenu
 import com.example.lostandfound.CustomElements.CustomGrayTitle
 import com.example.lostandfound.CustomElements.CustomInputField
 import com.example.lostandfound.CustomElements.CustomTextDialog
+import com.example.lostandfound.CustomElements.CustomTimePickerTextField
 import com.example.lostandfound.DateTimeManager
 import com.example.lostandfound.ui.theme.ComposeTheme
 
@@ -201,11 +202,17 @@ fun MainContent(viewModel: NewLostViewModel = viewModel()) {
         }
     )
 
-    // the selected date is in string format
+    // the selected date and time is in string format
     val selectedDate = remember{
         mutableStateOf("")
     }
     val isDateDialogShown = remember{
+        mutableStateOf(false)
+    }
+    val selectedTime = remember{
+        mutableStateOf("")
+    }
+    val isTimeDialogShown = remember{
         mutableStateOf(false)
     }
 
@@ -214,7 +221,12 @@ fun MainContent(viewModel: NewLostViewModel = viewModel()) {
     ItemImage(imageUri = itemImage, launcher = launcher)
     Category()
     Subcategory(context = context)
-    DateAndTime(selectedDate = selectedDate, isDateDialogShown = isDateDialogShown)
+    DateAndTime(
+        selectedDate = selectedDate,
+        isDateDialogShown = isDateDialogShown,
+        selectedTime = selectedTime,
+        isTimeDialogShown = isTimeDialogShown
+    )
 
     DoneButton()
 }
@@ -328,7 +340,9 @@ fun Subcategory(
 @Composable
 fun DateAndTime(
     selectedDate: MutableState<String>,
-    isDateDialogShown: MutableState<Boolean>
+    isDateDialogShown: MutableState<Boolean>,
+    selectedTime: MutableState<String>,
+    isTimeDialogShown: MutableState<Boolean>
 ){
     CustomGrayTitle(text = "Date and time")
 
@@ -336,6 +350,12 @@ fun DateAndTime(
         selectedDate = selectedDate,
         isDialogShown = isDateDialogShown,
         placeholder = "Select a date..."
+    )
+
+    CustomTimePickerTextField(
+        selectedTime = selectedTime,
+        isDialogShown = isTimeDialogShown,
+        placeholder = "Select a time..."
     )
 
 }

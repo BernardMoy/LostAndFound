@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.AccessTime
 import androidx.compose.material.icons.outlined.CalendarMonth
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -191,6 +192,66 @@ fun CustomDatePickerTextField(
         // if isDialogShown is true, show the date selection dialog
         CustomDatePickerDialog(
             selectedDate = selectedDate,
+            isDialogShown = isDialogShown
+        )
+    }
+}
+
+
+
+@Composable
+fun CustomTimePickerTextField(
+    selectedTime: MutableState<String>,
+    isDialogShown: MutableState<Boolean>,
+    placeholder: String
+){
+
+    Column {
+        // the text field to prompt user to open date picker
+        OutlinedTextField(
+            value = selectedTime.value,
+            placeholder = {
+                Text(text = placeholder,
+                    style = Typography.bodyMedium,
+                    color = Color.Gray
+                )
+            },
+            onValueChange = { newText ->
+                selectedTime.value = newText
+            },
+            readOnly = true,   // make it read only
+            singleLine = true,
+            enabled = false,   // this is needed to make the text field clickable
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(
+                    horizontal = 0.dp,
+                    vertical = dimensionResource(id = R.dimen.content_margin_half)
+                )
+                .clickable {
+                    // when the text field is clicked, open the dialog
+                    isDialogShown.value = true
+                },
+            colors = TextFieldDefaults.colors(
+                // for enabled (Editable) text
+                unfocusedContainerColor = Color.Transparent,
+                focusedContainerColor = Color.Transparent,
+                disabledContainerColor = Color.Transparent,
+
+                // for the color of the border
+                disabledIndicatorColor = MaterialTheme.colorScheme.onBackground,
+
+                // for the text color that is not placeholder
+                disabledTextColor = MaterialTheme.colorScheme.onBackground
+            ),
+            trailingIcon = {
+                Icon(imageVector = Icons.Outlined.AccessTime, contentDescription = "Pick a time", tint = MaterialTheme.colorScheme.onBackground)
+            },
+        )
+
+        // if isDialogShown is true, show the date selection dialog
+        CustomTimePickerDialog(
+            selectedTime = selectedTime,
             isDialogShown = isDialogShown
         )
     }
