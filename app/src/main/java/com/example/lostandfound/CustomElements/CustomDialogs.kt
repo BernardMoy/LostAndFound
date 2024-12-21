@@ -1,6 +1,9 @@
 package com.example.lostandfound.CustomElements
 
+import android.app.TimePickerDialog
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -12,7 +15,9 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TimePicker
 import androidx.compose.material3.rememberDatePickerState
+import androidx.compose.material3.rememberTimePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Alignment
@@ -21,6 +26,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.dimensionResource
 import com.example.lostandfound.DateTimeManager
 import com.example.lostandfound.R
+import java.util.Calendar
 
 @Composable
 fun CustomTextDialog(
@@ -79,6 +85,7 @@ fun CustomDatePickerDialog(
                 // close the dialog
                 isDialogShown.value = false
             },
+
             confirmButton = {
                 CustomButton(
                     text = "Select",
@@ -96,7 +103,7 @@ fun CustomDatePickerDialog(
 
                         // dismiss dialog
                         isDialogShown.value = false
-                    }
+                    },
                 )
             },
             dismissButton = {
@@ -110,7 +117,7 @@ fun CustomDatePickerDialog(
             },
             colors = DatePickerDefaults.colors(
                 containerColor = MaterialTheme.colorScheme.background
-            ),
+            )
         ) {
             // for the date picker above the calendar
             // the edit (pen button) is set to be disabled here
@@ -122,16 +129,68 @@ fun CustomDatePickerDialog(
                         text = "Date of lost item",
                         modifier = Modifier.padding(dimensionResource(id = R.dimen.title_margin))
                     )
-                }
+                },
+                colors = DatePickerDefaults.colors(
+                    containerColor = MaterialTheme.colorScheme.background
+                )
             )
         }
     }
 }
 
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CustomTimePickerDialog(
-
+    selectedTime: MutableState<String>,
+    isDialogShown: MutableState<Boolean>
 ){
+    // here need to wrap the time picker inside an alert dialog
+    val currentTime = Calendar.getInstance()
+
+    // set the initial time to the current time
+    val timePickerState = rememberTimePickerState(
+        initialHour = currentTime.get(Calendar.HOUR_OF_DAY),
+        initialMinute = currentTime.get(Calendar.MINUTE),
+        is24Hour = true,
+    )
+
+    // show the dialog only when isDialogShown is true
+    if (isDialogShown.value){
+        AlertDialog(
+            onDismissRequest = {
+                isDialogShown.value = false },
+            confirmButton = {
+                // change the selected time
+                CustomButton(
+                    text = "Select",
+                    type = ButtonType.FILLED,
+                    onClick = {
+                        // update the string variable
+                        selectedTime.value = "33:33"
+
+                        // dismiss dialog
+                        isDialogShown.value = false
+                    },
+                )
+            },
+            dismissButton = {
+                CustomButton(text = "Cancel",
+                    type = ButtonType.OUTLINED,
+                    onClick = {
+                        // dismiss dialog
+                        isDialogShown.value = false
+                    }
+                )
+            },
+            text = {
+                // content goes here
+                TimePicker(
+                    state = timePickerState,
+
+                )
+            }
+        )
+    }
 
 }
