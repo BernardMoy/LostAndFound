@@ -25,7 +25,9 @@ fun CustomGrayTitle(
         fontWeight = FontWeight.Bold,
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = dimensionResource(id = R.dimen.content_margin)
+            .padding(
+                bottom = dimensionResource(id = R.dimen.content_margin),
+                top = dimensionResource(id = R.dimen.title_margin)
             )
     )
 }

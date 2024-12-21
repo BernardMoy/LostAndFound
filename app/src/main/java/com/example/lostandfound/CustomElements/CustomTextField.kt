@@ -103,7 +103,7 @@ fun CustomInputField(
     OutlinedTextField(
         value = varFieldContent,
         placeholder = {
-            Text(text = placeholder, style = Typography.bodyMedium)
+            Text(text = placeholder, style = Typography.bodyMedium, color = Color.Gray)
         },
         onValueChange = { newText ->
             if (isEditable){
