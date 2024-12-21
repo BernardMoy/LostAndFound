@@ -33,8 +33,15 @@ public class DateTimeManager {
     }
 
     // get the time in a formatted string
-    public String getFormattedString(){
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMM yyyy HH:mm");
+    // extract only the date part
+    public String getFormattedDate(){
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMM yyyy");
+        return formatter.format(this.localDateTime);
+    }
+
+    // extract only the time part in 24h format
+    public String getFormattedTime(){
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
         return formatter.format(this.localDateTime);
     }
 

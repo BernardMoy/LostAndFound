@@ -24,10 +24,10 @@ public class DateTimeManagerTest {
     @Test
     public void testGetFormattedString(){
         DateTimeManager dateTimeManager1 = new DateTimeManager(YEAR, MONTH, DAY, HOUR, MINUTE);
-        assertEquals("18 Jun 2024 17:04", dateTimeManager1.getFormattedString());
+        assertEquals("18 Jun 2024", dateTimeManager1.getFormattedDate());
 
         DateTimeManager dateTimeManager2 = new DateTimeManager(EPOCH);
-        assertEquals("18 Jun 2024 17:04", dateTimeManager2.getFormattedString());
+        assertEquals("17:04", dateTimeManager2.getFormattedTime());
     }
 
     @Test
