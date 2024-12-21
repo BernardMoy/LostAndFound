@@ -176,16 +176,10 @@ fun MainContent(viewModel: EditProfileViewModel = viewModel()) {
     // get the first and last name from shared preferences
     val sp = context.getSharedPreferences(SharedPreferencesNames.NAME_USERS, Context.MODE_PRIVATE)
 
-    val firstName = remember {
-        mutableStateOf(
-            sp.getString(SharedPreferencesNames.USER_FIRSTNAME, "") ?: ""
-        )
-    }
-    val lastName = remember {
-        mutableStateOf(
-            sp.getString(SharedPreferencesNames.USER_LASTNAME, "") ?: ""
-        )
-    }
+    // set the first names and last names from the view model
+    viewModel.setFirstName(sp.getString(SharedPreferencesNames.USER_FIRSTNAME, "") ?: "")
+    viewModel.setLastName(sp.getString(SharedPreferencesNames.USER_LASTNAME, "") ?: "")
+
 
     val email = sp.getString(SharedPreferencesNames.USER_EMAIL, "") ?: ""
 
@@ -206,15 +200,13 @@ fun MainContent(viewModel: EditProfileViewModel = viewModel()) {
     AvatarBottomSheet(isSheetOpen = isSheetOpen, imageUri = imageUri)
 
     Avatar(imageUri = imageUri, isSheetOpen = isSheetOpen)
-    FirstAndLastNameFields(firstName = firstName, lastName = lastName)
+    FirstAndLastNameFields(viewModel = viewModel)
     ErrorMessage(viewModel = viewModel)
     ReminderMessage()
     SaveButton(
         viewModel = viewModel,
         inPreview = inPreview,
         context = context,
-        firstName = firstName,
-        lastName = lastName,
         email = email,
         imageUri = imageUri
     )
@@ -281,26 +273,25 @@ fun Avatar(
 
 @Composable
 fun FirstAndLastNameFields(
-    firstName: MutableState<String>,
-    lastName: MutableState<String>
+    viewModel: EditProfileViewModel,
 ){
     Column {
         // first name field
         CustomEditText(fieldLabel = "First name",
-            fieldContent = firstName.value,
+            fieldContent = viewModel.firstName.value,
             leftIcon = Icons.Outlined.AccountCircle,
             isEditable = true,
-            onTextChanged = {firstName.value = it},
+            onTextChanged = {viewModel.setFirstName(it)},
         )
 
         HorizontalDivider(thickness = 1.dp)
 
         // last name field
         CustomEditText(fieldLabel = "Last name",
-            fieldContent = lastName.value,
+            fieldContent = viewModel.lastName.value,
             leftIcon = Icons.Outlined.AccountCircle,
             isEditable = true,
-            onTextChanged = {lastName.value = it}
+            onTextChanged = {viewModel.setLastName(it)}
         )
 
         HorizontalDivider(thickness = 1.dp)
@@ -348,8 +339,6 @@ fun SaveButton(
     viewModel: EditProfileViewModel,
     inPreview: Boolean,
     context: Context,
-    firstName: MutableState<String>,
-    lastName: MutableState<String>,
     email: String,
     imageUri: MutableState<Uri?>
 ) {
@@ -380,13 +369,13 @@ fun SaveButton(
             text = "Save Profile",
             type = ButtonType.FILLED,
             onClick = {
-                // handle save logic here
+                // handle save logic here, as it involves the context (Toast message and auth manager)
                 // update the data from the firestore database
                 // but only when not in preview to avoid firebase errors
                 if (inPreview) return@CustomButton
 
                 // verify the input fields
-                if (!viewModel.validateNames(firstName.value, lastName.value)){
+                if (!viewModel.validateNames()){
                     return@CustomButton
                 }
 
@@ -399,8 +388,8 @@ fun SaveButton(
                 // last lambda argument can be out of parenthesis
                 firebaseAuthManager.updateUser(
                     email,
-                    firstName.value,
-                    lastName.value,
+                    viewModel.firstName.value,
+                    viewModel.lastName.value,
                     ImageManager.uriToString(context, imageUri.value)
 
                 ) { error ->
