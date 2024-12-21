@@ -40,6 +40,12 @@ fun CustomDropdownMenu(
         // the first text that is shown
         mutableStateOf(placeholder)
     }
+
+    // initially, selected = false to display the placeholder
+    var isSelected by remember{
+        mutableStateOf(false)
+    }
+
     Column (
         modifier = Modifier.fillMaxWidth()
     ){
@@ -63,8 +69,8 @@ fun CustomDropdownMenu(
                     focusedContainerColor = MaterialTheme.colorScheme.background,
 
                     // the text color is gray for the placeholder
-                    unfocusedTextColor = if (selectedText ==  placeholder) Color.Gray else MaterialTheme.colorScheme.onBackground,
-                    focusedTextColor = if (selectedText ==  "Select an item...") Color.Gray else MaterialTheme.colorScheme.onBackground,
+                    unfocusedTextColor = if (!isSelected) Color.Gray else MaterialTheme.colorScheme.onBackground,
+                    focusedTextColor = if (!isSelected) Color.Gray else MaterialTheme.colorScheme.onBackground,
 
                     unfocusedIndicatorColor = MaterialTheme.colorScheme.onBackground,
                     focusedIndicatorColor = MaterialTheme.colorScheme.primary
@@ -85,6 +91,7 @@ fun CustomDropdownMenu(
                         onClick = {
                             selectedText = items[index]
                             isExpanded = false
+                            isSelected = true
 
                             // call the custom on item selected function
                             onItemSelected(text)
