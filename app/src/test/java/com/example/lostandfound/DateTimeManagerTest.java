@@ -12,69 +12,22 @@ public class DateTimeManagerTest {
     private static final int DAY = 18;
     private static final int HOUR = 17;
     private static final int MINUTE = 4;
+    private static final long EPOCH_DATE_ONLY = 1718668800L;
+    private static final int TIME_SECONDS = 61440;
     private static final long EPOCH = 1718730240L;
 
     @Test
-    public void testGetEpoch(){
-        DateTimeManager dateTimeManager1 = new DateTimeManager(YEAR, MONTH, DAY, HOUR, MINUTE);
-        assertEquals(EPOCH, dateTimeManager1.getEpoch());
-
-        DateTimeManager dateTimeManager2 = new DateTimeManager(EPOCH);
-        assertEquals(EPOCH, dateTimeManager2.getEpoch());
+    public void testDateToString(){
+        assertEquals("18 Jun 2024", DateTimeManager.dateToString(EPOCH_DATE_ONLY));
     }
 
     @Test
-    public void testGetFormattedString(){
-        DateTimeManager dateTimeManager1 = new DateTimeManager(YEAR, MONTH, DAY, HOUR, MINUTE);
-        assertEquals("18 Jun 2024", dateTimeManager1.getFormattedDate());
-
-        DateTimeManager dateTimeManager2 = new DateTimeManager(EPOCH);
-        assertEquals("17:04", dateTimeManager2.getFormattedTime());
+    public void testTimeToString(){
+        assertEquals("17:04", DateTimeManager.timeToString(HOUR, MINUTE));
     }
 
     @Test
-    public void testGetYear(){
-        DateTimeManager dateTimeManager1 = new DateTimeManager(YEAR, MONTH, DAY, HOUR, MINUTE);
-        assertEquals(YEAR, dateTimeManager1.getYear());
-
-        DateTimeManager dateTimeManager2 = new DateTimeManager(EPOCH);
-        assertEquals(YEAR, dateTimeManager2.getYear());
+    public void testGetDateTimeEpoch(){
+        assertEquals(EPOCH, DateTimeManager.getDateTimeEpoch(EPOCH_DATE_ONLY, HOUR, MINUTE));
     }
-
-    @Test
-    public void testGetMonth(){
-        DateTimeManager dateTimeManager1 = new DateTimeManager(YEAR, MONTH, DAY, HOUR, MINUTE);
-        assertEquals(MONTH, dateTimeManager1.getMonth());
-
-        DateTimeManager dateTimeManager2 = new DateTimeManager(EPOCH);
-        assertEquals(MONTH, dateTimeManager2.getMonth());
-    }
-
-    @Test
-    public void testGetDay(){
-        DateTimeManager dateTimeManager1 = new DateTimeManager(YEAR, MONTH, DAY, HOUR, MINUTE);
-        assertEquals(DAY, dateTimeManager1.getDay());
-
-        DateTimeManager dateTimeManager2 = new DateTimeManager(EPOCH);
-        assertEquals(DAY, dateTimeManager2.getDay());
-    }
-
-    @Test
-    public void testGetHour(){
-        DateTimeManager dateTimeManager1 = new DateTimeManager(YEAR, MONTH, DAY, HOUR, MINUTE);
-        assertEquals(HOUR, dateTimeManager1.getHour());
-
-        DateTimeManager dateTimeManager2 = new DateTimeManager(EPOCH);
-        assertEquals(HOUR, dateTimeManager2.getHour());
-    }
-
-    @Test
-    public void testGetMinute(){
-        DateTimeManager dateTimeManager1 = new DateTimeManager(YEAR, MONTH, DAY, HOUR, MINUTE);
-        assertEquals(MINUTE, dateTimeManager1.getMinute());
-
-        DateTimeManager dateTimeManager2 = new DateTimeManager(EPOCH);
-        assertEquals(MINUTE, dateTimeManager2.getMinute());
-    }
-
 }

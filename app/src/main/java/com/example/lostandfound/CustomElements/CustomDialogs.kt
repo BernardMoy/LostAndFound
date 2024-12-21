@@ -94,11 +94,7 @@ fun CustomDatePickerDialog(
                         val epoch = ((datePickerState.selectedDateMillis ?: 0L )/ 1000L)
 
                         // get the string representation of the date
-                        val manager =
-                            DateTimeManager(
-                                epoch
-                            )
-                        val dateString = manager.formattedDate
+                        val dateString = DateTimeManager.dateToString(epoch)
 
                         // update the string variable
                         selectedDate.value = dateString
@@ -147,13 +143,10 @@ fun CustomTimePickerDialog(
     selectedTime: MutableState<String>,
     isDialogShown: MutableState<Boolean>
 ){
-    // here need to wrap the time picker inside an alert dialog
-    val currentTime = Calendar.getInstance()
-
     // set the initial time to the current time
     val timePickerState = rememberTimePickerState(
-        initialHour = currentTime.get(Calendar.HOUR_OF_DAY),
-        initialMinute = currentTime.get(Calendar.MINUTE),
+        initialHour = DateTimeManager.getCurrentHour(),
+        initialMinute = DateTimeManager.getCurrentMinute(),
         is24Hour = true,
     )
 
@@ -169,7 +162,7 @@ fun CustomTimePickerDialog(
                     type = ButtonType.FILLED,
                     onClick = {
                         // update the string variable
-                        val timeString = String.format(locale = Locale.UK, "%02d:%02d", timePickerState.hour, timePickerState.minute)
+                        val timeString = DateTimeManager.timeToString(timePickerState.hour, timePickerState.minute)
                         selectedTime.value = timeString
 
                         // dismiss dialog
