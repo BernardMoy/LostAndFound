@@ -303,10 +303,11 @@ fun Subcategory(
     CustomGrayTitle(text = "Select subcategory")
     
     CustomDropdownMenu(
-        items = listOf<String>("Wallet", "Key", "Watch", "Umbrella", "Eyeglasses")
-    ) {
-        
-    }
+        items = listOf<String>("Wallet", "Key", "Watch", "Umbrella", "Eyeglasses"),
+        onItemSelected = { item ->
+            Toast.makeText(context, item, Toast.LENGTH_SHORT).show()
+        }
+    )
 }
 
 @Composable
