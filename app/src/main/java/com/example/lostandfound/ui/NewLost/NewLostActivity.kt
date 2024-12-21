@@ -36,6 +36,7 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.outlined.AccountCircle
 import androidx.compose.material.icons.outlined.Add
 import androidx.compose.material.icons.outlined.Cancel
+import androidx.compose.material.icons.outlined.Close
 import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -196,6 +197,7 @@ fun MainContent(viewModel: NewLostViewModel = viewModel()) {
         }
     )
 
+    // Display different input fields
     ItemName(itemName = itemName)
     ItemImage(imageUri = itemImage, launcher = launcher)
 }
@@ -236,13 +238,31 @@ fun ItemImage(
                     modifier = Modifier.padding(vertical = dimensionResource(id = R.dimen.content_margin))
                 ){
                     // display the image of the item only when it is not null
+                    val painter = rememberAsyncImagePainter(model = imageUri.value)
+
                     Image(
-                        painter = rememberAsyncImagePainter(model = imageUri.value),
+                        painter = painter,
                         contentDescription = "Item image",
+                        contentScale = ContentScale.FillWidth,  // make the image fill width
                         modifier = Modifier
                             .fillMaxWidth()
-                            .aspectRatio(1f)
                     )
+
+                    // the cross button at the top right of the image to remove it
+                    IconButton(onClick = {
+                        // remove the image
+                        imageUri.value = null
+                    },
+                        modifier = Modifier
+                            .size(dimensionResource(id = R.dimen.image_button_size))
+                            .clip(CircleShape)
+                            .background(MaterialTheme.colorScheme.primary)
+                            .align(Alignment.TopEnd)
+                    ) {
+                        Icon(imageVector = Icons.Outlined.Close,
+                            contentDescription = "Remove image",
+                            tint = Color.White)
+                    }
                 }
             }
 
