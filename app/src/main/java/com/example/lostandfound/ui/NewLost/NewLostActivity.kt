@@ -2,14 +2,17 @@ package com.example.lostandfound.ui.NewLost
 
 import android.app.Activity
 import android.content.Context
+import android.graphics.Paint.Align
 import android.net.Uri
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.BackHandler
+import androidx.activity.compose.ManagedActivityResultLauncher
 import androidx.activity.compose.rememberLauncherForActivityResult
 import com.example.lostandfound.R
 import androidx.activity.compose.setContent
+import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
@@ -18,6 +21,8 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -66,6 +71,7 @@ import coil3.compose.rememberAsyncImagePainter
 import com.example.lostandfound.CustomElements.BackToolbar
 import com.example.lostandfound.CustomElements.ButtonType
 import com.example.lostandfound.CustomElements.CustomActionRow
+import com.example.lostandfound.CustomElements.CustomActionText
 import com.example.lostandfound.CustomElements.CustomButton
 import com.example.lostandfound.CustomElements.CustomEditText
 import com.example.lostandfound.CustomElements.CustomErrortext
@@ -175,7 +181,23 @@ fun MainContent(viewModel: NewLostViewModel = viewModel()) {
     val inPreview = LocalInspectionMode.current
 
     val itemName = remember { mutableStateOf("") }
+
+    val itemImage = remember {
+        mutableStateOf<Uri?>(
+            null    // image is initially null
+        )
+    }
+
+    // launcher to pick image from device
+    val launcher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.PickVisualMedia(),
+        onResult = { uri ->
+            itemImage.value = uri
+        }
+    )
+
     ItemName(itemName = itemName)
+    ItemImage(imageUri = itemImage, launcher = launcher)
 }
 
 @Composable
@@ -189,6 +211,58 @@ fun ItemName(
         onTextChanged = {itemName.value = it},
         placeholder = "e.g. Bluetooth earbuds"
     )
+}
+
+@Composable
+fun ItemImage(
+    imageUri: MutableState<Uri?>,
+    launcher: ManagedActivityResultLauncher<PickVisualMediaRequest, Uri?>
+){
+    CustomGrayTitle(text = "Item image")
+
+    // Box for storing the image and the add button
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(0.dp, 0.dp, 0.dp, dimensionResource(id = R.dimen.title_margin)),
+        contentAlignment = Alignment.CenterStart
+    ){
+        Column(
+
+        ){
+            // box for storing the image
+            if (imageUri.value != null) {
+                Box(
+                    modifier = Modifier.padding(vertical = dimensionResource(id = R.dimen.content_margin))
+                ){
+                    // display the image of the item only when it is not null
+                    Image(
+                        painter = rememberAsyncImagePainter(model = imageUri.value),
+                        contentDescription = "Item image",
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .aspectRatio(1f)
+                    )
+                }
+            }
+
+
+            // the clickable text to add new image
+            Box(
+                modifier = Modifier.padding(vertical = dimensionResource(id = R.dimen.content_margin))
+            ){
+                CustomActionText(
+                    text = "Add Image",
+                    onClick = {
+                        // pick image from the gallery to modify the item image
+                        launcher.launch(
+                            PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
+                        )
+                    },
+                )
+            }
+        }
+    }
 }
 
 
