@@ -23,6 +23,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
+import kotlinx.coroutines.selects.select
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -35,7 +36,8 @@ fun CustomDropdownMenu(
     }
 
     var selectedText by remember {
-        mutableStateOf(items[0])
+        // the first text that is shown
+        mutableStateOf("Select an item...")
     }
     Column (
         modifier = Modifier.fillMaxWidth()
@@ -59,9 +61,13 @@ fun CustomDropdownMenu(
                     unfocusedContainerColor = MaterialTheme.colorScheme.background,
                     focusedContainerColor = MaterialTheme.colorScheme.background,
 
+                    // the text color is gray for the placeholder
+                    unfocusedTextColor = if (selectedText ==  "Select an item...") Color.Gray else MaterialTheme.colorScheme.onBackground,
+                    focusedTextColor = if (selectedText ==  "Select an item...") Color.Gray else MaterialTheme.colorScheme.onBackground,
+
                     unfocusedIndicatorColor = MaterialTheme.colorScheme.onBackground,
                     focusedIndicatorColor = MaterialTheme.colorScheme.primary
-                )
+                ),
             )
             ExposedDropdownMenu(
                 expanded = isExpanded,
