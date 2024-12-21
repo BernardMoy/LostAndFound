@@ -1,8 +1,13 @@
 package com.example.lostandfound.CustomElements
 
+import android.util.Log
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.CalendarMonth
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
@@ -10,6 +15,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -127,4 +133,60 @@ fun CustomInputField(
             disabledIndicatorColor = Color.Gray
         )
     )
+}
+
+// currently, this text field has no function to callback when the string date changes
+// may be implemented in the future if needed
+@Composable
+fun CustomDatePickerTextField(
+    // pass in a variable of selected date, initially is the current date.
+    selectedDate: MutableState<String>,
+    isDialogShown: MutableState<Boolean>,
+    placeholder: String
+){
+    Column {
+        // the text field to prompt user to open date picker
+        OutlinedTextField(
+            value = selectedDate.value,
+            placeholder = {
+                Text(text = placeholder, style = Typography.bodyMedium, color = Color.Gray)
+            },
+            onValueChange = { newText ->
+                selectedDate.value = newText
+            },
+            readOnly = true,   // make it read only
+            singleLine = true,
+            enabled = false,   // this is needed to make the text field clickable
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(
+                    horizontal = 0.dp,
+                    vertical = dimensionResource(id = R.dimen.content_margin_half)
+                ).clickable {
+                    // when the text field is clicked, open the dialog
+                    isDialogShown.value = true
+                },
+            colors = TextFieldDefaults.colors(
+                // for enabled (Editable) text
+                unfocusedContainerColor = Color.Transparent,
+                focusedContainerColor = Color.Transparent,
+                disabledContainerColor = Color.Transparent,
+
+                // for the color of the border
+                focusedIndicatorColor = MaterialTheme.colorScheme.primary,
+                unfocusedIndicatorColor = MaterialTheme.colorScheme.onBackground,
+                disabledIndicatorColor = Color.Gray
+            ),
+            trailingIcon = {
+                Icon(imageVector = Icons.Outlined.CalendarMonth, contentDescription = "Pick a date", tint = MaterialTheme.colorScheme.onBackground)
+            },
+        )
+
+
+        // if isDialogShown is true, show the date selection dialog
+        CustomDatePickerDialog(
+            selectedDate = selectedDate,
+            isDialogShown = isDialogShown
+        )
+    }
 }

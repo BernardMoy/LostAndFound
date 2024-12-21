@@ -1,6 +1,7 @@
 package com.example.lostandfound.ui.NewLost
 
 import android.app.Activity
+import android.app.DatePickerDialog
 import android.content.Context
 import android.graphics.Paint.Align
 import android.net.Uri
@@ -39,6 +40,7 @@ import androidx.compose.material.icons.outlined.Cancel
 import androidx.compose.material.icons.outlined.Close
 import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -49,9 +51,11 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.material3.Surface
+import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -71,19 +75,15 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import coil3.compose.rememberAsyncImagePainter
 import com.example.lostandfound.CustomElements.BackToolbar
 import com.example.lostandfound.CustomElements.ButtonType
-import com.example.lostandfound.CustomElements.CustomActionRow
 import com.example.lostandfound.CustomElements.CustomActionText
 import com.example.lostandfound.CustomElements.CustomButton
+import com.example.lostandfound.CustomElements.CustomDatePickerDialog
+import com.example.lostandfound.CustomElements.CustomDatePickerTextField
 import com.example.lostandfound.CustomElements.CustomDropdownMenu
-import com.example.lostandfound.CustomElements.CustomEditText
-import com.example.lostandfound.CustomElements.CustomErrortext
 import com.example.lostandfound.CustomElements.CustomGrayTitle
 import com.example.lostandfound.CustomElements.CustomInputField
 import com.example.lostandfound.CustomElements.CustomTextDialog
-import com.example.lostandfound.FirebaseManagers.FirebaseAuthManager
-import com.example.lostandfound.Utility.ImageManager
-import com.example.lostandfound.Utility.SharedPreferencesNames
-import com.example.lostandfound.ui.EditProfile.EditProfileViewModel
+import com.example.lostandfound.DateTimeManager
 import com.example.lostandfound.ui.theme.ComposeTheme
 
 
@@ -156,7 +156,8 @@ fun NewLostScreen(activity: ComponentActivity) {
                             isDialogShown.value = false
                             // exit the activity
                             activity.finish()
-                        })
+                        }
+                    )
                 },
                 dismissButton = {
                     CustomButton(text = "Cancel",
@@ -164,7 +165,8 @@ fun NewLostScreen(activity: ComponentActivity) {
                         onClick = {
                             // dismiss the dialog
                             isDialogShown.value = false
-                        })
+                        }
+                    )
                 },
                 isDialogShown = isDialogShown    // dialog is shown only when the value of isDialogShown is true
             )
@@ -199,11 +201,20 @@ fun MainContent(viewModel: NewLostViewModel = viewModel()) {
         }
     )
 
+    // the selected date is in string format
+    val selectedDate = remember{
+        mutableStateOf("")
+    }
+    val isDateDialogShown = remember{
+        mutableStateOf(false)
+    }
+
     // Display different input fields
     ItemName(itemName = itemName)
     ItemImage(imageUri = itemImage, launcher = launcher)
     Category()
     Subcategory(context = context)
+    DateAndTime(selectedDate = selectedDate, isDateDialogShown = isDateDialogShown)
 
     DoneButton()
 }
@@ -296,14 +307,14 @@ fun ItemImage(
 fun Category(
 
 ){
-    CustomGrayTitle(text = "Select category")
+    CustomGrayTitle(text = "Category")
 }
 
 @Composable
 fun Subcategory(
     context: Context
 ){
-    CustomGrayTitle(text = "Select subcategory")
+    CustomGrayTitle(text = "Subcategory")
     
     CustomDropdownMenu(
         items = listOf<String>("Wallet", "Key", "Watch", "Umbrella", "Eyeglasses"),
@@ -313,10 +324,19 @@ fun Subcategory(
     )
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DateAndTime(
-
+    selectedDate: MutableState<String>,
+    isDateDialogShown: MutableState<Boolean>
 ){
+    CustomGrayTitle(text = "Date and time")
+
+    CustomDatePickerTextField(
+        selectedDate = selectedDate,
+        isDialogShown = isDateDialogShown,
+        placeholder = "Select a date..."
+    )
 
 }
 
