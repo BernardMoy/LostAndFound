@@ -30,7 +30,8 @@ import kotlinx.coroutines.selects.select
 fun CustomDropdownMenu(
     items: List<String>,      // a list of items to show up in the menu
     onItemSelected: (String) -> Unit,    // function to execute when an item is selected
-    placeholder: String = "Select an item..."
+    placeholder: String = "Select an item...",
+    isError: Boolean = false
 ){
     var isExpanded by remember {
         mutableStateOf(false)
@@ -64,6 +65,7 @@ fun CustomDropdownMenu(
                 trailingIcon = {
                     ExposedDropdownMenuDefaults.TrailingIcon(expanded = isExpanded)  // show the icon on the right
                 },
+                isError = isError,
                 colors = TextFieldDefaults.colors(
                     unfocusedContainerColor = MaterialTheme.colorScheme.background,
                     focusedContainerColor = MaterialTheme.colorScheme.background,
@@ -73,7 +75,10 @@ fun CustomDropdownMenu(
                     focusedTextColor = if (!isSelected) Color.Gray else MaterialTheme.colorScheme.onBackground,
 
                     unfocusedIndicatorColor = MaterialTheme.colorScheme.onBackground,
-                    focusedIndicatorColor = MaterialTheme.colorScheme.primary
+                    focusedIndicatorColor = MaterialTheme.colorScheme.primary,
+
+                    errorContainerColor = MaterialTheme.colorScheme.background,
+                    errorTextColor = if (!isSelected) Color.Gray else MaterialTheme.colorScheme.onBackground
                 ),
             )
             ExposedDropdownMenu(
