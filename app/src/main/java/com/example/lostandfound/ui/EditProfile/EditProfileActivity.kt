@@ -183,23 +183,21 @@ fun MainContent(viewModel: EditProfileViewModel = viewModel()) {
 
     val email = sp.getString(SharedPreferencesNames.USER_EMAIL, "") ?: ""
 
-    // stores the image uri of the user's avatar
-    val imageUri = remember {
-        mutableStateOf<Uri?>(
-            // convert the stored string to uri
-            if (inPreview) null else
-                ImageManager.stringToUri(
-                    context,
-                    sp.getString(SharedPreferencesNames.USER_AVATAR, "") ?: ""
-                )
-        )
-    }
+    // set the uri from the view model
+    viewModel.setAvatar(
+        // convert the stored string to uri
+        if (inPreview) null else
+            ImageManager.stringToUri(
+                context,
+                sp.getString(SharedPreferencesNames.USER_AVATAR, "") ?: ""
+            )
+    )
 
     // the bottom sheet that is displayed at the bottom
     val isSheetOpen = remember { mutableStateOf(false) }
-    AvatarBottomSheet(isSheetOpen = isSheetOpen, imageUri = imageUri)
+    AvatarBottomSheet(isSheetOpen = isSheetOpen, viewModel = viewModel)
 
-    Avatar(imageUri = imageUri, isSheetOpen = isSheetOpen)
+    Avatar(imageUri = viewModel.imageUri, isSheetOpen = isSheetOpen)
     FirstAndLastNameFields(viewModel = viewModel)
     ErrorMessage(viewModel = viewModel)
     ReminderMessage()
@@ -207,8 +205,7 @@ fun MainContent(viewModel: EditProfileViewModel = viewModel()) {
         viewModel = viewModel,
         inPreview = inPreview,
         context = context,
-        email = email,
-        imageUri = imageUri
+        email = email
     )
 
 }
@@ -340,7 +337,6 @@ fun SaveButton(
     inPreview: Boolean,
     context: Context,
     email: String,
-    imageUri: MutableState<Uri?>
 ) {
     // box for save button
     // isloading state to display the loading animation
@@ -390,7 +386,7 @@ fun SaveButton(
                     email,
                     viewModel.firstName.value,
                     viewModel.lastName.value,
-                    ImageManager.uriToString(context, imageUri.value)
+                    ImageManager.uriToString(context, viewModel.imageUri.value)
 
                 ) { error ->
                     // finish loading
@@ -420,7 +416,10 @@ fun SaveButton(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AvatarBottomSheet(isSheetOpen: MutableState<Boolean>, imageUri: MutableState<Uri?>){
+fun AvatarBottomSheet(
+    viewModel: EditProfileViewModel,
+    isSheetOpen: MutableState<Boolean>
+){
     if (isSheetOpen.value){
         ModalBottomSheet(
             onDismissRequest = { isSheetOpen.value = false },
@@ -430,7 +429,7 @@ fun AvatarBottomSheet(isSheetOpen: MutableState<Boolean>, imageUri: MutableState
             val launcher = rememberLauncherForActivityResult(
                 contract = ActivityResultContracts.PickVisualMedia(),
                 onResult = { uri ->
-                    imageUri.value = uri
+                    viewModel.setAvatar(uri)
 
                     // close the bottom sheet here after the imageuri value has been set
                     isSheetOpen.value = false
@@ -460,7 +459,7 @@ fun AvatarBottomSheet(isSheetOpen: MutableState<Boolean>, imageUri: MutableState
                     tint = MaterialTheme.colorScheme.error,
                     onClick = {
                         // remove the profile avatar
-                        imageUri.value = null
+                        viewModel.setAvatar(null)
 
                         // dismiss the bottom sheet
                         isSheetOpen.value = false

@@ -1,5 +1,6 @@
 package com.example.lostandfound.ui.EditProfile
 
+import android.net.Uri
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.LiveData
@@ -7,9 +8,10 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
 class EditProfileViewModel : ViewModel(){
-    // mutable live data for first name and last names
+    // mutable state data for first name and last names - as they are passed to other jetpack composables
     val firstName: MutableState<String> = mutableStateOf("")
     val lastName: MutableState<String> = mutableStateOf("")
+    val imageUri: MutableState<Uri?> = mutableStateOf(null)
 
     // mutable live data for displaying profile error
     val profileError: MutableLiveData<String> = MutableLiveData("")
@@ -19,6 +21,9 @@ class EditProfileViewModel : ViewModel(){
     }
     fun setLastName(s: String){
         lastName.value = s
+    }
+    fun setAvatar(image: Uri?){
+        imageUri.value = image
     }
 
     fun setError(s: String){
