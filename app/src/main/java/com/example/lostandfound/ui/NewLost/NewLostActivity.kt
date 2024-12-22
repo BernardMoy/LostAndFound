@@ -225,7 +225,7 @@ fun ItemName(
         fieldContent = itemName.value,
         isEditable = true,
         onTextChanged = {itemName.value = it},
-        placeholder = "e.g. Bluetooth earbuds"
+        placeholder = "e.g. Bluetooth earbuds",
     )
 }
 

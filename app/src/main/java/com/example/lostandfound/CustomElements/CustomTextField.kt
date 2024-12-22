@@ -121,17 +121,20 @@ fun CustomInputField(
             ),
         colors = TextFieldDefaults.colors(
             // for enabled (Editable) text
-            unfocusedContainerColor = Color.Transparent,
-            focusedContainerColor = Color.Transparent,
+            unfocusedContainerColor = MaterialTheme.colorScheme.background,
+            focusedContainerColor = MaterialTheme.colorScheme.background,
 
             // for disabled (non editable) text
-            disabledContainerColor = Color.Transparent,
+            disabledContainerColor = MaterialTheme.colorScheme.background,
             disabledTextColor = MaterialTheme.colorScheme.onBackground,
 
             // for the color of the border
             focusedIndicatorColor = MaterialTheme.colorScheme.primary,
             unfocusedIndicatorColor = MaterialTheme.colorScheme.onBackground,
-            disabledIndicatorColor = Color.Gray
+            disabledIndicatorColor = Color.Gray,
+
+            errorContainerColor = MaterialTheme.colorScheme.background,
+            errorTextColor = MaterialTheme.colorScheme.onBackground
         )
     )
 }
@@ -143,7 +146,8 @@ fun CustomDatePickerTextField(
     // pass in a variable of selected date, initially is the current date.
     selectedDate: MutableState<String>,
     isDialogShown: MutableState<Boolean>,
-    placeholder: String
+    placeholder: String,
+    isError: Boolean = false
 ){
 
     Column {
@@ -159,6 +163,7 @@ fun CustomDatePickerTextField(
             onValueChange = { newText ->
                 selectedDate.value = newText
             },
+            isError = isError,
             readOnly = true,   // make it read only
             singleLine = true,
             enabled = false,   // this is needed to make the text field clickable
@@ -174,15 +179,17 @@ fun CustomDatePickerTextField(
                 },
             colors = TextFieldDefaults.colors(
                 // for enabled (Editable) text
-                unfocusedContainerColor = Color.Transparent,
-                focusedContainerColor = Color.Transparent,
-                disabledContainerColor = Color.Transparent,
+                unfocusedContainerColor = MaterialTheme.colorScheme.background,
+                focusedContainerColor = MaterialTheme.colorScheme.background,
+                disabledContainerColor = MaterialTheme.colorScheme.background,
+                errorContainerColor = MaterialTheme.colorScheme.background,
 
                 // for the color of the border
                 disabledIndicatorColor = MaterialTheme.colorScheme.onBackground,
 
                 // for the text color that is not placeholder
-                disabledTextColor = MaterialTheme.colorScheme.onBackground
+                disabledTextColor = MaterialTheme.colorScheme.onBackground,
+
             ),
             trailingIcon = {
                 Icon(imageVector = Icons.Outlined.CalendarMonth, contentDescription = "Pick a date", tint = MaterialTheme.colorScheme.onBackground)
@@ -203,7 +210,8 @@ fun CustomDatePickerTextField(
 fun CustomTimePickerTextField(
     selectedTime: MutableState<String>,
     isDialogShown: MutableState<Boolean>,
-    placeholder: String
+    placeholder: String,
+    isError: Boolean = false
 ){
 
     Column {
@@ -219,6 +227,7 @@ fun CustomTimePickerTextField(
             onValueChange = { newText ->
                 selectedTime.value = newText
             },
+            isError = isError,
             readOnly = true,   // make it read only
             singleLine = true,
             enabled = false,   // this is needed to make the text field clickable
@@ -234,9 +243,10 @@ fun CustomTimePickerTextField(
                 },
             colors = TextFieldDefaults.colors(
                 // for enabled (Editable) text
-                unfocusedContainerColor = Color.Transparent,
-                focusedContainerColor = Color.Transparent,
-                disabledContainerColor = Color.Transparent,
+                unfocusedContainerColor = MaterialTheme.colorScheme.background,
+                focusedContainerColor = MaterialTheme.colorScheme.background,
+                disabledContainerColor = MaterialTheme.colorScheme.background,
+                errorContainerColor = MaterialTheme.colorScheme.background,
 
                 // for the color of the border
                 disabledIndicatorColor = MaterialTheme.colorScheme.onBackground,
