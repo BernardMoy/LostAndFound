@@ -10,6 +10,7 @@ import androidx.activity.compose.ManagedActivityResultLauncher
 import androidx.activity.compose.rememberLauncherForActivityResult
 import com.example.lostandfound.R
 import androidx.activity.compose.setContent
+import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
@@ -165,74 +166,40 @@ fun MainContent(viewModel: NewLostViewModel = viewModel()) {
     // boolean to determine if it is being rendered in preview
     val inPreview = LocalInspectionMode.current
 
-    val itemName = remember { mutableStateOf("") }
-
-    val itemImage = remember {
-        mutableStateOf<Uri?>(
-            null    // image is initially null
-        )
-    }
-
     // launcher to pick image from device
     val launcher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.PickVisualMedia(),
-        onResult = { uri ->
-            itemImage.value = uri
-        }
+        onResult = { viewModel.onImagePicked(it) }
     )
-
-    // the selected date and time is in string format
-    val selectedDate = remember{
-        mutableStateOf("")
-    }
-    val isDateDialogShown = remember{
-        mutableStateOf(false)
-    }
-    val selectedTime = remember{
-        mutableStateOf("")
-    }
-    val isTimeDialogShown = remember{
-        mutableStateOf(false)
-    }
-
-    val additionalDescription = remember {
-        mutableStateOf("")
-    }
 
     // Display different input fields
-    ItemName(itemName = itemName)
-    ItemImage(imageUri = itemImage, launcher = launcher)
-    Category()
-    Subcategory(context = context)
-    DateAndTime(
-        selectedDate = selectedDate,
-        isDateDialogShown = isDateDialogShown,
-        selectedTime = selectedTime,
-        isTimeDialogShown = isTimeDialogShown
-    )
-
-    AdditionalDescription(description = additionalDescription)
-    ReminderMessage()
-    DoneButton()
+    ItemName(viewModel = viewModel)
+    ItemImage(viewModel = viewModel, launcher = launcher)
+    Category(viewModel = viewModel)
+    Subcategory(context = context, viewModel = viewModel)
+    DateAndTime(viewModel = viewModel)
+    AdditionalDescription(viewModel = viewModel)
+    ReminderMessage(viewModel = viewModel)
+    DoneButton(viewModel = viewModel)
 }
 
 @Composable
 fun ItemName(
-    itemName: MutableState<String>
+    viewModel: NewLostViewModel
 ){
     CustomGrayTitle(text = "Name of item")
     CustomInputField(
-        fieldContent = itemName.value,
+        fieldContent = viewModel.itemName.value,
         isEditable = true,
-        onTextChanged = {itemName.value = it},
+        onTextChanged = {viewModel.onItemNameChanged(it)},
         placeholder = "e.g. Bluetooth earbuds",
     )
 }
 
 @Composable
 fun ItemImage(
-    imageUri: MutableState<Uri?>,
-    launcher: ManagedActivityResultLauncher<PickVisualMediaRequest, Uri?>
+    launcher: ManagedActivityResultLauncher<PickVisualMediaRequest, Uri?>,
+    viewModel: NewLostViewModel,
 ){
     CustomGrayTitle(text = "Item image")
 
@@ -247,12 +214,12 @@ fun ItemImage(
 
         ){
             // box for storing the image
-            if (imageUri.value != null) {
+            if (viewModel.itemImage.value != null) {
                 Box(
                     modifier = Modifier.padding(vertical = dimensionResource(id = R.dimen.content_margin))
                 ){
                     // display the image of the item only when it is not null
-                    val painter = rememberAsyncImagePainter(model = imageUri.value)
+                    val painter = rememberAsyncImagePainter(model = viewModel.itemImage.value)
 
                     Image(
                         painter = painter,
@@ -265,7 +232,7 @@ fun ItemImage(
                     // the cross button at the top right of the image to remove it
                     IconButton(onClick = {
                         // remove the image
-                        imageUri.value = null
+                        viewModel.onImageCrossClicked()
                     },
                         modifier = Modifier
                             .size(dimensionResource(id = R.dimen.image_button_size))
@@ -302,14 +269,15 @@ fun ItemImage(
 
 @Composable
 fun Category(
-
+    viewModel: NewLostViewModel
 ){
     CustomGrayTitle(text = "Category")
 }
 
 @Composable
 fun Subcategory(
-    context: Context
+    context: Context,
+    viewModel: NewLostViewModel
 ){
     CustomGrayTitle(text = "Subcategory")
     
@@ -324,22 +292,19 @@ fun Subcategory(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DateAndTime(
-    selectedDate: MutableState<String>,
-    isDateDialogShown: MutableState<Boolean>,
-    selectedTime: MutableState<String>,
-    isTimeDialogShown: MutableState<Boolean>
+    viewModel: NewLostViewModel
 ){
     CustomGrayTitle(text = "Date and time")
 
     CustomDatePickerTextField(
-        selectedDate = selectedDate,
-        isDialogShown = isDateDialogShown,
+        selectedDate = viewModel.selectedDate,
+        isDialogShown = viewModel.isDateDialogShown,
         placeholder = "Select a date..."
     )
 
     CustomTimePickerTextField(
-        selectedTime = selectedTime,
-        isDialogShown = isTimeDialogShown,
+        selectedTime = viewModel.selectedTime,
+        isDialogShown = viewModel.isTimeDialogShown,
         placeholder = "Select a time..."
     )
 
@@ -347,20 +312,20 @@ fun DateAndTime(
 
 @Composable
 fun Location(
-
+    viewModel: NewLostViewModel
 ){
 
 }
 
 @Composable
 fun AdditionalDescription(
-    description: MutableState<String>
+    viewModel: NewLostViewModel
 ){
     CustomGrayTitle(text = "Additional description")
     CustomInputField(
-        fieldContent = description.value,
+        fieldContent = viewModel.additionalDescription.value,
         isEditable = true,
-        onTextChanged = {description.value = it},
+        onTextChanged = {viewModel.onDescriptionChanged(it)},
         placeholder = "What should be noted of about your item?",
         isMultiLine = true
     )
@@ -368,7 +333,7 @@ fun AdditionalDescription(
 
 @Composable
 fun ReminderMessage(
-
+    viewModel: NewLostViewModel
 ){
     Text(
         text = "Reminder message goes here.",
@@ -385,7 +350,7 @@ fun ReminderMessage(
 
 @Composable
 fun DoneButton(
-
+    viewModel: NewLostViewModel
 ) {
     // box for save button
     // isloading state to display the loading animation
