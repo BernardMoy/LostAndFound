@@ -15,6 +15,7 @@ import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
@@ -70,6 +71,7 @@ import com.example.lostandfound.CustomElements.CustomGrayTitle
 import com.example.lostandfound.CustomElements.CustomInputField
 import com.example.lostandfound.CustomElements.CustomTextDialog
 import com.example.lostandfound.CustomElements.CustomTimePickerTextField
+import com.example.lostandfound.Utility.categories
 import com.example.lostandfound.ui.theme.ComposeTheme
 
 
@@ -282,11 +284,16 @@ fun Category(
         mutableStateOf(false)
     }
 
-    FlowRow (){
-        CustomFilterChip(
-            label = "Personal items",
-            leadingIcon = Icons.Outlined.AccountBox
-        )
+    FlowRow (
+        horizontalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin_half))
+    ){
+        // for each category, create a custom filter chip for that
+        categories.forEach{ category ->
+            CustomFilterChip(
+                label = category.name,
+                leadingIcon = category.leadingIcon
+            )
+        }
     }
 }
 
