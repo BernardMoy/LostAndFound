@@ -17,6 +17,8 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -26,6 +28,8 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.AccountBalanceWallet
+import androidx.compose.material.icons.outlined.AccountBox
 import androidx.compose.material.icons.outlined.Cancel
 import androidx.compose.material.icons.outlined.Close
 import androidx.compose.material3.CircularProgressIndicator
@@ -61,6 +65,7 @@ import com.example.lostandfound.CustomElements.CustomActionText
 import com.example.lostandfound.CustomElements.CustomButton
 import com.example.lostandfound.CustomElements.CustomDatePickerTextField
 import com.example.lostandfound.CustomElements.CustomDropdownMenu
+import com.example.lostandfound.CustomElements.CustomFilterChip
 import com.example.lostandfound.CustomElements.CustomGrayTitle
 import com.example.lostandfound.CustomElements.CustomInputField
 import com.example.lostandfound.CustomElements.CustomTextDialog
@@ -267,11 +272,22 @@ fun ItemImage(
 }
 
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun Category(
     viewModel: NewLostViewModel
 ){
     CustomGrayTitle(text = "Category")
+    val isSelected: MutableState<Boolean> = remember{
+        mutableStateOf(false)
+    }
+
+    FlowRow (){
+        CustomFilterChip(
+            label = "Personal items",
+            leadingIcon = Icons.Outlined.AccountBox
+        )
+    }
 }
 
 @Composable
@@ -314,6 +330,15 @@ fun DateAndTime(
 fun Location(
     viewModel: NewLostViewModel
 ){
+    CustomGrayTitle(text = "Location")
+
+    // the action text to choose a location from google maps
+    CustomActionText(
+        text = "Add location",
+        onClick = {
+
+        },
+    )
 
 }
 
