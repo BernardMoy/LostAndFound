@@ -74,6 +74,7 @@ import com.example.lostandfound.CustomElements.CustomTimePickerTextField
 import com.example.lostandfound.Utility.Category
 import com.example.lostandfound.Utility.categories
 import com.example.lostandfound.ui.theme.ComposeTheme
+import com.example.lostandfound.ui.theme.Typography
 
 
 class NewLostActivity : ComponentActivity() {
@@ -294,6 +295,9 @@ fun Category(
                 // to ensure only one can be selected at a time
                 onClick = {
                     viewModel.onCategorySelected(category)
+
+                    // reset the selected subcategory every time
+                    viewModel.onSubCategorySelected("")
                 },
                 isSelected = viewModel.isCategorySelected(category)
             )
@@ -307,13 +311,29 @@ fun Subcategory(
     viewModel: NewLostViewModel
 ){
     CustomGrayTitle(text = "Subcategory")
-    
-    CustomDropdownMenu(
-        items = listOf("Wallet", "Key", "Watch", "Umbrella", "Eyeglasses"),
-        onItemSelected = { item ->
-            Toast.makeText(context, item, Toast.LENGTH_SHORT).show()
-        }
-    )
+
+    // display different fields depending on the selected category
+    if (viewModel.selectedCategory == null) {
+        Text(
+            text = "Please select a category first",
+            style = Typography.bodyMedium,
+            color = Color.Gray
+        )
+
+    } else if (viewModel.selectedCategory!!.name == "Others") {
+        CustomInputField(
+            fieldContent = "",   // have no initial value
+            isEditable = true,
+            onTextChanged = {viewModel.onSubCategorySelected(it)},  // change the subcat to the string inputted
+            placeholder = "Describe the category...",
+        )
+
+    } else {
+        CustomDropdownMenu(
+            items = viewModel.selectedCategory!!.subCategories,
+            selectedText = viewModel.selectedSubCategory
+        )
+    }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
