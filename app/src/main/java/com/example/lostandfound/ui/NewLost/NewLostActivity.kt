@@ -282,12 +282,6 @@ fun Category(
 ){
     CustomGrayTitle(text = "Category")
 
-    // keep track of the selected category here
-    var selectedCategory by remember{
-        // initially the selected category is null
-        mutableStateOf<Category?>(null)
-    }
-
     FlowRow (
         horizontalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin_half))
     ){
@@ -296,12 +290,12 @@ fun Category(
             CustomFilterChip(
                 label = category.name,
                 leadingIcon = category.leadingIcon,
+                // change the selected category var
+                // to ensure only one can be selected at a time
                 onClick = {
-                    // change the selected category var
-                    // to ensure only one can be selected at a time
-                    selectedCategory = category
+                    viewModel.onCategorySelected(category)
                 },
-                isSelected = (selectedCategory == category)
+                isSelected = viewModel.isCategorySelected(category)
             )
         }
     }
@@ -315,7 +309,7 @@ fun Subcategory(
     CustomGrayTitle(text = "Subcategory")
     
     CustomDropdownMenu(
-        items = listOf<String>("Wallet", "Key", "Watch", "Umbrella", "Eyeglasses"),
+        items = listOf("Wallet", "Key", "Watch", "Umbrella", "Eyeglasses"),
         onItemSelected = { item ->
             Toast.makeText(context, item, Toast.LENGTH_SHORT).show()
         }
