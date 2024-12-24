@@ -20,18 +20,13 @@ import com.example.lostandfound.ui.theme.Typography
 fun CustomFilterChip(
     label: String,
     leadingIcon: ImageVector,
-    selectedByDefault: Boolean = false
+    isSelected: Boolean,
+    onClick: () -> Unit
 ){
-    var isSelected by remember{
-        // initially, the state is un-selected
-        mutableStateOf(selectedByDefault)
-    }
+
     FilterChip(
         selected = isSelected,
-        onClick = {
-            // invert the selected state
-            isSelected = !isSelected
-        },
+        onClick = onClick,
         label = {
             Text(
                 text = label,
