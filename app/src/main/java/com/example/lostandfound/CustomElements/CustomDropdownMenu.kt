@@ -16,6 +16,7 @@ import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldColors
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -29,21 +30,11 @@ import kotlinx.coroutines.selects.select
 @Composable
 fun CustomDropdownMenu(
     items: List<String>,      // a list of items to show up in the menu
-    onItemSelected: (String) -> Unit,    // function to execute when an item is selected
+    selectedText: MutableState<String>, // placeholder is displayed if this value is ""
     placeholder: String = "Select an item...",
     isError: Boolean = false
 ){
     var isExpanded by remember {
-        mutableStateOf(false)
-    }
-
-    var selectedText by remember {
-        // the first text that is shown
-        mutableStateOf(placeholder)
-    }
-
-    // initially, selected = false to display the placeholder
-    var isSelected by remember{
         mutableStateOf(false)
     }
 
@@ -59,7 +50,7 @@ fun CustomDropdownMenu(
                 modifier = Modifier
                     .fillMaxWidth()
                     .menuAnchor(MenuAnchorType.PrimaryEditable, true),
-                value = selectedText,
+                value = if (selectedText.value != "") selectedText.value else placeholder,
                 onValueChange = {},
                 readOnly = true,
                 trailingIcon = {
@@ -71,14 +62,14 @@ fun CustomDropdownMenu(
                     focusedContainerColor = MaterialTheme.colorScheme.background,
 
                     // the text color is gray for the placeholder
-                    unfocusedTextColor = if (!isSelected) Color.Gray else MaterialTheme.colorScheme.onBackground,
-                    focusedTextColor = if (!isSelected) Color.Gray else MaterialTheme.colorScheme.onBackground,
+                    unfocusedTextColor = if (selectedText.value == "") Color.Gray else MaterialTheme.colorScheme.onBackground,
+                    focusedTextColor = if (selectedText.value == "") Color.Gray else MaterialTheme.colorScheme.onBackground,
 
                     unfocusedIndicatorColor = MaterialTheme.colorScheme.onBackground,
                     focusedIndicatorColor = MaterialTheme.colorScheme.primary,
 
                     errorContainerColor = MaterialTheme.colorScheme.background,
-                    errorTextColor = if (!isSelected) Color.Gray else MaterialTheme.colorScheme.onBackground
+                    errorTextColor = if (selectedText.value == "") Color.Gray else MaterialTheme.colorScheme.onBackground
                 ),
             )
             ExposedDropdownMenu(
@@ -94,12 +85,8 @@ fun CustomDropdownMenu(
                         ) },
                         modifier = Modifier.background(MaterialTheme.colorScheme.background),
                         onClick = {
-                            selectedText = items[index]
+                            selectedText.value = items[index]  // change the selected text
                             isExpanded = false
-                            isSelected = true
-
-                            // call the custom on item selected function
-                            onItemSelected(text)
                         }
                     )
                 }

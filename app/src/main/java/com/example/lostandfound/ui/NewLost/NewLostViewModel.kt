@@ -23,6 +23,9 @@ class NewLostViewModel: ViewModel() {
     // initially the selected category is null
     var selectedCategory by mutableStateOf<Category?>(null)
 
+    // the subcategory is also null
+    val selectedSubCategory = mutableStateOf<String>("")
+
 
     val nameError: MutableLiveData<String> = MutableLiveData("")
 
@@ -48,10 +51,13 @@ class NewLostViewModel: ViewModel() {
         additionalDescription.value = d
     }
 
-    fun onCategorySelected(c: Category){
+    fun onCategorySelected(c: Category?){
         selectedCategory = c
     }
     fun isCategorySelected(c: Category): Boolean{
         return selectedCategory == c
+    }
+    fun onSubCategorySelected(s: String){
+        selectedSubCategory.value = s
     }
 }
