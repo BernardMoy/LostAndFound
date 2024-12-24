@@ -71,6 +71,7 @@ import com.example.lostandfound.CustomElements.CustomGrayTitle
 import com.example.lostandfound.CustomElements.CustomInputField
 import com.example.lostandfound.CustomElements.CustomTextDialog
 import com.example.lostandfound.CustomElements.CustomTimePickerTextField
+import com.example.lostandfound.Utility.Category
 import com.example.lostandfound.Utility.categories
 import com.example.lostandfound.ui.theme.ComposeTheme
 
@@ -280,8 +281,11 @@ fun Category(
     viewModel: NewLostViewModel
 ){
     CustomGrayTitle(text = "Category")
-    val isSelected: MutableState<Boolean> = remember{
-        mutableStateOf(false)
+
+    // keep track of the selected category here
+    var selectedCategory by remember{
+        // initially the selected category is null
+        mutableStateOf<Category?>(null)
     }
 
     FlowRow (
@@ -291,7 +295,13 @@ fun Category(
         categories.forEach{ category ->
             CustomFilterChip(
                 label = category.name,
-                leadingIcon = category.leadingIcon
+                leadingIcon = category.leadingIcon,
+                onClick = {
+                    // change the selected category var
+                    // to ensure only one can be selected at a time
+                    selectedCategory = category
+                },
+                isSelected = (selectedCategory == category)
             )
         }
     }
