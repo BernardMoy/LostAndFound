@@ -44,6 +44,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -66,6 +67,7 @@ import com.example.lostandfound.CustomElements.CustomActionText
 import com.example.lostandfound.CustomElements.CustomButton
 import com.example.lostandfound.CustomElements.CustomDatePickerTextField
 import com.example.lostandfound.CustomElements.CustomDropdownMenu
+import com.example.lostandfound.CustomElements.CustomErrorText
 import com.example.lostandfound.CustomElements.CustomFilterChip
 import com.example.lostandfound.CustomElements.CustomGrayTitle
 import com.example.lostandfound.CustomElements.CustomInputField
@@ -187,6 +189,7 @@ fun MainContent(viewModel: NewLostViewModel = viewModel()) {
     Category(viewModel = viewModel)
     Subcategory(context = context, viewModel = viewModel)
     DateAndTime(viewModel = viewModel)
+    Location(viewModel = viewModel)
     AdditionalDescription(viewModel = viewModel)
     ReminderMessage(viewModel = viewModel)
     DoneButton(viewModel = viewModel)
@@ -202,6 +205,11 @@ fun ItemName(
         isEditable = true,
         onTextChanged = {viewModel.onItemNameChanged(it)},
         placeholder = "e.g. Bluetooth earbuds",
+        isError = viewModel.nameError.value.isNotEmpty()
+    )
+
+    CustomErrorText(
+        text = viewModel.nameError.value
     )
 }
 
@@ -331,7 +339,7 @@ fun Subcategory(
     } else {
         CustomDropdownMenu(
             items = viewModel.selectedCategory!!.subCategories,
-            selectedText = viewModel.selectedSubCategory
+            selectedText = viewModel.selectedSubCategory   // will be changed when new option is selected
         )
     }
 }

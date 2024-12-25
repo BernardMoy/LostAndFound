@@ -96,7 +96,7 @@ fun CustomInputField(
     isEditable: Boolean,
     onTextChanged: ((String) -> Unit)? = null,
     isError: Boolean = false,
-    isMultiLine: Boolean = false
+    isMultiLine: Boolean = false,
 ){
     var varFieldContent by remember{ mutableStateOf(fieldContent)}
 

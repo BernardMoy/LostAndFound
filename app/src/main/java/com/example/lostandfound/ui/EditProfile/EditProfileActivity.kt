@@ -68,7 +68,7 @@ import com.example.lostandfound.CustomElements.ButtonType
 import com.example.lostandfound.CustomElements.CustomActionRow
 import com.example.lostandfound.CustomElements.CustomButton
 import com.example.lostandfound.CustomElements.CustomEditText
-import com.example.lostandfound.CustomElements.CustomErrortext
+import com.example.lostandfound.CustomElements.CustomErrorText
 import com.example.lostandfound.CustomElements.CustomTextDialog
 import com.example.lostandfound.FirebaseManagers.FirebaseAuthManager
 import com.example.lostandfound.Utility.ImageManager
@@ -177,14 +177,14 @@ fun MainContent(viewModel: EditProfileViewModel = viewModel()) {
     val sp = context.getSharedPreferences(SharedPreferencesNames.NAME_USERS, Context.MODE_PRIVATE)
 
     // set the first names and last names from the view model
-    viewModel.setFirstName(sp.getString(SharedPreferencesNames.USER_FIRSTNAME, "") ?: "")
-    viewModel.setLastName(sp.getString(SharedPreferencesNames.USER_LASTNAME, "") ?: "")
+    viewModel.onFirstNameChanged(sp.getString(SharedPreferencesNames.USER_FIRSTNAME, "") ?: "")
+    viewModel.onLastNameChanged(sp.getString(SharedPreferencesNames.USER_LASTNAME, "") ?: "")
 
 
     val email = sp.getString(SharedPreferencesNames.USER_EMAIL, "") ?: ""
 
     // set the uri from the view model
-    viewModel.setAvatar(
+    viewModel.onAvatarChanged(
         // convert the stored string to uri
         if (inPreview) null else
             ImageManager.stringToUri(
@@ -278,7 +278,7 @@ fun FirstAndLastNameFields(
             fieldContent = viewModel.firstName.value,
             leftIcon = Icons.Outlined.AccountCircle,
             isEditable = true,
-            onTextChanged = {viewModel.setFirstName(it)},
+            onTextChanged = {viewModel.onFirstNameChanged(it)},
         )
 
         HorizontalDivider(thickness = 1.dp)
@@ -288,7 +288,7 @@ fun FirstAndLastNameFields(
             fieldContent = viewModel.lastName.value,
             leftIcon = Icons.Outlined.AccountCircle,
             isEditable = true,
-            onTextChanged = {viewModel.setLastName(it)}
+            onTextChanged = {viewModel.onLastNameChanged(it)}
         )
 
         HorizontalDivider(thickness = 1.dp)
@@ -300,17 +300,10 @@ fun FirstAndLastNameFields(
 fun ErrorMessage(
     viewModel: EditProfileViewModel
 ) {
-    // error
+    // this error message is set to be displayed only when it is not empty
     // observe the viewmodel live data of the error
     val error by viewModel.profileError.observeAsState("")
-    if (error.isNotEmpty()) {
-        // display error message only when the live data error is not empty
-        Box(
-            modifier = Modifier.padding(vertical = dimensionResource(id = R.dimen.title_margin))
-        ) {
-            CustomErrortext(text = error)
-        }
-    }
+    CustomErrorText(text = error)
 }
 
 @Composable
@@ -428,8 +421,8 @@ fun AvatarBottomSheet(
             // launcher to request image from the device
             val launcher = rememberLauncherForActivityResult(
                 contract = ActivityResultContracts.PickVisualMedia(),
-                onResult = { uri ->
-                    viewModel.setAvatar(uri)
+                onResult = {
+                    viewModel.onAvatarChanged(it)
 
                     // close the bottom sheet here after the imageuri value has been set
                     isSheetOpen.value = false
@@ -459,7 +452,7 @@ fun AvatarBottomSheet(
                     tint = MaterialTheme.colorScheme.error,
                     onClick = {
                         // remove the profile avatar
-                        viewModel.setAvatar(null)
+                        viewModel.onAvatarChanged(null)
 
                         // dismiss the bottom sheet
                         isSheetOpen.value = false
