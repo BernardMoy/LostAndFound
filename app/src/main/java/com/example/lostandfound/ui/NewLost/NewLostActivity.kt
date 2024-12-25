@@ -311,6 +311,8 @@ fun Category(
             )
         }
     }
+
+    CustomErrorText(text = viewModel.categoryError.value)
 }
 
 @Composable
@@ -342,6 +344,8 @@ fun Subcategory(
             selectedText = viewModel.selectedSubCategory   // will be changed when new option is selected
         )
     }
+
+    CustomErrorText(text = viewModel.subCategoryError.value)
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -363,6 +367,8 @@ fun DateAndTime(
         placeholder = "Select a time..."
     )
 
+    CustomErrorText(text = viewModel.dateTimeError.value)
+
 }
 
 @Composable
@@ -378,6 +384,8 @@ fun Location(
 
         },
     )
+
+    CustomErrorText(text = viewModel.locationError.value)
 
 }
 
@@ -400,7 +408,9 @@ fun ReminderMessage(
     viewModel: NewLostViewModel
 ){
     Text(
-        text = "Reminder message goes here.",
+        text = "Please do not share sensitive personal information, " +
+                "including bank account details, credit/debit card numbers, " +
+                "biometric data or political or religious information.",
         style = MaterialTheme.typography.bodyMedium,
         color = Color.Gray,
         modifier = Modifier
@@ -443,7 +453,12 @@ fun DoneButton(
             text = "Done",
             type = ButtonType.FILLED,
             onClick = {
+                // check if the input fields are valid
+                if (!viewModel.validateInput()){
+                    return@CustomButton
+                }
 
+                // add to firebase database
             }
         )
     }
