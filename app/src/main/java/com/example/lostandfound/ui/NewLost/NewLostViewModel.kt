@@ -10,14 +10,17 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.lostandfound.ErrorCallback
 import com.example.lostandfound.Utility.Category
+import com.example.lostandfound.Utility.DateTimeManager
+import com.example.lostandfound.Utility.FirestoreNames
 
 class NewLostViewModel: ViewModel() {
 
     val itemName: MutableState<String> = mutableStateOf("")
     val itemImage: MutableState<Uri?> = mutableStateOf(null)
-    val selectedDate: MutableState<String> = mutableStateOf("")
+    val selectedDate: MutableState<Long?> = mutableStateOf(null)     // date, time can be null if not selected
     val isDateDialogShown: MutableState<Boolean> = mutableStateOf(false)
-    val selectedTime: MutableState<String> = mutableStateOf("")
+    val selectedHour: MutableState<Int?> = mutableStateOf(null)
+    val selectedMinute: MutableState<Int?> = mutableStateOf(null)
     val isTimeDialogShown: MutableState<Boolean> = mutableStateOf(false)
     val additionalDescription: MutableState<String> = mutableStateOf("")
 
@@ -84,12 +87,21 @@ class NewLostViewModel: ViewModel() {
             subCategoryError.value = "Subcategory cannot be empty"
             return false
         }
-        if (selectedDate.value.isEmpty()){
+        if (selectedDate.value == null){
             dateError.value = "Date cannot be empty"
             return false
         }
-        if (selectedTime.value.isEmpty()){
+        if (selectedHour.value == null || selectedMinute.value == null){
             timeError.value = "Time cannot be empty"
+            return false
+        }
+        if (DateTimeManager.isTimeInFuture(
+                // these values must be non-null, otherwise would have been caught in the above methods 
+                DateTimeManager.getDateTimeEpoch(
+                    selectedDate.value!!,
+                    selectedHour.value!!, selectedMinute.value!!
+                ))){
+            timeError.value = "The date and time cannot be in future"
             return false
         }
 
@@ -98,8 +110,18 @@ class NewLostViewModel: ViewModel() {
         return true
     }
 
-    // when the done button is clicked
+    // when the done button is clicked, add data to db
     fun onDoneButtonClicked(callback: ErrorCallback){
+        val myMap = mapOf(
+            FirestoreNames.LOSTFOUND_ITEMNAME to itemName.value,
+            FirestoreNames.LOSTFOUND_CATEGORY to selectedCategory!!.name,      // wont be null, otherwise it is captured above
+            FirestoreNames.LOSTFOUND_SUBCATEGORY to selectedSubCategory.value,
+            FirestoreNames.LOSTFOUND_EPOCHDATETIME to DateTimeManager.getDateTimeEpoch(
+                selectedDate.value?:0L, selectedHour.value?:0, selectedMinute.value?:0
+            ),
+            FirestoreNames.LOSTFOUND_DESCRIPTION to additionalDescription.value
+        )
 
+        // add to the firestore db
     }
 }

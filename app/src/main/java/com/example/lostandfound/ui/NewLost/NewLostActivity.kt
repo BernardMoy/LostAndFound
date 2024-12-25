@@ -74,6 +74,7 @@ import com.example.lostandfound.CustomElements.CustomInputField
 import com.example.lostandfound.CustomElements.CustomTextDialog
 import com.example.lostandfound.CustomElements.CustomTimePickerTextField
 import com.example.lostandfound.Utility.Category
+import com.example.lostandfound.Utility.DateTimeManager
 import com.example.lostandfound.Utility.categories
 import com.example.lostandfound.ui.theme.ComposeTheme
 import com.example.lostandfound.ui.theme.Typography
@@ -367,7 +368,8 @@ fun DateAndTime(
     CustomErrorText(text = viewModel.dateError.value)
 
     CustomTimePickerTextField(
-        selectedTime = viewModel.selectedTime,
+        selectedHour = viewModel.selectedHour,
+        selectedMinute = viewModel.selectedMinute,
         isDialogShown = viewModel.isTimeDialogShown,
         placeholder = "Select a time...",
         isError = viewModel.timeError.value.isNotEmpty()
