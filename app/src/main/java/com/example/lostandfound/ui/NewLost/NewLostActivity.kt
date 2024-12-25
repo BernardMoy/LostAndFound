@@ -192,6 +192,7 @@ fun MainContent(viewModel: NewLostViewModel = viewModel()) {
     Category(viewModel = viewModel)
     Subcategory(viewModel = viewModel)
     ItemColor(viewModel = viewModel)
+    ItemBrand(viewModel = viewModel)
     DateAndTime(viewModel = viewModel)
     Location(viewModel = viewModel)
     AdditionalDescription(viewModel = viewModel)
@@ -222,7 +223,7 @@ fun ItemImage(
     launcher: ManagedActivityResultLauncher<PickVisualMediaRequest, Uri?>,
     viewModel: NewLostViewModel,
 ){
-    CustomGrayTitle(text = "Item image")
+    CustomGrayTitle(text = "Item image (Optional)")
 
     // Box for storing the image and the add button
     Box(
@@ -386,6 +387,20 @@ fun ItemColor(
     CustomErrorText(text = viewModel.colorError.value)
 }
 
+
+@Composable
+fun ItemBrand(
+    viewModel: NewLostViewModel
+){
+    CustomGrayTitle(text = "Brand (Optional)")
+    CustomInputField(
+        fieldContent = viewModel.itemBrand.value,
+        isEditable = true,
+        onTextChanged = {viewModel.onItemBrandChanged(it)},
+        placeholder = "What is the brand of your item?",
+        isError = false // wont have error
+    )
+}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

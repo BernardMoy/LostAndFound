@@ -18,6 +18,7 @@ class NewLostViewModel: ViewModel() {
 
     val itemName: MutableState<String> = mutableStateOf("")
     val itemImage: MutableState<Uri?> = mutableStateOf(null)
+    val itemBrand: MutableState<String> = mutableStateOf("")
     val selectedDate: MutableState<Long?> = mutableStateOf(null)     // date, time can be null if not selected
     val isDateDialogShown: MutableState<Boolean> = mutableStateOf(false)
     val selectedHour: MutableState<Int?> = mutableStateOf(null)
@@ -54,6 +55,10 @@ class NewLostViewModel: ViewModel() {
 
     fun onItemNameChanged(s: String){
         itemName.value = s
+    }
+
+    fun onItemBrandChanged(s: String){
+        itemBrand.value = s
     }
 
     fun onDescriptionChanged(d: String){
