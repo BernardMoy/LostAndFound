@@ -185,7 +185,7 @@ fun CustomDatePickerTextField(
                 errorContainerColor = MaterialTheme.colorScheme.background,
 
                 // for the color of the border
-                disabledIndicatorColor = MaterialTheme.colorScheme.onBackground,
+                disabledIndicatorColor = if (isError) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.onBackground,
 
                 // for the text color that is not placeholder
                 disabledTextColor = MaterialTheme.colorScheme.onBackground,
@@ -249,7 +249,7 @@ fun CustomTimePickerTextField(
                 errorContainerColor = MaterialTheme.colorScheme.background,
 
                 // for the color of the border
-                disabledIndicatorColor = MaterialTheme.colorScheme.onBackground,
+                disabledIndicatorColor = if (isError) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.onBackground,
 
                 // for the text color that is not placeholder
                 disabledTextColor = MaterialTheme.colorScheme.onBackground
