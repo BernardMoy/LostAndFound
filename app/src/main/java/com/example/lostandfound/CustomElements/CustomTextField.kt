@@ -57,12 +57,12 @@ fun CustomEditText(
             Text(text = fieldLabel, style = Typography.bodySmall)   // style for the label
         },
         leadingIcon = {
-            Icon(imageVector = leftIcon, contentDescription = null, tint = Color.Gray)
+            Icon(imageVector = leftIcon, contentDescription = null, tint = MaterialTheme.colorScheme.outline)
         },
         trailingIcon = {
             // right icon can be null
             if (rightIcon != null){
-                Icon(imageVector = rightIcon, contentDescription = null, tint = Color.Gray)
+                Icon(imageVector = rightIcon, contentDescription = null, tint = MaterialTheme.colorScheme.outline)
             }
         },
         modifier = Modifier
@@ -131,7 +131,7 @@ fun CustomInputField(
             // for the color of the border
             focusedIndicatorColor = MaterialTheme.colorScheme.primary,
             unfocusedIndicatorColor = MaterialTheme.colorScheme.onBackground,
-            disabledIndicatorColor = Color.Gray,
+            disabledIndicatorColor = MaterialTheme.colorScheme.outline,
 
             errorContainerColor = MaterialTheme.colorScheme.background,
             errorTextColor = MaterialTheme.colorScheme.onBackground

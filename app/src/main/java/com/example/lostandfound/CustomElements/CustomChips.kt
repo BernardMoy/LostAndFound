@@ -40,12 +40,12 @@ fun CustomFilterChip(
             Icon(
                 imageVector = leadingIcon,
                 contentDescription = "Click to select",
-                tint = Color.Gray
+                tint = MaterialTheme.colorScheme.outline
             )
         },
         border = BorderStroke(
             width = 1.dp,
-            color = if (isError) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.onBackground
+            color = if (isError) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.outline
         ),
         colors = FilterChipDefaults.filterChipColors(
             selectedContainerColor = MaterialTheme.colorScheme.primaryContainer,
