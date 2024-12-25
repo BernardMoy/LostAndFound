@@ -358,16 +358,19 @@ fun DateAndTime(
     CustomDatePickerTextField(
         selectedDate = viewModel.selectedDate,
         isDialogShown = viewModel.isDateDialogShown,
-        placeholder = "Select a date..."
+        placeholder = "Select a date...",
+        isError = viewModel.dateError.value.isNotEmpty(),
     )
+    CustomErrorText(text = viewModel.dateError.value)
 
     CustomTimePickerTextField(
         selectedTime = viewModel.selectedTime,
         isDialogShown = viewModel.isTimeDialogShown,
-        placeholder = "Select a time..."
+        placeholder = "Select a time...",
+        isError = viewModel.timeError.value.isNotEmpty()
     )
 
-    CustomErrorText(text = viewModel.dateTimeError.value)
+    CustomErrorText(text = viewModel.timeError.value)
 
 }
 

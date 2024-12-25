@@ -31,7 +31,8 @@ class NewLostViewModel: ViewModel() {
     val nameError: MutableState<String> = mutableStateOf("")
     val categoryError: MutableState<String> = mutableStateOf("")
     val subCategoryError: MutableState<String> = mutableStateOf("")
-    val dateTimeError: MutableState<String> = mutableStateOf("")
+    val dateError: MutableState<String> = mutableStateOf("")
+    val timeError: MutableState<String> = mutableStateOf("")
     val locationError: MutableState<String> = mutableStateOf("")
 
     fun onImagePicked(uri: Uri?){
@@ -66,7 +67,8 @@ class NewLostViewModel: ViewModel() {
         nameError.value = ""
         categoryError.value = ""
         subCategoryError.value = ""
-        dateTimeError.value = ""
+        dateError.value = ""
+        timeError.value = ""
         locationError.value = ""
 
         // check each of them
@@ -83,11 +85,11 @@ class NewLostViewModel: ViewModel() {
             return false
         }
         if (selectedDate.value.isEmpty()){
-            dateTimeError.value = "Date cannot be empty"
+            dateError.value = "Date cannot be empty"
             return false
         }
         if (selectedTime.value.isEmpty()){
-            dateTimeError.value = "Time cannot be empty"
+            timeError.value = "Time cannot be empty"
             return false
         }
 
