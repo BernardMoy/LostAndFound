@@ -6,6 +6,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -42,6 +43,28 @@ public class FirestoreManager {
             @Override
             public void onFailure(@NonNull Exception e) {
                 callback.onComplete(false);
+            }
+        });
+    }
+
+    /**
+     * Method to put new data to the database, where the key is not specified and instead a unique ID is used for the key
+     *
+     * @param collection collection name
+     * @param data  a map storing the new values
+     * @param callback return the unique ID generated if successful, empty string otherwise
+     */
+    public void putWithUniqueId(String collection, Map<String, Object> data, Callback<String> callback){
+        db.collection(collection).add(data).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+            @Override
+            public void onSuccess(DocumentReference documentReference) {
+                String uid = documentReference.getId();
+                callback.onComplete(uid);
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                callback.onComplete("");
             }
         });
     }

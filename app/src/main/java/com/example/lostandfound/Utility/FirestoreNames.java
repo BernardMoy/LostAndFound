@@ -14,4 +14,10 @@ public final class FirestoreNames {
 
     public static final String USER_VERIFICATIONS_HASHEDCODE = "hashedCode";
     public static final String USER_VERIFICATIONS_TIMESTAMP = "timestamp";
+
+    public static final String LOSTFOUND_ITEMNAME = "itemName";
+    public static final String LOSTFOUND_CATEGORY = "category";
+    public static final String LOSTFOUND_SUBCATEGORY = "subCategory";
+    public static final String LOSTFOUND_EPOCHDATETIME = "dateTime";
+    public static final String LOSTFOUND_DESCRIPTION = "description";
 }

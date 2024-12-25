@@ -73,7 +73,7 @@ fun CustomTextDialog(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CustomDatePickerDialog(
-    selectedDate: MutableState<String>,
+    selectedDate: MutableState<Long?>,
     isDialogShown: MutableState<Boolean>
 ){
     if (isDialogShown.value) {
@@ -93,11 +93,8 @@ fun CustomDatePickerDialog(
                         // get the epoch time
                         val epoch = ((datePickerState.selectedDateMillis ?: 0L )/ 1000L)
 
-                        // get the string representation of the date
-                        val dateString = DateTimeManager.dateToString(epoch)
-
-                        // update the string variable
-                        selectedDate.value = dateString
+                        // update the epoch value
+                        selectedDate.value = epoch
 
                         // dismiss dialog
                         isDialogShown.value = false
@@ -140,7 +137,8 @@ fun CustomDatePickerDialog(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CustomTimePickerDialog(
-    selectedTime: MutableState<String>,
+    selectedHour: MutableState<Int?>,
+    selectedMinute: MutableState<Int?>,
     isDialogShown: MutableState<Boolean>
 ){
     // set the initial time to the current time
@@ -162,8 +160,8 @@ fun CustomTimePickerDialog(
                     type = ButtonType.FILLED,
                     onClick = {
                         // update the string variable
-                        val timeString = DateTimeManager.timeToString(timePickerState.hour, timePickerState.minute)
-                        selectedTime.value = timeString
+                        selectedHour.value = timePickerState.hour
+                        selectedMinute.value = timePickerState.minute
 
                         // dismiss dialog
                         isDialogShown.value = false
