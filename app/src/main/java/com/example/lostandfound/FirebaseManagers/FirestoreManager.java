@@ -4,6 +4,8 @@ import androidx.annotation.NonNull;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -92,6 +94,18 @@ public class FirestoreManager {
         });
     }
 
+    // get the current user's UID
+    public String getUserID(){
+        // if logged in, get the current user's UID
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user == null){
+            return "";
+        }
+
+        return user.getUid();
+    }
+
+    // method to check if user has internet connection
     /*
     Designed based on this post:
     https://stackoverflow.com/questions/50594146/firestore-timeout-for-android
