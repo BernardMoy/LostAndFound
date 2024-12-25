@@ -24,10 +24,15 @@ class NewLostViewModel: ViewModel() {
     var selectedCategory by mutableStateOf<Category?>(null)
 
     // the subcategory is also null
-    val selectedSubCategory = mutableStateOf<String>("")
+    val selectedSubCategory = mutableStateOf("")
 
+    // error fields
+    val nameError: MutableState<String> = mutableStateOf("")
 
-    val nameError: MutableLiveData<String> = MutableLiveData("")
+    // set methods for error fields
+    fun setNameError(s: String){
+        nameError.value = s
+    }
 
 
     // function to validate the input fields

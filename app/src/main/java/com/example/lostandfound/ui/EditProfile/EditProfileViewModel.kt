@@ -16,16 +16,6 @@ class EditProfileViewModel : ViewModel(){
     // mutable live data for displaying profile error
     val profileError: MutableLiveData<String> = MutableLiveData("")
 
-    fun setFirstName(s: String){
-        firstName.value = s
-    }
-    fun setLastName(s: String){
-        lastName.value = s
-    }
-    fun setAvatar(image: Uri?){
-        imageUri.value = image
-    }
-
     fun setError(s: String){
         profileError.value = s
     }
@@ -48,10 +38,13 @@ class EditProfileViewModel : ViewModel(){
 
     // functions to change the edit text fields within the edit texts
     fun onFirstNameChanged(s: String){
-        setFirstName(s)
+        firstName.value = s
     }
     fun onLastNameChanged(s: String){
-        setLastName(s)
+        lastName.value = s
+    }
+    fun onAvatarChanged(uri: Uri?){
+        imageUri.value = uri
     }
 
 

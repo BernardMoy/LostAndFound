@@ -1,6 +1,7 @@
 package com.example.lostandfound.CustomElements
 
 import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -15,32 +16,39 @@ import androidx.compose.ui.unit.dp
 import com.example.lostandfound.R
 
 @Composable
-fun CustomErrortext(
+fun CustomErrorText(
     text: String
 ) {
-    // surface is a block for displaying content
-    Surface(
-        shape = RoundedCornerShape(dimensionResource(id = R.dimen.corner_radius_small)),
-        color = MaterialTheme.colorScheme.errorContainer,
-        modifier = Modifier
-            .border(
-                width = 1.dp,
-                color = MaterialTheme.colorScheme.onErrorContainer,
-                shape = RoundedCornerShape(dimensionResource(id = R.dimen.corner_radius_small))
-            )
+    // this is only displayed when the error field is not empty
+    if (text.isNotEmpty()){
+        // surface is a block for displaying content
+        Box(
+            modifier = Modifier.padding(vertical = dimensionResource(id = R.dimen.title_margin))
+        ) {
+            Surface(
+                shape = RoundedCornerShape(dimensionResource(id = R.dimen.corner_radius_small)),
+                color = MaterialTheme.colorScheme.errorContainer,
+                modifier = Modifier
+                    .border(
+                        width = 1.dp,
+                        color = MaterialTheme.colorScheme.onErrorContainer,
+                        shape = RoundedCornerShape(dimensionResource(id = R.dimen.corner_radius_small))
+                    )
 
-    ){
-        Text(
-            text = text,
-            style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onErrorContainer,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(
-                    vertical = dimensionResource(id = R.dimen.content_margin),
-                    horizontal = dimensionResource(id = R.dimen.title_margin)
-                ),
-            textAlign = TextAlign.Start
-        )
+            ) {
+                Text(
+                    text = text,
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onErrorContainer,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(
+                            vertical = dimensionResource(id = R.dimen.content_margin),
+                            horizontal = dimensionResource(id = R.dimen.title_margin)
+                        ),
+                    textAlign = TextAlign.Start
+                )
+            }
+        }
     }
 }
