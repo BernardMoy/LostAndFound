@@ -307,7 +307,8 @@ fun Category(
                     // reset the selected subcategory every time
                     viewModel.onSubCategorySelected("")
                 },
-                isSelected = viewModel.isCategorySelected(category)
+                isSelected = viewModel.isCategorySelected(category),
+                isError = viewModel.categoryError.value.isNotEmpty()
             )
         }
     }
@@ -336,12 +337,14 @@ fun Subcategory(
             isEditable = true,
             onTextChanged = {viewModel.onSubCategorySelected(it)},  // change the subcat to the string inputted
             placeholder = "Describe the category...",
+            isError = viewModel.subCategoryError.value.isNotEmpty()
         )
 
     } else {
         CustomDropdownMenu(
             items = viewModel.selectedCategory!!.subCategories,
-            selectedText = viewModel.selectedSubCategory   // will be changed when new option is selected
+            selectedText = viewModel.selectedSubCategory,   // will be changed when new option is selectedisError = viewModel.subCategoryError.value.isNotEmpty()
+            isError = viewModel.subCategoryError.value.isNotEmpty()
         )
     }
 

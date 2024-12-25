@@ -30,7 +30,7 @@ private val DarkColorScheme = darkColorScheme(
 
     surface = BackgroundColorDark,  // adjust based on light / dark
     onSurface = OnBackgroundDark,
-    surfaceVariant = Gray
+    surfaceVariant = Gray,
 )
 
 private val LightColorScheme = lightColorScheme(
