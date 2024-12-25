@@ -10,6 +10,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.lostandfound.ErrorCallback
 import com.example.lostandfound.Utility.Category
+import com.example.lostandfound.Utility.Colors
 import com.example.lostandfound.Utility.DateTimeManager
 import com.example.lostandfound.Utility.FirestoreNames
 
@@ -30,10 +31,15 @@ class NewLostViewModel: ViewModel() {
     // the subcategory is also null
     val selectedSubCategory = mutableStateOf("")
 
+    // the selected color is also null
+    var selectedColor by mutableStateOf<Colors?>(null)
+
+
     // error fields
     val nameError: MutableState<String> = mutableStateOf("")
     val categoryError: MutableState<String> = mutableStateOf("")
     val subCategoryError: MutableState<String> = mutableStateOf("")
+    val colorError: MutableState<String> = mutableStateOf("")
     val dateError: MutableState<String> = mutableStateOf("")
     val timeError: MutableState<String> = mutableStateOf("")
     val locationError: MutableState<String> = mutableStateOf("")
@@ -57,8 +63,14 @@ class NewLostViewModel: ViewModel() {
     fun onCategorySelected(c: Category?){
         selectedCategory = c
     }
+    fun onColorSelected(c: Colors?){
+        selectedColor = c
+    }
     fun isCategorySelected(c: Category): Boolean{
         return selectedCategory == c
+    }
+    fun isColorSelected(c: Colors): Boolean {
+        return selectedColor == c
     }
     fun onSubCategorySelected(s: String){
         selectedSubCategory.value = s
@@ -87,6 +99,10 @@ class NewLostViewModel: ViewModel() {
             subCategoryError.value = "Subcategory cannot be empty"
             return false
         }
+        if (selectedColor == null){
+            colorError.value = "Color cannot be empty"
+            return false
+        }
         if (selectedDate.value == null){
             dateError.value = "Date cannot be empty"
             return false
@@ -96,7 +112,7 @@ class NewLostViewModel: ViewModel() {
             return false
         }
         if (DateTimeManager.isTimeInFuture(
-                // these values must be non-null, otherwise would have been caught in the above methods 
+                // these values must be non-null, otherwise would have been caught in the above methods
                 DateTimeManager.getDateTimeEpoch(
                     selectedDate.value!!,
                     selectedHour.value!!, selectedMinute.value!!
@@ -112,7 +128,7 @@ class NewLostViewModel: ViewModel() {
 
     // when the done button is clicked, add data to db
     fun onDoneButtonClicked(callback: ErrorCallback){
-        val myMap = mapOf(
+        val data = mapOf(
             FirestoreNames.LOSTFOUND_ITEMNAME to itemName.value,
             FirestoreNames.LOSTFOUND_CATEGORY to selectedCategory!!.name,      // wont be null, otherwise it is captured above
             FirestoreNames.LOSTFOUND_SUBCATEGORY to selectedSubCategory.value,
