@@ -1,5 +1,6 @@
 package com.example.lostandfound.CustomElements
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.material3.Icon
@@ -14,6 +15,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.unit.dp
 import com.example.lostandfound.ui.theme.Typography
 
 @Composable
@@ -21,7 +23,8 @@ fun CustomFilterChip(
     label: String,
     leadingIcon: ImageVector,
     isSelected: Boolean,
-    onClick: () -> Unit
+    onClick: () -> Unit,
+    isError: Boolean
 ){
 
     FilterChip(
@@ -40,6 +43,10 @@ fun CustomFilterChip(
                 tint = Color.Gray
             )
         },
+        border = BorderStroke(
+            width = 1.dp,
+            color = if (isError) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.onBackground
+        ),
         colors = FilterChipDefaults.filterChipColors(
             selectedContainerColor = MaterialTheme.colorScheme.primaryContainer,
             containerColor = MaterialTheme.colorScheme.background,
