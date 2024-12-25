@@ -8,6 +8,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.lostandfound.ErrorCallback
 import com.example.lostandfound.Utility.Category
 
 class NewLostViewModel: ViewModel() {
@@ -28,17 +29,10 @@ class NewLostViewModel: ViewModel() {
 
     // error fields
     val nameError: MutableState<String> = mutableStateOf("")
-
-    // set methods for error fields
-    fun setNameError(s: String){
-        nameError.value = s
-    }
-
-
-    // function to validate the input fields
-    fun validateInput(){
-
-    }
+    val categoryError: MutableState<String> = mutableStateOf("")
+    val subCategoryError: MutableState<String> = mutableStateOf("")
+    val dateTimeError: MutableState<String> = mutableStateOf("")
+    val locationError: MutableState<String> = mutableStateOf("")
 
     fun onImagePicked(uri: Uri?){
         itemImage.value = uri
@@ -64,5 +58,46 @@ class NewLostViewModel: ViewModel() {
     }
     fun onSubCategorySelected(s: String){
         selectedSubCategory.value = s
+    }
+
+    // function to validate the input fields
+    fun validateInput(): Boolean{
+        // initially reset all error fields
+        nameError.value = ""
+        categoryError.value = ""
+        subCategoryError.value = ""
+        dateTimeError.value = ""
+        locationError.value = ""
+
+        // check each of them
+        if (itemName.value.isEmpty()){
+            nameError.value = "Item name cannot be empty"
+            return false
+        }
+        if (selectedCategory == null){
+            categoryError.value = "Category cannot be empty"
+            return false
+        }
+        if (selectedSubCategory.value.isEmpty()) {
+            subCategoryError.value = "Subcategory cannot be empty"
+            return false
+        }
+        if (selectedDate.value.isEmpty()){
+            dateTimeError.value = "Date cannot be empty"
+            return false
+        }
+        if (selectedTime.value.isEmpty()){
+            dateTimeError.value = "Time cannot be empty"
+            return false
+        }
+
+        // implement location error
+
+        return true
+    }
+
+    // when the done button is clicked
+    fun onDoneButtonClicked(callback: ErrorCallback){
+
     }
 }
