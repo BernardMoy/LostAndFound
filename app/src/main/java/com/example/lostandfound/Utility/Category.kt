@@ -51,7 +51,7 @@ val categories: List<Category> = listOf(
     ),
     Category(name = "Others",
         subCategories = listOf(),
-        leadingIcon = Icons.Outlined.QuestionMark)
-
+        leadingIcon = Icons.Outlined.QuestionMark
+    )
 
 )

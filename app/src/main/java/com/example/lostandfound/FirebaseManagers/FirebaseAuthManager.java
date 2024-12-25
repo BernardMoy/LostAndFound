@@ -20,6 +20,10 @@ import com.google.firebase.auth.FirebaseUser;
 import java.util.HashMap;
 import java.util.Map;
 
+/*
+This class only stores methods that involves using the context
+If not, use that in firestore manager!
+ */
 public class FirebaseAuthManager {
     private Context ctx;             // ctx required for accessing shared preferences
     private FirebaseAuth mAuth;      // stores emails and passwords
