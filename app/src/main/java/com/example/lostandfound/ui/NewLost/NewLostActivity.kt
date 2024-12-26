@@ -528,7 +528,7 @@ fun DoneButton(
                             (context as Activity).finish()
 
                         } else {
-                            Toast.makeText(context, "Error creating item", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(context, error, Toast.LENGTH_SHORT).show()
                         }
                     }
                 })
