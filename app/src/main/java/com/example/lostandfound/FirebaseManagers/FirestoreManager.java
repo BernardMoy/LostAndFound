@@ -117,17 +117,6 @@ public class FirestoreManager {
         });
     }
 
-    // get the current user's UID
-    public String getUserID(){
-        // if logged in, get the current user's UID
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        if (user == null){
-            return "";
-        }
-
-        return user.getUid();
-    }
-
     // method to check if user has internet connection
     /*
     Designed based on this post:
