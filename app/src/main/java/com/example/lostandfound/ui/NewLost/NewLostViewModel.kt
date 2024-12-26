@@ -9,6 +9,9 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.lostandfound.ErrorCallback
+import com.example.lostandfound.FirebaseManagers.FirebaseUtility
+import com.example.lostandfound.FirebaseManagers.FirestoreManager
+import com.example.lostandfound.FirebaseManagers.FirestoreManager.Callback
 import com.example.lostandfound.Utility.Category
 import com.example.lostandfound.Utility.Colors
 import com.example.lostandfound.Utility.DateTimeManager
@@ -134,9 +137,12 @@ class NewLostViewModel: ViewModel() {
     // when the done button is clicked, add data to db
     fun onDoneButtonClicked(callback: ErrorCallback){
         val data = mapOf(
+            FirestoreNames.LOSTFOUND_USER to FirebaseUtility.getUserID(),
             FirestoreNames.LOSTFOUND_ITEMNAME to itemName.value,
             FirestoreNames.LOSTFOUND_CATEGORY to selectedCategory!!.name,      // wont be null, otherwise it is captured above
             FirestoreNames.LOSTFOUND_SUBCATEGORY to selectedSubCategory.value,
+            FirestoreNames.LOSTFOUND_COLOR to selectedColor!!.name,   // null is checked
+            FirestoreNames.LOSTFOUND_BRAND to itemBrand.value,
             FirestoreNames.LOSTFOUND_EPOCHDATETIME to DateTimeManager.getDateTimeEpoch(
                 selectedDate.value?:0L, selectedHour.value?:0, selectedMinute.value?:0
             ),
@@ -144,5 +150,17 @@ class NewLostViewModel: ViewModel() {
         )
 
         // add to the firestore db
+        val firestoreManager = FirestoreManager()
+        firestoreManager.putWithUniqueId(FirestoreNames.COLLECTION_LOST_ITEMS, data, object: Callback<String>{
+            override fun onComplete(result: String) {
+                if (result.isEmpty()){
+                    callback.onComplete("Error adding item to database")
+                }
+
+                // add the image to firebase storage
+
+                callback.onComplete("")  // no error
+            }
+        })
     }
 }

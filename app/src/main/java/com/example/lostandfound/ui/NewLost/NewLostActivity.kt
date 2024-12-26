@@ -1,5 +1,6 @@
 package com.example.lostandfound.ui.NewLost
 
+import android.app.Activity
 import android.content.Context
 import android.net.Uri
 import android.os.Bundle
@@ -74,6 +75,7 @@ import com.example.lostandfound.CustomElements.CustomGrayTitle
 import com.example.lostandfound.CustomElements.CustomInputField
 import com.example.lostandfound.CustomElements.CustomTextDialog
 import com.example.lostandfound.CustomElements.CustomTimePickerTextField
+import com.example.lostandfound.ErrorCallback
 import com.example.lostandfound.Utility.Category
 import com.example.lostandfound.Utility.DateTimeManager
 import com.example.lostandfound.Utility.categories
@@ -197,7 +199,7 @@ fun MainContent(viewModel: NewLostViewModel = viewModel()) {
     Location(viewModel = viewModel)
     AdditionalDescription(viewModel = viewModel)
     ReminderMessage(viewModel = viewModel)
-    DoneButton(viewModel = viewModel)
+    DoneButton(context = context, viewModel = viewModel)
 }
 
 @Composable
@@ -482,6 +484,7 @@ fun ReminderMessage(
 
 @Composable
 fun DoneButton(
+    context: Context,
     viewModel: NewLostViewModel
 ) {
     // box for save button
@@ -517,6 +520,18 @@ fun DoneButton(
                 }
 
                 // add to firebase database
+                viewModel.onDoneButtonClicked(object: ErrorCallback{
+                    override fun onComplete(error: String) {
+                        if (error.isEmpty()){
+                            // if no errors, exit activity and display success message
+                            Toast.makeText(context, "New lost item posted!", Toast.LENGTH_SHORT).show()
+                            (context as Activity).finish()
+
+                        } else {
+                            Toast.makeText(context, "Error creating item", Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                })
             }
         )
     }

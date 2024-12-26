@@ -6,6 +6,7 @@ public final class FirestoreNames {
     // strings that represent all collection names
     public static final String COLLECTION_USERS = "users";
     public static final String COLLECTION_USER_VERIFICATIONS = "user_verifications";
+    public static final String COLLECTION_LOST_ITEMS = "lost_items";
 
     // strings that represent all key names in the map that is stored
     public static final String USERS_FIRSTNAME = "firstName";
@@ -15,9 +16,12 @@ public final class FirestoreNames {
     public static final String USER_VERIFICATIONS_HASHEDCODE = "hashedCode";
     public static final String USER_VERIFICATIONS_TIMESTAMP = "timestamp";
 
+    public static final String LOSTFOUND_USER = "user";
     public static final String LOSTFOUND_ITEMNAME = "itemName";
     public static final String LOSTFOUND_CATEGORY = "category";
     public static final String LOSTFOUND_SUBCATEGORY = "subCategory";
+    public static final String LOSTFOUND_COLOR = "color";
+    public static final String LOSTFOUND_BRAND = "brand";
     public static final String LOSTFOUND_EPOCHDATETIME = "dateTime";
     public static final String LOSTFOUND_DESCRIPTION = "description";
 }
