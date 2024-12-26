@@ -9,6 +9,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.lostandfound.ErrorCallback
+import com.example.lostandfound.FirebaseManagers.FirebaseStorageManager
 import com.example.lostandfound.FirebaseManagers.FirebaseUtility
 import com.example.lostandfound.FirebaseManagers.FirestoreManager
 import com.example.lostandfound.FirebaseManagers.FirestoreManager.Callback
@@ -151,15 +152,33 @@ class NewLostViewModel: ViewModel() {
 
         // add to the firestore db
         val firestoreManager = FirestoreManager()
-        firestoreManager.putWithUniqueId(FirestoreNames.COLLECTION_LOST_ITEMS, data, object: Callback<String>{
-            override fun onComplete(result: String) {
+        val storageManager = FirebaseStorageManager()
+
+        firestoreManager.putWithUniqueId(FirestoreNames.COLLECTION_LOST_ITEMS, data, object: FirestoreManager.Callback<String>{
+            override fun onComplete(result: String) {     // the unique id generated is returned
                 if (result.isEmpty()){
                     callback.onComplete("Error adding item to database")
+                    return
                 }
 
-                // add the image to firebase storage
+                // add the image to firebase storage if it is not null
+                if (itemImage.value != null){
+                    storageManager.putImage(result, itemImage.value, object: FirebaseStorageManager.Callback<Boolean>{
+                        override fun onComplete(resultImage: Boolean) {
+                            if (!resultImage){
+                                // delete the previously uploaded firestore object if image uploading fails
+                                firestoreManager.delete(FirestoreNames.COLLECTION_LOST_ITEMS, result, object: FirestoreManager.Callback<Boolean>{
+                                    override fun onComplete(result: Boolean?) {
+                                    }
+                                })
+                                callback.onComplete("Error adding image to database")
+                                return
+                            }
 
-                callback.onComplete("")  // no error
+                            callback.onComplete("")  // exit with no errors
+                        }
+                    })
+                }
             }
         })
     }
