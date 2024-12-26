@@ -20,7 +20,7 @@ import com.example.lostandfound.Utility.FirestoreNames
 class NewLostViewModel: ViewModel() {
 
     val itemName: MutableState<String> = mutableStateOf("")
-    val itemImage: MutableState<Uri?> = mutableStateOf(null)
+    val itemImage: MutableState<Uri?> = mutableStateOf(null)   // stores the image to be added to storage
     val itemBrand: MutableState<String> = mutableStateOf("")
     val selectedDate: MutableState<Long?> = mutableStateOf(null)     // date, time can be null if not selected
     val isDateDialogShown: MutableState<Boolean> = mutableStateOf(false)
