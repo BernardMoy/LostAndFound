@@ -1,6 +1,7 @@
 package com.example.lostandfound.FirebaseManagers;
 
 import android.net.Uri;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 
@@ -32,8 +33,13 @@ public class FirebaseStorageManager {
      * @param callback Return true if successful, false otherwise
      */
     public void putImage(String key, Uri image, Callback<Boolean> callback){
+        // if image is null, return
+        if (image == null){
+            return;
+        }
         // create reference of the image as a path
-        StorageReference imageReference = storageReference.child("images/" + key);
+        StorageReference imageReference = storageReference.child("images/" + key + ".jpg");
+        Log.d("DEBUG", "Storage Path: images/" + key + ".jpg");
 
         // put the file to the path
         imageReference.putFile(image).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
@@ -45,6 +51,7 @@ public class FirebaseStorageManager {
             @Override
             public void onFailure(@NonNull Exception e) {
                 callback.onComplete(false);
+                Log.d("ERROR", e.getMessage());
             }
         });
     }

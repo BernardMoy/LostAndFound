@@ -178,6 +178,9 @@ class NewLostViewModel: ViewModel() {
                             callback.onComplete("")  // exit with no errors
                         }
                     })
+                } else {
+                    // if image is null, exit activity
+                    callback.onComplete("")
                 }
             }
         })
