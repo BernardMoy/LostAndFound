@@ -24,7 +24,8 @@ fun CustomFilterChip(
     leadingIcon: ImageVector,
     isSelected: Boolean,
     onClick: () -> Unit,
-    isError: Boolean
+    isError: Boolean,
+    leadingIconTint: Color = MaterialTheme.colorScheme.outline
 ){
 
     FilterChip(
@@ -40,7 +41,7 @@ fun CustomFilterChip(
             Icon(
                 imageVector = leadingIcon,
                 contentDescription = "Click to select",
-                tint = MaterialTheme.colorScheme.outline
+                tint = leadingIconTint
             )
         },
         border = BorderStroke(

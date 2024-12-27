@@ -1,5 +1,6 @@
 package com.example.lostandfound.ui.NewLost
 
+import android.app.Activity
 import android.content.Context
 import android.net.Uri
 import android.os.Bundle
@@ -29,6 +30,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Circle
 import androidx.compose.material.icons.outlined.AccountBalanceWallet
 import androidx.compose.material.icons.outlined.AccountBox
 import androidx.compose.material.icons.outlined.Cancel
@@ -73,8 +75,11 @@ import com.example.lostandfound.CustomElements.CustomGrayTitle
 import com.example.lostandfound.CustomElements.CustomInputField
 import com.example.lostandfound.CustomElements.CustomTextDialog
 import com.example.lostandfound.CustomElements.CustomTimePickerTextField
+import com.example.lostandfound.ErrorCallback
 import com.example.lostandfound.Utility.Category
+import com.example.lostandfound.Utility.DateTimeManager
 import com.example.lostandfound.Utility.categories
+import com.example.lostandfound.Utility.itemColors
 import com.example.lostandfound.ui.theme.ComposeTheme
 import com.example.lostandfound.ui.theme.Typography
 
@@ -187,12 +192,14 @@ fun MainContent(viewModel: NewLostViewModel = viewModel()) {
     ItemName(viewModel = viewModel)
     ItemImage(viewModel = viewModel, launcher = launcher)
     Category(viewModel = viewModel)
-    Subcategory(context = context, viewModel = viewModel)
+    Subcategory(viewModel = viewModel)
+    ItemColor(viewModel = viewModel)
+    ItemBrand(viewModel = viewModel)
     DateAndTime(viewModel = viewModel)
     Location(viewModel = viewModel)
     AdditionalDescription(viewModel = viewModel)
     ReminderMessage(viewModel = viewModel)
-    DoneButton(viewModel = viewModel)
+    DoneButton(context = context, viewModel = viewModel)
 }
 
 @Composable
@@ -218,7 +225,7 @@ fun ItemImage(
     launcher: ManagedActivityResultLauncher<PickVisualMediaRequest, Uri?>,
     viewModel: NewLostViewModel,
 ){
-    CustomGrayTitle(text = "Item image")
+    CustomGrayTitle(text = "Item image (Optional)")
 
     // Box for storing the image and the add button
     Box(
@@ -318,7 +325,6 @@ fun Category(
 
 @Composable
 fun Subcategory(
-    context: Context,
     viewModel: NewLostViewModel
 ){
     CustomGrayTitle(text = "Subcategory")
@@ -351,6 +357,53 @@ fun Subcategory(
     CustomErrorText(text = viewModel.subCategoryError.value)
 }
 
+
+@OptIn(ExperimentalLayoutApi::class)
+@Composable
+fun ItemColor(
+    viewModel: NewLostViewModel
+){
+    CustomGrayTitle(text = "Color")
+
+    FlowRow (
+        horizontalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin_half))
+    ){
+        // for each category, create a custom filter chip for that
+        itemColors.forEach{ col ->
+            CustomFilterChip(
+                label = col.name,
+                leadingIcon = Icons.Filled.Circle,
+                leadingIconTint = col.color,
+
+                // change the selected category var
+                // to ensure only one can be selected at a time
+                onClick = {
+                    viewModel.onColorSelected(col)
+                },
+                isSelected = viewModel.isColorSelected(col),
+                isError = viewModel.colorError.value.isNotEmpty()
+            )
+        }
+    }
+
+    CustomErrorText(text = viewModel.colorError.value)
+}
+
+
+@Composable
+fun ItemBrand(
+    viewModel: NewLostViewModel
+){
+    CustomGrayTitle(text = "Brand (Optional)")
+    CustomInputField(
+        fieldContent = viewModel.itemBrand.value,
+        isEditable = true,
+        onTextChanged = {viewModel.onItemBrandChanged(it)},
+        placeholder = "What is the brand of your item?",
+        isError = false // wont have error
+    )
+}
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DateAndTime(
@@ -367,7 +420,8 @@ fun DateAndTime(
     CustomErrorText(text = viewModel.dateError.value)
 
     CustomTimePickerTextField(
-        selectedTime = viewModel.selectedTime,
+        selectedHour = viewModel.selectedHour,
+        selectedMinute = viewModel.selectedMinute,
         isDialogShown = viewModel.isTimeDialogShown,
         placeholder = "Select a time...",
         isError = viewModel.timeError.value.isNotEmpty()
@@ -430,6 +484,7 @@ fun ReminderMessage(
 
 @Composable
 fun DoneButton(
+    context: Context,
     viewModel: NewLostViewModel
 ) {
     // box for save button
@@ -465,6 +520,18 @@ fun DoneButton(
                 }
 
                 // add to firebase database
+                viewModel.onDoneButtonClicked(object: ErrorCallback{
+                    override fun onComplete(error: String) {
+                        if (error.isEmpty()){
+                            // if no errors, exit activity and display success message
+                            Toast.makeText(context, "New lost item posted!", Toast.LENGTH_SHORT).show()
+                            (context as Activity).finish()
+
+                        } else {
+                            Toast.makeText(context, error, Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                })
             }
         )
     }

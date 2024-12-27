@@ -27,6 +27,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.unit.dp
 import com.example.lostandfound.R
+import com.example.lostandfound.Utility.DateTimeManager
 import com.example.lostandfound.ui.theme.Typography
 
 @Composable
@@ -144,7 +145,7 @@ fun CustomInputField(
 @Composable
 fun CustomDatePickerTextField(
     // pass in a variable of selected date, initially is the current date.
-    selectedDate: MutableState<String>,
+    selectedDate: MutableState<Long?>,
     isDialogShown: MutableState<Boolean>,
     placeholder: String,
     isError: Boolean = false
@@ -153,15 +154,15 @@ fun CustomDatePickerTextField(
     Column {
         // the text field to prompt user to open date picker
         OutlinedTextField(
-            value = selectedDate.value,
+            value = if (selectedDate.value == null) "" else DateTimeManager.dateToString(selectedDate.value!!),
             placeholder = {
                 Text(text = placeholder,
                     style = Typography.bodyMedium,
                     color = Color.Gray
                 )
             },
-            onValueChange = { newText ->
-                selectedDate.value = newText
+            onValueChange = {
+                // do nothing as it is always disabled
             },
             isError = isError,
             readOnly = true,   // make it read only
@@ -190,7 +191,7 @@ fun CustomDatePickerTextField(
                 // for the text color that is not placeholder
                 disabledTextColor = MaterialTheme.colorScheme.onBackground,
 
-            ),
+                ),
             trailingIcon = {
                 Icon(imageVector = Icons.Outlined.CalendarMonth, contentDescription = "Pick a date", tint = MaterialTheme.colorScheme.onBackground)
             },
@@ -208,7 +209,8 @@ fun CustomDatePickerTextField(
 
 @Composable
 fun CustomTimePickerTextField(
-    selectedTime: MutableState<String>,
+    selectedHour: MutableState<Int?>,
+    selectedMinute: MutableState<Int?>,
     isDialogShown: MutableState<Boolean>,
     placeholder: String,
     isError: Boolean = false
@@ -217,15 +219,16 @@ fun CustomTimePickerTextField(
     Column {
         // the text field to prompt user to open date picker
         OutlinedTextField(
-            value = selectedTime.value,
+            value = if (selectedHour.value == null || selectedMinute.value == null) "" else
+                DateTimeManager.timeToString(selectedHour.value!!, selectedMinute.value!!),
             placeholder = {
                 Text(text = placeholder,
                     style = Typography.bodyMedium,
                     color = Color.Gray
                 )
             },
-            onValueChange = { newText ->
-                selectedTime.value = newText
+            onValueChange = {
+
             },
             isError = isError,
             readOnly = true,   // make it read only
@@ -261,7 +264,8 @@ fun CustomTimePickerTextField(
 
         // if isDialogShown is true, show the date selection dialog
         CustomTimePickerDialog(
-            selectedTime = selectedTime,
+            selectedHour = selectedHour,
+            selectedMinute = selectedMinute,
             isDialogShown = isDialogShown
         )
     }

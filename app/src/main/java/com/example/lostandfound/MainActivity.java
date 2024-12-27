@@ -1,10 +1,15 @@
 package com.example.lostandfound;
 
+import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
 import static android.app.PendingIntent.getActivity;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.Settings;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
@@ -27,6 +32,7 @@ import com.example.lostandfound.ui.Settings.SettingsActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -39,6 +45,7 @@ import androidx.navigation.ui.NavigationUI;
 import com.example.lostandfound.databinding.ActivityMainBinding;
 import com.google.android.material.imageview.ShapeableImageView;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -68,6 +75,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // Set toolbar as the topActionbar
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        // initialise firebase app
+        FirebaseApp.initializeApp(MainActivity.this);
 
 
         // Passing each menu ID as a set of Ids because each
