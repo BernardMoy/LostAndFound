@@ -5,6 +5,7 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
+import com.google.android.gms.auth.api.signin.internal.Storage;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FirebaseStorage;
@@ -27,18 +28,21 @@ public class FirebaseStorageManager {
 
     /**
      * Put image given a key and a uri.
+     * The image will be stored as "folder/key.jpg"
      *
-     * @param key Unique id, can be the id associated with an item
+     * @param folder directory where the image is stored
+     * @param key unique identifier of the image, also name of the image
      * @param image Uri image from user uploads
      * @param callback Return true if successful, false otherwise
      */
-    public void putImage(String key, Uri image, Callback<Boolean> callback){
-        // if image is null, return
+    public void putImage(String folder, String key, Uri image, Callback<Boolean> callback){
+        // if image is null, return false
         if (image == null){
+            callback.onComplete(false);
             return;
         }
 
-        StorageReference imageReference = storageReference.child("images").child(key);
+        StorageReference imageReference = storageReference.child(folder).child(key);
         imageReference.putFile(image).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
@@ -52,7 +56,25 @@ public class FirebaseStorageManager {
         });
     }
 
-    public void getImage(String key, Callback<Uri> callback){
+    /**
+     * Given a folder and key, return the Uri
+     *
+     * @param folder dircetory where the image is stored
+     * @param key unique identifier of the image, also name of the image
+     * @param callback Uri of the image, or null if not found
+     */
+    public void getImage(String folder, String key, Callback<Uri> callback){
+        StorageReference imageReference = storageReference.child(folder).child(key);
+    }
+
+    /**
+     * Given a folder and a key, delete the image with the name as the key
+     *
+     * @param folder dircetory where the image is stored
+     * @param key unique identifier of the image, also name of the image
+     * @param callback true if operation successful (Even when entry does not exist), false otherwise
+     */
+    public void deleteImage(String folder, String key, Callback<Boolean> callback){
 
     }
 }
