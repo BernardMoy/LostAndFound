@@ -59,22 +59,46 @@ public class FirebaseStorageManager {
     /**
      * Given a folder and key, return the Uri
      *
-     * @param folder dircetory where the image is stored
+     * @param folder directory where the image is stored
      * @param key unique identifier of the image, also name of the image
      * @param callback Uri of the image, or null if not found
      */
     public void getImage(String folder, String key, Callback<Uri> callback){
         StorageReference imageReference = storageReference.child(folder).child(key);
+        imageReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+            @Override
+            public void onSuccess(Uri uri) {
+                // return the uri
+                callback.onComplete(uri);
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                // return null
+                callback.onComplete(null);
+            }
+        });
     }
 
     /**
      * Given a folder and a key, delete the image with the name as the key
      *
-     * @param folder dircetory where the image is stored
+     * @param folder directory where the image is stored
      * @param key unique identifier of the image, also name of the image
      * @param callback true if operation successful (Even when entry does not exist), false otherwise
      */
     public void deleteImage(String folder, String key, Callback<Boolean> callback){
-
+        StorageReference imageReference = storageReference.child(folder).child(key);
+        imageReference.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void unused) {
+                callback.onComplete(true);   // delete successful, whether or not the image exists
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                callback.onComplete(false);
+            }
+        });
     }
 }

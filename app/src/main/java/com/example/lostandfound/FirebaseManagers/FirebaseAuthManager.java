@@ -8,7 +8,7 @@ import android.content.SharedPreferences;
 import androidx.annotation.NonNull;
 
 import com.example.lostandfound.ErrorCallback;
-import com.example.lostandfound.Utility.FirestoreNames;
+import com.example.lostandfound.Utility.FirebaseNames;
 import com.example.lostandfound.Utility.SharedPreferencesNames;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -44,12 +44,12 @@ public class FirebaseAuthManager {
                 if (task.isSuccessful()){
                     // add the firstname and lastname data to database where email is the id
                     Map<String, Object> data = new HashMap<>();
-                    data.put(FirestoreNames.USERS_FIRSTNAME, firstName);
-                    data.put(FirestoreNames.USERS_LASTNAME, lastName);
-                    data.put(FirestoreNames.USERS_AVATAR, avatar);
+                    data.put(FirebaseNames.USERS_FIRSTNAME, firstName);
+                    data.put(FirebaseNames.USERS_LASTNAME, lastName);
+                    data.put(FirebaseNames.USERS_AVATAR, avatar);
 
                     // add the data to firestore db
-                    db.put(FirestoreNames.COLLECTION_USERS, email, data, new FirestoreManager.Callback<Boolean>() {
+                    db.put(FirebaseNames.COLLECTION_USERS, email, data, new FirestoreManager.Callback<Boolean>() {
                         @Override
                         public void onComplete(Boolean result) {
                             if (!result){
@@ -92,16 +92,16 @@ public class FirebaseAuthManager {
                 if (task.isSuccessful()){
                     // sign in successful
                     // get other parameters given the user email
-                    db.get(FirestoreNames.COLLECTION_USERS, emailAddress, new FirestoreManager.Callback<Map<String, Object>>() {
+                    db.get(FirebaseNames.COLLECTION_USERS, emailAddress, new FirestoreManager.Callback<Map<String, Object>>() {
                         @Override
                         public void onComplete(Map<String, Object> result) {
                             if (result == null){
                                 callback.onComplete("User not found in the database");
                                 return;
                             }
-                            String firstName = (String) result.get(FirestoreNames.USERS_FIRSTNAME);
-                            String lastName = (String) result.get(FirestoreNames.USERS_LASTNAME);
-                            String avatar = (String) result.get(FirestoreNames.USERS_AVATAR);
+                            String firstName = (String) result.get(FirebaseNames.USERS_FIRSTNAME);
+                            String lastName = (String) result.get(FirebaseNames.USERS_LASTNAME);
+                            String avatar = (String) result.get(FirebaseNames.USERS_AVATAR);
 
                             // save the extra user credentials into shared preferences
                             SharedPreferences sharedPreferences = ctx.getSharedPreferences(SharedPreferencesNames.NAME_USERS, MODE_PRIVATE);
@@ -130,11 +130,11 @@ public class FirebaseAuthManager {
 
         // add the firstname and lastname data to database where email is the id
         Map<String, Object> data = new HashMap<>();
-        data.put(FirestoreNames.USERS_FIRSTNAME, newFirstName);
-        data.put(FirestoreNames.USERS_LASTNAME, newLastName);
-        data.put(FirestoreNames.USERS_AVATAR, avatar);
+        data.put(FirebaseNames.USERS_FIRSTNAME, newFirstName);
+        data.put(FirebaseNames.USERS_LASTNAME, newLastName);
+        data.put(FirebaseNames.USERS_AVATAR, avatar);
 
-        db.put(FirestoreNames.COLLECTION_USERS, emailAddress, data, new FirestoreManager.Callback<Boolean>() {
+        db.put(FirebaseNames.COLLECTION_USERS, emailAddress, data, new FirestoreManager.Callback<Boolean>() {
             @Override
             public void onComplete(Boolean result) {
                 if (!result){

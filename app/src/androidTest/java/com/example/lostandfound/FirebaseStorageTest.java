@@ -2,9 +2,14 @@ package com.example.lostandfound;
 
 import android.net.Uri;
 
+import androidx.annotation.NonNull;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import com.example.lostandfound.FirebaseManagers.FirebaseStorageManager;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.collection.BuildConfig;
 
 import org.junit.Before;
@@ -47,17 +52,32 @@ public class FirebaseStorageTest {
 
     @Test
     public void testGetImage() throws InterruptedException{
-        final CountDownLatch latch = new CountDownLatch(1);
-
-        firebaseStorageManager.getImage(TESTFOLDER, TESTKEY, new FirebaseStorageManager.Callback<Uri>() {
+        // it needs a user to be signed in
+        FirebaseAuth.getInstance().signInAnonymously().addOnSuccessListener(new OnSuccessListener<AuthResult>() {
             @Override
-            public void onComplete(Uri result) {
-                assert result == targetImage;
-                latch.countDown();
+            public void onSuccess(AuthResult authResult) {
+                final CountDownLatch latch = new CountDownLatch(1);
+
+                firebaseStorageManager.getImage(TESTFOLDER, TESTKEY, new FirebaseStorageManager.Callback<Uri>() {
+                    @Override
+                    public void onComplete(Uri result) {
+                        assert result == targetImage;
+                        latch.countDown();
+                    }
+                });
+
+                try {
+                    latch.await();
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                assert false;
             }
         });
-
-        latch.await();
     }
 
     @Test

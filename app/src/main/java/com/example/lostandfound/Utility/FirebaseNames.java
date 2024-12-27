@@ -1,7 +1,7 @@
 package com.example.lostandfound.Utility;
 
-public final class FirestoreNames {
-    private FirestoreNames(){}
+public final class FirebaseNames {
+    private FirebaseNames(){}
 
     // strings that represent all collection names
     public static final String COLLECTION_USERS = "users";
@@ -16,6 +16,7 @@ public final class FirestoreNames {
     public static final String USER_VERIFICATIONS_HASHEDCODE = "hashedCode";
     public static final String USER_VERIFICATIONS_TIMESTAMP = "timestamp";
 
+    public static final String LOSTFOUND_IMAGE_FOLDER = "lost_images";
     public static final String LOSTFOUND_USER = "user";
     public static final String LOSTFOUND_ITEMNAME = "itemName";
     public static final String LOSTFOUND_CATEGORY = "category";
