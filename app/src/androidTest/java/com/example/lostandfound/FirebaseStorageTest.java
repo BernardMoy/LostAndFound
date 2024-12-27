@@ -5,6 +5,7 @@ import android.net.Uri;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import com.example.lostandfound.FirebaseManagers.FirebaseStorageManager;
+import com.google.firebase.database.collection.BuildConfig;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -18,7 +19,7 @@ public class FirebaseStorageTest {
 
     @Before
     public void setUp(){
-        this.targetImage = Uri.parse("app/src/main/res/drawable/placeholder_image.png");
+        this.targetImage = Uri.parse("android.resource://com.example.lostandfound/" + R.drawable.placeholder_image);
         this.firebaseStorageManager = new FirebaseStorageManager();
     }
 
