@@ -87,7 +87,8 @@ dependencies {
     implementation("io.coil-kt.coil3:coil-compose:3.0.4")
 
     implementation(platform("com.google.firebase:firebase-bom:33.7.0"))
-    implementation("com.google.firebase:firebase-storage")
+    implementation("com.google.firebase:firebase-storage:21.0.1")
+    implementation ("com.github.bumptech.glide:glide:4.16.0")
 
     androidTestImplementation("androidx.compose.ui:ui-test-junit4-android:1.7.6")
     debugImplementation("androidx.compose.ui:ui-test-manifest:1.7.6")

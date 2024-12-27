@@ -45,6 +45,7 @@ import androidx.navigation.ui.NavigationUI;
 import com.example.lostandfound.databinding.ActivityMainBinding;
 import com.google.android.material.imageview.ShapeableImageView;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -74,6 +75,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // Set toolbar as the topActionbar
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        // initialise firebase app
+        FirebaseApp.initializeApp(MainActivity.this);
 
 
         // Passing each menu ID as a set of Ids because each
