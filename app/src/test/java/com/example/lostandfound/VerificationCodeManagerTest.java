@@ -10,7 +10,7 @@ import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.mock;
 
 import com.example.lostandfound.FirebaseManagers.FirestoreManager;
-import com.example.lostandfound.Utility.FirestoreNames;
+import com.example.lostandfound.Utility.FirebaseNames;
 import com.example.lostandfound.Utility.Hasher;
 
 import org.junit.Before;
@@ -47,14 +47,14 @@ public class VerificationCodeManagerTest {
             FirestoreManager.Callback<Map<String, Object>> callback = invocation.getArgument(2);
             callback.onComplete(null);      // user data not found in db
             return null;
-        }).when(mockFirestoreManager).get(eq(FirestoreNames.COLLECTION_USER_VERIFICATIONS), eq(testEmail), any(FirestoreManager.Callback.class));
+        }).when(mockFirestoreManager).get(eq(FirebaseNames.COLLECTION_USER_VERIFICATIONS), eq(testEmail), any(FirestoreManager.Callback.class));
 
         // mock the put method to the database after the code is generated
         doAnswer(invocation -> {
             FirestoreManager.Callback<Boolean> callback = invocation.getArgument(3);
             callback.onComplete(true);      // assume put always return true
             return null;
-        }).when(mockFirestoreManager).put(eq(FirestoreNames.COLLECTION_USER_VERIFICATIONS), eq(testEmail), any(Map.class), any(FirestoreManager.Callback.class));
+        }).when(mockFirestoreManager).put(eq(FirebaseNames.COLLECTION_USER_VERIFICATIONS), eq(testEmail), any(Map.class), any(FirestoreManager.Callback.class));
 
 
         // code generation should be successful, returning no errors
@@ -82,19 +82,19 @@ public class VerificationCodeManagerTest {
             FirestoreManager.Callback<Map<String, Object>> callback = invocation.getArgument(2);
 
             Map<String, Object> result = new HashMap<>();
-            result.put(FirestoreNames.USER_VERIFICATIONS_HASHEDCODE, "000000");
-            result.put(FirestoreNames.USER_VERIFICATIONS_TIMESTAMP, 0L);
+            result.put(FirebaseNames.USER_VERIFICATIONS_HASHEDCODE, "000000");
+            result.put(FirebaseNames.USER_VERIFICATIONS_TIMESTAMP, 0L);
 
             callback.onComplete(result);
             return null;
-        }).when(mockFirestoreManager).get(eq(FirestoreNames.COLLECTION_USER_VERIFICATIONS), eq(testEmail), any(FirestoreManager.Callback.class));
+        }).when(mockFirestoreManager).get(eq(FirebaseNames.COLLECTION_USER_VERIFICATIONS), eq(testEmail), any(FirestoreManager.Callback.class));
 
         // mock the put method to the database after the code is generated
         doAnswer(invocation -> {
             FirestoreManager.Callback<Boolean> callback = invocation.getArgument(3);
             callback.onComplete(true);      // assume put always return true
             return null;
-        }).when(mockFirestoreManager).put(eq(FirestoreNames.COLLECTION_USER_VERIFICATIONS), eq(testEmail), any(Map.class), any(FirestoreManager.Callback.class));
+        }).when(mockFirestoreManager).put(eq(FirebaseNames.COLLECTION_USER_VERIFICATIONS), eq(testEmail), any(Map.class), any(FirestoreManager.Callback.class));
 
         // code generation should be successful, returning no errors
         final CountDownLatch latch = new CountDownLatch(1);
@@ -122,20 +122,20 @@ public class VerificationCodeManagerTest {
             FirestoreManager.Callback<Map<String, Object>> callback = invocation.getArgument(2);
 
             Map<String, Object> result = new HashMap<>();
-            result.put(FirestoreNames.USER_VERIFICATIONS_HASHEDCODE, "000000");
+            result.put(FirebaseNames.USER_VERIFICATIONS_HASHEDCODE, "000000");
             long testTimeStamp = Calendar.getInstance().getTimeInMillis() - 30*1000;
-            result.put(FirestoreNames.USER_VERIFICATIONS_TIMESTAMP, testTimeStamp);
+            result.put(FirebaseNames.USER_VERIFICATIONS_TIMESTAMP, testTimeStamp);
 
             callback.onComplete(result);
             return null;
-        }).when(mockFirestoreManager).get(eq(FirestoreNames.COLLECTION_USER_VERIFICATIONS), eq(testEmail), any(FirestoreManager.Callback.class));
+        }).when(mockFirestoreManager).get(eq(FirebaseNames.COLLECTION_USER_VERIFICATIONS), eq(testEmail), any(FirestoreManager.Callback.class));
 
         // mock the put method to the database after the code is generated
         doAnswer(invocation -> {
             FirestoreManager.Callback<Boolean> callback = invocation.getArgument(3);
             callback.onComplete(true);      // assume put always return true
             return null;
-        }).when(mockFirestoreManager).put(eq(FirestoreNames.COLLECTION_USER_VERIFICATIONS), eq(testEmail), any(Map.class), any(FirestoreManager.Callback.class));
+        }).when(mockFirestoreManager).put(eq(FirebaseNames.COLLECTION_USER_VERIFICATIONS), eq(testEmail), any(Map.class), any(FirestoreManager.Callback.class));
 
         // code generation should be successful, returning no errors
         final CountDownLatch latch = new CountDownLatch(1);
@@ -162,14 +162,14 @@ public class VerificationCodeManagerTest {
             FirestoreManager.Callback<Map<String, Object>> callback = invocation.getArgument(2);
 
             Map<String, Object> result = new HashMap<>();
-            result.put(FirestoreNames.USER_VERIFICATIONS_HASHEDCODE, Hasher.hash("328334"));    // stores the hashed code
+            result.put(FirebaseNames.USER_VERIFICATIONS_HASHEDCODE, Hasher.hash("328334"));    // stores the hashed code
             long testTimeStamp = Calendar.getInstance().getTimeInMillis() - 5*60*1000;
-            result.put(FirestoreNames.USER_VERIFICATIONS_TIMESTAMP, testTimeStamp);
+            result.put(FirebaseNames.USER_VERIFICATIONS_TIMESTAMP, testTimeStamp);
 
             callback.onComplete(result);
             return null;
 
-        }).when(mockFirestoreManager).get(eq(FirestoreNames.COLLECTION_USER_VERIFICATIONS), eq(testEmail), any(FirestoreManager.Callback.class));
+        }).when(mockFirestoreManager).get(eq(FirebaseNames.COLLECTION_USER_VERIFICATIONS), eq(testEmail), any(FirestoreManager.Callback.class));
 
         // provide the correct verification code
         final CountDownLatch latch = new CountDownLatch(1);
@@ -196,14 +196,14 @@ public class VerificationCodeManagerTest {
             FirestoreManager.Callback<Map<String, Object>> callback = invocation.getArgument(2);
 
             Map<String, Object> result = new HashMap<>();
-            result.put(FirestoreNames.USER_VERIFICATIONS_HASHEDCODE, Hasher.hash("328334"));    // stores the hashed code
+            result.put(FirebaseNames.USER_VERIFICATIONS_HASHEDCODE, Hasher.hash("328334"));    // stores the hashed code
             long testTimeStamp = Calendar.getInstance().getTimeInMillis() - 5*60*1000;
-            result.put(FirestoreNames.USER_VERIFICATIONS_TIMESTAMP, testTimeStamp);
+            result.put(FirebaseNames.USER_VERIFICATIONS_TIMESTAMP, testTimeStamp);
 
             callback.onComplete(result);
             return null;
 
-        }).when(mockFirestoreManager).get(eq(FirestoreNames.COLLECTION_USER_VERIFICATIONS), eq(testEmail), any(FirestoreManager.Callback.class));
+        }).when(mockFirestoreManager).get(eq(FirebaseNames.COLLECTION_USER_VERIFICATIONS), eq(testEmail), any(FirestoreManager.Callback.class));
 
         // provide the correct verification code
         final CountDownLatch latch = new CountDownLatch(1);
@@ -230,14 +230,14 @@ public class VerificationCodeManagerTest {
             FirestoreManager.Callback<Map<String, Object>> callback = invocation.getArgument(2);
 
             Map<String, Object> result = new HashMap<>();
-            result.put(FirestoreNames.USER_VERIFICATIONS_HASHEDCODE, Hasher.hash("328334"));    // stores the hashed code
+            result.put(FirebaseNames.USER_VERIFICATIONS_HASHEDCODE, Hasher.hash("328334"));    // stores the hashed code
             long testTimeStamp = Calendar.getInstance().getTimeInMillis() - 11*60*1000;
-            result.put(FirestoreNames.USER_VERIFICATIONS_TIMESTAMP, testTimeStamp);
+            result.put(FirebaseNames.USER_VERIFICATIONS_TIMESTAMP, testTimeStamp);
 
             callback.onComplete(result);
             return null;
 
-        }).when(mockFirestoreManager).get(eq(FirestoreNames.COLLECTION_USER_VERIFICATIONS), eq(testEmail), any(FirestoreManager.Callback.class));
+        }).when(mockFirestoreManager).get(eq(FirebaseNames.COLLECTION_USER_VERIFICATIONS), eq(testEmail), any(FirestoreManager.Callback.class));
 
         // provide the correct verification code
         final CountDownLatch latch = new CountDownLatch(1);
