@@ -20,7 +20,7 @@ public class FirebaseStorageManager {
         void onComplete(T result);
     }
 
-    public FirebaseStorageManager(){
+    public FirebaseStorageManager() {
         storage = FirebaseStorage.getInstance();
         storageReference = storage.getReference();
     }
@@ -38,7 +38,7 @@ public class FirebaseStorageManager {
             return;
         }
 
-        StorageReference imageReference = storageReference.child("images/" + key);
+        StorageReference imageReference = storageReference.child("images").child(key);
         imageReference.putFile(image).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
