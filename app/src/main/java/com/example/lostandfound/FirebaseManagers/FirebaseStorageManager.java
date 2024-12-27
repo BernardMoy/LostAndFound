@@ -8,7 +8,6 @@ import androidx.annotation.NonNull;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageMetadata;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
@@ -39,11 +38,7 @@ public class FirebaseStorageManager {
             return;
         }
 
-        // create reference of the image as a path
-        StorageReference imageReference = storageReference.child("images/" + key + ".jpg");
-        Log.d("REF", imageReference.getPath());
-
-        // put the file to the path
+        StorageReference imageReference = storageReference.child("images/" + key);
         imageReference.putFile(image).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
@@ -53,7 +48,6 @@ public class FirebaseStorageManager {
             @Override
             public void onFailure(@NonNull Exception e) {
                 callback.onComplete(false);
-                Log.d("ERROR", e.getMessage());
             }
         });
     }
