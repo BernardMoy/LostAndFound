@@ -13,6 +13,7 @@
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
 
         <!-- Background color -->
+        <item name="colorOnBackground">@color/white</item>
         <item name="android:windowBackground">@color/backgroundColorDark</item>
 
         <!-- Customize your theme here. -->
