@@ -69,6 +69,7 @@ import com.example.lostandfound.CustomElements.CustomActionRow
 import com.example.lostandfound.CustomElements.CustomButton
 import com.example.lostandfound.CustomElements.CustomEditText
 import com.example.lostandfound.CustomElements.CustomErrorText
+import com.example.lostandfound.CustomElements.CustomProgressBar
 import com.example.lostandfound.CustomElements.CustomTextDialog
 import com.example.lostandfound.FirebaseManagers.FirebaseAuthManager
 import com.example.lostandfound.Utility.ImageManager
@@ -337,17 +338,7 @@ fun SaveButton(
 
     // when isLoading changes, functions that uses the variable are re-composed
     if (isLoading){
-        Box(
-            modifier = Modifier.fillMaxWidth(),
-            contentAlignment = Alignment.Center
-        ){
-            CircularProgressIndicator(
-                modifier = Modifier
-                    .width(dimensionResource(id = R.dimen.image_button_size))
-                    .padding(dimensionResource(id = R.dimen.content_margin_half)),
-                color = MaterialTheme.colorScheme.background,
-                trackColor = MaterialTheme.colorScheme.onPrimaryContainer)
-        }
+        CustomProgressBar()
     }
 
     Box(
