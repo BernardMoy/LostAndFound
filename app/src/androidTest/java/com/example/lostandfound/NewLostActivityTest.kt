@@ -72,4 +72,28 @@ class NewLostActivityTest {
 
         assert(viewModel.selectedSubCategory.value == SUBCATEGORYNAME)
     }
+
+    @Test
+    fun testSelectSubCategoryOverridden(){
+        val viewModel = NewLostViewModel()
+        composeTestRule.setContent {
+            Category(viewModel = viewModel)  // set content to be category while passing the created VM to it
+            Subcategory(viewModel = viewModel)
+        }
+
+        val CATEGORYNAME = categories[0].name
+        val NEWCATEGORYNAME = "Others"
+        val SUBCATEGORYNAME = categories[0].subCategories[0]
+
+        // select category
+        composeTestRule.onNodeWithText(CATEGORYNAME).performClick()
+
+        // select subcategory
+        composeTestRule.onNodeWithTag("SubCategoryDropdown").performClick() // open the dropdown menu
+        composeTestRule.onNodeWithText(SUBCATEGORYNAME).performClick()
+        assert(viewModel.selectedSubCategory.value == SUBCATEGORYNAME)
+
+        composeTestRule.onNodeWithText(NEWCATEGORYNAME).performClick()
+        assert(viewModel.selectedSubCategory.value.isEmpty())
+    }
 }
