@@ -16,6 +16,7 @@ import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.focusable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -207,12 +208,12 @@ fun MainContent(viewModel: NewLostViewModel = viewModel()) {
 @Composable
 fun ItemName(
     viewModel: NewLostViewModel
-){
+) {
     CustomGrayTitle(text = "Name of item")
     CustomInputField(
         fieldContent = viewModel.itemName.value,
         isEditable = true,
-        onTextChanged = {viewModel.onItemNameChanged(it)},
+        onTextChanged = { viewModel.onItemNameChanged(it) },
         placeholder = "e.g. Bluetooth earbuds",
         isError = viewModel.nameError.value.isNotEmpty()
     )
@@ -226,7 +227,7 @@ fun ItemName(
 fun ItemImage(
     launcher: ManagedActivityResultLauncher<PickVisualMediaRequest, Uri?>,
     viewModel: NewLostViewModel,
-){
+) {
     CustomGrayTitle(text = "Item image (Optional)")
 
     // Box for storing the image and the add button
@@ -235,15 +236,13 @@ fun ItemImage(
             .fillMaxWidth()
             .padding(0.dp, 0.dp, 0.dp, dimensionResource(id = R.dimen.title_margin)),
         contentAlignment = Alignment.CenterStart
-    ){
-        Column(
-
-        ){
+    ) {
+        Column {
             // box for storing the image
             if (viewModel.itemImage.value != null) {
                 Box(
                     modifier = Modifier.padding(vertical = dimensionResource(id = R.dimen.content_margin))
-                ){
+                ) {
                     // display the image of the item only when it is not null
                     val painter = rememberAsyncImagePainter(model = viewModel.itemImage.value)
 
@@ -256,19 +255,22 @@ fun ItemImage(
                     )
 
                     // the cross button at the top right of the image to remove it
-                    IconButton(onClick = {
-                        // remove the image
-                        viewModel.onImageCrossClicked()
-                    },
+                    IconButton(
+                        onClick = {
+                            // remove the image
+                            viewModel.onImageCrossClicked()
+                        },
                         modifier = Modifier
                             .size(dimensionResource(id = R.dimen.image_button_size))
                             .clip(CircleShape)
                             .background(MaterialTheme.colorScheme.primary)
                             .align(Alignment.TopEnd)
                     ) {
-                        Icon(imageVector = Icons.Outlined.Close,
+                        Icon(
+                            imageVector = Icons.Outlined.Close,
                             contentDescription = "Remove image",
-                            tint = Color.White)
+                            tint = Color.White
+                        )
                     }
                 }
             }
@@ -277,7 +279,7 @@ fun ItemImage(
             // the clickable text to add new image
             Box(
                 modifier = Modifier.padding(vertical = dimensionResource(id = R.dimen.content_margin))
-            ){
+            ) {
                 CustomActionText(
                     text = "Add Image",
                     onClick = {
@@ -297,14 +299,14 @@ fun ItemImage(
 @Composable
 fun Category(
     viewModel: NewLostViewModel
-){
+) {
     CustomGrayTitle(text = "Category")
 
-    FlowRow (
+    FlowRow(
         horizontalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin_half))
-    ){
+    ) {
         // for each category, create a custom filter chip for that
-        categories.forEach{ category ->
+        categories.forEach { category ->
             CustomFilterChip(
                 label = category.name,
                 leadingIcon = category.leadingIcon,
@@ -328,7 +330,7 @@ fun Category(
 @Composable
 fun Subcategory(
     viewModel: NewLostViewModel
-){
+) {
     CustomGrayTitle(text = "Subcategory")
 
     // display different fields depending on the selected category
@@ -343,15 +345,17 @@ fun Subcategory(
         CustomInputField(
             fieldContent = "",   // have no initial value
             isEditable = true,
-            onTextChanged = {viewModel.onSubCategorySelected(it)},  // change the subcat to the string inputted
+            onTextChanged = { viewModel.onSubCategorySelected(it) },  // change the subcat to the string inputted
             placeholder = "Describe the category...",
-            isError = viewModel.subCategoryError.value.isNotEmpty()
+            isError = viewModel.subCategoryError.value.isNotEmpty(),
+            testTag = "SubCategoryInput"
         )
+
 
     } else {
         Box(
             modifier = Modifier.testTag("SubCategoryDropdown")
-        ){
+        ) {
             CustomDropdownMenu(
                 items = viewModel.selectedCategory!!.subCategories,
                 selectedText = viewModel.selectedSubCategory,   // will be changed when new option is selectedisError = viewModel.subCategoryError.value.isNotEmpty()
@@ -368,14 +372,14 @@ fun Subcategory(
 @Composable
 fun ItemColor(
     viewModel: NewLostViewModel
-){
+) {
     CustomGrayTitle(text = "Color")
 
-    FlowRow (
+    FlowRow(
         horizontalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin_half))
-    ){
+    ) {
         // for each category, create a custom filter chip for that
-        itemColors.forEach{ col ->
+        itemColors.forEach { col ->
             CustomFilterChip(
                 label = col.name,
                 leadingIcon = Icons.Filled.Circle,
@@ -399,12 +403,12 @@ fun ItemColor(
 @Composable
 fun ItemBrand(
     viewModel: NewLostViewModel
-){
+) {
     CustomGrayTitle(text = "Brand (Optional)")
     CustomInputField(
         fieldContent = viewModel.itemBrand.value,
         isEditable = true,
-        onTextChanged = {viewModel.onItemBrandChanged(it)},
+        onTextChanged = { viewModel.onItemBrandChanged(it) },
         placeholder = "What is the brand of your item?",
         isError = false // wont have error
     )
@@ -414,7 +418,7 @@ fun ItemBrand(
 @Composable
 fun DateAndTime(
     viewModel: NewLostViewModel
-){
+) {
     CustomGrayTitle(text = "Date and time")
 
     CustomDatePickerTextField(
@@ -440,7 +444,7 @@ fun DateAndTime(
 @Composable
 fun Location(
     viewModel: NewLostViewModel
-){
+) {
     CustomGrayTitle(text = "Location")
 
     // the action text to choose a location from google maps
@@ -458,12 +462,12 @@ fun Location(
 @Composable
 fun AdditionalDescription(
     viewModel: NewLostViewModel
-){
+) {
     CustomGrayTitle(text = "Additional description")
     CustomInputField(
         fieldContent = viewModel.additionalDescription.value,
         isEditable = true,
-        onTextChanged = {viewModel.onDescriptionChanged(it)},
+        onTextChanged = { viewModel.onDescriptionChanged(it) },
         placeholder = "What should be noted of about your item?",
         isMultiLine = true
     )
@@ -472,7 +476,7 @@ fun AdditionalDescription(
 @Composable
 fun ReminderMessage(
     viewModel: NewLostViewModel
-){
+) {
     Text(
         text = "Please do not share sensitive personal information, " +
                 "including bank account details, credit/debit card numbers, " +
@@ -496,23 +500,23 @@ fun DoneButton(
 
     // box for save button
     // isloading state to display the loading animation
-    var isLoading by remember{mutableStateOf(false)}
+    var isLoading by remember { mutableStateOf(false) }
 
     // when isLoading changes, functions that uses the variable are re-composed
-    if (isLoading){
+    if (isLoading) {
         CustomProgressBar()
     }
 
     Box(
         modifier = Modifier.fillMaxWidth(),
         contentAlignment = Alignment.Center
-    ){
+    ) {
         CustomButton(
             text = "Done",
             type = ButtonType.FILLED,
             onClick = {
                 // check if the input fields are valid
-                if (!viewModel.validateInput()){
+                if (!viewModel.validateInput()) {
                     return@CustomButton
                 }
 
@@ -520,15 +524,16 @@ fun DoneButton(
                 isLoading = true
 
                 // add to firebase database
-                viewModel.onDoneButtonClicked(object: ErrorCallback{
+                viewModel.onDoneButtonClicked(object : ErrorCallback {
                     override fun onComplete(error: String) {
 
                         // stop loading
                         isLoading = false
 
-                        if (error.isEmpty()){
+                        if (error.isEmpty()) {
                             // if no errors, exit activity and display success message
-                            Toast.makeText(context, "New lost item posted!", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(context, "New lost item posted!", Toast.LENGTH_SHORT)
+                                .show()
                             (context as Activity).finish()
 
                         } else {

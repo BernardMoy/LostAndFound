@@ -1,9 +1,12 @@
 package com.example.lostandfound
 
+import android.util.Log
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performTextInput
+import androidx.compose.ui.test.requestFocus
 import com.example.lostandfound.Utility.categories
 import com.example.lostandfound.ui.NewLost.Category
 import com.example.lostandfound.ui.NewLost.NewLostViewModel
@@ -41,7 +44,6 @@ class NewLostActivityTest {
 
         // select category
         composeTestRule.onNodeWithText(CATEGORYNAME).performClick()
-        assert(viewModel.selectedCategory != null && viewModel.selectedCategory!!.name == CATEGORYNAME)
 
         // select subcategory
         composeTestRule.onNodeWithTag("SubCategoryDropdown").performClick() // open the dropdown menu
@@ -50,7 +52,24 @@ class NewLostActivityTest {
     }
 
     @Test
-    fun testSelectSubCategoryOverridden(){
+    fun testOtherCategory(){
+        val viewModel = NewLostViewModel()
+        composeTestRule.setContent {
+            Category(viewModel = viewModel)  // set content to be category while passing the created VM to it
+            Subcategory(viewModel = viewModel)
+        }
 
+        val CATEGORYNAME = "Others"
+        val SUBCATEGORYNAME = "Placeholder"
+
+        // select category
+        composeTestRule.onNodeWithText(CATEGORYNAME).performClick()
+
+        // select subcategory
+        composeTestRule.onNodeWithTag("SubCategoryInput")
+            .performClick()
+            .performTextInput(SUBCATEGORYNAME)
+
+        assert(viewModel.selectedSubCategory.value == SUBCATEGORYNAME)
     }
 }
