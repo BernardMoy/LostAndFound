@@ -8,7 +8,7 @@
     android:orientation="vertical"
     app:cornerRadius = "@dimen/corner_radius"
     android:padding="@dimen/content_margin"
-    android:background="@color/backgroundColor">
+    android:background="?android:attr/windowBackground">
 
     <ImageView
         android:layout_width="@dimen/content_image_size"

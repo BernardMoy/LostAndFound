@@ -65,7 +65,10 @@ public class ProfileActivity extends AppCompatActivity {
                 Dialog dialog = new Dialog(ProfileActivity.this);
                 dialog.setContentView(R.layout.dialog_logout);
                 dialog.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                dialog.getWindow().setBackgroundDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.dialog_background, null));
+                dialog.getWindow().setBackgroundDrawable(
+                        ResourcesCompat.getDrawable(getResources(), R.drawable.dialog_background, ProfileActivity.this.getTheme())
+                );
+
                 dialog.setCancelable(true);
 
                 // load the dialog binding
