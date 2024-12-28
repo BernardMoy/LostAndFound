@@ -1,13 +1,11 @@
 package com.example.lostandfound
 
-import android.util.Log
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTextInput
-import androidx.compose.ui.test.requestFocus
-import com.example.lostandfound.Utility.categories
+import com.example.lostandfound.Data.categories
 import com.example.lostandfound.ui.NewLost.Category
 import com.example.lostandfound.ui.NewLost.NewLostViewModel
 import com.example.lostandfound.ui.NewLost.Subcategory

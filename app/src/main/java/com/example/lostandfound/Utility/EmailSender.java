@@ -1,8 +1,10 @@
-package com.example.lostandfound;
+package com.example.lostandfound.Utility;
 
 import android.app.Activity;
 import android.content.Context;
 import android.widget.Toast;
+
+import com.example.lostandfound.R;
 
 import java.util.Properties;
 import java.util.concurrent.ExecutorService;

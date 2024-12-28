@@ -1,8 +1,7 @@
-package com.example.lostandfound;
+package com.example.lostandfound.Utility;
 
+import com.example.lostandfound.Data.FirebaseNames;
 import com.example.lostandfound.FirebaseManagers.FirestoreManager;
-import com.example.lostandfound.Utility.FirebaseNames;
-import com.example.lostandfound.Utility.Hasher;
 
 import java.security.SecureRandom;
 import java.util.Calendar;

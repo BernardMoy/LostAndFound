@@ -1,4 +1,4 @@
-package com.example.lostandfound;
+package com.example.lostandfound.Utility;
 
 public interface ErrorCallback {
     // a callback function that returns an error message, or empty string if no errors

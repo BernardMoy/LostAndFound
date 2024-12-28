@@ -20,7 +20,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.lostandfound.R;
 import com.example.lostandfound.Utility.ImageManager;
-import com.example.lostandfound.Utility.SharedPreferencesNames;
+import com.example.lostandfound.Data.SharedPreferencesNames;
 import com.example.lostandfound.databinding.ActivityProfileBinding;
 import com.example.lostandfound.databinding.DialogLogoutBinding;
 import com.example.lostandfound.ui.EditProfile.EditProfileActivity;
@@ -62,7 +62,7 @@ public class ProfileActivity extends AppCompatActivity {
         binding.logOut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Dialog dialog = new Dialog(ProfileActivity.this);
+                Dialog dialog = new Dialog(ProfileActivity.this, R.style.Theme_LostAndFound);
                 dialog.setContentView(R.layout.dialog_logout);
                 dialog.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                 dialog.getWindow().setBackgroundDrawable(

@@ -1,17 +1,6 @@
-package com.example.lostandfound.Utility
+package com.example.lostandfound.Data
 
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.AccountBox
-import androidx.compose.material.icons.outlined.Checkroom
-import androidx.compose.material.icons.outlined.Draw
-import androidx.compose.material.icons.outlined.Edit
-import androidx.compose.material.icons.outlined.Headset
-import androidx.compose.material.icons.outlined.QuestionMark
-import androidx.compose.material.icons.outlined.Restaurant
-import androidx.compose.material.icons.outlined.ShoppingBag
-import androidx.compose.material.icons.outlined.SportsBasketball
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
 
 data class Colors(
     val name: String,
