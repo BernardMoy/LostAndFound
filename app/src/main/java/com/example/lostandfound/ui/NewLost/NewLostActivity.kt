@@ -73,6 +73,7 @@ import com.example.lostandfound.CustomElements.CustomErrorText
 import com.example.lostandfound.CustomElements.CustomFilterChip
 import com.example.lostandfound.CustomElements.CustomGrayTitle
 import com.example.lostandfound.CustomElements.CustomInputField
+import com.example.lostandfound.CustomElements.CustomProgressBar
 import com.example.lostandfound.CustomElements.CustomTextDialog
 import com.example.lostandfound.CustomElements.CustomTimePickerTextField
 import com.example.lostandfound.ErrorCallback
@@ -487,23 +488,14 @@ fun DoneButton(
     context: Context,
     viewModel: NewLostViewModel
 ) {
+
     // box for save button
     // isloading state to display the loading animation
     var isLoading by remember{mutableStateOf(false)}
 
     // when isLoading changes, functions that uses the variable are re-composed
     if (isLoading){
-        Box(
-            modifier = Modifier.fillMaxWidth(),
-            contentAlignment = Alignment.Center
-        ){
-            CircularProgressIndicator(
-                modifier = Modifier
-                    .width(dimensionResource(id = R.dimen.image_button_size))
-                    .padding(dimensionResource(id = R.dimen.content_margin_half)),
-                color = MaterialTheme.colorScheme.background,
-                trackColor = MaterialTheme.colorScheme.onPrimaryContainer)
-        }
+        CustomProgressBar()
     }
 
     Box(
@@ -519,9 +511,16 @@ fun DoneButton(
                     return@CustomButton
                 }
 
+                // begin loading
+                isLoading = true
+
                 // add to firebase database
                 viewModel.onDoneButtonClicked(object: ErrorCallback{
                     override fun onComplete(error: String) {
+
+                        // stop loading
+                        isLoading = false
+
                         if (error.isEmpty()){
                             // if no errors, exit activity and display success message
                             Toast.makeText(context, "New lost item posted!", Toast.LENGTH_SHORT).show()
