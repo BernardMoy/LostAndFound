@@ -57,6 +57,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalInspectionMode
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -348,11 +349,15 @@ fun Subcategory(
         )
 
     } else {
-        CustomDropdownMenu(
-            items = viewModel.selectedCategory!!.subCategories,
-            selectedText = viewModel.selectedSubCategory,   // will be changed when new option is selectedisError = viewModel.subCategoryError.value.isNotEmpty()
-            isError = viewModel.subCategoryError.value.isNotEmpty()
-        )
+        Box(
+            modifier = Modifier.testTag("SubCategoryDropdown")
+        ){
+            CustomDropdownMenu(
+                items = viewModel.selectedCategory!!.subCategories,
+                selectedText = viewModel.selectedSubCategory,   // will be changed when new option is selectedisError = viewModel.subCategoryError.value.isNotEmpty()
+                isError = viewModel.subCategoryError.value.isNotEmpty()
+            )
+        }
     }
 
     CustomErrorText(text = viewModel.subCategoryError.value)
