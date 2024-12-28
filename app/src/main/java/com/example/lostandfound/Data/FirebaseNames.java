@@ -1,4 +1,4 @@
-package com.example.lostandfound.Utility;
+package com.example.lostandfound.Data;
 
 public final class FirebaseNames {
     private FirebaseNames(){}

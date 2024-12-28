@@ -5,7 +5,7 @@ import android.content.Context;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.example.lostandfound.ErrorCallback;
+import com.example.lostandfound.Utility.ErrorCallback;
 import com.example.lostandfound.FirebaseManagers.FirebaseAuthManager;
 
 public class LoginViewModel extends ViewModel {
