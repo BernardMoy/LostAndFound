@@ -33,8 +33,8 @@ public class EditProfileViewModelTest {
     @Test
     public void testValidateEmail(){
         // test for invalid inputs
-        viewModel.setFirstName("");
-        viewModel.setLastName("Lastname");
+        viewModel.onFirstNameChanged("");
+        viewModel.onLastNameChanged("Lastname");
         assertFalse(viewModel.validateNames());
         assertEquals("First name cannot be empty", viewModel.getProfileError().getValue());
     }
