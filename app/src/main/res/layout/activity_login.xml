@@ -103,7 +103,7 @@
                         android:drawableTint="@color/gray"
                         android:background="@drawable/background_light_gray_selector"
                         android:textSize="@dimen/content_font_size"
-                        android:textColor="@color/black"
+                        android:textColor="?attr/colorOnBackground"
                         android:padding="@dimen/content_margin"
                         android:textColorHint="@color/gray"
                         android:hint="Password"
