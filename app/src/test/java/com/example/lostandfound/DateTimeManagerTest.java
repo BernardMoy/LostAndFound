@@ -30,4 +30,19 @@ public class DateTimeManagerTest {
     public void testGetDateTimeEpoch(){
         assertEquals(EPOCH, DateTimeManager.getDateTimeEpoch(EPOCH_DATE_ONLY, HOUR, MINUTE));
     }
+
+    @Test
+    public void testEpochToDate(){
+        assertEquals(EPOCH_DATE_ONLY, DateTimeManager.epochToDate(EPOCH));
+    }
+
+    @Test
+    public void testEpochToHour(){
+        assertEquals(HOUR, DateTimeManager.epochToHour(EPOCH));
+    }
+
+    @Test
+    public void testEpochToMinute(){
+        assertEquals(MINUTE, DateTimeManager.epochToMinute(EPOCH));
+    }
 }
