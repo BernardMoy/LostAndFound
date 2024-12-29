@@ -47,12 +47,6 @@ fun CustomButton(
                     shape = RoundedCornerShape(dimensionResource(id = R.dimen.corner_radius))   // also apply the shape to the background
                 )
             ) {
-                Box(
-                    modifier = Modifier.background(
-                        Brush.horizontalGradient(listOf(MaterialTheme.colorScheme.primary, MaterialTheme.colorScheme.secondary)),
-                        shape = RoundedCornerShape(dimensionResource(id = R.dimen.corner_radius))   // also apply the shape to the background
-                    )
-                )
                 CustomButtonContent(text = text, small = small)
             }
         }
@@ -121,11 +115,12 @@ fun CustomButton(
                     containerColor = Color.Transparent,     // color of container
                     contentColor = Color.White,     // color of the text
                     disabledContainerColor = Color.Gray,
-                    disabledContentColor = Color.White
+                    disabledContentColor = Color.White,
                 ),
                 enabled = enabled,
                 shape = RoundedCornerShape(dimensionResource(id = R.dimen.corner_radius)),  // make the button have rounded corners
                 modifier = Modifier.background(
+                    // add the gradient to the background instead of the container color
                     color = MaterialTheme.colorScheme.error,
                     shape = RoundedCornerShape(dimensionResource(id = R.dimen.corner_radius))   // also apply the shape to the background
                 )

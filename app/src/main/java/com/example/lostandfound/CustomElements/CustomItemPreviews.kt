@@ -1,6 +1,5 @@
 package com.example.lostandfound.CustomElements
 
-import android.graphics.Color
 import android.net.Uri
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
@@ -15,14 +14,12 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Circle
-import androidx.compose.material.icons.outlined.Circle
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.text.font.FontWeight
@@ -50,7 +47,7 @@ fun CustomLostItemPreview(
     data: Map<String, Any>,
     onDeleteButtonClicked: () -> Unit = {},
     onViewButtonClicked: () -> Unit = {}
-){
+) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -62,14 +59,23 @@ fun CustomLostItemPreview(
                 )
             )
             .padding(dimensionResource(id = R.dimen.title_margin))
-    ){
-        Column (
+    ) {
+        Column(
             verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin))
-        ){
-            Row (
+        ) {
+
+            Text(
+                text = "Lost Entry #44",
+                style = Typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onPrimaryContainer,
+                fontWeight = FontWeight.Bold,
+            )
+
+
+            Row(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin_half))
-            ){
+            ) {
                 Icon(
                     imageVector = Icons.Filled.Circle,
                     tint = colorResource(id = R.color.status0),
@@ -77,27 +83,22 @@ fun CustomLostItemPreview(
                     modifier = Modifier.width(dimensionResource(id = R.dimen.content_margin))
                 )
                 Text(
-                    text = "Lost Entry #44",
+                    text = "Status: Not found",
                     style = Typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onPrimaryContainer,
+                    color = colorResource(id = R.color.status0),
                     fontWeight = FontWeight.Bold,
                 )
             }
 
-            Text(
-                text = "Status: Not found",
-                style = Typography.bodyMedium,
-                color = colorResource(id = R.color.status0),
-                fontWeight = FontWeight.Bold,
-            )
 
             // the main content of the item goes here
             Row(
                 horizontalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin))
-            ){
+            ) {
                 // placeholder image
-                val targetImage = Uri.parse("android.resource://com.example.lostandfound/" + R.drawable.placeholder_image);
-                
+                val targetImage =
+                    Uri.parse("android.resource://com.example.lostandfound/" + R.drawable.placeholder_image)
+
                 // image of the item
                 Image(
                     painter = rememberAsyncImagePainter(model = targetImage),
@@ -107,10 +108,10 @@ fun CustomLostItemPreview(
                 )
 
                 // other attributes of the item
-                Column (
+                Column(
                     modifier = Modifier.weight(2F),
                     verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin_half))
-                ){
+                ) {
                     // name
                     Text(
                         text = "Item name",
@@ -118,7 +119,7 @@ fun CustomLostItemPreview(
                         color = MaterialTheme.colorScheme.onBackground,
                         fontWeight = FontWeight.Bold,
                     )
-                    
+
                     // date and time
                     Text(
                         text = "Date: ",
@@ -140,7 +141,7 @@ fun CustomLostItemPreview(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.End
 
-            ){
+            ) {
                 CustomButton(
                     text = "Delete",
                     type = ButtonType.WARNING,
@@ -156,7 +157,7 @@ fun CustomLostItemPreview(
                     text = "View",
                     type = ButtonType.FILLED,
                     onClick = {
-                        onDeleteButtonClicked()
+                        onViewButtonClicked()
                     },
                     small = true
                 )
