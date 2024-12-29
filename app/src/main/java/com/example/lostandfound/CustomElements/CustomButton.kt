@@ -2,6 +2,7 @@ package com.example.lostandfound.CustomElements
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
@@ -22,7 +23,8 @@ fun CustomButton(
     text: String,
     type: ButtonType,
     onClick: () -> Unit,
-    enabled: Boolean = true
+    enabled: Boolean = true,
+    small: Boolean = false
 
 ) {
     // create different buttons depending on the type of button
@@ -45,7 +47,13 @@ fun CustomButton(
                     shape = RoundedCornerShape(dimensionResource(id = R.dimen.corner_radius))   // also apply the shape to the background
                 )
             ) {
-                CustomButtonContent(text = text)
+                Box(
+                    modifier = Modifier.background(
+                        Brush.horizontalGradient(listOf(MaterialTheme.colorScheme.primary, MaterialTheme.colorScheme.secondary)),
+                        shape = RoundedCornerShape(dimensionResource(id = R.dimen.corner_radius))   // also apply the shape to the background
+                    )
+                )
+                CustomButtonContent(text = text, small = small)
             }
         }
 
@@ -62,7 +70,7 @@ fun CustomButton(
                 enabled = enabled,
                 shape = RoundedCornerShape(dimensionResource(id = R.dimen.corner_radius))  // make the button have rounded corners
             ) {
-                CustomButtonContent(text = text)
+                CustomButtonContent(text = text, small = small)
             }
         }
 
@@ -84,7 +92,7 @@ fun CustomButton(
                 enabled = enabled,
                 shape = RoundedCornerShape(dimensionResource(id = R.dimen.corner_radius))  // make the button have rounded corners
             ) {
-                CustomButtonContent(text = text)
+                CustomButtonContent(text = text, small = small)
             }
         }
 
@@ -101,7 +109,28 @@ fun CustomButton(
                 enabled = enabled,
                 shape = RoundedCornerShape(dimensionResource(id = R.dimen.corner_radius))  // make the button have rounded corners
             ) {
-                CustomButtonContent(text = text)
+                CustomButtonContent(text = text, small = small)
+            }
+        }
+
+        // for buttons such ad delete
+        ButtonType.WARNING -> {
+            Button(
+                onClick = onClick,
+                colors = ButtonColors(
+                    containerColor = Color.Transparent,     // color of container
+                    contentColor = Color.White,     // color of the text
+                    disabledContainerColor = Color.Gray,
+                    disabledContentColor = Color.White
+                ),
+                enabled = enabled,
+                shape = RoundedCornerShape(dimensionResource(id = R.dimen.corner_radius)),  // make the button have rounded corners
+                modifier = Modifier.background(
+                    color = MaterialTheme.colorScheme.error,
+                    shape = RoundedCornerShape(dimensionResource(id = R.dimen.corner_radius))   // also apply the shape to the background
+                )
+            ) {
+                CustomButtonContent(text = text, small = small)
             }
         }
     }
@@ -110,22 +139,33 @@ fun CustomButton(
 // text of the button
 // it has no color as it is overridden by the content color of the button
 @Composable
-fun CustomButtonContent(text: String) {
-    Text(
-        text = text,
-        style = MaterialTheme.typography.titleMedium,
-        fontWeight = FontWeight.Bold,
-        modifier = Modifier.padding(
-            dimensionResource(id = R.dimen.content_margin),
-            dimensionResource(id = R.dimen.content_margin_half),
-            dimensionResource(id = R.dimen.content_margin),
-            dimensionResource(id = R.dimen.content_margin_half),
+fun CustomButtonContent(text: String, small: Boolean) {
+    if (small){
+        Text(
+            text = text,
+            style = MaterialTheme.typography.titleSmall,
+            fontWeight = FontWeight.Bold,
+            modifier = Modifier.padding(
+                horizontal = dimensionResource(id = R.dimen.content_margin_half)
+            )
         )
-    )
+
+    } else {
+        Text(
+            text = text,
+            style = MaterialTheme.typography.titleMedium,
+            fontWeight = FontWeight.Bold,
+            modifier = Modifier.padding(
+                horizontal = dimensionResource(id = R.dimen.content_margin),
+                vertical = dimensionResource(id = R.dimen.content_margin_half)
+            )
+        )
+    }
+
 }
 
 // an enum class representing the type of buttons
 enum class ButtonType{
-    FILLED, TONAL, OUTLINED, WHITE
+    FILLED, TONAL, OUTLINED, WHITE, WARNING
 }
 

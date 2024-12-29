@@ -62,10 +62,6 @@ fun LostFragmentScreen() {
 
 @Composable
 fun MainContent(viewModel: EditProfileViewModel = viewModel()){
-    Text(
-        text = "Lost fragment",
-        color = MaterialTheme.colorScheme.primary
-    )
 
     CustomLostItemPreview(data = mapOf())
 }
