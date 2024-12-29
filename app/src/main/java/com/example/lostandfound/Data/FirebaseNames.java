@@ -25,4 +25,9 @@ public final class FirebaseNames {
     public static final String LOSTFOUND_BRAND = "brand";
     public static final String LOSTFOUND_EPOCHDATETIME = "dateTime";
     public static final String LOSTFOUND_DESCRIPTION = "description";
+    public static final String LOSTFOUND_LOCATION = "location";
+    public static final String LOSTFOUND_STATUS = "status";
+    public static final String FOUND_SECURITY_Q = "security_question";
+    public static final String FOUND_SECURITY_Q_ANS = "security_question_answer";
+
 }
