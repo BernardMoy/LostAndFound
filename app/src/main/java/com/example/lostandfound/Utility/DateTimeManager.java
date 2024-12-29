@@ -38,6 +38,18 @@ public class DateTimeManager {
         return String.format(Locale.UK, "%02d:%02d", hour, minute);
     }
 
+    // get the date and time both to string when given a date time epoch
+    public static String dateTimeToString(long epoch){
+        LocalDateTime localDateTime = LocalDateTime.ofInstant(
+                Instant.ofEpochSecond(epoch),
+                ZoneId.of("UTC")
+        );
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMM yyyy HH:mm");
+        return formatter.format(localDateTime);
+    }
+
+
     // get the epoch stored in the database: date epoch + time seconds
     public static long getDateTimeEpoch(long dateEpochSeconds, int hour, int minute){
         long epochTime = (long) hour *60*60+minute* 60L;

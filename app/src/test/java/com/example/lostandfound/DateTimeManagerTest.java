@@ -45,4 +45,9 @@ public class DateTimeManagerTest {
     public void testEpochToMinute(){
         assertEquals(MINUTE, DateTimeManager.epochToMinute(EPOCH));
     }
+
+    @Test
+    public void testDateTimeToString(){
+        assertEquals("18 Jun 2024 17:04", DateTimeManager.dateTimeToString(EPOCH));
+    }
 }
