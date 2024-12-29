@@ -7,6 +7,7 @@ public final class FirebaseNames {
     public static final String COLLECTION_USERS = "users";
     public static final String COLLECTION_USER_VERIFICATIONS = "user_verifications";
     public static final String COLLECTION_LOST_ITEMS = "lost_items";
+    public static final String COLLECTION_REPORT_ISSUE = "reported_issues";
 
     // strings that represent all key names in the map that is stored
     public static final String USERS_FIRSTNAME = "firstName";
@@ -29,5 +30,8 @@ public final class FirebaseNames {
     public static final String LOSTFOUND_STATUS = "status";
     public static final String FOUND_SECURITY_Q = "security_question";
     public static final String FOUND_SECURITY_Q_ANS = "security_question_answer";
+
+    public static final String REPORT_ISSUE_USER = "user";
+    public static final String REPORT_ISSUE_DESC = "description";
 
 }

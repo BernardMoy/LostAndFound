@@ -35,7 +35,31 @@ class ReportIssueViewModel: ViewModel() {
         return true
     }
 
-    fun onDoneButtonClicked(){
+    // add the issue to the database when done button is clicked
+    fun onDoneButtonClicked(callback: ErrorCallback){
+
+        // validate input
+        if (!validateInput()) {
+            return
+        }
+
+        // add the issue to database with the user id
+        val data = mapOf(
+            FirebaseNames.REPORT_ISSUE_USER to FirebaseUtility.getUserID(),
+            FirebaseNames.REPORT_ISSUE_DESC to description.value
+        )
+
+        val manager = FirestoreManager()
+        manager.putWithUniqueId(FirebaseNames.COLLECTION_REPORT_ISSUE, data, object: FirestoreManager.Callback<String>{
+            override fun onComplete(result: String) {
+                if (result.isEmpty()){
+                    callback.onComplete("Error adding item to database")
+                    return
+                }
+
+                callback.onComplete("")   // return no errors
+            }
+        })
 
     }
 }
