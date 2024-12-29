@@ -25,7 +25,8 @@ class NewFoundViewModel: ViewModel() {
     val selectedHour: MutableState<Int?> = mutableStateOf(null)
     val selectedMinute: MutableState<Int?> = mutableStateOf(null)
     val isTimeDialogShown: MutableState<Boolean> = mutableStateOf(false)
-    val additionalDescription: MutableState<String> = mutableStateOf("")
+    val securityQuestion: MutableState<String> = mutableStateOf("")
+    val securityQuestionAns: MutableState<String> = mutableStateOf("")
 
     // initially the selected category is null
     var selectedCategory by mutableStateOf<Category?>(null)
@@ -45,6 +46,7 @@ class NewFoundViewModel: ViewModel() {
     val dateError: MutableState<String> = mutableStateOf("")
     val timeError: MutableState<String> = mutableStateOf("")
     val locationError: MutableState<String> = mutableStateOf("")
+    val securityQuestionAnsError: MutableState<String> = mutableStateOf("")
 
     fun onImagePicked(uri: Uri?){
         itemImage.value = uri
@@ -62,8 +64,11 @@ class NewFoundViewModel: ViewModel() {
         itemBrand.value = s
     }
 
-    fun onDescriptionChanged(d: String){
-        additionalDescription.value = d
+    fun onSecurityQuestionChanged(s: String){
+        securityQuestion.value = s
+    }
+    fun onSecurityQuestionAnsChanged(s: String){
+        securityQuestionAns.value = s
     }
 
     fun onCategorySelected(c: Category?){
@@ -144,14 +149,15 @@ class NewFoundViewModel: ViewModel() {
             FirebaseNames.LOSTFOUND_EPOCHDATETIME to DateTimeManager.getDateTimeEpoch(
                 selectedDate.value?:0L, selectedHour.value?:0, selectedMinute.value?:0
             ),
-            FirebaseNames.LOSTFOUND_DESCRIPTION to additionalDescription.value
+            FirebaseNames.FOUND_SECURITY_Q to securityQuestion.value,
+            FirebaseNames.FOUND_SECURITY_Q_ANS to securityQuestionAns.value
         )
 
         // add to the firestore db
         val firestoreManager = FirestoreManager()
         val storageManager = FirebaseStorageManager()
 
-        firestoreManager.putWithUniqueId(FirebaseNames.COLLECTION_LOST_ITEMS, data, object: FirestoreManager.Callback<String>{
+        firestoreManager.putWithUniqueId(FirebaseNames.COLLECTION_FOUND_ITEMS, data, object: FirestoreManager.Callback<String>{
             override fun onComplete(result: String) {     // the unique id generated is returned
                 if (result.isEmpty()){
                     callback.onComplete("Error adding item to database")
