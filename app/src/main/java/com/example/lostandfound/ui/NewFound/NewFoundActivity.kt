@@ -190,7 +190,8 @@ fun MainContent(viewModel: NewFoundViewModel = viewModel()) {
     ItemBrand(viewModel = viewModel)
     DateAndTime(viewModel = viewModel)
     Location(viewModel = viewModel)
-    AdditionalDescription(viewModel = viewModel)
+    SecurityQuestion(viewModel = viewModel)
+    SecurityQuestionAns(viewModel = viewModel)
     ReminderMessage(viewModel = viewModel)
     DoneButton(context = context, viewModel = viewModel)
 }
@@ -450,17 +451,38 @@ fun Location(
 }
 
 @Composable
-fun AdditionalDescription(
+fun SecurityQuestion(
     viewModel: NewFoundViewModel
 ) {
-    CustomGrayTitle(text = "Additional description")
+    CustomGrayTitle(text = "Security question (Optional)")
+    Text(
+        text = "The security question is a question that users will have to answer before claiming the item.",
+        style = Typography.bodyMedium,
+        color = Color.Gray
+    )
     CustomInputField(
-        fieldContent = viewModel.additionalDescription.value,
+        fieldContent = viewModel.securityQuestion.value,
         isEditable = true,
-        onTextChanged = { viewModel.onDescriptionChanged(it) },
-        placeholder = "What should be noted of about your item?",
+        onTextChanged = { viewModel.onSecurityQuestionChanged(it) },
+        placeholder = "Question",
         isMultiLine = true
     )
+    // wont error
+}
+
+@Composable
+fun SecurityQuestionAns(
+    viewModel: NewFoundViewModel
+) {
+    CustomGrayTitle(text = "Security question answer")
+    CustomInputField(
+        fieldContent = viewModel.securityQuestionAns.value,
+        isEditable = true,
+        onTextChanged = { viewModel.onSecurityQuestionAnsChanged(it) },
+        placeholder = "Answer",
+        isMultiLine = true
+    )
+    CustomErrorText(text = viewModel.securityQuestionAnsError.value)
 }
 
 @Composable
