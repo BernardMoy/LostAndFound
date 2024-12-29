@@ -1,6 +1,9 @@
 package com.example.lostandfound.ui.ReportIssue
 
+import android.app.Activity
+import android.content.Context
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.setContent
@@ -16,8 +19,10 @@ import androidx.compose.material.icons.outlined.Cancel
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -31,8 +36,10 @@ import com.example.lostandfound.CustomElements.CustomButton
 import com.example.lostandfound.CustomElements.CustomErrorText
 import com.example.lostandfound.CustomElements.CustomGrayTitle
 import com.example.lostandfound.CustomElements.CustomInputField
+import com.example.lostandfound.CustomElements.CustomProgressBar
 import com.example.lostandfound.CustomElements.CustomTextDialog
 import com.example.lostandfound.R
+import com.example.lostandfound.Utility.ErrorCallback
 import com.example.lostandfound.ui.theme.ComposeTheme
 
 
@@ -135,7 +142,7 @@ fun MainContent(viewModel: ReportIssueViewModel = viewModel()) {
     val inPreview = LocalInspectionMode.current
 
     Description(viewModel = viewModel)
-    DoneButton(viewModel = viewModel)
+    DoneButton(context = context, viewModel = viewModel)
 }
 
 
@@ -157,18 +164,39 @@ fun Description(viewModel: ReportIssueViewModel) {
 }
 
 @Composable
-fun DoneButton(viewModel: ReportIssueViewModel) {
+fun DoneButton(
+    context: Context,
+    viewModel: ReportIssueViewModel
+) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
             .padding(top = dimensionResource(id = R.dimen.title_margin)),
         contentAlignment = Alignment.Center
     ) {
+        var isLoading by remember { mutableStateOf(false) }
+        if (isLoading) { CustomProgressBar() }
+
         CustomButton(
             text = "Done",
             type = ButtonType.FILLED,
             onClick = {
-                viewModel.onDoneButtonClicked()
+                viewModel.onDoneButtonClicked(object: ErrorCallback{
+                    override fun onComplete(error: String) {
+                        // stop loading
+                        isLoading = false
+
+                        if (error.isEmpty()) {
+                            // if no errors, exit activity and display success message
+                            Toast.makeText(context, "Issue reported!", Toast.LENGTH_SHORT)
+                                .show()
+                            (context as Activity).finish()
+
+                        } else {
+                            Toast.makeText(context, error, Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                })
             }
         )
     }
