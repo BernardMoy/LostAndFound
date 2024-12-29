@@ -14,6 +14,7 @@ import com.example.lostandfound.Data.Category
 import com.example.lostandfound.Data.Colors
 import com.example.lostandfound.Utility.DateTimeManager
 import com.example.lostandfound.Data.FirebaseNames
+import com.example.lostandfound.Data.lostStatus
 
 class NewLostViewModel: ViewModel() {
 
@@ -144,7 +145,8 @@ class NewLostViewModel: ViewModel() {
             FirebaseNames.LOSTFOUND_EPOCHDATETIME to DateTimeManager.getDateTimeEpoch(
                 selectedDate.value?:0L, selectedHour.value?:0, selectedMinute.value?:0
             ),
-            FirebaseNames.LOSTFOUND_DESCRIPTION to additionalDescription.value
+            FirebaseNames.LOSTFOUND_DESCRIPTION to additionalDescription.value,
+            FirebaseNames.LOSTFOUND_STATUS to 0 // represent the lost status 
         )
 
         // add to the firestore db
