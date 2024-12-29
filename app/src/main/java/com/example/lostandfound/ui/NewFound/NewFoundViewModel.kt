@@ -14,6 +14,8 @@ import com.example.lostandfound.Data.Category
 import com.example.lostandfound.Data.Colors
 import com.example.lostandfound.Utility.DateTimeManager
 import com.example.lostandfound.Data.FirebaseNames
+import com.example.lostandfound.Data.foundStatus
+import com.example.lostandfound.Data.lostStatus
 
 class NewFoundViewModel: ViewModel() {
 
@@ -156,7 +158,8 @@ class NewFoundViewModel: ViewModel() {
                 selectedDate.value?:0L, selectedHour.value?:0, selectedMinute.value?:0
             ),
             FirebaseNames.FOUND_SECURITY_Q to securityQuestion.value,
-            FirebaseNames.FOUND_SECURITY_Q_ANS to securityQuestionAns.value
+            FirebaseNames.FOUND_SECURITY_Q_ANS to securityQuestionAns.value,
+            FirebaseNames.LOSTFOUND_STATUS to 0  // represent the found status
         )
 
         // add to the firestore db
