@@ -480,7 +480,8 @@ fun SecurityQuestionAns(
         isEditable = true,
         onTextChanged = { viewModel.onSecurityQuestionAnsChanged(it) },
         placeholder = "Answer",
-        isMultiLine = true
+        isMultiLine = true,
+        isError = viewModel.securityQuestionAnsError.value.isNotEmpty()
     )
     CustomErrorText(text = viewModel.securityQuestionAnsError.value)
 }
@@ -545,7 +546,7 @@ fun DoneButton(
 
                         if (error.isEmpty()) {
                             // if no errors, exit activity and display success message
-                            Toast.makeText(context, "New lost item posted!", Toast.LENGTH_SHORT)
+                            Toast.makeText(context, "New found item posted!", Toast.LENGTH_SHORT)
                                 .show()
                             (context as Activity).finish()
 

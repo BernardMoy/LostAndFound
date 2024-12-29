@@ -134,6 +134,12 @@ class NewFoundViewModel: ViewModel() {
 
         // implement location error
 
+        // if security question is not empty, then security answer cannot be empty
+        if (securityQuestion.value.isNotEmpty() && securityQuestionAns.value.isEmpty()){
+            securityQuestionAnsError.value = "Security question answer cannot be empty"
+            return false
+        }
+
         return true
     }
 
