@@ -82,6 +82,7 @@ fun CustomEditText(
             // for disabled (non editable) text
             disabledContainerColor = Color.Transparent,
             disabledTextColor = MaterialTheme.colorScheme.onBackground,
+            disabledLabelColor = MaterialTheme.colorScheme.onBackground,
 
             // remove the default bottom line
             focusedIndicatorColor = Color.Transparent,
