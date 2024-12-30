@@ -73,6 +73,7 @@ import com.example.lostandfound.CustomElements.CustomTimePickerTextField
 import com.example.lostandfound.Utility.ErrorCallback
 import com.example.lostandfound.Data.categories
 import com.example.lostandfound.Data.itemColors
+import com.example.lostandfound.FirebaseManagers.FirebaseUtility
 import com.example.lostandfound.ui.theme.ComposeTheme
 import com.example.lostandfound.ui.theme.Typography
 
@@ -83,6 +84,15 @@ class NewLostActivity : ComponentActivity() {
 
         setContent {
             NewLostScreen(activity = this)
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        // check if user is logged in
+        if (!FirebaseUtility.isUserLoggedIn()){
+            finish()
         }
     }
 }

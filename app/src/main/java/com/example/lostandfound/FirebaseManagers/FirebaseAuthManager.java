@@ -168,11 +168,4 @@ public class FirebaseAuthManager {
         editor.clear();
         editor.apply();
     }
-
-
-    // method to check if user is already logged in
-    public boolean isUserLoggedIn(){
-        FirebaseUser user = mAuth.getCurrentUser();
-        return user != null;
-    }
 }

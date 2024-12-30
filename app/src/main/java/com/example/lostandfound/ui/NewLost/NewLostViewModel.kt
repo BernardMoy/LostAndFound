@@ -146,7 +146,7 @@ class NewLostViewModel: ViewModel() {
                 selectedDate.value?:0L, selectedHour.value?:0, selectedMinute.value?:0
             ),
             FirebaseNames.LOSTFOUND_DESCRIPTION to additionalDescription.value,
-            FirebaseNames.LOSTFOUND_STATUS to 0 // represent the lost status 
+            FirebaseNames.LOSTFOUND_STATUS to 0 // represent the lost status
         )
 
         // add to the firestore db

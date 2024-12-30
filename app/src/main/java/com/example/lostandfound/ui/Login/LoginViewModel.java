@@ -5,6 +5,7 @@ import android.content.Context;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.example.lostandfound.FirebaseManagers.FirebaseUtility;
 import com.example.lostandfound.Utility.ErrorCallback;
 import com.example.lostandfound.FirebaseManagers.FirebaseAuthManager;
 
@@ -45,7 +46,7 @@ public class LoginViewModel extends ViewModel {
     // method to validate if user is already logged in
     public boolean isUserSignedIn(Context ctx){
         FirebaseAuthManager firebaseAuthManager = new FirebaseAuthManager(ctx);
-        return firebaseAuthManager.isUserLoggedIn();
+        return FirebaseUtility.isUserLoggedIn();
     }
 
     // method to log in user
