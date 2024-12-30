@@ -1,11 +1,13 @@
 package com.example.lostandfound.ui.Profile
 
 import android.content.Context
+import android.content.Intent
 import android.graphics.Paint.Align
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -45,6 +47,7 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.core.content.ContextCompat.startActivity
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil3.compose.rememberAsyncImagePainter
 import com.example.lostandfound.CustomElements.BackToolbar
@@ -57,17 +60,30 @@ import com.example.lostandfound.CustomElements.CustomGrayTitle
 import com.example.lostandfound.CustomElements.CustomTextDialog
 import com.example.lostandfound.Data.SharedPreferencesNames
 import com.example.lostandfound.R
+import com.example.lostandfound.Utility.ImageManager
+import com.example.lostandfound.ui.EditProfile.EditProfileActivity
 import com.example.lostandfound.ui.theme.ComposeTheme
 import com.example.lostandfound.ui.theme.Typography
 
 
 class ProfileActivity : ComponentActivity() {
+
+    val viewModel:ProfileViewModel by viewModels()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         setContent {
-            ProfileScreen(activity = this)
+            ProfileScreen(activity = this, viewModel = viewModel)
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        updateData(
+            context = this,
+            viewModel = viewModel
+        )
     }
 }
 
@@ -77,30 +93,19 @@ class MockActivity : ComponentActivity()
 @Preview(showBackground = true)
 @Composable
 fun Preview() {
-    ProfileScreen(activity = MockActivity())
+    ProfileScreen(activity = MockActivity(), viewModel = ProfileViewModel())
 }
 
 @Composable
-fun ProfileScreen(activity: ComponentActivity) {
+fun ProfileScreen(activity: ComponentActivity, viewModel: ProfileViewModel) {
     ComposeTheme {
         Surface {
-            val isDialogShown = remember { mutableStateOf(false) }
-
-            // open the dialog when the back button on device is pressed
-            BackHandler {
-                isDialogShown.value = true
-            }
-
             Scaffold(
                 // top toolbar
                 topBar = {
                     BackToolbarColored(
                         title = "Profile",
-                        activity = activity,
-                        backButtonOnClick = {
-                            // show the dialog
-                            isDialogShown.value = true
-                        }
+                        activity = activity
                     )
                 }
             ) { innerPadding ->
@@ -111,36 +116,9 @@ fun ProfileScreen(activity: ComponentActivity) {
                         .verticalScroll(rememberScrollState())   // make screen scrollable
                 ) {
                     // content goes here
-                    MainContent()
+                    MainContent(viewModel = viewModel)
                 }
             }
-
-            // the dialog when the back button is pressed
-            CustomTextDialog(
-                icon = Icons.Outlined.Cancel,
-                title = "Discard changes?",
-                content = "All your changes will be lost.",
-                confirmButton = {
-                    CustomButton(
-                        text = "Discard",
-                        type = ButtonType.FILLED,
-                        onClick = {
-                            // dismiss the dialog
-                            isDialogShown.value = false
-                            // exit the activity
-                            activity.finish()
-                        })
-                },
-                dismissButton = {
-                    CustomButton(text = "Cancel",
-                        type = ButtonType.OUTLINED,
-                        onClick = {
-                            // dismiss the dialog
-                            isDialogShown.value = false
-                        })
-                },
-                isDialogShown = isDialogShown    // dialog is shown only when the value of isDialogShown is true
-            )
         }
     }
 }
@@ -148,7 +126,7 @@ fun ProfileScreen(activity: ComponentActivity) {
 // content includes avatar, edit fields, reminder message and save button
 // get the view model in the function parameter
 @Composable
-fun MainContent(viewModel: ProfileViewModel = viewModel()) {
+fun MainContent(viewModel: ProfileViewModel) {
 
     // get the local context
     val context = LocalContext.current
@@ -156,10 +134,7 @@ fun MainContent(viewModel: ProfileViewModel = viewModel()) {
     // boolean to determine if it is being rendered in preview
     val inPreview = LocalInspectionMode.current
 
-    // get the first and last name from shared preferences
-    val sp = context.getSharedPreferences(SharedPreferencesNames.NAME_USERS, Context.MODE_PRIVATE)
-    
-    TopProfileBox(viewModel = viewModel)
+    TopProfileBox(context = context, viewModel = viewModel)
     Column(
         modifier = Modifier.padding(dimensionResource(id = R.dimen.title_margin))
     ){
@@ -170,6 +145,7 @@ fun MainContent(viewModel: ProfileViewModel = viewModel()) {
 
 @Composable
 fun TopProfileBox(
+    context: Context,
     viewModel: ProfileViewModel
 ){
     Box(
@@ -233,7 +209,9 @@ fun TopProfileBox(
                 text = "Edit profile",
                 type = ButtonType.WHITE,
                 onClick = {
-
+                    // start edit profile activity
+                    val intent = Intent(context, EditProfileActivity::class.java)
+                    context.startActivity(intent)
                 }
             )
         }
@@ -311,11 +289,22 @@ fun Actions(
 }
 
 // function to update the fields (names, emails, avatar) based on shared preference
-fun UpdateData(
+fun updateData(
     context: Context,  // used to accessing shared pref
     viewModel: ProfileViewModel
 ){
+    val sp = context.getSharedPreferences(SharedPreferencesNames.NAME_USERS, Context.MODE_PRIVATE)
 
+    // set the data from shared pref
+    viewModel.onFirstNameChanged(sp.getString(SharedPreferencesNames.USER_FIRSTNAME, "") ?: "")
+    viewModel.onLastNameChanged(sp.getString(SharedPreferencesNames.USER_LASTNAME, "") ?: "")
+    viewModel.onEmailChanged(sp.getString(SharedPreferencesNames.USER_EMAIL, "") ?: "")
+    viewModel.onImageChanged(
+        ImageManager.stringToUri(
+            context = context,
+            string = sp.getString(SharedPreferencesNames.USER_AVATAR, "") ?: ""
+        )
+    )
 }
 
 
