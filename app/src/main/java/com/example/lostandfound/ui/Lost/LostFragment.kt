@@ -13,6 +13,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -31,6 +33,10 @@ import com.example.lostandfound.ui.theme.Typography
 
 
 class LostFragment : Fragment() {
+
+    // variable to keep track of whether the user is logged in
+    val isLoggedIn = mutableStateOf(FirebaseUtility.isUserLoggedIn())
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -41,7 +47,7 @@ class LostFragment : Fragment() {
             setContent {
                 ComposeTheme{
                     // check if user is logged in
-                    if (!FirebaseUtility.isUserLoggedIn()){
+                    if (!isLoggedIn.value){
                         Box(
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -62,6 +68,13 @@ class LostFragment : Fragment() {
             }
         }
         return view
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        // update the user's log in status
+        isLoggedIn.value = FirebaseUtility.isUserLoggedIn()
     }
 }
 
