@@ -99,7 +99,6 @@ fun LostFragmentScreen() {
 }
 
 @Composable
-fun MainContent(viewModel: EditProfileViewModel = viewModel()){
-
+fun MainContent(viewModel: LostFragmentViewModel = viewModel()){
     CustomLostItemPreview(data = mapOf())
 }
