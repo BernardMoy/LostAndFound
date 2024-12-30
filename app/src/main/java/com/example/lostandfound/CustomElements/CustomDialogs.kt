@@ -4,6 +4,8 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDefaults
@@ -18,14 +20,30 @@ import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.material3.rememberTimePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import com.example.lostandfound.Utility.DateTimeManager
 import com.example.lostandfound.R
-import java.util.Calendar
-import java.util.Locale
+import com.example.lostandfound.ui.theme.ComposeTheme
+
+
+
+@Preview(showBackground = true)
+@Composable
+fun LoginDialogPreview() {
+    ComposeTheme {
+        CustomLoginDialog(
+            onLoginClicked = {},
+            isDialogShown = remember {mutableStateOf(true)}
+        )
+    }
+}
 
 @Composable
 fun CustomTextDialog(
@@ -60,7 +78,7 @@ fun CustomTextDialog(
                         text = content,
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onBackground,
-                        modifier = Modifier.align(Alignment.Center) // center the text
+                        textAlign = TextAlign.Center
                     )
                 }
             },
@@ -190,4 +208,67 @@ fun CustomTimePickerDialog(
         )
     }
 
+}
+
+// Dialog when user tries to access content that they need to log in first
+@Composable
+fun CustomLoginDialog(
+    onLoginClicked: (() -> Unit),
+    isDialogShown: MutableState<Boolean>
+){
+    // Shown only when isDialogShown is true
+    if (isDialogShown.value){
+        AlertDialog(
+            onDismissRequest = { isDialogShown.value = false },
+            containerColor = MaterialTheme.colorScheme.background,
+            icon = {
+                Icon(imageVector = Icons.Outlined.Person,
+                    contentDescription = "Login icon",
+                    tint = MaterialTheme.colorScheme.onPrimaryContainer,
+                    modifier = Modifier.size(dimensionResource(R.dimen.image_button_size)))
+            },
+            title = {
+                Text(text = "Login required",
+                    style = MaterialTheme.typography.titleMedium,
+                    color = MaterialTheme.colorScheme.onBackground)
+            },
+            text = {
+                Box(
+                    modifier = Modifier.fillMaxWidth(),
+                    contentAlignment = Alignment.Center // Centers the content inside the Box
+                ) {
+                    Text(
+                        text = "Please login first to perform this action.",
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onBackground,
+                        textAlign = TextAlign.Center
+                    )
+                }
+            },
+            confirmButton = {
+                // change the selected time
+                CustomButton(
+                    text = "Login",
+                    type = ButtonType.FILLED,
+                    onClick = {
+                        // update the string variable
+                        onLoginClicked()
+
+                        // dismiss dialog
+                        isDialogShown.value = false
+                    },
+                )
+            },
+            dismissButton = {
+                CustomButton(
+                    text = "Cancel",
+                    type = ButtonType.OUTLINED,
+                    onClick = {
+                        // dismiss dialog
+                        isDialogShown.value = false
+                    }
+                )
+            }
+        )
+    }
 }
