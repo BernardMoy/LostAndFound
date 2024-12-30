@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Paint.Align
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.setContent
@@ -59,6 +60,7 @@ import com.example.lostandfound.CustomElements.CustomEditText
 import com.example.lostandfound.CustomElements.CustomGrayTitle
 import com.example.lostandfound.CustomElements.CustomTextDialog
 import com.example.lostandfound.Data.SharedPreferencesNames
+import com.example.lostandfound.FirebaseManagers.FirebaseAuthManager
 import com.example.lostandfound.R
 import com.example.lostandfound.Utility.ImageManager
 import com.example.lostandfound.ui.EditProfile.EditProfileActivity
@@ -141,6 +143,36 @@ fun MainContent(viewModel: ProfileViewModel) {
         AccountDetails(viewModel = viewModel)
         Actions(viewModel = viewModel)
     }
+
+    // the dialog for logging out
+    CustomTextDialog(
+        icon = Icons.AutoMirrored.Outlined.Logout,
+        title = "Logout",
+        content = "Are you sure you want to logout?",
+        confirmButton = {
+            CustomButton(
+                text = "Logout",
+                type = ButtonType.FILLED,
+                onClick = {
+                    val manager: FirebaseAuthManager = FirebaseAuthManager(context)
+                    manager.logoutUser()
+                    Toast.makeText(context, "Logged out successfully", Toast.LENGTH_SHORT).show()
+                    viewModel.isLogoutDialogShown.value = false
+                    (context as ProfileActivity).finish()
+                }
+            )
+        },
+        dismissButton = {
+            CustomButton(text = "Cancel",
+                type = ButtonType.OUTLINED,
+                onClick = {
+                    // dismiss the dialog
+                    viewModel.isLogoutDialogShown.value = false
+                }
+            )
+        },
+        isDialogShown = viewModel.isLogoutDialogShown
+    )
 }
 
 @Composable
@@ -263,7 +295,10 @@ fun Actions(
         // log out button
         CustomActionRow(
             text = "Logout",
-            onClick = { /*TODO*/ },
+            onClick = {
+                // show dialog
+                viewModel.isLogoutDialogShown.value = true
+            },
             leftIcon = Icons.AutoMirrored.Outlined.Logout
         )
 
