@@ -40,6 +40,7 @@ fun LoginDialogPreview() {
     ComposeTheme {
         CustomLoginDialog(
             onLoginClicked = {},
+            onDismissClicked = {},
             isDialogShown = remember {mutableStateOf(true)}
         )
     }
@@ -213,13 +214,16 @@ fun CustomTimePickerDialog(
 // Dialog when user tries to access content that they need to log in first
 @Composable
 fun CustomLoginDialog(
+    onDismissClicked: () -> Unit,
     onLoginClicked: (() -> Unit),
     isDialogShown: MutableState<Boolean>
 ){
     // Shown only when isDialogShown is true
     if (isDialogShown.value){
         AlertDialog(
-            onDismissRequest = { isDialogShown.value = false },
+            onDismissRequest = {
+            // non dismissable
+            },
             containerColor = MaterialTheme.colorScheme.background,
             icon = {
                 Icon(imageVector = Icons.Outlined.Person,
@@ -251,11 +255,7 @@ fun CustomLoginDialog(
                     text = "Login",
                     type = ButtonType.FILLED,
                     onClick = {
-                        // update the string variable
                         onLoginClicked()
-
-                        // dismiss dialog
-                        isDialogShown.value = false
                     },
                 )
             },
@@ -264,8 +264,7 @@ fun CustomLoginDialog(
                     text = "Cancel",
                     type = ButtonType.OUTLINED,
                     onClick = {
-                        // dismiss dialog
-                        isDialogShown.value = false
+                        onDismissClicked()
                     }
                 )
             }

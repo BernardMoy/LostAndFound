@@ -2,6 +2,7 @@ package com.example.lostandfound.ui.NewLost
 
 import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.widget.Toast
@@ -67,6 +68,7 @@ import com.example.lostandfound.CustomElements.CustomErrorText
 import com.example.lostandfound.CustomElements.CustomFilterChip
 import com.example.lostandfound.CustomElements.CustomGrayTitle
 import com.example.lostandfound.CustomElements.CustomInputField
+import com.example.lostandfound.CustomElements.CustomLoginDialog
 import com.example.lostandfound.CustomElements.CustomProgressBar
 import com.example.lostandfound.CustomElements.CustomTextDialog
 import com.example.lostandfound.CustomElements.CustomTimePickerTextField
@@ -74,6 +76,7 @@ import com.example.lostandfound.Utility.ErrorCallback
 import com.example.lostandfound.Data.categories
 import com.example.lostandfound.Data.itemColors
 import com.example.lostandfound.FirebaseManagers.FirebaseUtility
+import com.example.lostandfound.ui.Login.LoginActivity
 import com.example.lostandfound.ui.theme.ComposeTheme
 import com.example.lostandfound.ui.theme.Typography
 
@@ -83,16 +86,27 @@ class NewLostActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         setContent {
-            NewLostScreen(activity = this)
-        }
-    }
-
-    override fun onResume() {
-        super.onResume()
-
-        // check if user is logged in
-        if (!FirebaseUtility.isUserLoggedIn()){
-            finish()
+            // first check if user is logged in
+            if (!FirebaseUtility.isUserLoggedIn()){
+                val isDialogOpen = remember{ mutableStateOf(true) }
+                ComposeTheme {
+                    CustomLoginDialog(
+                        onDismissClicked = {
+                            isDialogOpen.value = false
+                            finish()
+                        },
+                        onLoginClicked = {
+                            val intent = Intent(this, LoginActivity::class.java)
+                            startActivity(intent)
+                            isDialogOpen.value = false
+                            finish()
+                        },
+                        isDialogShown = isDialogOpen
+                    )
+                }
+            } else {
+                NewLostScreen(activity = this)
+            }
         }
     }
 }
