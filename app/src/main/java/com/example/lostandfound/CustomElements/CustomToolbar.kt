@@ -68,3 +68,53 @@ fun BackToolbar(
         modifier = Modifier.fillMaxWidth()
     )
 }
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun BackToolbarColored(
+    title: String,
+    activity: ComponentActivity,
+    backButtonOnClick: (() -> Unit)? = null   // this is a procedure that executes: It does not return a value
+) {
+
+    CenterAlignedTopAppBar(
+        title = {
+            Text(
+                text = title,
+                fontSize = dimensionResource(id = R.dimen.title_font_size).value.sp,
+                fontWeight = FontWeight.Bold
+            )
+        },
+
+        navigationIcon = {
+            if (backButtonOnClick != null){
+                IconButton(onClick = {
+                    // call the on click button that takes in the current activity
+                    backButtonOnClick()
+                }) {
+                    Icon(imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                        contentDescription = "Back")
+                }
+
+            } else {
+                IconButton(onClick = {
+                    // default behaviour is to exit the activity
+                    activity.finish()
+                }) {
+                    Icon(imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                        contentDescription = "Back")
+                }
+            }
+        },
+
+        colors = TopAppBarColors(
+            containerColor = MaterialTheme.colorScheme.primary,     // make the toolbar background transparent
+            titleContentColor = MaterialTheme.colorScheme.onPrimary,    // title text color
+            actionIconContentColor = MaterialTheme.colorScheme.onPrimary,    // action buttons color
+            scrolledContainerColor = MaterialTheme.colorScheme.onBackground,
+            navigationIconContentColor = MaterialTheme.colorScheme.onPrimary   // back button color
+        ),
+
+        modifier = Modifier.fillMaxWidth()
+    )
+}
