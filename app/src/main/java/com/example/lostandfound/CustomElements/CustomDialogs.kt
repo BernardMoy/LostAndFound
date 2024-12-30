@@ -1,5 +1,6 @@
 package com.example.lostandfound.CustomElements
 
+import android.graphics.Paint.Align
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -74,6 +75,7 @@ fun CustomTextDialog(
             text = {
                 Box(
                     modifier = Modifier.fillMaxWidth(),
+                    contentAlignment = Alignment.Center
                 ) {
                     Text(
                         text = content,
