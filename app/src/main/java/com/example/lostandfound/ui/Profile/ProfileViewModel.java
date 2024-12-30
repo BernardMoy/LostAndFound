@@ -7,6 +7,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.example.lostandfound.FirebaseManagers.FirebaseAuthManager;
+import com.example.lostandfound.FirebaseManagers.FirebaseUtility;
 
 public class ProfileViewModel extends ViewModel {
 
@@ -32,7 +33,7 @@ public class ProfileViewModel extends ViewModel {
     // method to validate if user is already logged in
     public boolean isUserSignedIn(Context ctx){
         FirebaseAuthManager firebaseAuthManager = new FirebaseAuthManager(ctx);
-        return firebaseAuthManager.isUserLoggedIn();
+        return FirebaseUtility.isUserLoggedIn();
     }
 
     // method to logout user
