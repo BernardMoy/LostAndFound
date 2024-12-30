@@ -7,9 +7,9 @@ import androidx.lifecycle.ViewModel
 
 class ProfileViewModel : ViewModel(){
     val imageUri: MutableState<Uri?> = mutableStateOf(null)
-    val email: MutableState<String> = mutableStateOf("E")
-    val firstName: MutableState<String> = mutableStateOf("se")
-    val lastName: MutableState<String> = mutableStateOf("e")
+    val email: MutableState<String> = mutableStateOf("")
+    val firstName: MutableState<String> = mutableStateOf("")
+    val lastName: MutableState<String> = mutableStateOf("")
 
     fun onImageChanged(uri: Uri?){
         imageUri.value = uri
