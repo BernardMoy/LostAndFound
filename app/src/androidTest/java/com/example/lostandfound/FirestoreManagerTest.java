@@ -151,18 +151,17 @@ public class FirestoreManagerTest {
     }
 
     @Test
-    public void testGetWhere() throws InterruptedException{
+    public void testGetIdsWhere() throws InterruptedException{
         final CountDownLatch latch = new CountDownLatch(1);
 
-        firestoreManager.getWhere(COLLECTION, "att2", 3L, new FirestoreManager.Callback<List<Map<String, Object>>>() {
+        firestoreManager.getIdsWhere(COLLECTION, "att2", 3L, new FirestoreManager.Callback<List<String>>() {
             @Override
-            public void onComplete(List<Map<String, Object>> result) {
+            public void onComplete(List<String> result) {
                 // the result should only be length 1
                 assertEquals(1, result.size());
 
                 // verify the data retrieved is correct - it should return full values of the document
-                assertEquals("val1", result.get(0).get("att1"));
-                assertEquals(3L, result.get(0).get("att2"));
+                assertEquals("testGetWhere", result.get(0));
 
                 // signal operation completed
                 latch.countDown();

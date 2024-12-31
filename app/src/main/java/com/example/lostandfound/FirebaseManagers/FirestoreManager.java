@@ -106,17 +106,17 @@ public class FirestoreManager {
      * @param collection collection name
      * @param attribute the attribute of the value
      * @param whereValue the value that the attribute should equal to
-     * @param callback return the values in a list of map, or null if failed or values does not exist
+     * @param callback return the list of document ids, or null if failed or values does not exist
      */
-    public void getWhere(String collection, String attribute, Object whereValue, Callback<List<Map<String, Object>>> callback){
+    public void getIdsWhere(String collection, String attribute, Object whereValue, Callback<List<String>> callback){
         db.collection(collection).whereEqualTo(attribute, whereValue).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                List<Map<String, Object>> result = new ArrayList<>();
+                List<String> result = new ArrayList<>();
 
                 // for each matching data, get it and add it to result
                 for (QueryDocumentSnapshot snapshot: queryDocumentSnapshots){
-                    result.add(snapshot.getData());
+                    result.add(snapshot.getId());
                 }
 
                 // return the result
