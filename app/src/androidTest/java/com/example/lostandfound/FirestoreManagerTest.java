@@ -14,6 +14,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CountDownLatch;
 
@@ -24,6 +25,7 @@ public class FirestoreManagerTest {
     private FirebaseFirestore firestore;
 
     private Map<String, Object> testValue;
+    private Map<String, Object> testValueSpecial;
 
     @Before
     public void setUp() throws InterruptedException{
@@ -38,11 +40,23 @@ public class FirestoreManagerTest {
         testValue.put("att1", "val1");
         testValue.put("att2", 2);
 
-        // countdown latch for the 3 insert statements
-        final CountDownLatch latch = new CountDownLatch(2);
+        // test values for the getWhere method only, to verify that it actually extracts the correct data
+        testValueSpecial = new HashMap<>();
+        testValueSpecial.put("att1", "val1");
+        testValueSpecial.put("att2", 3);
 
-        // insert values for the get, update and delete methods
+        // countdown latch for the 3 insert statements
+        final CountDownLatch latch = new CountDownLatch(3);
+
+        // insert values for the get, getwhere and delete methods
         firestore.collection(COLLECTION).document("testGet").set(testValue).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void unused) {
+                latch.countDown();
+            }
+        });
+
+        firestore.collection(COLLECTION).document("testGetWhere").set(testValueSpecial).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void unused) {
                 latch.countDown();
@@ -67,7 +81,7 @@ public class FirestoreManagerTest {
 
         firestore.collection(COLLECTION).document("testGet").delete().addOnCompleteListener(task -> latch.countDown());
         firestore.collection(COLLECTION).document("testPut").delete().addOnCompleteListener(task -> latch.countDown());
-        firestore.collection(COLLECTION).document("testUpdate").delete().addOnCompleteListener(task -> latch.countDown());
+        firestore.collection(COLLECTION).document("testGetWhere").delete().addOnCompleteListener(task -> latch.countDown());
         firestore.collection(COLLECTION).document("testDelete").delete().addOnCompleteListener(task -> latch.countDown());
 
         // wait for all operations to finish
@@ -135,6 +149,29 @@ public class FirestoreManagerTest {
         // wait for the get operation to complete
         getLatch.await();
     }
+
+    @Test
+    public void testGetWhere() throws InterruptedException{
+        final CountDownLatch latch = new CountDownLatch(1);
+
+        firestoreManager.getWhere(COLLECTION, "att2", 3L, new FirestoreManager.Callback<List<Map<String, Object>>>() {
+            @Override
+            public void onComplete(List<Map<String, Object>> result) {
+                // the result should only be length 1
+                assertEquals(1, result.size());
+
+                // verify the data retrieved is correct - it should return full values of the document
+                assertEquals("val1", result.get(0).get("att1"));
+                assertEquals(3L, result.get(0).get("att2"));
+
+                // signal operation completed
+                latch.countDown();
+            }
+        });
+
+        latch.await();
+    }
+
 
     @Test
     public void testDelete() throws InterruptedException{

@@ -9,7 +9,11 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 public class FirestoreManager {
@@ -75,6 +79,7 @@ public class FirestoreManager {
      * @param collection collection name
      * @param key key of items in the collection
      * @param callback return the values in a map, or null if failed or values does not exist
+     *                 it should only return a single key value pair as the key for the collection is unique.
      */
     public void get(String collection, String key, Callback<Map<String, Object>> callback){
         db.collection(collection).document(key).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
@@ -90,6 +95,37 @@ public class FirestoreManager {
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
+                callback.onComplete(null);
+            }
+        });
+    }
+
+    /**
+     * Method to get data from the database, given attribute and the value it equals to.
+     *
+     * @param collection collection name
+     * @param attribute the attribute of the value
+     * @param whereValue the value that the attribute should equal to
+     * @param callback return the values in a list of map, or null if failed or values does not exist
+     */
+    public void getWhere(String collection, String attribute, Object whereValue, Callback<List<Map<String, Object>>> callback){
+        db.collection(collection).whereEqualTo(attribute, whereValue).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                List<Map<String, Object>> result = new ArrayList<>();
+
+                // for each matching data, get it and add it to result
+                for (QueryDocumentSnapshot snapshot: queryDocumentSnapshots){
+                    result.add(snapshot.getData());
+                }
+
+                // return the result
+                callback.onComplete(result);
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                // return null
                 callback.onComplete(null);
             }
         });

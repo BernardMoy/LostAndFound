@@ -1,26 +1,10 @@
 package com.example.lostandfound;
 
 import android.net.Uri;
-import android.util.Log;
-
-import androidx.annotation.NonNull;
-import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import com.example.lostandfound.FirebaseManagers.FirebaseStorageManager;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.FirebaseApp;
-import com.google.firebase.auth.AuthResult;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.collection.BuildConfig;
 
-import org.junit.Before;
-import org.junit.Test;
-
-import java.util.Objects;
-import java.util.concurrent.CountDownLatch;
-
-public class FirebaseStorageTest {
+public class FirebaseStorageManagerTest {
     private Uri targetImage;
     private static final String TESTKEY = "ABCDEF0";
     private static final String TESTFOLDER = "Tests";
