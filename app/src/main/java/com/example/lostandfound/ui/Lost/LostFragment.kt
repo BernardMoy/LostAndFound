@@ -100,5 +100,12 @@ fun LostFragmentScreen() {
 
 @Composable
 fun MainContent(viewModel: LostFragmentViewModel = viewModel()){
-    CustomLostItemPreview(data = mapOf())
+    // load lost item data of the current user from the view model
+    viewModel.getAllData()
+
+    // for each data, display it as a preview
+    val itemData by viewModel.itemData.observeAsState(emptyList())
+    viewModel.itemData.forEach{ itemMap ->
+        CustomLostItemPreview(data = itemMap)
+    }
 }
