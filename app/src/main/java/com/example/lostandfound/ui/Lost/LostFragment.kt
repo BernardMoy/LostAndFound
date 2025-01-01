@@ -40,6 +40,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.lostandfound.CustomElements.CustomCenterText
+import com.example.lostandfound.CustomElements.CustomCenteredProgressbar
 import com.example.lostandfound.CustomElements.CustomLostItemPreview
 import com.example.lostandfound.CustomElements.CustomProgressBar
 import com.example.lostandfound.Data.FirebaseNames
@@ -116,7 +117,7 @@ fun MainContent(viewModel: LostFragmentViewModel = viewModel()){
 
     // display content
     if (viewModel.isLoading.value){
-        CustomProgressBar()
+        CustomCenteredProgressbar()
 
     } else {
         RefreshButton(context = context, viewModel = viewModel)
