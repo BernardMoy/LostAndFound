@@ -14,7 +14,7 @@ interface Callback<T> {
 
 class LostFragmentViewModel : ViewModel(){
     // whether the screen is loading
-    val isLoading: MutableState<Boolean> = mutableStateOf(true)
+    val isLoading: MutableState<Boolean> = mutableStateOf(false)
 
     // store the list of data in a map
     val itemData: MutableList<Map<String, Any>> = mutableListOf()

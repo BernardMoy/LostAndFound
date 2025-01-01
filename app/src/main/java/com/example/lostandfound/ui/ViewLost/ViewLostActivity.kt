@@ -1,7 +1,9 @@
 package com.example.lostandfound.ui.ViewLost
 
+import android.content.Context
 import android.net.Uri
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
@@ -26,6 +28,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -41,11 +44,14 @@ import coil3.compose.rememberAsyncImagePainter
 import com.example.lostandfound.CustomElements.BackToolbar
 import com.example.lostandfound.CustomElements.CustomEditText
 import com.example.lostandfound.CustomElements.CustomGrayTitle
+import com.example.lostandfound.CustomElements.CustomProgressBar
 import com.example.lostandfound.Data.IntentExtraNames
 import com.example.lostandfound.Data.lostStatusText
 import com.example.lostandfound.Data.statusColor
 import com.example.lostandfound.R
 import com.example.lostandfound.Utility.DateTimeManager
+import com.example.lostandfound.ui.Lost.Callback
+import com.example.lostandfound.ui.Lost.LostFragmentViewModel
 import com.example.lostandfound.ui.theme.ComposeTheme
 import com.example.lostandfound.ui.theme.Typography
 
@@ -110,15 +116,25 @@ fun MainContent(viewModel: ViewLostViewModel) {
     // boolean to determine if it is being rendered in preview
     val inPreview = LocalInspectionMode.current
 
-    Column(
-        verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin))
-    ){
-        Reference(viewModel = viewModel)
-        Status(viewModel = viewModel)
-        ItemImage(viewModel = viewModel)
-        ItemDetails(viewModel = viewModel)
+    LaunchedEffect(Unit) {
+        loadData(context, viewModel)
+    }
 
-        // also display the user
+    // display content
+    if (viewModel.isLoading.value) {
+        CustomProgressBar()
+
+    } else {
+        Column(
+            verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin))
+        ){
+            Reference(viewModel = viewModel)
+            Status(viewModel = viewModel)
+            ItemImage(viewModel = viewModel)
+            ItemDetails(viewModel = viewModel)
+
+            // also display the user
+        }
     }
 }
 
@@ -215,7 +231,7 @@ fun ItemDetails(viewModel: ViewLostViewModel){
 
         // brand (Optional)
         CustomEditText(fieldLabel = "Brand",
-            fieldContent = viewModel.brand ?: "Not provided",
+            fieldContent = if (viewModel.brand.isNotEmpty()) viewModel.brand else "Not provided",
             leftIcon = Icons.Outlined.Title,
             isEditable = false
         )
@@ -223,7 +239,7 @@ fun ItemDetails(viewModel: ViewLostViewModel){
 
         // description (Optional)
         CustomEditText(fieldLabel = "Description",
-            fieldContent = viewModel.description ?: "Not provided",
+            fieldContent = if (viewModel.description.isNotEmpty()) viewModel.description else "Not provided",
             leftIcon = Icons.Outlined.Description,
             isEditable = false
         )
@@ -231,6 +247,26 @@ fun ItemDetails(viewModel: ViewLostViewModel){
     }
 }
 
+// function to load data, called when the activity is created
+fun loadData(
+    context: Context,
+    viewModel: ViewLostViewModel
+){
+    // is loading initially
+    viewModel.isLoading.value = true
+
+    // load lost item data of the current user from the view model
+    viewModel.getItemData(object : com.example.lostandfound.ui.ViewLost.Callback<Boolean>{
+        override fun onComplete(result: Boolean) {
+            viewModel.isLoading.value = false
+
+            if (!result){
+                // display toast message for failed data retrieval
+                Toast.makeText(context, "Fetching data failed", Toast.LENGTH_SHORT).show()
+            }
+        }
+    })
+}
 
 
 

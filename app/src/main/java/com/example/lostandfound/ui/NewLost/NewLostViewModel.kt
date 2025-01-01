@@ -140,10 +140,10 @@ class NewLostViewModel: ViewModel() {
             FirebaseNames.LOSTFOUND_CATEGORY to selectedCategory!!.name,      // wont be null, otherwise it is captured above
             FirebaseNames.LOSTFOUND_SUBCATEGORY to selectedSubCategory.value,
             FirebaseNames.LOSTFOUND_COLOR to selectedColor!!.name,   // null is checked
-            FirebaseNames.LOSTFOUND_BRAND to itemBrand.value,
             FirebaseNames.LOSTFOUND_EPOCHDATETIME to DateTimeManager.getDateTimeEpoch(
                 selectedDate.value?:0L, selectedHour.value?:0, selectedMinute.value?:0
             ),
+            FirebaseNames.LOSTFOUND_BRAND to itemBrand.value,
             FirebaseNames.LOSTFOUND_DESCRIPTION to additionalDescription.value,
             FirebaseNames.LOSTFOUND_STATUS to 0 // represent the lost status
         )
