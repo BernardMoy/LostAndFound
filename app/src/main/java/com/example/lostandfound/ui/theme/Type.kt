@@ -17,14 +17,6 @@ val Typography = Typography(
         letterSpacing = 0.25.sp
     ),
 
-    bodyLarge = TextStyle(
-        fontFamily = FontFamily.Default,
-        fontWeight = FontWeight.Normal,
-        fontSize = 25.sp,
-        lineHeight = 20.sp,
-        letterSpacing = 0.25.sp
-    ),
-
     titleMedium = TextStyle(
         fontFamily = FontFamily.Default,
         fontWeight = FontWeight.Medium, // Medium weight text
