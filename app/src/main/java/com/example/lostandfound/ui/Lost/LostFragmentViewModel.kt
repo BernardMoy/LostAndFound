@@ -1,12 +1,15 @@
 package com.example.lostandfound.ui.Lost
 
+import android.net.Uri
 import android.util.Log
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import com.example.lostandfound.Data.FirebaseNames
+import com.example.lostandfound.FirebaseManagers.FirebaseStorageManager
 import com.example.lostandfound.FirebaseManagers.FirebaseUtility
 import com.example.lostandfound.FirebaseManagers.FirestoreManager
+import com.example.lostandfound.R
 
 interface Callback<T> {
     fun onComplete(result: T)
@@ -21,6 +24,7 @@ class LostFragmentViewModel : ViewModel(){
 
     // firestore manager
     val firestoreManager = FirestoreManager()
+    val firebaseStorageManager = FirebaseStorageManager()
 
     /*
     function to get all item data corresponding to the current user, and update the mutable itemData list.
@@ -70,14 +74,29 @@ class LostFragmentViewModel : ViewModel(){
                                     val mutableItemResult = itemResult.toMutableMap()
                                     mutableItemResult[FirebaseNames.LOSTFOUND_ID] = itemID
 
-                                    // add the data to the list
-                                    itemData.add(mutableItemResult)
-                                    fetchedItems ++
+                                    // also add the image
+                                    firebaseStorageManager.getImage(FirebaseNames.FOLDER_LOST_IMAGE, itemID, object: FirebaseStorageManager.Callback<Uri?>{
+                                        override fun onComplete(result: Uri?) {
+                                            // if the result is null, replace it by placeholder image
+                                            if (result == null){
+                                                val placeHolder: Uri = Uri.parse("android.resource://com.example.lostandfound/" + R.drawable.placeholder_image)
+                                                mutableItemResult[FirebaseNames.LOSTFOUND_IMAGE] = placeHolder
 
-                                    // return true when all items have been fetched
-                                    if (fetchedItems == resultSize){
-                                        callback.onComplete(true)
-                                    }
+                                            } else {
+                                                mutableItemResult[FirebaseNames.LOSTFOUND_IMAGE] = result
+                                            }
+
+                                            // add the data to the list
+                                            itemData.add(mutableItemResult)
+                                            fetchedItems ++
+
+                                            // return true when all items have been fetched
+                                            if (fetchedItems == resultSize){
+                                                callback.onComplete(true)
+                                            }
+                                        }
+                                    })
+
                                 }
                             }
                         )

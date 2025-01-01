@@ -178,12 +178,8 @@ fun ItemImage(viewModel: ViewLostViewModel){
         modifier = Modifier.fillMaxWidth()
     ){
         // image of the item
-        val testImage =
-            Uri.parse("android.resource://com.example.lostandfound/" + R.drawable.placeholder_image)
-
-        // wont be displayed if image is null
         Image(
-            painter = rememberAsyncImagePainter(model = testImage),
+            painter = rememberAsyncImagePainter(model = viewModel.image),
             contentDescription = "Item image",
             modifier = Modifier.fillMaxWidth(),
             alignment = Alignment.Center
