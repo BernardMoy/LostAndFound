@@ -1,50 +1,67 @@
 package com.example.lostandfound.ui.ViewLost
 
-import android.content.Context
-import android.content.SharedPreferences
+import android.net.Uri
 import android.os.Bundle
-import android.widget.Toast
 import androidx.activity.ComponentActivity
-import com.example.lostandfound.R
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.DarkMode
-import androidx.compose.material.icons.outlined.Delete
-import androidx.compose.material.icons.outlined.Info
-import androidx.compose.material.icons.outlined.LocationOn
-import androidx.compose.material.icons.outlined.Notifications
+import androidx.compose.material.icons.outlined.AccountCircle
+import androidx.compose.material.icons.outlined.Description
+import androidx.compose.material.icons.outlined.Edit
+import androidx.compose.material.icons.outlined.Folder
 import androidx.compose.material.icons.outlined.Palette
-import androidx.compose.material.icons.outlined.Report
+import androidx.compose.material.icons.outlined.Title
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Scaffold
-import androidx.compose.runtime.Composable
 import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalInspectionMode
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import coil3.compose.rememberAsyncImagePainter
 import com.example.lostandfound.CustomElements.BackToolbar
-import com.example.lostandfound.CustomElements.CustomActionRow
+import com.example.lostandfound.CustomElements.CustomEditText
 import com.example.lostandfound.CustomElements.CustomGrayTitle
-import com.example.lostandfound.Data.SharedPreferencesNames
+import com.example.lostandfound.Data.IntentExtraNames
+import com.example.lostandfound.Data.lostStatusText
+import com.example.lostandfound.Data.statusColor
+import com.example.lostandfound.R
+import com.example.lostandfound.Utility.DateTimeManager
 import com.example.lostandfound.ui.theme.ComposeTheme
+import com.example.lostandfound.ui.theme.Typography
 
 
 class ViewLostActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        // create the view model here
+        val viewModel: ViewLostViewModel by viewModels()
+
+        // load the passed intent data into the view model
+        viewModel.itemID = intent.getStringExtra(IntentExtraNames.INTENT_LOST_ID) ?: ""
+
         setContent {
-            ViewLostScreen(activity = this)
+            ViewLostScreen(activity = this, viewModel = viewModel)
         }
     }
 }
@@ -55,11 +72,11 @@ class MockActivity : ComponentActivity()
 @Preview(showBackground = true)
 @Composable
 fun Preview() {
-    ViewLostScreen(activity = MockActivity())
+    ViewLostScreen(activity = MockActivity(), viewModel = ViewLostViewModel())
 }
 
 @Composable
-fun ViewLostScreen(activity: ComponentActivity) {
+fun ViewLostScreen(activity: ComponentActivity, viewModel: ViewLostViewModel) {
     ComposeTheme {
         Surface {
             Scaffold(
@@ -73,10 +90,10 @@ fun ViewLostScreen(activity: ComponentActivity) {
                         .fillMaxSize()
                         .padding(paddingValues = innerPadding)
                         .padding(dimensionResource(id = R.dimen.title_margin))
-                        .verticalScroll(rememberScrollState())   // make screen scrollable
-                ) {
+                        .verticalScroll(rememberScrollState()),   // make screen scrollable
+                    ) {
                     // content goes here
-                    MainContent()
+                    MainContent(viewModel = viewModel)
                 }
             }
         }
@@ -86,13 +103,136 @@ fun ViewLostScreen(activity: ComponentActivity) {
 // content includes avatar, edit fields, reminder message and save button
 // get the view model in the function parameter
 @Composable
-fun MainContent(viewModel: ViewLostViewModel = viewModel()) {
+fun MainContent(viewModel: ViewLostViewModel) {
     // get the local context
     val context = LocalContext.current
 
     // boolean to determine if it is being rendered in preview
     val inPreview = LocalInspectionMode.current
 
+    Column(
+        verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin))
+    ){
+        Reference(viewModel = viewModel)
+        Status(viewModel = viewModel)
+        ItemImage(viewModel = viewModel)
+        ItemDetails(viewModel = viewModel)
+
+        // also display the user
+    }
 }
+
+@Composable
+fun Reference(viewModel: ViewLostViewModel){
+    Row(
+        modifier = Modifier.fillMaxWidth()
+    ){
+        Text(
+            text = "Reference: #" + viewModel.itemID,
+            style = Typography.bodyMedium,
+            color = Color.Gray,
+            modifier = Modifier.fillMaxWidth(),
+            textAlign = TextAlign.Center
+        )
+    }
+}
+
+@Composable
+fun Status(viewModel: ViewLostViewModel) {
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+    ) {
+        Text(
+            text = "Status: " + lostStatusText[viewModel.status],
+            style = Typography.bodyMedium,
+            color = colorResource(
+                id = statusColor[viewModel.status] ?: R.color.status0
+            ),
+            fontWeight = FontWeight.Bold,
+            modifier = Modifier.fillMaxWidth(),
+            textAlign = TextAlign.Center
+        )
+    }
+}
+
+@Composable
+fun ItemImage(viewModel: ViewLostViewModel){
+    Row(
+        modifier = Modifier.fillMaxWidth()
+    ){
+        // image of the item
+        val testImage =
+            Uri.parse("android.resource://com.example.lostandfound/" + R.drawable.placeholder_image)
+
+        // wont be displayed if image is null
+        Image(
+            painter = rememberAsyncImagePainter(model = testImage),
+            contentDescription = "Item image",
+            modifier = Modifier.fillMaxWidth(),
+            alignment = Alignment.Center
+        )
+    }
+}
+
+@Composable
+fun ItemDetails(viewModel: ViewLostViewModel){
+    Column(
+    ){
+        CustomGrayTitle(text = "Item details")
+
+        // Name of item
+        CustomEditText(
+            fieldLabel = "Item name",
+            fieldContent = viewModel.itemName,
+            leftIcon = Icons.Outlined.Edit,
+            isEditable = false
+        )
+        HorizontalDivider(thickness = 1.dp)
+
+        // category and subcategory
+        CustomEditText(fieldLabel = "Category",
+            fieldContent = viewModel.category + ", " + viewModel.subCategory,
+            leftIcon = Icons.Outlined.Folder,
+            isEditable = false
+        )
+        HorizontalDivider(thickness = 1.dp)
+
+        // date and time
+        CustomEditText(fieldLabel = "Date and time",
+            fieldContent = DateTimeManager.dateTimeToString(viewModel.dateTime),
+            leftIcon = Icons.Outlined.Palette,
+            isEditable = false
+        )
+        HorizontalDivider(thickness = 1.dp)
+
+        // color
+        CustomEditText(fieldLabel = "Color",
+            fieldContent = viewModel.color,
+            leftIcon = Icons.Outlined.Palette,
+            isEditable = false
+        )
+        HorizontalDivider(thickness = 1.dp)
+
+        // brand (Optional)
+        CustomEditText(fieldLabel = "Brand",
+            fieldContent = viewModel.brand ?: "Not provided",
+            leftIcon = Icons.Outlined.Title,
+            isEditable = false
+        )
+        HorizontalDivider(thickness = 1.dp)
+
+        // description (Optional)
+        CustomEditText(fieldLabel = "Description",
+            fieldContent = viewModel.description ?: "Not provided",
+            leftIcon = Icons.Outlined.Description,
+            isEditable = false
+        )
+        HorizontalDivider(thickness = 1.dp)
+    }
+}
+
+
+
+
 
 
