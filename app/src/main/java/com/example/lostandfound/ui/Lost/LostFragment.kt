@@ -39,6 +39,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.lostandfound.CustomElements.CustomCenterText
 import com.example.lostandfound.CustomElements.CustomLostItemPreview
 import com.example.lostandfound.CustomElements.CustomProgressBar
 import com.example.lostandfound.Data.FirebaseNames
@@ -67,19 +68,7 @@ class LostFragment : Fragment() {
                 ComposeTheme{
                     // check if user is logged in
                     if (!isLoggedIn.value){
-                        Box(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .fillMaxHeight()
-                        ) {
-                            Text(
-                                text = "Please login first to view this content.",
-                                style = Typography.bodyMedium,
-                                color = Color.Gray,
-                                textAlign = TextAlign.Center,
-                                modifier = Modifier.align(Alignment.Center)
-                            )
-                        }
+                        CustomCenterText(text = "Please login first to view this content.")
                     } else {
                         LostFragmentScreen()
                     }
