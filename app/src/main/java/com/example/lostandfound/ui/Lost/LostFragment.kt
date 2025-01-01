@@ -1,30 +1,37 @@
 package com.example.lostandfound.ui.Lost
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.lostandfound.CustomElements.CustomLostItemPreview
+import com.example.lostandfound.CustomElements.CustomProgressBar
 import com.example.lostandfound.FirebaseManagers.FirebaseUtility
 import com.example.lostandfound.R
 import com.example.lostandfound.ui.EditProfile.EditProfileViewModel
@@ -100,12 +107,42 @@ fun LostFragmentScreen() {
 
 @Composable
 fun MainContent(viewModel: LostFragmentViewModel = viewModel()){
-    // load lost item data of the current user from the view model
-    viewModel.getAllData()
+    val context = LocalContext.current
 
+    LaunchedEffect(Unit) {
+        // is loading initially
+        viewModel.isLoading.value = true
+
+        // load lost item data of the current user from the view model
+        viewModel.getAllData(object: Callback<Boolean>{
+            override fun onComplete(result: Boolean) {
+                viewModel.isLoading.value = false
+
+                if (!result){
+                    // display toast message for failed data retrieval
+                    Toast.makeText(context, "Fetching data failed", Toast.LENGTH_SHORT).show()
+                }
+            }
+        })
+    }
+
+    // display content
+    if (viewModel.isLoading.value){
+        CustomProgressBar()
+
+    } else {
+        LostItemsColumn(viewModel = viewModel)
+    }
+}
+
+@Composable
+fun LostItemsColumn(
+    viewModel: LostFragmentViewModel
+){
     // for each data, display it as a preview
-    val itemData by viewModel.itemData.observeAsState(emptyList())
-    viewModel.itemData.forEach{ itemMap ->
-        CustomLostItemPreview(data = itemMap)
+    LazyColumn {
+        items(viewModel.itemData) { itemMap ->
+            CustomLostItemPreview(data = itemMap)
+        }
     }
 }
