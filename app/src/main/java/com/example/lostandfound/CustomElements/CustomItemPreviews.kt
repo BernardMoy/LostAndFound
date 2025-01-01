@@ -92,19 +92,24 @@ fun CustomLostItemPreview(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin_half))
             ) {
+                // the status of the item can be either 0 1 2 - cast them to int
+                val status = (data[FirebaseNames.LOSTFOUND_STATUS] as Long).toInt()
+
                 Icon(
                     imageVector = Icons.Filled.Circle,
-                    tint = colorResource(id = R.color.status0),
+                    tint = colorResource(
+                        id = statusColor[status] ?: R.color.status0
+                    ),
                     contentDescription = "Status of item",
                     modifier = Modifier.width(dimensionResource(id = R.dimen.content_margin))
                 )
 
-                // the status of the item can be either 0 1 2
-                val status = data[FirebaseNames.LOSTFOUND_STATUS] as? Int
                 Text(
                     text = "Status: " + lostStatusText[status],
                     style = Typography.bodyMedium,
-                    color = colorResource(id = statusColor[status] ?: R.color.status0),
+                    color = colorResource(
+                        id = statusColor[status] ?: R.color.status0
+                    ),
                     fontWeight = FontWeight.Bold,
                     )
 
