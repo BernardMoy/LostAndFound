@@ -6,14 +6,21 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Refresh
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -131,7 +138,43 @@ fun MainContent(viewModel: LostFragmentViewModel = viewModel()){
         CustomProgressBar()
 
     } else {
+        RefreshButton(viewModel = viewModel)
         LostItemsColumn(viewModel = viewModel)
+    }
+}
+
+@Composable
+fun RefreshButton(
+    viewModel: LostFragmentViewModel
+){
+    Row (
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(bottom = dimensionResource(id = R.dimen.content_margin)),
+        horizontalArrangement = Arrangement.Start,
+        verticalAlignment = Alignment.CenterVertically,
+    ){
+        // display the text at the start
+        Text(
+            text = "Your lost items",
+            style = Typography.titleMedium,
+            color = MaterialTheme.colorScheme.secondary,
+            modifier = Modifier.weight(1f) // make the refresh button go to the end by taking up all available space
+
+        )
+        IconButton(
+           onClick = {
+                // refresh the list - manually (by now)
+
+           }
+        ) {
+            Icon(
+                imageVector = Icons.Outlined.Refresh,
+                contentDescription = "Reload",
+                modifier = Modifier.size(dimensionResource(id = R.dimen.image_button_size)),
+                tint = MaterialTheme.colorScheme.secondary
+            )
+        }
     }
 }
 

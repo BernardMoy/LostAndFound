@@ -48,6 +48,7 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat.startActivity
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil3.compose.rememberAsyncImagePainter
@@ -226,7 +227,8 @@ fun TopProfileBox(
             Text(
                 text = viewModel.firstName.value + " " + viewModel.lastName.value,
                 color = MaterialTheme.colorScheme.onPrimary,
-                style = Typography.bodyLarge
+                style = Typography.bodyMedium,
+                fontSize = 24.sp  // force large font here
             )
 
             // email
