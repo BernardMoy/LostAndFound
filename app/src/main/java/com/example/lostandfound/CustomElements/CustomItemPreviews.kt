@@ -27,6 +27,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil3.compose.rememberAsyncImagePainter
+import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
+import com.bumptech.glide.integration.compose.GlideImage
 import com.example.lostandfound.Data.FirebaseNames
 import com.example.lostandfound.Data.lostStatusText
 import com.example.lostandfound.Data.statusColor
@@ -46,6 +48,7 @@ fun Preview() {
     }
 }
 
+@OptIn(ExperimentalGlideComposeApi::class)
 @Composable
 fun CustomLostItemPreview(
     data: Map<String, Any>,
@@ -121,11 +124,10 @@ fun CustomLostItemPreview(
                 horizontalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin))
             ) {
                 // image of the item
-                Image(
-                    painter = rememberAsyncImagePainter(model = (data[FirebaseNames.LOSTFOUND_IMAGE] as Uri)),
+                GlideImage(
+                    model = (data[FirebaseNames.LOSTFOUND_IMAGE] as Uri),
                     contentDescription = "Item image",
-                    modifier = Modifier
-                        .weight(1F)
+                    modifier = Modifier.weight(1F)
                 )
 
                 // other attributes of the item

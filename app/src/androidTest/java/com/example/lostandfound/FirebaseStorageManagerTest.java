@@ -2,7 +2,19 @@ package com.example.lostandfound;
 
 import android.net.Uri;
 
+import androidx.annotation.NonNull;
+
 import com.example.lostandfound.FirebaseManagers.FirebaseStorageManager;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+
+import org.junit.Before;
+import org.junit.Test;
+
+import java.util.Objects;
+import java.util.concurrent.CountDownLatch;
 
 public class FirebaseStorageManagerTest {
     private Uri targetImage;
@@ -14,7 +26,7 @@ public class FirebaseStorageManagerTest {
     These tests are not tested by default.
     This is to save quota for firebase storage queries.
      */
-    /*
+
     @Before
     public void setUp() throws InterruptedException {
         this.targetImage = Uri.parse("android.resource://com.example.lostandfound/" + R.drawable.placeholder_image);
@@ -100,6 +112,5 @@ public class FirebaseStorageManagerTest {
         latch4.await();
     }
 
-     */
 
 }
