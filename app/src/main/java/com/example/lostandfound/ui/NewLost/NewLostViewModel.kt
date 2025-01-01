@@ -161,7 +161,7 @@ class NewLostViewModel: ViewModel() {
 
                 // add the image to firebase storage if it is not null
                 if (itemImage.value != null){
-                    storageManager.putImage(FirebaseNames.LOSTFOUND_IMAGE_FOLDER, result, itemImage.value, object: FirebaseStorageManager.Callback<Boolean>{
+                    storageManager.putImage(FirebaseNames.FOLDER_LOST_IMAGE, result, itemImage.value, object: FirebaseStorageManager.Callback<Boolean>{
                         override fun onComplete(resultImage: Boolean) {
                             if (!resultImage){
                                 // delete the previously uploaded firestore object if image uploading fails

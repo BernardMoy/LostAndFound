@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import com.example.lostandfound.Data.FirebaseNames
 import com.example.lostandfound.FirebaseManagers.FirebaseStorageManager
 import com.example.lostandfound.FirebaseManagers.FirestoreManager
+import com.example.lostandfound.R
 
 interface Callback<T> {
     fun onComplete(result: T)
@@ -37,7 +38,7 @@ class ViewLostViewModel : ViewModel(){
 
         // managers
         val firestoreManager = FirestoreManager()
-        val storageManager = FirebaseStorageManager()
+        val firebaseStorageManager = FirebaseStorageManager()
 
         // get data from firebase db
         firestoreManager.get(FirebaseNames.COLLECTION_LOST_ITEMS, itemID, object : FirestoreManager.Callback<Map<String, Any>> {
@@ -59,8 +60,23 @@ class ViewLostViewModel : ViewModel(){
                 description = result[FirebaseNames.LOSTFOUND_DESCRIPTION].toString()
                 status = (result[FirebaseNames.LOSTFOUND_STATUS] as Long).toInt()
 
-                // return true
-                callback.onComplete(true)
+
+
+                firebaseStorageManager.getImage(FirebaseNames.FOLDER_LOST_IMAGE, itemID, object: FirebaseStorageManager.Callback<Uri?>{
+                    override fun onComplete(result: Uri?) {
+                        // if the result is null, replace it by placeholder image
+                        if (result == null){
+                            val placeHolder: Uri = Uri.parse("android.resource://com.example.lostandfound/" + R.drawable.placeholder_image)
+                            image = placeHolder
+
+                        } else {
+                            image = result
+                        }
+
+                        // return true after all data has been fetched
+                        callback.onComplete(true)
+                    }
+                })
             }
         })
     }

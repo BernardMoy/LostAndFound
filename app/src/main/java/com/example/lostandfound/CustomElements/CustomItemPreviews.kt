@@ -120,13 +120,9 @@ fun CustomLostItemPreview(
             Row(
                 horizontalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin))
             ) {
-                // placeholder image
-                val targetImage =
-                    Uri.parse("android.resource://com.example.lostandfound/" + R.drawable.placeholder_image)
-
                 // image of the item
                 Image(
-                    painter = rememberAsyncImagePainter(model = targetImage),
+                    painter = rememberAsyncImagePainter(model = (data[FirebaseNames.LOSTFOUND_IMAGE] as Uri)),
                     contentDescription = "Item image",
                     modifier = Modifier
                         .weight(1F)
