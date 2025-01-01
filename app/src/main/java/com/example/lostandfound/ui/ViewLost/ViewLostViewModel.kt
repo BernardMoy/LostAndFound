@@ -2,24 +2,30 @@ package com.example.lostandfound.ui.ViewLost
 
 import android.net.Uri
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
+import com.example.lostandfound.Data.FirebaseNames
+import com.example.lostandfound.FirebaseManagers.FirebaseStorageManager
+import com.example.lostandfound.FirebaseManagers.FirestoreManager
 
 interface Callback<T> {
     fun onComplete(result: T)
 }
 
 class ViewLostViewModel : ViewModel(){
-    var itemID: String = ""
+    val isLoading: MutableState<Boolean> = mutableStateOf(false)
 
     // item data are stored here
+    var itemID: String = ""  // retrieved as soon as the activity is created
+
     var userID: String = ""
     var itemName: String = ""
     var category: String = ""
     var subCategory: String = ""
     var color: String = ""
     var dateTime: Long = 0L
-    var brand: String? = null
-    var description: String? = null
+    var brand: String = ""  // nullable
+    var description: String = ""  // nullable
     var status: Int = 0
 
     // image stored here
@@ -29,5 +35,33 @@ class ViewLostViewModel : ViewModel(){
     // return true if successful, false otherwise
     fun getItemData(callback: Callback<Boolean>){
 
+        // managers
+        val firestoreManager = FirestoreManager()
+        val storageManager = FirebaseStorageManager()
+
+        // get data from firebase db
+        firestoreManager.get(FirebaseNames.COLLECTION_LOST_ITEMS, itemID, object : FirestoreManager.Callback<Map<String, Any>> {
+            override fun onComplete(result: Map<String, Any>?) {
+                if (result == null){
+                    // failed
+                    callback.onComplete(false)
+                    return
+                }
+
+                // load the data into the view model
+                userID = result[FirebaseNames.LOSTFOUND_USER].toString()
+                itemName = result[FirebaseNames.LOSTFOUND_ITEMNAME].toString()
+                category = result[FirebaseNames.LOSTFOUND_CATEGORY].toString()
+                subCategory = result[FirebaseNames.LOSTFOUND_SUBCATEGORY].toString()
+                color = result[FirebaseNames.LOSTFOUND_COLOR].toString()
+                dateTime = result[FirebaseNames.LOSTFOUND_EPOCHDATETIME] as Long
+                brand = result[FirebaseNames.LOSTFOUND_BRAND].toString()
+                description = result[FirebaseNames.LOSTFOUND_DESCRIPTION].toString()
+                status = (result[FirebaseNames.LOSTFOUND_STATUS] as Long).toInt()
+
+                // return true
+                callback.onComplete(true)
+            }
+        })
     }
 }
