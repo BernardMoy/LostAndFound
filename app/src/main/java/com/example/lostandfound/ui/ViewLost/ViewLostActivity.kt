@@ -42,6 +42,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil3.compose.rememberAsyncImagePainter
 import com.example.lostandfound.CustomElements.BackToolbar
+import com.example.lostandfound.CustomElements.CustomCenteredProgressbar
 import com.example.lostandfound.CustomElements.CustomEditText
 import com.example.lostandfound.CustomElements.CustomGrayTitle
 import com.example.lostandfound.CustomElements.CustomProgressBar
@@ -122,7 +123,7 @@ fun MainContent(viewModel: ViewLostViewModel) {
 
     // display content
     if (viewModel.isLoading.value) {
-        CustomProgressBar()
+        CustomCenteredProgressbar()
 
     } else {
         Column(
