@@ -1,6 +1,7 @@
 package com.example.lostandfound.ui.Lost
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -40,9 +41,12 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.lostandfound.CustomElements.CustomLostItemPreview
 import com.example.lostandfound.CustomElements.CustomProgressBar
+import com.example.lostandfound.Data.FirebaseNames
+import com.example.lostandfound.Data.IntentExtraNames
 import com.example.lostandfound.FirebaseManagers.FirebaseUtility
 import com.example.lostandfound.R
 import com.example.lostandfound.ui.EditProfile.EditProfileViewModel
+import com.example.lostandfound.ui.ViewLost.ViewLostActivity
 import com.example.lostandfound.ui.theme.ComposeTheme
 import com.example.lostandfound.ui.theme.Typography
 
@@ -127,7 +131,7 @@ fun MainContent(viewModel: LostFragmentViewModel = viewModel()){
 
     } else {
         RefreshButton(context = context, viewModel = viewModel)
-        LostItemsColumn(viewModel = viewModel)
+        LostItemsColumn(context = context, viewModel = viewModel)
     }
 }
 
@@ -169,6 +173,7 @@ fun RefreshButton(
 
 @Composable
 fun LostItemsColumn(
+    context: Context,
     viewModel: LostFragmentViewModel
 ){
     // for each data, display it as a preview
@@ -176,7 +181,20 @@ fun LostItemsColumn(
         verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.title_margin))
     ){
         items(viewModel.itemData) { itemMap ->
-            CustomLostItemPreview(data = itemMap)
+            CustomLostItemPreview(
+                data = itemMap,
+                onViewButtonClicked = {
+                    // start view item activity
+                    val intent = Intent(context, ViewLostActivity::class.java)
+
+                    // pass only the item id as the extra value
+                    intent.putExtra(
+                        IntentExtraNames.INTENT_LOST_ID,
+                        itemMap[FirebaseNames.LOSTFOUND_ID] as String
+                    )
+                    context.startActivity(intent)
+                }
+            )
         }
     }
 }

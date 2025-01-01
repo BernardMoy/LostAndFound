@@ -26,6 +26,11 @@
             android:exported="false"
             android:windowSoftInputMode="adjustPan" />
         <activity
+            android:name=".ui.ViewLost.ViewLostActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:exported="false"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
             android:name=".ui.ActivityLog.ActivityLogActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:exported="false"
