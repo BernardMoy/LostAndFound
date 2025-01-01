@@ -31,6 +31,7 @@ public final class FirebaseNames {
     public static final String LOSTFOUND_STATUS = "status";
     public static final String FOUND_SECURITY_Q = "security_question";
     public static final String FOUND_SECURITY_Q_ANS = "security_question_answer";
+    public static final String LOSTFOUND_ID = "item_id";
 
     public static final String REPORT_ISSUE_USER = "user";
     public static final String REPORT_ISSUE_DESC = "description";

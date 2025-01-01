@@ -66,8 +66,12 @@ class LostFragmentViewModel : ViewModel(){
                                         return
                                     }
 
+                                    // add the item id to the itemResult map
+                                    val mutableItemResult = itemResult.toMutableMap()
+                                    mutableItemResult[FirebaseNames.LOSTFOUND_ID] = itemID
+
                                     // add the data to the list
-                                    itemData.add(itemResult)
+                                    itemData.add(mutableItemResult)
                                     fetchedItems ++
 
                                     // return true when all items have been fetched
