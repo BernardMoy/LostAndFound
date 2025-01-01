@@ -1,5 +1,6 @@
 package com.example.lostandfound.ui.Lost
 
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -117,20 +118,7 @@ fun MainContent(viewModel: LostFragmentViewModel = viewModel()){
     val context = LocalContext.current
 
     LaunchedEffect(Unit) {
-        // is loading initially
-        viewModel.isLoading.value = true
-
-        // load lost item data of the current user from the view model
-        viewModel.getAllData(object: Callback<Boolean>{
-            override fun onComplete(result: Boolean) {
-                viewModel.isLoading.value = false
-
-                if (!result){
-                    // display toast message for failed data retrieval
-                    Toast.makeText(context, "Fetching data failed", Toast.LENGTH_SHORT).show()
-                }
-            }
-        })
+        refreshData(context, viewModel)
     }
 
     // display content
@@ -138,13 +126,14 @@ fun MainContent(viewModel: LostFragmentViewModel = viewModel()){
         CustomProgressBar()
 
     } else {
-        RefreshButton(viewModel = viewModel)
+        RefreshButton(context = context, viewModel = viewModel)
         LostItemsColumn(viewModel = viewModel)
     }
 }
 
 @Composable
 fun RefreshButton(
+    context: Context,
     viewModel: LostFragmentViewModel
 ){
     Row (
@@ -164,8 +153,8 @@ fun RefreshButton(
         )
         IconButton(
            onClick = {
-                // refresh the list - manually (by now)
-
+               // refresh the list - manually (by now)
+               refreshData(context, viewModel)
            }
         ) {
             Icon(
@@ -190,4 +179,25 @@ fun LostItemsColumn(
             CustomLostItemPreview(data = itemMap)
         }
     }
+}
+
+// function to refresh data, called everytime the function is created or refresh button clicked
+fun refreshData(
+    context: Context,
+    viewModel: LostFragmentViewModel
+){
+    // is loading initially
+    viewModel.isLoading.value = true
+
+    // load lost item data of the current user from the view model
+    viewModel.getAllData(object: Callback<Boolean>{
+        override fun onComplete(result: Boolean) {
+            viewModel.isLoading.value = false
+
+            if (!result){
+                // display toast message for failed data retrieval
+                Toast.makeText(context, "Fetching data failed", Toast.LENGTH_SHORT).show()
+            }
+        }
+    })
 }
