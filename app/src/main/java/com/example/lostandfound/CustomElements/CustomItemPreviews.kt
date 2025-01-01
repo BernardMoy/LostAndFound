@@ -28,7 +28,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil3.compose.rememberAsyncImagePainter
 import com.example.lostandfound.Data.FirebaseNames
+import com.example.lostandfound.Data.lostStatusText
+import com.example.lostandfound.Data.statusColor
 import com.example.lostandfound.R
+import com.example.lostandfound.Utility.DateTimeManager
 import com.example.lostandfound.ui.theme.ComposeTheme
 import com.example.lostandfound.ui.theme.Typography
 
@@ -77,7 +80,7 @@ fun CustomLostItemPreview(
                 )
 
                 Text(
-                    text = "#xRHS8Pyod6DYVx0pu7mL",
+                    text = "#" + data[FirebaseNames.LOSTFOUND_ID].toString(),
                     style = Typography.bodyMedium,
                     color = Color.Gray
                 )
@@ -95,12 +98,16 @@ fun CustomLostItemPreview(
                     contentDescription = "Status of item",
                     modifier = Modifier.width(dimensionResource(id = R.dimen.content_margin))
                 )
+
+                // the status of the item can be either 0 1 2
+                val status = data[FirebaseNames.LOSTFOUND_STATUS] as? Int
                 Text(
-                    text = "Status: Not found",
+                    text = "Status: " + lostStatusText[status],
                     style = Typography.bodyMedium,
-                    color = colorResource(id = R.color.status0),
+                    color = colorResource(id = statusColor[status] ?: R.color.status0),
                     fontWeight = FontWeight.Bold,
-                )
+                    )
+
             }
 
 
@@ -127,7 +134,7 @@ fun CustomLostItemPreview(
                 ) {
                     // name
                     Text(
-                        text = "Item name",
+                        text = data[FirebaseNames.LOSTFOUND_ITEMNAME].toString(),
                         style = Typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onBackground,
                         fontWeight = FontWeight.Bold,
@@ -135,14 +142,16 @@ fun CustomLostItemPreview(
 
                     // date and time
                     Text(
-                        text = "Date: ",
+                        text = "Date: "
+                                + DateTimeManager.dateTimeToString((data[FirebaseNames.LOSTFOUND_EPOCHDATETIME] as? Long) ?: 0L),
                         style = Typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onBackground
                     )
 
                     // category
                     Text(
-                        text = "Category: ",
+                        text = "Category: " + data[FirebaseNames.LOSTFOUND_CATEGORY].toString()
+                                + ", " + data[FirebaseNames.LOSTFOUND_SUBCATEGORY].toString(),
                         style = Typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onBackground
                     )

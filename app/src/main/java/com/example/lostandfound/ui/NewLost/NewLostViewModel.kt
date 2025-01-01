@@ -14,7 +14,6 @@ import com.example.lostandfound.Data.Category
 import com.example.lostandfound.Data.Colors
 import com.example.lostandfound.Utility.DateTimeManager
 import com.example.lostandfound.Data.FirebaseNames
-import com.example.lostandfound.Data.lostStatus
 
 class NewLostViewModel: ViewModel() {
 

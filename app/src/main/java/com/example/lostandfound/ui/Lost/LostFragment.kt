@@ -183,7 +183,9 @@ fun LostItemsColumn(
     viewModel: LostFragmentViewModel
 ){
     // for each data, display it as a preview
-    LazyColumn {
+    LazyColumn (
+        verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.title_margin))
+    ){
         items(viewModel.itemData) { itemMap ->
             CustomLostItemPreview(data = itemMap)
         }
