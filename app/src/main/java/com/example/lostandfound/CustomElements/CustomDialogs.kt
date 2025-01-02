@@ -1,6 +1,7 @@
 package com.example.lostandfound.CustomElements
 
 import android.graphics.Paint.Align
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -29,9 +30,12 @@ import androidx.compose.material3.TimePickerDefaults
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.material3.rememberTimePickerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -48,10 +52,15 @@ import com.example.lostandfound.Utility.DateTimeManager
 import com.example.lostandfound.R
 import com.example.lostandfound.ui.theme.ComposeTheme
 import com.example.lostandfound.ui.theme.Typography
+import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.compose.GoogleMap
+import com.google.maps.android.compose.MapProperties
+import com.google.maps.android.compose.MapType
+import com.google.maps.android.compose.MapUiSettings
 import com.google.maps.android.compose.Marker
+import com.google.maps.android.compose.MarkerState
 import com.google.maps.android.compose.rememberCameraPositionState
 import com.google.maps.android.compose.rememberMarkerState
 
@@ -299,8 +308,7 @@ fun CustomLoginDialog(
 fun CustomGoogleMapsDialog(
     isDialogShown: MutableState<Boolean>,
     isEditable: Boolean, // if false, it is in view mode
-    latitude: Double = 52.37930763817003,     // provide lat and long optionally, other it displays this default location
-    longitude: Double = -1.5614912710215834
+    location: MutableState<LatLng>
 ){
     if (isDialogShown.value){
         Dialog(
@@ -343,21 +351,50 @@ fun CustomGoogleMapsDialog(
                         }
 
                         // Google maps composable
-                        val location = LatLng(latitude, longitude)
-                        val locationMarkerState = rememberMarkerState(position = location)
-                        val cameraPositionState = rememberCameraPositionState {
-                            position = CameraPosition.fromLatLngZoom(location, 15f)
+                        val markerState = remember {
+                            MarkerState(position = location.value)
                         }
+                        val cameraPositionState = rememberCameraPositionState {
+                            position = CameraPosition.fromLatLngZoom(location.value, 15f)
+                        }
+                        val uiSettings by remember {
+                            mutableStateOf(MapUiSettings(zoomControlsEnabled = true))
+                        }
+                        val properties by remember {
+                            mutableStateOf(MapProperties(mapType = MapType.NORMAL))
+                        }
+
+                        // when a new location is selected
+                        LaunchedEffect(location.value) {
+                            // change the marker location
+                            markerState.position = location.value
+
+                            // change the camera location when a new location value is selected
+                            cameraPositionState.animate(
+                                update = CameraUpdateFactory.newLatLng(location.value),
+                                durationMs = 1500
+                            )
+                        }
+
                         GoogleMap(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .weight(1f),
-                            cameraPositionState = cameraPositionState
+                            cameraPositionState = cameraPositionState,
+                            uiSettings = uiSettings,
+                            properties = properties,
+                            onMapClick = { latlng ->
+                                // update location with selected latlng
+                                if (isEditable){
+                                    location.value = latlng
+                                }
+                            }
                         ) {
+                            // markers goes here
+                            // It will be updated when location is updated through tapping on the map
                             Marker(
-                                state = locationMarkerState,
-                                title = "Singapore",
-                                snippet = "Marker in Singapore"
+                                state = markerState,
+                                title = "Item location"
                             )
                         }
 

@@ -14,6 +14,7 @@ import com.example.lostandfound.Data.Category
 import com.example.lostandfound.Data.Colors
 import com.example.lostandfound.Utility.DateTimeManager
 import com.example.lostandfound.Data.FirebaseNames
+import com.google.android.gms.maps.model.LatLng
 
 class NewLostViewModel: ViewModel() {
 
@@ -25,6 +26,7 @@ class NewLostViewModel: ViewModel() {
     val selectedHour: MutableState<Int?> = mutableStateOf(null)
     val selectedMinute: MutableState<Int?> = mutableStateOf(null)
     val isTimeDialogShown: MutableState<Boolean> = mutableStateOf(false)
+    val selectedLocation: MutableState<LatLng> = mutableStateOf(LatLng(52.37930763817003,-1.5614912710215834)) // default location
     val additionalDescription: MutableState<String> = mutableStateOf("")
     val isLocationDialogShown: MutableState<Boolean> = mutableStateOf(false)
 

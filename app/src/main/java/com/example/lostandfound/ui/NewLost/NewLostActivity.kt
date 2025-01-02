@@ -481,7 +481,8 @@ fun Location(
     // the google maps dialog
     CustomGoogleMapsDialog(
         isDialogShown = viewModel.isLocationDialogShown,
-        isEditable = false
+        location = viewModel.selectedLocation,
+        isEditable = true  // able to pick location
     )
 
     CustomErrorText(text = viewModel.locationError.value)
