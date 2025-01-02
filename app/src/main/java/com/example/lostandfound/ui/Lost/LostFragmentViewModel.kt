@@ -56,7 +56,12 @@ class LostFragmentViewModel : ViewModel(){
                     val resultSize = result.size
                     var fetchedItems = 0
 
-                    Log.d("RESULTSIZE", resultSize.toString())
+                    // if no result, return
+                    // as the code below would not be executed
+                    if (resultSize == 0){
+                        callback.onComplete(true)
+                        return
+                    }
 
                     // for each retrieved item id, get their data and store that data into the itemData list
                     result.forEach { itemID ->

@@ -166,25 +166,35 @@ fun LostItemsColumn(
     context: Context,
     viewModel: LostFragmentViewModel
 ){
-    // for each data, display it as a preview
-    LazyColumn (
-        verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.title_margin))
-    ){
-        items(viewModel.itemData) { itemMap ->
-            CustomLostItemPreview(
-                data = itemMap,
-                onViewButtonClicked = {
-                    // start view item activity
-                    val intent = Intent(context, ViewLostActivity::class.java)
+    // if there are no data, display message
+    if (viewModel.itemData.size == 0){
+        Box(
+            modifier = Modifier.padding(horizontal = dimensionResource(id = R.dimen.title_margin))
+        ){
+            CustomCenterText(text = "You have no lost items. Tap the '+' button to create one.")
+        }
 
-                    // pass only the item id as the extra value
-                    intent.putExtra(
-                        IntentExtraNames.INTENT_LOST_ID,
-                        itemMap[FirebaseNames.LOSTFOUND_ID] as String
-                    )
-                    context.startActivity(intent)
-                }
-            )
+    } else {
+        // for each data, display it as a preview
+        LazyColumn (
+            verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.title_margin))
+        ){
+            items(viewModel.itemData) { itemMap ->
+                CustomLostItemPreview(
+                    data = itemMap,
+                    onViewButtonClicked = {
+                        // start view item activity
+                        val intent = Intent(context, ViewLostActivity::class.java)
+
+                        // pass only the item id as the extra value
+                        intent.putExtra(
+                            IntentExtraNames.INTENT_LOST_ID,
+                            itemMap[FirebaseNames.LOSTFOUND_ID] as String
+                        )
+                        context.startActivity(intent)
+                    }
+                )
+            }
         }
     }
 }
