@@ -1,5 +1,7 @@
 package com.example.lostandfound.FirebaseManagers;
 
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 
 import com.google.android.gms.tasks.OnFailureListener;
@@ -9,6 +11,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
@@ -101,15 +104,24 @@ public class FirestoreManager {
     }
 
     /**
-     * Method to get data from the database, given attribute and the value it equals to.
+     * Method to get data from the database,
+     * given attribute and the value it equals to and also specify a key to order the data by.
      *
      * @param collection collection name
      * @param attribute the attribute of the value
      * @param whereValue the value that the attribute should equal to
      * @param callback return the list of document ids, or null if failed or values does not exist
      */
-    public void getIdsWhere(String collection, String attribute, Object whereValue, Callback<List<String>> callback){
-        db.collection(collection).whereEqualTo(attribute, whereValue).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+    public void getIdsWhere(String collection,
+                            String attribute,
+                            Object whereValue,
+                            String orderByKey,
+                            Callback<List<String>> callback){
+        db.collection(collection)
+                .whereEqualTo(attribute, whereValue)
+                .orderBy(orderByKey, Query.Direction.DESCENDING)
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                 List<String> result = new ArrayList<>();
@@ -127,6 +139,7 @@ public class FirestoreManager {
             public void onFailure(@NonNull Exception e) {
                 // return null
                 callback.onComplete(null);
+                Log.d("ERROR", e.getMessage());
             }
         });
     }

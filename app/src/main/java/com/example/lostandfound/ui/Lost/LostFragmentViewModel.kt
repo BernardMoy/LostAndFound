@@ -40,9 +40,10 @@ class LostFragmentViewModel : ViewModel(){
 
         // get all data from firebase with matching user ids
         firestoreManager.getIdsWhere(
-            FirebaseNames.COLLECTION_LOST_ITEMS,
-            FirebaseNames.LOSTFOUND_USER,
-            userID,
+            FirebaseNames.COLLECTION_LOST_ITEMS,  // collection
+            FirebaseNames.LOSTFOUND_USER,  // where attribute
+            userID,  // attribute value
+            FirebaseNames.LOSTFOUND_TIMEPOSTED,  // order by
             object : FirestoreManager.Callback<List<String>> {
                 override fun onComplete(result: List<String>?) {
                     // if result is null, fetching data failed

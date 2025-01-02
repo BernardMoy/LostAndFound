@@ -154,7 +154,7 @@ public class FirestoreManagerTest {
     public void testGetIdsWhere() throws InterruptedException{
         final CountDownLatch latch = new CountDownLatch(1);
 
-        firestoreManager.getIdsWhere(COLLECTION, "att2", 3L, new FirestoreManager.Callback<List<String>>() {
+        firestoreManager.getIdsWhere(COLLECTION, "att2", 3L, "att2", new FirestoreManager.Callback<List<String>>() {
             @Override
             public void onComplete(List<String> result) {
                 // the result should only be length 1
