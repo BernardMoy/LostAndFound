@@ -479,7 +479,10 @@ fun Location(
     )
 
     // the google maps dialog
-    CustomGoogleMapsDialog(isDialogShown = viewModel.isLocationDialogShown)
+    CustomGoogleMapsDialog(
+        isDialogShown = viewModel.isLocationDialogShown,
+        isEditable = true
+    )
 
     CustomErrorText(text = viewModel.locationError.value)
 
