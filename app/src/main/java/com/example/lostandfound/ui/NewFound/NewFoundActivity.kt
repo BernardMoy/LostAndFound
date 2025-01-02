@@ -73,6 +73,7 @@ import com.example.lostandfound.CustomElements.CustomTimePickerTextField
 import com.example.lostandfound.Utility.ErrorCallback
 import com.example.lostandfound.Data.categories
 import com.example.lostandfound.Data.itemColors
+import com.example.lostandfound.ui.NewLost.NewLostViewModel
 import com.example.lostandfound.ui.theme.ComposeTheme
 import com.example.lostandfound.ui.theme.Typography
 
@@ -190,6 +191,7 @@ fun MainContent(viewModel: NewFoundViewModel = viewModel()) {
     ItemBrand(viewModel = viewModel)
     DateAndTime(viewModel = viewModel)
     Location(viewModel = viewModel)
+    AdditionalDescription(viewModel = viewModel)
     SecurityQuestion(viewModel = viewModel)
     SecurityQuestionAns(viewModel = viewModel)
     ReminderMessage(viewModel = viewModel)
@@ -448,6 +450,20 @@ fun Location(
 
     CustomErrorText(text = viewModel.locationError.value)
 
+}
+
+@Composable
+fun AdditionalDescription(
+    viewModel: NewFoundViewModel
+) {
+    CustomGrayTitle(text = "Additional description (Optional)")
+    CustomInputField(
+        fieldContent = viewModel.additionalDescription.value,
+        isEditable = true,
+        onTextChanged = { viewModel.onDescriptionChanged(it) },
+        placeholder = "What should be noted of about the item?",
+        isMultiLine = true
+    )
 }
 
 @Composable

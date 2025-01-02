@@ -25,6 +25,7 @@ class NewFoundViewModel: ViewModel() {
     val selectedHour: MutableState<Int?> = mutableStateOf(null)
     val selectedMinute: MutableState<Int?> = mutableStateOf(null)
     val isTimeDialogShown: MutableState<Boolean> = mutableStateOf(false)
+    val additionalDescription: MutableState<String> = mutableStateOf("")
     val securityQuestion: MutableState<String> = mutableStateOf("")
     val securityQuestionAns: MutableState<String> = mutableStateOf("")
 
@@ -85,6 +86,9 @@ class NewFoundViewModel: ViewModel() {
     }
     fun onSubCategorySelected(s: String){
         selectedSubCategory.value = s
+    }
+    fun onDescriptionChanged(s: String){
+        additionalDescription.value = s
     }
 
     // function to validate the input fields
@@ -155,6 +159,7 @@ class NewFoundViewModel: ViewModel() {
             FirebaseNames.LOSTFOUND_EPOCHDATETIME to DateTimeManager.getDateTimeEpoch(
                 selectedDate.value?:0L, selectedHour.value?:0, selectedMinute.value?:0
             ),
+            FirebaseNames.LOSTFOUND_DESCRIPTION to additionalDescription.value,
             FirebaseNames.FOUND_SECURITY_Q to securityQuestion.value,
             FirebaseNames.FOUND_SECURITY_Q_ANS to securityQuestionAns.value,
             FirebaseNames.LOSTFOUND_STATUS to 0,  // represent the found status

@@ -477,7 +477,7 @@ fun Location(
 fun AdditionalDescription(
     viewModel: NewLostViewModel
 ) {
-    CustomGrayTitle(text = "Additional description")
+    CustomGrayTitle(text = "Additional description (Optional)")
     CustomInputField(
         fieldContent = viewModel.additionalDescription.value,
         isEditable = true,

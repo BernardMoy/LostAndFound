@@ -3,6 +3,7 @@ package com.example.lostandfound.ui.ViewFound
 import android.content.Context
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -22,6 +23,7 @@ import androidx.compose.material.icons.outlined.CalendarMonth
 import androidx.compose.material.icons.outlined.Description
 import androidx.compose.material.icons.outlined.Edit
 import androidx.compose.material.icons.outlined.Folder
+import androidx.compose.material.icons.outlined.Lock
 import androidx.compose.material.icons.outlined.Palette
 import androidx.compose.material.icons.outlined.Timer
 import androidx.compose.material.icons.outlined.Title
@@ -51,6 +53,7 @@ import com.example.lostandfound.CustomElements.CustomEditText
 import com.example.lostandfound.CustomElements.CustomGrayTitle
 import com.example.lostandfound.CustomElements.CustomProgressBar
 import com.example.lostandfound.Data.IntentExtraNames
+import com.example.lostandfound.Data.foundStatusText
 import com.example.lostandfound.Data.lostStatusText
 import com.example.lostandfound.Data.statusColor
 import com.example.lostandfound.R
@@ -69,7 +72,9 @@ class ViewFoundActivity : ComponentActivity() {
         val viewModel: ViewFoundViewModel by viewModels()
 
         // load the passed intent data into the view model
-        viewModel.itemID = intent.getStringExtra(IntentExtraNames.INTENT_LOST_ID) ?: ""
+        viewModel.itemID = intent.getStringExtra(IntentExtraNames.INTENT_FOUND_ID) ?: ""
+        Log.d("ITEMID", viewModel.itemID.toString())
+
 
         setContent {
             ViewFoundScreen(activity = this, viewModel = viewModel)
@@ -93,7 +98,7 @@ fun ViewFoundScreen(activity: ComponentActivity, viewModel: ViewFoundViewModel) 
             Scaffold(
                 // top toolbar
                 topBar = {
-                    BackToolbar(title = "View lost item", activity = activity)
+                    BackToolbar(title = "View found item", activity = activity)
                 }
             ) { innerPadding ->
                 Column(
@@ -165,7 +170,7 @@ fun Status(viewModel: ViewFoundViewModel) {
         modifier = Modifier.fillMaxWidth(),
     ) {
         Text(
-            text = "Status: " + lostStatusText[viewModel.status],
+            text = "Status: " + foundStatusText[viewModel.status],
             style = Typography.bodyMedium,
             color = colorResource(
                 id = statusColor[viewModel.status] ?: R.color.status0
@@ -247,6 +252,14 @@ fun ItemDetails(viewModel: ViewFoundViewModel){
             isEditable = false
         )
         HorizontalDivider(thickness = 1.dp)
+
+        // security question - whether it exists
+        CustomEditText(
+            fieldLabel = "Security question",
+            fieldContent = if (viewModel.securityQuestion.isEmpty()) "No" else "Yes",
+            isEditable = false,
+            leftIcon = Icons.Outlined.Lock
+        )
     }
 }
 
