@@ -28,6 +28,8 @@ class ViewLostViewModel : ViewModel(){
     var brand: String = ""  // nullable
     var description: String = ""  // nullable
     var status: Int = 0
+    var userName: String = ""
+    var timePosted: Long = 0L
 
     // image stored here
     var image: Uri? = null
@@ -50,7 +52,6 @@ class ViewLostViewModel : ViewModel(){
                 }
 
                 // load the data into the view model
-                userID = result[FirebaseNames.LOSTFOUND_USER].toString()
                 itemName = result[FirebaseNames.LOSTFOUND_ITEMNAME].toString()
                 category = result[FirebaseNames.LOSTFOUND_CATEGORY].toString()
                 subCategory = result[FirebaseNames.LOSTFOUND_SUBCATEGORY].toString()
@@ -60,8 +61,13 @@ class ViewLostViewModel : ViewModel(){
                 description = result[FirebaseNames.LOSTFOUND_DESCRIPTION].toString()
                 status = (result[FirebaseNames.LOSTFOUND_STATUS] as Long).toInt()
 
+                // user data
+                userID = result[FirebaseNames.LOSTFOUND_USER].toString()
+                timePosted = result[FirebaseNames.LOSTFOUND_TIMEPOSTED] as Long
 
 
+
+                // get image of the item from firebase storage
                 firebaseStorageManager.getImage(FirebaseNames.FOLDER_LOST_IMAGE, itemID, object: FirebaseStorageManager.Callback<Uri?>{
                     override fun onComplete(result: Uri?) {
                         // if the result is null, replace it by placeholder image

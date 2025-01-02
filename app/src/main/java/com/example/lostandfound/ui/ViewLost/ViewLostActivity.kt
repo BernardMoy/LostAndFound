@@ -18,10 +18,12 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.AccountCircle
+import androidx.compose.material.icons.outlined.CalendarMonth
 import androidx.compose.material.icons.outlined.Description
 import androidx.compose.material.icons.outlined.Edit
 import androidx.compose.material.icons.outlined.Folder
 import androidx.compose.material.icons.outlined.Palette
+import androidx.compose.material.icons.outlined.Timer
 import androidx.compose.material.icons.outlined.Title
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Scaffold
@@ -135,6 +137,7 @@ fun MainContent(viewModel: ViewLostViewModel) {
             Status(viewModel = viewModel)
             ItemImage(viewModel = viewModel)
             ItemDetails(viewModel = viewModel)
+            UserData(viewModel = viewModel)
 
             // also display the user
         }
@@ -216,7 +219,7 @@ fun ItemDetails(viewModel: ViewLostViewModel){
         // date and time
         CustomEditText(fieldLabel = "Date and time",
             fieldContent = DateTimeManager.dateTimeToString(viewModel.dateTime),
-            leftIcon = Icons.Outlined.Palette,
+            leftIcon = Icons.Outlined.CalendarMonth,
             isEditable = false
         )
         HorizontalDivider(thickness = 1.dp)
@@ -241,6 +244,34 @@ fun ItemDetails(viewModel: ViewLostViewModel){
         CustomEditText(fieldLabel = "Description",
             fieldContent = if (viewModel.description.isNotEmpty()) viewModel.description else "Not provided",
             leftIcon = Icons.Outlined.Description,
+            isEditable = false
+        )
+        HorizontalDivider(thickness = 1.dp)
+    }
+}
+
+@Composable
+fun UserData(
+    viewModel: ViewLostViewModel
+){
+    Column(
+    ) {
+        CustomGrayTitle(text = "User information")
+
+        // Name of user
+        CustomEditText(
+            fieldLabel = "User",
+            fieldContent = viewModel.itemName,
+            leftIcon = Icons.Outlined.AccountCircle,
+            isEditable = false
+        )
+        HorizontalDivider(thickness = 1.dp)
+
+        // category and subcategory
+        CustomEditText(
+            fieldLabel = "Time posted",
+            fieldContent = DateTimeManager.dateTimeToString(viewModel.timePosted),
+            leftIcon = Icons.Outlined.CalendarMonth,
             isEditable = false
         )
         HorizontalDivider(thickness = 1.dp)
