@@ -42,14 +42,18 @@ public class FirebaseAuthManager {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()){
+                    // get the user id
+                    String userID = mAuth.getUid();
+
                     // add the firstname and lastname data to database where email is the id
                     Map<String, Object> data = new HashMap<>();
+                    data.put(FirebaseNames.USERS_EMAIL, email);
                     data.put(FirebaseNames.USERS_FIRSTNAME, firstName);
                     data.put(FirebaseNames.USERS_LASTNAME, lastName);
                     data.put(FirebaseNames.USERS_AVATAR, avatar);
 
                     // add the data to firestore db
-                    db.put(FirebaseNames.COLLECTION_USERS, email, data, new FirestoreManager.Callback<Boolean>() {
+                    db.put(FirebaseNames.COLLECTION_USERS, userID, data, new FirestoreManager.Callback<Boolean>() {
                         @Override
                         public void onComplete(Boolean result) {
                             if (!result){
@@ -91,14 +95,18 @@ public class FirebaseAuthManager {
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()){
                     // sign in successful
-                    // get other parameters given the user email
-                    db.get(FirebaseNames.COLLECTION_USERS, emailAddress, new FirestoreManager.Callback<Map<String, Object>>() {
+
+                    // get other parameters given the user ID
+                    String userID = mAuth.getUid();
+
+                    db.get(FirebaseNames.COLLECTION_USERS, userID, new FirestoreManager.Callback<Map<String, Object>>() {
                         @Override
                         public void onComplete(Map<String, Object> result) {
                             if (result == null){
                                 callback.onComplete("User not found in the database");
                                 return;
                             }
+                            String email = (String) result.get(FirebaseNames.USERS_EMAIL);
                             String firstName = (String) result.get(FirebaseNames.USERS_FIRSTNAME);
                             String lastName = (String) result.get(FirebaseNames.USERS_LASTNAME);
                             String avatar = (String) result.get(FirebaseNames.USERS_AVATAR);
@@ -108,7 +116,7 @@ public class FirebaseAuthManager {
                             SharedPreferences.Editor editor = sharedPreferences.edit();
                             editor.putString(SharedPreferencesNames.USER_FIRSTNAME, firstName);
                             editor.putString(SharedPreferencesNames.USER_LASTNAME, lastName);
-                            editor.putString(SharedPreferencesNames.USER_EMAIL, emailAddress);
+                            editor.putString(SharedPreferencesNames.USER_EMAIL, email);
                             editor.putString(SharedPreferencesNames.USER_AVATAR, avatar);
                             editor.apply();
 
@@ -127,14 +135,22 @@ public class FirebaseAuthManager {
 
     // method to update user credentials
     public void updateUser(String emailAddress, String newFirstName, String newLastName, String avatar, ErrorCallback callback){
+        // get uid
+        String userID = mAuth.getUid();
+        // if uid is null, return false
+        if (userID == null){
+            callback.onComplete("You are not logged in.");
+            return;
+        }
 
         // add the firstname and lastname data to database where email is the id
         Map<String, Object> data = new HashMap<>();
+        data.put(FirebaseNames.USERS_EMAIL, emailAddress);
         data.put(FirebaseNames.USERS_FIRSTNAME, newFirstName);
         data.put(FirebaseNames.USERS_LASTNAME, newLastName);
         data.put(FirebaseNames.USERS_AVATAR, avatar);
 
-        db.put(FirebaseNames.COLLECTION_USERS, emailAddress, data, new FirestoreManager.Callback<Boolean>() {
+        db.put(FirebaseNames.COLLECTION_USERS, userID, data, new FirestoreManager.Callback<Boolean>() {
             @Override
             public void onComplete(Boolean result) {
                 if (!result){
@@ -145,6 +161,7 @@ public class FirebaseAuthManager {
                 // Save the new user credentials (First, last name, email, avatar) in sharedpreferences
                 SharedPreferences sharedPreferences = ctx.getSharedPreferences(SharedPreferencesNames.NAME_USERS, MODE_PRIVATE);
                 SharedPreferences.Editor editor = sharedPreferences.edit();
+                // no need to put email as it cant be updated
                 editor.putString(SharedPreferencesNames.USER_FIRSTNAME, newFirstName);
                 editor.putString(SharedPreferencesNames.USER_LASTNAME, newLastName);
                 editor.putString(SharedPreferencesNames.USER_AVATAR, avatar);
