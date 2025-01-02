@@ -157,7 +157,8 @@ class NewFoundViewModel: ViewModel() {
             ),
             FirebaseNames.FOUND_SECURITY_Q to securityQuestion.value,
             FirebaseNames.FOUND_SECURITY_Q_ANS to securityQuestionAns.value,
-            FirebaseNames.LOSTFOUND_STATUS to 0  // represent the found status
+            FirebaseNames.LOSTFOUND_STATUS to 0,  // represent the found status
+            FirebaseNames.LOSTFOUND_TIMEPOSTED to DateTimeManager.getCurrentEpochTime()
         )
 
         // add to the firestore db
