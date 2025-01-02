@@ -66,7 +66,6 @@ class ViewLostViewModel : ViewModel(){
                 timePosted = result[FirebaseNames.LOSTFOUND_TIMEPOSTED] as Long
 
 
-
                 // get image of the item from firebase storage
                 firebaseStorageManager.getImage(FirebaseNames.FOLDER_LOST_IMAGE, itemID, object: FirebaseStorageManager.Callback<Uri?>{
                     override fun onComplete(result: Uri?) {
@@ -79,8 +78,24 @@ class ViewLostViewModel : ViewModel(){
                             image = result
                         }
 
-                        // return true after all data has been fetched
-                        callback.onComplete(true)
+
+                        // get name of the user from firebase firestore
+                        firestoreManager.get(FirebaseNames.COLLECTION_USERS, userID, object : FirestoreManager.Callback<Map<String, Any>>{
+                            override fun onComplete(result: Map<String, Any>?) {
+                                if (result == null) {
+                                    userName = "Unknown"
+
+                                } else {
+                                    val name = result[FirebaseNames.USERS_FIRSTNAME].toString() + " " + result[FirebaseNames.USERS_LASTNAME].toString()
+
+                                    // set username
+                                    userName = name
+                                }
+
+                                // return true after all data has been fetched
+                                callback.onComplete(true)
+                            }
+                        })
                     }
                 })
             }
