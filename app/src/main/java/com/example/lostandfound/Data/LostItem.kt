@@ -14,7 +14,8 @@ data class LostItem(
     val dateTime: String,
     val brand: String?,
     val description: String?,
-    val status: Int
+    val status: Int,
+    val timePosted: Long
 
     // also the item image which is not stored here
 )
