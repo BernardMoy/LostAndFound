@@ -41,6 +41,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil3.compose.rememberAsyncImagePainter
+import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
+import com.bumptech.glide.integration.compose.GlideImage
 import com.example.lostandfound.CustomElements.BackToolbar
 import com.example.lostandfound.CustomElements.CustomCenteredProgressbar
 import com.example.lostandfound.CustomElements.CustomEditText
@@ -172,14 +174,15 @@ fun Status(viewModel: ViewLostViewModel) {
     }
 }
 
+@OptIn(ExperimentalGlideComposeApi::class)
 @Composable
 fun ItemImage(viewModel: ViewLostViewModel){
     Row(
         modifier = Modifier.fillMaxWidth()
     ){
         // image of the item
-        Image(
-            painter = rememberAsyncImagePainter(model = viewModel.image),
+        GlideImage(
+            model = viewModel.image,
             contentDescription = "Item image",
             modifier = Modifier.fillMaxWidth(),
             alignment = Alignment.Center
