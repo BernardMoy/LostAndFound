@@ -82,7 +82,7 @@ class FoundFragment : Fragment() {
     override fun onResume() {
         super.onResume()
 
-        // update the user's log in status
+            // update the user's log in status
         isLoggedIn.value = FirebaseUtility.isUserLoggedIn()
     }
 }
@@ -188,7 +188,7 @@ fun FoundItemsColumn(
 
                         // pass only the item id as the extra value
                         intent.putExtra(
-                            IntentExtraNames.INTENT_LOST_ID,
+                            IntentExtraNames.INTENT_FOUND_ID,
                             itemMap[FirebaseNames.LOSTFOUND_ID] as String
                         )
                         context.startActivity(intent)

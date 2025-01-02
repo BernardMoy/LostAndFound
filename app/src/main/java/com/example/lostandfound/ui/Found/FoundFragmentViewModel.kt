@@ -40,7 +40,7 @@ class FoundFragmentViewModel : ViewModel(){
 
         // get all data from firebase with matching user ids
         firestoreManager.getIdsWhere(
-            FirebaseNames.COLLECTION_LOST_ITEMS,  // collection
+            FirebaseNames.COLLECTION_FOUND_ITEMS,  // collection
             FirebaseNames.LOSTFOUND_USER,  // where attribute
             userID,  // attribute value
             FirebaseNames.LOSTFOUND_TIMEPOSTED,  // order by
@@ -66,7 +66,7 @@ class FoundFragmentViewModel : ViewModel(){
                     // for each retrieved item id, get their data and store that data into the itemData list
                     result.forEach { itemID ->
                         firestoreManager.get(
-                            FirebaseNames.COLLECTION_LOST_ITEMS,
+                            FirebaseNames.COLLECTION_FOUND_ITEMS,
                             itemID,
                             object : FirestoreManager.Callback<Map<String, Any>> {
                                 override fun onComplete(itemResult: Map<String, Any>?) {
@@ -81,7 +81,7 @@ class FoundFragmentViewModel : ViewModel(){
                                     mutableItemResult[FirebaseNames.LOSTFOUND_ID] = itemID
 
                                     // also add the image
-                                    firebaseStorageManager.getImage(FirebaseNames.FOLDER_LOST_IMAGE, itemID, object: FirebaseStorageManager.Callback<Uri?>{
+                                    firebaseStorageManager.getImage(FirebaseNames.FOLDER_FOUND_IMAGE, itemID, object: FirebaseStorageManager.Callback<Uri?>{
                                         override fun onComplete(result: Uri?) {
                                             // if the result is null, replace it by placeholder image
                                             if (result == null){

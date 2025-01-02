@@ -30,6 +30,10 @@ class ViewFoundViewModel : ViewModel(){
     var userName: String = ""
     var timePosted: Long = 0L
 
+    // unique to found items (Can be empty)
+    var securityQuestion: String = ""
+    var securityQuestionAns: String = ""
+
     // image stored here
     var image: Uri? = null
 
@@ -42,7 +46,7 @@ class ViewFoundViewModel : ViewModel(){
         val firebaseStorageManager = FirebaseStorageManager()
 
         // get data from firebase db
-        firestoreManager.get(FirebaseNames.COLLECTION_LOST_ITEMS, itemID, object : FirestoreManager.Callback<Map<String, Any>> {
+        firestoreManager.get(FirebaseNames.COLLECTION_FOUND_ITEMS, itemID, object : FirestoreManager.Callback<Map<String, Any>> {
             override fun onComplete(result: Map<String, Any>?) {
                 if (result == null){
                     // failed
@@ -59,6 +63,8 @@ class ViewFoundViewModel : ViewModel(){
                 brand = result[FirebaseNames.LOSTFOUND_BRAND].toString()
                 description = result[FirebaseNames.LOSTFOUND_DESCRIPTION].toString()
                 status = (result[FirebaseNames.LOSTFOUND_STATUS] as Long).toInt()
+                securityQuestion = result[FirebaseNames.FOUND_SECURITY_Q].toString()
+                securityQuestionAns = result[FirebaseNames.FOUND_SECURITY_Q_ANS].toString()
 
                 // user data
                 userID = result[FirebaseNames.LOSTFOUND_USER].toString()
@@ -66,7 +72,7 @@ class ViewFoundViewModel : ViewModel(){
 
 
                 // get image of the item from firebase storage
-                firebaseStorageManager.getImage(FirebaseNames.FOLDER_LOST_IMAGE, itemID, object: FirebaseStorageManager.Callback<Uri?>{
+                firebaseStorageManager.getImage(FirebaseNames.FOLDER_FOUND_IMAGE, itemID, object: FirebaseStorageManager.Callback<Uri?>{
                     override fun onComplete(result: Uri?) {
                         // if the result is null, replace it by placeholder image
                         if (result == null){

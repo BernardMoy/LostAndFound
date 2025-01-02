@@ -30,6 +30,7 @@ import coil3.compose.rememberAsyncImagePainter
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.example.lostandfound.Data.FirebaseNames
+import com.example.lostandfound.Data.foundStatusText
 import com.example.lostandfound.Data.lostStatusText
 import com.example.lostandfound.Data.statusColor
 import com.example.lostandfound.R
@@ -253,7 +254,7 @@ fun CustomFoundItemPreview(
                 )
 
                 Text(
-                    text = "Status: " + lostStatusText[status],
+                    text = "Status: " + foundStatusText[status],
                     style = Typography.bodyMedium,
                     color = colorResource(
                         id = statusColor[status] ?: R.color.status0
