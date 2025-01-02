@@ -2,6 +2,7 @@ package com.example.lostandfound.CustomElements
 
 import android.graphics.Paint.Align
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -29,10 +30,16 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.window.Dialog
 import com.example.lostandfound.Utility.DateTimeManager
 import com.example.lostandfound.R
 import com.example.lostandfound.ui.theme.ComposeTheme
-
+import com.google.android.gms.maps.model.CameraPosition
+import com.google.android.gms.maps.model.LatLng
+import com.google.maps.android.compose.GoogleMap
+import com.google.maps.android.compose.Marker
+import com.google.maps.android.compose.rememberCameraPositionState
+import com.google.maps.android.compose.rememberMarkerState
 
 
 @Preview(showBackground = true)
@@ -269,6 +276,37 @@ fun CustomLoginDialog(
                         onDismissClicked()
                     }
                 )
+            }
+        )
+    }
+}
+
+@Composable
+fun CustomGoogleMapsDialog(
+    isDialogShown: MutableState<Boolean>
+){
+    if (isDialogShown.value){
+        Dialog(
+            onDismissRequest = {
+                isDialogShown.value = false
+            },
+            content = {
+                // Google maps composable
+                val singapore = LatLng(1.35, 103.87)
+                val singaporeMarkerState = rememberMarkerState(position = singapore)
+                val cameraPositionState = rememberCameraPositionState {
+                    position = CameraPosition.fromLatLngZoom(singapore, 10f)
+                }
+                GoogleMap(
+                    modifier = Modifier.fillMaxSize(),
+                    cameraPositionState = cameraPositionState
+                ) {
+                    Marker(
+                        state = singaporeMarkerState,
+                        title = "Singapore",
+                        snippet = "Marker in Singapore"
+                    )
+                }
             }
         )
     }

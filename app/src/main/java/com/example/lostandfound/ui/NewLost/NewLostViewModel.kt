@@ -26,6 +26,7 @@ class NewLostViewModel: ViewModel() {
     val selectedMinute: MutableState<Int?> = mutableStateOf(null)
     val isTimeDialogShown: MutableState<Boolean> = mutableStateOf(false)
     val additionalDescription: MutableState<String> = mutableStateOf("")
+    val isLocationDialogShown: MutableState<Boolean> = mutableStateOf(false)
 
     // initially the selected category is null
     var selectedCategory by mutableStateOf<Category?>(null)
