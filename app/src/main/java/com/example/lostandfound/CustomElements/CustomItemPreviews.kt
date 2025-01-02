@@ -123,7 +123,7 @@ fun CustomLostItemPreview(
             Row(
                 horizontalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin))
             ) {
-                // image of the item
+                // image of the item is loaded using GlideImage
                 GlideImage(
                     model = (data[FirebaseNames.LOSTFOUND_IMAGE] as Uri),
                     contentDescription = "Item image",
