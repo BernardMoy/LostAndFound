@@ -261,7 +261,7 @@ fun UserData(
         // Name of user
         CustomEditText(
             fieldLabel = "User",
-            fieldContent = viewModel.itemName,
+            fieldContent = viewModel.userName,
             leftIcon = Icons.Outlined.AccountCircle,
             isEditable = false
         )
