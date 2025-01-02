@@ -66,12 +66,14 @@ import com.example.lostandfound.CustomElements.CustomDatePickerTextField
 import com.example.lostandfound.CustomElements.CustomDropdownMenu
 import com.example.lostandfound.CustomElements.CustomErrorText
 import com.example.lostandfound.CustomElements.CustomFilterChip
+import com.example.lostandfound.CustomElements.CustomGoogleMapsDialog
 import com.example.lostandfound.CustomElements.CustomGrayTitle
 import com.example.lostandfound.CustomElements.CustomInputField
 import com.example.lostandfound.CustomElements.CustomLoginDialog
 import com.example.lostandfound.CustomElements.CustomProgressBar
 import com.example.lostandfound.CustomElements.CustomTextDialog
 import com.example.lostandfound.CustomElements.CustomTimePickerTextField
+import com.example.lostandfound.Data.MapState
 import com.example.lostandfound.Utility.ErrorCallback
 import com.example.lostandfound.Data.categories
 import com.example.lostandfound.Data.itemColors
@@ -79,6 +81,12 @@ import com.example.lostandfound.FirebaseManagers.FirebaseUtility
 import com.example.lostandfound.ui.Login.LoginActivity
 import com.example.lostandfound.ui.theme.ComposeTheme
 import com.example.lostandfound.ui.theme.Typography
+import com.google.android.gms.maps.model.CameraPosition
+import com.google.android.gms.maps.model.LatLng
+import com.google.maps.android.compose.GoogleMap
+import com.google.maps.android.compose.Marker
+import com.google.maps.android.compose.rememberCameraPositionState
+import com.google.maps.android.compose.rememberMarkerState
 
 
 class NewLostActivity : ComponentActivity() {
@@ -465,9 +473,13 @@ fun Location(
     CustomActionText(
         text = "Add location",
         onClick = {
-
+            // is dialog shown become true
+            viewModel.isLocationDialogShown.value = true
         },
     )
+
+    // the google maps dialog
+    CustomGoogleMapsDialog(isDialogShown = viewModel.isLocationDialogShown)
 
     CustomErrorText(text = viewModel.locationError.value)
 
