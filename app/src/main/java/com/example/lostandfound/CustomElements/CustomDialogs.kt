@@ -329,19 +329,22 @@ fun CustomGoogleMapsDialog(
                         horizontalAlignment = Alignment.CenterHorizontally
                     ){
                         Text(
-                            text = "Select location",
+                            text = if (isEditable) "Select location" else "View location",
                             style = Typography.titleMedium,
                             color = MaterialTheme.colorScheme.onPrimaryContainer
                         )
-                        Text(
-                            text = "Tap on the map to select a location.",
-                            style = Typography.bodyMedium,
-                            color = Color.Gray
-                        )
+
+                        if (isEditable){
+                            Text(
+                                text = "Tap on the map to select a location.",
+                                style = Typography.bodyMedium,
+                                color = Color.Gray
+                            )
+                        }
 
                         // Google maps composable
                         val location = LatLng(latitude, longitude)
-                        val singaporeMarkerState = rememberMarkerState(position = location)
+                        val locationMarkerState = rememberMarkerState(position = location)
                         val cameraPositionState = rememberCameraPositionState {
                             position = CameraPosition.fromLatLngZoom(location, 15f)
                         }
@@ -352,7 +355,7 @@ fun CustomGoogleMapsDialog(
                             cameraPositionState = cameraPositionState
                         ) {
                             Marker(
-                                state = singaporeMarkerState,
+                                state = locationMarkerState,
                                 title = "Singapore",
                                 snippet = "Marker in Singapore"
                             )
@@ -363,14 +366,16 @@ fun CustomGoogleMapsDialog(
                             modifier = Modifier.fillMaxWidth(),
                             horizontalArrangement = Arrangement.SpaceEvenly
                         ){
-                            CustomButton(
-                                text = "Use device location",
-                                type = ButtonType.OUTLINED,
-                                small = true,
-                                onClick = {
+                            if (isEditable){
+                                CustomButton(
+                                    text = "Use device location",
+                                    type = ButtonType.OUTLINED,
+                                    small = true,
+                                    onClick = {
 
-                                }
-                            )
+                                    }
+                                )
+                            }
 
                             CustomButton(
                                 text = "Done",
