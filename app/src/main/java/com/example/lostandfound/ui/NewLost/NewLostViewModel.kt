@@ -47,7 +47,6 @@ class NewLostViewModel: ViewModel() {
     val colorError: MutableState<String> = mutableStateOf("")
     val dateError: MutableState<String> = mutableStateOf("")
     val timeError: MutableState<String> = mutableStateOf("")
-    val locationError: MutableState<String> = mutableStateOf("")
 
     fun onImagePicked(uri: Uri?){
         itemImage.value = uri
@@ -93,7 +92,6 @@ class NewLostViewModel: ViewModel() {
         subCategoryError.value = ""
         dateError.value = ""
         timeError.value = ""
-        locationError.value = ""
 
         // check each of them
         if (itemName.value.isEmpty()){
@@ -147,6 +145,7 @@ class NewLostViewModel: ViewModel() {
                 selectedDate.value?:0L, selectedHour.value?:0, selectedMinute.value?:0
             ),
             FirebaseNames.LOSTFOUND_BRAND to itemBrand.value,
+            FirebaseNames.LOSTFOUND_LOCATION to selectedLocation.value,
             FirebaseNames.LOSTFOUND_DESCRIPTION to additionalDescription.value,
             FirebaseNames.LOSTFOUND_STATUS to 0, // represent the lost status
             FirebaseNames.LOSTFOUND_TIMEPOSTED to DateTimeManager.getCurrentEpochTime()

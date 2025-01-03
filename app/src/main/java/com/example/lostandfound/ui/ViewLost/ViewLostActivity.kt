@@ -1,13 +1,11 @@
 package com.example.lostandfound.ui.ViewLost
 
 import android.content.Context
-import android.net.Uri
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -23,7 +21,6 @@ import androidx.compose.material.icons.outlined.Description
 import androidx.compose.material.icons.outlined.Edit
 import androidx.compose.material.icons.outlined.Folder
 import androidx.compose.material.icons.outlined.Palette
-import androidx.compose.material.icons.outlined.Timer
 import androidx.compose.material.icons.outlined.Title
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Scaffold
@@ -31,6 +28,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -42,21 +40,20 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import coil3.compose.rememberAsyncImagePainter
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.example.lostandfound.CustomElements.BackToolbar
+import com.example.lostandfound.CustomElements.CustomActionText
 import com.example.lostandfound.CustomElements.CustomCenteredProgressbar
 import com.example.lostandfound.CustomElements.CustomEditText
+import com.example.lostandfound.CustomElements.CustomPickLocationDialog
 import com.example.lostandfound.CustomElements.CustomGrayTitle
-import com.example.lostandfound.CustomElements.CustomProgressBar
+import com.example.lostandfound.CustomElements.CustomViewLocationDialog
 import com.example.lostandfound.Data.IntentExtraNames
 import com.example.lostandfound.Data.lostStatusText
 import com.example.lostandfound.Data.statusColor
 import com.example.lostandfound.R
 import com.example.lostandfound.Utility.DateTimeManager
-import com.example.lostandfound.ui.Lost.Callback
-import com.example.lostandfound.ui.Lost.LostFragmentViewModel
 import com.example.lostandfound.ui.theme.ComposeTheme
 import com.example.lostandfound.ui.theme.Typography
 
@@ -137,6 +134,7 @@ fun MainContent(viewModel: ViewLostViewModel) {
             Status(viewModel = viewModel)
             ItemImage(viewModel = viewModel)
             ItemDetails(viewModel = viewModel)
+            LocationData(viewModel = viewModel)
             UserData(viewModel = viewModel)
 
             // also display the user
@@ -248,6 +246,27 @@ fun ItemDetails(viewModel: ViewLostViewModel){
         )
         HorizontalDivider(thickness = 1.dp)
     }
+}
+
+@Composable
+fun LocationData(
+    viewModel: ViewLostViewModel
+){
+    Column {
+        CustomGrayTitle(text = "Location")
+
+        CustomActionText(
+            text = "View location",
+            onClick = {
+                viewModel.isLocationDialogShown.value = true
+            },
+        )
+    }
+
+    CustomViewLocationDialog(
+        isDialogShown = viewModel.isLocationDialogShown,
+        selectedLocation = viewModel.location
+    )
 }
 
 @Composable

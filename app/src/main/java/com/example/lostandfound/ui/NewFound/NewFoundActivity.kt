@@ -67,6 +67,7 @@ import com.example.lostandfound.CustomElements.CustomErrorText
 import com.example.lostandfound.CustomElements.CustomFilterChip
 import com.example.lostandfound.CustomElements.CustomGrayTitle
 import com.example.lostandfound.CustomElements.CustomInputField
+import com.example.lostandfound.CustomElements.CustomPickLocationDialog
 import com.example.lostandfound.CustomElements.CustomProgressBar
 import com.example.lostandfound.CustomElements.CustomTextDialog
 import com.example.lostandfound.CustomElements.CustomTimePickerTextField
@@ -193,7 +194,7 @@ fun MainContent(viewModel: NewFoundViewModel = viewModel()) {
         ItemColor(viewModel = viewModel)
         ItemBrand(viewModel = viewModel)
         DateAndTime(viewModel = viewModel)
-        Location(viewModel = viewModel)
+        Location(context = context, viewModel = viewModel)
         AdditionalDescription(viewModel = viewModel)
         SecurityQuestion(viewModel = viewModel)
         SecurityQuestionAns(viewModel = viewModel)
@@ -440,6 +441,7 @@ fun DateAndTime(
 
 @Composable
 fun Location(
+    context: Context,
     viewModel: NewFoundViewModel
 ) {
     CustomGrayTitle(text = "Location")
@@ -448,12 +450,16 @@ fun Location(
     CustomActionText(
         text = "Add location",
         onClick = {
-
+            // is dialog shown become true
+            viewModel.isLocationDialogShown.value = true
         },
     )
 
-    CustomErrorText(text = viewModel.locationError.value)
-
+    // the google maps dialog
+    CustomPickLocationDialog(
+        isDialogShown = viewModel.isLocationDialogShown,
+        selectedLocation = viewModel.selectedLocation,
+    )
 }
 
 @Composable

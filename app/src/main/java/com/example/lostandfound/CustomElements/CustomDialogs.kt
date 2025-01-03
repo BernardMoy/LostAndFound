@@ -1,7 +1,5 @@
 package com.example.lostandfound.CustomElements
 
-import android.graphics.Paint.Align
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -42,10 +40,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.dimensionResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import com.example.lostandfound.Utility.DateTimeManager
@@ -62,7 +58,6 @@ import com.google.maps.android.compose.MapUiSettings
 import com.google.maps.android.compose.Marker
 import com.google.maps.android.compose.MarkerState
 import com.google.maps.android.compose.rememberCameraPositionState
-import com.google.maps.android.compose.rememberMarkerState
 
 
 @Preview(showBackground = true)
@@ -305,9 +300,8 @@ fun CustomLoginDialog(
 }
 
 @Composable
-fun CustomGoogleMapsDialog(
+fun CustomPickLocationDialog(
     isDialogShown: MutableState<Boolean>,
-    isEditable: Boolean, // if false, it is in view mode
     selectedLocation: MutableState<LatLng>,   // this is the state that will ONLY BE UPDATED WHEN THE DONE BUTTON IS CLICKED
 ){
     var currentLocation by remember {
@@ -349,18 +343,16 @@ fun CustomGoogleMapsDialog(
                         horizontalAlignment = Alignment.CenterHorizontally
                     ){
                         Text(
-                            text = if (isEditable) "Select location" else "View location",
+                            text = "Select location",
                             style = Typography.titleMedium,
                             color = MaterialTheme.colorScheme.onPrimaryContainer
                         )
 
-                        if (isEditable){
-                            Text(
-                                text = "Tap on the map to select a location.",
-                                style = Typography.bodyMedium,
-                                color = Color.Gray
-                            )
-                        }
+                        Text(
+                            text = "Tap on the map to select a location.",
+                            style = Typography.bodyMedium,
+                            color = Color.Gray
+                        )
 
                         // Google maps composable
                         val markerState = remember {
@@ -397,9 +389,8 @@ fun CustomGoogleMapsDialog(
                             properties = properties,
                             onMapClick = { latlng ->
                                 // update location with selected latlng
-                                if (isEditable){
-                                    currentLocation = latlng
-                                }
+                                currentLocation = latlng
+
                             }
                         ) {
                             // markers goes here
@@ -415,16 +406,15 @@ fun CustomGoogleMapsDialog(
                             modifier = Modifier.fillMaxWidth(),
                             horizontalArrangement = Arrangement.SpaceEvenly
                         ){
-                            if (isEditable){
-                                CustomButton(
-                                    text = "Use device location",
-                                    type = ButtonType.OUTLINED,
-                                    small = true,
-                                    onClick = {
+                            CustomButton(
+                                text = "Use device location",
+                                type = ButtonType.OUTLINED,
+                                small = true,
+                                onClick = {
 
-                                    }
-                                )
-                            }
+                                }
+                            )
+
 
                             CustomButton(
                                 text = "Done",
@@ -434,6 +424,110 @@ fun CustomGoogleMapsDialog(
                                     selectedLocation.value = currentLocation
                                     isDialogShown.value = false
                                 }
+                            )
+                        }
+                    }
+
+                    // close button at top end
+                    IconButton(
+                        onClick = {
+                            // remove the image
+                            isDialogShown.value = false
+                        },
+                        modifier = Modifier
+                            .padding(
+                                dimensionResource(id = R.dimen.content_margin_half)
+                            )
+                            .size(dimensionResource(id = R.dimen.image_button_size))
+                            .clip(CircleShape)
+                            .background(MaterialTheme.colorScheme.primary)
+                            .align(Alignment.TopEnd)
+                    ) {
+                        Icon(
+                            imageVector = Icons.Outlined.Close,
+                            contentDescription = "Close dialog",
+                            tint = Color.White
+                        )
+                    }
+
+                }
+
+            }
+        )
+    }
+}
+
+
+
+@Composable
+fun CustomViewLocationDialog(
+    isDialogShown: MutableState<Boolean>,
+    selectedLocation: LatLng,   // no need to be mutable here
+){
+    if (isDialogShown.value){
+        Dialog(
+            onDismissRequest = {
+                isDialogShown.value = false
+            },
+            properties = DialogProperties(usePlatformDefaultWidth = false),  // remove horizontal padding
+            content = {
+                Box(
+                    modifier = Modifier
+                        .padding(
+                            vertical = dimensionResource(id = R.dimen.header_margin),
+                            horizontal = dimensionResource(id = R.dimen.title_margin)
+                        )
+                        .fillMaxSize()
+                        .clip(RoundedCornerShape(dimensionResource(id = R.dimen.corner_radius)))
+                        .background(color = MaterialTheme.colorScheme.background),
+
+                    ){
+                    Column(
+                        modifier = Modifier.padding(
+                            vertical = dimensionResource(id = R.dimen.title_margin),
+                            horizontal = dimensionResource(id = R.dimen.content_margin)
+                        ),
+                        verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin)),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ){
+                        Text(
+                            text = "View location",
+                            style = Typography.titleMedium,
+                            color = MaterialTheme.colorScheme.onPrimaryContainer
+                        )
+
+
+                        // Google maps composable
+                        val markerState = remember {
+                            MarkerState(position = selectedLocation)
+                        }
+                        val cameraPositionState = rememberCameraPositionState {
+                            position = CameraPosition.fromLatLngZoom(selectedLocation, 15f)
+                        }
+                        val uiSettings by remember {
+                            mutableStateOf(MapUiSettings(zoomControlsEnabled = true))
+                        }
+                        val properties by remember {
+                            mutableStateOf(MapProperties(mapType = MapType.NORMAL))
+                        }
+
+
+                        GoogleMap(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .weight(1f),
+                            cameraPositionState = cameraPositionState,
+                            uiSettings = uiSettings,
+                            properties = properties,
+                            onMapClick = { latlng ->
+                                // nothing happens
+                            }
+                        ) {
+                            // markers goes here
+                            // It will be updated when location is updated through tapping on the map
+                            Marker(
+                                state = markerState,
+                                title = "Item location"
                             )
                         }
                     }
