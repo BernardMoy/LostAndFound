@@ -5,6 +5,7 @@ import static android.app.PendingIntent.getActivity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
@@ -354,6 +355,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
 
 
+            // show elements that have been hidden
+            Menu navDrawerMenu = navigationDrawer.getMenu();
+            navDrawerMenu.findItem(R.id.drawer_menu_menu).setVisible(true);
+            navDrawerMenu.findItem(R.id.drawer_menu_create).setVisible(true);
+            navDrawerMenu.findItem(R.id.drawer_menu_activity).setVisible(true);
+            navDrawerMenu.findItem(R.id.nav_drawer_profile).setVisible(true);
+            navDrawerMenu.findItem(R.id.nav_drawer_take_a_tour).setVisible(true);
+
+
         } else {
             // user is not signed in
 
@@ -369,7 +379,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
             // hide some elements of the navigation drawer
-            navigationDrawer.getMenu().findItem(R.id.nav_drawer_activity_log).setVisible(false);
+            Menu navDrawerMenu = navigationDrawer.getMenu();
+            navDrawerMenu.findItem(R.id.drawer_menu_menu).setVisible(false);
+            navDrawerMenu.findItem(R.id.drawer_menu_create).setVisible(false);
+            navDrawerMenu.findItem(R.id.drawer_menu_activity).setVisible(false);
+            navDrawerMenu.findItem(R.id.nav_drawer_profile).setVisible(false);
+            navDrawerMenu.findItem(R.id.nav_drawer_take_a_tour).setVisible(false);
         }
     }
 }
