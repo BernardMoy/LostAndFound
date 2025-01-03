@@ -98,6 +98,10 @@ class FoundFragmentViewModel : ViewModel(){
 
                                             // return true when all items have been fetched
                                             if (fetchedItems == resultSize){
+                                                // sort the data
+                                                itemData.sortByDescending { key ->
+                                                    key[FirebaseNames.LOSTFOUND_TIMEPOSTED] as? Long
+                                                }
                                                 callback.onComplete(true)
                                             }
                                         }
