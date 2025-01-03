@@ -183,19 +183,23 @@ fun MainContent(viewModel: NewFoundViewModel = viewModel()) {
     )
 
     // Display different input fields
-    ItemName(viewModel = viewModel)
-    ItemImage(viewModel = viewModel, launcher = launcher)
-    Category(viewModel = viewModel)
-    Subcategory(viewModel = viewModel)
-    ItemColor(viewModel = viewModel)
-    ItemBrand(viewModel = viewModel)
-    DateAndTime(viewModel = viewModel)
-    Location(viewModel = viewModel)
-    AdditionalDescription(viewModel = viewModel)
-    SecurityQuestion(viewModel = viewModel)
-    SecurityQuestionAns(viewModel = viewModel)
-    ReminderMessage(viewModel = viewModel)
-    DoneButton(context = context, viewModel = viewModel)
+    Column (
+        verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin_half))
+    ) {
+        ItemName(viewModel = viewModel)
+        ItemImage(viewModel = viewModel, launcher = launcher)
+        Category(viewModel = viewModel)
+        Subcategory(viewModel = viewModel)
+        ItemColor(viewModel = viewModel)
+        ItemBrand(viewModel = viewModel)
+        DateAndTime(viewModel = viewModel)
+        Location(viewModel = viewModel)
+        AdditionalDescription(viewModel = viewModel)
+        SecurityQuestion(viewModel = viewModel)
+        SecurityQuestionAns(viewModel = viewModel)
+        ReminderMessage(viewModel = viewModel)
+        DoneButton(context = context, viewModel = viewModel)
+    }
 }
 
 @Composable

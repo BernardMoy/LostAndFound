@@ -21,6 +21,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -78,6 +79,7 @@ import com.example.lostandfound.Utility.ErrorCallback
 import com.example.lostandfound.Data.categories
 import com.example.lostandfound.Data.itemColors
 import com.example.lostandfound.FirebaseManagers.FirebaseUtility
+import com.example.lostandfound.Utility.LocationManager
 import com.example.lostandfound.ui.Login.LoginActivity
 import com.example.lostandfound.ui.theme.ComposeTheme
 import com.example.lostandfound.ui.theme.Typography
@@ -214,17 +216,22 @@ fun MainContent(viewModel: NewLostViewModel = viewModel()) {
     )
 
     // Display different input fields
-    ItemName(viewModel = viewModel)
-    ItemImage(viewModel = viewModel, launcher = launcher)
-    Category(viewModel = viewModel)
-    Subcategory(viewModel = viewModel)
-    ItemColor(viewModel = viewModel)
-    ItemBrand(viewModel = viewModel)
-    DateAndTime(viewModel = viewModel)
-    Location(viewModel = viewModel)
-    AdditionalDescription(viewModel = viewModel)
-    ReminderMessage(viewModel = viewModel)
-    DoneButton(context = context, viewModel = viewModel)
+    Column (
+        verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin_half))
+    ){
+        ItemName(viewModel = viewModel)
+        ItemImage(viewModel = viewModel, launcher = launcher)
+        Category(viewModel = viewModel)
+        Subcategory(viewModel = viewModel)
+        ItemColor(viewModel = viewModel)
+        ItemBrand(viewModel = viewModel)
+        DateAndTime(viewModel = viewModel)
+        Location(context = context, viewModel = viewModel)
+        AdditionalDescription(viewModel = viewModel)
+        ReminderMessage(viewModel = viewModel)
+        DoneButton(context = context, viewModel = viewModel)
+    }
+
 }
 
 @Composable
@@ -465,10 +472,22 @@ fun DateAndTime(
 
 @Composable
 fun Location(
+    context: Context,
     viewModel: NewLostViewModel
 ) {
     CustomGrayTitle(text = "Location")
 
+    /*
+    // not necessary to display location description
+    Text(
+        text = LocationManager.getLocationDescription(context, viewModel.selectedLocation.value),
+        style = Typography.bodyMedium,
+        color = MaterialTheme.colorScheme.onBackground
+    )
+
+     Spacer(modifier = Modifier.padding(dimensionResource(id = R.dimen.content_margin_half)))
+     */
+    
     // the action text to choose a location from google maps
     CustomActionText(
         text = "Add location",
