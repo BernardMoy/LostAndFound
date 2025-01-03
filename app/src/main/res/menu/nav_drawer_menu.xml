@@ -4,7 +4,9 @@
     tools:showIn = "navigation_view">
 
     <item
-        android:title="Menu">
+        android:title="Menu"
+        android:id="@+id/drawer_menu_menu"
+        >
         <menu>
             <!-- <item
                 android:id="@+id/nav_drawer_recents"
@@ -44,7 +46,8 @@
     </item>
 
     <item
-        android:title="Create">
+        android:title="Create"
+        android:id="@+id/drawer_menu_create">
         <menu>
             <item
                 android:id="@+id/nav_drawer_new_lost"
@@ -58,7 +61,8 @@
     </item>
 
     <item
-        android:title="Activity">
+        android:title="Activity"
+        android:id="@+id/drawer_menu_activity">
         <menu>
             <item
                 android:id="@+id/nav_drawer_activity_log"
