@@ -8,6 +8,7 @@ import com.example.lostandfound.Data.FirebaseNames
 import com.example.lostandfound.FirebaseManagers.FirebaseStorageManager
 import com.example.lostandfound.FirebaseManagers.FirestoreManager
 import com.example.lostandfound.R
+import com.google.android.gms.maps.model.LatLng
 
 interface Callback<T> {
     fun onComplete(result: T)
@@ -15,6 +16,7 @@ interface Callback<T> {
 
 class ViewFoundViewModel : ViewModel(){
     val isLoading: MutableState<Boolean> = mutableStateOf(false)
+    val isLocationDialogShown: MutableState<Boolean> = mutableStateOf(false)
 
     // item data are stored here
     var itemID: String = ""  // retrieved as soon as the activity is created
@@ -36,6 +38,7 @@ class ViewFoundViewModel : ViewModel(){
 
     // image stored here
     var image: Uri? = null
+    var location: LatLng = LatLng(52.37930763817003,-1.5614912710215834)
 
     // function to get item data from firebase. Called only after itemID has been loaded from intent
     // return true if successful, false otherwise
@@ -69,6 +72,12 @@ class ViewFoundViewModel : ViewModel(){
                 // user data
                 userID = result[FirebaseNames.LOSTFOUND_USER].toString()
                 timePosted = result[FirebaseNames.LOSTFOUND_TIMEPOSTED] as Long
+
+                // location data: Reconstruct the latlng object
+                location = LatLng(
+                    (result[FirebaseNames.LOSTFOUND_LOCATION] as HashMap<*, *>)["latitude"] as Double,
+                    (result[FirebaseNames.LOSTFOUND_LOCATION] as HashMap<*, *>)["longitude"] as Double
+                )
 
 
                 // get image of the item from firebase storage

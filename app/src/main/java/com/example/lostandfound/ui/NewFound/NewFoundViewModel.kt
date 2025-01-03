@@ -14,6 +14,7 @@ import com.example.lostandfound.Data.Category
 import com.example.lostandfound.Data.Colors
 import com.example.lostandfound.Utility.DateTimeManager
 import com.example.lostandfound.Data.FirebaseNames
+import com.google.android.gms.maps.model.LatLng
 
 class NewFoundViewModel: ViewModel() {
 
@@ -25,6 +26,8 @@ class NewFoundViewModel: ViewModel() {
     val selectedHour: MutableState<Int?> = mutableStateOf(null)
     val selectedMinute: MutableState<Int?> = mutableStateOf(null)
     val isTimeDialogShown: MutableState<Boolean> = mutableStateOf(false)
+    val selectedLocation: MutableState<LatLng> = mutableStateOf(LatLng(52.37930763817003,-1.5614912710215834)) // default location
+    val isLocationDialogShown: MutableState<Boolean> = mutableStateOf(false)
     val additionalDescription: MutableState<String> = mutableStateOf("")
     val securityQuestion: MutableState<String> = mutableStateOf("")
     val securityQuestionAns: MutableState<String> = mutableStateOf("")
@@ -46,7 +49,6 @@ class NewFoundViewModel: ViewModel() {
     val colorError: MutableState<String> = mutableStateOf("")
     val dateError: MutableState<String> = mutableStateOf("")
     val timeError: MutableState<String> = mutableStateOf("")
-    val locationError: MutableState<String> = mutableStateOf("")
     val securityQuestionAnsError: MutableState<String> = mutableStateOf("")
 
     fun onImagePicked(uri: Uri?){
@@ -99,7 +101,6 @@ class NewFoundViewModel: ViewModel() {
         subCategoryError.value = ""
         dateError.value = ""
         timeError.value = ""
-        locationError.value = ""
 
         // check each of them
         if (itemName.value.isEmpty()){
@@ -163,7 +164,8 @@ class NewFoundViewModel: ViewModel() {
             FirebaseNames.FOUND_SECURITY_Q to securityQuestion.value,
             FirebaseNames.FOUND_SECURITY_Q_ANS to securityQuestionAns.value,
             FirebaseNames.LOSTFOUND_STATUS to 0,  // represent the found status
-            FirebaseNames.LOSTFOUND_TIMEPOSTED to DateTimeManager.getCurrentEpochTime()
+            FirebaseNames.LOSTFOUND_TIMEPOSTED to DateTimeManager.getCurrentEpochTime(),
+            FirebaseNames.LOSTFOUND_LOCATION to selectedLocation.value
         )
 
         // add to the firestore db
