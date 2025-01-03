@@ -67,6 +67,7 @@ import com.example.lostandfound.CustomElements.CustomErrorText
 import com.example.lostandfound.CustomElements.CustomFilterChip
 import com.example.lostandfound.CustomElements.CustomGrayTitle
 import com.example.lostandfound.CustomElements.CustomInputField
+import com.example.lostandfound.CustomElements.CustomPickLocationDialog
 import com.example.lostandfound.CustomElements.CustomProgressBar
 import com.example.lostandfound.CustomElements.CustomTextDialog
 import com.example.lostandfound.CustomElements.CustomTimePickerTextField
@@ -183,19 +184,23 @@ fun MainContent(viewModel: NewFoundViewModel = viewModel()) {
     )
 
     // Display different input fields
-    ItemName(viewModel = viewModel)
-    ItemImage(viewModel = viewModel, launcher = launcher)
-    Category(viewModel = viewModel)
-    Subcategory(viewModel = viewModel)
-    ItemColor(viewModel = viewModel)
-    ItemBrand(viewModel = viewModel)
-    DateAndTime(viewModel = viewModel)
-    Location(viewModel = viewModel)
-    AdditionalDescription(viewModel = viewModel)
-    SecurityQuestion(viewModel = viewModel)
-    SecurityQuestionAns(viewModel = viewModel)
-    ReminderMessage(viewModel = viewModel)
-    DoneButton(context = context, viewModel = viewModel)
+    Column (
+        verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin_half))
+    ) {
+        ItemName(viewModel = viewModel)
+        ItemImage(viewModel = viewModel, launcher = launcher)
+        Category(viewModel = viewModel)
+        Subcategory(viewModel = viewModel)
+        ItemColor(viewModel = viewModel)
+        ItemBrand(viewModel = viewModel)
+        DateAndTime(viewModel = viewModel)
+        Location(context = context, viewModel = viewModel)
+        AdditionalDescription(viewModel = viewModel)
+        SecurityQuestion(viewModel = viewModel)
+        SecurityQuestionAns(viewModel = viewModel)
+        ReminderMessage(viewModel = viewModel)
+        DoneButton(context = context, viewModel = viewModel)
+    }
 }
 
 @Composable
@@ -436,6 +441,7 @@ fun DateAndTime(
 
 @Composable
 fun Location(
+    context: Context,
     viewModel: NewFoundViewModel
 ) {
     CustomGrayTitle(text = "Location")
@@ -444,12 +450,16 @@ fun Location(
     CustomActionText(
         text = "Add location",
         onClick = {
-
+            // is dialog shown become true
+            viewModel.isLocationDialogShown.value = true
         },
     )
 
-    CustomErrorText(text = viewModel.locationError.value)
-
+    // the google maps dialog
+    CustomPickLocationDialog(
+        isDialogShown = viewModel.isLocationDialogShown,
+        selectedLocation = viewModel.selectedLocation,
+    )
 }
 
 @Composable

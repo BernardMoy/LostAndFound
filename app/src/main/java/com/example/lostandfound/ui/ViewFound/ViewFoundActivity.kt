@@ -48,10 +48,12 @@ import coil3.compose.rememberAsyncImagePainter
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.example.lostandfound.CustomElements.BackToolbar
+import com.example.lostandfound.CustomElements.CustomActionText
 import com.example.lostandfound.CustomElements.CustomCenteredProgressbar
 import com.example.lostandfound.CustomElements.CustomEditText
 import com.example.lostandfound.CustomElements.CustomGrayTitle
 import com.example.lostandfound.CustomElements.CustomProgressBar
+import com.example.lostandfound.CustomElements.CustomViewLocationDialog
 import com.example.lostandfound.Data.IntentExtraNames
 import com.example.lostandfound.Data.foundStatusText
 import com.example.lostandfound.Data.lostStatusText
@@ -60,6 +62,7 @@ import com.example.lostandfound.R
 import com.example.lostandfound.Utility.DateTimeManager
 import com.example.lostandfound.ui.Found.Callback
 import com.example.lostandfound.ui.Found.FoundFragmentViewModel
+import com.example.lostandfound.ui.ViewLost.ViewLostViewModel
 import com.example.lostandfound.ui.theme.ComposeTheme
 import com.example.lostandfound.ui.theme.Typography
 
@@ -142,6 +145,7 @@ fun MainContent(viewModel: ViewFoundViewModel) {
             Status(viewModel = viewModel)
             ItemImage(viewModel = viewModel)
             ItemDetails(viewModel = viewModel)
+            LocationData(viewModel = viewModel)
             UserData(viewModel = viewModel)
 
             // also display the user
@@ -262,6 +266,28 @@ fun ItemDetails(viewModel: ViewFoundViewModel){
         )
     }
 }
+
+@Composable
+fun LocationData(
+    viewModel: ViewFoundViewModel
+){
+    Column {
+        CustomGrayTitle(text = "Location")
+
+        CustomActionText(
+            text = "View location",
+            onClick = {
+                viewModel.isLocationDialogShown.value = true
+            },
+        )
+    }
+
+    CustomViewLocationDialog(
+        isDialogShown = viewModel.isLocationDialogShown,
+        selectedLocation = viewModel.location
+    )
+}
+
 
 @Composable
 fun UserData(

@@ -14,6 +14,7 @@ import com.example.lostandfound.Data.Category
 import com.example.lostandfound.Data.Colors
 import com.example.lostandfound.Utility.DateTimeManager
 import com.example.lostandfound.Data.FirebaseNames
+import com.google.android.gms.maps.model.LatLng
 
 class NewLostViewModel: ViewModel() {
 
@@ -25,7 +26,9 @@ class NewLostViewModel: ViewModel() {
     val selectedHour: MutableState<Int?> = mutableStateOf(null)
     val selectedMinute: MutableState<Int?> = mutableStateOf(null)
     val isTimeDialogShown: MutableState<Boolean> = mutableStateOf(false)
+    val selectedLocation: MutableState<LatLng> = mutableStateOf(LatLng(52.37930763817003,-1.5614912710215834)) // default location
     val additionalDescription: MutableState<String> = mutableStateOf("")
+    val isLocationDialogShown: MutableState<Boolean> = mutableStateOf(false)
 
     // initially the selected category is null
     var selectedCategory by mutableStateOf<Category?>(null)
@@ -44,7 +47,6 @@ class NewLostViewModel: ViewModel() {
     val colorError: MutableState<String> = mutableStateOf("")
     val dateError: MutableState<String> = mutableStateOf("")
     val timeError: MutableState<String> = mutableStateOf("")
-    val locationError: MutableState<String> = mutableStateOf("")
 
     fun onImagePicked(uri: Uri?){
         itemImage.value = uri
@@ -90,7 +92,6 @@ class NewLostViewModel: ViewModel() {
         subCategoryError.value = ""
         dateError.value = ""
         timeError.value = ""
-        locationError.value = ""
 
         // check each of them
         if (itemName.value.isEmpty()){
@@ -144,6 +145,7 @@ class NewLostViewModel: ViewModel() {
                 selectedDate.value?:0L, selectedHour.value?:0, selectedMinute.value?:0
             ),
             FirebaseNames.LOSTFOUND_BRAND to itemBrand.value,
+            FirebaseNames.LOSTFOUND_LOCATION to selectedLocation.value,
             FirebaseNames.LOSTFOUND_DESCRIPTION to additionalDescription.value,
             FirebaseNames.LOSTFOUND_STATUS to 0, // represent the lost status
             FirebaseNames.LOSTFOUND_TIMEPOSTED to DateTimeManager.getCurrentEpochTime()
