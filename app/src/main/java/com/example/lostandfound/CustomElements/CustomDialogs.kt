@@ -308,8 +308,20 @@ fun CustomLoginDialog(
 fun CustomGoogleMapsDialog(
     isDialogShown: MutableState<Boolean>,
     isEditable: Boolean, // if false, it is in view mode
-    location: MutableState<LatLng>
+    selectedLocation: MutableState<LatLng>,   // this is the state that will ONLY BE UPDATED WHEN THE DONE BUTTON IS CLICKED
 ){
+    var currentLocation by remember {
+        mutableStateOf(selectedLocation.value)
+    }
+
+    // Code is executed everytime the dialog becomes shown
+    LaunchedEffect(isDialogShown.value) {
+        if (isDialogShown.value) {
+            // reset current location to the selected location
+            currentLocation = selectedLocation.value
+        }
+    }
+
     if (isDialogShown.value){
         Dialog(
             onDismissRequest = {
@@ -352,10 +364,10 @@ fun CustomGoogleMapsDialog(
 
                         // Google maps composable
                         val markerState = remember {
-                            MarkerState(position = location.value)
+                            MarkerState(position = currentLocation)
                         }
                         val cameraPositionState = rememberCameraPositionState {
-                            position = CameraPosition.fromLatLngZoom(location.value, 15f)
+                            position = CameraPosition.fromLatLngZoom(currentLocation, 15f)
                         }
                         val uiSettings by remember {
                             mutableStateOf(MapUiSettings(zoomControlsEnabled = true))
@@ -365,13 +377,13 @@ fun CustomGoogleMapsDialog(
                         }
 
                         // when a new location is selected
-                        LaunchedEffect(location.value) {
+                        LaunchedEffect(currentLocation) {
                             // change the marker location
-                            markerState.position = location.value
+                            markerState.position = currentLocation
 
                             // change the camera location when a new location value is selected
                             cameraPositionState.animate(
-                                update = CameraUpdateFactory.newLatLng(location.value),
+                                update = CameraUpdateFactory.newLatLng(currentLocation),
                                 durationMs = 1500
                             )
                         }
@@ -386,7 +398,7 @@ fun CustomGoogleMapsDialog(
                             onMapClick = { latlng ->
                                 // update location with selected latlng
                                 if (isEditable){
-                                    location.value = latlng
+                                    currentLocation = latlng
                                 }
                             }
                         ) {
@@ -418,8 +430,8 @@ fun CustomGoogleMapsDialog(
                                 text = "Done",
                                 type = ButtonType.FILLED,
                                 onClick = {
-
-                                    // dismiss dialog
+                                    // change selected location
+                                    selectedLocation.value = currentLocation
                                     isDialogShown.value = false
                                 }
                             )
