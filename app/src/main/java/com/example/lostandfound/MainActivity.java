@@ -14,6 +14,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
 
+import com.example.lostandfound.FirebaseManagers.FirebaseAuthManager;
+import com.example.lostandfound.FirebaseManagers.FirebaseUtility;
 import com.example.lostandfound.Utility.ImageManager;
 import com.example.lostandfound.Data.SharedPreferencesNames;
 import com.example.lostandfound.ui.ActivityLog.ActivityLogActivity;
@@ -56,6 +58,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private NavigationView navigationDrawer;
     private LinearLayout navHeader;
 
+    private FirebaseAuthManager firebaseAuthManager;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,7 +76,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         // initialise firebase app
         FirebaseApp.initializeApp(MainActivity.this);
-
 
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
@@ -308,10 +311,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     // method to update the displayed data depending on whether they are logged in
     public void updateUserDisplayedData(){
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-
-        if (user != null) {
-            // user is signed in
+        if (FirebaseUtility.isUserLoggedIn()){ // user is signed in
             // hide the log in button
             binding.loginButton.setEnabled(false);
             binding.loginButton.setVisibility(View.GONE);
@@ -353,6 +353,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         .setImageURI(ImageManager.INSTANCE.stringToUri(this, avatar));
             }
 
+
         } else {
             // user is not signed in
 
@@ -365,6 +366,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             binding.profileAndNotificationsIcons.setVisibility(View.GONE);
             binding.loginButton.setEnabled(true);
             binding.loginButton.setVisibility(View.VISIBLE);
+
+
+            // hide some elements of the navigation drawer
+            navigationDrawer.getMenu().findItem(R.id.nav_drawer_activity_log).setVisible(false);
         }
     }
 }
