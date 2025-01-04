@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
@@ -298,7 +299,7 @@ fun CustomComparisonField(
     centerLabel: String,
     contentLeft: String,    // val is passed if not editable, var if editable
     contentRight: String,
-    icon: ImageVector
+    icon: ImageVector?
 ){
     // partition the row into 3 parts
     Row(
@@ -309,22 +310,28 @@ fun CustomComparisonField(
             style = Typography.bodyMedium,
             color = MaterialTheme.colorScheme.onBackground,
             modifier = Modifier
-                .weight(2f)
-                .padding(horizontal = dimensionResource(id = R.dimen.content_margin_half)
+                .weight(3f)
+                .padding(
+                    horizontal = dimensionResource(id = R.dimen.content_margin_half)
                 ),
             textAlign = TextAlign.Center,
         )
 
         Row(
-            modifier = Modifier.weight(1f),
+            modifier = Modifier.weight(3f),
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin_half))
+            horizontalArrangement = Arrangement.Center
         ){
-            Icon(
-                imageVector = icon,
-                contentDescription = "Attribute icon",
-                tint = Color.Gray
-            )
+            if (icon != null){
+                Icon(
+                    imageVector = icon,
+                    contentDescription = "Attribute icon",
+                    tint = Color.Gray
+                )
+            }
+
+            Spacer(modifier = Modifier.padding(dimensionResource(id = R.dimen.content_margin_half)))
+
             Text(
                 text = centerLabel,
                 style = Typography.bodyMedium,
@@ -337,8 +344,9 @@ fun CustomComparisonField(
             style = Typography.bodyMedium,
             color = MaterialTheme.colorScheme.onBackground,
             modifier = Modifier
-                .weight(2f)
-                .padding(horizontal = dimensionResource(id = R.dimen.content_margin_half)
+                .weight(3f)
+                .padding(
+                    horizontal = dimensionResource(id = R.dimen.content_margin_half)
                 ),
             textAlign = TextAlign.Center
         )

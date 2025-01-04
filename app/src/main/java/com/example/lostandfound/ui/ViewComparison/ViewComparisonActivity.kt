@@ -45,12 +45,14 @@ import com.bumptech.glide.integration.compose.GlideImage
 import com.example.lostandfound.CustomElements.BackToolbar
 import com.example.lostandfound.CustomElements.CustomActionText
 import com.example.lostandfound.CustomElements.CustomCenteredProgressbar
+import com.example.lostandfound.CustomElements.CustomComparisonField
 import com.example.lostandfound.CustomElements.CustomEditText
 import com.example.lostandfound.CustomElements.CustomGrayTitle
 import com.example.lostandfound.CustomElements.CustomViewLocationDialog
 import com.example.lostandfound.Data.FoundItem
 import com.example.lostandfound.Data.IntentExtraNames
 import com.example.lostandfound.Data.LostItem
+import com.example.lostandfound.Data.foundStatusText
 import com.example.lostandfound.Data.lostStatusText
 import com.example.lostandfound.Data.statusColor
 import com.example.lostandfound.R
@@ -99,7 +101,7 @@ fun ViewComparisonScreen(activity: ComponentActivity, viewModel: ViewComparisonV
             Scaffold(
                 // top toolbar
                 topBar = {
-                    BackToolbar(title = "View lost item", activity = activity)
+                    BackToolbar(title = "View Comparison", activity = activity)
                 }
             ) { innerPadding ->
                 Column(
@@ -139,7 +141,6 @@ fun MainContent(viewModel: ViewComparisonViewModel) {
         Column(
             verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin))
         ){
-            /*
             Reference(viewModel = viewModel)
             Status(viewModel = viewModel)
             ItemImage(viewModel = viewModel)
@@ -147,23 +148,20 @@ fun MainContent(viewModel: ViewComparisonViewModel) {
             LocationData(viewModel = viewModel)
             UserData(viewModel = viewModel)
 
-
-             */
         }
     }
 }
-/*
+
 @Composable
 fun Reference(viewModel: ViewComparisonViewModel){
     Row(
         modifier = Modifier.fillMaxWidth()
     ){
-        Text(
-            text = "Reference: #" + viewModel.itemData.itemID,
-            style = Typography.bodyMedium,
-            color = Color.Gray,
-            modifier = Modifier.fillMaxWidth(),
-            textAlign = TextAlign.Center
+        CustomComparisonField(
+            centerLabel = "Reference",
+            contentLeft = "#" + viewModel.lostItemData.itemID,
+            contentRight = "#" + viewModel.foundItemData.itemID,
+            icon = null
         )
     }
 }
@@ -173,15 +171,11 @@ fun Status(viewModel: ViewComparisonViewModel) {
     Row(
         modifier = Modifier.fillMaxWidth(),
     ) {
-        Text(
-            text = "Status: " + lostStatusText[viewModel.itemData.status],
-            style = Typography.bodyMedium,
-            color = colorResource(
-                id = statusColor[viewModel.itemData.status] ?: R.color.status0
-            ),
-            fontWeight = FontWeight.Bold,
-            modifier = Modifier.fillMaxWidth(),
-            textAlign = TextAlign.Center
+        CustomComparisonField(
+            centerLabel = "Status",
+            contentLeft = lostStatusText[viewModel.lostItemData.status] ?: "Unknown",
+            contentRight = foundStatusText[viewModel.foundItemData.status] ?: "Unknown",
+            icon = null
         )
     }
 }
@@ -194,9 +188,16 @@ fun ItemImage(viewModel: ViewComparisonViewModel){
     ){
         // image of the item
         GlideImage(
-            model = Uri.parse(viewModel.itemData.image),
-            contentDescription = "Item image",
-            modifier = Modifier.fillMaxWidth(),
+            model = Uri.parse(viewModel.lostItemData.image),
+            contentDescription = "Lost item image",
+            modifier = Modifier.weight(2f),
+            alignment = Alignment.Center
+        )
+
+        GlideImage(
+            model = Uri.parse(viewModel.foundItemData.image),
+            contentDescription = "Found item image",
+            modifier = Modifier.weight(2f),
             alignment = Alignment.Center
         )
     }
@@ -205,55 +206,61 @@ fun ItemImage(viewModel: ViewComparisonViewModel){
 @Composable
 fun ItemDetails(viewModel: ViewComparisonViewModel){
     Column(
+        verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin))
     ){
         CustomGrayTitle(text = "Item details")
 
         // Name of item
-        CustomEditText(
-            fieldLabel = "Item name",
-            fieldContent = viewModel.itemData.itemName,
-            leftIcon = Icons.Outlined.Edit,
-            isEditable = false
+        CustomComparisonField(
+            centerLabel = "Name",
+            contentLeft = viewModel.lostItemData.itemName,
+            contentRight = viewModel.foundItemData.itemName,
+            icon = Icons.Outlined.Edit
         )
         HorizontalDivider(thickness = 1.dp)
 
         // category and subcategory
-        CustomEditText(fieldLabel = "Category",
-            fieldContent = viewModel.itemData.category + ", " + viewModel.itemData.subCategory,
-            leftIcon = Icons.Outlined.Folder,
-            isEditable = false
+        CustomComparisonField(
+            centerLabel = "Category",
+            contentLeft = viewModel.lostItemData.category + ", " + viewModel.lostItemData.subCategory,
+            contentRight = viewModel.foundItemData.category + ", " + viewModel.foundItemData.subCategory,
+            icon = Icons.Outlined.Folder
         )
         HorizontalDivider(thickness = 1.dp)
 
         // date and time
-        CustomEditText(fieldLabel = "Date and time",
-            fieldContent = DateTimeManager.dateTimeToString(viewModel.itemData.dateTime),
-            leftIcon = Icons.Outlined.CalendarMonth,
-            isEditable = false
+        CustomComparisonField(
+            centerLabel = "Time",
+            contentLeft = DateTimeManager.dateTimeToString(viewModel.lostItemData.dateTime),
+            contentRight = DateTimeManager.dateTimeToString(viewModel.foundItemData.dateTime),
+            icon = Icons.Outlined.CalendarMonth
         )
         HorizontalDivider(thickness = 1.dp)
 
         // color
-        CustomEditText(fieldLabel = "Color",
-            fieldContent = viewModel.itemData.color,
-            leftIcon = Icons.Outlined.Palette,
-            isEditable = false
+        CustomComparisonField(
+            centerLabel = "Category",
+            contentLeft = viewModel.lostItemData.color,
+            contentRight = viewModel.foundItemData.color,
+            icon = Icons.Outlined.Palette
         )
         HorizontalDivider(thickness = 1.dp)
 
         // brand (Optional)
-        CustomEditText(fieldLabel = "Brand",
-            fieldContent = if (viewModel.itemData.brand.isNotEmpty()) viewModel.itemData.brand else "Not provided",
-            leftIcon = Icons.Outlined.Title,
-            isEditable = false
+        CustomComparisonField(
+            centerLabel = "Brand",
+            contentLeft = viewModel.lostItemData.brand.ifEmpty { "Unknown" },
+            contentRight = viewModel.foundItemData.brand.ifEmpty { "Unknown" },
+            icon = Icons.Outlined.Title
         )
         HorizontalDivider(thickness = 1.dp)
 
         // description (Optional)
-        CustomEditText(fieldLabel = "Description",
-            fieldContent = if (viewModel.itemData.description.isNotEmpty()) viewModel.itemData.description else "Not provided",
-            leftIcon = Icons.Outlined.Description,
-            isEditable = false
+        CustomComparisonField(
+            centerLabel = "Description",
+            contentLeft = viewModel.lostItemData.description.ifEmpty { "Unknown" },
+            contentRight = viewModel.foundItemData.description.ifEmpty { "Unknown" },
+            icon = Icons.Outlined.Description
         )
         HorizontalDivider(thickness = 1.dp)
     }
@@ -277,7 +284,7 @@ fun LocationData(
     CustomViewLocationDialog(
         isDialogShown = viewModel.isLocationDialogShown,
         selectedLocation = LocationManager.pairToLatlng(
-            viewModel.itemData.location
+            viewModel.lostItemData.location // show both HEREEEEEEEEEEEEEEEEEEEEE
         )
     )
 }
@@ -290,27 +297,26 @@ fun UserData(
     ) {
         CustomGrayTitle(text = "User information")
 
-        // Name of user
+        // Name of the FOUND user as only lost users would see this screen
         CustomEditText(
             fieldLabel = "User",
-            fieldContent = viewModel.userName,
+            fieldContent = viewModel.foundUserName,
             leftIcon = Icons.Outlined.AccountCircle,
             isEditable = false
         )
         HorizontalDivider(thickness = 1.dp)
 
-        // category and subcategory
-        CustomEditText(
-            fieldLabel = "Time posted",
-            fieldContent = DateTimeManager.dateTimeToString(viewModel.itemData.timePosted),
-            leftIcon = Icons.Outlined.CalendarMonth,
-            isEditable = false
+        // time posted
+        CustomComparisonField(
+            centerLabel = "Time posted",
+            contentLeft = DateTimeManager.dateTimeToString(viewModel.lostItemData.timePosted),
+            contentRight = DateTimeManager.dateTimeToString(viewModel.foundItemData.timePosted),
+            icon = Icons.Outlined.CalendarMonth
         )
         HorizontalDivider(thickness = 1.dp)
     }
 }
 
- */
 
 // function to load data, called when the activity is created
 fun loadData(
