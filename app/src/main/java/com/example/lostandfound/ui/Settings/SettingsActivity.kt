@@ -1,11 +1,11 @@
 package com.example.lostandfound.ui.Settings
 
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
-import com.example.lostandfound.R
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -20,22 +20,24 @@ import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.LocationOn
 import androidx.compose.material.icons.outlined.Notifications
 import androidx.compose.material.icons.outlined.Palette
-import androidx.compose.material.icons.outlined.Report
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Scaffold
-import androidx.compose.runtime.Composable
 import androidx.compose.material3.Surface
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.core.content.ContextCompat.startActivity
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.lostandfound.CustomElements.BackToolbar
 import com.example.lostandfound.CustomElements.CustomActionRow
 import com.example.lostandfound.CustomElements.CustomGrayTitle
 import com.example.lostandfound.Data.SharedPreferencesNames
+import com.example.lostandfound.R
+import com.example.lostandfound.ui.AboutApp.AboutAppActivity
 import com.example.lostandfound.ui.theme.ComposeTheme
 
 
@@ -162,7 +164,11 @@ fun AboutTheApp(
         CustomActionRow(text = "About the app",
             leftIcon = Icons.Outlined.Info,
             onClick = {
-                Toast.makeText(context, "Color theme", Toast.LENGTH_SHORT).show()
+                val i: Intent = Intent(
+                    context,
+                    AboutAppActivity::class.java
+                )
+                context.startActivity(i)
             }
         )
 

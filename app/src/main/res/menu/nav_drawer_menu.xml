@@ -28,10 +28,12 @@
                 android:icon="@drawable/check_icon"
                 android:title="My found items" />
 
+            <!--
             <item
                 android:id="@+id/nav_drawer_search"
                 android:icon="@drawable/search_icon"
                 android:title="Search lost items" />
+                -->
 
             <item
                 android:id="@+id/nav_drawer_chat"
