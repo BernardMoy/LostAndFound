@@ -30,7 +30,7 @@ class ViewLostViewModel : ViewModel(){
         color = "Unknown",
         brand = "",
         dateTime = 0L,
-        location = Pair(0.0, 0.0),
+        location = Pair(52.37930763817003,-1.5614912710215834),
         description = "",
         status = 0,
         timePosted = 0L,

@@ -1,8 +1,9 @@
 package com.example.lostandfound.Data
 
-import android.net.Uri
-import com.google.android.gms.maps.model.LatLng
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
 
+@Parcelize
 data class FoundItem(
     // ids
     val itemID: String,
@@ -15,15 +16,15 @@ data class FoundItem(
     val color: String,
     val brand: String,  // can be empty
     val dateTime: Long,  // in epoch
-    val location: LatLng,
+    val location: Pair<Double, Double>, // store the latlng value as latitude and longitude
     val description: String,    // can be empty
-    val status: Int,
     val securityQuestion: String,
     val securityQuestionAns: String,
+    val status: Int,
 
     // time posted info
     val timePosted: Long,
 
     // item image
-    val image: Uri
-)
+    val image: String  // store the item image as string
+) : Parcelable

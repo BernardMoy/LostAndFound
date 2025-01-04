@@ -5,10 +5,9 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import com.example.lostandfound.Data.FirebaseNames
-import com.example.lostandfound.FirebaseManagers.FirebaseStorageManager
+import com.example.lostandfound.Data.FoundItem
 import com.example.lostandfound.FirebaseManagers.FirestoreManager
-import com.example.lostandfound.R
-import com.google.android.gms.maps.model.LatLng
+import com.example.lostandfound.ui.ViewLost.Callback
 
 interface Callback<T> {
     fun onComplete(result: T)
@@ -19,99 +18,48 @@ class ViewFoundViewModel : ViewModel(){
     val isLocationDialogShown: MutableState<Boolean> = mutableStateOf(false)
 
     // item data are stored here
-    var itemID: String = ""  // retrieved as soon as the activity is created
-    var userID: String = ""
-    var itemName: String = ""
-    var category: String = ""
-    var subCategory: String = ""
-    var color: String = ""
-    var dateTime: Long = 0L
-    var brand: String = ""  // nullable
-    var description: String = ""  // nullable
-    var status: Int = 0
-    var userName: String = ""
-    var timePosted: Long = 0L
+    var itemData = FoundItem(
+        itemID = "Unknown",
+        userID = "Unknown",
+        itemName = "Unknown",
+        category = "Unknown",
+        subCategory = "Unknown",
+        color = "Unknown",
+        brand = "",
+        dateTime = 0L,
+        location = Pair(52.37930763817003,-1.5614912710215834),
+        description = "",
+        status = 0,
+        timePosted = 0L,
+        image = "",
+        securityQuestion = "",
+        securityQuestionAns = ""
+    )
 
-    // unique to found items (Can be empty)
-    var securityQuestion: String = ""
-    var securityQuestionAns: String = ""
+    // username used to display the user
+    var userName = "Unknown"
 
-    // image stored here
-    var image: Uri? = null
-    var location: LatLng = LatLng(52.37930763817003,-1.5614912710215834)
-
-    // function to get item data from firebase. Called only after itemID has been loaded from intent
-    // return true if successful, false otherwise
-    fun getItemData(callback: Callback<Boolean>){
+    // function to get item data
+    fun getUserName(callback: com.example.lostandfound.ui.ViewFound.Callback<Boolean>){
 
         // managers
         val firestoreManager = FirestoreManager()
-        val firebaseStorageManager = FirebaseStorageManager()
 
-        // get data from firebase db
-        firestoreManager.get(FirebaseNames.COLLECTION_FOUND_ITEMS, itemID, object : FirestoreManager.Callback<Map<String, Any>> {
+        // get name of the user from firebase firestore
+        firestoreManager.get(FirebaseNames.COLLECTION_USERS, itemData.userID, object : FirestoreManager.Callback<Map<String, Any>>{
             override fun onComplete(result: Map<String, Any>?) {
-                if (result == null){
-                    // failed
+                if (result == null) {
                     callback.onComplete(false)
-                    return
+
+                } else {
+                    val name = result[FirebaseNames.USERS_FIRSTNAME].toString() + " " + result[FirebaseNames.USERS_LASTNAME].toString()
+
+                    // set username
+                    userName = name
+
+                    // return true
+                    callback.onComplete(true)
                 }
-
-                // load the data into the view model
-                itemName = result[FirebaseNames.LOSTFOUND_ITEMNAME].toString()
-                category = result[FirebaseNames.LOSTFOUND_CATEGORY].toString()
-                subCategory = result[FirebaseNames.LOSTFOUND_SUBCATEGORY].toString()
-                color = result[FirebaseNames.LOSTFOUND_COLOR].toString()
-                dateTime = result[FirebaseNames.LOSTFOUND_EPOCHDATETIME] as Long
-                brand = result[FirebaseNames.LOSTFOUND_BRAND].toString()
-                description = result[FirebaseNames.LOSTFOUND_DESCRIPTION].toString()
-                status = (result[FirebaseNames.LOSTFOUND_STATUS] as Long).toInt()
-                securityQuestion = result[FirebaseNames.FOUND_SECURITY_Q].toString()
-                securityQuestionAns = result[FirebaseNames.FOUND_SECURITY_Q_ANS].toString()
-
-                // user data
-                userID = result[FirebaseNames.LOSTFOUND_USER].toString()
-                timePosted = result[FirebaseNames.LOSTFOUND_TIMEPOSTED] as Long
-
-                // location data: Reconstruct the latlng object
-                location = LatLng(
-                    (result[FirebaseNames.LOSTFOUND_LOCATION] as HashMap<*, *>)["latitude"] as Double,
-                    (result[FirebaseNames.LOSTFOUND_LOCATION] as HashMap<*, *>)["longitude"] as Double
-                )
-
-
-                // get image of the item from firebase storage
-                firebaseStorageManager.getImage(FirebaseNames.FOLDER_FOUND_IMAGE, itemID, object: FirebaseStorageManager.Callback<Uri?>{
-                    override fun onComplete(result: Uri?) {
-                        // if the result is null, replace it by placeholder image
-                        if (result == null){
-                            val placeHolder: Uri = Uri.parse("android.resource://com.example.lostandfound/" + R.drawable.placeholder_image)
-                            image = placeHolder
-
-                        } else {
-                            image = result
-                        }
-
-
-                        // get name of the user from firebase firestore
-                        firestoreManager.get(FirebaseNames.COLLECTION_USERS, userID, object : FirestoreManager.Callback<Map<String, Any>>{
-                            override fun onComplete(result: Map<String, Any>?) {
-                                if (result == null) {
-                                    userName = "Unknown"
-
-                                } else {
-                                    val name = result[FirebaseNames.USERS_FIRSTNAME].toString() + " " + result[FirebaseNames.USERS_LASTNAME].toString()
-
-                                    // set username
-                                    userName = name
-                                }
-
-                                // return true after all data has been fetched
-                                callback.onComplete(true)
-                            }
-                        })
-                    }
-                })
             }
         })
     }

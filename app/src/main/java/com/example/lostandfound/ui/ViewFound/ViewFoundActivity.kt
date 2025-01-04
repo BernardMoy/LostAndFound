@@ -3,12 +3,10 @@ package com.example.lostandfound.ui.ViewFound
 import android.content.Context
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -25,7 +23,6 @@ import androidx.compose.material.icons.outlined.Edit
 import androidx.compose.material.icons.outlined.Folder
 import androidx.compose.material.icons.outlined.Lock
 import androidx.compose.material.icons.outlined.Palette
-import androidx.compose.material.icons.outlined.Timer
 import androidx.compose.material.icons.outlined.Title
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Scaffold
@@ -44,7 +41,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import coil3.compose.rememberAsyncImagePainter
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.example.lostandfound.CustomElements.BackToolbar
@@ -52,17 +48,14 @@ import com.example.lostandfound.CustomElements.CustomActionText
 import com.example.lostandfound.CustomElements.CustomCenteredProgressbar
 import com.example.lostandfound.CustomElements.CustomEditText
 import com.example.lostandfound.CustomElements.CustomGrayTitle
-import com.example.lostandfound.CustomElements.CustomProgressBar
 import com.example.lostandfound.CustomElements.CustomViewLocationDialog
+import com.example.lostandfound.Data.FoundItem
 import com.example.lostandfound.Data.IntentExtraNames
 import com.example.lostandfound.Data.foundStatusText
-import com.example.lostandfound.Data.lostStatusText
 import com.example.lostandfound.Data.statusColor
 import com.example.lostandfound.R
 import com.example.lostandfound.Utility.DateTimeManager
-import com.example.lostandfound.ui.Found.Callback
-import com.example.lostandfound.ui.Found.FoundFragmentViewModel
-import com.example.lostandfound.ui.ViewLost.ViewLostViewModel
+import com.example.lostandfound.Utility.LocationManager
 import com.example.lostandfound.ui.theme.ComposeTheme
 import com.example.lostandfound.ui.theme.Typography
 
@@ -75,9 +68,10 @@ class ViewFoundActivity : ComponentActivity() {
         val viewModel: ViewFoundViewModel by viewModels()
 
         // load the passed intent data into the view model
-        viewModel.itemID = intent.getStringExtra(IntentExtraNames.INTENT_FOUND_ID) ?: ""
-        Log.d("ITEMID", viewModel.itemID.toString())
-
+        val passedItem = intent.getParcelableExtra<FoundItem>(IntentExtraNames.INTENT_FOUND_ID)
+        if (passedItem != null) {
+            viewModel.itemData = passedItem
+        }
 
         setContent {
             ViewFoundScreen(activity = this, viewModel = viewModel)
@@ -110,7 +104,7 @@ fun ViewFoundScreen(activity: ComponentActivity, viewModel: ViewFoundViewModel) 
                         .padding(paddingValues = innerPadding)
                         .padding(dimensionResource(id = R.dimen.title_margin))
                         .verticalScroll(rememberScrollState()),   // make screen scrollable
-                    ) {
+                ) {
                     // content goes here
                     MainContent(viewModel = viewModel)
                 }
@@ -140,7 +134,7 @@ fun MainContent(viewModel: ViewFoundViewModel) {
     } else {
         Column(
             verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin))
-        ){
+        ) {
             Reference(viewModel = viewModel)
             Status(viewModel = viewModel)
             ItemImage(viewModel = viewModel)
@@ -154,12 +148,12 @@ fun MainContent(viewModel: ViewFoundViewModel) {
 }
 
 @Composable
-fun Reference(viewModel: ViewFoundViewModel){
+fun Reference(viewModel: ViewFoundViewModel) {
     Row(
         modifier = Modifier.fillMaxWidth()
-    ){
+    ) {
         Text(
-            text = "Reference: #" + viewModel.itemID,
+            text = "Reference: #" + viewModel.itemData.itemID,
             style = Typography.bodyMedium,
             color = Color.Gray,
             modifier = Modifier.fillMaxWidth(),
@@ -174,10 +168,10 @@ fun Status(viewModel: ViewFoundViewModel) {
         modifier = Modifier.fillMaxWidth(),
     ) {
         Text(
-            text = "Status: " + foundStatusText[viewModel.status],
+            text = "Status: " + foundStatusText[viewModel.itemData.status],
             style = Typography.bodyMedium,
             color = colorResource(
-                id = statusColor[viewModel.status] ?: R.color.status0
+                id = statusColor[viewModel.itemData.status] ?: R.color.status0
             ),
             fontWeight = FontWeight.Bold,
             modifier = Modifier.fillMaxWidth(),
@@ -188,13 +182,13 @@ fun Status(viewModel: ViewFoundViewModel) {
 
 @OptIn(ExperimentalGlideComposeApi::class)
 @Composable
-fun ItemImage(viewModel: ViewFoundViewModel){
+fun ItemImage(viewModel: ViewFoundViewModel) {
     Row(
         modifier = Modifier.fillMaxWidth()
-    ){
+    ) {
         // image of the item
         GlideImage(
-            model = viewModel.image,
+            model = Uri.parse(viewModel.itemData.image),
             contentDescription = "Item image",
             modifier = Modifier.fillMaxWidth(),
             alignment = Alignment.Center
@@ -203,55 +197,59 @@ fun ItemImage(viewModel: ViewFoundViewModel){
 }
 
 @Composable
-fun ItemDetails(viewModel: ViewFoundViewModel){
-    Column(
-    ){
+fun ItemDetails(viewModel: ViewFoundViewModel) {
+    Column {
         CustomGrayTitle(text = "Item details")
 
         // Name of item
         CustomEditText(
             fieldLabel = "Item name",
-            fieldContent = viewModel.itemName,
+            fieldContent = viewModel.itemData.itemName,
             leftIcon = Icons.Outlined.Edit,
             isEditable = false
         )
         HorizontalDivider(thickness = 1.dp)
 
         // category and subcategory
-        CustomEditText(fieldLabel = "Category",
-            fieldContent = viewModel.category + ", " + viewModel.subCategory,
+        CustomEditText(
+            fieldLabel = "Category",
+            fieldContent = viewModel.itemData.category + ", " + viewModel.itemData.subCategory,
             leftIcon = Icons.Outlined.Folder,
             isEditable = false
         )
         HorizontalDivider(thickness = 1.dp)
 
         // date and time
-        CustomEditText(fieldLabel = "Date and time",
-            fieldContent = DateTimeManager.dateTimeToString(viewModel.dateTime),
+        CustomEditText(
+            fieldLabel = "Date and time",
+            fieldContent = DateTimeManager.dateTimeToString(viewModel.itemData.dateTime),
             leftIcon = Icons.Outlined.CalendarMonth,
             isEditable = false
         )
         HorizontalDivider(thickness = 1.dp)
 
         // color
-        CustomEditText(fieldLabel = "Color",
-            fieldContent = viewModel.color,
+        CustomEditText(
+            fieldLabel = "Color",
+            fieldContent = viewModel.itemData.color,
             leftIcon = Icons.Outlined.Palette,
             isEditable = false
         )
         HorizontalDivider(thickness = 1.dp)
 
         // brand (Optional)
-        CustomEditText(fieldLabel = "Brand",
-            fieldContent = if (viewModel.brand.isNotEmpty()) viewModel.brand else "Not provided",
+        CustomEditText(
+            fieldLabel = "Brand",
+            fieldContent = if (viewModel.itemData.brand.isNotEmpty()) viewModel.itemData.brand else "Not provided",
             leftIcon = Icons.Outlined.Title,
             isEditable = false
         )
         HorizontalDivider(thickness = 1.dp)
 
         // description (Optional)
-        CustomEditText(fieldLabel = "Description",
-            fieldContent = if (viewModel.description.isNotEmpty()) viewModel.description else "Not provided",
+        CustomEditText(
+            fieldLabel = "Description",
+            fieldContent = if (viewModel.itemData.description.isNotEmpty()) viewModel.itemData.description else "Not provided",
             leftIcon = Icons.Outlined.Description,
             isEditable = false
         )
@@ -260,7 +258,7 @@ fun ItemDetails(viewModel: ViewFoundViewModel){
         // security question - whether it exists
         CustomEditText(
             fieldLabel = "Security question",
-            fieldContent = if (viewModel.securityQuestion.isEmpty()) "No" else "Yes",
+            fieldContent = if (viewModel.itemData.securityQuestion.isEmpty()) "No" else "Yes",
             isEditable = false,
             leftIcon = Icons.Outlined.Lock
         )
@@ -270,7 +268,7 @@ fun ItemDetails(viewModel: ViewFoundViewModel){
 @Composable
 fun LocationData(
     viewModel: ViewFoundViewModel
-){
+) {
     Column {
         CustomGrayTitle(text = "Location")
 
@@ -284,7 +282,9 @@ fun LocationData(
 
     CustomViewLocationDialog(
         isDialogShown = viewModel.isLocationDialogShown,
-        selectedLocation = viewModel.location
+        selectedLocation = LocationManager.pairToLatlng(
+            viewModel.itemData.location
+        )
     )
 }
 
@@ -292,9 +292,8 @@ fun LocationData(
 @Composable
 fun UserData(
     viewModel: ViewFoundViewModel
-){
-    Column(
-    ) {
+) {
+    Column {
         CustomGrayTitle(text = "User information")
 
         // Name of user
@@ -309,7 +308,7 @@ fun UserData(
         // category and subcategory
         CustomEditText(
             fieldLabel = "Time posted",
-            fieldContent = DateTimeManager.dateTimeToString(viewModel.timePosted),
+            fieldContent = DateTimeManager.dateTimeToString(viewModel.itemData.timePosted),
             leftIcon = Icons.Outlined.CalendarMonth,
             isEditable = false
         )
@@ -321,16 +320,16 @@ fun UserData(
 fun loadData(
     context: Context,
     viewModel: ViewFoundViewModel
-){
+) {
     // is loading initially
     viewModel.isLoading.value = true
 
-    // load lost item data of the current user from the view model
-    viewModel.getItemData(object : com.example.lostandfound.ui.ViewFound.Callback<Boolean>{
+    // load found item data of the current user from the view model
+    viewModel.getUserName(object : Callback<Boolean> {
         override fun onComplete(result: Boolean) {
             viewModel.isLoading.value = false
 
-            if (!result){
+            if (!result) {
                 // display toast message for failed data retrieval
                 Toast.makeText(context, "Fetching data failed", Toast.LENGTH_SHORT).show()
             }

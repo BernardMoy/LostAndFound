@@ -83,7 +83,7 @@ class LostFragmentViewModel : ViewModel(){
                                     // get the image of the item
                                     firebaseStorageManager.getImage(FirebaseNames.FOLDER_LOST_IMAGE, itemID, object: FirebaseStorageManager.Callback<Uri?>{
                                         override fun onComplete(result: Uri?) {
-                                            // initialise the itme image to the default image
+                                            // initialise the item image to the default image
                                             var itemImage: Uri = Uri.parse("android.resource://com.example.lostandfound/" + R.drawable.placeholder_image)
 
                                             // if the result is not null, replace it by actual item image
@@ -116,7 +116,6 @@ class LostFragmentViewModel : ViewModel(){
 
                                             // return true when all items have been fetched
                                             if (fetchedItems == resultSize){
-
                                                 // sort the data
                                                 itemData.sortByDescending { key ->
                                                     key.timePosted
