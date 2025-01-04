@@ -1,6 +1,7 @@
 package com.example.lostandfound.ui.ViewLost
 
 import android.content.Context
+import android.net.Uri
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
@@ -50,10 +51,12 @@ import com.example.lostandfound.CustomElements.CustomPickLocationDialog
 import com.example.lostandfound.CustomElements.CustomGrayTitle
 import com.example.lostandfound.CustomElements.CustomViewLocationDialog
 import com.example.lostandfound.Data.IntentExtraNames
+import com.example.lostandfound.Data.LostItem
 import com.example.lostandfound.Data.lostStatusText
 import com.example.lostandfound.Data.statusColor
 import com.example.lostandfound.R
 import com.example.lostandfound.Utility.DateTimeManager
+import com.example.lostandfound.Utility.LocationManager
 import com.example.lostandfound.ui.theme.ComposeTheme
 import com.example.lostandfound.ui.theme.Typography
 
@@ -66,7 +69,10 @@ class ViewLostActivity : ComponentActivity() {
         val viewModel: ViewLostViewModel by viewModels()
 
         // load the passed intent data into the view model
-        viewModel.itemID = intent.getStringExtra(IntentExtraNames.INTENT_LOST_ID) ?: ""
+        val passedItem = intent.getParcelableExtra<LostItem>(IntentExtraNames.INTENT_LOST_ID)
+        if (passedItem != null){
+            viewModel.itemData = passedItem
+        }
 
         setContent {
             ViewLostScreen(activity = this, viewModel = viewModel)
@@ -148,7 +154,7 @@ fun Reference(viewModel: ViewLostViewModel){
         modifier = Modifier.fillMaxWidth()
     ){
         Text(
-            text = "Reference: #" + viewModel.itemID,
+            text = "Reference: #" + viewModel.itemData.itemID,
             style = Typography.bodyMedium,
             color = Color.Gray,
             modifier = Modifier.fillMaxWidth(),
@@ -163,10 +169,10 @@ fun Status(viewModel: ViewLostViewModel) {
         modifier = Modifier.fillMaxWidth(),
     ) {
         Text(
-            text = "Status: " + lostStatusText[viewModel.status],
+            text = "Status: " + lostStatusText[viewModel.itemData.status],
             style = Typography.bodyMedium,
             color = colorResource(
-                id = statusColor[viewModel.status] ?: R.color.status0
+                id = statusColor[viewModel.itemData.status] ?: R.color.status0
             ),
             fontWeight = FontWeight.Bold,
             modifier = Modifier.fillMaxWidth(),
@@ -183,7 +189,7 @@ fun ItemImage(viewModel: ViewLostViewModel){
     ){
         // image of the item
         GlideImage(
-            model = viewModel.image,
+            model = Uri.parse(viewModel.itemData.image),
             contentDescription = "Item image",
             modifier = Modifier.fillMaxWidth(),
             alignment = Alignment.Center
@@ -200,7 +206,7 @@ fun ItemDetails(viewModel: ViewLostViewModel){
         // Name of item
         CustomEditText(
             fieldLabel = "Item name",
-            fieldContent = viewModel.itemName,
+            fieldContent = viewModel.itemData.itemName,
             leftIcon = Icons.Outlined.Edit,
             isEditable = false
         )
@@ -208,7 +214,7 @@ fun ItemDetails(viewModel: ViewLostViewModel){
 
         // category and subcategory
         CustomEditText(fieldLabel = "Category",
-            fieldContent = viewModel.category + ", " + viewModel.subCategory,
+            fieldContent = viewModel.itemData.category + ", " + viewModel.itemData.subCategory,
             leftIcon = Icons.Outlined.Folder,
             isEditable = false
         )
@@ -216,7 +222,7 @@ fun ItemDetails(viewModel: ViewLostViewModel){
 
         // date and time
         CustomEditText(fieldLabel = "Date and time",
-            fieldContent = DateTimeManager.dateTimeToString(viewModel.dateTime),
+            fieldContent = DateTimeManager.dateTimeToString(viewModel.itemData.dateTime),
             leftIcon = Icons.Outlined.CalendarMonth,
             isEditable = false
         )
@@ -224,7 +230,7 @@ fun ItemDetails(viewModel: ViewLostViewModel){
 
         // color
         CustomEditText(fieldLabel = "Color",
-            fieldContent = viewModel.color,
+            fieldContent = viewModel.itemData.color,
             leftIcon = Icons.Outlined.Palette,
             isEditable = false
         )
@@ -232,7 +238,7 @@ fun ItemDetails(viewModel: ViewLostViewModel){
 
         // brand (Optional)
         CustomEditText(fieldLabel = "Brand",
-            fieldContent = if (viewModel.brand.isNotEmpty()) viewModel.brand else "Not provided",
+            fieldContent = if (viewModel.itemData.brand.isNotEmpty()) viewModel.itemData.brand else "Not provided",
             leftIcon = Icons.Outlined.Title,
             isEditable = false
         )
@@ -240,7 +246,7 @@ fun ItemDetails(viewModel: ViewLostViewModel){
 
         // description (Optional)
         CustomEditText(fieldLabel = "Description",
-            fieldContent = if (viewModel.description.isNotEmpty()) viewModel.description else "Not provided",
+            fieldContent = if (viewModel.itemData.description.isNotEmpty()) viewModel.itemData.description else "Not provided",
             leftIcon = Icons.Outlined.Description,
             isEditable = false
         )
@@ -265,7 +271,9 @@ fun LocationData(
 
     CustomViewLocationDialog(
         isDialogShown = viewModel.isLocationDialogShown,
-        selectedLocation = viewModel.location
+        selectedLocation = LocationManager.pairToLatlng(
+            viewModel.itemData.location
+        )
     )
 }
 
@@ -289,7 +297,7 @@ fun UserData(
         // category and subcategory
         CustomEditText(
             fieldLabel = "Time posted",
-            fieldContent = DateTimeManager.dateTimeToString(viewModel.timePosted),
+            fieldContent = DateTimeManager.dateTimeToString(viewModel.itemData.timePosted),
             leftIcon = Icons.Outlined.CalendarMonth,
             isEditable = false
         )
@@ -306,7 +314,7 @@ fun loadData(
     viewModel.isLoading.value = true
 
     // load lost item data of the current user from the view model
-    viewModel.getItemData(object : com.example.lostandfound.ui.ViewLost.Callback<Boolean>{
+    viewModel.getUserName(object : com.example.lostandfound.ui.ViewLost.Callback<Boolean>{
         override fun onComplete(result: Boolean) {
             viewModel.isLoading.value = false
 
