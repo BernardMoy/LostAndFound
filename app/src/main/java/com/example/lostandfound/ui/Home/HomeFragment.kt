@@ -1,5 +1,7 @@
 package com.example.lostandfound.ui.Home
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -11,12 +13,17 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.lostandfound.CustomElements.ButtonType
+import com.example.lostandfound.CustomElements.CustomButton
 import com.example.lostandfound.R
 import com.example.lostandfound.ui.EditProfile.EditProfileViewModel
+import com.example.lostandfound.ui.ViewComparison.ViewComparisonActivity
+import com.example.lostandfound.ui.theme.ComposeTheme
 
 
 class HomeFragment : Fragment() {
@@ -28,7 +35,9 @@ class HomeFragment : Fragment() {
         val view = ComposeView(requireContext())
         view.apply{
             setContent {
-                HomeFragmentScreen()
+                ComposeTheme {
+                    HomeFragmentScreen()
+                }
             }
         }
         return view
@@ -39,7 +48,9 @@ class HomeFragment : Fragment() {
 @Preview(showBackground = true)
 @Composable
 fun Preview() {
-    HomeFragmentScreen()
+    ComposeTheme {
+        HomeFragmentScreen()
+    }
 }
 
 @Composable
@@ -54,6 +65,16 @@ fun HomeFragmentScreen() {
 }
 
 @Composable
-fun MainContent(viewModel: EditProfileViewModel = viewModel()){
+fun MainContent(
+    viewModel: EditProfileViewModel = viewModel()
+){
+
+    val context = LocalContext.current
+
     Text(text = "Home fragment")
+
+    CustomButton(text = "compare", type = ButtonType.FILLED, onClick = {
+        val i: Intent = Intent(context, ViewComparisonActivity::class.java)
+        context.startActivity(i)
+    })
 }

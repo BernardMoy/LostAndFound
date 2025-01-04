@@ -7,6 +7,7 @@ import com.example.lostandfound.Data.FirebaseNames
 import com.example.lostandfound.Data.FoundItem
 import com.example.lostandfound.Data.LostItem
 import com.example.lostandfound.FirebaseManagers.FirestoreManager
+import com.example.lostandfound.R
 
 interface Callback<T> {
     fun onComplete(result: T)
@@ -15,8 +16,7 @@ interface Callback<T> {
 class ViewComparisonViewModel : ViewModel(){
     val isLoading: MutableState<Boolean> = mutableStateOf(false)
 
-    val isLostLocationDialogShown: MutableState<Boolean> = mutableStateOf(false)
-    val isFoundLocationDialogShown: MutableState<Boolean> = mutableStateOf(false)
+    val isLocationDialogShown: MutableState<Boolean> = mutableStateOf(false)
 
     // default lost item placeholder data
     var lostItemData = LostItem(
@@ -32,7 +32,7 @@ class ViewComparisonViewModel : ViewModel(){
         description = "",
         status = 0,
         timePosted = 0L,
-        image = ""
+        image = "android.resource://com.example.lostandfound/" + R.drawable.placeholder_image
     )
 
     // default found item placeholder data
@@ -49,7 +49,7 @@ class ViewComparisonViewModel : ViewModel(){
         description = "",
         status = 0,
         timePosted = 0L,
-        image = "",
+        image = "android.resource://com.example.lostandfound/" + R.drawable.placeholder_image,
         securityQuestion = "",
         securityQuestionAns = ""
     )
