@@ -166,12 +166,20 @@ fun AboutTheApp(
             }
         )
 
+        /*
+        The following feature requires login.
+        Currently all settings features does not require login,
+        hence it has been removed
+         */
+        /*
         CustomActionRow(text = "Report a problem with the app",
             leftIcon = Icons.Outlined.Report,
             onClick = {
                 Toast.makeText(context, "Color theme", Toast.LENGTH_SHORT).show()
             }
         )
+
+         */
     }
 }
 
