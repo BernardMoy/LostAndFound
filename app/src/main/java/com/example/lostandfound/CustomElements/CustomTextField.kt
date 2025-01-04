@@ -12,6 +12,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.AccessTime
 import androidx.compose.material.icons.outlined.CalendarMonth
 import androidx.compose.material.icons.outlined.PestControlRodent
+import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
@@ -383,4 +384,54 @@ fun CustomComparisonField(
             contentRight()
         }
     }
+}
+
+
+@Composable
+fun CustomSearchField(
+    placeholder: String,
+    fieldContent: String,    // val is passed if not editable, var if editable
+    onTextChanged: ((String) -> Unit)?,
+){
+    var varFieldContent by remember{ mutableStateOf(fieldContent)}
+
+    OutlinedTextField(
+        value = varFieldContent,
+        placeholder = {
+            Text(text = placeholder, style = Typography.bodyMedium, color = Color.Gray)
+        },
+        onValueChange = { newText ->
+                varFieldContent = newText
+                onTextChanged?.invoke(varFieldContent)
+
+        },
+        enabled = true,
+        singleLine = true,
+        leadingIcon = {
+            Icon(imageVector = Icons.Outlined.Search, contentDescription = "Search")
+        },
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(
+                horizontal = 0.dp, vertical = dimensionResource(id = R.dimen.content_margin_half)
+            ),
+
+        colors = TextFieldDefaults.colors(
+            // for enabled (Editable) text
+            unfocusedContainerColor = MaterialTheme.colorScheme.background,
+            focusedContainerColor = MaterialTheme.colorScheme.background,
+
+            // for disabled (non editable) text
+            disabledContainerColor = MaterialTheme.colorScheme.background,
+            disabledTextColor = MaterialTheme.colorScheme.onBackground,
+
+            // for the color of the border
+            focusedIndicatorColor = MaterialTheme.colorScheme.primary,
+            unfocusedIndicatorColor = Color.Gray,
+            disabledIndicatorColor = MaterialTheme.colorScheme.outline,
+
+            errorContainerColor = MaterialTheme.colorScheme.background,
+            errorTextColor = MaterialTheme.colorScheme.onBackground
+        )
+    )
 }
