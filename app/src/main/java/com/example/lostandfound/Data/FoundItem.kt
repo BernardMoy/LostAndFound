@@ -1,16 +1,9 @@
 package com.example.lostandfound.Data
 
 import android.net.Uri
-import android.os.Parcelable
 import com.google.android.gms.maps.model.LatLng
-import kotlinx.parcelize.Parcelize
 
-/*
-Currently a map is used for passing data between classes, as all other firebase data are stored in a map.
-It is possible to convert to storing LostItem classes instead of the map by modifying FirestoreManager
- */
-@Parcelize
-data class LostItem(
+data class FoundItem(
     // ids
     val itemID: String,
     val userID: String,
@@ -22,13 +15,15 @@ data class LostItem(
     val color: String,
     val brand: String,  // can be empty
     val dateTime: Long,  // in epoch
-    val location: Pair<Double, Double>, // store the latlng value as latitude and longitude
+    val location: LatLng,
     val description: String,    // can be empty
     val status: Int,
+    val securityQuestion: String,
+    val securityQuestionAns: String,
 
     // time posted info
     val timePosted: Long,
 
     // item image
-    val image: String  // store the item image as string
-) : Parcelable
+    val image: Uri
+)

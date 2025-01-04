@@ -179,17 +179,17 @@ fun LostItemsColumn(
         LazyColumn (
             verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.title_margin))
         ){
-            items(viewModel.itemData) { itemMap ->
+            items(viewModel.itemData) { lostItem ->
                 CustomLostItemPreview(
-                    data = itemMap,
+                    data = lostItem,
                     onViewButtonClicked = {
                         // start view item activity
                         val intent = Intent(context, ViewLostActivity::class.java)
 
-                        // pass only the item id as the extra value
+                        // pass the lost item object to another activity
                         intent.putExtra(
                             IntentExtraNames.INTENT_LOST_ID,
-                            itemMap[FirebaseNames.LOSTFOUND_ID] as String
+                            lostItem
                         )
                         context.startActivity(intent)
                     }
