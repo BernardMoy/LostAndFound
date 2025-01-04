@@ -1,7 +1,5 @@
 package com.example.lostandfound;
 
-import static android.app.PendingIntent.getActivity;
-
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -13,23 +11,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.widget.Toolbar;
-
-import com.example.lostandfound.FirebaseManagers.FirebaseAuthManager;
-import com.example.lostandfound.FirebaseManagers.FirebaseUtility;
-import com.example.lostandfound.Utility.ImageManager;
-import com.example.lostandfound.Data.SharedPreferencesNames;
-import com.example.lostandfound.ui.ActivityLog.ActivityLogActivity;
-import com.example.lostandfound.ui.Login.LoginActivity;
-import com.example.lostandfound.ui.NewFound.NewFoundActivity;
-import com.example.lostandfound.ui.NewLost.NewLostActivity;
-import com.example.lostandfound.ui.Notifications.NotificationsActivity;
-import com.example.lostandfound.ui.Profile.ProfileActivity;
-import com.example.lostandfound.ui.ReportIssue.ReportIssueActivity;
-import com.example.lostandfound.ui.Settings.SettingsActivity;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
-
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -39,7 +22,21 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
+import com.example.lostandfound.Data.SharedPreferencesNames;
+import com.example.lostandfound.FirebaseManagers.FirebaseAuthManager;
+import com.example.lostandfound.FirebaseManagers.FirebaseUtility;
+import com.example.lostandfound.Utility.ImageManager;
 import com.example.lostandfound.databinding.ActivityMainBinding;
+import com.example.lostandfound.ui.ActivityLog.ActivityLogActivity;
+import com.example.lostandfound.ui.HowItWorks.HowItWorksActivity;
+import com.example.lostandfound.ui.Login.LoginActivity;
+import com.example.lostandfound.ui.NewFound.NewFoundActivity;
+import com.example.lostandfound.ui.NewLost.NewLostActivity;
+import com.example.lostandfound.ui.Notifications.NotificationsActivity;
+import com.example.lostandfound.ui.Profile.ProfileActivity;
+import com.example.lostandfound.ui.ReportIssue.ReportIssueActivity;
+import com.example.lostandfound.ui.Settings.SettingsActivity;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.imageview.ShapeableImageView;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.FirebaseApp;
@@ -127,9 +124,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 } else if (clickedId == R.id.nav_drawer_my_found) {
                     navView.setSelectedItemId(R.id.navigation_found);
 
-                } else if (clickedId == R.id.nav_drawer_search) {
-                    navView.setSelectedItemId(R.id.navigation_search);
-
                 } else if (clickedId == R.id.nav_drawer_chat){
                     navView.setSelectedItemId(R.id.navigation_chat);
 
@@ -150,21 +144,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     startActivity(i);
 
                 } else if (clickedId == R.id.nav_drawer_settings){
-                    // start Settings activity
                     Intent i = new Intent(MainActivity.this, SettingsActivity.class);
                     startActivity(i);
 
                 } else if (clickedId == R.id.nav_drawer_profile){
-                    // start Profile activity
                     Intent i = new Intent(MainActivity.this, ProfileActivity.class);
                     startActivity(i);
 
                 } else if (clickedId == R.id.nav_drawer_take_a_tour){
 
                 } else if (clickedId == R.id.nav_drawer_how_it_works){
+                    Intent i = new Intent(MainActivity.this, HowItWorksActivity.class);
+                    startActivity(i);
 
                 } else if (clickedId == R.id.nav_drawer_report_an_issue){
-                    // start report issue activity
                     Intent i = new Intent(MainActivity.this, ReportIssueActivity.class);
                     startActivity(i);
                 }
