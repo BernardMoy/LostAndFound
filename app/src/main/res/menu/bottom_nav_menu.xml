@@ -17,11 +17,6 @@
         android:title="@string/title_found" />
 
     <item
-        android:id="@+id/navigation_search"
-        android:icon="@drawable/search_icon"
-        android:title="@string/title_search" />
-
-    <item
         android:id="@+id/navigation_chat"
         android:icon="@drawable/chat_icon"
         android:title="@string/title_chat" />
