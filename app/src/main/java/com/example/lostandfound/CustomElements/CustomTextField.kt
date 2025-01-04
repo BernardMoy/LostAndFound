@@ -1,6 +1,5 @@
 package com.example.lostandfound.CustomElements
 
-import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -286,7 +285,7 @@ fun CustomTimePickerTextField(
 @Preview(showBackground = true)
 @Composable
 fun PreviewDoubleText() {
-    CustomComparisonField(
+    CustomComparisonTextField(
         centerLabel = "Label",
         contentLeft = "Lefteeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
         contentRight = "Right",
@@ -295,13 +294,13 @@ fun PreviewDoubleText() {
 }
 
 @Composable
-fun CustomComparisonField(
+fun CustomComparisonTextField(
     centerLabel: String,
     contentLeft: String,    // val is passed if not editable, var if editable
     contentRight: String,
     icon: ImageVector?
 ){
-    // partition the row into 3 parts
+    // partition the row into 3 parts (1:1:1)
     Row(
         verticalAlignment = Alignment.CenterVertically,
     ){
@@ -350,5 +349,38 @@ fun CustomComparisonField(
                 ),
             textAlign = TextAlign.Center
         )
+    }
+}
+
+@Composable
+fun CustomComparisonField(
+    centerLabel: @Composable () -> Unit,
+    contentLeft: @Composable () -> Unit,
+    contentRight: @Composable () -> Unit
+){
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceEvenly
+    ){
+        Box(
+            modifier = Modifier.weight(3f),
+            contentAlignment = Alignment.Center
+        ){
+            contentLeft()
+        }
+
+        Box(
+            modifier = Modifier.weight(3f),
+            contentAlignment = Alignment.Center
+        ){
+            centerLabel()
+        }
+
+        Box(
+            modifier = Modifier.weight(3f),
+            contentAlignment = Alignment.Center
+        ){
+            contentRight()
+        }
     }
 }
