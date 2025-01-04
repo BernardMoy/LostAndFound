@@ -28,12 +28,15 @@ fun CustomErrorText(
             Surface(
                 shape = RoundedCornerShape(dimensionResource(id = R.dimen.corner_radius_small)),
                 color = MaterialTheme.colorScheme.errorContainer,
+                /*
                 modifier = Modifier
                     .border(
                         width = 1.dp,
                         color = MaterialTheme.colorScheme.onErrorContainer,
                         shape = RoundedCornerShape(dimensionResource(id = R.dimen.corner_radius_small))
                     )
+
+                 */
 
             ) {
                 Text(
