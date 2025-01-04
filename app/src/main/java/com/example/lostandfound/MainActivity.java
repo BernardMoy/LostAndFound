@@ -80,7 +80,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // menu should be considered as top level destinations.
         BottomNavigationView navView = findViewById(R.id.nav_view);
         AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.navigation_home, R.id.navigation_lost, R.id.navigation_found, R.id.navigation_search, R.id.navigation_chat)
+                R.id.navigation_home, R.id.navigation_lost, R.id.navigation_found, R.id.navigation_chat)
                 .setOpenableLayout(drawerLayout)
                 .build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_main);
@@ -360,6 +360,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             navDrawerMenu.findItem(R.id.drawer_menu_activity).setVisible(true);
             navDrawerMenu.findItem(R.id.nav_drawer_profile).setVisible(true);
             navDrawerMenu.findItem(R.id.nav_drawer_take_a_tour).setVisible(true);
+            navDrawerMenu.findItem(R.id.nav_drawer_report_an_issue).setVisible(true);
 
 
         } else {
@@ -383,6 +384,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             navDrawerMenu.findItem(R.id.drawer_menu_activity).setVisible(false);
             navDrawerMenu.findItem(R.id.nav_drawer_profile).setVisible(false);
             navDrawerMenu.findItem(R.id.nav_drawer_take_a_tour).setVisible(false);
+            navDrawerMenu.findItem(R.id.nav_drawer_report_an_issue).setVisible(false);
         }
     }
 }

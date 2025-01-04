@@ -16,8 +16,10 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Cancel
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -25,9 +27,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.lostandfound.CustomElements.BackToolbar
@@ -40,6 +44,7 @@ import com.example.lostandfound.CustomElements.CustomProgressBar
 import com.example.lostandfound.CustomElements.CustomTextDialog
 import com.example.lostandfound.R
 import com.example.lostandfound.Utility.ErrorCallback
+import com.example.lostandfound.ui.NewFound.NewFoundViewModel
 import com.example.lostandfound.ui.theme.ComposeTheme
 
 
@@ -142,6 +147,7 @@ fun MainContent(viewModel: ReportIssueViewModel = viewModel()) {
     val inPreview = LocalInspectionMode.current
 
     Description(viewModel = viewModel)
+    ReminderMessage(viewModel = viewModel)
     DoneButton(context = context, viewModel = viewModel)
 }
 
@@ -160,6 +166,23 @@ fun Description(viewModel: ReportIssueViewModel) {
 
     CustomErrorText(
         text = viewModel.descriptionError.value
+    )
+}
+
+@Composable
+fun ReminderMessage(
+    viewModel: ReportIssueViewModel
+) {
+    Text(
+        text = "Your user information will be visible when reviewing your reported issue.",
+        style = MaterialTheme.typography.bodyMedium,
+        color = Color.Gray,
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(
+                dimensionResource(id = R.dimen.header_margin),
+            ),
+        textAlign = TextAlign.Center   // center text
     )
 }
 
