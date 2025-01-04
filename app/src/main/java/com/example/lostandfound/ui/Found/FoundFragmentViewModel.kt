@@ -6,10 +6,12 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import com.example.lostandfound.Data.FirebaseNames
+import com.example.lostandfound.Data.FoundItem
 import com.example.lostandfound.FirebaseManagers.FirebaseStorageManager
 import com.example.lostandfound.FirebaseManagers.FirebaseUtility
 import com.example.lostandfound.FirebaseManagers.FirestoreManager
 import com.example.lostandfound.R
+import com.example.lostandfound.Utility.LocationManager
 
 interface Callback<T> {
     fun onComplete(result: T)
@@ -20,7 +22,7 @@ class FoundFragmentViewModel : ViewModel(){
     val isLoading: MutableState<Boolean> = mutableStateOf(false)
 
     // store the list of data in a map
-    val itemData: MutableList<Map<String, Any>> = mutableListOf()
+    val itemData: MutableList<FoundItem> = mutableListOf()
 
     // firestore manager
     val firestoreManager = FirestoreManager()
@@ -76,31 +78,48 @@ class FoundFragmentViewModel : ViewModel(){
                                         return
                                     }
 
-                                    // add the item id to the itemResult map
-                                    val mutableItemResult = itemResult.toMutableMap()
-                                    mutableItemResult[FirebaseNames.LOSTFOUND_ID] = itemID
 
-                                    // also add the image
+                                    // get the image of the item
                                     firebaseStorageManager.getImage(FirebaseNames.FOLDER_FOUND_IMAGE, itemID, object: FirebaseStorageManager.Callback<Uri?>{
                                         override fun onComplete(result: Uri?) {
-                                            // if the result is null, replace it by placeholder image
-                                            if (result == null){
-                                                val placeHolder: Uri = Uri.parse("android.resource://com.example.lostandfound/" + R.drawable.placeholder_image)
-                                                mutableItemResult[FirebaseNames.LOSTFOUND_IMAGE] = placeHolder
+                                            // initialise the item image to the default image
+                                            var itemImage: Uri = Uri.parse("android.resource://com.example.lostandfound/" + R.drawable.placeholder_image)
 
-                                            } else {
-                                                mutableItemResult[FirebaseNames.LOSTFOUND_IMAGE] = result
+                                            // if the result is not null, replace it by actual item image
+                                            if (result != null) {
+                                                itemImage = result
                                             }
 
+                                            // create found item class object
+                                            val thisFoundItem = FoundItem(
+                                                itemID = itemID,
+                                                userID = userID,
+                                                itemName = itemResult[FirebaseNames.LOSTFOUND_ITEMNAME] as String,
+                                                category = itemResult[FirebaseNames.LOSTFOUND_CATEGORY] as String,
+                                                subCategory = itemResult[FirebaseNames.LOSTFOUND_SUBCATEGORY] as String,
+                                                color = itemResult[FirebaseNames.LOSTFOUND_COLOR] as String,
+                                                brand = itemResult[FirebaseNames.LOSTFOUND_BRAND] as String,
+                                                dateTime = itemResult[FirebaseNames.LOSTFOUND_EPOCHDATETIME] as Long,
+                                                location = LocationManager.LocationToPair(
+                                                    itemResult[FirebaseNames.LOSTFOUND_LOCATION] as HashMap<*, *>
+                                                ),
+                                                description = itemResult[FirebaseNames.LOSTFOUND_DESCRIPTION] as String,
+                                                status = (itemResult[FirebaseNames.LOSTFOUND_STATUS] as Long).toInt(),
+                                                timePosted = itemResult[FirebaseNames.LOSTFOUND_TIMEPOSTED] as Long,
+                                                image = itemImage.toString(),  // uri to string
+                                                securityQuestion = itemResult[FirebaseNames.FOUND_SECURITY_Q] as String,
+                                                securityQuestionAns = itemResult[FirebaseNames.FOUND_SECURITY_Q_ANS] as String
+                                            )
+
                                             // add the data to the list
-                                            itemData.add(mutableItemResult)
+                                            itemData.add(thisFoundItem)
                                             fetchedItems ++
 
                                             // return true when all items have been fetched
                                             if (fetchedItems == resultSize){
                                                 // sort the data
                                                 itemData.sortByDescending { key ->
-                                                    key[FirebaseNames.LOSTFOUND_TIMEPOSTED] as? Long
+                                                    key.timePosted
                                                 }
                                                 callback.onComplete(true)
                                             }

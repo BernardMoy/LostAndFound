@@ -30,6 +30,7 @@ import coil3.compose.rememberAsyncImagePainter
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.example.lostandfound.Data.FirebaseNames
+import com.example.lostandfound.Data.FoundItem
 import com.example.lostandfound.Data.LostItem
 import com.example.lostandfound.Data.foundStatusText
 import com.example.lostandfound.Data.lostStatusText
@@ -192,7 +193,7 @@ fun CustomLostItemPreview(
 @OptIn(ExperimentalGlideComposeApi::class)
 @Composable
 fun CustomFoundItemPreview(
-    data: Map<String, Any>,
+    data: FoundItem,
     onDeleteButtonClicked: () -> Unit = {},
     onViewButtonClicked: () -> Unit = {}
 ) {
@@ -224,7 +225,7 @@ fun CustomFoundItemPreview(
                 )
 
                 Text(
-                    text = "#" + data[FirebaseNames.LOSTFOUND_ID].toString(),
+                    text = "#" + data.itemID,
                     style = Typography.bodyMedium,
                     color = Color.Gray
                 )
@@ -237,7 +238,7 @@ fun CustomFoundItemPreview(
                 horizontalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin_half))
             ) {
                 // the status of the item can be either 0 1 2 - cast them to int
-                val status = (data[FirebaseNames.LOSTFOUND_STATUS] as Long).toInt()
+                val status = data.status
 
                 Icon(
                     imageVector = Icons.Filled.Circle,
@@ -266,7 +267,7 @@ fun CustomFoundItemPreview(
             ) {
                 // image of the item is loaded using GlideImage
                 GlideImage(
-                    model = (data[FirebaseNames.LOSTFOUND_IMAGE] as Uri),
+                    model = Uri.parse(data.image),
                     contentDescription = "Item image",
                     modifier = Modifier.weight(1F)
                 )
@@ -278,7 +279,7 @@ fun CustomFoundItemPreview(
                 ) {
                     // name
                     Text(
-                        text = data[FirebaseNames.LOSTFOUND_ITEMNAME].toString(),
+                        text = data.itemName,
                         style = Typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onBackground,
                         fontWeight = FontWeight.Bold,
@@ -287,8 +288,7 @@ fun CustomFoundItemPreview(
                     // date and time
                     Text(
                         text = "Date: "
-                                + DateTimeManager.dateTimeToString(
-                            (data[FirebaseNames.LOSTFOUND_EPOCHDATETIME] as? Long) ?: 0L
+                                + DateTimeManager.dateTimeToString(data.dateTime
                         ),
                         style = Typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onBackground
@@ -296,8 +296,8 @@ fun CustomFoundItemPreview(
 
                     // category
                     Text(
-                        text = "Category: " + data[FirebaseNames.LOSTFOUND_CATEGORY].toString()
-                                + ", " + data[FirebaseNames.LOSTFOUND_SUBCATEGORY].toString(),
+                        text = "Category: " + data.category
+                                + ", " + data.subCategory,
                         style = Typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onBackground
                     )
