@@ -52,6 +52,7 @@ import com.example.lostandfound.CustomElements.CustomComparisonTextField
 import com.example.lostandfound.CustomElements.CustomEditText
 import com.example.lostandfound.CustomElements.CustomGrayTitle
 import com.example.lostandfound.CustomElements.CustomViewLocationDialog
+import com.example.lostandfound.CustomElements.CustomViewTwoLocationsDialog
 import com.example.lostandfound.Data.FoundItem
 import com.example.lostandfound.Data.IntentExtraNames
 import com.example.lostandfound.Data.LostItem
@@ -148,7 +149,7 @@ fun MainContent(viewModel: ViewComparisonViewModel) {
             Status(viewModel = viewModel)
             ItemImage(viewModel = viewModel)
             ItemDetails(viewModel = viewModel)
-            LocationData(viewModel = viewModel)
+            LocationData(context = context, viewModel = viewModel)
             UserData(viewModel = viewModel)
 
         }
@@ -323,6 +324,7 @@ fun ItemDetails(viewModel: ViewComparisonViewModel){
 
 @Composable
 fun LocationData(
+    context: Context,
     viewModel: ViewComparisonViewModel
 ){
     Column {
@@ -336,11 +338,11 @@ fun LocationData(
         )
     }
 
-    CustomViewLocationDialog(
+    CustomViewTwoLocationsDialog(
+        context = context,
         isDialogShown = viewModel.isLocationDialogShown,
-        selectedLocation = LocationManager.pairToLatlng(
-            viewModel.lostItemData.location // show both HEREEEEEEEEEEEEEEEEEEEEE
-        )
+        selectedLocation1 = LocationManager.pairToLatlng(viewModel.lostItemData.location),
+        selectedLocation2 = LocationManager.pairToLatlng(viewModel.foundItemData.location)
     )
 }
 

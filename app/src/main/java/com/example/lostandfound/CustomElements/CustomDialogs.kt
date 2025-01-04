@@ -1,5 +1,9 @@
 package com.example.lostandfound.CustomElements
 
+import android.content.Context
+import android.graphics.Bitmap
+import android.util.TypedValue
+import androidx.annotation.DrawableRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -44,11 +48,14 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
+import androidx.core.content.ContextCompat
 import com.example.lostandfound.Utility.DateTimeManager
 import com.example.lostandfound.R
 import com.example.lostandfound.ui.theme.ComposeTheme
 import com.example.lostandfound.ui.theme.Typography
 import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.model.BitmapDescriptor
+import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.compose.GoogleMap
@@ -553,10 +560,171 @@ fun CustomViewLocationDialog(
                             tint = Color.White
                         )
                     }
-
                 }
-
             }
         )
     }
+}
+
+@Composable
+fun CustomViewTwoLocationsDialog(
+    context: Context,
+    isDialogShown: MutableState<Boolean>,
+    selectedLocation1: LatLng,   // no need to be mutable here
+    selectedLocation2: LatLng
+){
+    if (isDialogShown.value){
+        Dialog(
+            onDismissRequest = {
+                isDialogShown.value = false
+            },
+            properties = DialogProperties(usePlatformDefaultWidth = false),  // remove horizontal padding
+            content = {
+                Box(
+                    modifier = Modifier
+                        .padding(
+                            vertical = dimensionResource(id = R.dimen.header_margin),
+                            horizontal = dimensionResource(id = R.dimen.title_margin)
+                        )
+                        .fillMaxSize()
+                        .clip(RoundedCornerShape(dimensionResource(id = R.dimen.corner_radius)))
+                        .background(color = MaterialTheme.colorScheme.background),
+
+                    ){
+                    Column(
+                        modifier = Modifier.padding(
+                            vertical = dimensionResource(id = R.dimen.title_margin),
+                            horizontal = dimensionResource(id = R.dimen.content_margin)
+                        ),
+                        verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin)),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ){
+                        Text(
+                            text = "View location",
+                            style = Typography.titleMedium,
+                            color = MaterialTheme.colorScheme.onPrimaryContainer
+                        )
+
+
+                        // Google maps composable
+                        val markerState1 = remember {
+                            MarkerState(position = selectedLocation1)
+                        }
+                        val markerState2 = remember {
+                            MarkerState(position = selectedLocation2)
+                        }
+                        val cameraPositionState1 = rememberCameraPositionState {
+                            position = CameraPosition.fromLatLngZoom(selectedLocation1, 15f)
+                        }
+                        val cameraPositionState2 = rememberCameraPositionState {
+                            position = CameraPosition.fromLatLngZoom(selectedLocation1, 15f)
+                        }
+
+                        val uiSettings by remember {
+                            mutableStateOf(MapUiSettings(zoomControlsEnabled = true))
+                        }
+                        val properties by remember {
+                            mutableStateOf(MapProperties(mapType = MapType.NORMAL))
+                        }
+
+
+                        GoogleMap(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .weight(1f),
+                            cameraPositionState = cameraPositionState2, // set focus to found item location
+                            uiSettings = uiSettings,
+                            properties = properties,
+                            onMapClick = { latlng ->
+                                // nothing happens
+                            }
+                        ) {
+                            // markers goes here
+                            // It will be updated when location is updated through tapping on the map
+                            MapMarker(
+                                context = context,
+                                state = markerState1,
+                                title = "Lost item location",
+                                iconResourceId = R.drawable.pin_lost
+                            )
+                            MapMarker(
+                                context = context,
+                                state = markerState2,
+                                title = "Found item location",
+                                iconResourceId = R.drawable.pin_found
+                            )
+                        }
+                    }
+
+                    // close button at top end
+                    IconButton(
+                        onClick = {
+                            // remove the image
+                            isDialogShown.value = false
+                        },
+                        modifier = Modifier
+                            .padding(
+                                dimensionResource(id = R.dimen.content_margin_half)
+                            )
+                            .size(dimensionResource(id = R.dimen.image_button_size))
+                            .clip(CircleShape)
+                            .background(MaterialTheme.colorScheme.primary)
+                            .align(Alignment.TopEnd)
+                    ) {
+                        Icon(
+                            imageVector = Icons.Outlined.Close,
+                            contentDescription = "Close dialog",
+                            tint = Color.White
+                        )
+                    }
+                }
+            }
+        )
+    }
+}
+
+/*
+https://stackoverflow.com/questions/70598043/how-to-use-custom-icon-of-google-maps-marker-in-compose
+ */
+@Composable
+fun MapMarker(
+    context: Context,
+    state: MarkerState,
+    title: String,
+    @DrawableRes iconResourceId: Int
+) {
+    val icon = bitmapDescriptor(
+        context, iconResourceId
+    )
+    Marker(
+        state = state,
+        title = title,
+        icon = icon,
+    )
+}
+
+fun bitmapDescriptor(
+    context: Context,
+    vectorResId: Int
+): BitmapDescriptor? {
+
+    // retrieve the actual drawable
+    val drawable = ContextCompat.getDrawable(context, vectorResId) ?: return null
+
+    // force the width of the drawable to be 48dp
+    val displayMetrics = context.resources.displayMetrics
+    val width = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 48.toFloat(), displayMetrics).toInt()
+    val height = drawable.intrinsicHeight*width/drawable.intrinsicWidth
+
+    drawable.setBounds(0, 0, width, height)
+    val bm = Bitmap.createBitmap(
+        width,
+        height,
+        Bitmap.Config.ARGB_8888
+    )
+
+    // draw it onto the bitmap
+    val canvas = android.graphics.Canvas(bm)
+    drawable.draw(canvas)
+    return BitmapDescriptorFactory.fromBitmap(bm)
 }
