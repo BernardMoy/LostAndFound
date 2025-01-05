@@ -73,8 +73,4 @@ fun MainContent(
 
     Text(text = "Home fragment")
 
-    CustomButton(text = "compare", type = ButtonType.FILLED, onClick = {
-        val i: Intent = Intent(context, ViewComparisonActivity::class.java)
-        context.startActivity(i)
-    })
 }

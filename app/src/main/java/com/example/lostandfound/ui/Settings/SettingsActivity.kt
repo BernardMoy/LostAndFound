@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Android
 import androidx.compose.material.icons.outlined.DarkMode
 import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material.icons.outlined.Info
@@ -35,9 +36,13 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.lostandfound.CustomElements.BackToolbar
 import com.example.lostandfound.CustomElements.CustomActionRow
 import com.example.lostandfound.CustomElements.CustomGrayTitle
+import com.example.lostandfound.Data.IntentExtraNames
+import com.example.lostandfound.Data.LostItem
 import com.example.lostandfound.Data.SharedPreferencesNames
 import com.example.lostandfound.R
 import com.example.lostandfound.ui.AboutApp.AboutAppActivity
+import com.example.lostandfound.ui.Search.SearchActivity
+import com.example.lostandfound.ui.ViewComparison.ViewComparisonActivity
 import com.example.lostandfound.ui.theme.ComposeTheme
 
 
@@ -101,7 +106,7 @@ fun MainContent(viewModel: SettingsViewModel = viewModel()) {
     HorizontalDivider(thickness = 1.dp)
     AboutTheApp(context = context)
     HorizontalDivider(thickness = 1.dp)
-    Developer(context = context)
+    Developer(context = context, viewModel = viewModel)
 }
 
 @Composable
@@ -191,7 +196,8 @@ fun AboutTheApp(
 
 @Composable
 fun Developer(
-    context: Context
+    context: Context,
+    viewModel: SettingsViewModel
 ){
     CustomGrayTitle(text = "Developer settings")
     Column (
@@ -207,5 +213,36 @@ fun Developer(
                 Toast.makeText(context, "Shared preferences cleared", Toast.LENGTH_SHORT).show()
             }
         )
+
+        CustomActionRow(text = "Open comparison activity",
+            leftIcon = Icons.Outlined.Android,
+            onClick = {
+                val i: Intent = Intent(context, ViewComparisonActivity::class.java)
+                i.putExtra(
+                    IntentExtraNames.INTENT_LOST_ID,
+                    viewModel.placeholderLostItem
+                )
+                i.putExtra(
+                    IntentExtraNames.INTENT_FOUND_ID,
+                    viewModel.placeholderFoundItem
+                )
+                context.startActivity(i)
+            }
+        )
+
+        CustomActionRow(text = "Open search activity",
+            leftIcon = Icons.Outlined.Android,
+            onClick = {
+                val i: Intent = Intent(context, SearchActivity::class.java)
+                i.putExtra(
+                    IntentExtraNames.INTENT_LOST_ID,
+                    viewModel.placeholderLostItem
+                )
+                context.startActivity(i)
+            }
+        )
+
+
+
     }
 }

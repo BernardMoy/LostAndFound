@@ -80,7 +80,7 @@ fun SearchScreen(activity: ComponentActivity, viewModel: SearchViewModel) {
                         .fillMaxWidth()
                         .padding(paddingValues = innerPadding)
                         .padding(dimensionResource(id = R.dimen.title_margin))
-                        .verticalScroll(rememberScrollState())
+
                 ) {
                     // includes the top tab bar and the main content
                     MainContent(viewModel = viewModel)
