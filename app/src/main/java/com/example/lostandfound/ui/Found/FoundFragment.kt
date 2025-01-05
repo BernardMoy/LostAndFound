@@ -181,16 +181,10 @@ fun FoundItemsColumn(
         }
 
     } else {
-        var searchWord by remember{
-            mutableStateOf("")
-        }
         // search bar
         CustomSearchField(
             placeholder = "Search by name or reference #...",
-            fieldContent = searchWord,
-            onTextChanged = { s ->
-                searchWord = s
-            }
+            fieldContent = viewModel.searchWord
         )
         Spacer(modifier = Modifier.padding(vertical = dimensionResource(id = R.dimen.content_margin)))
 
@@ -199,7 +193,15 @@ fun FoundItemsColumn(
         LazyColumn (
             verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.title_margin))
         ){
-            items(viewModel.itemData) { itemData ->
+            items(
+                viewModel.itemData.filter { item ->
+                    // filter items based on the item names or ids
+                    // by default it shows all items if the search word is empty
+                    item.itemName.contains(viewModel.searchWord.value)
+                            || item.itemID.startsWith(viewModel.searchWord.value.removePrefix("#"))
+                }
+
+            ) { itemData ->
                 CustomFoundItemPreview(
                     data = itemData,
                     onViewButtonClicked = {
