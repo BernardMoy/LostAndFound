@@ -79,7 +79,7 @@ class ViewComparisonActivity : ComponentActivity() {
 
         // load the passed intent data into the view model
         val passedLostItem = intent.getParcelableExtra<LostItem>(IntentExtraNames.INTENT_LOST_ID)
-        val passedFoundItem = intent.getParcelableExtra<FoundItem>(IntentExtraNames.INTENT_LOST_ID)
+        val passedFoundItem = intent.getParcelableExtra<FoundItem>(IntentExtraNames.INTENT_FOUND_ID)
         if (passedLostItem != null){
             viewModel.lostItemData = passedLostItem
         }
