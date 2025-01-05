@@ -1,14 +1,21 @@
 package com.example.lostandfound.ui.Search
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
@@ -16,11 +23,17 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalInspectionMode
+import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.lostandfound.CustomElements.BackToolbar
+import com.example.lostandfound.CustomElements.CustomCenterText
+import com.example.lostandfound.CustomElements.CustomCenteredProgressbar
+import com.example.lostandfound.CustomElements.CustomFoundItemPreview
 import com.example.lostandfound.Data.IntentExtraNames
 import com.example.lostandfound.Data.LostItem
+import com.example.lostandfound.R
+import com.example.lostandfound.ui.ViewFound.ViewFoundActivity
 import com.example.lostandfound.ui.theme.ComposeTheme
 
 
@@ -66,6 +79,8 @@ fun SearchScreen(activity: ComponentActivity, viewModel: SearchViewModel) {
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(paddingValues = innerPadding)
+                        .padding(dimensionResource(id = R.dimen.title_margin))
+                        .verticalScroll(rememberScrollState())
                 ) {
                     // includes the top tab bar and the main content
                     MainContent(viewModel = viewModel)
@@ -101,7 +116,56 @@ fun MainContent(viewModel: SearchViewModel) {
             }
         })
     }
+
+    // display content
+    if (viewModel.isLoading.value){
+        CustomCenteredProgressbar()
+
+    } else {
+        MatchingItemsColumn(context = context, viewModel = viewModel)
+    }
 }
 
+
+@Composable
+fun MatchingItemsColumn(
+    context: Context,
+    viewModel: SearchViewModel
+){
+    // if there are no data, display message
+    if (viewModel.matchedFoundItems.size == 0){
+        Box(
+            modifier = Modifier.padding(horizontal = dimensionResource(id = R.dimen.title_margin))
+        ){
+            CustomCenterText(text = "Unfortunately we did not find any matches for your item. Perhaps it has not been found yet?")
+        }
+
+    } else {
+        // for each data, display it as a preview
+        LazyColumn (
+            verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.title_margin))
+        ){
+            items(
+                viewModel.matchedFoundItems
+
+            ) { itemData ->
+                CustomFoundItemPreview(
+                    data = itemData,
+                    onViewButtonClicked = {
+                        // start view item activity
+                        val intent = Intent(context, ViewFoundActivity::class.java)
+
+                        // pass only the item id as the extra value
+                        intent.putExtra(
+                            IntentExtraNames.INTENT_FOUND_ID,
+                            itemData
+                        )
+                        context.startActivity(intent)
+                    }
+                )
+            }
+        }
+    }
+}
 
 
