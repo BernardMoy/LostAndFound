@@ -1,6 +1,8 @@
 package com.example.lostandfound.ui.ViewComparison
 
+import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.widget.Toast
@@ -41,6 +43,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.core.content.ContextCompat.startActivity
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.example.lostandfound.CustomElements.BackToolbar
@@ -62,6 +65,7 @@ import com.example.lostandfound.Data.statusColor
 import com.example.lostandfound.R
 import com.example.lostandfound.Utility.DateTimeManager
 import com.example.lostandfound.Utility.LocationManager
+import com.example.lostandfound.ui.Done.DoneActivity
 import com.example.lostandfound.ui.theme.ComposeTheme
 import com.example.lostandfound.ui.theme.Typography
 
@@ -151,7 +155,7 @@ fun MainContent(viewModel: ViewComparisonViewModel) {
             ItemDetails(viewModel = viewModel)
             LocationData(context = context, viewModel = viewModel)
             UserData(viewModel = viewModel)
-            ClaimButton(viewModel = viewModel)
+            ClaimButton(context = context, viewModel = viewModel)
 
         }
     }
@@ -368,6 +372,7 @@ fun UserData(
 
 @Composable
 fun ClaimButton(
+    context: Context,
     viewModel: ViewComparisonViewModel
 ){
     Row(
@@ -380,7 +385,12 @@ fun ClaimButton(
             text = "Claim this Item",
             type = ButtonType.FILLED,
             onClick = {
+                val i: Intent = Intent(context, DoneActivity::class.java)
+                i.putExtra(IntentExtraNames.INTENT_DONE_ACTIVITY_TITLE, "Claim Submitted")
+                context.startActivity(i)
 
+                // close current activity
+                (context as Activity).finish()
             }
         )
     }

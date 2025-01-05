@@ -4,9 +4,9 @@ import android.app.Activity
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -22,9 +22,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalInspectionMode
@@ -32,11 +30,11 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.lostandfound.CustomElements.BackToolbar
 import com.example.lostandfound.CustomElements.ButtonType
 import com.example.lostandfound.CustomElements.CustomButton
+import com.example.lostandfound.Data.IntentExtraNames
 import com.example.lostandfound.R
-import com.example.lostandfound.ui.ReportIssue.DoneViewModel
+import com.example.lostandfound.ui.Done.DoneViewModel
 import com.example.lostandfound.ui.theme.ComposeTheme
 import com.example.lostandfound.ui.theme.Typography
 
@@ -45,8 +43,17 @@ class DoneActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        // create the view model here
+        val viewModel: DoneViewModel by viewModels()
+
+        // load the passed intent data into the view model
+        val passedItem = intent.getStringExtra(IntentExtraNames.INTENT_DONE_ACTIVITY_TITLE)
+        if (passedItem != null) {
+            viewModel.titleText = passedItem
+        }
+
         setContent {
-            DoneScreen(activity = this)
+            DoneScreen(activity = this, viewModel = viewModel)
         }
     }
 }
@@ -57,11 +64,11 @@ class MockActivity : ComponentActivity()
 @Preview(showBackground = true)
 @Composable
 fun Preview() {
-    DoneScreen(activity = MockActivity())
+    DoneScreen(activity = MockActivity(), viewModel = viewModel())
 }
 
 @Composable
-fun DoneScreen(activity: ComponentActivity) {
+fun DoneScreen(activity: ComponentActivity, viewModel: DoneViewModel) {
     ComposeTheme {
         Surface {
             Scaffold(
