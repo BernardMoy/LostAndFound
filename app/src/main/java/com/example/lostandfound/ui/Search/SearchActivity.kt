@@ -18,6 +18,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.lostandfound.CustomElements.BackToolbar
 import com.example.lostandfound.Data.FoundItemList
 import com.example.lostandfound.Data.IntentExtraNames
+import com.example.lostandfound.Data.LostItem
 import com.example.lostandfound.ui.ReportIssue.SearchViewModel
 import com.example.lostandfound.ui.theme.ComposeTheme
 
@@ -29,10 +30,10 @@ class SearchActivity : ComponentActivity() {
         // create the view model here
         val viewModel: SearchViewModel by viewModels()
 
-        // load the passed intent data into the view model
-        val passedItem = intent.getParcelableExtra<FoundItemList>(IntentExtraNames.INTENT_FOUND_LIST_ID)
+        // load the passed lost item
+        val passedItem = intent.getParcelableExtra<LostItem>(IntentExtraNames.INTENT_LOST_ID)
         if (passedItem != null){
-            viewModel.itemList = passedItem
+            viewModel.lostItem = passedItem
         }
 
         setContent {
