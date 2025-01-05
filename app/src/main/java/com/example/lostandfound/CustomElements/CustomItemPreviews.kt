@@ -51,7 +51,8 @@ fun Preview() {
 fun CustomLostItemPreview(
     data: LostItem,
     onDeleteButtonClicked: () -> Unit = {},
-    onViewButtonClicked: () -> Unit = {}
+    onViewButtonClicked: () -> Unit = {},
+    isOwner: Boolean = false
 ) {
     Box(
         modifier = Modifier
@@ -164,14 +165,17 @@ fun CustomLostItemPreview(
                 horizontalArrangement = Arrangement.End
 
             ) {
-                CustomButton(
-                    text = "Delete",
-                    type = ButtonType.WARNING,
-                    onClick = {
-                        onDeleteButtonClicked()
-                    },
-                    small = true
-                )
+                if (isOwner){
+                    CustomButton(
+                        text = "Delete",
+                        type = ButtonType.WARNING,
+                        onClick = {
+                            onDeleteButtonClicked()
+                        },
+                        small = true
+                    )
+
+                }
 
                 Spacer(modifier = Modifier.width(dimensionResource(id = R.dimen.content_margin)))
 
@@ -195,14 +199,15 @@ fun CustomLostItemPreview(
 fun CustomFoundItemPreview(
     data: FoundItem,
     onDeleteButtonClicked: () -> Unit = {},
-    onViewButtonClicked: () -> Unit = {}
+    onViewButtonClicked: () -> Unit = {},
+    isOwner: Boolean = false  // is owner mode is set to false when viewing previews of items from other people
 ) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
             .border(
                 width = 1.dp,
-                color = androidx.compose.ui.graphics.Color.Gray,
+                color = Color.Gray,
                 shape = RoundedCornerShape(
                     dimensionResource(id = R.dimen.corner_radius_small)
                 )
@@ -310,19 +315,21 @@ fun CustomFoundItemPreview(
                 horizontalArrangement = Arrangement.End
 
             ) {
-                CustomButton(
-                    text = "Delete",
-                    type = ButtonType.WARNING,
-                    onClick = {
-                        onDeleteButtonClicked()
-                    },
-                    small = true
-                )
+                if (isOwner){
+                    CustomButton(
+                        text = "Delete",
+                        type = ButtonType.WARNING,
+                        onClick = {
+                            onDeleteButtonClicked()
+                        },
+                        small = true
+                    )
+                }
 
                 Spacer(modifier = Modifier.width(dimensionResource(id = R.dimen.content_margin)))
 
                 CustomButton(
-                    text = "View",
+                    text = if (isOwner) "View" else "Claim",
                     type = ButtonType.FILLED,
                     onClick = {
                         onViewButtonClicked()

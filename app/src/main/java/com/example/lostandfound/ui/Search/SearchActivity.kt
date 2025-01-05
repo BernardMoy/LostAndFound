@@ -33,6 +33,7 @@ import com.example.lostandfound.CustomElements.CustomFoundItemPreview
 import com.example.lostandfound.Data.IntentExtraNames
 import com.example.lostandfound.Data.LostItem
 import com.example.lostandfound.R
+import com.example.lostandfound.ui.ViewComparison.ViewComparisonActivity
 import com.example.lostandfound.ui.ViewFound.ViewFoundActivity
 import com.example.lostandfound.ui.theme.ComposeTheme
 
@@ -148,20 +149,25 @@ fun MatchingItemsColumn(
             items(
                 viewModel.matchedFoundItems
 
-            ) { itemData ->
+            ) { foundItemData ->
                 CustomFoundItemPreview(
-                    data = itemData,
+                    data = foundItemData,
                     onViewButtonClicked = {
-                        // start view item activity
-                        val intent = Intent(context, ViewFoundActivity::class.java)
+                        // start comparison activity
+                        val intent = Intent(context, ViewComparisonActivity::class.java)
 
-                        // pass only the item id as the extra value
+                        // pass both the lost item and found item
+                        intent.putExtra(
+                            IntentExtraNames.INTENT_LOST_ID,
+                            viewModel.lostItem
+                        )
                         intent.putExtra(
                             IntentExtraNames.INTENT_FOUND_ID,
-                            itemData
+                            foundItemData
                         )
                         context.startActivity(intent)
-                    }
+                    },
+                    isOwner = false
                 )
             }
         }

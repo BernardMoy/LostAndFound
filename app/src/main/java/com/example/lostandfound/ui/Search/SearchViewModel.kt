@@ -16,6 +16,7 @@ class SearchViewModel: ViewModel() {
     val isLoading: MutableState<Boolean> = mutableStateOf(true)
 
     // placeholder function for lost item
+    // loaded on create
     var lostItem: LostItem = LostItem(
         itemID = "Unknown",
         userID = "Unknown",
