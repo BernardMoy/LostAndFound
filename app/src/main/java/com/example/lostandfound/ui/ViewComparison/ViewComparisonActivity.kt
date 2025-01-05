@@ -7,7 +7,6 @@ import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -45,13 +44,14 @@ import androidx.compose.ui.unit.dp
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.example.lostandfound.CustomElements.BackToolbar
+import com.example.lostandfound.CustomElements.ButtonType
 import com.example.lostandfound.CustomElements.CustomActionText
+import com.example.lostandfound.CustomElements.CustomButton
 import com.example.lostandfound.CustomElements.CustomCenteredProgressbar
 import com.example.lostandfound.CustomElements.CustomComparisonField
 import com.example.lostandfound.CustomElements.CustomComparisonTextField
 import com.example.lostandfound.CustomElements.CustomEditText
 import com.example.lostandfound.CustomElements.CustomGrayTitle
-import com.example.lostandfound.CustomElements.CustomViewLocationDialog
 import com.example.lostandfound.CustomElements.CustomViewTwoLocationsDialog
 import com.example.lostandfound.Data.FoundItem
 import com.example.lostandfound.Data.IntentExtraNames
@@ -151,6 +151,7 @@ fun MainContent(viewModel: ViewComparisonViewModel) {
             ItemDetails(viewModel = viewModel)
             LocationData(context = context, viewModel = viewModel)
             UserData(viewModel = viewModel)
+            ClaimButton(viewModel = viewModel)
 
         }
     }
@@ -365,6 +366,26 @@ fun UserData(
     }
 }
 
+@Composable
+fun ClaimButton(
+    viewModel: ViewComparisonViewModel
+){
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = dimensionResource(id = R.dimen.content_margin)),
+        horizontalArrangement = Arrangement.Center
+    ){
+        CustomButton(
+            text = "Claim this Item",
+            type = ButtonType.FILLED,
+            onClick = {
+
+            }
+        )
+    }
+}
+
 
 // function to load data, called when the activity is created
 fun loadData(
@@ -386,6 +407,8 @@ fun loadData(
         }
     })
 }
+
+
 
 
 
