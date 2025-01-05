@@ -11,9 +11,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.AccessTime
 import androidx.compose.material.icons.outlined.CalendarMonth
+import androidx.compose.material.icons.outlined.Close
 import androidx.compose.material.icons.outlined.PestControlRodent
 import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
@@ -390,25 +392,30 @@ fun CustomComparisonField(
 @Composable
 fun CustomSearchField(
     placeholder: String,
-    fieldContent: String,    // val is passed if not editable, var if editable
-    onTextChanged: ((String) -> Unit)?,
+    fieldContent: MutableState<String>
 ){
-    var varFieldContent by remember{ mutableStateOf(fieldContent)}
 
     OutlinedTextField(
-        value = varFieldContent,
+        value = fieldContent.value,
         placeholder = {
             Text(text = placeholder, style = Typography.bodyMedium, color = Color.Gray)
         },
         onValueChange = { newText ->
-                varFieldContent = newText
-                onTextChanged?.invoke(varFieldContent)
-
+            fieldContent.value = newText
         },
         enabled = true,
         singleLine = true,
         leadingIcon = {
-            Icon(imageVector = Icons.Outlined.Search, contentDescription = "Search")
+            Icon(imageVector = Icons.Outlined.Search, contentDescription = "Search", tint = Color.Gray)
+        },
+        trailingIcon = {
+            IconButton(
+                onClick = {
+                    fieldContent.value = ""
+                }
+            ) {
+                Icon(imageVector = Icons.Outlined.Close, contentDescription = "Clear", tint = Color.Gray)
+            }
         },
         modifier = Modifier
             .fillMaxWidth()
