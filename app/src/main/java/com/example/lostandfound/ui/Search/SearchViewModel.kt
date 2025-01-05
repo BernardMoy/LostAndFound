@@ -1,7 +1,6 @@
 package com.example.lostandfound.ui.ReportIssue
 
 import androidx.lifecycle.ViewModel
-import com.example.lostandfound.Data.FoundItemList
 import com.example.lostandfound.Data.LostItem
 
 interface Callback<T> {
@@ -27,7 +26,6 @@ class SearchViewModel: ViewModel() {
     )
 
     // initialise the list of matching found items to be displayed as empty list
-    var matchingItemList: FoundItemList = FoundItemList(listOf())
 
 
 }

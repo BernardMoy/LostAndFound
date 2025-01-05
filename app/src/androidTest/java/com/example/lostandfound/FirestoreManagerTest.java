@@ -5,6 +5,8 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
+import android.util.Log;
+
 import com.example.lostandfound.FirebaseManagers.FirestoreManager;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -162,6 +164,24 @@ public class FirestoreManagerTest {
 
                 // verify the data retrieved is correct - it should return full values of the document
                 assertEquals("testGetWhere", result.get(0));
+
+                // signal operation completed
+                latch.countDown();
+            }
+        });
+
+        latch.await();
+    }
+
+    @Test
+    public void testGetAllIds() throws InterruptedException{
+        final CountDownLatch latch = new CountDownLatch(1);
+
+        firestoreManager.getAllIds(COLLECTION,  new FirestoreManager.Callback<List<String>>() {
+            @Override
+            public void onComplete(List<String> result) {
+                // the result should only be length 2
+                assertEquals(3, result.size());  // testDelete, testGet, testWhere
 
                 // signal operation completed
                 latch.countDown();

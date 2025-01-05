@@ -565,7 +565,7 @@ fun DoneButton(
                 viewModel.onDoneButtonClicked(object: Callback<LostItem?>{
                     override fun onComplete(result: LostItem?) {
                         isLoading = false
-                        
+
                         // if the item is null, it error
                         if (result == null){
                             Toast.makeText(context, "Error adding item", Toast.LENGTH_SHORT).show()

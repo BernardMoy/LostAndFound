@@ -144,6 +144,37 @@ public class FirestoreManager {
         });
     }
 
+    /**
+     * Method to get data from the database,
+     * returning all the keys (item ids) regardless of condition
+     *
+     * @param collection collection name
+     * @param callback return the list of document ids, or null if failed or collection doesnt exist
+     */
+    public void getAllIds(String collection, Callback<List<String>> callback){
+        db.collection(collection).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                List<String> result = new ArrayList<>();
+
+                // for each matching data, get it and add it to result
+                for (QueryDocumentSnapshot snapshot: queryDocumentSnapshots){
+                    result.add(snapshot.getId());
+                }
+
+                // return the result
+                callback.onComplete(result);
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                // return null
+                callback.onComplete(null);
+                Log.d("ERROR", e.getMessage());
+            }
+        });
+    }
+
 
     /**
      * Deletes data from the firestore database when given a key
