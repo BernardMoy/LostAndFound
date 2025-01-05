@@ -1,6 +1,8 @@
 package com.example.lostandfound.ui.Search
 
+import android.content.Context
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
@@ -10,6 +12,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalInspectionMode
@@ -18,7 +21,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.lostandfound.CustomElements.BackToolbar
 import com.example.lostandfound.Data.IntentExtraNames
 import com.example.lostandfound.Data.LostItem
-import com.example.lostandfound.ui.ReportIssue.SearchViewModel
 import com.example.lostandfound.ui.theme.ComposeTheme
 
 
@@ -83,6 +85,22 @@ fun MainContent(viewModel: SearchViewModel) {
     // boolean to determine if it is being rendered in preview
     val inPreview = LocalInspectionMode.current
 
+    LaunchedEffect(Unit) {
+        // is loading initially
+        viewModel.isLoading.value = true
+
+        // load lost item data of the current user from the view model
+        viewModel.loadItems(object: Callback<Boolean> {
+            override fun onComplete(result: Boolean) {
+                viewModel.isLoading.value = false
+
+                if (!result){
+                    // display toast message for failed data retrieval
+                    Toast.makeText(context, "Fetching data failed", Toast.LENGTH_SHORT).show()
+                }
+            }
+        })
+    }
 }
 
 
