@@ -57,6 +57,7 @@ import com.example.lostandfound.ui.EditProfile.EditProfileViewModel
 import com.example.lostandfound.ui.ViewFound.ViewFoundActivity
 import com.example.lostandfound.ui.theme.ComposeTheme
 import com.example.lostandfound.ui.theme.Typography
+import java.util.Locale
 
 
 class FoundFragment : Fragment() {
@@ -197,7 +198,8 @@ fun FoundItemsColumn(
                 viewModel.itemData.filter { item ->
                     // filter items based on the item names or ids
                     // by default it shows all items if the search word is empty
-                    item.itemName.contains(viewModel.searchWord.value)
+                    item.itemName.lowercase(Locale.UK).contains(viewModel.searchWord.value.lowercase(
+                        Locale.UK))
                             || item.itemID.startsWith(viewModel.searchWord.value.removePrefix("#"))
                 }
 

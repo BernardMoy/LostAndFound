@@ -22,6 +22,9 @@ class LostFragmentViewModel : ViewModel(){
     // whether the screen is loading
     val isLoading: MutableState<Boolean> = mutableStateOf(false)
 
+    // search word
+    val searchWord: MutableState<String> = mutableStateOf("")
+
     // store the list of data in a map
     val itemData: MutableList<LostItem> = mutableListOf()
 
