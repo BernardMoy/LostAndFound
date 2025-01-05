@@ -15,7 +15,7 @@ import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.lostandfound.CustomElements.BackToolbar
-import com.example.lostandfound.ui.ReportIssue.DoneViewModel
+import com.example.lostandfound.ui.ReportIssue.AboutAppViewModel
 import com.example.lostandfound.ui.theme.ComposeTheme
 
 
@@ -64,7 +64,7 @@ fun AboutAppScreen(activity: ComponentActivity) {
 // content includes avatar, edit fields, reminder message and save button
 // get the view model in the function parameter
 @Composable
-fun MainContent(viewModel: DoneViewModel = viewModel()) {
+fun MainContent(viewModel: AboutAppViewModel = viewModel()) {
     // get the local context
     val context = LocalContext.current
 
