@@ -16,7 +16,6 @@ import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.lostandfound.CustomElements.BackToolbar
-import com.example.lostandfound.Data.FoundItemList
 import com.example.lostandfound.Data.IntentExtraNames
 import com.example.lostandfound.Data.LostItem
 import com.example.lostandfound.ui.ReportIssue.SearchViewModel
