@@ -1,0 +1,159 @@
+package com.example.lostandfound.ui.Done
+
+import android.app.Activity
+import android.os.Bundle
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.CheckCircle
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.scale
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalInspectionMode
+import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.lostandfound.CustomElements.BackToolbar
+import com.example.lostandfound.CustomElements.ButtonType
+import com.example.lostandfound.CustomElements.CustomButton
+import com.example.lostandfound.R
+import com.example.lostandfound.ui.ReportIssue.DoneViewModel
+import com.example.lostandfound.ui.theme.ComposeTheme
+import com.example.lostandfound.ui.theme.Typography
+
+
+class DoneActivity : ComponentActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        setContent {
+            DoneScreen(activity = this)
+        }
+    }
+}
+
+// mock activity for previews
+class MockActivity : ComponentActivity()
+
+@Preview(showBackground = true)
+@Composable
+fun Preview() {
+    DoneScreen(activity = MockActivity())
+}
+
+@Composable
+fun DoneScreen(activity: ComponentActivity) {
+    ComposeTheme {
+        Surface {
+            Scaffold(
+
+            ) { innerPadding ->
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(paddingValues = innerPadding)
+                ) {
+                    // includes the top tab bar and the main content
+                    MainContent()
+                }
+            }
+        }
+    }
+}
+
+// content includes avatar, edit fields, reminder message and save button
+// get the view model in the function parameter
+@Composable
+fun MainContent(viewModel: DoneViewModel = viewModel()) {
+    // get the local context
+    val context = LocalContext.current
+
+    // boolean to determine if it is being rendered in preview
+    val inPreview = LocalInspectionMode.current
+
+    // the big background
+    BoxWithConstraints(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(
+                Brush.verticalGradient(
+                    listOf(
+                        MaterialTheme.colorScheme.primary,
+                        MaterialTheme.colorScheme.secondary
+                    )
+                ),
+            )
+    ){
+        val iconWidth = maxWidth/2
+        Column (
+            verticalArrangement = Arrangement.Center,
+            modifier = Modifier
+                .fillMaxSize()
+        ){
+            Row (
+                modifier = Modifier.fillMaxWidth()
+                    .padding(vertical = dimensionResource(id = R.dimen.content_margin)),
+                horizontalArrangement = Arrangement.Center
+            ){
+                Icon(
+                    imageVector = Icons.Outlined.CheckCircle,
+                    tint = MaterialTheme.colorScheme.onPrimary,
+                    contentDescription = "Done",
+                    modifier = Modifier
+                        .size(iconWidth)
+                )
+            }
+
+            Row (
+                modifier = Modifier.fillMaxWidth()
+                    .padding(vertical = dimensionResource(id = R.dimen.title_margin)),
+                horizontalArrangement = Arrangement.Center
+            ){
+                Text(
+                    text = "Claim submitted",
+                    style = Typography.headlineMedium,
+                    color = MaterialTheme.colorScheme.onPrimary,
+                    fontWeight = FontWeight.Bold
+                )
+            }
+
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = dimensionResource(id = R.dimen.header_margin)),
+                horizontalArrangement = Arrangement.Center
+            ){
+                CustomButton(
+                    text = "Done",
+                    type = ButtonType.WHITE,
+                    onClick = {
+                        // finish the activity
+                        (context as Activity).finish()
+                    }
+                )
+            }
+        }
+    }
+}
+
+
+
