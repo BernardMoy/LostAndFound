@@ -1,4 +1,4 @@
-package com.example.lostandfound.ui.ReportIssue
+package com.example.lostandfound.ui.AboutApp
 
 import androidx.lifecycle.ViewModel
 

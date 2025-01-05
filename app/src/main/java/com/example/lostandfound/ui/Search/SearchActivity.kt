@@ -1,8 +1,9 @@
-package com.example.lostandfound.ui.AboutApp
+package com.example.lostandfound.ui.Search
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -15,15 +16,27 @@ import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.lostandfound.CustomElements.BackToolbar
+import com.example.lostandfound.Data.FoundItemList
+import com.example.lostandfound.Data.IntentExtraNames
+import com.example.lostandfound.ui.ReportIssue.SearchViewModel
 import com.example.lostandfound.ui.theme.ComposeTheme
 
 
-class AboutAppActivity : ComponentActivity() {
+class SearchActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        // create the view model here
+        val viewModel: SearchViewModel by viewModels()
+
+        // load the passed intent data into the view model
+        val passedItem = intent.getParcelableExtra<FoundItemList>(IntentExtraNames.INTENT_FOUND_LIST_ID)
+        if (passedItem != null){
+            viewModel.itemList = passedItem
+        }
+
         setContent {
-            AboutAppScreen(activity = this)
+            SearchScreen(activity = this, viewModel = viewModel)
         }
     }
 }
@@ -34,17 +47,17 @@ class MockActivity : ComponentActivity()
 @Preview(showBackground = true)
 @Composable
 fun Preview() {
-    AboutAppScreen(activity = MockActivity())
+    SearchScreen(activity = MockActivity(), viewModel = viewModel())
 }
 
 @Composable
-fun AboutAppScreen(activity: ComponentActivity) {
+fun SearchScreen(activity: ComponentActivity, viewModel: SearchViewModel) {
     ComposeTheme {
         Surface {
             Scaffold(
                 // top toolbar
                 topBar = {
-                    BackToolbar(title = "About the App", activity = activity)
+                    BackToolbar(title = "Search Items", activity = activity)
                 }
             ) { innerPadding ->
                 Column(
@@ -53,7 +66,7 @@ fun AboutAppScreen(activity: ComponentActivity) {
                         .padding(paddingValues = innerPadding)
                 ) {
                     // includes the top tab bar and the main content
-                    MainContent()
+                    MainContent(viewModel = viewModel)
                 }
             }
         }
@@ -63,7 +76,7 @@ fun AboutAppScreen(activity: ComponentActivity) {
 // content includes avatar, edit fields, reminder message and save button
 // get the view model in the function parameter
 @Composable
-fun MainContent(viewModel: AboutAppViewModel = viewModel()) {
+fun MainContent(viewModel: SearchViewModel) {
     // get the local context
     val context = LocalContext.current
 
