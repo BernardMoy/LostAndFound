@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -36,6 +37,7 @@ import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.toLowerCase
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -43,6 +45,7 @@ import com.example.lostandfound.CustomElements.CustomCenterText
 import com.example.lostandfound.CustomElements.CustomCenteredProgressbar
 import com.example.lostandfound.CustomElements.CustomLostItemPreview
 import com.example.lostandfound.CustomElements.CustomProgressBar
+import com.example.lostandfound.CustomElements.CustomSearchField
 import com.example.lostandfound.Data.FirebaseNames
 import com.example.lostandfound.Data.IntentExtraNames
 import com.example.lostandfound.FirebaseManagers.FirebaseUtility
@@ -51,6 +54,7 @@ import com.example.lostandfound.ui.EditProfile.EditProfileViewModel
 import com.example.lostandfound.ui.ViewLost.ViewLostActivity
 import com.example.lostandfound.ui.theme.ComposeTheme
 import com.example.lostandfound.ui.theme.Typography
+import java.util.Locale
 
 
 class LostFragment : Fragment() {
@@ -175,11 +179,26 @@ fun LostItemsColumn(
         }
 
     } else {
+        // search bar
+        CustomSearchField(
+            placeholder = "Search by name or reference #...",
+            fieldContent = viewModel.searchWord
+        )
+        Spacer(modifier = Modifier.padding(vertical = dimensionResource(id = R.dimen.content_margin)))
+
+
         // for each data, display it as a preview
         LazyColumn (
             verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.title_margin))
         ){
-            items(viewModel.itemData) { lostItem ->
+            items(
+                viewModel.itemData.filter { item ->
+                    // filter items based on the item names or ids
+                    // by default it shows all items if the search word is empty
+                    item.itemName.lowercase(Locale.UK).contains(viewModel.searchWord.value.lowercase(Locale.UK))
+                            || item.itemID.startsWith(viewModel.searchWord.value.removePrefix("#"))
+                }
+            ) { lostItem ->
                 CustomLostItemPreview(
                     data = lostItem,
                     onViewButtonClicked = {
