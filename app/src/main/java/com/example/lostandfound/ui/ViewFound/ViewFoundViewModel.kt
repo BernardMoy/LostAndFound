@@ -14,7 +14,7 @@ interface Callback<T> {
 }
 
 class ViewFoundViewModel : ViewModel(){
-    val isLoading: MutableState<Boolean> = mutableStateOf(false)
+    val isLoading: MutableState<Boolean> = mutableStateOf(true)
     val isLocationDialogShown: MutableState<Boolean> = mutableStateOf(false)
 
     // item data are stored here

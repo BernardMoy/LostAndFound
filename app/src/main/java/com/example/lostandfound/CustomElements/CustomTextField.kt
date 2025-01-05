@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.AccessTime
 import androidx.compose.material.icons.outlined.CalendarMonth
@@ -124,6 +125,7 @@ fun CustomInputField(
                 onTextChanged?.invoke(varFieldContent)
             }
         },
+        shape = RoundedCornerShape(dimensionResource(id = R.dimen.corner_radius_small)),
         enabled = isEditable,
         isError = isError,
         singleLine = !isMultiLine,
@@ -177,6 +179,7 @@ fun CustomDatePickerTextField(
             onValueChange = {
                 // do nothing as it is always disabled
             },
+            shape = RoundedCornerShape(dimensionResource(id = R.dimen.corner_radius_small)),
             isError = isError,
             readOnly = true,   // make it read only
             singleLine = true,
@@ -243,6 +246,7 @@ fun CustomTimePickerTextField(
             onValueChange = {
 
             },
+            shape = RoundedCornerShape(dimensionResource(id = R.dimen.corner_radius_small)),
             isError = isError,
             readOnly = true,   // make it read only
             singleLine = true,
@@ -408,6 +412,7 @@ fun CustomSearchField(
         leadingIcon = {
             Icon(imageVector = Icons.Outlined.Search, contentDescription = "Search", tint = Color.Gray)
         },
+        shape = RoundedCornerShape(dimensionResource(id = R.dimen.corner_radius_small)),
         trailingIcon = {
             IconButton(
                 onClick = {

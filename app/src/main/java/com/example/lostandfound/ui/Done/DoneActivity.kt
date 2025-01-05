@@ -5,6 +5,14 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.rememberInfiniteTransition
+import androidx.compose.animation.core.rememberTransition
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.BoxWithConstraints
@@ -22,8 +30,17 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.TransformOrigin
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.dimensionResource
@@ -97,6 +114,20 @@ fun MainContent(viewModel: DoneViewModel = viewModel()) {
     // boolean to determine if it is being rendered in preview
     val inPreview = LocalInspectionMode.current
 
+    // scale for the checkmark icon
+    var originalScale by remember {
+        mutableFloatStateOf(0.5f)
+    }
+    LaunchedEffect (Unit){
+        // when the activity is first launched, scale up the icon
+        originalScale = 1.0f
+    }
+    val animatedScale by animateFloatAsState(
+        targetValue = originalScale,
+        animationSpec = tween(durationMillis = 1000),
+        label = "iconScale"
+    )
+
     // the big background
     BoxWithConstraints(
         modifier = Modifier
@@ -117,7 +148,8 @@ fun MainContent(viewModel: DoneViewModel = viewModel()) {
                 .fillMaxSize()
         ){
             Row (
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier
+                    .fillMaxWidth()
                     .padding(vertical = dimensionResource(id = R.dimen.content_margin)),
                 horizontalArrangement = Arrangement.Center
             ){
@@ -127,11 +159,13 @@ fun MainContent(viewModel: DoneViewModel = viewModel()) {
                     contentDescription = "Done",
                     modifier = Modifier
                         .size(iconWidth)
+                        .scale(animatedScale)
                 )
             }
 
             Row (
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier
+                    .fillMaxWidth()
                     .padding(vertical = dimensionResource(id = R.dimen.title_margin)),
                 horizontalArrangement = Arrangement.Center
             ){

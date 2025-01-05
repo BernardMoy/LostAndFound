@@ -16,7 +16,7 @@ interface Callback<T> {
 }
 
 class ViewLostViewModel : ViewModel(){
-    val isLoading: MutableState<Boolean> = mutableStateOf(false)
+    val isLoading: MutableState<Boolean> = mutableStateOf(true)
     val isLocationDialogShown: MutableState<Boolean> = mutableStateOf(false)
 
     // default lost item placeholder data
