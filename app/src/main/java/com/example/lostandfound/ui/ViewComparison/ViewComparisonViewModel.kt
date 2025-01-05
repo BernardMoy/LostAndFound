@@ -14,7 +14,7 @@ interface Callback<T> {
 }
 
 class ViewComparisonViewModel : ViewModel(){
-    val isLoading: MutableState<Boolean> = mutableStateOf(false)
+    val isLoading: MutableState<Boolean> = mutableStateOf(true)
 
     val isLocationDialogShown: MutableState<Boolean> = mutableStateOf(false)
 
