@@ -32,4 +32,12 @@ object LocationManager {
             location["longitude"] as Double
         )
     }
+
+    // convert a latlng to pair
+    fun latLngToPair(location: LatLng): Pair<Double, Double>{
+        return Pair<Double, Double>(
+            location.latitude,
+            location.longitude
+        )
+    }
 }

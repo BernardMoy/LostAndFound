@@ -73,11 +73,13 @@ import com.example.lostandfound.CustomElements.CustomLoginDialog
 import com.example.lostandfound.CustomElements.CustomProgressBar
 import com.example.lostandfound.CustomElements.CustomTextDialog
 import com.example.lostandfound.CustomElements.CustomTimePickerTextField
-import com.example.lostandfound.Utility.ErrorCallback
+import com.example.lostandfound.Data.IntentExtraNames
+import com.example.lostandfound.Data.LostItem
 import com.example.lostandfound.Data.categories
 import com.example.lostandfound.Data.itemColors
 import com.example.lostandfound.FirebaseManagers.FirebaseUtility
 import com.example.lostandfound.ui.Login.LoginActivity
+import com.example.lostandfound.ui.Search.SearchActivity
 import com.example.lostandfound.ui.theme.ComposeTheme
 import com.example.lostandfound.ui.theme.Typography
 
@@ -560,21 +562,22 @@ fun DoneButton(
                 isLoading = true
 
                 // add to firebase database
-                viewModel.onDoneButtonClicked(object :
-                    ErrorCallback {
-                    override fun onComplete(error: String) {
-
-                        // stop loading
+                viewModel.onDoneButtonClicked(object: Callback<LostItem?>{
+                    override fun onComplete(result: LostItem?) {
                         isLoading = false
-
-                        if (error.isEmpty()) {
-                            // if no errors, exit activity and display success message
-                            Toast.makeText(context, "New lost item posted!", Toast.LENGTH_SHORT)
-                                .show()
-                            (context as Activity).finish()
+                        
+                        // if the item is null, it error
+                        if (result == null){
+                            Toast.makeText(context, "Error adding item", Toast.LENGTH_SHORT).show()
 
                         } else {
-                            Toast.makeText(context, error, Toast.LENGTH_SHORT).show()
+                            val intent = Intent(context, SearchActivity::class.java)
+                            // pass the generated lost item to the intent
+                            intent.putExtra(
+                                IntentExtraNames.INTENT_LOST_ID,
+                                result
+                            )
+                            context.startActivity(intent)
                         }
                     }
                 })
