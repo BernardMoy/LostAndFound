@@ -10,6 +10,7 @@ import com.example.lostandfound.FirebaseManagers.FirebaseUtility
 import com.example.lostandfound.FirebaseManagers.FirestoreManager
 import com.example.lostandfound.R
 import com.example.lostandfound.Utility.DateTimeManager
+import com.example.lostandfound.Utility.ErrorCallback
 
 interface Callback<T> {
     fun onComplete(result: T)
@@ -86,9 +87,30 @@ class ViewComparisonViewModel : ViewModel(){
 
 
     // function to update item status
-    fun updateItemStatus(lostItemStatus: Int, foundItemStatus: Int, callback: Callback<Boolean>){
+    fun updateItemStatus(lostItemStatus: Int, foundItemStatus: Int, callback: ErrorCallback){
         // update the current lost and found item status
-        lostItemData.status = lostItemStatus
-        foundItemData.status - foundItemStatus
+        val firestoreManager = FirestoreManager()
+
+        // update the lost item
+        firestoreManager.update(FirebaseNames.COLLECTION_LOST_ITEMS, lostItemData.itemID, FirebaseNames.LOSTFOUND_STATUS, lostItemStatus, object : FirestoreManager.Callback<Boolean>{
+            override fun onComplete(result: Boolean) {
+                if (!result){
+                    callback.onComplete("Error updating lost data")
+
+                } else {
+                    // also update the found item
+                    firestoreManager.update(FirebaseNames.COLLECTION_FOUND_ITEMS, foundItemData.itemID, FirebaseNames.LOSTFOUND_STATUS, foundItemStatus, object : FirestoreManager.Callback<Boolean>{
+                        override fun onComplete(result: Boolean) {
+                            if (!result){
+                                callback.onComplete("Error updating found data")
+
+                            } else {
+                                callback.onComplete("")
+                            }
+                        }
+                    })
+                }
+            }
+        })
     }
 }
