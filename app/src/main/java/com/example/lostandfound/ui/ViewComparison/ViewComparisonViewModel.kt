@@ -102,7 +102,7 @@ class ViewComparisonViewModel : ViewModel(){
                     firestoreManager.update(FirebaseNames.COLLECTION_FOUND_ITEMS, foundItemData.itemID, FirebaseNames.LOSTFOUND_STATUS, foundItemStatus, object : FirestoreManager.Callback<Boolean>{
                         override fun onComplete(result: Boolean) {
                             if (!result){
-                                callback.onComplete("Error updating found data")
+                                callback.onComplete("Error updating the data")
 
                             } else {
                                 callback.onComplete("")
@@ -110,6 +110,39 @@ class ViewComparisonViewModel : ViewModel(){
                         }
                     })
                 }
+            }
+        })
+    }
+
+    // function to add the items to the claimed collection, and also update the item status
+    fun putClaimedItemsAndUpdate(callback: ErrorCallback){
+        val firestoreManager = FirestoreManager()
+
+        val data: Map<String, String> = mutableMapOf(
+            FirebaseNames.LOST_ITEM_ID to lostItemData.itemID,
+            FirebaseNames.FOUND_ITEM_ID to foundItemData.itemID
+        )
+
+        firestoreManager.putWithUniqueId(FirebaseNames.COLLECTION_CLAIMED_ITEMS, data, object: FirestoreManager.Callback<String>{
+            override fun onComplete(result: String) {
+                // it returns the generated id
+                if (result.isEmpty()){
+                    callback.onComplete("Error claiming items")
+                    return
+                }
+
+                // update
+                updateItemStatus(1, 1, object: ErrorCallback{
+                    override fun onComplete(error: String) {
+                        if (error.isNotEmpty()){
+                            callback.onComplete(error)
+                            return
+                        }
+
+                        // no errors
+                        callback.onComplete("")
+                    }
+                })
             }
         })
     }

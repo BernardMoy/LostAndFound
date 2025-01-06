@@ -402,12 +402,9 @@ fun ClaimButton(
                 isLoading = true
 
                 // update statuses of the item
-                viewModel.updateItemStatus(1, 1, object : ErrorCallback{
+                viewModel.putClaimedItemsAndUpdate(object : ErrorCallback{
                     override fun onComplete(error: String) {
-                        isLoading = false
-
                         if (error.isNotEmpty()){
-                            // display error
                             Toast.makeText(context, error, Toast.LENGTH_SHORT).show()
                             return
                         }
