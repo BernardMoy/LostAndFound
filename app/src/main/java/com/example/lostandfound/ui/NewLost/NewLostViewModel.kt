@@ -15,6 +15,7 @@ import com.example.lostandfound.Data.Colors
 import com.example.lostandfound.Utility.DateTimeManager
 import com.example.lostandfound.Data.FirebaseNames
 import com.example.lostandfound.Data.LostItem
+import com.example.lostandfound.R
 import com.example.lostandfound.Utility.LocationManager
 import com.google.android.gms.maps.model.LatLng
 
@@ -226,7 +227,7 @@ class NewLostViewModel: ViewModel() {
                         description = additionalDescription.value,
                         status = 0,
                         timePosted = currentTime,
-                        image = ""
+                        image = "android.resource://com.example.lostandfound/" + R.drawable.placeholder_image
                     )
 
                     callback.onComplete(generatedLostItem)  //return the lost item added
