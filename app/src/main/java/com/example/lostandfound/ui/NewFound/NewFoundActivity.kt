@@ -73,10 +73,12 @@ import com.example.lostandfound.CustomElements.CustomPickLocationDialog
 import com.example.lostandfound.CustomElements.CustomProgressBar
 import com.example.lostandfound.CustomElements.CustomTextDialog
 import com.example.lostandfound.CustomElements.CustomTimePickerTextField
+import com.example.lostandfound.Data.IntentExtraNames
 import com.example.lostandfound.Utility.ErrorCallback
 import com.example.lostandfound.Data.categories
 import com.example.lostandfound.Data.itemColors
 import com.example.lostandfound.FirebaseManagers.FirebaseUtility
+import com.example.lostandfound.ui.Done.DoneActivity
 import com.example.lostandfound.ui.Login.LoginActivity
 import com.example.lostandfound.ui.theme.ComposeTheme
 import com.example.lostandfound.ui.theme.Typography
@@ -595,8 +597,11 @@ fun DoneButton(
 
                         if (error.isEmpty()) {
                             // if no errors, exit activity and display success message
-                            Toast.makeText(context, "New found item posted!", Toast.LENGTH_SHORT)
-                                .show()
+                            val i: Intent = Intent(context, DoneActivity::class.java)
+                            i.putExtra(IntentExtraNames.INTENT_DONE_ACTIVITY_TITLE, "Item posted!")
+                            context.startActivity(i)
+
+                            // close current activity
                             (context as Activity).finish()
 
                         } else {

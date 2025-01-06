@@ -127,7 +127,7 @@ fun MainContent(viewModel: DoneViewModel = viewModel()) {
     }
     val animatedScale by animateFloatAsState(
         targetValue = originalScale,
-        animationSpec = tween(durationMillis = 1000),
+        animationSpec = tween(durationMillis = 1500),
         label = "iconScale"
     )
 
@@ -173,7 +173,7 @@ fun MainContent(viewModel: DoneViewModel = viewModel()) {
                 horizontalArrangement = Arrangement.Center
             ){
                 Text(
-                    text = "Claim submitted",
+                    text = viewModel.titleText,
                     style = Typography.headlineMedium,
                     color = MaterialTheme.colorScheme.onPrimary,
                     fontWeight = FontWeight.Bold
