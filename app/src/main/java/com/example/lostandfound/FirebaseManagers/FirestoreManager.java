@@ -219,4 +219,30 @@ public class FirestoreManager {
     }
 
      */
+
+    /**
+     * Given a collection, a key, an attribute name and a new value,
+     * update the attribute value to the new value.
+     *
+     * @param collection Collection
+     * @param key key / itemID
+     * @param attribute attribute name
+     * @param newValue new value of the attribute after updating
+     * @param callback return true if successful, false otherwise
+     */
+    public void update(String collection, String key, String attribute, Object newValue, Callback<Boolean> callback){
+        db.collection(collection).document(key)
+                .update(attribute, newValue)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void unused) {
+                        callback.onComplete(true);
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        callback.onComplete(false);
+                    }
+                });
+    }
 }
