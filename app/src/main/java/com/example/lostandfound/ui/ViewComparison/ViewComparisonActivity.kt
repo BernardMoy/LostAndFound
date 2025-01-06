@@ -32,6 +32,10 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -55,6 +59,7 @@ import com.example.lostandfound.CustomElements.CustomComparisonField
 import com.example.lostandfound.CustomElements.CustomComparisonTextField
 import com.example.lostandfound.CustomElements.CustomEditText
 import com.example.lostandfound.CustomElements.CustomGrayTitle
+import com.example.lostandfound.CustomElements.CustomProgressBar
 import com.example.lostandfound.CustomElements.CustomViewTwoLocationsDialog
 import com.example.lostandfound.Data.FoundItem
 import com.example.lostandfound.Data.IntentExtraNames
@@ -64,6 +69,7 @@ import com.example.lostandfound.Data.lostStatusText
 import com.example.lostandfound.Data.statusColor
 import com.example.lostandfound.R
 import com.example.lostandfound.Utility.DateTimeManager
+import com.example.lostandfound.Utility.ErrorCallback
 import com.example.lostandfound.Utility.LocationManager
 import com.example.lostandfound.ui.Done.DoneActivity
 import com.example.lostandfound.ui.theme.ComposeTheme
@@ -375,6 +381,14 @@ fun ClaimButton(
     context: Context,
     viewModel: ViewComparisonViewModel
 ){
+    // isloading state to display the loading animation
+    var isLoading by remember { mutableStateOf(false) }
+
+    // when isLoading changes, functions that uses the variable are re-composed
+    if (isLoading) {
+        CustomProgressBar()
+    }
+
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -385,12 +399,25 @@ fun ClaimButton(
             text = "Claim this Item",
             type = ButtonType.FILLED,
             onClick = {
-                val i: Intent = Intent(context, DoneActivity::class.java)
-                i.putExtra(IntentExtraNames.INTENT_DONE_ACTIVITY_TITLE, "Claim Submitted")
-                context.startActivity(i)
+                isLoading = true
 
-                // close current activity
-                (context as Activity).finish()
+                // update statuses of the item
+                viewModel.putClaimedItemsAndUpdate(object : ErrorCallback{
+                    override fun onComplete(error: String) {
+                        if (error.isNotEmpty()){
+                            Toast.makeText(context, error, Toast.LENGTH_SHORT).show()
+                            return
+                        }
+
+                        // start done activity
+                        val i: Intent = Intent(context, DoneActivity::class.java)
+                        i.putExtra(IntentExtraNames.INTENT_DONE_ACTIVITY_TITLE, "Claim Submitted")
+                        context.startActivity(i)
+
+                        // close current activity
+                        (context as Activity).finish()
+                    }
+                })
             }
         )
     }
