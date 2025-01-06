@@ -27,7 +27,8 @@ public class FirestoreManagerTest {
     private FirebaseFirestore firestore;
 
     private Map<String, Object> testValue;
-    private Map<String, Object> testValueSpecial;
+    private Map<String, Object> testValueGetWhere;
+    private Map<String, Object> testValueUpdate;
 
     @Before
     public void setUp() throws InterruptedException{
@@ -43,9 +44,13 @@ public class FirestoreManagerTest {
         testValue.put("att2", 2);
 
         // test values for the getWhere method only, to verify that it actually extracts the correct data
-        testValueSpecial = new HashMap<>();
-        testValueSpecial.put("att1", "val1");
-        testValueSpecial.put("att2", 3);
+        testValueGetWhere = new HashMap<>();
+        testValueGetWhere.put("att1", "val1");
+        testValueGetWhere.put("att2", 3230329);  // this value has to be unique
+
+        testValueUpdate = new HashMap<>();
+        testValueUpdate.put("attSpecial", "val1");
+        testValueUpdate.put("att2", 4);
 
         // countdown latch for the 3 insert statements
         final CountDownLatch latch = new CountDownLatch(3);
@@ -58,7 +63,14 @@ public class FirestoreManagerTest {
             }
         });
 
-        firestore.collection(COLLECTION).document("testGetWhere").set(testValueSpecial).addOnSuccessListener(new OnSuccessListener<Void>() {
+        firestore.collection(COLLECTION).document("testGetWhere").set(testValueGetWhere).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void unused) {
+                latch.countDown();
+            }
+        });
+
+        firestore.collection(COLLECTION).document("testUpdate").set(testValueUpdate).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void unused) {
                 latch.countDown();
@@ -79,12 +91,13 @@ public class FirestoreManagerTest {
     @After
     public void tearDown() throws InterruptedException{
 
-        final CountDownLatch latch = new CountDownLatch(4);
+        final CountDownLatch latch = new CountDownLatch(5);
 
         firestore.collection(COLLECTION).document("testGet").delete().addOnCompleteListener(task -> latch.countDown());
         firestore.collection(COLLECTION).document("testPut").delete().addOnCompleteListener(task -> latch.countDown());
         firestore.collection(COLLECTION).document("testGetWhere").delete().addOnCompleteListener(task -> latch.countDown());
         firestore.collection(COLLECTION).document("testDelete").delete().addOnCompleteListener(task -> latch.countDown());
+        firestore.collection(COLLECTION).document("testUpdate").delete().addOnCompleteListener(task -> latch.countDown());
 
         // wait for all operations to finish
         latch.await();
@@ -156,7 +169,7 @@ public class FirestoreManagerTest {
     public void testGetIdsWhere() throws InterruptedException{
         final CountDownLatch latch = new CountDownLatch(1);
 
-        firestoreManager.getIdsWhere(COLLECTION, "att2", 3L, "att2", new FirestoreManager.Callback<List<String>>() {
+        firestoreManager.getIdsWhere(COLLECTION, "att2", 3230329, "att2", new FirestoreManager.Callback<List<String>>() {
             @Override
             public void onComplete(List<String> result) {
                 // the result should only be length 1
@@ -173,6 +186,9 @@ public class FirestoreManagerTest {
         latch.await();
     }
 
+    /*
+    This test method depend on whether testPut() is first executed. Fix that
+     */
     @Test
     public void testGetAllIds() throws InterruptedException{
         final CountDownLatch latch = new CountDownLatch(1);
@@ -180,11 +196,36 @@ public class FirestoreManagerTest {
         firestoreManager.getAllIds(COLLECTION,  new FirestoreManager.Callback<List<String>>() {
             @Override
             public void onComplete(List<String> result) {
-                // the result should only be length 2
-                assertEquals(3, result.size());  // testDelete, testGet, testWhere
+                // the result should only be the length of the collections
+                assertEquals(5, result.size());  // equal to the number teared down
 
                 // signal operation completed
                 latch.countDown();
+            }
+        });
+
+        latch.await();
+    }
+
+    @Test
+    public void testUpdate() throws InterruptedException{
+        final CountDownLatch latch = new CountDownLatch(1);
+
+        firestoreManager.update(COLLECTION, "testUpdate", "attSpecial", "Updated", new FirestoreManager.Callback<Boolean>() {
+            @Override
+            public void onComplete(Boolean result) {
+                assertTrue(result);
+
+                // verify that the result is updated
+                firestoreManager.get(COLLECTION, "testUpdate", new FirestoreManager.Callback<Map<String, Object>>() {
+                    @Override
+                    public void onComplete(Map<String, Object> result) {
+                        assertEquals("Updated", result.get("attSpecial"));
+                        assertEquals(4L, result.get("att2"));
+
+                        latch.countDown();
+                    }
+                });
             }
         });
 

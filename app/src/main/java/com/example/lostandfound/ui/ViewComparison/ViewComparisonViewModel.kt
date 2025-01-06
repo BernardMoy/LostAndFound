@@ -10,6 +10,7 @@ import com.example.lostandfound.FirebaseManagers.FirebaseUtility
 import com.example.lostandfound.FirebaseManagers.FirestoreManager
 import com.example.lostandfound.R
 import com.example.lostandfound.Utility.DateTimeManager
+import com.example.lostandfound.Utility.ErrorCallback
 
 interface Callback<T> {
     fun onComplete(result: T)
@@ -86,9 +87,63 @@ class ViewComparisonViewModel : ViewModel(){
 
 
     // function to update item status
-    fun updateItemStatus(lostItemStatus: Int, foundItemStatus: Int, callback: Callback<Boolean>){
+    fun updateItemStatus(lostItemStatus: Int, foundItemStatus: Int, callback: ErrorCallback){
         // update the current lost and found item status
-        lostItemData.status = lostItemStatus
-        foundItemData.status - foundItemStatus
+        val firestoreManager = FirestoreManager()
+
+        // update the lost item
+        firestoreManager.update(FirebaseNames.COLLECTION_LOST_ITEMS, lostItemData.itemID, FirebaseNames.LOSTFOUND_STATUS, lostItemStatus, object : FirestoreManager.Callback<Boolean>{
+            override fun onComplete(result: Boolean) {
+                if (!result){
+                    callback.onComplete("Error updating lost data")
+
+                } else {
+                    // also update the found item
+                    firestoreManager.update(FirebaseNames.COLLECTION_FOUND_ITEMS, foundItemData.itemID, FirebaseNames.LOSTFOUND_STATUS, foundItemStatus, object : FirestoreManager.Callback<Boolean>{
+                        override fun onComplete(result: Boolean) {
+                            if (!result){
+                                callback.onComplete("Error updating the data")
+
+                            } else {
+                                callback.onComplete("")
+                            }
+                        }
+                    })
+                }
+            }
+        })
+    }
+
+    // function to add the items to the claimed collection, and also update the item status
+    fun putClaimedItemsAndUpdate(callback: ErrorCallback){
+        val firestoreManager = FirestoreManager()
+
+        val data: Map<String, String> = mutableMapOf(
+            FirebaseNames.LOST_ITEM_ID to lostItemData.itemID,
+            FirebaseNames.FOUND_ITEM_ID to foundItemData.itemID
+        )
+
+        firestoreManager.putWithUniqueId(FirebaseNames.COLLECTION_CLAIMED_ITEMS, data, object: FirestoreManager.Callback<String>{
+            override fun onComplete(result: String) {
+                // it returns the generated id
+                if (result.isEmpty()){
+                    callback.onComplete("Error claiming items")
+                    return
+                }
+
+                // update
+                updateItemStatus(1, 1, object: ErrorCallback{
+                    override fun onComplete(error: String) {
+                        if (error.isNotEmpty()){
+                            callback.onComplete(error)
+                            return
+                        }
+
+                        // no errors
+                        callback.onComplete("")
+                    }
+                })
+            }
+        })
     }
 }
