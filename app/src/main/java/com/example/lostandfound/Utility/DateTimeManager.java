@@ -121,4 +121,27 @@ public class DateTimeManager {
             }
         }
     }
+
+    // method to get the string describing a chat message
+    // the time is shown if within last day, otherwise it shows N days ago
+    public static String getChatTimeDescription(long epoch) {
+        long currentEpoch = getCurrentEpochTime();
+
+        if (currentEpoch - epoch < 86400) {
+            // within last day, return the hour minute
+            LocalDateTime localDateTime = Instant.ofEpochSecond(epoch).atZone(ZoneId.of("UTC")).toLocalDateTime();
+            return String.valueOf(localDateTime.getHour()) + ":" + String.valueOf(localDateTime.getMinute());
+
+        } else {
+            // return N days ago
+            int numberOfDays = (int) ((currentEpoch - epoch) / 86400);
+            if (numberOfDays == 1) {
+                return String.valueOf(numberOfDays) + " day ago";
+
+            } else {
+                return String.valueOf(numberOfDays) + " days ago";
+
+            }
+        }
+    }
 }
