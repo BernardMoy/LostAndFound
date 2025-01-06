@@ -6,8 +6,10 @@ import androidx.lifecycle.ViewModel
 import com.example.lostandfound.Data.FirebaseNames
 import com.example.lostandfound.Data.FoundItem
 import com.example.lostandfound.Data.LostItem
+import com.example.lostandfound.FirebaseManagers.FirebaseUtility
 import com.example.lostandfound.FirebaseManagers.FirestoreManager
 import com.example.lostandfound.R
+import com.example.lostandfound.Utility.DateTimeManager
 
 interface Callback<T> {
     fun onComplete(result: T)
@@ -80,5 +82,13 @@ class ViewComparisonViewModel : ViewModel(){
                 }
             }
         })
+    }
+
+
+    // function to update item status
+    fun updateItemStatus(lostItemStatus: Int, foundItemStatus: Int, callback: Callback<Boolean>){
+        // update the current lost and found item status
+        lostItemData.status = lostItemStatus
+        foundItemData.status - foundItemStatus
     }
 }
