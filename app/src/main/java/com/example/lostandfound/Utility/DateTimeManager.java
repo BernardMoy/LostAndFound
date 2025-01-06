@@ -89,4 +89,36 @@ public class DateTimeManager {
         LocalDateTime localDateTime = Instant.ofEpochSecond(epoch).atZone(ZoneId.of("UTC")).toLocalDateTime();
         return localDateTime.getMinute();
     }
+
+    // method to get the string describing when the item is posted
+    // either last hour, n hours ago or n days ago
+    public static String getDescription(long epoch){
+        long currentEpoch = getCurrentEpochTime();
+
+        // within last hour
+        if (currentEpoch - epoch < 3600){
+            return "Last hour";
+
+        } else {
+            // calculate the number of hours elapsed
+            int numberOfHours = (int)((currentEpoch - epoch) / 3600);   // scale it down
+            if (numberOfHours == 1){
+                return String.valueOf(numberOfHours) + " hour ago";
+
+            } else if (numberOfHours < 24){
+                return String.valueOf(numberOfHours) + " hours ago";
+
+            } else {
+                // calculate the number of days elapsed
+                int numberOfDays = (int) ((currentEpoch - epoch) / 86400);
+                if (numberOfDays == 1) {
+                    return String.valueOf(numberOfDays) + " day ago";
+
+                } else {
+                    return String.valueOf(numberOfDays) + " days ago";
+
+                }
+            }
+        }
+    }
 }
