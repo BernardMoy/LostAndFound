@@ -1,6 +1,7 @@
 package com.example.lostandfound.ui.Done
 
 import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -46,10 +47,12 @@ import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.core.content.ContextCompat.startActivity
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.lostandfound.CustomElements.ButtonType
 import com.example.lostandfound.CustomElements.CustomButton
 import com.example.lostandfound.Data.IntentExtraNames
+import com.example.lostandfound.MainActivity
 import com.example.lostandfound.R
 import com.example.lostandfound.ui.Done.DoneViewModel
 import com.example.lostandfound.ui.theme.ComposeTheme
@@ -187,7 +190,18 @@ fun MainContent(viewModel: DoneViewModel = viewModel()) {
                     text = "Done",
                     type = ButtonType.WHITE,
                     onClick = {
-                        // finish the activity
+                        /*
+                        Navigate back to the home activity
+                        Start the intent to home activity, then pop all previous activities from the stack
+                        */
+                        val intent = Intent(context, MainActivity::class.java).apply {
+                            flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
+                        }
+
+                        // start main activity
+                        context.startActivity(intent)
+
+                        // finish current activity
                         (context as Activity).finish()
                     }
                 )
