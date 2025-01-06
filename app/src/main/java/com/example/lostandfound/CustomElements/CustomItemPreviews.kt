@@ -156,6 +156,13 @@ fun CustomLostItemPreview(
                         style = Typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onBackground
                     )
+
+                    // time posted desc
+                    Text(
+                        text = "Posted " + DateTimeManager.getDescription(data.timePosted),
+                        style = Typography.bodyMedium,
+                        color = Color.Gray
+                    )
                 }
             }
 
@@ -305,6 +312,13 @@ fun CustomFoundItemPreview(
                                 + ", " + data.subCategory,
                         style = Typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onBackground
+                    )
+
+                    // time posted desc
+                    Text(
+                        text = "Posted " + DateTimeManager.getDescription(data.timePosted),
+                        style = Typography.bodyMedium,
+                        color = Color.Gray
                     )
                 }
             }

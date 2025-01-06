@@ -7,23 +7,33 @@ import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.lostandfound.CustomElements.BackToolbar
@@ -36,6 +46,7 @@ import com.example.lostandfound.R
 import com.example.lostandfound.ui.ViewComparison.ViewComparisonActivity
 import com.example.lostandfound.ui.ViewFound.ViewFoundActivity
 import com.example.lostandfound.ui.theme.ComposeTheme
+import com.example.lostandfound.ui.theme.Typography
 
 
 class SearchActivity : ComponentActivity() {
@@ -123,10 +134,56 @@ fun MainContent(viewModel: SearchViewModel) {
         CustomCenteredProgressbar()
 
     } else {
-        MatchingItemsColumn(context = context, viewModel = viewModel)
+        Column (
+            modifier = Modifier.fillMaxWidth(),
+            verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin))
+        ){
+            TopDescription(viewModel = viewModel)
+            MatchingItemsColumn(context = context, viewModel = viewModel)
+        }
     }
 }
 
+@Composable
+fun TopDescription(
+    viewModel: SearchViewModel
+){
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(bottom = dimensionResource(id = R.dimen.title_margin)),
+        horizontalAlignment = Alignment.CenterHorizontally,
+    ){
+        Text(
+            text = "We have found "
+                    + viewModel.matchedFoundItems.size.toString() + " items that matches your lost item.",
+            style = Typography.bodyMedium,
+            color = MaterialTheme.colorScheme.onBackground,
+            textAlign = TextAlign.Center
+        )
+
+        Spacer(modifier = Modifier.padding(dimensionResource(id = R.dimen.content_margin_half)))
+
+        Text(
+            text = "Don't see your item? ",
+            style = Typography.bodyMedium,
+            color = Color.Gray,
+            textAlign = TextAlign.Center
+        )
+
+        Text(
+            text = "Click here and we will track it for you. ",
+            style = Typography.bodyMedium,
+            color = MaterialTheme.colorScheme.onPrimaryContainer,
+            textAlign = TextAlign.Center,
+            fontWeight = FontWeight.Bold,
+            textDecoration = TextDecoration.Underline,
+            modifier = Modifier.clickable { 
+
+            }
+        )
+    }
+}
 
 @Composable
 fun MatchingItemsColumn(
