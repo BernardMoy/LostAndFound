@@ -8,6 +8,8 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.AccessTime
@@ -15,6 +17,8 @@ import androidx.compose.material.icons.outlined.CalendarMonth
 import androidx.compose.material.icons.outlined.Close
 import androidx.compose.material.icons.outlined.PestControlRodent
 import androidx.compose.material.icons.outlined.Search
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -32,14 +36,18 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.lostandfound.Data.ChatMessage
 import com.example.lostandfound.R
 import com.example.lostandfound.Utility.DateTimeManager
+import com.example.lostandfound.ui.theme.ComposeTheme
 import com.example.lostandfound.ui.theme.Typography
+import kotlin.math.max
 
 @Composable
 fun CustomEditText(
@@ -292,12 +300,32 @@ fun CustomTimePickerTextField(
 @Preview(showBackground = true)
 @Composable
 fun PreviewDoubleText() {
+    /*
     CustomComparisonTextField(
         centerLabel = "Label",
         contentLeft = "Lefteeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
         contentRight = "Right",
         icon = Icons.Outlined.PestControlRodent
     )
+
+     */
+    ComposeTheme {
+        Column (
+            verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin))
+        ){
+            CustomChatField(
+                text = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
+                timestamp = 2L,
+                isSentByCurrentUser = false
+            )
+
+            CustomChatField(
+                text = "e",
+                timestamp = 2L,
+                isSentByCurrentUser = true
+            )
+        }
+    }
 }
 
 @Composable
@@ -446,4 +474,35 @@ fun CustomSearchField(
             errorTextColor = MaterialTheme.colorScheme.onBackground
         )
     )
+}
+
+@Composable
+fun CustomChatField(
+    text: String,
+    timestamp: Long,
+    isSentByCurrentUser: Boolean
+){
+    Row (
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = if (isSentByCurrentUser) Arrangement.End else Arrangement.Start
+    ){
+        ElevatedCard(
+            elevation = CardDefaults.cardElevation(
+                defaultElevation = 6.dp
+            ),
+            colors = CardDefaults.cardColors(
+                containerColor = if (isSentByCurrentUser) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.primaryContainer
+            ),
+            // set the max width of the text message to be 2/3 of the row width
+            modifier = Modifier.widthIn(max = LocalConfiguration.current.screenWidthDp.dp * 2/3)
+        ) {
+            Text(
+                text = text,
+                style = Typography.bodyMedium,
+                color = if (isSentByCurrentUser) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onPrimaryContainer,
+                modifier = Modifier.padding(dimensionResource(id = R.dimen.title_margin)),
+                textAlign = if (isSentByCurrentUser) TextAlign.End else TextAlign.Start
+            )
+        }
+    }
 }
