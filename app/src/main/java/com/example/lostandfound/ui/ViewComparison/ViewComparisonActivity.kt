@@ -398,6 +398,7 @@ fun ClaimButton(
         CustomButton(
             text = "Claim this Item",
             type = ButtonType.FILLED,
+            enabled = !isLoading,  // if loading, disable the button
             onClick = {
                 isLoading = true
 
