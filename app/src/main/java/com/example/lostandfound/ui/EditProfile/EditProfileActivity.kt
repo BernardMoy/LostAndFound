@@ -346,6 +346,7 @@ fun SaveButton(
         CustomButton(
             text = "Save Profile",
             type = ButtonType.FILLED,
+            enabled = !isLoading,  // if loading, disable the button
             onClick = {
                 // handle save logic here, as it involves the context (Toast message and auth manager)
                 // update the data from the firestore database

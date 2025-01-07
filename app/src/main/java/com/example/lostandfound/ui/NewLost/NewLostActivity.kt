@@ -552,6 +552,7 @@ fun DoneButton(
         CustomButton(
             text = "Done",
             type = ButtonType.FILLED,
+            enabled = !isLoading,  // if loading, disable the button
             onClick = {
                 // check if the input fields are valid
                 if (!viewModel.validateInput()) {
