@@ -223,8 +223,7 @@ fun MatchingItemsColumn(
                             foundItemData
                         )
                         context.startActivity(intent)
-                    },
-                    isOwner = false
+                    }
                 )
             }
         }

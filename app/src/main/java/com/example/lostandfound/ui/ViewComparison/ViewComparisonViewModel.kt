@@ -33,9 +33,9 @@ class ViewComparisonViewModel : ViewModel(){
         dateTime = 0L,
         location = Pair(52.37930763817003,-1.5614912710215834),
         description = "",
-        status = 0,
         timePosted = 0L,
-        image = "android.resource://com.example.lostandfound/" + R.drawable.placeholder_image
+        image = "android.resource://com.example.lostandfound/" + R.drawable.placeholder_image,
+        status = 0
     )
 
     // default found item placeholder data
@@ -50,11 +50,11 @@ class ViewComparisonViewModel : ViewModel(){
         dateTime = 0L,
         location = Pair(52.37930763817003,-1.5614912710215834),
         description = "",
-        status = 0,
         timePosted = 0L,
         image = "android.resource://com.example.lostandfound/" + R.drawable.placeholder_image,
         securityQuestion = "",
-        securityQuestionAns = ""
+        securityQuestionAns = "",
+        status = 0
     )
 
     // username used to display the found user, only that is needed
@@ -87,6 +87,7 @@ class ViewComparisonViewModel : ViewModel(){
 
 
     // function to update item status
+    /*
     fun updateItemStatus(lostItemStatus: Int, foundItemStatus: Int, callback: ErrorCallback){
         // update the current lost and found item status
         val firestoreManager = FirestoreManager()
@@ -114,13 +115,17 @@ class ViewComparisonViewModel : ViewModel(){
         })
     }
 
+     */
+
     // function to add the items to the claimed collection, and also update the item status
     fun putClaimedItemsAndUpdate(callback: ErrorCallback){
         val firestoreManager = FirestoreManager()
 
-        val data: Map<String, String> = mutableMapOf(
-            FirebaseNames.LOST_ITEM_ID to lostItemData.itemID,
-            FirebaseNames.FOUND_ITEM_ID to foundItemData.itemID
+        val data: Map<String, Any> = mutableMapOf(
+            FirebaseNames.CLAIM_IS_APPROVED to false,  // default false
+            FirebaseNames.CLAIM_TIMESTAMP to DateTimeManager.getCurrentEpochTime(),
+            FirebaseNames.CLAIM_LOST_ITEM_ID to lostItemData.itemID,
+            FirebaseNames.CLAIM_FOUND_ITEM_ID to foundItemData.itemID
         )
 
         firestoreManager.putWithUniqueId(FirebaseNames.COLLECTION_CLAIMED_ITEMS, data, object: FirestoreManager.Callback<String>{
@@ -131,18 +136,8 @@ class ViewComparisonViewModel : ViewModel(){
                     return
                 }
 
-                // update
-                updateItemStatus(1, 1, object: ErrorCallback{
-                    override fun onComplete(error: String) {
-                        if (error.isNotEmpty()){
-                            callback.onComplete(error)
-                            return
-                        }
-
-                        // no errors
-                        callback.onComplete("")
-                    }
-                })
+                // return with no errors
+                callback.onComplete("")
             }
         })
     }

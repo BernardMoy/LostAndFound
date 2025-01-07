@@ -24,7 +24,7 @@ data class LostItem(
     val dateTime: Long,  // in epoch
     val location: Pair<Double, Double>, // store the latlng value as latitude and longitude
     val description: String,    // can be empty
-    var status: Int,
+    val status: Int,
 
     // time posted info
     val timePosted: Long,
