@@ -49,6 +49,7 @@ import com.example.lostandfound.CustomElements.CustomSearchField
 import com.example.lostandfound.Data.FirebaseNames
 import com.example.lostandfound.Data.IntentExtraNames
 import com.example.lostandfound.FirebaseManagers.FirebaseUtility
+import com.example.lostandfound.FirebaseManagers.ItemStatusManager
 import com.example.lostandfound.R
 import com.example.lostandfound.ui.EditProfile.EditProfileViewModel
 import com.example.lostandfound.ui.ViewLost.ViewLostActivity
