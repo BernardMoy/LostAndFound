@@ -52,10 +52,10 @@ public class FirestoreManagerTest {
         testValueUpdate.put("attSpecial", "val1");
         testValueUpdate.put("att2", 4);
 
-        // countdown latch for the 3 insert statements
-        final CountDownLatch latch = new CountDownLatch(3);
+        // countdown latch for the 4 insert statements
+        final CountDownLatch latch = new CountDownLatch(4);
 
-        // insert values for the get, getwhere and delete methods
+        // insert values for the put, get, getwhere and delete methods
         firestore.collection(COLLECTION).document("testGet").set(testValue).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void unused) {
@@ -193,16 +193,26 @@ public class FirestoreManagerTest {
     public void testGetAllIds() throws InterruptedException{
         final CountDownLatch latch = new CountDownLatch(1);
 
-        firestoreManager.getAllIds(COLLECTION,  new FirestoreManager.Callback<List<String>>() {
+        // force add the testPut data
+        firestore.collection(COLLECTION).document("testPut").set(testValue).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
-            public void onComplete(List<String> result) {
-                // the result should only be the length of the collections
-                assertEquals(5, result.size());  // equal to the number teared down
+            public void onSuccess(Void unused) {
 
-                // signal operation completed
-                latch.countDown();
+                // afterwards, perform getAllIDs to ensure testPut collection is present
+                firestoreManager.getAllIds(COLLECTION,  new FirestoreManager.Callback<List<String>>() {
+                    @Override
+                    public void onComplete(List<String> result) {
+                        Log.d("RESULT", result.toString());
+                        // the result should only be the length of the collections
+                        assertEquals(5, result.size());  // equal to the number teared down
+
+                        // signal operation completed
+                        latch.countDown();
+                    }
+                });
             }
         });
+
 
         latch.await();
     }
