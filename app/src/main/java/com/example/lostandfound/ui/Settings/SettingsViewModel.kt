@@ -21,9 +21,9 @@ class SettingsViewModel : ViewModel(){
         dateTime = 0L,
         location = Pair(52.37930763817003,-1.5614912710215834),
         description = "",
-        status = 0,
         timePosted = 0L,
-        image = "android.resource://com.example.lostandfound/" + R.drawable.placeholder_image
+        image = "android.resource://com.example.lostandfound/" + R.drawable.placeholder_image,
+        status = 0
     )
 
     var placeholderFoundItem = FoundItem(
@@ -37,11 +37,11 @@ class SettingsViewModel : ViewModel(){
         dateTime = 0L,
         location = Pair(52.37930763817003,-1.5614912710215834),
         description = "",
-        status = 0,
         timePosted = 0L,
         image = "android.resource://com.example.lostandfound/" + R.drawable.placeholder_image,
         securityQuestion = "",
-        securityQuestionAns = ""
+        securityQuestionAns = "",
+        status = 0
     )
 
 

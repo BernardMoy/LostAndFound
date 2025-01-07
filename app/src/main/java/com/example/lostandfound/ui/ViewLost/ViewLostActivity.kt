@@ -1,6 +1,7 @@
 package com.example.lostandfound.ui.ViewLost
 
 import android.content.Context
+import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.widget.Toast
@@ -44,7 +45,9 @@ import androidx.compose.ui.unit.dp
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.example.lostandfound.CustomElements.BackToolbar
+import com.example.lostandfound.CustomElements.ButtonType
 import com.example.lostandfound.CustomElements.CustomActionText
+import com.example.lostandfound.CustomElements.CustomButton
 import com.example.lostandfound.CustomElements.CustomCenteredProgressbar
 import com.example.lostandfound.CustomElements.CustomEditText
 import com.example.lostandfound.CustomElements.CustomPickLocationDialog
@@ -57,6 +60,7 @@ import com.example.lostandfound.Data.statusColor
 import com.example.lostandfound.R
 import com.example.lostandfound.Utility.DateTimeManager
 import com.example.lostandfound.Utility.LocationManager
+import com.example.lostandfound.ui.Search.SearchActivity
 import com.example.lostandfound.ui.theme.ComposeTheme
 import com.example.lostandfound.ui.theme.Typography
 
@@ -142,6 +146,9 @@ fun MainContent(viewModel: ViewLostViewModel) {
             ItemDetails(viewModel = viewModel)
             LocationData(viewModel = viewModel)
             UserData(viewModel = viewModel)
+
+            // if status = 0 or 1, display matching items
+            ViewMatchingItems(context = context, viewModel = viewModel)
 
             // also display the user
         }
@@ -302,6 +309,35 @@ fun UserData(
             isEditable = false
         )
         HorizontalDivider(thickness = 1.dp)
+    }
+}
+
+@Composable
+fun ViewMatchingItems(
+    context: Context,
+    viewModel: ViewLostViewModel
+){
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = dimensionResource(id = R.dimen.content_margin)),
+        horizontalArrangement = Arrangement.Center
+    ){
+        CustomButton(
+            text = "View matching items",
+            type = ButtonType.FILLED,
+            onClick = {
+                // start search activity
+                val intent = Intent(context, SearchActivity::class.java)
+
+                // pass the lost item to the intent
+                intent.putExtra(
+                    IntentExtraNames.INTENT_LOST_ID,
+                    viewModel.itemData
+                )
+                context.startActivity(intent)
+            }
+        )
     }
 }
 

@@ -35,6 +35,7 @@ import com.example.lostandfound.Data.LostItem
 import com.example.lostandfound.Data.foundStatusText
 import com.example.lostandfound.Data.lostStatusText
 import com.example.lostandfound.Data.statusColor
+import com.example.lostandfound.FirebaseManagers.FirebaseUtility
 import com.example.lostandfound.R
 import com.example.lostandfound.Utility.DateTimeManager
 import com.example.lostandfound.ui.theme.ComposeTheme
@@ -52,8 +53,9 @@ fun CustomLostItemPreview(
     data: LostItem,
     onDeleteButtonClicked: () -> Unit = {},
     onViewButtonClicked: () -> Unit = {},
-    isOwner: Boolean = false
 ) {
+    val isOwner: Boolean = FirebaseUtility.getUserID() == data.userID
+
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -94,23 +96,21 @@ fun CustomLostItemPreview(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin_half))
             ) {
-                // the status of the item can be either 0 1 2 - cast them to int
-                val status = data.status
 
                 Icon(
                     imageVector = Icons.Filled.Circle,
                     tint = colorResource(
-                        id = statusColor[status] ?: R.color.status0
+                        id = statusColor[data.status] ?: R.color.status0
                     ),
                     contentDescription = "Status of item",
                     modifier = Modifier.width(dimensionResource(id = R.dimen.content_margin))
                 )
 
                 Text(
-                    text = "Status: " + lostStatusText[status],
+                    text = "Status: " + lostStatusText[data.status],
                     style = Typography.bodyMedium,
                     color = colorResource(
-                        id = statusColor[status] ?: R.color.status0
+                        id = statusColor[data.status] ?: R.color.status0
                     ),
                     fontWeight = FontWeight.Bold,
                     )
@@ -207,8 +207,9 @@ fun CustomFoundItemPreview(
     data: FoundItem,
     onDeleteButtonClicked: () -> Unit = {},
     onViewButtonClicked: () -> Unit = {},
-    isOwner: Boolean = false  // is owner mode is set to false when viewing previews of items from other people
 ) {
+    val isOwner: Boolean = FirebaseUtility.getUserID() == data.userID
+
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -249,23 +250,20 @@ fun CustomFoundItemPreview(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin_half))
             ) {
-                // the status of the item can be either 0 1 2 - cast them to int
-                val status = data.status
-
                 Icon(
                     imageVector = Icons.Filled.Circle,
                     tint = colorResource(
-                        id = statusColor[status] ?: R.color.status0
+                        id = statusColor[data.status] ?: R.color.status0
                     ),
                     contentDescription = "Status of item",
                     modifier = Modifier.width(dimensionResource(id = R.dimen.content_margin))
                 )
 
                 Text(
-                    text = "Status: " + foundStatusText[status],
+                    text = "Status: " + foundStatusText[data.status],
                     style = Typography.bodyMedium,
                     color = colorResource(
-                        id = statusColor[status] ?: R.color.status0
+                        id = statusColor[data.status] ?: R.color.status0
                     ),
                     fontWeight = FontWeight.Bold,
                 )

@@ -157,7 +157,6 @@ class NewLostViewModel: ViewModel() {
             FirebaseNames.LOSTFOUND_BRAND to itemBrand.value,
             FirebaseNames.LOSTFOUND_LOCATION to selectedLocation.value,
             FirebaseNames.LOSTFOUND_DESCRIPTION to additionalDescription.value,
-            FirebaseNames.LOSTFOUND_STATUS to 0, // represent the lost status
             FirebaseNames.LOSTFOUND_TIMEPOSTED to currentTime
         )
 
@@ -200,9 +199,9 @@ class NewLostViewModel: ViewModel() {
                                 ),
                                 location = LocationManager.latLngToPair(selectedLocation.value),
                                 description = additionalDescription.value,
-                                status = 0,
                                 timePosted = currentTime,
-                                image = itemImage.value.toString() // convert uri to string
+                                image = itemImage.value.toString(), // convert uri to string
+                                status = 0
                             )
 
                             callback.onComplete(generatedLostItem)  //return the lost item added
@@ -225,9 +224,9 @@ class NewLostViewModel: ViewModel() {
                         ),
                         location = LocationManager.latLngToPair(selectedLocation.value),
                         description = additionalDescription.value,
-                        status = 0,
                         timePosted = currentTime,
-                        image = "android.resource://com.example.lostandfound/" + R.drawable.placeholder_image
+                        image = "android.resource://com.example.lostandfound/" + R.drawable.placeholder_image,
+                        status = 0
                     )
 
                     callback.onComplete(generatedLostItem)  //return the lost item added

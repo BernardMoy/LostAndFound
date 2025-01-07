@@ -28,9 +28,9 @@ class SearchViewModel: ViewModel() {
         dateTime = 0L,
         location = Pair(52.37930763817003,-1.5614912710215834),
         description = "",
-        status = 0,
         timePosted = 0L,
-        image = ""
+        image = "",
+        status = 0
     )
 
     var matchedFoundItems: MutableList<FoundItem> = mutableListOf()

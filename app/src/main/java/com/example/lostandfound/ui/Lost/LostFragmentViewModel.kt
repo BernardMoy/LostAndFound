@@ -10,6 +10,7 @@ import com.example.lostandfound.Data.LostItem
 import com.example.lostandfound.FirebaseManagers.FirebaseStorageManager
 import com.example.lostandfound.FirebaseManagers.FirebaseUtility
 import com.example.lostandfound.FirebaseManagers.FirestoreManager
+import com.example.lostandfound.FirebaseManagers.ItemStatusManager
 import com.example.lostandfound.R
 import com.example.lostandfound.Utility.LocationManager
 import com.google.android.gms.maps.model.LatLng
@@ -94,40 +95,44 @@ class LostFragmentViewModel : ViewModel(){
                                                 itemImage = result
                                             }
 
-                                            // create lost item class object
-                                            val thisLostItem = LostItem(
-                                                itemID = itemID,
-                                                userID = userID,
-                                                itemName = itemResult[FirebaseNames.LOSTFOUND_ITEMNAME] as String,
-                                                category = itemResult[FirebaseNames.LOSTFOUND_CATEGORY] as String,
-                                                subCategory = itemResult[FirebaseNames.LOSTFOUND_SUBCATEGORY] as String,
-                                                color = itemResult[FirebaseNames.LOSTFOUND_COLOR] as String,
-                                                brand = itemResult[FirebaseNames.LOSTFOUND_BRAND] as String,
-                                                dateTime = itemResult[FirebaseNames.LOSTFOUND_EPOCHDATETIME] as Long,
-                                                location = LocationManager.LocationToPair(
-                                                    itemResult[FirebaseNames.LOSTFOUND_LOCATION] as HashMap<*, *>
-                                                ),
-                                                description = itemResult[FirebaseNames.LOSTFOUND_DESCRIPTION] as String,
-                                                status = (itemResult[FirebaseNames.LOSTFOUND_STATUS] as Long).toInt(),
-                                                timePosted = itemResult[FirebaseNames.LOSTFOUND_TIMEPOSTED] as Long,
-                                                image = itemImage.toString()  // uri to string
-                                            )
+                                            // get the status of the item
+                                            ItemStatusManager.getLostItemStatus(itemID, object: ItemStatusManager.StatusCallback{
+                                                override fun onComplete(status: Int) {
+                                                    // create lost item class object
+                                                    val thisLostItem = LostItem(
+                                                        itemID = itemID,
+                                                        userID = userID,
+                                                        itemName = itemResult[FirebaseNames.LOSTFOUND_ITEMNAME] as String,
+                                                        category = itemResult[FirebaseNames.LOSTFOUND_CATEGORY] as String,
+                                                        subCategory = itemResult[FirebaseNames.LOSTFOUND_SUBCATEGORY] as String,
+                                                        color = itemResult[FirebaseNames.LOSTFOUND_COLOR] as String,
+                                                        brand = itemResult[FirebaseNames.LOSTFOUND_BRAND] as String,
+                                                        dateTime = itemResult[FirebaseNames.LOSTFOUND_EPOCHDATETIME] as Long,
+                                                        location = LocationManager.LocationToPair(
+                                                            itemResult[FirebaseNames.LOSTFOUND_LOCATION] as HashMap<*, *>
+                                                        ),
+                                                        description = itemResult[FirebaseNames.LOSTFOUND_DESCRIPTION] as String,
+                                                        timePosted = itemResult[FirebaseNames.LOSTFOUND_TIMEPOSTED] as Long,
+                                                        status = status,
+                                                        image = itemImage.toString()  // uri to string
+                                                    )
 
-                                            // add the data to the list
-                                            itemData.add(thisLostItem)
-                                            fetchedItems ++
+                                                    // add the data to the list
+                                                    itemData.add(thisLostItem)
+                                                    fetchedItems ++
 
-                                            // return true when all items have been fetched
-                                            if (fetchedItems == resultSize){
-                                                // sort the data
-                                                itemData.sortByDescending { key ->
-                                                    key.timePosted
+                                                    // return true when all items have been fetched
+                                                    if (fetchedItems == resultSize){
+                                                        // sort the data
+                                                        itemData.sortByDescending { key ->
+                                                            key.timePosted
+                                                        }
+                                                        callback.onComplete(true)
+                                                    }
                                                 }
-                                                callback.onComplete(true)
-                                            }
+                                            })
                                         }
                                     })
-
                                 }
                             }
                         )
