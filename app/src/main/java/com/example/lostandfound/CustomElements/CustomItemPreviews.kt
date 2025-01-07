@@ -35,6 +35,7 @@ import com.example.lostandfound.Data.LostItem
 import com.example.lostandfound.Data.foundStatusText
 import com.example.lostandfound.Data.lostStatusText
 import com.example.lostandfound.Data.statusColor
+import com.example.lostandfound.FirebaseManagers.FirebaseUtility
 import com.example.lostandfound.R
 import com.example.lostandfound.Utility.DateTimeManager
 import com.example.lostandfound.ui.theme.ComposeTheme
@@ -52,8 +53,9 @@ fun CustomLostItemPreview(
     data: LostItem,
     onDeleteButtonClicked: () -> Unit = {},
     onViewButtonClicked: () -> Unit = {},
-    isOwner: Boolean = false
 ) {
+    val isOwner: Boolean = FirebaseUtility.getUserID() == data.userID
+
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -205,8 +207,9 @@ fun CustomFoundItemPreview(
     data: FoundItem,
     onDeleteButtonClicked: () -> Unit = {},
     onViewButtonClicked: () -> Unit = {},
-    isOwner: Boolean = false  // is owner mode is set to false when viewing previews of items from other people
 ) {
+    val isOwner: Boolean = FirebaseUtility.getUserID() == data.userID
+
     Box(
         modifier = Modifier
             .fillMaxWidth()
