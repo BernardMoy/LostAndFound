@@ -20,6 +20,7 @@ data class FoundItem(
     val description: String,    // can be empty
     val securityQuestion: String,
     val securityQuestionAns: String,
+    val status: Int,
 
     // time posted info
     val timePosted: Long,

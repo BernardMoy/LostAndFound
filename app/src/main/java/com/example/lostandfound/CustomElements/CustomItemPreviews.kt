@@ -250,17 +250,17 @@ fun CustomFoundItemPreview(
                 Icon(
                     imageVector = Icons.Filled.Circle,
                     tint = colorResource(
-                        id = statusColor[0] ?: R.color.status0
+                        id = statusColor[data.status] ?: R.color.status0
                     ),
                     contentDescription = "Status of item",
                     modifier = Modifier.width(dimensionResource(id = R.dimen.content_margin))
                 )
 
                 Text(
-                    text = "Status: " + foundStatusText[0],
+                    text = "Status: " + foundStatusText[data.status],
                     style = Typography.bodyMedium,
                     color = colorResource(
-                        id = statusColor[0] ?: R.color.status0
+                        id = statusColor[data.status] ?: R.color.status0
                     ),
                     fontWeight = FontWeight.Bold,
                 )

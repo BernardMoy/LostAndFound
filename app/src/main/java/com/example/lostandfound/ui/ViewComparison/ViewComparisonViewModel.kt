@@ -53,7 +53,8 @@ class ViewComparisonViewModel : ViewModel(){
         timePosted = 0L,
         image = "android.resource://com.example.lostandfound/" + R.drawable.placeholder_image,
         securityQuestion = "",
-        securityQuestionAns = ""
+        securityQuestionAns = "",
+        status = 0
     )
 
     // username used to display the found user, only that is needed
