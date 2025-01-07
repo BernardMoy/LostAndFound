@@ -29,14 +29,15 @@ public final class FirebaseNames {
     public static final String LOSTFOUND_EPOCHDATETIME = "dateTime";
     public static final String LOSTFOUND_DESCRIPTION = "description";
     public static final String LOSTFOUND_LOCATION = "location";
-    public static final String LOSTFOUND_STATUS = "status";
     public static final String FOUND_SECURITY_Q = "security_question";
     public static final String FOUND_SECURITY_Q_ANS = "security_question_answer";
     public static final String LOSTFOUND_TIMEPOSTED = "time_posted";
 
     // for use in claimed items
-    public static final String LOST_ITEM_ID = "lost_item_id";
-    public static final String FOUND_ITEM_ID = "found_item_id";
+    public static final String CLAIM_LOST_ITEM_ID = "lost_item_id";
+    public static final String CLAIM_FOUND_ITEM_ID = "found_item_id";
+    public static final String CLAIM_IS_APPROVED = "is_approved";
+    public static final String CLAIM_TIMESTAMP = "timestamp";
 
     public static final String FOLDER_LOST_IMAGE = "lost_images";
     public static final String FOLDER_FOUND_IMAGE = "found_images";

@@ -107,7 +107,6 @@ class FoundFragmentViewModel : ViewModel(){
                                                     itemResult[FirebaseNames.LOSTFOUND_LOCATION] as HashMap<*, *>
                                                 ),
                                                 description = itemResult[FirebaseNames.LOSTFOUND_DESCRIPTION] as String,
-                                                status = (itemResult[FirebaseNames.LOSTFOUND_STATUS] as Long).toInt(),
                                                 timePosted = itemResult[FirebaseNames.LOSTFOUND_TIMEPOSTED] as Long,
                                                 image = itemImage.toString(),  // uri to string
                                                 securityQuestion = itemResult[FirebaseNames.FOUND_SECURITY_Q] as String,
