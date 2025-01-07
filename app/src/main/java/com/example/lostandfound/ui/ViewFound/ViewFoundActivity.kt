@@ -168,10 +168,10 @@ fun Status(viewModel: ViewFoundViewModel) {
         modifier = Modifier.fillMaxWidth(),
     ) {
         Text(
-            text = "Status: " + foundStatusText[viewModel.itemData.status],
+            text = "Status: " + foundStatusText[0],
             style = Typography.bodyMedium,
             color = colorResource(
-                id = statusColor[viewModel.itemData.status] ?: R.color.status0
+                id = statusColor[0] ?: R.color.status0
             ),
             fontWeight = FontWeight.Bold,
             modifier = Modifier.fillMaxWidth(),

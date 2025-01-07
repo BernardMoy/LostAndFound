@@ -94,23 +94,21 @@ fun CustomLostItemPreview(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin_half))
             ) {
-                // the status of the item can be either 0 1 2 - cast them to int
-                val status = data.status
 
                 Icon(
                     imageVector = Icons.Filled.Circle,
                     tint = colorResource(
-                        id = statusColor[status] ?: R.color.status0
+                        id = statusColor[0] ?: R.color.status0
                     ),
                     contentDescription = "Status of item",
                     modifier = Modifier.width(dimensionResource(id = R.dimen.content_margin))
                 )
 
                 Text(
-                    text = "Status: " + lostStatusText[status],
+                    text = "Status: " + lostStatusText[0],
                     style = Typography.bodyMedium,
                     color = colorResource(
-                        id = statusColor[status] ?: R.color.status0
+                        id = statusColor[0] ?: R.color.status0
                     ),
                     fontWeight = FontWeight.Bold,
                     )
@@ -249,23 +247,20 @@ fun CustomFoundItemPreview(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin_half))
             ) {
-                // the status of the item can be either 0 1 2 - cast them to int
-                val status = data.status
-
                 Icon(
                     imageVector = Icons.Filled.Circle,
                     tint = colorResource(
-                        id = statusColor[status] ?: R.color.status0
+                        id = statusColor[0] ?: R.color.status0
                     ),
                     contentDescription = "Status of item",
                     modifier = Modifier.width(dimensionResource(id = R.dimen.content_margin))
                 )
 
                 Text(
-                    text = "Status: " + foundStatusText[status],
+                    text = "Status: " + foundStatusText[0],
                     style = Typography.bodyMedium,
                     color = colorResource(
-                        id = statusColor[status] ?: R.color.status0
+                        id = statusColor[0] ?: R.color.status0
                     ),
                     fontWeight = FontWeight.Bold,
                 )

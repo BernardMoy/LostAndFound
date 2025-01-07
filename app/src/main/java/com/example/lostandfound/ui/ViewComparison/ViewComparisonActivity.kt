@@ -205,20 +205,20 @@ fun Status(viewModel: ViewComparisonViewModel) {
             },
             contentLeft = {
                 Text(
-                    text = lostStatusText[viewModel.lostItemData.status] ?: "",
+                    text = lostStatusText[0] ?: "",
                     style = Typography.bodyMedium,
                     color = colorResource(
-                        id = statusColor[viewModel.lostItemData.status] ?: R.color.status0
+                        id = statusColor[0] ?: R.color.status0
                     ),
                     fontWeight = FontWeight.Bold
                 )
             },
             contentRight = {
                 Text(
-                    text = foundStatusText[viewModel.foundItemData.status] ?: "",
+                    text = foundStatusText[0] ?: "",
                     style = Typography.bodyMedium,
                     color = colorResource(
-                        id = statusColor[viewModel.foundItemData.status] ?: R.color.status0
+                        id = statusColor[0] ?: R.color.status0
                     ),
                     fontWeight = FontWeight.Bold
                 )
