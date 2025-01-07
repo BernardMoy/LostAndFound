@@ -32,7 +32,8 @@ class ViewFoundViewModel : ViewModel(){
         timePosted = 0L,
         image = "",
         securityQuestion = "",
-        securityQuestionAns = ""
+        securityQuestionAns = "",
+        status = 0
     )
 
     // username used to display the user

@@ -40,7 +40,8 @@ class SettingsViewModel : ViewModel(){
         timePosted = 0L,
         image = "android.resource://com.example.lostandfound/" + R.drawable.placeholder_image,
         securityQuestion = "",
-        securityQuestionAns = ""
+        securityQuestionAns = "",
+        status = 0
     )
 
 

@@ -73,6 +73,10 @@ object ItemStatusManager {
                         // There exists some claims but none are approved -> status 1
                         callback.onComplete(1)
                     }
+                    .addOnFailureListener { exception ->
+                        Log.d("Status exception", exception.message ?: "")
+                        callback.onComplete(0)
+                    }
 
             }
             .addOnFailureListener { exception ->
