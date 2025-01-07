@@ -33,7 +33,8 @@ class ViewLostViewModel : ViewModel(){
         location = Pair(52.37930763817003,-1.5614912710215834),
         description = "",
         timePosted = 0L,
-        image = ""
+        image = "",
+        status = 0
     )
 
     // username used to display the user

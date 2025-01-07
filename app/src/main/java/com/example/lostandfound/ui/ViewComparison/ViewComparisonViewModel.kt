@@ -34,7 +34,8 @@ class ViewComparisonViewModel : ViewModel(){
         location = Pair(52.37930763817003,-1.5614912710215834),
         description = "",
         timePosted = 0L,
-        image = "android.resource://com.example.lostandfound/" + R.drawable.placeholder_image
+        image = "android.resource://com.example.lostandfound/" + R.drawable.placeholder_image,
+        status = 0
     )
 
     // default found item placeholder data

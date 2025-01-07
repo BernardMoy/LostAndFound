@@ -200,7 +200,8 @@ class NewLostViewModel: ViewModel() {
                                 location = LocationManager.latLngToPair(selectedLocation.value),
                                 description = additionalDescription.value,
                                 timePosted = currentTime,
-                                image = itemImage.value.toString() // convert uri to string
+                                image = itemImage.value.toString(), // convert uri to string
+                                status = 0
                             )
 
                             callback.onComplete(generatedLostItem)  //return the lost item added
@@ -224,7 +225,8 @@ class NewLostViewModel: ViewModel() {
                         location = LocationManager.latLngToPair(selectedLocation.value),
                         description = additionalDescription.value,
                         timePosted = currentTime,
-                        image = "android.resource://com.example.lostandfound/" + R.drawable.placeholder_image
+                        image = "android.resource://com.example.lostandfound/" + R.drawable.placeholder_image,
+                        status = 0
                     )
 
                     callback.onComplete(generatedLostItem)  //return the lost item added
