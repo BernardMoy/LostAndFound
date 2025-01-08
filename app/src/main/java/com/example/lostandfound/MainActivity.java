@@ -352,7 +352,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             navDrawerMenu.findItem(R.id.drawer_menu_create).setVisible(true);
             navDrawerMenu.findItem(R.id.drawer_menu_activity).setVisible(true);
             navDrawerMenu.findItem(R.id.nav_drawer_profile).setVisible(true);
-            navDrawerMenu.findItem(R.id.nav_drawer_take_a_tour).setVisible(true);
             navDrawerMenu.findItem(R.id.nav_drawer_report_an_issue).setVisible(true);
 
 
@@ -376,7 +375,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             navDrawerMenu.findItem(R.id.drawer_menu_create).setVisible(false);
             navDrawerMenu.findItem(R.id.drawer_menu_activity).setVisible(false);
             navDrawerMenu.findItem(R.id.nav_drawer_profile).setVisible(false);
-            navDrawerMenu.findItem(R.id.nav_drawer_take_a_tour).setVisible(false);
             navDrawerMenu.findItem(R.id.nav_drawer_report_an_issue).setVisible(false);
         }
     }

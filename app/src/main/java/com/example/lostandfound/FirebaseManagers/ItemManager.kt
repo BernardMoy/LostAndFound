@@ -2,6 +2,7 @@ package com.example.lostandfound.FirebaseManagers
 
 import android.net.Uri
 import android.util.Log
+import com.example.lostandfound.Data.Claim
 import com.example.lostandfound.Data.FirebaseNames
 import com.example.lostandfound.Data.FoundItem
 import com.example.lostandfound.Data.LostItem
@@ -11,38 +12,38 @@ import com.example.lostandfound.Utility.LocationManager
 import com.google.firebase.firestore.FirebaseFirestore
 
 object ItemManager {
-    interface LostItemCallback{
+    interface LostItemCallback {
         fun onComplete(lostItem: LostItem?)  // return the lost item generated, or null if failed
     }
 
-    interface FoundItemCallback{
+    interface FoundItemCallback {
         fun onComplete(foundItem: FoundItem?)  // return the found item generated, or null if failed
     }
 
-    interface StatusCallback{
+    interface StatusCallback {
         fun onComplete(status: Int) // return the status, which must be 0, 1 or 2 (0 if error)
     }
 
-    interface LostClaimIdCallback{
-        fun onComplete(claimID: String)  // return the string of claim id, or empty string if failed or null
+    interface LostClaimCallback {
+        fun onComplete(claim: Claim?)  // return the claim, or null if failed
     }
 
-    interface FoundClaimIdCallback{
-        fun onComplete(claimIDs: List<String>)  // return the list of claim id strings, or empty list if failed or null
+    interface FoundClaimCallback {
+        fun onComplete(claimList: MutableList<Claim>)  // return the list of claims, or empty list if failed
     }
 
     // method to get the lostitem as a LostItem object when given a lost item id
-    fun getLostItemFromId(lostItemID: String, callback: LostItemCallback){
+    fun getLostItemFromId(lostItemID: String, callback: LostItemCallback) {
         val firestoreManager = FirestoreManager()
         val firebaseStorageManager = FirebaseStorageManager()
 
         firestoreManager.get(
             FirebaseNames.COLLECTION_LOST_ITEMS,
             lostItemID,
-            object : FirestoreManager.Callback<Map<String, Any>> {
+            object : Callback<Map<String, Any>> {
                 override fun onComplete(itemResult: Map<String, Any>?) {
                     // if itemResult is null, fetching data failed
-                    if (itemResult == null){
+                    if (itemResult == null) {
                         callback.onComplete(null)
                         return
                     }
@@ -51,7 +52,7 @@ object ItemManager {
                     firebaseStorageManager.getImage(
                         FirebaseNames.FOLDER_LOST_IMAGE,
                         lostItemID,
-                        object: FirebaseStorageManager.Callback<Uri?>{
+                        object : FirebaseStorageManager.Callback<Uri?> {
                             override fun onComplete(result: Uri?) {
                                 // initialise the item image to the default image
                                 var itemImage: Uri =
@@ -63,7 +64,7 @@ object ItemManager {
                                 }
 
                                 // get the status of the item
-                                getLostItemStatus(lostItemID, object : ItemManager.StatusCallback {
+                                getLostItemStatus(lostItemID, object : StatusCallback {
                                     override fun onComplete(status: Int) {
                                         // create lost item class object
                                         val thisLostItem = LostItem(
@@ -98,17 +99,17 @@ object ItemManager {
 
 
     // method to get the founditem as a LostItem object when given a found item id
-    fun getFoundItemFromId(foundItemID: String, callback: FoundItemCallback){
+    fun getFoundItemFromId(foundItemID: String, callback: FoundItemCallback) {
         val firestoreManager = FirestoreManager()
         val firebaseStorageManager = FirebaseStorageManager()
 
         firestoreManager.get(
             FirebaseNames.COLLECTION_FOUND_ITEMS,
             foundItemID,
-            object : FirestoreManager.Callback<Map<String, Any>> {
+            object : Callback<Map<String, Any>> {
                 override fun onComplete(itemResult: Map<String, Any>?) {
                     // if itemResult is null, fetching data failed
-                    if (itemResult == null){
+                    if (itemResult == null) {
                         callback.onComplete(null)
                         return
                     }
@@ -117,7 +118,7 @@ object ItemManager {
                     firebaseStorageManager.getImage(
                         FirebaseNames.FOLDER_FOUND_IMAGE,
                         foundItemID,
-                        object: FirebaseStorageManager.Callback<Uri?>{
+                        object : FirebaseStorageManager.Callback<Uri?> {
                             override fun onComplete(result: Uri?) {
                                 // initialise the item image to the default image
                                 var itemImage: Uri =
@@ -129,33 +130,35 @@ object ItemManager {
                                 }
 
                                 // get the status of the item
-                                getFoundItemStatus(foundItemID, object : ItemManager.StatusCallback {
-                                    override fun onComplete(status: Int) {
-                                        // create found item class object
-                                        val thisFoundItem = FoundItem(
-                                            itemID = foundItemID,
-                                            userID = FirebaseUtility.getUserID(),
-                                            itemName = itemResult[FirebaseNames.LOSTFOUND_ITEMNAME] as String,
-                                            category = itemResult[FirebaseNames.LOSTFOUND_CATEGORY] as String,
-                                            subCategory = itemResult[FirebaseNames.LOSTFOUND_SUBCATEGORY] as String,
-                                            color = itemResult[FirebaseNames.LOSTFOUND_COLOR] as String,
-                                            brand = itemResult[FirebaseNames.LOSTFOUND_BRAND] as String,
-                                            dateTime = itemResult[FirebaseNames.LOSTFOUND_EPOCHDATETIME] as Long,
-                                            location = LocationManager.LocationToPair(
-                                                itemResult[FirebaseNames.LOSTFOUND_LOCATION] as HashMap<*, *>
-                                            ),
-                                            description = itemResult[FirebaseNames.LOSTFOUND_DESCRIPTION] as String,
-                                            timePosted = itemResult[FirebaseNames.LOSTFOUND_TIMEPOSTED] as Long,
-                                            status = status,
-                                            image = itemImage.toString(),  // uri to string
-                                            securityQuestion = itemResult[FirebaseNames.FOUND_SECURITY_Q] as String,
-                                            securityQuestionAns = itemResult[FirebaseNames.FOUND_SECURITY_Q_ANS] as String
-                                        )
+                                getFoundItemStatus(
+                                    foundItemID,
+                                    object : StatusCallback {
+                                        override fun onComplete(status: Int) {
+                                            // create found item class object
+                                            val thisFoundItem = FoundItem(
+                                                itemID = foundItemID,
+                                                userID = FirebaseUtility.getUserID(),
+                                                itemName = itemResult[FirebaseNames.LOSTFOUND_ITEMNAME] as String,
+                                                category = itemResult[FirebaseNames.LOSTFOUND_CATEGORY] as String,
+                                                subCategory = itemResult[FirebaseNames.LOSTFOUND_SUBCATEGORY] as String,
+                                                color = itemResult[FirebaseNames.LOSTFOUND_COLOR] as String,
+                                                brand = itemResult[FirebaseNames.LOSTFOUND_BRAND] as String,
+                                                dateTime = itemResult[FirebaseNames.LOSTFOUND_EPOCHDATETIME] as Long,
+                                                location = LocationManager.LocationToPair(
+                                                    itemResult[FirebaseNames.LOSTFOUND_LOCATION] as HashMap<*, *>
+                                                ),
+                                                description = itemResult[FirebaseNames.LOSTFOUND_DESCRIPTION] as String,
+                                                timePosted = itemResult[FirebaseNames.LOSTFOUND_TIMEPOSTED] as Long,
+                                                status = status,
+                                                image = itemImage.toString(),  // uri to string
+                                                securityQuestion = itemResult[FirebaseNames.FOUND_SECURITY_Q] as String,
+                                                securityQuestionAns = itemResult[FirebaseNames.FOUND_SECURITY_Q_ANS] as String
+                                            )
 
-                                        // return the generated found item
-                                        callback.onComplete(thisFoundItem)
-                                    }
-                                })
+                                            // return the generated found item
+                                            callback.onComplete(thisFoundItem)
+                                        }
+                                    })
                             }
                         }
                     )
@@ -166,21 +169,47 @@ object ItemManager {
 
     // method to get claim id given a lost item.
     // A lost item can only associate with one claim id
-    fun getClaimIdFromLostId(lostItemID: String, callback: LostClaimIdCallback){
+    fun getClaimFromLostId(lostItemID: String, callback: LostClaimCallback) {
         val firestoreManager = FirestoreManager()
 
         firestoreManager.getIdsWhere(FirebaseNames.COLLECTION_CLAIMED_ITEMS,
             FirebaseNames.CLAIM_LOST_ITEM_ID,
             lostItemID,
             FirebaseNames.CLAIM_TIMESTAMP,   // order by
-            object: Callback<List<String>>{
+            object : Callback<List<String>> {
                 override fun onComplete(result: List<String>?) {
-                    if (result.isNullOrEmpty()){
-                        callback.onComplete("")
+                    if (result.isNullOrEmpty()) {
+                        callback.onComplete(null)
+                        return
 
-                    } else {
-                        callback.onComplete(result[0])  // there will only be one claim associated with lost item, return the only one
                     }
+                    // there will only be one claim associated with lost item
+                    val claimID = result[0]
+
+                    firestoreManager.get(
+                        FirebaseNames.COLLECTION_CLAIMED_ITEMS,
+                        claimID,
+                        object : Callback<Map<String, Any>> {
+                            override fun onComplete(result: Map<String, Any>?) {
+                                if (result == null) {
+                                    callback.onComplete(null)
+                                    return
+                                }
+
+                                // construct the claim item
+                                val thisClaim: Claim = Claim(
+                                    claimID = claimID,
+                                    lostItemID = result[FirebaseNames.CLAIM_LOST_ITEM_ID].toString(),
+                                    foundItemID = result[FirebaseNames.CLAIM_FOUND_ITEM_ID].toString(),
+                                    isApproved = result[FirebaseNames.CLAIM_IS_APPROVED] as Boolean,
+                                    timestamp = result[FirebaseNames.CLAIM_TIMESTAMP] as Long
+                                )
+
+                                // return the claim item
+                                callback.onComplete(thisClaim)
+                            }
+                        })
+
                 }
             }
         )
@@ -189,28 +218,62 @@ object ItemManager {
 
     // method to get claim ids given a found item.
     // A found item can be associated with more than one claims
-    fun getClaimIdFromFoundId(foundItemID: String, callback: FoundClaimIdCallback){
+    fun getClaimsFromFoundId(foundItemID: String, callback: FoundClaimCallback) {
         val firestoreManager = FirestoreManager()
 
         firestoreManager.getIdsWhere(FirebaseNames.COLLECTION_CLAIMED_ITEMS,
             FirebaseNames.CLAIM_FOUND_ITEM_ID,
             foundItemID,
             FirebaseNames.CLAIM_TIMESTAMP,
-            object : Callback<List<String>>{
+            object : Callback<List<String>> {
                 override fun onComplete(result: List<String>?) {
-                    if (result.isNullOrEmpty()){
-                        callback.onComplete(listOf())
+                    if (result.isNullOrEmpty()) {
+                        callback.onComplete(mutableListOf())
+                        return
 
-                    } else {
-                        callback.onComplete(result)
                     }
+
+                    // for each result, get its claim id and construct object
+                    val claimList: MutableList<Claim> = mutableListOf()
+
+                    result.forEach { claimID ->
+                        firestoreManager.get(
+                            FirebaseNames.COLLECTION_CLAIMED_ITEMS,
+                            claimID,
+                            object : Callback<Map<String, Any>> {
+                                override fun onComplete(result: Map<String, Any>?) {
+                                    // if any fails, return empty list
+                                    if (result == null) {
+                                        callback.onComplete(mutableListOf())
+                                        return
+                                    }
+
+                                    // construct the claim item
+                                    val thisClaim: Claim = Claim(
+                                        claimID = claimID,
+                                        lostItemID = result[FirebaseNames.CLAIM_LOST_ITEM_ID].toString(),
+                                        foundItemID = result[FirebaseNames.CLAIM_FOUND_ITEM_ID].toString(),
+                                        isApproved = result[FirebaseNames.CLAIM_IS_APPROVED] as Boolean,
+                                        timestamp = result[FirebaseNames.CLAIM_TIMESTAMP] as Long
+                                    )
+
+                                    //add the item to the list
+                                    claimList.add(thisClaim)
+                                }
+                            }
+                        )
+                    }
+
+                    // return the list
+                    callback.onComplete(claimList)
+
                 }
             }
         )
     }
 
     // method to get the status given a lost item id, by querying the claim collection
-    fun getLostItemStatus(lostItemID: String, callback: StatusCallback){
+    fun getLostItemStatus(lostItemID: String, callback: StatusCallback) {
         val db = FirebaseFirestore.getInstance()
 
         // check if the item exists
@@ -218,7 +281,7 @@ object ItemManager {
             .whereEqualTo(FirebaseNames.CLAIM_LOST_ITEM_ID, lostItemID)
             .get()
             .addOnSuccessListener { querySnapshot ->
-                if (querySnapshot.isEmpty){
+                if (querySnapshot.isEmpty) {
                     // No claims found for the lost item -> status 0
                     callback.onComplete(0)
                     return@addOnSuccessListener
@@ -226,9 +289,9 @@ object ItemManager {
 
                 // A claim exist, then check if it is approved
                 // Only one claim can exist at a time for lost items
-                for (claim in querySnapshot){
+                for (claim in querySnapshot) {
                     val isApproved = claim.getBoolean(FirebaseNames.CLAIM_IS_APPROVED) ?: false
-                    if (isApproved){
+                    if (isApproved) {
                         // claim is approved -> status 2
                         callback.onComplete(2)
                         return@addOnSuccessListener
@@ -240,7 +303,7 @@ object ItemManager {
 
             }
             .addOnFailureListener { exception ->
-                Log.d("Status exception", exception.message?:"")
+                Log.d("Status exception", exception.message ?: "")
                 callback.onComplete(0)
             }
     }
@@ -266,7 +329,7 @@ object ItemManager {
                     .whereEqualTo(FirebaseNames.CLAIM_IS_APPROVED, true)
                     .get()
                     .addOnSuccessListener { querySnapshot2 ->
-                        if (!querySnapshot2.isEmpty){
+                        if (!querySnapshot2.isEmpty) {
                             // any approved claims -> status 2
                             callback.onComplete(2)
                             return@addOnSuccessListener

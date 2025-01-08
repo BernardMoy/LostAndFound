@@ -62,6 +62,7 @@ import com.example.lostandfound.CustomElements.CustomGrayTitle
 import com.example.lostandfound.CustomElements.CustomProgressBar
 import com.example.lostandfound.CustomElements.CustomViewLocationDialog
 import com.example.lostandfound.CustomElements.CustomViewTwoLocationsDialog
+import com.example.lostandfound.Data.Claim
 import com.example.lostandfound.Data.IntentExtraNames
 import com.example.lostandfound.Data.FoundItem
 import com.example.lostandfound.Data.LostItem
@@ -87,9 +88,9 @@ class ViewClaimActivity : ComponentActivity() {
         val viewModel: ViewClaimViewModel by viewModels()
 
         // load the passed intent data into the view model
-        val passedClaimId = intent.getStringExtra(IntentExtraNames.INTENT_CLAIM_ID)
-        if (passedClaimId != null){
-            viewModel.claimId = passedClaimId
+        val passedClaim = intent.getParcelableExtra<Claim>(IntentExtraNames.INTENT_CLAIM_ITEM)
+        if (passedClaim != null){
+            viewModel.claimData = passedClaim
         }
 
         setContent {
@@ -398,7 +399,7 @@ fun loadData(
     viewModel.isLoading.value = true
 
     // load lost item data of the current user from the view model
-    viewModel.loadDataWithClaimId(object : ErrorCallback{
+    viewModel.loadDataWithClaim(object : ErrorCallback{
         override fun onComplete(error: String) {
             viewModel.isLoading.value = false
 
