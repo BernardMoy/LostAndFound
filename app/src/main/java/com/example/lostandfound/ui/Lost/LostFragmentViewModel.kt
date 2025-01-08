@@ -1,7 +1,6 @@
 package com.example.lostandfound.ui.Lost
 
 import android.net.Uri
-import android.util.Log
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
@@ -10,10 +9,9 @@ import com.example.lostandfound.Data.LostItem
 import com.example.lostandfound.FirebaseManagers.FirebaseStorageManager
 import com.example.lostandfound.FirebaseManagers.FirebaseUtility
 import com.example.lostandfound.FirebaseManagers.FirestoreManager
-import com.example.lostandfound.FirebaseManagers.ItemStatusManager
+import com.example.lostandfound.FirebaseManagers.ItemManager
 import com.example.lostandfound.R
 import com.example.lostandfound.Utility.LocationManager
-import com.google.android.gms.maps.model.LatLng
 
 interface Callback<T> {
     fun onComplete(result: T)
@@ -72,70 +70,27 @@ class LostFragmentViewModel : ViewModel(){
 
                     // for each retrieved item id, get their data and store that data into the itemData list
                     result.forEach { itemID ->
-                        firestoreManager.get(
-                            FirebaseNames.COLLECTION_LOST_ITEMS,
-                            itemID,
-                            object : FirestoreManager.Callback<Map<String, Any>> {
-                                override fun onComplete(itemResult: Map<String, Any>?) {
-                                    // if itemResult is null, fetching data failed
-                                    if (itemResult == null){
-                                        callback.onComplete(false)
-                                        return
+                        ItemManager.getLostItemFromId(itemID, object: ItemManager.LostItemCallback{
+                            override fun onComplete(lostItem: LostItem?) {
+                                if (lostItem == null){
+                                    callback.onComplete(false)  // fetching data failed
+                                    return
+                                }
+
+                                // add the data to the list
+                                itemData.add(lostItem)
+                                fetchedItems ++
+
+                                // return true when all items have been fetched
+                                if (fetchedItems == resultSize){
+                                    // sort the data
+                                    itemData.sortByDescending { key ->
+                                        key.timePosted
                                     }
-
-
-                                    // get the image of the item
-                                    firebaseStorageManager.getImage(FirebaseNames.FOLDER_LOST_IMAGE, itemID, object: FirebaseStorageManager.Callback<Uri?>{
-                                        override fun onComplete(result: Uri?) {
-                                            // initialise the item image to the default image
-                                            var itemImage: Uri = Uri.parse("android.resource://com.example.lostandfound/" + R.drawable.placeholder_image)
-
-                                            // if the result is not null, replace it by actual item image
-                                            if (result != null) {
-                                                itemImage = result
-                                            }
-
-                                            // get the status of the item
-                                            ItemStatusManager.getLostItemStatus(itemID, object: ItemStatusManager.StatusCallback{
-                                                override fun onComplete(status: Int) {
-                                                    // create lost item class object
-                                                    val thisLostItem = LostItem(
-                                                        itemID = itemID,
-                                                        userID = userID,
-                                                        itemName = itemResult[FirebaseNames.LOSTFOUND_ITEMNAME] as String,
-                                                        category = itemResult[FirebaseNames.LOSTFOUND_CATEGORY] as String,
-                                                        subCategory = itemResult[FirebaseNames.LOSTFOUND_SUBCATEGORY] as String,
-                                                        color = itemResult[FirebaseNames.LOSTFOUND_COLOR] as String,
-                                                        brand = itemResult[FirebaseNames.LOSTFOUND_BRAND] as String,
-                                                        dateTime = itemResult[FirebaseNames.LOSTFOUND_EPOCHDATETIME] as Long,
-                                                        location = LocationManager.LocationToPair(
-                                                            itemResult[FirebaseNames.LOSTFOUND_LOCATION] as HashMap<*, *>
-                                                        ),
-                                                        description = itemResult[FirebaseNames.LOSTFOUND_DESCRIPTION] as String,
-                                                        timePosted = itemResult[FirebaseNames.LOSTFOUND_TIMEPOSTED] as Long,
-                                                        status = status,
-                                                        image = itemImage.toString()  // uri to string
-                                                    )
-
-                                                    // add the data to the list
-                                                    itemData.add(thisLostItem)
-                                                    fetchedItems ++
-
-                                                    // return true when all items have been fetched
-                                                    if (fetchedItems == resultSize){
-                                                        // sort the data
-                                                        itemData.sortByDescending { key ->
-                                                            key.timePosted
-                                                        }
-                                                        callback.onComplete(true)
-                                                    }
-                                                }
-                                            })
-                                        }
-                                    })
+                                    callback.onComplete(true)
                                 }
                             }
-                        )
+                        })
                     }
                 }
             }

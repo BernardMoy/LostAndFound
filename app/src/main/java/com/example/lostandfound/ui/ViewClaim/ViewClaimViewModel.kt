@@ -1,4 +1,4 @@
-package com.example.lostandfound.ui.ViewComparison
+package com.example.lostandfound.ui.ViewClaim
 
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
@@ -8,17 +8,18 @@ import com.example.lostandfound.Data.FoundItem
 import com.example.lostandfound.Data.LostItem
 import com.example.lostandfound.FirebaseManagers.FirestoreManager
 import com.example.lostandfound.R
-import com.example.lostandfound.Utility.DateTimeManager
 import com.example.lostandfound.Utility.ErrorCallback
+import com.example.lostandfound.ui.ViewComparison.Callback
 
 interface Callback<T> {
     fun onComplete(result: T)
 }
 
-class ViewComparisonViewModel : ViewModel(){
+class ViewClaimViewModel : ViewModel(){
     val isLoading: MutableState<Boolean> = mutableStateOf(true)
-
     val isLocationDialogShown: MutableState<Boolean> = mutableStateOf(false)
+
+    var claimId: String = ""
 
     // default lost item placeholder data
     var lostItemData = LostItem(
@@ -57,11 +58,34 @@ class ViewComparisonViewModel : ViewModel(){
     )
 
     // username used to display the found user, only that is needed
+    var lostUserName = "Unknown"
     var foundUserName = "Unknown"
+
+
+    // function to load the lost and found item data when given the claim item id.
+    fun loadDataWithClaimId(callback: ErrorCallback){
+        val firestoreManager = FirestoreManager()
+
+        // get the lost and found item ids given the claim id
+        firestoreManager.get(FirebaseNames.COLLECTION_CLAIMED_ITEMS, claimId, object : FirestoreManager.Callback<Map<String, Any>>{
+            override fun onComplete(result: Map<String, Any>?) {
+                if (result == null){
+                    callback.onComplete("Claim data not found")
+                    return
+                }
+
+                val lostItemId = result[FirebaseNames.CLAIM_LOST_ITEM_ID].toString()
+                val foundItemId = result[FirebaseNames.CLAIM_FOUND_ITEM_ID].toString()
+
+                // load the lost items and found items
+
+
+            }
+        })
+    }
 
     // function to get item data
     fun getUserName(callback: Callback<Boolean>){
-
         // manager
         val firestoreManager = FirestoreManager()
 
@@ -80,63 +104,6 @@ class ViewComparisonViewModel : ViewModel(){
                     // return true
                     callback.onComplete(true)
                 }
-            }
-        })
-    }
-
-
-    // function to update item status
-    /*
-    fun updateItemStatus(lostItemStatus: Int, foundItemStatus: Int, callback: ErrorCallback){
-        // update the current lost and found item status
-        val firestoreManager = FirestoreManager()
-
-        // update the lost item
-        firestoreManager.update(FirebaseNames.COLLECTION_LOST_ITEMS, lostItemData.itemID, FirebaseNames.LOSTFOUND_STATUS, lostItemStatus, object : FirestoreManager.Callback<Boolean>{
-            override fun onComplete(result: Boolean) {
-                if (!result){
-                    callback.onComplete("Error updating lost data")
-
-                } else {
-                    // also update the found item
-                    firestoreManager.update(FirebaseNames.COLLECTION_FOUND_ITEMS, foundItemData.itemID, FirebaseNames.LOSTFOUND_STATUS, foundItemStatus, object : FirestoreManager.Callback<Boolean>{
-                        override fun onComplete(result: Boolean) {
-                            if (!result){
-                                callback.onComplete("Error updating the data")
-
-                            } else {
-                                callback.onComplete("")
-                            }
-                        }
-                    })
-                }
-            }
-        })
-    }
-
-     */
-
-    // function to add the items to the claimed collection, and also update the item status
-    fun putClaimedItems(callback: ErrorCallback){
-        val firestoreManager = FirestoreManager()
-
-        val data: Map<String, Any> = mutableMapOf(
-            FirebaseNames.CLAIM_IS_APPROVED to false,  // default false
-            FirebaseNames.CLAIM_TIMESTAMP to DateTimeManager.getCurrentEpochTime(),
-            FirebaseNames.CLAIM_LOST_ITEM_ID to lostItemData.itemID,
-            FirebaseNames.CLAIM_FOUND_ITEM_ID to foundItemData.itemID
-        )
-
-        firestoreManager.putWithUniqueId(FirebaseNames.COLLECTION_CLAIMED_ITEMS, data, object: FirestoreManager.Callback<String>{
-            override fun onComplete(result: String) {
-                // it returns the generated id
-                if (result.isEmpty()){
-                    callback.onComplete("Error claiming items")
-                    return
-                }
-
-                // return with no errors
-                callback.onComplete("")
             }
         })
     }
