@@ -22,40 +22,10 @@ class ViewClaimViewModel : ViewModel(){
     var claimId: String = ""
 
     // default lost item placeholder data
-    var lostItemData = LostItem(
-        itemID = "Unknown",
-        userID = "Unknown",
-        itemName = "Unknown",
-        category = "Unknown",
-        subCategory = "Unknown",
-        color = "Unknown",
-        brand = "",
-        dateTime = 0L,
-        location = Pair(52.37930763817003,-1.5614912710215834),
-        description = "",
-        timePosted = 0L,
-        image = "android.resource://com.example.lostandfound/" + R.drawable.placeholder_image,
-        status = 0
-    )
+    var lostItemData = LostItem()
 
     // default found item placeholder data
-    var foundItemData = FoundItem(
-        itemID = "Unknown",
-        userID = "Unknown",
-        itemName = "Unknown",
-        category = "Unknown",
-        subCategory = "Unknown",
-        color = "Unknown",
-        brand = "",
-        dateTime = 0L,
-        location = Pair(52.37930763817003,-1.5614912710215834),
-        description = "",
-        timePosted = 0L,
-        image = "android.resource://com.example.lostandfound/" + R.drawable.placeholder_image,
-        securityQuestion = "",
-        securityQuestionAns = "",
-        status = 0
-    )
+    var foundItemData = FoundItem()
 
     // username used to display the found user, only that is needed
     var lostUserName = "Unknown"
