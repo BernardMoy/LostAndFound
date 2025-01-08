@@ -6,9 +6,8 @@ import com.example.lostandfound.Data.FoundItem
 import com.example.lostandfound.Data.LostItem
 import com.example.lostandfound.FirebaseManagers.FirebaseStorageManager
 import com.example.lostandfound.FirebaseManagers.FirestoreManager
-import com.example.lostandfound.FirebaseManagers.ItemStatusManager
+import com.example.lostandfound.FirebaseManagers.ItemManager
 import com.example.lostandfound.R
-import com.google.firebase.Firebase
 
 interface MatchCallback{
     fun onComplete(result: MutableList<FoundItem>?)
@@ -84,7 +83,7 @@ fun matchItems(
                                         }
 
                                         // get the status of the item
-                                        ItemStatusManager.getFoundItemStatus(itemID, object: ItemStatusManager.StatusCallback{
+                                        ItemManager.getFoundItemStatus(itemID, object: ItemManager.StatusCallback{
                                             override fun onComplete(status: Int) {
                                                 // create found item class object
                                                 val thisFoundItem = FoundItem(

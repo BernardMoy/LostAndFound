@@ -1,4 +1,4 @@
-package com.example.lostandfound.ui.ViewComparison
+package com.example.lostandfound.ui.ViewClaim
 
 import android.app.Activity
 import android.content.Context
@@ -57,43 +57,43 @@ import com.example.lostandfound.CustomElements.CustomCenteredProgressbar
 import com.example.lostandfound.CustomElements.CustomComparisonField
 import com.example.lostandfound.CustomElements.CustomComparisonTextField
 import com.example.lostandfound.CustomElements.CustomEditText
+import com.example.lostandfound.CustomElements.CustomPickLocationDialog
 import com.example.lostandfound.CustomElements.CustomGrayTitle
 import com.example.lostandfound.CustomElements.CustomProgressBar
+import com.example.lostandfound.CustomElements.CustomViewLocationDialog
 import com.example.lostandfound.CustomElements.CustomViewTwoLocationsDialog
-import com.example.lostandfound.Data.FoundItem
 import com.example.lostandfound.Data.IntentExtraNames
+import com.example.lostandfound.Data.FoundItem
 import com.example.lostandfound.Data.LostItem
 import com.example.lostandfound.Data.foundStatusText
 import com.example.lostandfound.Data.lostStatusText
 import com.example.lostandfound.Data.statusColor
+import com.example.lostandfound.FirebaseManagers.FirestoreManager
 import com.example.lostandfound.R
 import com.example.lostandfound.Utility.DateTimeManager
 import com.example.lostandfound.Utility.ErrorCallback
 import com.example.lostandfound.Utility.LocationManager
 import com.example.lostandfound.ui.Done.DoneActivity
+import com.example.lostandfound.ui.Search.SearchActivity
+import com.example.lostandfound.ui.ViewClaim.ViewClaimViewModel
 import com.example.lostandfound.ui.theme.ComposeTheme
 import com.example.lostandfound.ui.theme.Typography
 
-
-class ViewComparisonActivity : ComponentActivity() {
+class ViewClaimActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         // create the view model here
-        val viewModel: ViewComparisonViewModel by viewModels()
+        val viewModel: ViewClaimViewModel by viewModels()
 
         // load the passed intent data into the view model
-        val passedLostItem = intent.getParcelableExtra<LostItem>(IntentExtraNames.INTENT_LOST_ID)
-        val passedFoundItem = intent.getParcelableExtra<FoundItem>(IntentExtraNames.INTENT_FOUND_ID)
-        if (passedLostItem != null){
-            viewModel.lostItemData = passedLostItem
-        }
-        if (passedFoundItem != null){
-            viewModel.foundItemData = passedFoundItem
+        val passedClaimId = intent.getStringExtra(IntentExtraNames.INTENT_CLAIM_ID)
+        if (passedClaimId != null){
+            viewModel.claimId = passedClaimId
         }
 
         setContent {
-            ViewComparisonScreen(activity = this, viewModel = viewModel)
+            ViewClaimScreen(activity = this, viewModel = viewModel)
         }
     }
 }
@@ -104,17 +104,17 @@ class MockActivity : ComponentActivity()
 @Preview(showBackground = true)
 @Composable
 fun Preview() {
-    ViewComparisonScreen(activity = MockActivity(), viewModel = ViewComparisonViewModel())
+    ViewClaimScreen(activity = MockActivity(), viewModel = ViewClaimViewModel())
 }
 
 @Composable
-fun ViewComparisonScreen(activity: ComponentActivity, viewModel: ViewComparisonViewModel) {
+fun ViewClaimScreen(activity: ComponentActivity, viewModel: ViewClaimViewModel) {
     ComposeTheme {
         Surface {
             Scaffold(
                 // top toolbar
                 topBar = {
-                    BackToolbar(title = "View Comparison", activity = activity)
+                    BackToolbar(title = "View Claim", activity = activity)
                 }
             ) { innerPadding ->
                 Column(
@@ -123,7 +123,7 @@ fun ViewComparisonScreen(activity: ComponentActivity, viewModel: ViewComparisonV
                         .padding(paddingValues = innerPadding)
                         .padding(dimensionResource(id = R.dimen.title_margin))
                         .verticalScroll(rememberScrollState()),   // make screen scrollable
-                    ) {
+                ) {
                     // content goes here
                     MainContent(viewModel = viewModel)
                 }
@@ -135,7 +135,7 @@ fun ViewComparisonScreen(activity: ComponentActivity, viewModel: ViewComparisonV
 // content includes avatar, edit fields, reminder message and save button
 // get the view model in the function parameter
 @Composable
-fun MainContent(viewModel: ViewComparisonViewModel) {
+fun MainContent(viewModel: ViewClaimViewModel) {
     // get the local context
     val context = LocalContext.current
 
@@ -161,13 +161,12 @@ fun MainContent(viewModel: ViewComparisonViewModel) {
             LocationData(context = context, viewModel = viewModel)
             UserData(viewModel = viewModel)
             ClaimButton(context = context, viewModel = viewModel)
-
         }
     }
 }
 
 @Composable
-fun Reference(viewModel: ViewComparisonViewModel){
+fun Reference(viewModel: ViewClaimViewModel){
     Row(
         modifier = Modifier.fillMaxWidth()
     ){
@@ -194,7 +193,7 @@ fun Reference(viewModel: ViewComparisonViewModel){
 }
 
 @Composable
-fun Status(viewModel: ViewComparisonViewModel) {
+fun Status(viewModel: ViewClaimViewModel) {
     Row(
         modifier = Modifier.fillMaxWidth(),
     ) {
@@ -228,7 +227,7 @@ fun Status(viewModel: ViewComparisonViewModel) {
 
 @OptIn(ExperimentalGlideComposeApi::class)
 @Composable
-fun ItemImage(viewModel: ViewComparisonViewModel){
+fun ItemImage(viewModel: ViewClaimViewModel){
     Row(
         modifier = Modifier
             .fillMaxWidth(),
@@ -270,7 +269,7 @@ fun ItemImage(viewModel: ViewComparisonViewModel){
 }
 
 @Composable
-fun ItemDetails(viewModel: ViewComparisonViewModel){
+fun ItemDetails(viewModel: ViewClaimViewModel){
     Column(
         verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin))
     ){
@@ -335,7 +334,7 @@ fun ItemDetails(viewModel: ViewComparisonViewModel){
 @Composable
 fun LocationData(
     context: Context,
-    viewModel: ViewComparisonViewModel
+    viewModel: ViewClaimViewModel
 ){
     Column {
         CustomGrayTitle(text = "Location")
@@ -358,7 +357,7 @@ fun LocationData(
 
 @Composable
 fun UserData(
-    viewModel: ViewComparisonViewModel
+    viewModel: ViewClaimViewModel
 ){
     Column(
     ) {
@@ -378,7 +377,7 @@ fun UserData(
 @Composable
 fun ClaimButton(
     context: Context,
-    viewModel: ViewComparisonViewModel
+    viewModel: ViewClaimViewModel
 ){
     // isloading state to display the loading animation
     var isLoading by remember { mutableStateOf(false) }
@@ -401,23 +400,6 @@ fun ClaimButton(
             onClick = {
                 isLoading = true
 
-                // update statuses of the item
-                viewModel.putClaimedItems(object : ErrorCallback{
-                    override fun onComplete(error: String) {
-                        if (error.isNotEmpty()){
-                            Toast.makeText(context, error, Toast.LENGTH_SHORT).show()
-                            return
-                        }
-
-                        // start done activity
-                        val i: Intent = Intent(context, DoneActivity::class.java)
-                        i.putExtra(IntentExtraNames.INTENT_DONE_ACTIVITY_TITLE, "Claim Submitted")
-                        context.startActivity(i)
-
-                        // close current activity
-                        (context as Activity).finish()
-                    }
-                })
             }
         )
     }
@@ -427,27 +409,10 @@ fun ClaimButton(
 // function to load data, called when the activity is created
 fun loadData(
     context: Context,
-    viewModel: ViewComparisonViewModel
+    viewModel: ViewClaimViewModel
 ){
     // is loading initially
     viewModel.isLoading.value = true
 
     // load lost item data of the current user from the view model
-    viewModel.getUserName(object : com.example.lostandfound.ui.ViewComparison.Callback<Boolean>{
-        override fun onComplete(result: Boolean) {
-            viewModel.isLoading.value = false
-
-            if (!result){
-                // display toast message for failed data retrieval
-                Toast.makeText(context, "Fetching data failed", Toast.LENGTH_SHORT).show()
-            }
-        }
-    })
 }
-
-
-
-
-
-
-
