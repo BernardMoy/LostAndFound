@@ -75,6 +75,7 @@ import com.example.lostandfound.Data.LostItem
 import com.example.lostandfound.Data.foundStatusText
 import com.example.lostandfound.Data.lostStatusText
 import com.example.lostandfound.Data.statusColor
+import com.example.lostandfound.FirebaseManagers.FirebaseUtility
 import com.example.lostandfound.FirebaseManagers.FirestoreManager
 import com.example.lostandfound.R
 import com.example.lostandfound.Utility.DateTimeManager
@@ -430,18 +431,32 @@ fun LocationData(
 fun UserData(
     viewModel: ViewClaimViewModel
 ){
-    Column(
-    ) {
-        CustomGrayTitle(text = "Contact user")
-
-        // Name of the FOUND user as only lost users would see this screen
+    // the view claim screen can be viewed by either the lost user or the found user.
+    // if the viewer is the lost user, display this
+    if (viewModel.lostItemData.userID == FirebaseUtility.getUserID()){
+        CustomGrayTitle(text = "Contact user who found this item")
         CustomEditText(
             fieldLabel = "User",
-            fieldContent = viewModel.foundUserName,
+            fieldContent = viewModel.lostUserName,
             leftIcon = Icons.Outlined.AccountCircle,
             isEditable = false
         )
         HorizontalDivider(thickness = 1.dp)
+    }
+
+    // if the viewer is the found user, display this
+    if (viewModel.foundItemData.userID == FirebaseUtility.getUserID()){
+        Column(
+        ) {
+            CustomGrayTitle(text = "Contact user who claimed this item")
+            CustomEditText(
+                fieldLabel = "User",
+                fieldContent = viewModel.lostUserName,
+                leftIcon = Icons.Outlined.AccountCircle,
+                isEditable = false
+            )
+            HorizontalDivider(thickness = 1.dp)
+        }
     }
 }
 

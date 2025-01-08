@@ -386,7 +386,7 @@ fun UserData(
 ){
     Column(
     ) {
-        CustomGrayTitle(text = "Contact user")
+        CustomGrayTitle(text = "Contact user who found the item")
 
         // Name of the FOUND user as only lost users would see this screen
         CustomEditText(
