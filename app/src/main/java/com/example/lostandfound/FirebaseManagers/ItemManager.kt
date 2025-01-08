@@ -3,6 +3,7 @@ package com.example.lostandfound.FirebaseManagers
 import android.net.Uri
 import android.util.Log
 import com.example.lostandfound.Data.Claim
+import com.example.lostandfound.Data.ClaimList
 import com.example.lostandfound.Data.FirebaseNames
 import com.example.lostandfound.Data.FoundItem
 import com.example.lostandfound.Data.LostItem
@@ -29,7 +30,7 @@ object ItemManager {
     }
 
     interface FoundClaimCallback {
-        fun onComplete(claimList: MutableList<Claim>)  // return the list of claims, or empty list if failed
+        fun onComplete(claimList: ClaimList)  // return the list of claims, or empty list if failed
     }
 
     // method to get the lostitem as a LostItem object when given a lost item id
@@ -228,7 +229,7 @@ object ItemManager {
             object : Callback<List<String>> {
                 override fun onComplete(result: List<String>?) {
                     if (result.isNullOrEmpty()) {
-                        callback.onComplete(mutableListOf())
+                        callback.onComplete(ClaimList())
                         return
 
                     }
@@ -244,7 +245,7 @@ object ItemManager {
                                 override fun onComplete(result: Map<String, Any>?) {
                                     // if any fails, return empty list
                                     if (result == null) {
-                                        callback.onComplete(mutableListOf())
+                                        callback.onComplete(ClaimList())
                                         return
                                     }
 
@@ -265,7 +266,7 @@ object ItemManager {
                     }
 
                     // return the list
-                    callback.onComplete(claimList)
+                    callback.onComplete(ClaimList(claimList))
 
                 }
             }
