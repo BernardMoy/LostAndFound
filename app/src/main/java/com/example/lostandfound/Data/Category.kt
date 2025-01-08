@@ -32,8 +32,8 @@ val categories: List<Category> = listOf(
         subCategories = listOf("backpack", "handbag", "shopping bag", "suitcase"),
         leadingIcon = Icons.Outlined.ShoppingBag
     ),
-    Category(name = "Books and Stationaries",
-        subCategories = listOf("Stationaries", "Pencil cases", "Books"),
+    Category(name = "Books and Stationeries",
+        subCategories = listOf("Stationeries", "Pencil cases", "Books"),
         leadingIcon = Icons.Outlined.Edit
     ),
     Category(name = "Clothings",

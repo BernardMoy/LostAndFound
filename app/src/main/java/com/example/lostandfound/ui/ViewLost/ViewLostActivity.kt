@@ -320,24 +320,46 @@ fun ViewMatchingItems(
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = dimensionResource(id = R.dimen.content_margin)),
-        horizontalArrangement = Arrangement.Center
+            .padding(vertical = dimensionResource(id = R.dimen.content_margin))
     ){
-        CustomButton(
-            text = "View matching items",
-            type = ButtonType.FILLED,
-            onClick = {
-                // start search activity
-                val intent = Intent(context, SearchActivity::class.java)
+        Column(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin))
+        ){
+            CustomButton(
+                text = "View claim",  // there can only be one claim for each lost item
+                type = ButtonType.FILLED,
+                onClick = {
+                    // start search activity
+                    val intent = Intent(context, SearchActivity::class.java)
 
-                // pass the lost item to the intent
-                intent.putExtra(
-                    IntentExtraNames.INTENT_LOST_ID,
-                    viewModel.itemData
-                )
-                context.startActivity(intent)
-            }
-        )
+                    // pass the lost item to the intent
+                    intent.putExtra(
+                        IntentExtraNames.INTENT_LOST_ID,
+                        viewModel.itemData
+                    )
+                    context.startActivity(intent)
+                }
+            )
+
+            CustomButton(
+                text = "View matching items",
+                type = ButtonType.FILLED,
+                onClick = {
+                    // start search activity
+                    val intent = Intent(context, SearchActivity::class.java)
+
+                    // pass the lost item to the intent
+                    intent.putExtra(
+                        IntentExtraNames.INTENT_LOST_ID,
+                        viewModel.itemData
+                    )
+                    context.startActivity(intent)
+                }
+            )
+        }
+
     }
 }
 

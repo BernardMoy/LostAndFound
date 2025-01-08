@@ -579,6 +579,9 @@ fun DoneButton(
                                 result
                             )
                             context.startActivity(intent)
+
+                            // finish current activity
+                            (context as Activity).finish()
                         }
                     }
                 })
