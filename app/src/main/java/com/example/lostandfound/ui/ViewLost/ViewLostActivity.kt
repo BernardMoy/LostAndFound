@@ -138,7 +138,7 @@ fun MainContent(viewModel: ViewLostViewModel) {
     }
 
     // display content
-    if (viewModel.isLoading.value) {
+    if (!inPreview && viewModel.isLoading.value) {
         CustomCenteredProgressbar()
 
     } else {
@@ -153,7 +153,7 @@ fun MainContent(viewModel: ViewLostViewModel) {
             UserData(viewModel = viewModel)
 
             // if status = 0 or 1, display matching items
-            ViewMatchingItems(context = context, viewModel = viewModel)
+            ActionButtons(context = context, inPreview = inPreview, viewModel = viewModel)
 
             // also display the user
         }
@@ -318,8 +318,9 @@ fun UserData(
 }
 
 @Composable
-fun ViewMatchingItems(
+fun ActionButtons(
     context: Context,
+    inPreview: Boolean,
     viewModel: ViewLostViewModel
 ){
     Row(
@@ -328,14 +329,14 @@ fun ViewMatchingItems(
             .padding(vertical = dimensionResource(id = R.dimen.content_margin))
     ){
         // only display buttons when the lost item is reported by the current user
-        if (FirebaseUtility.getUserID() == viewModel.itemData.userID){
+        if (inPreview || FirebaseUtility.getUserID() == viewModel.itemData.userID){
             Column(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin))
             ){
                 // if the status is 1 or 2, display this
-                if (viewModel.itemData.status == 1 || viewModel.itemData.status == 2) {
+                if (inPreview || viewModel.itemData.status == 1 || viewModel.itemData.status == 2) {
                     CustomButton(
                         text = "View claim",  // there can only be one claim for each lost item
                         type = ButtonType.FILLED,
@@ -366,10 +367,10 @@ fun ViewMatchingItems(
                 }
 
                 // if the status is 0 or 1, display this
-                if (viewModel.itemData.status == 0 || viewModel.itemData.status == 1){
+                if (inPreview || viewModel.itemData.status == 0 || viewModel.itemData.status == 1){
                     CustomButton(
                         text = "View matching items",
-                        type = ButtonType.FILLED,
+                        type = if (viewModel.itemData.status == 0) ButtonType.FILLED else ButtonType.OUTLINED,
                         onClick = {
                             // start search activity
                             val intent = Intent(context, SearchActivity::class.java)
