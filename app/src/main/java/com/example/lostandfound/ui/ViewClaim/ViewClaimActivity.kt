@@ -398,4 +398,14 @@ fun loadData(
     viewModel.isLoading.value = true
 
     // load lost item data of the current user from the view model
+    viewModel.loadDataWithClaimId(object : ErrorCallback{
+        override fun onComplete(error: String) {
+            viewModel.isLoading.value = false
+
+            if (error.isNotEmpty()){
+                Toast.makeText(context, error, Toast.LENGTH_SHORT).show()
+                return
+            }
+        }
+    })
 }
