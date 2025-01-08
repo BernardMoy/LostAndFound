@@ -7,7 +7,7 @@ import androidx.lifecycle.ViewModel
 import com.example.lostandfound.Data.FirebaseNames
 import com.example.lostandfound.Data.FoundItem
 import com.example.lostandfound.FirebaseManagers.FirestoreManager
-import com.example.lostandfound.ui.ViewLost.Callback
+import com.example.lostandfound.FirebaseManagers.UserManager
 
 interface Callback<T> {
     fun onComplete(result: T)
@@ -24,24 +24,14 @@ class ViewFoundViewModel : ViewModel(){
     var userName = "Unknown"
 
     // function to get item data
-    fun getUserName(callback: com.example.lostandfound.ui.ViewFound.Callback<Boolean>){
-
-        // managers
-        val firestoreManager = FirestoreManager()
-
-        // get name of the user from firebase firestore
-        firestoreManager.get(FirebaseNames.COLLECTION_USERS, itemData.userID, object : FirestoreManager.Callback<Map<String, Any>>{
-            override fun onComplete(result: Map<String, Any>?) {
-                if (result == null) {
+    fun getUserName(callback: Callback<Boolean>){
+        UserManager.getUsernameFromId(itemData.userID, object: UserManager.UsernameCallback{
+            override fun onComplete(username: String) {
+                if (username.isEmpty()){
                     callback.onComplete(false)
 
                 } else {
-                    val name = result[FirebaseNames.USERS_FIRSTNAME].toString() + " " + result[FirebaseNames.USERS_LASTNAME].toString()
-
-                    // set username
-                    userName = name
-
-                    // return true
+                    userName = username
                     callback.onComplete(true)
                 }
             }
