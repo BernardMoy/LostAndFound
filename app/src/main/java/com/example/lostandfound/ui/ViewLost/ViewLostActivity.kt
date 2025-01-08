@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -57,10 +58,13 @@ import com.example.lostandfound.Data.IntentExtraNames
 import com.example.lostandfound.Data.LostItem
 import com.example.lostandfound.Data.lostStatusText
 import com.example.lostandfound.Data.statusColor
+import com.example.lostandfound.FirebaseManagers.FirebaseUtility
+import com.example.lostandfound.FirebaseManagers.ItemManager
 import com.example.lostandfound.R
 import com.example.lostandfound.Utility.DateTimeManager
 import com.example.lostandfound.Utility.LocationManager
 import com.example.lostandfound.ui.Search.SearchActivity
+import com.example.lostandfound.ui.ViewClaim.ViewClaimActivity
 import com.example.lostandfound.ui.theme.ComposeTheme
 import com.example.lostandfound.ui.theme.Typography
 
@@ -322,44 +326,64 @@ fun ViewMatchingItems(
             .fillMaxWidth()
             .padding(vertical = dimensionResource(id = R.dimen.content_margin))
     ){
-        Column(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin))
-        ){
-            CustomButton(
-                text = "View claim",  // there can only be one claim for each lost item
-                type = ButtonType.FILLED,
-                onClick = {
-                    // start search activity
-                    val intent = Intent(context, SearchActivity::class.java)
+        // only display buttons when the lost item is reported by the current user
+        if (FirebaseUtility.getUserID() == viewModel.itemData.userID){
+            Column(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin))
+            ){
+                // if the status is 1 or 2, display this
+                if (viewModel.itemData.status == 1 || viewModel.itemData.status == 2) {
+                    CustomButton(
+                        text = "View claim",  // there can only be one claim for each lost item
+                        type = ButtonType.FILLED,
+                        onClick = {
+                            // start view claim activity
+                            val intent = Intent(context, ViewClaimActivity::class.java)
 
-                    // pass the lost item to the intent
-                    intent.putExtra(
-                        IntentExtraNames.INTENT_LOST_ID,
-                        viewModel.itemData
+                            // get the claim id associated with the lost item id
+                            ItemManager.getClaimIdFromLostId(viewModel.itemData.itemID, object: ItemManager.LostClaimIdCallback{
+                                override fun onComplete(claimID: String) {
+                                    if (claimID.isEmpty()){
+                                        Toast.makeText(context, "Fetching claim data failed", Toast.LENGTH_SHORT).show()
+                                        return
+                                    }
+
+                                    // pass the claim id to the intent
+                                    intent.putExtra(
+                                        IntentExtraNames.INTENT_CLAIM_ID,
+                                        claimID
+                                    )
+
+                                    // start view claim activity
+                                    context.startActivity(intent)
+                                }
+                            })
+                        }
                     )
-                    context.startActivity(intent)
                 }
-            )
 
-            CustomButton(
-                text = "View matching items",
-                type = ButtonType.FILLED,
-                onClick = {
-                    // start search activity
-                    val intent = Intent(context, SearchActivity::class.java)
+                // if the status is 0 or 1, display this
+                if (viewModel.itemData.status == 0 || viewModel.itemData.status == 1){
+                    CustomButton(
+                        text = "View matching items",
+                        type = ButtonType.FILLED,
+                        onClick = {
+                            // start search activity
+                            val intent = Intent(context, SearchActivity::class.java)
 
-                    // pass the lost item to the intent
-                    intent.putExtra(
-                        IntentExtraNames.INTENT_LOST_ID,
-                        viewModel.itemData
+                            // pass the lost item to the intent
+                            intent.putExtra(
+                                IntentExtraNames.INTENT_LOST_ID,
+                                viewModel.itemData
+                            )
+                            context.startActivity(intent)
+                        }
                     )
-                    context.startActivity(intent)
                 }
-            )
+            }
         }
-
     }
 }
 

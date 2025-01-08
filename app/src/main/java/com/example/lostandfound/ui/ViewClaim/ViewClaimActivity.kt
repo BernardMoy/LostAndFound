@@ -160,7 +160,7 @@ fun MainContent(viewModel: ViewClaimViewModel) {
             ItemDetails(viewModel = viewModel)
             LocationData(context = context, viewModel = viewModel)
             UserData(viewModel = viewModel)
-            ClaimButton(context = context, viewModel = viewModel)
+            DoneButton(context = context, viewModel = viewModel)
         }
     }
 }
@@ -255,15 +255,7 @@ fun ItemImage(viewModel: ViewClaimViewModel){
                     alignment = Alignment.Center
                 )
             },
-            centerLabel = {
-                Text(
-                    text = "Similarity\n" + "20%",
-                    style = Typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.primary,
-                    fontWeight = FontWeight.Bold,
-                    textAlign = TextAlign.Center
-                )
-            }
+            centerLabel = {}
         )
     }
 }
@@ -375,17 +367,10 @@ fun UserData(
 }
 
 @Composable
-fun ClaimButton(
+fun DoneButton(
     context: Context,
     viewModel: ViewClaimViewModel
 ){
-    // isloading state to display the loading animation
-    var isLoading by remember { mutableStateOf(false) }
-
-    // when isLoading changes, functions that uses the variable are re-composed
-    if (isLoading) {
-        CustomProgressBar()
-    }
 
     Row(
         modifier = Modifier
@@ -394,12 +379,10 @@ fun ClaimButton(
         horizontalArrangement = Arrangement.Center
     ){
         CustomButton(
-            text = "Claim this Item",
+            text = "Done",
             type = ButtonType.FILLED,
-            enabled = !isLoading,  // if loading, disable the button
             onClick = {
-                isLoading = true
-
+                (context as Activity).finish()
             }
         )
     }

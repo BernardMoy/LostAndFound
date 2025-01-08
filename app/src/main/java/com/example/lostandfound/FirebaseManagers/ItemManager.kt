@@ -5,6 +5,7 @@ import android.util.Log
 import com.example.lostandfound.Data.FirebaseNames
 import com.example.lostandfound.Data.FoundItem
 import com.example.lostandfound.Data.LostItem
+import com.example.lostandfound.FirebaseManagers.FirestoreManager.Callback
 import com.example.lostandfound.R
 import com.example.lostandfound.Utility.LocationManager
 import com.google.firebase.firestore.FirebaseFirestore
@@ -20,6 +21,14 @@ object ItemManager {
 
     interface StatusCallback{
         fun onComplete(status: Int) // return the status, which must be 0, 1 or 2 (0 if error)
+    }
+
+    interface LostClaimIdCallback{
+        fun onComplete(claimID: String)  // return the string of claim id, or empty string if failed or null
+    }
+
+    interface FoundClaimIdCallback{
+        fun onComplete(claimIDs: List<String>)  // return the list of claim id strings, or empty list if failed or null
     }
 
     // method to get the lostitem as a LostItem object when given a lost item id
@@ -155,6 +164,50 @@ object ItemManager {
         )
     }
 
+    // method to get claim id given a lost item.
+    // A lost item can only associate with one claim id
+    fun getClaimIdFromLostId(lostItemID: String, callback: LostClaimIdCallback){
+        val firestoreManager = FirestoreManager()
+
+        firestoreManager.getIdsWhere(FirebaseNames.COLLECTION_CLAIMED_ITEMS,
+            FirebaseNames.CLAIM_LOST_ITEM_ID,
+            lostItemID,
+            FirebaseNames.CLAIM_TIMESTAMP,   // order by
+            object: Callback<List<String>>{
+                override fun onComplete(result: List<String>?) {
+                    if (result.isNullOrEmpty()){
+                        callback.onComplete("")
+
+                    } else {
+                        callback.onComplete(result[0])  // there will only be one claim associated with lost item, return the only one
+                    }
+                }
+            }
+        )
+    }
+
+
+    // method to get claim ids given a found item.
+    // A found item can be associated with more than one claims
+    fun getClaimIdFromFoundId(foundItemID: String, callback: FoundClaimIdCallback){
+        val firestoreManager = FirestoreManager()
+
+        firestoreManager.getIdsWhere(FirebaseNames.COLLECTION_CLAIMED_ITEMS,
+            FirebaseNames.CLAIM_FOUND_ITEM_ID,
+            foundItemID,
+            FirebaseNames.CLAIM_TIMESTAMP,
+            object : Callback<List<String>>{
+                override fun onComplete(result: List<String>?) {
+                    if (result.isNullOrEmpty()){
+                        callback.onComplete(listOf())
+
+                    } else {
+                        callback.onComplete(result)
+                    }
+                }
+            }
+        )
+    }
 
     // method to get the status given a lost item id, by querying the claim collection
     fun getLostItemStatus(lostItemID: String, callback: StatusCallback){
