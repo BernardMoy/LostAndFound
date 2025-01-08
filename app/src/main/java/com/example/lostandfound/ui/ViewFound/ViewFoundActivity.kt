@@ -1,6 +1,7 @@
 package com.example.lostandfound.ui.ViewFound
 
 import android.content.Context
+import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.widget.Toast
@@ -44,18 +45,26 @@ import androidx.compose.ui.unit.dp
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.example.lostandfound.CustomElements.BackToolbar
+import com.example.lostandfound.CustomElements.ButtonType
 import com.example.lostandfound.CustomElements.CustomActionText
+import com.example.lostandfound.CustomElements.CustomButton
 import com.example.lostandfound.CustomElements.CustomCenteredProgressbar
 import com.example.lostandfound.CustomElements.CustomEditText
 import com.example.lostandfound.CustomElements.CustomGrayTitle
 import com.example.lostandfound.CustomElements.CustomViewLocationDialog
+import com.example.lostandfound.Data.Claim
 import com.example.lostandfound.Data.FoundItem
 import com.example.lostandfound.Data.IntentExtraNames
 import com.example.lostandfound.Data.foundStatusText
 import com.example.lostandfound.Data.statusColor
+import com.example.lostandfound.FirebaseManagers.FirebaseUtility
+import com.example.lostandfound.FirebaseManagers.ItemManager
 import com.example.lostandfound.R
 import com.example.lostandfound.Utility.DateTimeManager
 import com.example.lostandfound.Utility.LocationManager
+import com.example.lostandfound.ui.Search.SearchActivity
+import com.example.lostandfound.ui.ViewClaim.ViewClaimActivity
+import com.example.lostandfound.ui.ViewLost.ViewLostViewModel
 import com.example.lostandfound.ui.theme.ComposeTheme
 import com.example.lostandfound.ui.theme.Typography
 
@@ -128,7 +137,7 @@ fun MainContent(viewModel: ViewFoundViewModel) {
     }
 
     // display content
-    if (viewModel.isLoading.value) {
+    if (!inPreview && viewModel.isLoading.value) {
         CustomCenteredProgressbar()
 
     } else {
@@ -141,6 +150,7 @@ fun MainContent(viewModel: ViewFoundViewModel) {
             ItemDetails(viewModel = viewModel)
             LocationData(viewModel = viewModel)
             UserData(viewModel = viewModel)
+            ActionButtons(context = context, inPreview = inPreview, viewModel = viewModel)
 
             // also display the user
         }
@@ -313,6 +323,50 @@ fun UserData(
             isEditable = false
         )
         HorizontalDivider(thickness = 1.dp)
+    }
+}
+
+
+@Composable
+fun ActionButtons(
+    context: Context,
+    inPreview: Boolean,
+    viewModel: ViewFoundViewModel
+){
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = dimensionResource(id = R.dimen.content_margin))
+    ){
+        // only display buttons when the lost item is found by the current user
+        if (inPreview || FirebaseUtility.getUserID() == viewModel.itemData.userID){
+            Column(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin))
+            ){
+                // if the status is 0, display a message saying there are no claims
+                if (inPreview || viewModel.itemData.status == 0){
+                    Text(
+                        text = "There are currently no users who has claimed this item.",
+                        style = Typography.bodyMedium,
+                        color = Color.Gray,
+                        textAlign = TextAlign.Center
+                    )
+                }
+
+                // if the status is 1 or 2, display this
+                if (inPreview || viewModel.itemData.status == 1 || viewModel.itemData.status == 2) {
+                    CustomButton(
+                        text = "View claims for this item",  // there can only be one claim for each lost item
+                        type = ButtonType.FILLED,
+                        onClick = {
+                            // start new claim list activity
+                        }
+                    )
+                }
+            }
+        }
     }
 }
 
