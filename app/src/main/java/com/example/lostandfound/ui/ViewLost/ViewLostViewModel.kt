@@ -21,21 +21,7 @@ class ViewLostViewModel : ViewModel(){
 
     // default lost item placeholder data
     // will be replaced by method below
-    var itemData = LostItem(
-        itemID = "Unknown",
-        userID = "Unknown",
-        itemName = "Unknown",
-        category = "Unknown",
-        subCategory = "Unknown",
-        color = "Unknown",
-        brand = "",
-        dateTime = 0L,
-        location = Pair(52.37930763817003,-1.5614912710215834),
-        description = "",
-        timePosted = 0L,
-        image = "",
-        status = 0
-    )
+    var itemData = LostItem()
 
     // username used to display the user
     var userName = "Unknown"

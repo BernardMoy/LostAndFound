@@ -18,23 +18,7 @@ class ViewFoundViewModel : ViewModel(){
     val isLocationDialogShown: MutableState<Boolean> = mutableStateOf(false)
 
     // item data are stored here
-    var itemData = FoundItem(
-        itemID = "Unknown",
-        userID = "Unknown",
-        itemName = "Unknown",
-        category = "Unknown",
-        subCategory = "Unknown",
-        color = "Unknown",
-        brand = "",
-        dateTime = 0L,
-        location = Pair(52.37930763817003,-1.5614912710215834),
-        description = "",
-        timePosted = 0L,
-        image = "",
-        securityQuestion = "",
-        securityQuestionAns = "",
-        status = 0
-    )
+    var itemData = FoundItem()
 
     // username used to display the user
     var userName = "Unknown"
