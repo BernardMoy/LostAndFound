@@ -15,17 +15,22 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.AccountCircle
 import androidx.compose.material.icons.outlined.CalendarMonth
+import androidx.compose.material.icons.outlined.Cancel
+import androidx.compose.material.icons.outlined.CheckCircle
+import androidx.compose.material.icons.outlined.Close
 import androidx.compose.material.icons.outlined.Description
 import androidx.compose.material.icons.outlined.Edit
 import androidx.compose.material.icons.outlined.Folder
 import androidx.compose.material.icons.outlined.Palette
 import androidx.compose.material.icons.outlined.Title
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
@@ -45,6 +50,7 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
@@ -148,13 +154,14 @@ fun MainContent(viewModel: ViewClaimViewModel) {
     }
 
     // display content
-    if (viewModel.isLoading.value) {
+    if (!inPreview && viewModel.isLoading.value) {
         CustomCenteredProgressbar()
 
     } else {
         Column(
             verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin))
         ){
+            ClaimStatus(viewModel = viewModel)
             Reference(viewModel = viewModel)
             Status(viewModel = viewModel)
             ItemImage(viewModel = viewModel)
@@ -167,10 +174,81 @@ fun MainContent(viewModel: ViewClaimViewModel) {
 }
 
 @Composable
-fun Reference(viewModel: ViewClaimViewModel){
-    Row(
-        modifier = Modifier.fillMaxWidth()
+fun ClaimStatus(
+    viewModel: ViewClaimViewModel
+){
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(
+                vertical = dimensionResource(id = R.dimen.title_margin),
+                horizontal = dimensionResource(id = R.dimen.content_margin)
+            ),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin))
     ){
+        if (viewModel.claimData.isApproved){
+            Icon(
+                imageVector = Icons.Outlined.CheckCircle,
+                contentDescription = "Approved",
+                modifier = Modifier.size(dimensionResource(id = R.dimen.image_button_size)),
+                tint = colorResource(id = R.color.status2)
+            )
+            Text(
+                text = "This claim has been approved by the found user.",
+                color = colorResource(id = R.color.status2),
+                fontWeight = FontWeight.Bold,
+                style = Typography.bodyMedium,
+                textAlign = TextAlign.Center
+            )
+        } else {
+            Icon(
+                imageVector = Icons.Outlined.Cancel,
+                contentDescription = "Not been approved",
+                modifier = Modifier.size(dimensionResource(id = R.dimen.image_button_size)),
+                tint = colorResource(id = R.color.status0)
+            )
+            Text(
+                text = "This claim has not been approved by the found user.",
+                color = colorResource(id = R.color.status0),
+                fontWeight = FontWeight.Bold,
+                style = Typography.bodyMedium,
+                textAlign = TextAlign.Center
+            )
+        }
+    }
+
+}
+
+@Composable
+fun Reference(viewModel: ViewClaimViewModel){
+    Column(
+        modifier = Modifier.fillMaxWidth(),
+        verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin))
+    ){  
+        CustomComparisonField(
+            centerLabel = {},
+
+            contentLeft = {
+                Text(
+                    text = "Lost item",
+                    style = Typography.bodyMedium,
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.primary,
+                    textDecoration = TextDecoration.Underline
+                )
+            },
+            contentRight = {
+                Text(
+                    text = "Found item",
+                    style = Typography.bodyMedium,
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.secondary,
+                    textDecoration = TextDecoration.Underline
+                )
+            }
+        )
+
         CustomComparisonField(
             centerLabel = {
 

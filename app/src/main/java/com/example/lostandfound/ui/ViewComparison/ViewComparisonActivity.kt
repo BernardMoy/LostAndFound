@@ -45,6 +45,7 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
@@ -147,7 +148,7 @@ fun MainContent(viewModel: ViewComparisonViewModel) {
     }
 
     // display content
-    if (viewModel.isLoading.value) {
+    if (!inPreview && viewModel.isLoading.value) {
         CustomCenteredProgressbar()
 
     } else {
@@ -168,9 +169,32 @@ fun MainContent(viewModel: ViewComparisonViewModel) {
 
 @Composable
 fun Reference(viewModel: ViewComparisonViewModel){
-    Row(
-        modifier = Modifier.fillMaxWidth()
+    Column(
+        modifier = Modifier.fillMaxWidth(),
+        verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin))
     ){
+        CustomComparisonField(
+            centerLabel = {},
+
+            contentLeft = {
+                Text(
+                    text = "Lost item",
+                    style = Typography.bodyMedium,
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.primary,
+                    textDecoration = TextDecoration.Underline
+                )
+            },
+            contentRight = {
+                Text(
+                    text = "Found item",
+                    style = Typography.bodyMedium,
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.secondary,
+                    textDecoration = TextDecoration.Underline
+                )
+            }
+        )
         CustomComparisonField(
             centerLabel = {
 
