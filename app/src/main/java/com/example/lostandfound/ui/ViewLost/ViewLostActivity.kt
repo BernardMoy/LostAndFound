@@ -54,6 +54,7 @@ import com.example.lostandfound.CustomElements.CustomEditText
 import com.example.lostandfound.CustomElements.CustomPickLocationDialog
 import com.example.lostandfound.CustomElements.CustomGrayTitle
 import com.example.lostandfound.CustomElements.CustomViewLocationDialog
+import com.example.lostandfound.Data.Claim
 import com.example.lostandfound.Data.IntentExtraNames
 import com.example.lostandfound.Data.LostItem
 import com.example.lostandfound.Data.lostStatusText
@@ -342,18 +343,18 @@ fun ViewMatchingItems(
                             // start view claim activity
                             val intent = Intent(context, ViewClaimActivity::class.java)
 
-                            // get the claim id associated with the lost item id
-                            ItemManager.getClaimIdFromLostId(viewModel.itemData.itemID, object: ItemManager.LostClaimIdCallback{
-                                override fun onComplete(claimID: String) {
-                                    if (claimID.isEmpty()){
+                            // get the claim item associated with the lost id
+                            ItemManager.getClaimFromLostId(viewModel.itemData.itemID, object: ItemManager.LostClaimCallback{
+                                override fun onComplete(claim: Claim?) {
+                                    if (claim == null){
                                         Toast.makeText(context, "Fetching claim data failed", Toast.LENGTH_SHORT).show()
                                         return
                                     }
 
-                                    // pass the claim id to the intent
+                                    // pass the claim object to the intent
                                     intent.putExtra(
-                                        IntentExtraNames.INTENT_CLAIM_ID,
-                                        claimID
+                                        IntentExtraNames.INTENT_CLAIM_ITEM,
+                                        claim
                                     )
 
                                     // start view claim activity
