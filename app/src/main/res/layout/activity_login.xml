@@ -143,6 +143,7 @@
                 <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/login_button"
                     android:layout_marginTop="@dimen/content_margin"
+                    android:enabled="true"
                     android:text="Log in"
                     style="@style/colorButton" />
 

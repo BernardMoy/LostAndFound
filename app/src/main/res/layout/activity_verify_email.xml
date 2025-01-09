@@ -255,6 +255,7 @@
                 <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/verify_email_button"
                     android:layout_marginTop="@dimen/content_margin"
+                    android:enabled="true"
                     android:text="Verify Email"
                     style="@style/colorButton" />
 

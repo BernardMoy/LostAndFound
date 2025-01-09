@@ -106,12 +106,16 @@ public class LoginActivity extends AppCompatActivity {
                 // set the progress bar to be visible
                 binding.progressBar.setVisibility(View.VISIBLE);
 
+                // set login button disabled
+                binding.loginButton.setEnabled(false);
+
                 // Login with user
                 loginViewModel.loginUser(LoginActivity.this, email, password, new ErrorCallback() {
                     @Override
                     public void onComplete(String error) {
                         // hide the progress bar once operation is completed
                         binding.progressBar.setVisibility(View.GONE);
+                        binding.loginButton.setEnabled(true);
 
                         // if there is an error, exit function
                         if (!error.isEmpty()) {

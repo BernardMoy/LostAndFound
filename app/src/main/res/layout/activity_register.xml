@@ -161,6 +161,7 @@
                 <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/register_button"
                     android:layout_marginTop="@dimen/content_margin"
+                    android:enabled="true"
                     android:text="Register"
                     style="@style/colorButton" />
 
