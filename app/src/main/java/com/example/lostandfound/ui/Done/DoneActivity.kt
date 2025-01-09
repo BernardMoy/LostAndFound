@@ -186,6 +186,7 @@ fun MainContent(viewModel: DoneViewModel = viewModel()) {
                     .padding(vertical = dimensionResource(id = R.dimen.header_margin)),
                 horizontalArrangement = Arrangement.Center
             ){
+                // after clicking the done button, the user is always redirected to the main activity
                 CustomButton(
                     text = "Done",
                     type = ButtonType.WHITE,

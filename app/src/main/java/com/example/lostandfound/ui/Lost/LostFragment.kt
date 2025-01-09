@@ -34,6 +34,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.lostandfound.CustomElements.CustomCenterText
 import com.example.lostandfound.CustomElements.CustomCenteredProgressbar
@@ -42,6 +43,7 @@ import com.example.lostandfound.CustomElements.CustomSearchField
 import com.example.lostandfound.Data.IntentExtraNames
 import com.example.lostandfound.FirebaseManagers.FirebaseUtility
 import com.example.lostandfound.R
+import com.example.lostandfound.ui.Found.FoundFragmentViewModel
 import com.example.lostandfound.ui.ViewLost.ViewLostActivity
 import com.example.lostandfound.ui.theme.ComposeTheme
 import com.example.lostandfound.ui.theme.Typography
@@ -52,6 +54,9 @@ class LostFragment : Fragment() {
 
     // variable to keep track of whether the user is logged in
     val isLoggedIn = mutableStateOf(FirebaseUtility.isUserLoggedIn())
+
+    // create the view model here
+    val viewModel: LostFragmentViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -66,7 +71,7 @@ class LostFragment : Fragment() {
                     if (!isLoggedIn.value){
                         CustomCenterText(text = "Please login first to view this content.")
                     } else {
-                        LostFragmentScreen()
+                        LostFragmentScreen(viewModel = viewModel)
                     }
                 }
             }
@@ -79,6 +84,12 @@ class LostFragment : Fragment() {
 
         // update the user's log in status
         isLoggedIn.value = FirebaseUtility.isUserLoggedIn()
+
+        // refresh the data everytime the screen is reloaded
+        refreshData(
+            context = requireContext(),
+            viewModel = viewModel
+        )
     }
 }
 
@@ -87,28 +98,31 @@ class LostFragment : Fragment() {
 @Composable
 fun Preview() {
     ComposeTheme {
-        LostFragmentScreen()
+        LostFragmentScreen(viewModel = viewModel())
     }
 }
 
 @Composable
-fun LostFragmentScreen() {
+fun LostFragmentScreen(viewModel: LostFragmentViewModel) {
     Column(
         modifier = Modifier
             .fillMaxSize()
             .padding(dimensionResource(id = R.dimen.title_margin))
     ){
-        MainContent()
+        MainContent(viewModel = viewModel)
     }
 }
 
 @Composable
-fun MainContent(viewModel: LostFragmentViewModel = viewModel()){
+fun MainContent(viewModel: LostFragmentViewModel){
     val context = LocalContext.current
 
+    /*
+    It is now done in the onResume() method instead
     LaunchedEffect(Unit) {
         refreshData(context, viewModel)
     }
+     */
 
     // display content
     if (viewModel.isLoading.value){
