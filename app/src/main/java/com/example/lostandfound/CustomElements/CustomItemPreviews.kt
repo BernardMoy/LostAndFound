@@ -403,7 +403,7 @@ fun CustomClaimPreview(
 
                     // user name and claim time
                     Text(
-                        text = "Claimed by " + claimPreview.lostUserName,
+                        text = "Claim from " + claimPreview.lostUserName,
                         style = Typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onBackground,
                     )
