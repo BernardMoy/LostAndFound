@@ -111,6 +111,7 @@ public class VerifyEmailActivity extends AppCompatActivity {
             public void onClick(View view) {
                 // set progress bar to be visible
                 binding.progressBar.setVisibility(View.VISIBLE);
+                binding.verifyEmailButton.setEnabled(false);
 
                 // extract the string
                 String code = "000000";
@@ -143,9 +144,10 @@ public class VerifyEmailActivity extends AppCompatActivity {
                 verifyEmailViewModel.validateVerificationCode(VerifyEmailActivity.this, emailAddress, code, new ErrorCallback() {
                     @Override
                     public void onComplete(String error){
+                        binding.progressBar.setVisibility(View.GONE);
+                        binding.verifyEmailButton.setEnabled(true);
 
                         if (!error.isEmpty()) {
-                            binding.progressBar.setVisibility(View.GONE);
                             return;
                         }
 
