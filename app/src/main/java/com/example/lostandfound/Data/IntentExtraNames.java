@@ -18,7 +18,7 @@ public final class IntentExtraNames {
 
     // claim id for passing to view claim activity
     public static final String INTENT_CLAIM_ITEM = "claim_item";
-    public static final String INTENT_CLAIM_ITEM_LIST = "claim_item_list"; // for the found user, a list of claim IDs are passed instead to generate the claim previews
+    // for the view found to view claim list intent, the INTENT_FOUND_ID is passed instead
 
     // chat inbox id
     public static final String INTENT_CHAT_INBOX_ID = "chat_inbox_id";
