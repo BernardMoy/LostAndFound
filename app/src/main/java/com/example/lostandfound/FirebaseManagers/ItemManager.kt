@@ -3,7 +3,6 @@ package com.example.lostandfound.FirebaseManagers
 import android.net.Uri
 import android.util.Log
 import com.example.lostandfound.Data.Claim
-import com.example.lostandfound.Data.ClaimList
 import com.example.lostandfound.Data.ClaimPreview
 import com.example.lostandfound.Data.FirebaseNames
 import com.example.lostandfound.Data.FoundItem
@@ -33,7 +32,7 @@ object ItemManager {
     }
 
     interface FoundClaimCallback {
-        fun onComplete(claimList: ClaimList)  // return the list of claims, or empty list if failed
+        fun onComplete(claimList: MutableList<Claim>)  // return the list of claims, or empty list if failed
     }
 
     interface ClaimPreviewCallback{
@@ -236,12 +235,14 @@ object ItemManager {
             object : Callback<List<String>> {
                 override fun onComplete(result: List<String>?) {
                     if (result.isNullOrEmpty()) {
-                        callback.onComplete(ClaimList())
+                        callback.onComplete(mutableListOf())
                         return
 
                     }
 
                     // for each result, get its claim id and construct object
+                    val claimListSize = result.size
+                    var fetchedItems = 0
                     val claimList: MutableList<Claim> = mutableListOf()
 
                     result.forEach { claimID ->
@@ -252,7 +253,7 @@ object ItemManager {
                                 override fun onComplete(result: Map<String, Any>?) {
                                     // if any fails, return empty list
                                     if (result == null) {
-                                        callback.onComplete(ClaimList())
+                                        callback.onComplete(mutableListOf())
                                         return
                                     }
 
@@ -267,14 +268,16 @@ object ItemManager {
 
                                     //add the item to the list
                                     claimList.add(thisClaim)
+
+                                    fetchedItems ++
+                                    if (fetchedItems == claimListSize){
+                                        // return the list
+                                        callback.onComplete(claimList)
+                                    }
                                 }
                             }
                         )
                     }
-
-                    // return the list
-                    callback.onComplete(ClaimList(claimList))
-
                 }
             }
         )

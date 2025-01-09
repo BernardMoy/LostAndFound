@@ -49,6 +49,7 @@ public class FirestoreManager {
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
+                Log.d("FIREBASE MANAGER ERROR", e.getMessage());
                 callback.onComplete(false);
             }
         });
@@ -71,6 +72,7 @@ public class FirestoreManager {
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
+                Log.d("FIREBASE MANAGER ERROR", e.getMessage());
                 callback.onComplete("");
             }
         });
@@ -98,6 +100,7 @@ public class FirestoreManager {
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
+                Log.d("FIREBASE MANAGER ERROR", e.getMessage());
                 callback.onComplete(null);
             }
         });
@@ -138,8 +141,8 @@ public class FirestoreManager {
             @Override
             public void onFailure(@NonNull Exception e) {
                 // return null
+                Log.d("FIREBASE MANAGER ERROR", e.getMessage());
                 callback.onComplete(null);
-                Log.d("ERROR", e.getMessage());
             }
         });
     }
@@ -169,8 +172,8 @@ public class FirestoreManager {
             @Override
             public void onFailure(@NonNull Exception e) {
                 // return null
+                Log.d("FIREBASE MANAGER ERROR", e.getMessage());
                 callback.onComplete(null);
-                Log.d("ERROR", e.getMessage());
             }
         });
     }
@@ -192,6 +195,7 @@ public class FirestoreManager {
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
+                Log.d("FIREBASE MANAGER ERROR", e.getMessage());
                 callback.onComplete(false);
             }
         });
@@ -241,6 +245,7 @@ public class FirestoreManager {
                 }).addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
+                        Log.d("FIREBASE MANAGER ERROR", e.getMessage());
                         callback.onComplete(false);
                     }
                 });
