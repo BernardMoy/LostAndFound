@@ -169,7 +169,16 @@ fun MainContent(viewModel: ViewClaimViewModel) {
             ItemDetails(viewModel = viewModel)
             LocationData(context = context, viewModel = viewModel)
             UserData(viewModel = viewModel)
-            DoneButton(context = context, viewModel = viewModel)
+
+            // the user have the power to accept this claim if:
+            // 1. they are the owner of the found item
+            // 2. the found item has status 1, i.e. no claims that are approved
+            val canAccept = viewModel.foundItemData.userID == FirebaseUtility.getUserID()
+                    && viewModel.foundItemData.status == 1
+
+            // action buttons
+            AcceptButton(context = context, viewModel = viewModel, canAccept = canAccept)
+            DoneButton(context = context, viewModel = viewModel, canAccept = canAccept)
         }
     }
 }
@@ -236,7 +245,8 @@ fun Reference(viewModel: ViewClaimViewModel){
                     style = Typography.bodyMedium,
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.primary,
-                    textDecoration = TextDecoration.Underline
+                    textDecoration = TextDecoration.Underline,
+                    textAlign = TextAlign.Center
                 )
             },
             contentRight = {
@@ -245,7 +255,8 @@ fun Reference(viewModel: ViewClaimViewModel){
                     style = Typography.bodyMedium,
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.secondary,
-                    textDecoration = TextDecoration.Underline
+                    textDecoration = TextDecoration.Underline,
+                    textAlign = TextAlign.Center
                 )
             }
         )
@@ -283,22 +294,24 @@ fun Status(viewModel: ViewClaimViewModel) {
             },
             contentLeft = {
                 Text(
-                    text = lostStatusText[0] ?: "",
+                    text = lostStatusText[viewModel.lostItemData.status] ?: "",
                     style = Typography.bodyMedium,
                     color = colorResource(
-                        id = statusColor[0] ?: R.color.status0
+                        id = statusColor[viewModel.lostItemData.status] ?: R.color.status0
                     ),
-                    fontWeight = FontWeight.Bold
+                    fontWeight = FontWeight.Bold,
+                    textAlign = TextAlign.Center
                 )
             },
             contentRight = {
                 Text(
-                    text = foundStatusText[0] ?: "",
+                    text = foundStatusText[viewModel.foundItemData.status] ?: "",
                     style = Typography.bodyMedium,
                     color = colorResource(
-                        id = statusColor[0] ?: R.color.status0
+                        id = statusColor[viewModel.foundItemData.status] ?: R.color.status0
                     ),
-                    fontWeight = FontWeight.Bold
+                    fontWeight = FontWeight.Bold,
+                    textAlign = TextAlign.Center
                 )
             }
         )
@@ -463,22 +476,57 @@ fun UserData(
 @Composable
 fun DoneButton(
     context: Context,
-    viewModel: ViewClaimViewModel
+    viewModel: ViewClaimViewModel,
+    canAccept: Boolean
 ){
-
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = dimensionResource(id = R.dimen.content_margin)),
+            .padding(vertical = dimensionResource(id = R.dimen.content_margin_half)),
         horizontalArrangement = Arrangement.Center
     ){
         CustomButton(
             text = "Done",
-            type = ButtonType.FILLED,
+            type = if (canAccept) ButtonType.OUTLINED else ButtonType.FILLED,
             onClick = {
                 (context as Activity).finish()
             }
         )
+    }
+}
+
+// accept and reject buttons, if the found item hasnt been accepted by any lost item claims (status 1)
+@Composable
+fun AcceptButton(
+    context: Context,
+    viewModel: ViewClaimViewModel,
+    canAccept: Boolean
+){
+    // display the button only when can accept
+    if (canAccept){
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = dimensionResource(id = R.dimen.content_margin_half)),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ){
+            Text(
+                text = "You can choose to accept this claim as you owns the found item.",
+                style = Typography.bodyMedium,
+                color = Color.Gray,
+                textAlign = TextAlign.Center,
+                modifier = Modifier.padding(
+                    dimensionResource(id = R.dimen.title_margin)
+                )
+            )
+            CustomButton(
+                text = "Accept this claim",
+                type = ButtonType.FILLED,
+                onClick = {
+
+                }
+            )
+        }
     }
 }
 

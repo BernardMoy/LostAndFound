@@ -182,7 +182,8 @@ fun Reference(viewModel: ViewComparisonViewModel){
                     style = Typography.bodyMedium,
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.primary,
-                    textDecoration = TextDecoration.Underline
+                    textDecoration = TextDecoration.Underline,
+                    textAlign = TextAlign.Center
                 )
             },
             contentRight = {
@@ -191,7 +192,8 @@ fun Reference(viewModel: ViewComparisonViewModel){
                     style = Typography.bodyMedium,
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.secondary,
-                    textDecoration = TextDecoration.Underline
+                    textDecoration = TextDecoration.Underline,
+                    textAlign = TextAlign.Center
                 )
             }
         )
@@ -203,14 +205,16 @@ fun Reference(viewModel: ViewComparisonViewModel){
                 Text(
                     text = "#" + viewModel.lostItemData.itemID,
                     color = Color.Gray,
-                    style = Typography.bodyMedium
+                    style = Typography.bodyMedium,
+                    textAlign = TextAlign.Center
                 )
             },
             contentRight = {
                 Text(
                     text = "#" + viewModel.foundItemData.itemID,
                     color = Color.Gray,
-                    style = Typography.bodyMedium
+                    style = Typography.bodyMedium,
+                    textAlign = TextAlign.Center
                 )
             }
         )
@@ -233,7 +237,8 @@ fun Status(viewModel: ViewComparisonViewModel) {
                     color = colorResource(
                         id = statusColor[0] ?: R.color.status0
                     ),
-                    fontWeight = FontWeight.Bold
+                    fontWeight = FontWeight.Bold,
+                    textAlign = TextAlign.Center
                 )
             },
             contentRight = {
@@ -243,7 +248,8 @@ fun Status(viewModel: ViewComparisonViewModel) {
                     color = colorResource(
                         id = statusColor[0] ?: R.color.status0
                     ),
-                    fontWeight = FontWeight.Bold
+                    fontWeight = FontWeight.Bold,
+                    textAlign = TextAlign.Center
                 )
             }
         )
