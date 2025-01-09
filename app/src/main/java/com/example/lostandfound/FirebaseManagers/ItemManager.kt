@@ -306,8 +306,7 @@ object ItemManager {
                             lostItemImage = lostItem.image,
                             lostItemName = lostItem.itemName,
                             lostUserName = username,
-                            claimTimestamp = claimItem.timestamp,
-                            isClaimApproved = claimItem.isApproved
+                            claimItem = claimItem
                         )
 
                         // return the preview item

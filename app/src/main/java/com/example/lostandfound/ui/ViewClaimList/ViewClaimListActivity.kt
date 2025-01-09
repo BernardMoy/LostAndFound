@@ -1,6 +1,7 @@
 package com.example.lostandfound.ui.ViewClaimList
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
@@ -37,9 +38,14 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.example.lostandfound.CustomElements.BackToolbar
 import com.example.lostandfound.CustomElements.CustomCenteredProgressbar
 import com.example.lostandfound.CustomElements.CustomClaimPreview
+import com.example.lostandfound.Data.Claim
+import com.example.lostandfound.Data.ClaimPreview
 import com.example.lostandfound.Data.FoundItem
 import com.example.lostandfound.Data.IntentExtraNames
+import com.example.lostandfound.FirebaseManagers.ItemManager
 import com.example.lostandfound.R
+import com.example.lostandfound.ui.ViewClaim.ViewClaimActivity
+import com.example.lostandfound.ui.ViewLost.ViewLostActivity
 import com.example.lostandfound.ui.theme.ComposeTheme
 import com.example.lostandfound.ui.theme.Typography
 
@@ -51,6 +57,8 @@ class ViewClaimListActivity : ComponentActivity() {
         val viewModel: ViewClaimListViewModel by viewModels()
 
         // load the passed intent data into the view model
+        // found item is passed here instead of a list of claim items
+        // to allow the refresh button to work in this activity
         val passedFoundItem = intent.getParcelableExtra<FoundItem>(IntentExtraNames.INTENT_FOUND_ID)
         if (passedFoundItem != null) {
             viewModel.foundItem = passedFoundItem
@@ -137,10 +145,26 @@ fun ClaimPreviewsColumn(
             viewModel.claimPreviewList
 
         ) { claimPreview ->
-            CustomClaimPreview(claimPreview = claimPreview)
+            // load claim preview
+            CustomClaimPreview(
+                claimPreview = claimPreview,
+                onViewButtonClicked = {
+                    // get the claim item from preview
+                    val claimItem: Claim = claimPreview.claimItem
+
+                    // start view claim activity
+                    val intent = Intent(context, ViewClaimActivity::class.java)
+
+                    // pass the claim item object to the activity
+                    intent.putExtra(
+                        IntentExtraNames.INTENT_CLAIM_ITEM,
+                        claimItem
+                    )
+                    context.startActivity(intent)
+                }
+            )
         }
     }
-
 }
 
 
