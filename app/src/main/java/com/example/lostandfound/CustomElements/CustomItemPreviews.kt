@@ -45,7 +45,9 @@ import com.example.lostandfound.ui.theme.Typography
 @Preview(showBackground = true)
 @Composable
 fun Preview() {
-    CustomClaimPreview(claimPreview = ClaimPreview())
+    ComposeTheme {
+        CustomClaimPreview(claimPreview = ClaimPreview())
+    }
 }
 
 @OptIn(ExperimentalGlideComposeApi::class)
@@ -358,7 +360,8 @@ fun CustomFoundItemPreview(
 @OptIn(ExperimentalGlideComposeApi::class)
 @Composable
 fun CustomClaimPreview(
-    claimPreview: ClaimPreview
+    claimPreview: ClaimPreview,
+    onViewButtonClicked: () -> Unit = {}
 ){
     Box(
         modifier = Modifier
@@ -407,7 +410,7 @@ fun CustomClaimPreview(
 
                     // claim time
                     Text(
-                        text = "Claimed on " + DateTimeManager.dateTimeToString(claimPreview.claimTimestamp),
+                        text = "Claimed on " + DateTimeManager.dateTimeToString(claimPreview.claimItem.timestamp),
                         style = Typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onBackground,
                     )
@@ -417,7 +420,7 @@ fun CustomClaimPreview(
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin_half))
                     ) {
-                        val color = if (claimPreview.isClaimApproved) colorResource(id = R.color.status2) else colorResource(id = R.color.status0)
+                        val color = if (claimPreview.claimItem.isApproved) colorResource(id = R.color.status2) else colorResource(id = R.color.status0)
 
                         Icon(
                             imageVector = Icons.Filled.Circle,
@@ -426,10 +429,25 @@ fun CustomClaimPreview(
                             modifier = Modifier.width(dimensionResource(id = R.dimen.content_margin))
                         )
                         Text(
-                            text = if (claimPreview.isClaimApproved) "You have approved this claim." else "You have not approved this claim.",
+                            text = if (claimPreview.claimItem.isApproved) "You have approved this claim." else "You have not approved this claim.",
                             style = Typography.bodyMedium,
                             color = color,
                             fontWeight = FontWeight.Bold,
+                        )
+                    }
+                    
+                    // done button
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.End
+                    ){
+                        CustomButton(
+                            text = "View",
+                            type = ButtonType.FILLED,
+                            onClick = {
+                                onViewButtonClicked()
+                            },
+                            small = true
                         )
                     }
                 }

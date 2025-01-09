@@ -10,6 +10,5 @@ data class ClaimPreview (
     val lostItemImage: String = "android.resource://com.example.lostandfound/" + R.drawable.placeholder_image,
     val lostItemName: String = "Name of item",
     val lostUserName: String = "user name",
-    val claimTimestamp: Long = 0L,
-    val isClaimApproved: Boolean = false
+    val claimItem: Claim = Claim()
 )

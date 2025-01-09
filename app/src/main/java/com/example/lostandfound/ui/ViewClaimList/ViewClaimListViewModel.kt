@@ -19,7 +19,7 @@ class ViewClaimListViewModel : ViewModel() {
     // default found item placeholder data, loaded upon activity creation
     var foundItem = FoundItem()
 
-    // default claim preview list, to be updated in getAllData()
+    // store a list of claims
     var claimPreviewList: MutableList<ClaimPreview> = mutableListOf()
 
 
