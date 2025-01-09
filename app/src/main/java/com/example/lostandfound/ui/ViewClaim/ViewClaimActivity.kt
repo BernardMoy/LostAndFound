@@ -59,6 +59,7 @@ import com.example.lostandfound.CustomElements.CustomComparisonField
 import com.example.lostandfound.CustomElements.CustomComparisonTextField
 import com.example.lostandfound.CustomElements.CustomEditText
 import com.example.lostandfound.CustomElements.CustomGrayTitle
+import com.example.lostandfound.CustomElements.CustomProgressBar
 import com.example.lostandfound.CustomElements.CustomTextDialog
 import com.example.lostandfound.CustomElements.CustomViewTwoLocationsDialog
 import com.example.lostandfound.Data.Claim
@@ -506,6 +507,7 @@ fun AcceptButton(
                     dimensionResource(id = R.dimen.title_margin)
                 )
             )
+
             CustomButton(
                 text = "Accept this claim",
                 type = ButtonType.FILLED,
