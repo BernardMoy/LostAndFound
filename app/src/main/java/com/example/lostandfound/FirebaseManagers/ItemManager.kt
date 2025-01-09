@@ -4,13 +4,16 @@ import android.net.Uri
 import android.util.Log
 import com.example.lostandfound.Data.Claim
 import com.example.lostandfound.Data.ClaimList
+import com.example.lostandfound.Data.ClaimPreview
 import com.example.lostandfound.Data.FirebaseNames
 import com.example.lostandfound.Data.FoundItem
 import com.example.lostandfound.Data.LostItem
 import com.example.lostandfound.FirebaseManagers.FirestoreManager.Callback
 import com.example.lostandfound.R
 import com.example.lostandfound.Utility.LocationManager
+import com.google.firebase.Firebase
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.auth.User
 
 object ItemManager {
     interface LostItemCallback {
@@ -31,6 +34,10 @@ object ItemManager {
 
     interface FoundClaimCallback {
         fun onComplete(claimList: ClaimList)  // return the list of claims, or empty list if failed
+    }
+
+    interface ClaimPreviewCallback{
+        fun onComplete(claimPreview: ClaimPreview?)  // return the claim preview or null if failed
     }
 
     // method to get the lostitem as a LostItem object when given a lost item id
@@ -271,6 +278,42 @@ object ItemManager {
                 }
             }
         )
+    }
+
+    // method to get a ClaimPreview object given a Claim object
+    fun getClaimPreviewFromClaim(claimItem: Claim, callback: ClaimPreviewCallback){
+        // get the lost item name and image
+        getLostItemFromId(claimItem.lostItemID, object: LostItemCallback{
+            override fun onComplete(lostItem: LostItem?) {
+                if (lostItem == null){
+                    callback.onComplete(null)
+                    return
+                }
+
+                // get the lost item user name
+                UserManager.getUsernameFromId(lostItem.userID, object: UserManager.UsernameCallback{
+                    override fun onComplete(username: String) {
+                        if (username.isEmpty()){
+                            callback.onComplete(null)
+                            return
+                        }
+
+                        // create the preview item
+                        val thisClaimPreview = ClaimPreview(
+                            lostItemImage = lostItem.image,
+                            lostItemName = lostItem.itemName,
+                            lostUserName = username,
+                            claimTimestamp = claimItem.timestamp,
+                            isClaimApproved = claimItem.isApproved
+                        )
+
+                        // return the preview item
+                        callback.onComplete(thisClaimPreview)
+
+                    }
+                })
+            }
+        })
     }
 
     // method to get the status given a lost item id, by querying the claim collection
