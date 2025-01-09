@@ -53,6 +53,7 @@ import com.example.lostandfound.CustomElements.CustomEditText
 import com.example.lostandfound.CustomElements.CustomGrayTitle
 import com.example.lostandfound.CustomElements.CustomViewLocationDialog
 import com.example.lostandfound.Data.Claim
+import com.example.lostandfound.Data.ClaimList
 import com.example.lostandfound.Data.FoundItem
 import com.example.lostandfound.Data.IntentExtraNames
 import com.example.lostandfound.Data.foundStatusText
@@ -64,6 +65,7 @@ import com.example.lostandfound.Utility.DateTimeManager
 import com.example.lostandfound.Utility.LocationManager
 import com.example.lostandfound.ui.Search.SearchActivity
 import com.example.lostandfound.ui.ViewClaim.ViewClaimActivity
+import com.example.lostandfound.ui.ViewClaimList.ViewClaimListActivity
 import com.example.lostandfound.ui.ViewLost.ViewLostViewModel
 import com.example.lostandfound.ui.theme.ComposeTheme
 import com.example.lostandfound.ui.theme.Typography
@@ -362,6 +364,25 @@ fun ActionButtons(
                         type = ButtonType.FILLED,
                         onClick = {
                             // start new claim list activity
+                            val intent = Intent(context, ViewClaimListActivity::class.java)
+
+                            ItemManager.getClaimsFromFoundId(viewModel.itemData.itemID, object: ItemManager.FoundClaimCallback{
+                                override fun onComplete(claimList: ClaimList) {
+                                    if (claimList.claimList.isEmpty()){
+                                        Toast.makeText(context, "Fetching claims data failed", Toast.LENGTH_SHORT).show()
+                                        return
+                                    }
+
+                                    // pass the claim list object to the intent
+                                    intent.putExtra(
+                                        IntentExtraNames.INTENT_CLAIM_ITEM_LIST,
+                                        claimList
+                                    )
+
+                                    // start view claim list activity
+                                    context.startActivity(intent)
+                                }
+                            })
                         }
                     )
                 }

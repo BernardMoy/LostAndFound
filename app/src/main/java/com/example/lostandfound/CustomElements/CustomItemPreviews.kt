@@ -29,6 +29,7 @@ import androidx.compose.ui.unit.dp
 import coil3.compose.rememberAsyncImagePainter
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
+import com.example.lostandfound.Data.ClaimPreview
 import com.example.lostandfound.Data.FirebaseNames
 import com.example.lostandfound.Data.FoundItem
 import com.example.lostandfound.Data.LostItem
@@ -44,7 +45,7 @@ import com.example.lostandfound.ui.theme.Typography
 @Preview(showBackground = true)
 @Composable
 fun Preview() {
-
+    CustomClaimPreview(claimPreview = ClaimPreview())
 }
 
 @OptIn(ExperimentalGlideComposeApi::class)
@@ -349,6 +350,89 @@ fun CustomFoundItemPreview(
                     small = true
                 )
 
+            }
+        }
+    }
+}
+
+@OptIn(ExperimentalGlideComposeApi::class)
+@Composable
+fun CustomClaimPreview(
+    claimPreview: ClaimPreview
+){
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .border(
+                width = 1.dp,
+                color = Color.Gray,
+                shape = RoundedCornerShape(
+                    dimensionResource(id = R.dimen.corner_radius_small)
+                )
+            )
+            .padding(dimensionResource(id = R.dimen.title_margin))
+    ) {
+        Column (
+            verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin))
+        ){
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin))
+            ) {
+                // image of the item is loaded using GlideImage
+                GlideImage(
+                    model = Uri.parse(claimPreview.lostItemImage),
+                    contentDescription = "Item image",
+                    modifier = Modifier.weight(1F)
+                )
+
+                // other attributes of the item
+                Column(
+                    modifier = Modifier.weight(2F),
+                    verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin_half))
+                ) {
+                    // name
+                    Text(
+                        text = claimPreview.lostItemName,
+                        style = Typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onBackground,
+                        fontWeight = FontWeight.Bold,
+                    )
+
+                    // user name and claim time
+                    Text(
+                        text = "Claimed by " + claimPreview.lostUserName,
+                        style = Typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onBackground,
+                    )
+
+                    // claim time
+                    Text(
+                        text = "Claimed on " + DateTimeManager.dateTimeToString(claimPreview.claimTimestamp),
+                        style = Typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onBackground,
+                    )
+
+                    // whether is approved
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin_half))
+                    ) {
+                        val color = if (claimPreview.isClaimApproved) colorResource(id = R.color.status2) else colorResource(id = R.color.status0)
+
+                        Icon(
+                            imageVector = Icons.Filled.Circle,
+                            tint = color,
+                            contentDescription = "Status of claim",
+                            modifier = Modifier.width(dimensionResource(id = R.dimen.content_margin))
+                        )
+                        Text(
+                            text = if (claimPreview.isClaimApproved) "You have approved this claim." else "You have not approved this claim.",
+                            style = Typography.bodyMedium,
+                            color = color,
+                            fontWeight = FontWeight.Bold,
+                        )
+                    }
+                }
             }
         }
     }
