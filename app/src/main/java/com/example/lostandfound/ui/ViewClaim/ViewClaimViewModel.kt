@@ -11,7 +11,6 @@ import com.example.lostandfound.FirebaseManagers.FirestoreManager
 import com.example.lostandfound.FirebaseManagers.ItemManager
 import com.example.lostandfound.FirebaseManagers.UserManager
 import com.example.lostandfound.Utility.ErrorCallback
-import com.example.lostandfound.ui.ViewComparison.Callback
 
 interface Callback<T> {
     fun onComplete(result: T)
@@ -20,6 +19,7 @@ interface Callback<T> {
 class ViewClaimViewModel : ViewModel() {
     val isLoading: MutableState<Boolean> = mutableStateOf(true)
     val isLocationDialogShown: MutableState<Boolean> = mutableStateOf(false)
+    var isAcceptClaimDialogShown: MutableState<Boolean> = mutableStateOf(false)
 
     // default claim placeholder data
     var claimData = Claim()
@@ -35,7 +35,8 @@ class ViewClaimViewModel : ViewModel() {
     var foundUserName = "Unknown"
 
 
-    // function to load the lost and found item data when given the claim item id.
+    // function to load the lost and found item data  (lostItemData, foundItemData)
+    // when given the claim item (claimData)
     fun loadDataWithClaim(callback: ErrorCallback) {
         val firestoreManager = FirestoreManager()
 
@@ -114,31 +115,25 @@ class ViewClaimViewModel : ViewModel() {
             })
     }
 
-    // function to get item data
-    fun getUserName(callback: Callback<Boolean>) {
-        // manager
-        val firestoreManager = FirestoreManager()
-
-        // get name of the user from firebase firestore
-        firestoreManager.get(
-            FirebaseNames.COLLECTION_USERS,
-            foundItemData.userID,
-            object : FirestoreManager.Callback<Map<String, Any>> {
-                override fun onComplete(result: Map<String, Any>?) {
-                    if (result == null) {
+    // function to mark the claim as accepted
+    // once a claim is approved, it cannot be un-approved
+    fun approveClaim(callback: Callback<Boolean>){
+        val db = FirestoreManager()
+        db.update(FirebaseNames.COLLECTION_CLAIMED_ITEMS,
+            claimData.claimID,
+            FirebaseNames.CLAIM_IS_APPROVED,
+            true,  // set is approved to true
+            object: FirestoreManager.Callback<Boolean>{
+                override fun onComplete(result: Boolean) {
+                    if (!result){
                         callback.onComplete(false)
-
-                    } else {
-                        val name =
-                            result[FirebaseNames.USERS_FIRSTNAME].toString() + " " + result[FirebaseNames.USERS_LASTNAME].toString()
-
-                        // set username
-                        foundUserName = name
-
-                        // return true
-                        callback.onComplete(true)
+                        return
                     }
+
+                    // update successful, return true
+                    callback.onComplete(true)
                 }
-            })
+            }
+        )
     }
 }

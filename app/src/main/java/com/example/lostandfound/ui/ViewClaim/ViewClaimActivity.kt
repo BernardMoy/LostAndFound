@@ -23,7 +23,6 @@ import androidx.compose.material.icons.outlined.AccountCircle
 import androidx.compose.material.icons.outlined.CalendarMonth
 import androidx.compose.material.icons.outlined.Cancel
 import androidx.compose.material.icons.outlined.CheckCircle
-import androidx.compose.material.icons.outlined.Close
 import androidx.compose.material.icons.outlined.Description
 import androidx.compose.material.icons.outlined.Edit
 import androidx.compose.material.icons.outlined.Folder
@@ -37,10 +36,6 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -63,27 +58,20 @@ import com.example.lostandfound.CustomElements.CustomCenteredProgressbar
 import com.example.lostandfound.CustomElements.CustomComparisonField
 import com.example.lostandfound.CustomElements.CustomComparisonTextField
 import com.example.lostandfound.CustomElements.CustomEditText
-import com.example.lostandfound.CustomElements.CustomPickLocationDialog
 import com.example.lostandfound.CustomElements.CustomGrayTitle
-import com.example.lostandfound.CustomElements.CustomProgressBar
-import com.example.lostandfound.CustomElements.CustomViewLocationDialog
+import com.example.lostandfound.CustomElements.CustomTextDialog
 import com.example.lostandfound.CustomElements.CustomViewTwoLocationsDialog
 import com.example.lostandfound.Data.Claim
 import com.example.lostandfound.Data.IntentExtraNames
-import com.example.lostandfound.Data.FoundItem
-import com.example.lostandfound.Data.LostItem
 import com.example.lostandfound.Data.foundStatusText
 import com.example.lostandfound.Data.lostStatusText
 import com.example.lostandfound.Data.statusColor
 import com.example.lostandfound.FirebaseManagers.FirebaseUtility
-import com.example.lostandfound.FirebaseManagers.FirestoreManager
 import com.example.lostandfound.R
 import com.example.lostandfound.Utility.DateTimeManager
 import com.example.lostandfound.Utility.ErrorCallback
 import com.example.lostandfound.Utility.LocationManager
 import com.example.lostandfound.ui.Done.DoneActivity
-import com.example.lostandfound.ui.Search.SearchActivity
-import com.example.lostandfound.ui.ViewClaim.ViewClaimViewModel
 import com.example.lostandfound.ui.theme.ComposeTheme
 import com.example.lostandfound.ui.theme.Typography
 
@@ -96,7 +84,7 @@ class ViewClaimActivity : ComponentActivity() {
 
         // load the passed intent data into the view model
         val passedClaim = intent.getParcelableExtra<Claim>(IntentExtraNames.INTENT_CLAIM_ITEM)
-        if (passedClaim != null){
+        if (passedClaim != null) {
             viewModel.claimData = passedClaim
         }
 
@@ -161,7 +149,7 @@ fun MainContent(viewModel: ViewClaimViewModel) {
     } else {
         Column(
             verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin))
-        ){
+        ) {
             ClaimStatus(viewModel = viewModel)
             Reference(viewModel = viewModel)
             Status(viewModel = viewModel)
@@ -186,7 +174,7 @@ fun MainContent(viewModel: ViewClaimViewModel) {
 @Composable
 fun ClaimStatus(
     viewModel: ViewClaimViewModel
-){
+) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -196,8 +184,8 @@ fun ClaimStatus(
             ),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin))
-    ){
-        if (viewModel.claimData.isApproved){
+    ) {
+        if (viewModel.claimData.isApproved) {
             Icon(
                 imageVector = Icons.Outlined.CheckCircle,
                 contentDescription = "Approved",
@@ -231,11 +219,11 @@ fun ClaimStatus(
 }
 
 @Composable
-fun Reference(viewModel: ViewClaimViewModel){
+fun Reference(viewModel: ViewClaimViewModel) {
     Column(
         modifier = Modifier.fillMaxWidth(),
         verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin))
-    ){  
+    ) {
         CustomComparisonField(
             centerLabel = {},
 
@@ -320,12 +308,12 @@ fun Status(viewModel: ViewClaimViewModel) {
 
 @OptIn(ExperimentalGlideComposeApi::class)
 @Composable
-fun ItemImage(viewModel: ViewClaimViewModel){
+fun ItemImage(viewModel: ViewClaimViewModel) {
     Row(
         modifier = Modifier
             .fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically,
-    ){
+    ) {
         CustomComparisonField(
             contentLeft = {
                 // image of the item
@@ -354,10 +342,10 @@ fun ItemImage(viewModel: ViewClaimViewModel){
 }
 
 @Composable
-fun ItemDetails(viewModel: ViewClaimViewModel){
+fun ItemDetails(viewModel: ViewClaimViewModel) {
     Column(
         verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin))
-    ){
+    ) {
         CustomGrayTitle(text = "Item details")
 
         // Name of item
@@ -420,7 +408,7 @@ fun ItemDetails(viewModel: ViewClaimViewModel){
 fun LocationData(
     context: Context,
     viewModel: ViewClaimViewModel
-){
+) {
     Column {
         CustomGrayTitle(text = "Location")
 
@@ -443,10 +431,10 @@ fun LocationData(
 @Composable
 fun UserData(
     viewModel: ViewClaimViewModel
-){
+) {
     // the view claim screen can be viewed by either the lost user or the found user.
     // if the viewer is the lost user, display this
-    if (viewModel.lostItemData.userID == FirebaseUtility.getUserID()){
+    if (viewModel.lostItemData.userID == FirebaseUtility.getUserID()) {
         CustomGrayTitle(text = "Contact user who found this item")
         CustomEditText(
             fieldLabel = "User",
@@ -458,9 +446,8 @@ fun UserData(
     }
 
     // if the viewer is the found user, display this
-    if (viewModel.foundItemData.userID == FirebaseUtility.getUserID()){
-        Column(
-        ) {
+    if (viewModel.foundItemData.userID == FirebaseUtility.getUserID()) {
+        Column {
             CustomGrayTitle(text = "Contact user who claimed this item")
             CustomEditText(
                 fieldLabel = "User",
@@ -478,13 +465,13 @@ fun DoneButton(
     context: Context,
     viewModel: ViewClaimViewModel,
     canAccept: Boolean
-){
+) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = dimensionResource(id = R.dimen.content_margin_half)),
         horizontalArrangement = Arrangement.Center
-    ){
+    ) {
         CustomButton(
             text = "Done",
             type = if (canAccept) ButtonType.OUTLINED else ButtonType.FILLED,
@@ -501,15 +488,15 @@ fun AcceptButton(
     context: Context,
     viewModel: ViewClaimViewModel,
     canAccept: Boolean
-){
+) {
     // display the button only when can accept
-    if (canAccept){
+    if (canAccept) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(vertical = dimensionResource(id = R.dimen.content_margin_half)),
             horizontalAlignment = Alignment.CenterHorizontally
-        ){
+        ) {
             Text(
                 text = "You can choose to accept this claim as you owns the found item.",
                 style = Typography.bodyMedium,
@@ -523,10 +510,50 @@ fun AcceptButton(
                 text = "Accept this claim",
                 type = ButtonType.FILLED,
                 onClick = {
-
+                    // open the dialog to accept
+                    viewModel.isAcceptClaimDialogShown.value = true
                 }
             )
         }
+
+        // dialog when trying to click the accept button
+        CustomTextDialog(
+            icon = Icons.Outlined.CheckCircle,
+            title = "Approve this claim?",
+            content = "Once you have accepted this claim, you cannot accept other claims for this item.",
+            confirmButton = {
+                CustomButton(
+                    text = "Approve",
+                    type = ButtonType.FILLED,
+                    onClick = {
+                        // approve the claim
+                        viewModel.approveClaim(object : Callback<Boolean>{
+                            override fun onComplete(result: Boolean) {
+                                if (!result){
+                                    Toast.makeText(context, "Approving claim failed", Toast.LENGTH_SHORT).show()
+                                    return
+                                }
+
+                                // open done activity
+                                val intent: Intent = Intent(context, DoneActivity::class.java)
+                                intent.putExtra(IntentExtraNames.INTENT_DONE_ACTIVITY_TITLE, "Claim approved!")
+                                context.startActivity(intent)
+                            }
+                        })
+                    }
+                )
+            },
+            dismissButton = {
+                CustomButton(
+                    text = "Cancel",
+                    type = ButtonType.OUTLINED,
+                    onClick = {
+                        viewModel.isAcceptClaimDialogShown.value = false
+                    }
+                )
+            },
+            isDialogShown = viewModel.isAcceptClaimDialogShown
+        )
     }
 }
 
@@ -535,16 +562,16 @@ fun AcceptButton(
 fun loadData(
     context: Context,
     viewModel: ViewClaimViewModel
-){
+) {
     // is loading initially
     viewModel.isLoading.value = true
 
     // load lost item data of the current user from the view model
-    viewModel.loadDataWithClaim(object : ErrorCallback{
+    viewModel.loadDataWithClaim(object : ErrorCallback {
         override fun onComplete(error: String) {
             viewModel.isLoading.value = false
 
-            if (error.isNotEmpty()){
+            if (error.isNotEmpty()) {
                 Toast.makeText(context, error, Toast.LENGTH_SHORT).show()
                 return
             }
