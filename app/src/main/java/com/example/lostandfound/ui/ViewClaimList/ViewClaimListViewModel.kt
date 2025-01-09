@@ -60,6 +60,10 @@ class ViewClaimListViewModel : ViewModel() {
 
                             // return true when all items have been fetched
                             if (fetchedItems == claimListSize){
+                                // sort the items by their timestamp
+                                claimPreviewList.sortByDescending { item ->
+                                    item.claimItem.timestamp
+                                }
                                 callback.onComplete(true)
                             }
                         }
