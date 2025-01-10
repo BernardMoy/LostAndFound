@@ -164,6 +164,7 @@ fun CustomInputDialog(
                 ) {
                     Text(
                         text = content,
+                        modifier = Modifier.fillMaxWidth(),
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onBackground,
                         textAlign = TextAlign.Center
