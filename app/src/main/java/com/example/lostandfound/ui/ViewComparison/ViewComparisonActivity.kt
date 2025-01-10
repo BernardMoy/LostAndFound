@@ -23,6 +23,7 @@ import androidx.compose.material.icons.outlined.CalendarMonth
 import androidx.compose.material.icons.outlined.Description
 import androidx.compose.material.icons.outlined.Edit
 import androidx.compose.material.icons.outlined.Folder
+import androidx.compose.material.icons.outlined.Lock
 import androidx.compose.material.icons.outlined.Palette
 import androidx.compose.material.icons.outlined.Title
 import androidx.compose.material3.HorizontalDivider
@@ -59,6 +60,7 @@ import com.example.lostandfound.CustomElements.CustomComparisonField
 import com.example.lostandfound.CustomElements.CustomComparisonTextField
 import com.example.lostandfound.CustomElements.CustomEditText
 import com.example.lostandfound.CustomElements.CustomGrayTitle
+import com.example.lostandfound.CustomElements.CustomInputDialog
 import com.example.lostandfound.CustomElements.CustomProgressBar
 import com.example.lostandfound.CustomElements.CustomViewTwoLocationsDialog
 import com.example.lostandfound.Data.Claim
@@ -166,6 +168,7 @@ fun MainContent(viewModel: ViewComparisonViewModel) {
             ItemImage(viewModel = viewModel)
             ItemDetails(viewModel = viewModel)
             LocationData(context = context, viewModel = viewModel)
+            SecurityQuestion(viewModel = viewModel)
             UserData(viewModel = viewModel)
             ClaimButton(context = context, viewModel = viewModel)
 
@@ -393,6 +396,22 @@ fun LocationData(
 }
 
 @Composable
+fun SecurityQuestion(
+    viewModel: ViewComparisonViewModel
+){
+    // security question - whether it exists
+    Column{
+        CustomGrayTitle(text = "Security question")
+        CustomEditText(
+            fieldLabel = "Security question",
+            fieldContent = if (viewModel.foundItemData.securityQuestion.isEmpty()) "No" else "Yes",
+            isEditable = false,
+            leftIcon = Icons.Outlined.Lock
+        )
+    }
+}
+
+@Composable
 fun UserData(
     viewModel: ViewComparisonViewModel
 ){
@@ -448,23 +467,42 @@ fun ClaimButton(
                     onClick = {
                         isLoading = true
 
-                        // update statuses of the item
-                        viewModel.putClaimedItems(object : ErrorCallback{
-                            override fun onComplete(error: String) {
-                                if (error.isNotEmpty()){
-                                    Toast.makeText(context, error, Toast.LENGTH_SHORT).show()
-                                    return
-                                }
+                        // if there is a security question for the found item, prompt the user to enter it
+                        if (viewModel.foundItemData.securityQuestion.isNotEmpty()){
+                            viewModel.isSecurityQuestionDialogShown.value = true
 
-                                // start done activity
-                                val i: Intent = Intent(context, DoneActivity::class.java)
-                                i.putExtra(IntentExtraNames.INTENT_DONE_ACTIVITY_TITLE, "Claim Submitted")
-                                context.startActivity(i)
+                        } else {
+                            // claim item
+                            claimItem(context = context, viewModel = viewModel)
+                        }
+                    }
+                )
 
-                                // close current activity
-                                (context as Activity).finish()
+                // the dialog to prompt user to enter security question
+                CustomInputDialog(
+                    icon = Icons.Outlined.Lock,
+                    title = "Security question",
+                    content = viewModel.foundItemData.securityQuestion,
+                    inputText = viewModel.securityQuestionAnswerFromUser,
+                    isDialogShown = viewModel.isSecurityQuestionDialogShown,
+                    inputPlaceholder = "Your answer...",
+                    confirmButton = {
+                        CustomButton(
+                            text = "Claim",
+                            type = ButtonType.FILLED,
+                            onClick = {
+
                             }
-                        })
+                        )
+                    },
+                    dismissButton = {
+                        CustomButton(
+                            text = "Cancel",
+                            type = ButtonType.OUTLINED,
+                            onClick = {
+                                viewModel.isSecurityQuestionDialogShown.value = false
+                            }
+                        )
                     }
                 )
             } else if (viewModel.lostItemData.status == 1
@@ -490,6 +528,30 @@ fun ClaimButton(
     }
 }
 
+
+// function to claim item
+fun claimItem(
+    context: Context,
+    viewModel: ViewComparisonViewModel
+){
+    // update statuses of the item
+    viewModel.putClaimedItems(object : ErrorCallback{
+        override fun onComplete(error: String) {
+            if (error.isNotEmpty()){
+                Toast.makeText(context, error, Toast.LENGTH_SHORT).show()
+                return
+            }
+
+            // start done activity
+            val i: Intent = Intent(context, DoneActivity::class.java)
+            i.putExtra(IntentExtraNames.INTENT_DONE_ACTIVITY_TITLE, "Claim Submitted")
+            context.startActivity(i)
+
+            // close current activity
+            (context as Activity).finish()
+        }
+    })
+}
 
 // function to load data, called when the activity is created
 fun loadData(

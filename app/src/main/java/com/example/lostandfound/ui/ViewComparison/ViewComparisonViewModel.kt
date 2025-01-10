@@ -18,8 +18,11 @@ interface Callback<T> {
 
 class ViewComparisonViewModel : ViewModel(){
     val isLoading: MutableState<Boolean> = mutableStateOf(true)
-
     val isLocationDialogShown: MutableState<Boolean> = mutableStateOf(false)
+    val isSecurityQuestionDialogShown: MutableState<Boolean> = mutableStateOf(false)
+
+    // the security question ans the user answered
+    var securityQuestionAnswerFromUser: String = ""
 
     // default lost item placeholder data
     var lostItemData = LostItem()
