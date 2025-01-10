@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -439,7 +440,7 @@ fun UserData(
         CustomGrayTitle(text = "Contact user who found this item")
         CustomEditText(
             fieldLabel = "User",
-            fieldContent = viewModel.lostUserName,
+            fieldContent = viewModel.foundUserName,  // display the opposite user name
             leftIcon = Icons.Outlined.AccountCircle,
             isEditable = false
         )
@@ -448,16 +449,14 @@ fun UserData(
 
     // if the viewer is the found user, display this
     if (viewModel.foundItemData.userID == FirebaseUtility.getUserID()) {
-        Column {
-            CustomGrayTitle(text = "Contact user who claimed this item")
-            CustomEditText(
-                fieldLabel = "User",
-                fieldContent = viewModel.lostUserName,
-                leftIcon = Icons.Outlined.AccountCircle,
-                isEditable = false
-            )
-            HorizontalDivider(thickness = 1.dp)
-        }
+        CustomGrayTitle(text = "Contact user who claimed this item")
+        CustomEditText(
+            fieldLabel = "User",
+            fieldContent = viewModel.lostUserName,
+            leftIcon = Icons.Outlined.AccountCircle,
+            isEditable = false
+        )
+        HorizontalDivider(thickness = 1.dp)
     }
 }
 

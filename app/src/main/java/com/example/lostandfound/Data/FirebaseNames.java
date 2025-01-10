@@ -9,7 +9,7 @@ public final class FirebaseNames {
     public static final String COLLECTION_LOST_ITEMS = "lost_items";
     public static final String COLLECTION_FOUND_ITEMS = "found_items";
     public static final String COLLECTION_REPORT_ISSUE = "reported_issues";
-    public static final String COLLECTION_CLAIMED_ITEMS = "claimed_items";
+    public static final String COLLECTION_CLAIMED_ITEMS = "claims";
 
     // strings that represent all key names in the map that is stored
     public static final String USERS_FIRSTNAME = "firstName";
