@@ -76,7 +76,7 @@ object ItemManager {
                                         // create lost item class object
                                         val thisLostItem = LostItem(
                                             itemID = lostItemID,
-                                            userID = FirebaseUtility.getUserID(),
+                                            userID = itemResult[FirebaseNames.LOSTFOUND_USER] as String,
                                             itemName = itemResult[FirebaseNames.LOSTFOUND_ITEMNAME] as String,
                                             category = itemResult[FirebaseNames.LOSTFOUND_CATEGORY] as String,
                                             subCategory = itemResult[FirebaseNames.LOSTFOUND_SUBCATEGORY] as String,
@@ -144,7 +144,7 @@ object ItemManager {
                                             // create found item class object
                                             val thisFoundItem = FoundItem(
                                                 itemID = foundItemID,
-                                                userID = FirebaseUtility.getUserID(),
+                                                userID = itemResult[FirebaseNames.LOSTFOUND_USER] as String,
                                                 itemName = itemResult[FirebaseNames.LOSTFOUND_ITEMNAME] as String,
                                                 category = itemResult[FirebaseNames.LOSTFOUND_CATEGORY] as String,
                                                 subCategory = itemResult[FirebaseNames.LOSTFOUND_SUBCATEGORY] as String,
