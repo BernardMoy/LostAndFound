@@ -3,6 +3,7 @@ package com.example.lostandfound.ui.ViewComparison
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
+import com.example.lostandfound.Data.Claim
 import com.example.lostandfound.Data.FirebaseNames
 import com.example.lostandfound.Data.FoundItem
 import com.example.lostandfound.Data.LostItem
@@ -26,10 +27,13 @@ class ViewComparisonViewModel : ViewModel(){
     // default found item placeholder data
     var foundItemData = FoundItem()
 
+    // default claim item for the lost item placeholder
+    var claim = Claim()
+
     // username used to display the found user, only that is needed
     var foundUserName = "Unknown"
 
-    // function to get item data
+    // function to get user name of found item
     fun getUserName(callback: Callback<Boolean>){
 
         // manager
@@ -53,6 +57,8 @@ class ViewComparisonViewModel : ViewModel(){
             }
         })
     }
+
+
 
 
     // function to update item status

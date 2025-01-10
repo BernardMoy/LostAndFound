@@ -236,6 +236,12 @@ fun MatchingItemsColumn(
                             IntentExtraNames.INTENT_FOUND_ID,
                             foundItemData
                         )
+
+                        // also pass the claim item of the lost item
+                        intent.putExtra(
+                            IntentExtraNames.INTENT_CLAIM_ITEM,
+                            viewModel.claimedItem
+                        )
                         context.startActivity(intent)
                     },
                     viewButtonText = displayedButtonText
