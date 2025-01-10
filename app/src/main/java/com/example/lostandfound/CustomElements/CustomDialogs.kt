@@ -17,6 +17,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Close
+import androidx.compose.material.icons.outlined.Lock
 import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.DatePicker
@@ -71,10 +72,17 @@ import com.google.maps.android.compose.rememberCameraPositionState
 @Composable
 fun LoginDialogPreview() {
     ComposeTheme {
-        CustomLoginDialog(
-            onLoginClicked = {},
-            onDismissClicked = {},
-            isDialogShown = remember {mutableStateOf(true)}
+        CustomInputDialog(
+            icon = Icons.Outlined.Lock,
+            title = "Security Question",
+            content = "Question goes here! It can be very very long?",
+            inputText = "",
+            confirmButton = {},
+            dismissButton = {},
+            inputPlaceholder = "Your answer...",
+            isDialogShown = remember{
+                mutableStateOf(true)
+            }
         )
     }
 }
@@ -122,6 +130,60 @@ fun CustomTextDialog(
         )
     }
 }
+
+@Composable
+fun CustomInputDialog(
+    icon: ImageVector,
+    title: String,
+    content: String,
+    inputText: String,
+    inputPlaceholder: String,
+    confirmButton: @Composable (() -> Unit),
+    dismissButton: @Composable (() -> Unit) ? = null,   // optional secondary button
+    isDialogShown: MutableState<Boolean>
+){
+    if (isDialogShown.value){
+        AlertDialog(
+            onDismissRequest = { isDialogShown.value = false },
+            containerColor = MaterialTheme.colorScheme.background,
+            icon = {
+                Icon(imageVector = icon,
+                    contentDescription = "Dialog icon",
+                    tint = MaterialTheme.colorScheme.onPrimaryContainer,
+                    modifier = Modifier.size(dimensionResource(R.dimen.image_button_size)))
+            },
+            title = {
+                Text(text = title,
+                    style = MaterialTheme.typography.titleMedium,
+                    color = MaterialTheme.colorScheme.onBackground)
+            },
+            text = {
+                Column(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin))
+                ) {
+                    Text(
+                        text = content,
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onBackground,
+                        textAlign = TextAlign.Center
+                    )
+
+                    // input field
+                    CustomInputField(
+                        placeholder = inputPlaceholder,
+                        fieldContent = inputText,
+                        isEditable = true,
+                        isMultiLine = true
+                    )
+                }
+            },
+            confirmButton = confirmButton,
+            dismissButton = dismissButton
+        )
+    }
+}
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
