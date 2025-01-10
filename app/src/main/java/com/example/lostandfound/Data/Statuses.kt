@@ -15,7 +15,7 @@ val statusColor: Map<Int, Int> = mapOf(
 )
 
 val foundStatusText: Map<Int, String> = mapOf(
-    0 to "Not matched",
-    1 to "Claimed, pending approval",  // can have more then one claim pending approval
-    2 to "Claimed and approved"
+    0 to "This found item has not been claimed",
+    1 to "This found item has been claimed and pending approval",  // can have more then one claim pending approval
+    2 to "This found item has been claimed and approved"
 )

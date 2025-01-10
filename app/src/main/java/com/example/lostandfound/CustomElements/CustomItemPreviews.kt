@@ -208,6 +208,7 @@ fun CustomLostItemPreview(
 @Composable
 fun CustomFoundItemPreview(
     data: FoundItem,
+    viewButtonText: String,
     onDeleteButtonClicked: () -> Unit = {},
     onViewButtonClicked: () -> Unit = {},
 ) {
@@ -344,7 +345,7 @@ fun CustomFoundItemPreview(
                 Spacer(modifier = Modifier.width(dimensionResource(id = R.dimen.content_margin)))
 
                 CustomButton(
-                    text = if (isOwner) "View" else "Claim",
+                    text = viewButtonText,
                     type = ButtonType.FILLED,
                     onClick = {
                         onViewButtonClicked()
