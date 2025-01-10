@@ -61,12 +61,14 @@ import com.example.lostandfound.CustomElements.CustomEditText
 import com.example.lostandfound.CustomElements.CustomGrayTitle
 import com.example.lostandfound.CustomElements.CustomProgressBar
 import com.example.lostandfound.CustomElements.CustomViewTwoLocationsDialog
+import com.example.lostandfound.Data.Claim
 import com.example.lostandfound.Data.FoundItem
 import com.example.lostandfound.Data.IntentExtraNames
 import com.example.lostandfound.Data.LostItem
 import com.example.lostandfound.Data.foundStatusText
 import com.example.lostandfound.Data.lostStatusText
 import com.example.lostandfound.Data.statusColor
+import com.example.lostandfound.FirebaseManagers.FirebaseUtility
 import com.example.lostandfound.R
 import com.example.lostandfound.Utility.DateTimeManager
 import com.example.lostandfound.Utility.ErrorCallback
@@ -86,11 +88,15 @@ class ViewComparisonActivity : ComponentActivity() {
         // load the passed intent data into the view model
         val passedLostItem = intent.getParcelableExtra<LostItem>(IntentExtraNames.INTENT_LOST_ID)
         val passedFoundItem = intent.getParcelableExtra<FoundItem>(IntentExtraNames.INTENT_FOUND_ID)
+        val passedClaimItem = intent.getParcelableExtra<Claim>(IntentExtraNames.INTENT_CLAIM_ITEM)
         if (passedLostItem != null){
             viewModel.lostItemData = passedLostItem
         }
         if (passedFoundItem != null){
             viewModel.foundItemData = passedFoundItem
+        }
+        if (passedClaimItem != null){
+            viewModel.claim = passedClaimItem
         }
 
         setContent {
@@ -232,10 +238,10 @@ fun Status(viewModel: ViewComparisonViewModel) {
             },
             contentLeft = {
                 Text(
-                    text = lostStatusText[0] ?: "",
+                    text = lostStatusText[viewModel.lostItemData.status] ?: "",
                     style = Typography.bodyMedium,
                     color = colorResource(
-                        id = statusColor[0] ?: R.color.status0
+                        id = statusColor[viewModel.lostItemData.status] ?: R.color.status0
                     ),
                     fontWeight = FontWeight.Bold,
                     textAlign = TextAlign.Center
@@ -243,10 +249,10 @@ fun Status(viewModel: ViewComparisonViewModel) {
             },
             contentRight = {
                 Text(
-                    text = foundStatusText[0] ?: "",
+                    text = foundStatusText[viewModel.foundItemData.status] ?: "",
                     style = Typography.bodyMedium,
                     color = colorResource(
-                        id = statusColor[0] ?: R.color.status0
+                        id = statusColor[viewModel.foundItemData.status] ?: R.color.status0
                     ),
                     fontWeight = FontWeight.Bold,
                     textAlign = TextAlign.Center
@@ -424,32 +430,63 @@ fun ClaimButton(
             .padding(vertical = dimensionResource(id = R.dimen.content_margin)),
         horizontalArrangement = Arrangement.Center
     ){
-        CustomButton(
-            text = "Claim this Item",
-            type = ButtonType.FILLED,
-            enabled = !isLoading,  // if loading, disable the button
-            onClick = {
-                isLoading = true
+        // if the user is the owner of lost item and also the lost item has status = 0,
+        // they have the power to claim the item
 
-                // update statuses of the item
-                viewModel.putClaimedItems(object : ErrorCallback{
-                    override fun onComplete(error: String) {
-                        if (error.isNotEmpty()){
-                            Toast.makeText(context, error, Toast.LENGTH_SHORT).show()
-                            return
-                        }
+        // display messages if the user owns the lost item
+        if (viewModel.lostItemData.userID == FirebaseUtility.getUserID()){
 
-                        // start done activity
-                        val i: Intent = Intent(context, DoneActivity::class.java)
-                        i.putExtra(IntentExtraNames.INTENT_DONE_ACTIVITY_TITLE, "Claim Submitted")
-                        context.startActivity(i)
+            // if lost item status = 0 and the user is the owner of the lost item, they can claim
+            // else if lost item status = 1 and the found item is the lost item's claimed item, display already claimed message
+            // else, display they already claimed another item
 
-                        // close current activity
-                        (context as Activity).finish()
+            if (viewModel.lostItemData.status == 0){
+                CustomButton(
+                    text = "Claim this Item",
+                    type = ButtonType.FILLED,
+                    enabled = !isLoading,  // if loading, disable the button
+                    onClick = {
+                        isLoading = true
+
+                        // update statuses of the item
+                        viewModel.putClaimedItems(object : ErrorCallback{
+                            override fun onComplete(error: String) {
+                                if (error.isNotEmpty()){
+                                    Toast.makeText(context, error, Toast.LENGTH_SHORT).show()
+                                    return
+                                }
+
+                                // start done activity
+                                val i: Intent = Intent(context, DoneActivity::class.java)
+                                i.putExtra(IntentExtraNames.INTENT_DONE_ACTIVITY_TITLE, "Claim Submitted")
+                                context.startActivity(i)
+
+                                // close current activity
+                                (context as Activity).finish()
+                            }
+                        })
                     }
-                })
+                )
+            } else if (viewModel.lostItemData.status == 1
+                && viewModel.claim.foundItemID == viewModel.foundItemData.itemID){
+                Text(
+                    text = "You have already claimed this item.",
+                    style = Typography.bodyMedium,
+                    color = Color.Gray,
+                    modifier = Modifier.padding(dimensionResource(id = R.dimen.title_margin)),
+                    textAlign = TextAlign.Center
+                )
+
+            } else {
+                Text(
+                    text = "You cannot claim this item as you have already claimed another item.",
+                    style = Typography.bodyMedium,
+                    color = Color.Gray,
+                    modifier = Modifier.padding(dimensionResource(id = R.dimen.title_margin)),
+                    textAlign = TextAlign.Center
+                )
             }
-        )
+        }
     }
 }
 
