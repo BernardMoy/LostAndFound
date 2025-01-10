@@ -498,7 +498,7 @@ fun AcceptButton(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
-                text = "You can choose to accept this claim as you owns the found item.",
+                text = "You can choose to approve this claim as you owns the found item.",
                 style = Typography.bodyMedium,
                 color = Color.Gray,
                 textAlign = TextAlign.Center,
@@ -508,7 +508,7 @@ fun AcceptButton(
             )
 
             CustomButton(
-                text = "Accept this claim",
+                text = "Approve this claim",
                 type = ButtonType.FILLED,
                 onClick = {
                     // open the dialog to accept
@@ -555,6 +555,25 @@ fun AcceptButton(
             },
             isDialogShown = viewModel.isAcceptClaimDialogShown
         )
+    }
+    // else if the found item has already approved an item, it cannot approve another
+    else if (viewModel.lostItemData.status == 1 && viewModel.foundItemData.status == 2){
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = dimensionResource(id = R.dimen.content_margin_half)),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(
+                text = "You cannot approve this item as you have already approved another item.",
+                style = Typography.bodyMedium,
+                color = Color.Gray,
+                textAlign = TextAlign.Center,
+                modifier = Modifier.padding(
+                    dimensionResource(id = R.dimen.title_margin)
+                )
+            )
+        }
     }
 }
 
