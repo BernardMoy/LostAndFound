@@ -3,6 +3,7 @@ package com.example.lostandfound.ui.Search
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -207,6 +208,19 @@ fun MatchingItemsColumn(
                 viewModel.matchedFoundItems
 
             ) { foundItemData ->
+
+                // if lost item status = 0, then the user can claim item
+                // else if lost item status = 1 and the found item is claimed, then the user can view claim
+                // else, the user can only view the item
+                Log.d("A", viewModel.claimedItem.foundItemID)
+                Log.d("B", foundItemData.itemID)
+                var displayedButtonText = "View"
+                if (viewModel.lostItem.status == 0){
+                    displayedButtonText = "Claim"
+                } else if (viewModel.claimedItem.foundItemID == foundItemData.itemID){
+                    displayedButtonText = "View claim"
+                }
+
                 CustomFoundItemPreview(
                     data = foundItemData,
                     onViewButtonClicked = {
@@ -223,7 +237,8 @@ fun MatchingItemsColumn(
                             foundItemData
                         )
                         context.startActivity(intent)
-                    }
+                    },
+                    viewButtonText = displayedButtonText
                 )
             }
         }

@@ -229,7 +229,8 @@ fun FoundItemsColumn(
                             itemData
                         )
                         context.startActivity(intent)
-                    }
+                    },
+                    viewButtonText = "View"
                 )
             }
         }

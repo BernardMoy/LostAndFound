@@ -21,7 +21,9 @@ fun isMatch(
 
 ): Boolean{
     /* TODO implement this */
-    return true
+
+    // currently, return true if their users are different
+    return (lostItem.userID != foundItem.userID)
 }
 
 
