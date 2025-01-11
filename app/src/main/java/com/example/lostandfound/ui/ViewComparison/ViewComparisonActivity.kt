@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -470,6 +471,7 @@ fun ClaimButton(
                         // if there is a security question for the found item, prompt the user to enter it
                         if (viewModel.foundItemData.securityQuestion.isNotEmpty()){
                             viewModel.isSecurityQuestionDialogShown.value = true
+                            viewModel.securityQuestionInputError.value = ""
 
                         } else {
                             // claim item
@@ -491,7 +493,12 @@ fun ClaimButton(
                             text = "Claim",
                             type = ButtonType.FILLED,
                             onClick = {
+                                // validate input
+                                if (!viewModel.validateSecurityQuestionInput()){
+                                    return@CustomButton
+                                }
 
+                                // create claim
                             }
                         )
                     },
@@ -501,9 +508,13 @@ fun ClaimButton(
                             type = ButtonType.OUTLINED,
                             onClick = {
                                 viewModel.isSecurityQuestionDialogShown.value = false
+                                // stop loading
+                                isLoading = false
                             }
                         )
-                    }
+                    },
+                    errorMessage = viewModel.securityQuestionInputError
+
                 )
             } else if (viewModel.lostItemData.status == 1
                 && viewModel.claim.foundItemID == viewModel.foundItemData.itemID){

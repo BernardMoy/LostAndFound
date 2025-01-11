@@ -76,12 +76,17 @@ fun LoginDialogPreview() {
             icon = Icons.Outlined.Lock,
             title = "Security Question",
             content = "Question goes here! It can be very very long?",
-            inputText = "",
+            inputText = remember {
+                mutableStateOf("")
+            },
             confirmButton = {},
             dismissButton = {},
             inputPlaceholder = "Your answer...",
             isDialogShown = remember{
                 mutableStateOf(true)
+            },
+            errorMessage = remember {
+                mutableStateOf("")
             }
         )
     }
@@ -136,11 +141,12 @@ fun CustomInputDialog(
     icon: ImageVector,
     title: String,
     content: String,
-    inputText: String,
+    inputText: MutableState<String>,
     inputPlaceholder: String,
     confirmButton: @Composable (() -> Unit),
     dismissButton: @Composable (() -> Unit) ? = null,   // optional secondary button
-    isDialogShown: MutableState<Boolean>
+    isDialogShown: MutableState<Boolean>,
+    errorMessage: MutableState<String>
 ){
     if (isDialogShown.value){
         AlertDialog(
@@ -173,10 +179,21 @@ fun CustomInputDialog(
                     // input field
                     CustomInputField(
                         placeholder = inputPlaceholder,
-                        fieldContent = inputText,
+                        fieldContent = inputText.value,
                         isEditable = true,
-                        isMultiLine = true
+                        isMultiLine = true,
+                        onTextChanged = { s ->
+                            inputText.value = s
+                        }
                     )
+                    
+                    // error message
+                    Row (
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.Center
+                    ){
+                        CustomErrorTextNoBox(text = errorMessage.value)
+                    }
                 }
             },
             confirmButton = confirmButton,

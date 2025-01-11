@@ -22,7 +22,8 @@ class ViewComparisonViewModel : ViewModel(){
     val isSecurityQuestionDialogShown: MutableState<Boolean> = mutableStateOf(false)
 
     // the security question ans the user answered
-    var securityQuestionAnswerFromUser: String = ""
+    var securityQuestionAnswerFromUser: MutableState<String> = mutableStateOf("")
+    var securityQuestionInputError: MutableState<String> = mutableStateOf("")
 
     // default lost item placeholder data
     var lostItemData = LostItem()
@@ -118,5 +119,18 @@ class ViewComparisonViewModel : ViewModel(){
                 callback.onComplete("")
             }
         })
+    }
+
+    // function to verify if the security question input box is valid
+    fun validateSecurityQuestionInput(): Boolean{
+        // reset error
+        securityQuestionInputError.value = ""
+
+        if (securityQuestionAnswerFromUser.value.isEmpty()){
+            securityQuestionInputError.value = "This answer cannot be empty"
+            return false
+        }
+
+        return true
     }
 }

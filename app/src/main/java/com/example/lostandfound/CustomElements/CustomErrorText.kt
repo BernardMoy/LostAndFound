@@ -14,6 +14,7 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.example.lostandfound.R
+import com.example.lostandfound.ui.theme.Typography
 
 @Composable
 fun CustomErrorText(
@@ -53,5 +54,19 @@ fun CustomErrorText(
                 )
             }
         }
+    }
+}
+
+@Composable
+fun CustomErrorTextNoBox(
+    text: String
+){
+    if (text.isNotEmpty()){
+        Text(
+            text = text,
+            style = Typography.bodyMedium,
+            color = MaterialTheme.colorScheme.error,
+            textAlign = TextAlign.Center
+        )
     }
 }
