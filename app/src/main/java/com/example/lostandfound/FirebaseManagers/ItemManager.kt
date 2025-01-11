@@ -295,10 +295,9 @@ object ItemManager {
                     return
                 }
 
-                // get the lost item user name
-                UserManager.getUsernameFromId(lostItem.userID, object: UserManager.UsernameCallback{
-                    override fun onComplete(username: String) {
-                        if (username.isEmpty()){
+                UserManager.getUserFromId(lostItem.userID, object: UserManager.UserCallback{
+                    override fun onComplete(user: com.example.lostandfound.Data.User?) {
+                        if (user == null){
                             callback.onComplete(null)
                             return
                         }
@@ -307,13 +306,12 @@ object ItemManager {
                         val thisClaimPreview = ClaimPreview(
                             lostItemImage = lostItem.image,
                             lostItemName = lostItem.itemName,
-                            lostUserName = username,
+                            lostUserName = user.firstName + ' ' + user.lastName,
                             claimItem = claimItem
                         )
 
                         // return the preview item
                         callback.onComplete(thisClaimPreview)
-
                     }
                 })
             }

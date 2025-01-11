@@ -8,6 +8,7 @@ import com.example.lostandfound.Data.Claim
 import com.example.lostandfound.Data.FirebaseNames
 import com.example.lostandfound.Data.FoundItem
 import com.example.lostandfound.Data.LostItem
+import com.example.lostandfound.Data.User
 import com.example.lostandfound.FirebaseManagers.FirestoreManager
 import com.example.lostandfound.FirebaseManagers.ItemManager
 import com.example.lostandfound.FirebaseManagers.UserManager
@@ -67,16 +68,16 @@ class ViewClaimViewModel : ViewModel() {
                                 lostItemData = lostItem
 
                                 // get the lost user name
-                                UserManager.getUsernameFromId(
+                                UserManager.getUserFromId(
                                     lostItemData.userID,
-                                    object : UserManager.UsernameCallback {
-                                        override fun onComplete(username: String) {
-                                            if (username.isEmpty()) {
+                                    object : UserManager.UserCallback {
+                                        override fun onComplete(user: User?) {
+                                            if (user == null){
                                                 callback.onComplete("Error fetching user data")
                                                 return
                                             }
 
-                                            lostUserName = username
+                                            lostUserName = user.firstName + ' ' + user.lastName
 
                                             // load found data
                                             ItemManager.getFoundItemFromId(
@@ -91,16 +92,16 @@ class ViewClaimViewModel : ViewModel() {
                                                         foundItemData = foundItem
 
                                                         // get the found user name
-                                                        UserManager.getUsernameFromId(
+                                                        UserManager.getUserFromId(
                                                             foundItemData.userID,
-                                                            object : UserManager.UsernameCallback {
-                                                                override fun onComplete(username: String) {
-                                                                    if (username.isEmpty()) {
+                                                            object : UserManager.UserCallback {
+                                                                override fun onComplete(user: User?) {
+                                                                    if (user == null) {
                                                                         callback.onComplete("Error fetching user data")
                                                                         return
                                                                     }
 
-                                                                    foundUserName = username
+                                                                    foundUserName = user.firstName + ' ' + user.lastName
 
                                                                     // callback with no errors
                                                                     callback.onComplete("")

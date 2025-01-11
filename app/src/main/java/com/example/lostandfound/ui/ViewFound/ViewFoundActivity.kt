@@ -9,6 +9,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -309,15 +310,33 @@ fun UserData(
         CustomGrayTitle(text = "User information")
 
         // Name of user
-        CustomEditText(
-            fieldLabel = "User",
-            fieldContent = viewModel.userName,
-            leftIcon = Icons.Outlined.AccountCircle,
-            isEditable = false
-        )
+        Row(
+            verticalAlignment = Alignment.CenterVertically
+        ){
+            Box(
+                modifier = Modifier.weight(1f)
+            ){
+                CustomEditText(
+                    fieldLabel = "User",
+                    fieldContent = viewModel.userName,
+                    leftIcon = Icons.Outlined.AccountCircle,
+                    isEditable = false,
+                )
+            }
+
+            CustomButton(
+                text = "Contact",
+                type = ButtonType.TONAL,
+                onClick = {
+
+                },
+                small = true
+            )
+        }
+
         HorizontalDivider(thickness = 1.dp)
 
-        // category and subcategory
+        // time posted
         CustomEditText(
             fieldLabel = "Time posted",
             fieldContent = DateTimeManager.dateTimeToString(viewModel.itemData.timePosted),

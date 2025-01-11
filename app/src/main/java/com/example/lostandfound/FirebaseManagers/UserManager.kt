@@ -1,26 +1,35 @@
 package com.example.lostandfound.FirebaseManagers
 
 import com.example.lostandfound.Data.FirebaseNames
+import com.example.lostandfound.Data.User
+import com.example.lostandfound.Utility.ImageManager
 
 object UserManager {
-    interface UsernameCallback{
-        fun onComplete(username: String) // return the username, or empty string if fails
+
+    interface UserCallback{
+        fun onComplete(user: User?)  // return the user or null if fails
     }
 
-    // return the displayed name (first name + last name) when given a user id
-    // return empty string if failed (Username cannot be empty)
-    fun getUsernameFromId(userID: String, callback: UsernameCallback){
+    // method to get user object from id
+    fun getUserFromId(userID: String, callback: UserCallback){
         val firestoreManager = FirestoreManager()
 
         // get name of the user from firebase firestore
         firestoreManager.get(FirebaseNames.COLLECTION_USERS, userID, object : FirestoreManager.Callback<Map<String, Any>>{
             override fun onComplete(result: Map<String, Any>?) {
                 if (result == null) {
-                    callback.onComplete("")
+                    callback.onComplete(null)
 
                 } else {
-                    val name = result[FirebaseNames.USERS_FIRSTNAME].toString() + " " + result[FirebaseNames.USERS_LASTNAME].toString()
-                    callback.onComplete(name)
+                    val userData = User(
+                        userID = userID,
+                        avatar = result[FirebaseNames.USERS_AVATAR].toString(),
+                        firstName = result[FirebaseNames.USERS_FIRSTNAME].toString(),
+                        lastName = result[FirebaseNames.USERS_LASTNAME].toString(),
+                        email = result[FirebaseNames.USERS_EMAIL].toString()
+                    )
+
+                    callback.onComplete(userData)
                 }
             }
         })
