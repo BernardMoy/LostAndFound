@@ -559,7 +559,7 @@ fun AcceptButton(
         CustomTextDialog(
             icon = Icons.Outlined.CheckCircle,
             title = "Approve this claim?",
-            content = "Once you have accepted this claim, you cannot accept other claims for this item.",
+            content = "Once you have accepted this claim, you cannot approve other claims for this item.",
             confirmButton = {
                 CustomButton(
                     text = "Approve",

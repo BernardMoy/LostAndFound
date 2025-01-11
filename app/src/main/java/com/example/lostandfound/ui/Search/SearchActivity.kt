@@ -43,7 +43,9 @@ import com.example.lostandfound.CustomElements.CustomCenteredProgressbar
 import com.example.lostandfound.CustomElements.CustomFoundItemPreview
 import com.example.lostandfound.Data.IntentExtraNames
 import com.example.lostandfound.Data.LostItem
+import com.example.lostandfound.FirebaseManagers.FirebaseUtility
 import com.example.lostandfound.R
+import com.example.lostandfound.ui.ViewClaim.ViewClaimActivity
 import com.example.lostandfound.ui.ViewComparison.ViewComparisonActivity
 import com.example.lostandfound.ui.ViewFound.ViewFoundActivity
 import com.example.lostandfound.ui.theme.ComposeTheme
@@ -212,37 +214,53 @@ fun MatchingItemsColumn(
                 // if lost item status = 0, then the user can claim item
                 // else if lost item status = 1 and the found item is claimed, then the user can view claim
                 // else, the user can only view the item
-                Log.d("A", viewModel.claimedItem.foundItemID)
-                Log.d("B", foundItemData.itemID)
                 var displayedButtonText = "View"
-                if (viewModel.lostItem.status == 0){
-                    displayedButtonText = "Claim"
-                } else if (viewModel.claimedItem.foundItemID == foundItemData.itemID){
-                    displayedButtonText = "View claim"
+                if (viewModel.lostItem.userID == FirebaseUtility.getUserID()){
+                    if (viewModel.lostItem.status == 0){
+                        displayedButtonText = "Claim"
+
+                    } else if (viewModel.claimedItem.foundItemID == foundItemData.itemID){
+                        displayedButtonText = "View claim"
+
+                    }
                 }
 
                 CustomFoundItemPreview(
                     data = foundItemData,
                     onViewButtonClicked = {
-                        // start comparison activity
-                        val intent = Intent(context, ViewComparisonActivity::class.java)
+                        // if the displayed button is view claim, redirect to view claim activity
+                        if (displayedButtonText == "View claim"){
+                            // redirect to view comparison activity otherwise
+                            val intent = Intent(context, ViewClaimActivity::class.java)
 
-                        // pass both the lost item and found item
-                        intent.putExtra(
-                            IntentExtraNames.INTENT_LOST_ID,
-                            viewModel.lostItem
-                        )
-                        intent.putExtra(
-                            IntentExtraNames.INTENT_FOUND_ID,
-                            foundItemData
-                        )
+                            // pass the claim of lost item
+                            intent.putExtra(
+                                IntentExtraNames.INTENT_CLAIM_ITEM,
+                                viewModel.claimedItem
+                            )
+                            context.startActivity(intent)
 
-                        // also pass the claim item of the lost item
-                        intent.putExtra(
-                            IntentExtraNames.INTENT_CLAIM_ITEM,
-                            viewModel.claimedItem
-                        )
-                        context.startActivity(intent)
+                        } else {
+                            // redirect to view comparison activity otherwise
+                            val intent = Intent(context, ViewComparisonActivity::class.java)
+
+                            // pass both the lost item and found item
+                            intent.putExtra(
+                                IntentExtraNames.INTENT_LOST_ID,
+                                viewModel.lostItem
+                            )
+                            intent.putExtra(
+                                IntentExtraNames.INTENT_FOUND_ID,
+                                foundItemData
+                            )
+
+                            // also pass the claim item of the lost item
+                            intent.putExtra(
+                                IntentExtraNames.INTENT_CLAIM_ITEM,
+                                viewModel.claimedItem
+                            )
+                            context.startActivity(intent)
+                        }
                     },
                     viewButtonText = displayedButtonText
                 )

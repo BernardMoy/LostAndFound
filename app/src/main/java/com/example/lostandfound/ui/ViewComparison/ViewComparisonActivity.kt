@@ -517,8 +517,7 @@ fun ClaimButton(
                     errorMessage = viewModel.securityQuestionInputError
 
                 )
-            } else if (viewModel.lostItemData.status == 1
-                && viewModel.claim.foundItemID == viewModel.foundItemData.itemID){
+            } else if (viewModel.claim.foundItemID == viewModel.foundItemData.itemID){
                 Text(
                     text = "You have already claimed this item.",
                     style = Typography.bodyMedium,
