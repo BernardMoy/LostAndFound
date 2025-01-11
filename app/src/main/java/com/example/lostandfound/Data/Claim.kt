@@ -9,6 +9,7 @@ data class Claim(
     val lostItemID: String = "",
     val foundItemID: String = "",
     val isApproved: Boolean = false,
-    val timestamp: Long = 0L
+    val timestamp: Long = 0L,
+    val securityQuestionAns: String = ""
 
 ) : Parcelable
