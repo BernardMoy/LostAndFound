@@ -448,7 +448,6 @@ fun UserData(
                     small = true
                 )
             }
-
         }
         HorizontalDivider(thickness = 1.dp)
     }

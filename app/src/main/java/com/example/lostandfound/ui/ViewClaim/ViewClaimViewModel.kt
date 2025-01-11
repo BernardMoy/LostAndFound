@@ -22,6 +22,7 @@ class ViewClaimViewModel : ViewModel() {
     val isLoading: MutableState<Boolean> = mutableStateOf(true)
     val isLocationDialogShown: MutableState<Boolean> = mutableStateOf(false)
     var isAcceptClaimDialogShown: MutableState<Boolean> = mutableStateOf(false)
+    val isContactUserDialogShown: MutableState<Boolean> = mutableStateOf(false)
 
     // default claim placeholder data
     var claimData = Claim()
@@ -33,8 +34,8 @@ class ViewClaimViewModel : ViewModel() {
     var foundItemData = FoundItem()
 
     // username used to display the found user, only that is needed
-    var lostUserName = "Unknown"
-    var foundUserName = "Unknown"
+    var lostUser = User()
+    var foundUser = User()
 
 
     // function to load the lost and found item data  (lostItemData, foundItemData)
@@ -67,7 +68,7 @@ class ViewClaimViewModel : ViewModel() {
 
                                 lostItemData = lostItem
 
-                                // get the lost user name
+                                // get the lost user
                                 UserManager.getUserFromId(
                                     lostItemData.userID,
                                     object : UserManager.UserCallback {
@@ -77,7 +78,7 @@ class ViewClaimViewModel : ViewModel() {
                                                 return
                                             }
 
-                                            lostUserName = user.firstName + ' ' + user.lastName
+                                            lostUser = user
 
                                             // load found data
                                             ItemManager.getFoundItemFromId(
@@ -101,7 +102,7 @@ class ViewClaimViewModel : ViewModel() {
                                                                         return
                                                                     }
 
-                                                                    foundUserName = user.firstName + ' ' + user.lastName
+                                                                    foundUser = user
 
                                                                     // callback with no errors
                                                                     callback.onComplete("")
