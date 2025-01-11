@@ -418,7 +418,7 @@ fun loadData(
     viewModel.isLoading.value = true
 
     // load found item data of the current user from the view model
-    viewModel.getUserName(object : Callback<Boolean> {
+    viewModel.getUser(object : Callback<Boolean> {
         override fun onComplete(result: Boolean) {
             viewModel.isLoading.value = false
 

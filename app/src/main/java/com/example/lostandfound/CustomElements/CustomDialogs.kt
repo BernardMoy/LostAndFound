@@ -46,6 +46,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.window.Dialog
@@ -154,10 +155,11 @@ fun CustomUserDialog(
             onDismissRequest = { isDialogShown.value = false },
             containerColor = MaterialTheme.colorScheme.background,
             icon = {
+                val avatar = ImageManager.stringToUri(context, user.avatar)
+
                 Image(
-                    painter = rememberAsyncImagePainter(
-                        model = ImageManager.stringToUri(context, user.avatar)
-                    ),
+                    painter = if (avatar != null) rememberAsyncImagePainter(model = ImageManager.stringToUri(context, user.avatar))
+                            else painterResource(id = R.drawable.profile_icon),
                     contentDescription = "User avatar",
                     modifier = Modifier.size(
                         dimensionResource(R.dimen.image_button_size)

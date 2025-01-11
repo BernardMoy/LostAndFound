@@ -7,8 +7,9 @@ import com.example.lostandfound.Data.Claim
 import com.example.lostandfound.Data.FirebaseNames
 import com.example.lostandfound.Data.FoundItem
 import com.example.lostandfound.Data.LostItem
+import com.example.lostandfound.Data.User
 import com.example.lostandfound.FirebaseManagers.FirestoreManager
-import com.example.lostandfound.R
+import com.example.lostandfound.FirebaseManagers.UserManager
 import com.example.lostandfound.Utility.DateTimeManager
 import com.example.lostandfound.Utility.ErrorCallback
 
@@ -16,10 +17,11 @@ interface Callback<T> {
     fun onComplete(result: T)
 }
 
-class ViewComparisonViewModel : ViewModel(){
+class ViewComparisonViewModel : ViewModel() {
     val isLoading: MutableState<Boolean> = mutableStateOf(true)
     val isLocationDialogShown: MutableState<Boolean> = mutableStateOf(false)
     val isSecurityQuestionDialogShown: MutableState<Boolean> = mutableStateOf(false)
+    val isContactUserDialogShown: MutableState<Boolean> = mutableStateOf(false)
 
     // the security question ans the user answered
     var securityQuestionAnswerFromUser: MutableState<String> = mutableStateOf("")
@@ -35,69 +37,34 @@ class ViewComparisonViewModel : ViewModel(){
     var claim = Claim()
 
     // username used to display the found user, only that is needed
-    var foundUserName = "Unknown"
+    var foundUser = User()
 
     // function to get user name of found item
-    fun getUserName(callback: Callback<Boolean>){
+    fun getFoundUser(callback: Callback<Boolean>) {
+        // get user
+        UserManager.getUserFromId(
+            foundItemData.userID,
+            object : UserManager.UserCallback {
+                override fun onComplete(user: User?) {
+                    if (user == null) {
+                        callback.onComplete(false)
+                        return
+                    }
 
-        // manager
-        val firestoreManager = FirestoreManager()
-
-        // get name of the user from firebase firestore
-        firestoreManager.get(FirebaseNames.COLLECTION_USERS, foundItemData.userID, object : FirestoreManager.Callback<Map<String, Any>>{
-            override fun onComplete(result: Map<String, Any>?) {
-                if (result == null) {
-                    callback.onComplete(false)
-
-                } else {
-                    val name = result[FirebaseNames.USERS_FIRSTNAME].toString() + " " + result[FirebaseNames.USERS_LASTNAME].toString()
-
-                    // set username
-                    foundUserName = name
+                    // set user
+                    foundUser = user
 
                     // return true
                     callback.onComplete(true)
+
                 }
             }
-        })
+        )
     }
 
-
-
-
-    // function to update item status
-    /*
-    fun updateItemStatus(lostItemStatus: Int, foundItemStatus: Int, callback: ErrorCallback){
-        // update the current lost and found item status
-        val firestoreManager = FirestoreManager()
-
-        // update the lost item
-        firestoreManager.update(FirebaseNames.COLLECTION_LOST_ITEMS, lostItemData.itemID, FirebaseNames.LOSTFOUND_STATUS, lostItemStatus, object : FirestoreManager.Callback<Boolean>{
-            override fun onComplete(result: Boolean) {
-                if (!result){
-                    callback.onComplete("Error updating lost data")
-
-                } else {
-                    // also update the found item
-                    firestoreManager.update(FirebaseNames.COLLECTION_FOUND_ITEMS, foundItemData.itemID, FirebaseNames.LOSTFOUND_STATUS, foundItemStatus, object : FirestoreManager.Callback<Boolean>{
-                        override fun onComplete(result: Boolean) {
-                            if (!result){
-                                callback.onComplete("Error updating the data")
-
-                            } else {
-                                callback.onComplete("")
-                            }
-                        }
-                    })
-                }
-            }
-        })
-    }
-
-     */
 
     // function to add the items to the claimed collection, and also update the item status
-    fun putClaimedItems(callback: ErrorCallback){
+    fun putClaimedItems(callback: ErrorCallback) {
         val firestoreManager = FirestoreManager()
 
         val data: Map<String, Any> = mutableMapOf(
@@ -108,26 +75,29 @@ class ViewComparisonViewModel : ViewModel(){
             FirebaseNames.CLAIM_SECURITY_QUESTION_ANS to securityQuestionAnswerFromUser.value  // empty only when there are no sec Q
         )
 
-        firestoreManager.putWithUniqueId(FirebaseNames.COLLECTION_CLAIMED_ITEMS, data, object: FirestoreManager.Callback<String>{
-            override fun onComplete(result: String) {
-                // it returns the generated id
-                if (result.isEmpty()){
-                    callback.onComplete("Error claiming items")
-                    return
-                }
+        firestoreManager.putWithUniqueId(
+            FirebaseNames.COLLECTION_CLAIMED_ITEMS,
+            data,
+            object : FirestoreManager.Callback<String> {
+                override fun onComplete(result: String) {
+                    // it returns the generated id
+                    if (result.isEmpty()) {
+                        callback.onComplete("Error claiming items")
+                        return
+                    }
 
-                // return with no errors
-                callback.onComplete("")
-            }
-        })
+                    // return with no errors
+                    callback.onComplete("")
+                }
+            })
     }
 
     // function to verify if the security question input box is valid
-    fun validateSecurityQuestionInput(): Boolean{
+    fun validateSecurityQuestionInput(): Boolean {
         // reset error
         securityQuestionInputError.value = ""
 
-        if (securityQuestionAnswerFromUser.value.isEmpty()){
+        if (securityQuestionAnswerFromUser.value.isEmpty()) {
             securityQuestionInputError.value = "This answer cannot be empty"
             return false
         }
