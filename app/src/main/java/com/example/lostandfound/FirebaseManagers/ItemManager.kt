@@ -209,7 +209,8 @@ object ItemManager {
                                     lostItemID = result[FirebaseNames.CLAIM_LOST_ITEM_ID].toString(),
                                     foundItemID = result[FirebaseNames.CLAIM_FOUND_ITEM_ID].toString(),
                                     isApproved = result[FirebaseNames.CLAIM_IS_APPROVED] as Boolean,
-                                    timestamp = result[FirebaseNames.CLAIM_TIMESTAMP] as Long
+                                    timestamp = result[FirebaseNames.CLAIM_TIMESTAMP] as Long,
+                                    securityQuestionAns = result[FirebaseNames.CLAIM_SECURITY_QUESTION_ANS].toString()
                                 )
 
                                 // return the claim item
@@ -263,7 +264,8 @@ object ItemManager {
                                         lostItemID = result[FirebaseNames.CLAIM_LOST_ITEM_ID].toString(),
                                         foundItemID = result[FirebaseNames.CLAIM_FOUND_ITEM_ID].toString(),
                                         isApproved = result[FirebaseNames.CLAIM_IS_APPROVED] as Boolean,
-                                        timestamp = result[FirebaseNames.CLAIM_TIMESTAMP] as Long
+                                        timestamp = result[FirebaseNames.CLAIM_TIMESTAMP] as Long,
+                                        securityQuestionAns = result[FirebaseNames.CLAIM_SECURITY_QUESTION_ANS].toString()
                                     )
 
                                     //add the item to the list

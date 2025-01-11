@@ -5,7 +5,6 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -20,6 +19,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.outlined.HelpOutline
 import androidx.compose.material.icons.outlined.AccountCircle
 import androidx.compose.material.icons.outlined.CalendarMonth
 import androidx.compose.material.icons.outlined.Cancel
@@ -60,7 +60,6 @@ import com.example.lostandfound.CustomElements.CustomComparisonField
 import com.example.lostandfound.CustomElements.CustomComparisonTextField
 import com.example.lostandfound.CustomElements.CustomEditText
 import com.example.lostandfound.CustomElements.CustomGrayTitle
-import com.example.lostandfound.CustomElements.CustomProgressBar
 import com.example.lostandfound.CustomElements.CustomTextDialog
 import com.example.lostandfound.CustomElements.CustomViewTwoLocationsDialog
 import com.example.lostandfound.Data.Claim
@@ -158,6 +157,7 @@ fun MainContent(viewModel: ViewClaimViewModel) {
             ItemImage(viewModel = viewModel)
             ItemDetails(viewModel = viewModel)
             LocationData(context = context, viewModel = viewModel)
+            SecurityQuestion(viewModel = viewModel)
             UserData(viewModel = viewModel)
 
             // the user have the power to accept this claim if:
@@ -437,26 +437,64 @@ fun UserData(
     // the view claim screen can be viewed by either the lost user or the found user.
     // if the viewer is the lost user, display this
     if (viewModel.lostItemData.userID == FirebaseUtility.getUserID()) {
-        CustomGrayTitle(text = "Contact user who found this item")
-        CustomEditText(
-            fieldLabel = "User",
-            fieldContent = viewModel.foundUserName,  // display the opposite user name
-            leftIcon = Icons.Outlined.AccountCircle,
-            isEditable = false
-        )
-        HorizontalDivider(thickness = 1.dp)
+        Column {
+            CustomGrayTitle(text = "Contact user who found this item")
+            CustomEditText(
+                fieldLabel = "User",
+                fieldContent = viewModel.foundUserName,  // display the opposite user name
+                leftIcon = Icons.Outlined.AccountCircle,
+                isEditable = false
+            )
+            HorizontalDivider(thickness = 1.dp)
+        }
     }
 
     // if the viewer is the found user, display this
     if (viewModel.foundItemData.userID == FirebaseUtility.getUserID()) {
-        CustomGrayTitle(text = "Contact user who claimed this item")
-        CustomEditText(
-            fieldLabel = "User",
-            fieldContent = viewModel.lostUserName,
-            leftIcon = Icons.Outlined.AccountCircle,
-            isEditable = false
-        )
-        HorizontalDivider(thickness = 1.dp)
+        Column {
+            CustomGrayTitle(text = "Contact user who claimed this item")
+            CustomEditText(
+                fieldLabel = "User",
+                fieldContent = viewModel.lostUserName,
+                leftIcon = Icons.Outlined.AccountCircle,
+                isEditable = false
+            )
+            HorizontalDivider(thickness = 1.dp)
+        }
+    }
+}
+
+@Composable
+fun SecurityQuestion(
+    viewModel: ViewClaimViewModel
+) {
+    // if the viewer is the found user and the found item has security question, display this
+    if (viewModel.foundItemData.userID == FirebaseUtility.getUserID()
+        && viewModel.foundItemData.securityQuestion.isNotEmpty()
+    ) {
+
+        Column {
+            CustomGrayTitle(text = "Security question")
+            CustomEditText(
+                fieldLabel = "Security question",
+                fieldContent = viewModel.foundItemData.securityQuestion,
+                leftIcon = Icons.AutoMirrored.Outlined.HelpOutline,
+                isEditable = false
+            )
+            CustomEditText(
+                fieldLabel = "Your answer",
+                fieldContent = viewModel.foundItemData.securityQuestionAns,
+                leftIcon = Icons.Outlined.CheckCircle,
+                isEditable = false
+            )
+            CustomEditText(
+                fieldLabel = "Answer provided by the claim user",
+                fieldContent = viewModel.claimData.securityQuestionAns,
+                leftIcon = Icons.Outlined.CheckCircle,
+                isEditable = false
+            )
+            HorizontalDivider(thickness = 1.dp)
+        }
     }
 }
 
@@ -528,16 +566,23 @@ fun AcceptButton(
                     type = ButtonType.FILLED,
                     onClick = {
                         // approve the claim
-                        viewModel.approveClaim(object : Callback<Boolean>{
+                        viewModel.approveClaim(object : Callback<Boolean> {
                             override fun onComplete(result: Boolean) {
-                                if (!result){
-                                    Toast.makeText(context, "Approving claim failed", Toast.LENGTH_SHORT).show()
+                                if (!result) {
+                                    Toast.makeText(
+                                        context,
+                                        "Approving claim failed",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
                                     return
                                 }
 
                                 // open done activity
                                 val intent: Intent = Intent(context, DoneActivity::class.java)
-                                intent.putExtra(IntentExtraNames.INTENT_DONE_ACTIVITY_TITLE, "Claim approved!")
+                                intent.putExtra(
+                                    IntentExtraNames.INTENT_DONE_ACTIVITY_TITLE,
+                                    "Claim approved!"
+                                )
                                 context.startActivity(intent)
                             }
                         })
@@ -557,7 +602,7 @@ fun AcceptButton(
         )
     }
     // else if the found item has already approved an item, it cannot approve another
-    else if (viewModel.lostItemData.status == 1 && viewModel.foundItemData.status == 2){
+    else if (viewModel.lostItemData.status == 1 && viewModel.foundItemData.status == 2) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
