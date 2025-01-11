@@ -10,6 +10,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -61,6 +62,7 @@ import com.example.lostandfound.CustomElements.CustomComparisonTextField
 import com.example.lostandfound.CustomElements.CustomEditText
 import com.example.lostandfound.CustomElements.CustomGrayTitle
 import com.example.lostandfound.CustomElements.CustomTextDialog
+import com.example.lostandfound.CustomElements.CustomUserDialog
 import com.example.lostandfound.CustomElements.CustomViewTwoLocationsDialog
 import com.example.lostandfound.Data.Claim
 import com.example.lostandfound.Data.IntentExtraNames
@@ -158,7 +160,7 @@ fun MainContent(viewModel: ViewClaimViewModel) {
             ItemDetails(viewModel = viewModel)
             LocationData(context = context, viewModel = viewModel)
             SecurityQuestion(viewModel = viewModel)
-            UserData(viewModel = viewModel)
+            UserData(context = context, viewModel = viewModel)
 
             // the user have the power to accept this claim if:
             // 1. they are the owner of the found item
@@ -432,6 +434,7 @@ fun LocationData(
 
 @Composable
 fun UserData(
+    context: Context,
     viewModel: ViewClaimViewModel
 ) {
     // the view claim screen can be viewed by either the lost user or the found user.
@@ -439,12 +442,32 @@ fun UserData(
     if (viewModel.lostItemData.userID == FirebaseUtility.getUserID()) {
         Column {
             CustomGrayTitle(text = "Contact user who found this item")
-            CustomEditText(
-                fieldLabel = "User",
-                fieldContent = viewModel.foundUserName,  // display the opposite user name
-                leftIcon = Icons.Outlined.AccountCircle,
-                isEditable = false
-            )
+            Row(
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Box(
+                    modifier = Modifier.weight(1f)
+                ) {
+                    CustomEditText(
+                        fieldLabel = "User",
+                        fieldContent = viewModel.foundUser.firstName + ' ' + viewModel.foundUser.lastName,  // display the opposite user name
+                        leftIcon = Icons.Outlined.AccountCircle,
+                        isEditable = false
+                    )
+                }
+
+                // contact user button and dialog, when the user is not the current user
+                if (viewModel.foundUser.userID != FirebaseUtility.getUserID()) {
+                    CustomButton(
+                        text = "Contact",
+                        type = ButtonType.TONAL,
+                        onClick = {
+                            viewModel.isContactUserDialogShown.value = true
+                        },
+                        small = true
+                    )
+                }
+            }
             HorizontalDivider(thickness = 1.dp)
         }
     }
@@ -453,15 +476,45 @@ fun UserData(
     if (viewModel.foundItemData.userID == FirebaseUtility.getUserID()) {
         Column {
             CustomGrayTitle(text = "Contact user who claimed this item")
-            CustomEditText(
-                fieldLabel = "User",
-                fieldContent = viewModel.lostUserName,
-                leftIcon = Icons.Outlined.AccountCircle,
-                isEditable = false
-            )
+            Row(
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Box(
+                    modifier = Modifier.weight(1f)
+                ) {
+                    CustomEditText(
+                        fieldLabel = "User",
+                        fieldContent = viewModel.lostUser.firstName + ' ' + viewModel.lostUser.lastName,
+                        leftIcon = Icons.Outlined.AccountCircle,
+                        isEditable = false
+                    )
+                }
+
+                // contact user button and dialog, when the user is not the current user
+                if (viewModel.lostUser.userID != FirebaseUtility.getUserID()) {
+                    CustomButton(
+                        text = "Contact",
+                        type = ButtonType.TONAL,
+                        onClick = {
+                            viewModel.isContactUserDialogShown.value = true
+                        },
+                        small = true
+                    )
+                }
+            }
             HorizontalDivider(thickness = 1.dp)
         }
     }
+
+    // common dialog for contacting user
+    CustomUserDialog(
+        user = viewModel.foundUser,
+        context = context,
+        onConfirmButtonClicked = {
+
+        },
+        isDialogShown = viewModel.isContactUserDialogShown
+    )
 }
 
 @Composable
