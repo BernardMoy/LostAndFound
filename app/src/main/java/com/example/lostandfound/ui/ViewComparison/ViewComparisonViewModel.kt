@@ -104,7 +104,8 @@ class ViewComparisonViewModel : ViewModel(){
             FirebaseNames.CLAIM_IS_APPROVED to false,  // default false
             FirebaseNames.CLAIM_TIMESTAMP to DateTimeManager.getCurrentEpochTime(),
             FirebaseNames.CLAIM_LOST_ITEM_ID to lostItemData.itemID,
-            FirebaseNames.CLAIM_FOUND_ITEM_ID to foundItemData.itemID
+            FirebaseNames.CLAIM_FOUND_ITEM_ID to foundItemData.itemID,
+            FirebaseNames.CLAIM_SECURITY_QUESTION_ANS to securityQuestionAnswerFromUser.value  // empty only when there are no sec Q
         )
 
         firestoreManager.putWithUniqueId(FirebaseNames.COLLECTION_CLAIMED_ITEMS, data, object: FirestoreManager.Callback<String>{

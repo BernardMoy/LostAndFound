@@ -474,7 +474,7 @@ fun ClaimButton(
                             viewModel.securityQuestionInputError.value = ""
 
                         } else {
-                            // claim item
+                            // create claim and close activity
                             claimItem(context = context, viewModel = viewModel)
                         }
                     }
@@ -498,7 +498,8 @@ fun ClaimButton(
                                     return@CustomButton
                                 }
 
-                                // create claim
+                                // create claim and close activity
+                                claimItem(context = context, viewModel = viewModel)
                             }
                         )
                     },

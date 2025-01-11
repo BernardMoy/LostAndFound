@@ -38,6 +38,7 @@ public final class FirebaseNames {
     public static final String CLAIM_FOUND_ITEM_ID = "found_item_id";
     public static final String CLAIM_IS_APPROVED = "is_approved";
     public static final String CLAIM_TIMESTAMP = "timestamp";
+    public static final String CLAIM_SECURITY_QUESTION_ANS = "security_question_answer";
 
     public static final String FOLDER_LOST_IMAGE = "lost_images";
     public static final String FOLDER_FOUND_IMAGE = "found_images";
