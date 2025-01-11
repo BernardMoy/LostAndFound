@@ -4,6 +4,7 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.util.TypedValue
 import androidx.annotation.DrawableRes
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -50,8 +51,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import androidx.core.content.ContextCompat
+import coil3.compose.rememberAsyncImagePainter
+import com.example.lostandfound.Data.User
 import com.example.lostandfound.Utility.DateTimeManager
 import com.example.lostandfound.R
+import com.example.lostandfound.Utility.ImageManager
 import com.example.lostandfound.ui.theme.ComposeTheme
 import com.example.lostandfound.ui.theme.Typography
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -139,11 +143,9 @@ fun CustomTextDialog(
 // a dialog to view and contact user
 @Composable
 fun CustomUserDialog(
-    icon: ImageVector,
-    title: String,
-    content: String,
-    confirmButton: @Composable (() -> Unit),
-    dismissButton: @Composable (() -> Unit) ? = null,   // optional secondary button
+    user: User,
+    context: Context,  // used to convert string to uri
+    onConfirmButtonClicked: () -> Unit,
     isDialogShown: MutableState<Boolean>
 ){
     // Shown only when isDialogShown is true
@@ -152,15 +154,22 @@ fun CustomUserDialog(
             onDismissRequest = { isDialogShown.value = false },
             containerColor = MaterialTheme.colorScheme.background,
             icon = {
-                Icon(imageVector = icon,
-                    contentDescription = "Dialog icon",
-                    tint = MaterialTheme.colorScheme.onPrimaryContainer,
-                    modifier = Modifier.size(dimensionResource(R.dimen.image_button_size)))
+                Image(
+                    painter = rememberAsyncImagePainter(
+                        model = ImageManager.stringToUri(context, user.avatar)
+                    ),
+                    contentDescription = "User avatar",
+                    modifier = Modifier.size(
+                        dimensionResource(R.dimen.image_button_size)
+                    )
+                )
             },
             title = {
-                Text(text = title,
+                Text(
+                    text = user.firstName + ' ' + user.lastName,
                     style = MaterialTheme.typography.titleMedium,
-                    color = MaterialTheme.colorScheme.onBackground)
+                    color = MaterialTheme.colorScheme.onBackground
+                )
             },
             text = {
                 Box(
@@ -168,15 +177,29 @@ fun CustomUserDialog(
                     contentAlignment = Alignment.Center
                 ) {
                     Text(
-                        text = content,
+                        text = "Contact this user?",
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onBackground,
                         textAlign = TextAlign.Center
                     )
                 }
             },
-            confirmButton = confirmButton,
-            dismissButton = dismissButton
+            confirmButton = {
+                CustomButton(
+                    text = "Message",
+                    type = ButtonType.FILLED,
+                    onClick = onConfirmButtonClicked
+                )
+            },
+            dismissButton = {
+                CustomButton(
+                    text = "Cancel",
+                    type = ButtonType.OUTLINED,
+                    onClick = {
+                        isDialogShown.value = false
+                    }
+                )
+            }
         )
     }
 }

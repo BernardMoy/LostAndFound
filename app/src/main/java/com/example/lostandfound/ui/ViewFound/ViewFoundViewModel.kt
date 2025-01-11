@@ -17,12 +17,13 @@ interface Callback<T> {
 class ViewFoundViewModel : ViewModel(){
     val isLoading: MutableState<Boolean> = mutableStateOf(true)
     val isLocationDialogShown: MutableState<Boolean> = mutableStateOf(false)
+    val isContactUserDialogShown: MutableState<Boolean> = mutableStateOf(false)
 
     // item data are stored here
     var itemData = FoundItem()
 
     // username used to display the user
-    var userName = "Unknown"
+    var foundUser = User()
 
     // function to get user name given found item data
     fun getUserName(callback: Callback<Boolean>){
@@ -32,7 +33,7 @@ class ViewFoundViewModel : ViewModel(){
                     callback.onComplete(false)
 
                 } else {
-                    userName = user.firstName + ' ' + user.lastName
+                    foundUser = user
                     callback.onComplete(true)
                 }
             }

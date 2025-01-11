@@ -30,7 +30,7 @@ class FoundFragmentViewModel : ViewModel(){
 
     // firestore manager
     val firestoreManager = FirestoreManager()
-    val firebaseStorageManager = FirebaseStorageManager()
+
 
     /*
     function to get all item data corresponding to the current user, and update the mutable itemData list.

@@ -52,6 +52,7 @@ import com.example.lostandfound.CustomElements.CustomButton
 import com.example.lostandfound.CustomElements.CustomCenteredProgressbar
 import com.example.lostandfound.CustomElements.CustomEditText
 import com.example.lostandfound.CustomElements.CustomGrayTitle
+import com.example.lostandfound.CustomElements.CustomUserDialog
 import com.example.lostandfound.CustomElements.CustomViewLocationDialog
 import com.example.lostandfound.Data.Claim
 import com.example.lostandfound.Data.FirebaseNames
@@ -152,7 +153,7 @@ fun MainContent(viewModel: ViewFoundViewModel) {
             ItemImage(viewModel = viewModel)
             ItemDetails(viewModel = viewModel)
             LocationData(viewModel = viewModel)
-            UserData(viewModel = viewModel)
+            UserData(context = context, viewModel = viewModel)
             ActionButtons(context = context, inPreview = inPreview, viewModel = viewModel)
 
             // also display the user
@@ -304,6 +305,7 @@ fun LocationData(
 
 @Composable
 fun UserData(
+    context: Context,
     viewModel: ViewFoundViewModel
 ) {
     Column {
@@ -318,7 +320,7 @@ fun UserData(
             ){
                 CustomEditText(
                     fieldLabel = "User",
-                    fieldContent = viewModel.userName,
+                    fieldContent = viewModel.foundUser.firstName + ' ' + viewModel.foundUser.lastName,
                     leftIcon = Icons.Outlined.AccountCircle,
                     isEditable = false,
                 )
@@ -328,11 +330,21 @@ fun UserData(
                 text = "Contact",
                 type = ButtonType.TONAL,
                 onClick = {
-
+                    viewModel.isContactUserDialogShown.value = true
                 },
                 small = true
             )
         }
+
+        // contact user dialog
+        CustomUserDialog(
+            user = viewModel.foundUser,
+            context = context,
+            onConfirmButtonClicked = {
+
+            },
+            isDialogShown = viewModel.isContactUserDialogShown
+        )
 
         HorizontalDivider(thickness = 1.dp)
 
