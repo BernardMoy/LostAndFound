@@ -10,6 +10,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -53,6 +54,7 @@ import com.example.lostandfound.CustomElements.CustomCenteredProgressbar
 import com.example.lostandfound.CustomElements.CustomEditText
 import com.example.lostandfound.CustomElements.CustomPickLocationDialog
 import com.example.lostandfound.CustomElements.CustomGrayTitle
+import com.example.lostandfound.CustomElements.CustomUserDialog
 import com.example.lostandfound.CustomElements.CustomViewLocationDialog
 import com.example.lostandfound.Data.Claim
 import com.example.lostandfound.Data.IntentExtraNames
@@ -150,7 +152,7 @@ fun MainContent(viewModel: ViewLostViewModel) {
             ItemImage(viewModel = viewModel)
             ItemDetails(viewModel = viewModel)
             LocationData(viewModel = viewModel)
-            UserData(viewModel = viewModel)
+            UserData(context = context, viewModel = viewModel)
 
             // if status = 0 or 1, display matching items
             ActionButtons(context = context, inPreview = inPreview, viewModel = viewModel)
@@ -291,6 +293,7 @@ fun LocationData(
 
 @Composable
 fun UserData(
+    context: Context,
     viewModel: ViewLostViewModel
 ){
     Column(
@@ -298,15 +301,36 @@ fun UserData(
         CustomGrayTitle(text = "User information")
 
         // Name of user
-        CustomEditText(
-            fieldLabel = "User",
-            fieldContent = viewModel.userName,
-            leftIcon = Icons.Outlined.AccountCircle,
-            isEditable = false
-        )
+        Row(
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Box(
+                modifier = Modifier.weight(1f)
+            ) {
+                // Name of user
+                CustomEditText(
+                    fieldLabel = "User",
+                    fieldContent = viewModel.lostUser.firstName + ' ' + viewModel.lostUser.lastName,
+                    leftIcon = Icons.Outlined.AccountCircle,
+                    isEditable = false
+                )
+            }
+
+            // contact user button and dialog, when the user is not the current user
+            if (viewModel.lostUser.userID != FirebaseUtility.getUserID()) {
+                CustomButton(
+                    text = "Contact",
+                    type = ButtonType.TONAL,
+                    onClick = {
+                        viewModel.isContactUserDialogShown.value = true
+                    },
+                    small = true
+                )
+            }
+        }
         HorizontalDivider(thickness = 1.dp)
 
-        // category and subcategory
+        // time posted
         CustomEditText(
             fieldLabel = "Time posted",
             fieldContent = DateTimeManager.dateTimeToString(viewModel.itemData.timePosted),
@@ -315,6 +339,15 @@ fun UserData(
         )
         HorizontalDivider(thickness = 1.dp)
     }
+
+    CustomUserDialog(
+        user = viewModel.lostUser,
+        context = context,
+        onConfirmButtonClicked = {
+
+        },
+        isDialogShown = viewModel.isContactUserDialogShown
+    )
 }
 
 @Composable
@@ -398,7 +431,7 @@ fun loadData(
     viewModel.isLoading.value = true
 
     // load lost item data of the current user from the view model
-    viewModel.getUserName(object : com.example.lostandfound.ui.ViewLost.Callback<Boolean>{
+    viewModel.getUser(object : com.example.lostandfound.ui.ViewLost.Callback<Boolean>{
         override fun onComplete(result: Boolean) {
             viewModel.isLoading.value = false
 

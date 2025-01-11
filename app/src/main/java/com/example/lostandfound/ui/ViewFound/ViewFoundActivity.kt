@@ -54,21 +54,15 @@ import com.example.lostandfound.CustomElements.CustomEditText
 import com.example.lostandfound.CustomElements.CustomGrayTitle
 import com.example.lostandfound.CustomElements.CustomUserDialog
 import com.example.lostandfound.CustomElements.CustomViewLocationDialog
-import com.example.lostandfound.Data.Claim
-import com.example.lostandfound.Data.FirebaseNames
 import com.example.lostandfound.Data.FoundItem
 import com.example.lostandfound.Data.IntentExtraNames
 import com.example.lostandfound.Data.foundStatusText
 import com.example.lostandfound.Data.statusColor
 import com.example.lostandfound.FirebaseManagers.FirebaseUtility
-import com.example.lostandfound.FirebaseManagers.ItemManager
 import com.example.lostandfound.R
 import com.example.lostandfound.Utility.DateTimeManager
 import com.example.lostandfound.Utility.LocationManager
-import com.example.lostandfound.ui.Search.SearchActivity
-import com.example.lostandfound.ui.ViewClaim.ViewClaimActivity
 import com.example.lostandfound.ui.ViewClaimList.ViewClaimListActivity
-import com.example.lostandfound.ui.ViewLost.ViewLostViewModel
 import com.example.lostandfound.ui.theme.ComposeTheme
 import com.example.lostandfound.ui.theme.Typography
 
@@ -314,10 +308,10 @@ fun UserData(
         // Name of user
         Row(
             verticalAlignment = Alignment.CenterVertically
-        ){
+        ) {
             Box(
                 modifier = Modifier.weight(1f)
-            ){
+            ) {
                 CustomEditText(
                     fieldLabel = "User",
                     fieldContent = viewModel.foundUser.firstName + ' ' + viewModel.foundUser.lastName,
@@ -326,17 +320,20 @@ fun UserData(
                 )
             }
 
-            CustomButton(
-                text = "Contact",
-                type = ButtonType.TONAL,
-                onClick = {
-                    viewModel.isContactUserDialogShown.value = true
-                },
-                small = true
-            )
+            // contact user button and dialog, when the user is not the current user
+            if (viewModel.foundUser.userID != FirebaseUtility.getUserID()) {
+                CustomButton(
+                    text = "Contact",
+                    type = ButtonType.TONAL,
+                    onClick = {
+                        viewModel.isContactUserDialogShown.value = true
+                    },
+                    small = true
+                )
+            }
+
         }
 
-        // contact user dialog
         CustomUserDialog(
             user = viewModel.foundUser,
             context = context,
@@ -345,6 +342,9 @@ fun UserData(
             },
             isDialogShown = viewModel.isContactUserDialogShown
         )
+
+
+
 
         HorizontalDivider(thickness = 1.dp)
 
@@ -365,21 +365,21 @@ fun ActionButtons(
     context: Context,
     inPreview: Boolean,
     viewModel: ViewFoundViewModel
-){
+) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = dimensionResource(id = R.dimen.content_margin))
-    ){
+    ) {
         // only display buttons when the lost item is found by the current user
-        if (inPreview || FirebaseUtility.getUserID() == viewModel.itemData.userID){
+        if (inPreview || FirebaseUtility.getUserID() == viewModel.itemData.userID) {
             Column(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin))
-            ){
+            ) {
                 // if the status is 0, display a message saying there are no claims
-                if (inPreview || viewModel.itemData.status == 0){
+                if (inPreview || viewModel.itemData.status == 0) {
                     Text(
                         text = "There are currently no users who has claimed this item.",
                         style = Typography.bodyMedium,

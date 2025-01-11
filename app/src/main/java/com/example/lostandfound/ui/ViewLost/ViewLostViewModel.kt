@@ -20,16 +20,17 @@ interface Callback<T> {
 class ViewLostViewModel : ViewModel(){
     val isLoading: MutableState<Boolean> = mutableStateOf(true)
     val isLocationDialogShown: MutableState<Boolean> = mutableStateOf(false)
+    val isContactUserDialogShown: MutableState<Boolean> = mutableStateOf(false)
 
     // default lost item placeholder data
     // will be replaced by method below
     var itemData = LostItem()
 
     // username used to display the user
-    var userName = "Unknown"
+    var lostUser = User()
 
     // function to get user name and load it into the var
-    fun getUserName(callback: Callback<Boolean>){
+    fun getUser(callback: Callback<Boolean>){
         UserManager.getUserFromId(itemData.userID, object: UserManager.UserCallback{
             override fun onComplete(user: User?) {
                 if (user == null){
@@ -37,7 +38,7 @@ class ViewLostViewModel : ViewModel(){
                     return
                 }
 
-                userName = user.firstName + ' ' + user.lastName
+                lostUser = user
                 callback.onComplete(true)
             }
 
