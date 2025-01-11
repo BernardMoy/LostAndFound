@@ -6,6 +6,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import com.example.lostandfound.Data.FirebaseNames
 import com.example.lostandfound.Data.LostItem
+import com.example.lostandfound.Data.User
 import com.example.lostandfound.FirebaseManagers.FirebaseStorageManager
 import com.example.lostandfound.FirebaseManagers.FirestoreManager
 import com.example.lostandfound.FirebaseManagers.UserManager
@@ -29,16 +30,17 @@ class ViewLostViewModel : ViewModel(){
 
     // function to get user name and load it into the var
     fun getUserName(callback: Callback<Boolean>){
-        UserManager.getUsernameFromId(itemData.userID, object: UserManager.UsernameCallback{
-            override fun onComplete(username: String) {
-                if (username.isEmpty()){
+        UserManager.getUserFromId(itemData.userID, object: UserManager.UserCallback{
+            override fun onComplete(user: User?) {
+                if (user == null){
                     callback.onComplete(false)
-
-                } else {
-                    userName = username
-                    callback.onComplete(true)
+                    return
                 }
+
+                userName = user.firstName + ' ' + user.lastName
+                callback.onComplete(true)
             }
+
         })
     }
 }
