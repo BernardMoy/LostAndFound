@@ -5,12 +5,12 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -63,6 +63,7 @@ import com.example.lostandfound.CustomElements.CustomEditText
 import com.example.lostandfound.CustomElements.CustomGrayTitle
 import com.example.lostandfound.CustomElements.CustomInputDialog
 import com.example.lostandfound.CustomElements.CustomProgressBar
+import com.example.lostandfound.CustomElements.CustomUserDialog
 import com.example.lostandfound.CustomElements.CustomViewTwoLocationsDialog
 import com.example.lostandfound.Data.Claim
 import com.example.lostandfound.Data.FoundItem
@@ -170,7 +171,7 @@ fun MainContent(viewModel: ViewComparisonViewModel) {
             ItemDetails(viewModel = viewModel)
             LocationData(context = context, viewModel = viewModel)
             SecurityQuestion(viewModel = viewModel)
-            UserData(viewModel = viewModel)
+            UserData(context = context, viewModel = viewModel)
             ClaimButton(context = context, viewModel = viewModel)
 
         }
@@ -414,6 +415,7 @@ fun SecurityQuestion(
 
 @Composable
 fun UserData(
+    context: Context,
     viewModel: ViewComparisonViewModel
 ){
     Column(
@@ -421,14 +423,44 @@ fun UserData(
         CustomGrayTitle(text = "Contact user who found this item")
 
         // Name of the FOUND user as only lost users would see this screen
-        CustomEditText(
-            fieldLabel = "User",
-            fieldContent = viewModel.foundUserName,
-            leftIcon = Icons.Outlined.AccountCircle,
-            isEditable = false
-        )
+        Row(
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Box(
+                modifier = Modifier.weight(1f)
+            ) {
+                CustomEditText(
+                    fieldLabel = "User",
+                    fieldContent = viewModel.foundUser.firstName + ' ' + viewModel.foundUser.lastName,
+                    leftIcon = Icons.Outlined.AccountCircle,
+                    isEditable = false
+                )
+            }
+
+            // contact user button and dialog, when the user is not the current user
+            if (viewModel.foundUser.userID != FirebaseUtility.getUserID()) {
+                CustomButton(
+                    text = "Contact",
+                    type = ButtonType.TONAL,
+                    onClick = {
+                        viewModel.isContactUserDialogShown.value = true
+                    },
+                    small = true
+                )
+            }
+
+        }
         HorizontalDivider(thickness = 1.dp)
     }
+
+    CustomUserDialog(
+        user = viewModel.foundUser,
+        context = context,
+        onConfirmButtonClicked = {
+
+        },
+        isDialogShown = viewModel.isContactUserDialogShown
+    )
 }
 
 @Composable
@@ -573,7 +605,7 @@ fun loadData(
     viewModel.isLoading.value = true
 
     // load lost item data of the current user from the view model
-    viewModel.getUserName(object : com.example.lostandfound.ui.ViewComparison.Callback<Boolean>{
+    viewModel.getFoundUser(object : com.example.lostandfound.ui.ViewComparison.Callback<Boolean>{
         override fun onComplete(result: Boolean) {
             viewModel.isLoading.value = false
 
