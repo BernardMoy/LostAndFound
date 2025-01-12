@@ -24,7 +24,7 @@ public class LoginViewModel extends ViewModel {
 
     // validate email
     public boolean validateEmail(String email){
-        if (email.isEmpty()){
+        if (email.trim().isEmpty()){
             setLoginError("Email cannot be empty");
             return false;
 
@@ -34,7 +34,7 @@ public class LoginViewModel extends ViewModel {
 
     // validate password
     public boolean validatePassword(String password){
-        if (password.isEmpty()){
+        if (password.trim().isEmpty()){
             setLoginError("Password cannot be empty");
             return false;
 
@@ -55,7 +55,7 @@ public class LoginViewModel extends ViewModel {
         firebaseAuthManager.loginUser(emailAddress, password, new ErrorCallback() {
             @Override
             public void onComplete(String error) {
-                if (!error.isEmpty()){
+                if (!error.trim().isEmpty()){
                     setLoginError(error);
                     callback.onComplete(error);
                     return;

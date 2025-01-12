@@ -2,6 +2,7 @@ package com.example.lostandfound.ui.ChatInbox
 
 import android.content.Context
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
@@ -243,7 +244,21 @@ fun SendBar(
         // send button
         IconButton(
             onClick = {
-                viewModel.sendMessage()
+                // first validate message
+                if (!viewModel.validateMessage()){
+                    return@IconButton
+                }
+
+                viewModel.sendMessage(object: SendMessageCallback{
+                    override fun onComplete(result: Boolean) {
+                        if (!result){
+                            Toast.makeText(context, "Failed to send message", Toast.LENGTH_SHORT).show()
+                            return
+                        }
+
+                        // do nothing when send message successful
+                    }
+                })
             },
             modifier = Modifier  // add the background circle
                 .background(

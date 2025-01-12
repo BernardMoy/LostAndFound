@@ -19,7 +19,7 @@ public class RegisterViewModel extends ViewModel {
 
     // methods to validate whether the first name, last name, email and passwords are valid
     public boolean validateFirstName(String firstName){
-        if (firstName.isEmpty()){
+        if (firstName.trim().isEmpty()){
             setRegisterError("First name cannot be empty");
             return false;
         }
@@ -28,7 +28,7 @@ public class RegisterViewModel extends ViewModel {
 
     // validate last name
     public boolean validateLastName(String lastName){
-        if (lastName.isEmpty()){
+        if (lastName.trim().isEmpty()){
             setRegisterError("Last name cannot be empty");
             return false;
         }
@@ -37,7 +37,7 @@ public class RegisterViewModel extends ViewModel {
 
     // validate email
     public boolean validateEmail(String email){
-        if (email.isEmpty()){
+        if (email.trim().isEmpty()){
             setRegisterError("Email cannot be empty");
             return false;
 
@@ -50,7 +50,7 @@ public class RegisterViewModel extends ViewModel {
 
     // validate password
     public boolean validatePassword(String password){
-        if (password.isEmpty()){
+        if (password.trim().isEmpty()){
             setRegisterError("Password cannot be empty");
             return false;
 

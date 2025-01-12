@@ -103,7 +103,7 @@ class NewFoundViewModel: ViewModel() {
         timeError.value = ""
 
         // check each of them
-        if (itemName.value.isEmpty()){
+        if (itemName.value.trim().isEmpty()){
             nameError.value = "Item name cannot be empty"
             return false
         }
@@ -111,7 +111,7 @@ class NewFoundViewModel: ViewModel() {
             categoryError.value = "Category cannot be empty"
             return false
         }
-        if (selectedSubCategory.value.isEmpty()) {
+        if (selectedSubCategory.value.trim().isEmpty()) {
             subCategoryError.value = "Subcategory cannot be empty"
             return false
         }
@@ -140,7 +140,7 @@ class NewFoundViewModel: ViewModel() {
         // implement location error
 
         // if security question is not empty, then security answer cannot be empty
-        if (securityQuestion.value.isNotEmpty() && securityQuestionAns.value.isEmpty()){
+        if (securityQuestion.value.trim().isNotEmpty() && securityQuestionAns.value.trim().isEmpty()){
             securityQuestionAnsError.value = "Security question answer cannot be empty"
             return false
         }
@@ -173,7 +173,7 @@ class NewFoundViewModel: ViewModel() {
 
         firestoreManager.putWithUniqueId(FirebaseNames.COLLECTION_FOUND_ITEMS, data, object: FirestoreManager.Callback<String>{
             override fun onComplete(result: String) {     // the unique id generated is returned
-                if (result.isEmpty()){
+                if (result.trim().isEmpty()){
                     callback.onComplete("Error adding item to database")
                     return
                 }
