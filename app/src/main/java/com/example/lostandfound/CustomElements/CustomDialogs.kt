@@ -6,6 +6,7 @@ import android.util.TypedValue
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -49,6 +50,7 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import androidx.core.content.ContextCompat
@@ -161,9 +163,14 @@ fun CustomUserDialog(
                     painter = if (avatar != null) rememberAsyncImagePainter(model = ImageManager.stringToUri(context, user.avatar))
                             else painterResource(id = R.drawable.profile_icon),
                     contentDescription = "User avatar",
-                    modifier = Modifier.size(
-                        dimensionResource(R.dimen.image_button_size)
-                    )
+                    modifier = Modifier
+                        .size(dimensionResource(R.dimen.image_button_size))
+                        .clip(CircleShape)
+                        .border(
+                            width = 1.dp,
+                            color = MaterialTheme.colorScheme.onPrimaryContainer,
+                            shape = CircleShape
+                        ),
                 )
             },
             title = {
