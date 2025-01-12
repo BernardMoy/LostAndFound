@@ -20,7 +20,7 @@ public final class IntentExtraNames {
     public static final String INTENT_CLAIM_ITEM = "claim_item";
     // for the view found to view claim list intent, the INTENT_FOUND_ID is passed instead
 
-    // chat inbox id
-    public static final String INTENT_CHAT_INBOX_ID = "chat_inbox_id";
+    // chat user
+    public static final String INTENT_CHAT_USER = "chat_user";
 
 }
