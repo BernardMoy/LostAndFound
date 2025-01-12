@@ -100,7 +100,7 @@ class NewLostViewModel: ViewModel() {
         timeError.value = ""
 
         // check each of them
-        if (itemName.value.isEmpty()){
+        if (itemName.value.trim().isEmpty()){
             nameError.value = "Item name cannot be empty"
             return false
         }
@@ -108,7 +108,7 @@ class NewLostViewModel: ViewModel() {
             categoryError.value = "Category cannot be empty"
             return false
         }
-        if (selectedSubCategory.value.isEmpty()) {
+        if (selectedSubCategory.value.trim().isEmpty()) {
             subCategoryError.value = "Subcategory cannot be empty"
             return false
         }
@@ -166,7 +166,7 @@ class NewLostViewModel: ViewModel() {
 
         firestoreManager.putWithUniqueId(FirebaseNames.COLLECTION_LOST_ITEMS, data, object: FirestoreManager.Callback<String>{
             override fun onComplete(result: String) {     // the unique id generated is returned
-                if (result.isEmpty()){
+                if (result.trim().isEmpty()){
                     callback.onComplete(null)
                     return
                 }
