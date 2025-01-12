@@ -6,34 +6,50 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.outlined.Send
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalInspectionMode
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil3.compose.rememberAsyncImagePainter
 import com.example.lostandfound.CustomElements.BackToolbar
+import com.example.lostandfound.CustomElements.CustomInputField
 import com.example.lostandfound.Data.IntentExtraNames
 import com.example.lostandfound.Data.LostItem
 import com.example.lostandfound.Data.User
@@ -108,7 +124,11 @@ fun MainContent(viewModel: ChatInboxViewModel) {
 
     Column{
         UserData(context = context, viewModel = viewModel)
-        Messages(context = context, viewModel = viewModel)
+        Box(
+            modifier = Modifier.weight(1f)
+        ){
+            Messages(context = context, viewModel = viewModel)
+        }
         SendBar(context = context, viewModel = viewModel)
     }
 
@@ -151,7 +171,9 @@ fun UserData(
             text = viewModel.chatUser.firstName + ' ' + viewModel.chatUser.lastName,
             style = Typography.bodyMedium,
             fontWeight = FontWeight.Bold,
-            color = MaterialTheme.colorScheme.onBackground
+            color = MaterialTheme.colorScheme.onBackground,
+            modifier = Modifier.weight(1f),
+            textAlign = TextAlign.Start
         )
     }
 
@@ -165,7 +187,13 @@ fun Messages(
     context: Context,
     viewModel: ChatInboxViewModel
 ){
+    LazyColumn (
+        // it is assigned all the remaining height from the MainContent() composable
+       modifier = Modifier.fillMaxSize()
+    ){
 
+
+    }
 }
 
 // display send message bar
@@ -174,7 +202,63 @@ fun SendBar(
     context: Context,
     viewModel: ChatInboxViewModel
 ){
+    HorizontalDivider(thickness = 1.dp)
 
+    Row (
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin)),
+        modifier = Modifier.padding(horizontal = dimensionResource(id = R.dimen.content_margin))
+    ){
+        // type your message box
+        OutlinedTextField(
+            value = viewModel.typedText.value,
+            placeholder = {
+                Text(text = "Type your message...", style = Typography.bodyMedium, color = Color.Gray)
+            },
+            onValueChange = { newText ->
+                viewModel.typedText.value = newText
+            },
+            shape = RoundedCornerShape(dimensionResource(id = R.dimen.corner_radius_small)),
+            modifier = Modifier
+                .weight(1f)
+                .padding(
+                    vertical = dimensionResource(id = R.dimen.content_margin)
+                ),
+            colors = TextFieldDefaults.colors(
+                // for enabled (Editable) text
+                unfocusedContainerColor = MaterialTheme.colorScheme.background,
+                focusedContainerColor = MaterialTheme.colorScheme.background,
+
+                // for disabled (non editable) text
+                disabledContainerColor = MaterialTheme.colorScheme.background,
+                disabledTextColor = MaterialTheme.colorScheme.onBackground,
+
+                // for the color of the border
+                focusedIndicatorColor = MaterialTheme.colorScheme.primary,
+                unfocusedIndicatorColor = Color.Gray,
+                disabledIndicatorColor = MaterialTheme.colorScheme.outline,
+            )
+        )
+
+        // send button
+        IconButton(
+            onClick = {
+                viewModel.sendMessage()
+            },
+            modifier = Modifier  // add the background circle
+                .background(
+                    Brush.horizontalGradient(listOf(MaterialTheme.colorScheme.primary, MaterialTheme.colorScheme.secondary)),
+                    shape = CircleShape
+                )
+                .padding(3.dp)  // content margin half half
+        ) {
+            Icon(
+                imageVector = Icons.AutoMirrored.Outlined.Send,
+                contentDescription = "Send message",
+                tint = MaterialTheme.colorScheme.onPrimary
+            )
+        }
+    }
 }
 
 
