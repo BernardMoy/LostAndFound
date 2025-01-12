@@ -77,6 +77,7 @@ import com.example.lostandfound.R
 import com.example.lostandfound.Utility.DateTimeManager
 import com.example.lostandfound.Utility.ErrorCallback
 import com.example.lostandfound.Utility.LocationManager
+import com.example.lostandfound.ui.ChatInbox.ChatInboxActivity
 import com.example.lostandfound.ui.Done.DoneActivity
 import com.example.lostandfound.ui.theme.ComposeTheme
 import com.example.lostandfound.ui.theme.Typography
@@ -455,9 +456,6 @@ fun UserData(
     CustomUserDialog(
         user = viewModel.foundUser,
         context = context,
-        onConfirmButtonClicked = {
-
-        },
         isDialogShown = viewModel.isContactUserDialogShown
     )
 }

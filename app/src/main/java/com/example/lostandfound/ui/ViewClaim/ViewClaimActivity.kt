@@ -510,9 +510,6 @@ fun UserData(
     CustomUserDialog(
         user = viewModel.foundUser,
         context = context,
-        onConfirmButtonClicked = {
-
-        },
         isDialogShown = viewModel.isContactUserDialogShown
     )
 }
