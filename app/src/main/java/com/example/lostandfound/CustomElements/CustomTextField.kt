@@ -309,25 +309,6 @@ fun PreviewDoubleText() {
     )
 
      */
-    ComposeTheme {
-        Column (
-            verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin))
-        ){
-            CustomChatField(
-                text = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
-                timestamp = 1736188440L,
-                isSentByCurrentUser = false,
-                senderName = "Person1"
-            )
-
-            CustomChatField(
-                text = "e",
-                timestamp = 2L,
-                isSentByCurrentUser = true,
-                senderName = "Person2"
-            )
-        }
-    }
 }
 
 @Composable
@@ -476,73 +457,4 @@ fun CustomSearchField(
             errorTextColor = MaterialTheme.colorScheme.onBackground
         )
     )
-}
-
-@Composable
-fun CustomChatField(
-    text: String,
-    timestamp: Long,
-    senderName: String,
-    isSentByCurrentUser: Boolean
-){
-    Column (
-        modifier = Modifier.fillMaxWidth(),
-        horizontalAlignment = if (isSentByCurrentUser) Alignment.End else Alignment.Start,
-        verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin_half))
-    ){
-        // show the sender name
-        Text(
-            text = senderName,
-            style = Typography.bodyMedium,
-            color = Color.Gray
-        )
-
-        Row(
-            verticalAlignment = Alignment.Bottom,
-            horizontalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin_half))
-        ){
-            // show the time posted
-            if (isSentByCurrentUser){
-                Text(
-                    text = DateTimeManager.getChatTimeDescription(timestamp),
-                    style = Typography.bodyMedium,
-                    color = Color.Gray
-                )
-            }
-
-            // show the message
-            ElevatedCard(
-                elevation = CardDefaults.cardElevation(
-                    defaultElevation = 6.dp
-                ),
-                colors = CardDefaults.cardColors(
-                    containerColor = if (isSentByCurrentUser) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.primaryContainer
-                ),
-                // set the max width of the text message to be 2/3 of the row width
-                modifier = Modifier.widthIn(max = LocalConfiguration.current.screenWidthDp.dp * 2/3)
-            ) {
-                Column (
-                    modifier = Modifier.padding(dimensionResource(id = R.dimen.title_margin)),
-                    verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.title_margin))
-                ){
-                    // message text
-                    Text(
-                        text = text,
-                        style = Typography.bodyMedium,
-                        color = if (isSentByCurrentUser) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onPrimaryContainer,
-                        textAlign = if (isSentByCurrentUser) TextAlign.End else TextAlign.Start
-                    )
-                }
-            }
-
-            // show the time posted
-            if (!isSentByCurrentUser){
-                Text(
-                    text = DateTimeManager.getChatTimeDescription(timestamp),
-                    style = Typography.bodyMedium,
-                    color = Color.Gray
-                )
-            }
-        }
-    }
 }

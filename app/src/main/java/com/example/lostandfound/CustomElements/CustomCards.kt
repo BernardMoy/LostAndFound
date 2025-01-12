@@ -1,21 +1,16 @@
 package com.example.lostandfound.CustomElements
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -25,6 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.dimensionResource
@@ -33,18 +29,41 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.lostandfound.R
+import com.example.lostandfound.Utility.DateTimeManager
 import com.example.lostandfound.ui.theme.ComposeTheme
 import com.example.lostandfound.ui.theme.Typography
 
 @Preview(showBackground = true)
 @Composable
 fun CustomCardPreview() {
+    /*
     ComposeTheme {
         CustomCard(
             title = "Search",
             content = "Search for existing items",
             icon = Icons.Outlined.Search
         )
+    }
+     */
+
+    ComposeTheme {
+        Column (
+            verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin))
+        ){
+            CustomChatCard(
+                text = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
+                timestamp = 1736188440L,
+                isSentByCurrentUser = false,
+                senderName = "Person1"
+            )
+
+            CustomChatCard(
+                text = "e",
+                timestamp = 2L,
+                isSentByCurrentUser = true,
+                senderName = "Person2"
+            )
+        }
     }
 }
 
@@ -107,6 +126,86 @@ fun CustomCard(
                     style = Typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onPrimary,
                     textAlign = TextAlign.Center
+                )
+            }
+        }
+    }
+}
+
+@Composable
+fun CustomChatCard(
+    text: String,
+    timestamp: Long,
+    senderName: String,
+    isSentByCurrentUser: Boolean
+){
+    Column (
+        modifier = Modifier.fillMaxWidth(),
+        horizontalAlignment = if (isSentByCurrentUser) Alignment.End else Alignment.Start,
+        verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin_half))
+    ){
+        // show the sender name
+        Text(
+            text = senderName,
+            style = Typography.bodyMedium,
+            color = Color.Gray
+        )
+
+        Row(
+            verticalAlignment = Alignment.Bottom,
+            horizontalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin_half)),
+        ){
+            // show the time posted
+            if (isSentByCurrentUser){
+                Text(
+                    text = DateTimeManager.getChatTimeDescription(timestamp),
+                    style = Typography.bodyMedium,
+                    color = Color.Gray
+                )
+            }
+
+            // show the message
+            Card(
+                elevation = CardDefaults.cardElevation(
+                    defaultElevation = 6.dp
+                ),
+                colors = CardDefaults.cardColors(
+                    containerColor = if (isSentByCurrentUser) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.primaryContainer
+                ),
+                shape = RectangleShape,  // override the default shape
+
+                // set the max width of the text message to be 2/3 of the row width
+                modifier = Modifier
+                    .clip(
+                        RoundedCornerShape(
+                            topStart = dimensionResource(id = R.dimen.corner_radius_small),
+                            topEnd = dimensionResource(id = R.dimen.corner_radius_small),
+                            bottomStart = if (isSentByCurrentUser) dimensionResource(id = R.dimen.corner_radius_small) else 0.dp,
+                            bottomEnd = if (isSentByCurrentUser) 0.dp else dimensionResource(id = R.dimen.corner_radius_small)
+                        )
+                    )
+                    .widthIn(max = LocalConfiguration.current.screenWidthDp.dp * 2 / 3)
+            ) {
+                Column (
+                    modifier = Modifier.padding(dimensionResource(id = R.dimen.title_margin)),
+                    verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.title_margin))
+                ){
+                    // message text
+                    Text(
+                        text = text,
+                        style = Typography.bodyMedium,
+                        color = if (isSentByCurrentUser) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onPrimaryContainer,
+                        textAlign = if (isSentByCurrentUser) TextAlign.End else TextAlign.Start
+                    )
+                }
+            }
+
+            // show the time posted
+            if (!isSentByCurrentUser){
+                Text(
+                    text = DateTimeManager.getChatTimeDescription(timestamp),
+                    style = Typography.bodyMedium,
+                    color = Color.Gray
                 )
             }
         }
