@@ -13,6 +13,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Add
+import androidx.compose.material.icons.outlined.AddCircle
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -96,7 +99,11 @@ fun HowItWorksPager(
                     horizontal = dimensionResource(id = R.dimen.title_margin)
                 )
             ){
-                CustomCard(text = "Page")
+                CustomCard(
+                    icon = Icons.Outlined.AddCircle,
+                    title = "Add a lost item",
+                    content = "You can report a lost item with the + button below."
+                )
             }
         }
 
