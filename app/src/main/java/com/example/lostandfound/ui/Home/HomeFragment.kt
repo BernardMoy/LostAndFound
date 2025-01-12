@@ -13,10 +13,12 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.ArrowForward
+import androidx.compose.material.icons.filled.Circle
 import androidx.compose.material.icons.outlined.Add
 import androidx.compose.material.icons.outlined.AddCircle
 import androidx.compose.material.icons.outlined.CheckCircle
@@ -32,7 +34,9 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.dimensionResource
@@ -41,10 +45,12 @@ import androidx.compose.ui.unit.dp
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.lostandfound.CustomElements.ButtonType
+import com.example.lostandfound.CustomElements.CustomActionText
 import com.example.lostandfound.CustomElements.CustomButton
 import com.example.lostandfound.CustomElements.CustomCard
 import com.example.lostandfound.R
 import com.example.lostandfound.ui.EditProfile.EditProfileViewModel
+import com.example.lostandfound.ui.HowItWorks.HowItWorksActivity
 import com.example.lostandfound.ui.ViewComparison.ViewComparisonActivity
 import com.example.lostandfound.ui.theme.ComposeTheme
 
@@ -124,13 +130,24 @@ fun HowItWorksPager(
     ){
         // 4 dots and the -> button
         Row (
-
+            modifier = Modifier.padding(horizontal = dimensionResource(id = R.dimen.title_margin)),
+            verticalAlignment = Alignment.CenterVertically
         ){
             // the 4 dots
             Row(
-
+                modifier = Modifier.weight(1f),  // fill all remaining space
+                horizontalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin_half))
             ){
-
+                // for loop for each page
+                for (i in 0 until pagerSize){
+                    Icon(
+                        imageVector = Icons.Filled.Circle,
+                        contentDescription = "Page",
+                        modifier = Modifier.width(dimensionResource(id = R.dimen.content_margin)),
+                        tint = if (pagerState.currentPage == i) MaterialTheme.colorScheme.primary
+                                else Color.Gray
+                    )
+                }
             }
 
             // the next button
@@ -187,6 +204,23 @@ fun HowItWorksPager(
                     }
                 }
             }
+        }
+
+        // the action text to go to view how it works activity
+        Box(modifier = Modifier
+            .padding(
+                horizontal = dimensionResource(id = R.dimen.title_margin),
+                vertical = dimensionResource(id = R.dimen.content_margin)
+            )
+            .align(Alignment.End)
+        ){
+            CustomActionText(
+                text = "View how it works",
+                onClick = {
+                    val intent = Intent(context, HowItWorksActivity::class.java)
+                    context.startActivity(intent)
+                }
+            )
         }
     }
     HorizontalDivider(thickness = 1.dp)
