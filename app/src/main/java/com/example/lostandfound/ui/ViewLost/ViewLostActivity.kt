@@ -343,9 +343,6 @@ fun UserData(
     CustomUserDialog(
         user = viewModel.lostUser,
         context = context,
-        onConfirmButtonClicked = {
-
-        },
         isDialogShown = viewModel.isContactUserDialogShown
     )
 }
