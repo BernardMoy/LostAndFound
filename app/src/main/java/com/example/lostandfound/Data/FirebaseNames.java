@@ -52,6 +52,7 @@ public final class FirebaseNames {
     // for chat system
     public static final String CHAT_SENDER_USER_ID = "sender_user_id";
     public static final String CHAT_RECIPIENT_USER_ID = "recipient_user_id";
+    public static final String CHAT_FROM_TO = "from_to";  // an array for storing [from user id, to user id]
     public static final String CHAT_CONTENT = "chat_content";
     public static final String CHAT_TIMESTAMP = "timestamp";
 

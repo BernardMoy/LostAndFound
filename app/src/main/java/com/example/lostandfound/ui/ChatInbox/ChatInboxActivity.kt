@@ -52,6 +52,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil3.compose.rememberAsyncImagePainter
 import com.example.lostandfound.CustomElements.BackToolbar
+import com.example.lostandfound.CustomElements.CustomCenteredProgressbar
 import com.example.lostandfound.Data.IntentExtraNames
 import com.example.lostandfound.Data.User
 import com.example.lostandfound.R
@@ -72,6 +73,9 @@ class ChatInboxActivity : ComponentActivity() {
         if (passedItem != null) {
             viewModel.chatUser = passedItem
         }
+
+        // load messages on create
+        loadMessages(context = this, viewModel = viewModel)
 
         setContent {
             ChatInboxScreen(activity = this, viewModel = viewModel)
@@ -143,7 +147,12 @@ fun MainContent(viewModel: ChatInboxViewModel) {
         Box(
             modifier = Modifier.weight(1f)
         ) {
-            Messages(context = context, viewModel = viewModel)
+            if (viewModel.isLoading.value){
+                CustomCenteredProgressbar()
+
+            } else {
+                Messages(context = context, viewModel = viewModel)
+            }
         }
         SendBar(context = context, viewModel = viewModel)
     }
@@ -299,6 +308,27 @@ fun SendBar(
             )
         }
     }
+}
+
+// function to load all past messages
+fun loadMessages(
+    context: Context,
+    viewModel: ChatInboxViewModel
+){
+    viewModel.isLoading.value = true
+
+    viewModel.fetchMessagePreviews(object: FetchMessageCallback{
+        override fun onComplete(result: Boolean) {
+            viewModel.isLoading.value = false
+
+            if (!result){
+                Toast.makeText(context, "Fetching messages failed", Toast.LENGTH_SHORT).show()
+                return
+            }
+
+            // do nothing when it loads successfully
+        }
+    })
 }
 
 
