@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -22,7 +21,10 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.outlined.Send
+import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -32,6 +34,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -40,7 +43,6 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalInspectionMode
-import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -50,13 +52,10 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil3.compose.rememberAsyncImagePainter
 import com.example.lostandfound.CustomElements.BackToolbar
-import com.example.lostandfound.CustomElements.CustomInputField
 import com.example.lostandfound.Data.IntentExtraNames
-import com.example.lostandfound.Data.LostItem
 import com.example.lostandfound.Data.User
 import com.example.lostandfound.R
 import com.example.lostandfound.Utility.ImageManager
-import com.example.lostandfound.ui.ViewLost.ViewLostViewModel
 import com.example.lostandfound.ui.theme.ComposeTheme
 import com.example.lostandfound.ui.theme.Typography
 
@@ -70,7 +69,7 @@ class ChatInboxActivity : ComponentActivity() {
 
         // load the passed user data (Recipient user) into view model
         val passedItem = intent.getParcelableExtra<User>(IntentExtraNames.INTENT_CHAT_USER)
-        if (passedItem != null){
+        if (passedItem != null) {
             viewModel.chatUser = passedItem
         }
 
@@ -89,6 +88,7 @@ fun Preview() {
     ChatInboxScreen(activity = MockActivity(), viewModel = viewModel())
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ChatInboxScreen(activity: ComponentActivity, viewModel: ChatInboxViewModel) {
     ComposeTheme {
@@ -96,7 +96,23 @@ fun ChatInboxScreen(activity: ComponentActivity, viewModel: ChatInboxViewModel) 
             Scaffold(
                 // top toolbar
                 topBar = {
-                    BackToolbar(title = "Chat Inbox", activity = activity)
+                    TopAppBar(
+                        title = {
+                            UserData(context = activity, viewModel = viewModel)
+                        },
+                        navigationIcon = {
+                            IconButton(onClick = {
+                                // default behaviour is to exit the activity
+                                activity.finish()
+                            }) {
+                                Icon(
+                                    imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                                    contentDescription = "Back",
+                                    tint = MaterialTheme.colorScheme.primary
+                                )
+                            }
+                        }
+                    )
                 }
             ) { innerPadding ->
                 Column(
@@ -123,11 +139,10 @@ fun MainContent(viewModel: ChatInboxViewModel) {
     val inPreview = LocalInspectionMode.current
 
 
-    Column{
-        UserData(context = context, viewModel = viewModel)
+    Column {
         Box(
             modifier = Modifier.weight(1f)
-        ){
+        ) {
             Messages(context = context, viewModel = viewModel)
         }
         SendBar(context = context, viewModel = viewModel)
@@ -135,21 +150,21 @@ fun MainContent(viewModel: ChatInboxViewModel) {
 
 }
 
-// display brief user info on top
+// display user info in title
 @Composable
 fun UserData(
     context: Context,
     viewModel: ChatInboxViewModel
-){
+) {
     // user avatar and user name
-    Row (
+    Row(
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = dimensionResource(id = R.dimen.title_margin))
             .padding(vertical = dimensionResource(id = R.dimen.content_margin_half)),
         horizontalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.title_margin)),
         verticalAlignment = Alignment.CenterVertically
-    ){
+    ) {
         // user avatar
         val avatar = ImageManager.stringToUri(context, viewModel.chatUser.avatar)
         Image(
@@ -187,11 +202,11 @@ fun UserData(
 fun Messages(
     context: Context,
     viewModel: ChatInboxViewModel
-){
-    LazyColumn (
+) {
+    LazyColumn(
         // it is assigned all the remaining height from the MainContent() composable
-       modifier = Modifier.fillMaxSize()
-    ){
+        modifier = Modifier.fillMaxSize()
+    ) {
 
 
     }
@@ -202,19 +217,23 @@ fun Messages(
 fun SendBar(
     context: Context,
     viewModel: ChatInboxViewModel
-){
+) {
     HorizontalDivider(thickness = 1.dp)
 
-    Row (
+    Row(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin)),
         modifier = Modifier.padding(horizontal = dimensionResource(id = R.dimen.content_margin))
-    ){
+    ) {
         // type your message box
         OutlinedTextField(
             value = viewModel.typedText.value,
             placeholder = {
-                Text(text = "Type your message...", style = Typography.bodyMedium, color = Color.Gray)
+                Text(
+                    text = "Type your message...",
+                    style = Typography.bodyMedium,
+                    color = Color.Gray
+                )
             },
             onValueChange = { newText ->
                 viewModel.typedText.value = newText
@@ -245,14 +264,15 @@ fun SendBar(
         IconButton(
             onClick = {
                 // first validate message
-                if (!viewModel.validateMessage()){
+                if (!viewModel.validateMessage()) {
                     return@IconButton
                 }
 
-                viewModel.sendMessage(object: SendMessageCallback{
+                viewModel.sendMessage(object : SendMessageCallback {
                     override fun onComplete(result: Boolean) {
-                        if (!result){
-                            Toast.makeText(context, "Failed to send message", Toast.LENGTH_SHORT).show()
+                        if (!result) {
+                            Toast.makeText(context, "Failed to send message", Toast.LENGTH_SHORT)
+                                .show()
                             return
                         }
 
@@ -262,7 +282,12 @@ fun SendBar(
             },
             modifier = Modifier  // add the background circle
                 .background(
-                    Brush.horizontalGradient(listOf(MaterialTheme.colorScheme.primary, MaterialTheme.colorScheme.secondary)),
+                    Brush.horizontalGradient(
+                        listOf(
+                            MaterialTheme.colorScheme.primary,
+                            MaterialTheme.colorScheme.secondary
+                        )
+                    ),
                     shape = CircleShape
                 )
                 .padding(3.dp)  // content margin half half
