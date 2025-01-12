@@ -3,18 +3,15 @@ package com.example.lostandfound.ui.Found
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.activity.viewModels
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -23,24 +20,17 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Refresh
-import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.dimensionResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -48,15 +38,10 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.lostandfound.CustomElements.CustomCenterText
 import com.example.lostandfound.CustomElements.CustomCenteredProgressbar
 import com.example.lostandfound.CustomElements.CustomFoundItemPreview
-import com.example.lostandfound.CustomElements.CustomInputField
-import com.example.lostandfound.CustomElements.CustomProgressBar
 import com.example.lostandfound.CustomElements.CustomSearchField
-import com.example.lostandfound.Data.FirebaseNames
 import com.example.lostandfound.Data.IntentExtraNames
 import com.example.lostandfound.FirebaseManagers.FirebaseUtility
 import com.example.lostandfound.R
-import com.example.lostandfound.ui.EditProfile.EditProfileViewModel
-import com.example.lostandfound.ui.ViewClaim.ViewClaimViewModel
 import com.example.lostandfound.ui.ViewFound.ViewFoundActivity
 import com.example.lostandfound.ui.theme.ComposeTheme
 import com.example.lostandfound.ui.theme.Typography
@@ -77,11 +62,11 @@ class FoundFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         val view = ComposeView(requireContext())
-        view.apply{
+        view.apply {
             setContent {
-                ComposeTheme{
+                ComposeTheme {
                     // check if user is logged in
-                    if (!isLoggedIn.value){
+                    if (!isLoggedIn.value) {
                         CustomCenterText(text = "Please login first to view this content.")
                     } else {
                         FoundFragmentScreen(viewmodel = viewModel)
@@ -119,13 +104,13 @@ fun FoundFragmentScreen(viewmodel: FoundFragmentViewModel) {
         modifier = Modifier
             .fillMaxSize()
             .padding(dimensionResource(id = R.dimen.title_margin))
-    ){
+    ) {
         MainContent(viewModel = viewmodel)
     }
 }
 
 @Composable
-fun MainContent(viewModel: FoundFragmentViewModel){
+fun MainContent(viewModel: FoundFragmentViewModel) {
     val context = LocalContext.current
 
     /*
@@ -136,7 +121,7 @@ fun MainContent(viewModel: FoundFragmentViewModel){
      */
 
     // display content
-    if (viewModel.isLoading.value){
+    if (viewModel.isLoading.value) {
         CustomCenteredProgressbar()
 
     } else {
@@ -149,14 +134,14 @@ fun MainContent(viewModel: FoundFragmentViewModel){
 fun RefreshButton(
     context: Context,
     viewModel: FoundFragmentViewModel
-){
-    Row (
+) {
+    Row(
         modifier = Modifier
             .fillMaxWidth()
             .padding(bottom = dimensionResource(id = R.dimen.content_margin)),
         horizontalArrangement = Arrangement.Start,
         verticalAlignment = Alignment.CenterVertically,
-    ){
+    ) {
         // display the text at the start
         Text(
             text = "Your found items",
@@ -185,12 +170,12 @@ fun RefreshButton(
 fun FoundItemsColumn(
     context: Context,
     viewModel: FoundFragmentViewModel
-){
+) {
     // if there are no data, display message
-    if (viewModel.itemData.size == 0){
+    if (viewModel.itemData.size == 0) {
         Box(
             modifier = Modifier.padding(horizontal = dimensionResource(id = R.dimen.title_margin))
-        ){
+        ) {
             CustomCenterText(text = "You have no found items. Tap the '+' button to create one.")
         }
 
@@ -204,15 +189,18 @@ fun FoundItemsColumn(
 
 
         // for each data, display it as a preview
-        LazyColumn (
+        LazyColumn(
             verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.title_margin))
-        ){
+        ) {
             items(
                 viewModel.itemData.filter { item ->
                     // filter items based on the item names or ids
                     // by default it shows all items if the search word is empty
-                    item.itemName.lowercase(Locale.UK).contains(viewModel.searchWord.value.lowercase(
-                        Locale.UK))
+                    item.itemName.lowercase(Locale.UK).contains(
+                        viewModel.searchWord.value.lowercase(
+                            Locale.UK
+                        )
+                    )
                             || item.itemID.startsWith(viewModel.searchWord.value.removePrefix("#"))
                 }
 
@@ -241,16 +229,16 @@ fun FoundItemsColumn(
 fun refreshData(
     context: Context,
     viewModel: FoundFragmentViewModel
-){
+) {
     // is loading initially
     viewModel.isLoading.value = true
 
     // load lost item data of the current user from the view model
-    viewModel.getAllData(object: Callback<Boolean>{
+    viewModel.getAllData(object : Callback<Boolean> {
         override fun onComplete(result: Boolean) {
             viewModel.isLoading.value = false
 
-            if (!result){
+            if (!result) {
                 // display toast message for failed data retrieval
                 Toast.makeText(context, "Fetching data failed", Toast.LENGTH_SHORT).show()
             }

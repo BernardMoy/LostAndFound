@@ -87,6 +87,7 @@ class ChatInboxViewModel: ViewModel() {
             FirebaseNames.CHAT_FROM_TO,
             FirebaseUtility.getUserID(),  // contains the current user id
             FirebaseNames.CHAT_TIMESTAMP,
+            false,  // not in reverse order
             object: Callback<List<String>>{
                 override fun onComplete(result: List<String>?) {
                     if (result == null){
@@ -97,6 +98,12 @@ class ChatInboxViewModel: ViewModel() {
                     // for each chat id, get its chat preview and add to list
                     val totalSize = result.size
                     var fetchedItems = 0
+
+                    // if no result return true
+                    if (totalSize == 0){
+                        callback.onComplete(true)
+                        return
+                    }
 
                     result.forEach { chatMessageID ->
                         ItemManager.getChatMessagePreviewFromId(chatMessageID, object: ItemManager.ChatMessagePreviewCallback{
@@ -112,6 +119,10 @@ class ChatInboxViewModel: ViewModel() {
 
                                 fetchedItems ++
                                 if (fetchedItems == totalSize){
+                                    // same problem here, need to sort by timestamp at the end
+                                    chatMessagePreviewList.sortBy { key ->
+                                        key.chatMessage.timestamp
+                                    }
                                     callback.onComplete(true)
                                 }
                             }
