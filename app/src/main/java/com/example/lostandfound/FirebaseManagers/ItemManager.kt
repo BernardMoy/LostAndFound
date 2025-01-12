@@ -2,6 +2,8 @@ package com.example.lostandfound.FirebaseManagers
 
 import android.net.Uri
 import android.util.Log
+import com.example.lostandfound.Data.ChatMessage
+import com.example.lostandfound.Data.ChatMessagePreview
 import com.example.lostandfound.Data.Claim
 import com.example.lostandfound.Data.ClaimPreview
 import com.example.lostandfound.Data.FirebaseNames
@@ -38,6 +40,11 @@ object ItemManager {
     interface ClaimPreviewCallback{
         fun onComplete(claimPreview: ClaimPreview?)  // return the claim preview or null if failed
     }
+
+    interface ChatMessagePreviewCallback{
+        fun onComplete(chatMessagePreview: ChatMessagePreview?)
+    }
+
 
     // method to get the lostitem as a LostItem object when given a lost item id
     fun getLostItemFromId(lostItemID: String, callback: LostItemCallback) {
@@ -394,5 +401,55 @@ object ItemManager {
                 Log.d("Status exception", exception.message ?: "")
                 callback.onComplete(0)
             }
+    }
+
+
+    // method to get chat preview from chat id
+    fun getChatMessagePreviewFromId(messageID: String, callback: ChatMessagePreviewCallback) {
+        // first get chat
+        val firestoreManager = FirestoreManager()
+
+        firestoreManager.get(
+            FirebaseNames.COLLECTION_CHATS,
+            messageID,
+            object : Callback<Map<String, Any>> {
+                override fun onComplete(itemResult: Map<String, Any>?) {
+                    if (itemResult == null){
+                        callback.onComplete(null)
+                        return
+                    }
+
+                    // get the chat object
+                    val senderUserID = itemResult[FirebaseNames.CHAT_SENDER_USER_ID].toString()
+
+                    val chatMessage = ChatMessage(
+                        messageID = messageID,
+                        senderUserID = senderUserID,
+                        recipientUserID = itemResult[FirebaseNames.CHAT_RECIPIENT_USER_ID].toString(),
+                        text = itemResult[FirebaseNames.CHAT_CONTENT].toString(),
+                        timestamp = itemResult[FirebaseNames.CHAT_TIMESTAMP] as Long
+                    )
+
+                    // then get the user name that is required for the chat preview
+                    UserManager.getUserFromId(senderUserID, object: UserManager.UserCallback{
+                        override fun onComplete(user: com.example.lostandfound.Data.User?) {
+                            if (user == null){
+                                callback.onComplete(null)
+                                return
+                            }
+
+                            // create the chat message preview
+                            val chatMessagePreview = ChatMessagePreview(
+                                chatMessage,
+                                user.firstName + ' ' + user.lastName
+                            )
+
+                            // return it
+                            callback.onComplete(chatMessagePreview)
+                        }
+                    })
+                }
+            }
+        )
     }
 }

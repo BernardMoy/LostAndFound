@@ -28,6 +28,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.lostandfound.Data.ChatMessage
+import com.example.lostandfound.Data.ChatMessagePreview
+import com.example.lostandfound.FirebaseManagers.FirebaseUtility
 import com.example.lostandfound.R
 import com.example.lostandfound.Utility.DateTimeManager
 import com.example.lostandfound.ui.theme.ComposeTheme
@@ -50,6 +53,7 @@ fun CustomCardPreview() {
         Column (
             verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin))
         ){
+            /*
             CustomChatCard(
                 text = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
                 timestamp = 1736188440L,
@@ -63,6 +67,8 @@ fun CustomCardPreview() {
                 isSentByCurrentUser = true,
                 senderName = "Person2"
             )
+
+             */
         }
     }
 }
@@ -134,11 +140,11 @@ fun CustomCard(
 
 @Composable
 fun CustomChatCard(
-    text: String,
-    timestamp: Long,
-    senderName: String,
-    isSentByCurrentUser: Boolean
+    chatMessagePreview: ChatMessagePreview
 ){
+    // if the sender user id is the current user id, it is sent by current user
+    val isSentByCurrentUser = chatMessagePreview.chatMessage.senderUserID == FirebaseUtility.getUserID()
+
     Column (
         modifier = Modifier.fillMaxWidth(),
         horizontalAlignment = if (isSentByCurrentUser) Alignment.End else Alignment.Start,
@@ -146,7 +152,7 @@ fun CustomChatCard(
     ){
         // show the sender name
         Text(
-            text = senderName,
+            text = chatMessagePreview.senderUserName,
             style = Typography.bodyMedium,
             color = Color.Gray
         )
@@ -158,7 +164,7 @@ fun CustomChatCard(
             // show the time posted
             if (isSentByCurrentUser){
                 Text(
-                    text = DateTimeManager.getChatTimeDescription(timestamp),
+                    text = DateTimeManager.getChatTimeDescription(chatMessagePreview.chatMessage.timestamp),
                     style = Typography.bodyMedium,
                     color = Color.Gray
                 )
@@ -192,7 +198,7 @@ fun CustomChatCard(
                 ){
                     // message text
                     Text(
-                        text = text,
+                        text = chatMessagePreview.chatMessage.text,
                         style = Typography.bodyMedium,
                         color = if (isSentByCurrentUser) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onPrimaryContainer,
                         textAlign = if (isSentByCurrentUser) TextAlign.End else TextAlign.Start
@@ -203,7 +209,7 @@ fun CustomChatCard(
             // show the time posted
             if (!isSentByCurrentUser){
                 Text(
-                    text = DateTimeManager.getChatTimeDescription(timestamp),
+                    text = DateTimeManager.getChatTimeDescription(chatMessagePreview.chatMessage.timestamp),
                     style = Typography.bodyMedium,
                     color = Color.Gray
                 )

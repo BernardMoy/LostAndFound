@@ -147,6 +147,49 @@ public class FirestoreManager {
         });
     }
 
+
+    /**
+     * Method to get data from the database,
+     * given array attribute, and the value it should contain
+     *
+     * @param collection collection name
+     * @param arrayAttribute the name of the attribute representing the array
+     * @param containsValue the value that should contain in the array
+     * @param callback return the list of document ids, or null if failed or values does not exist
+     */
+    public void getIdsWhereArrayContains(String collection,
+                            String arrayAttribute,
+                            Object containsValue,
+                            String orderByKey,
+                            Callback<List<String>> callback){
+        db.collection(collection)
+                .whereArrayContains(arrayAttribute, containsValue)
+                .orderBy(orderByKey, Query.Direction.DESCENDING)
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        List<String> result = new ArrayList<>();
+
+                        // for each matching data, get it and add it to result
+                        for (QueryDocumentSnapshot snapshot: queryDocumentSnapshots){
+                            result.add(snapshot.getId());
+                        }
+
+                        // return the result
+                        callback.onComplete(result);
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        // return null
+                        Log.d("FIREBASE MANAGER ERROR", e.getMessage());
+                        callback.onComplete(null);
+                    }
+                });
+    }
+
+
     /**
      * Method to get data from the database,
      * returning all the keys (item ids) regardless of condition
