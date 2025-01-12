@@ -161,10 +161,14 @@ public class FirestoreManager {
                             String arrayAttribute,
                             Object containsValue,
                             String orderByKey,
+                            Boolean isReverseOrder,
                             Callback<List<String>> callback){
+
+        Query.Direction direction = isReverseOrder ? Query.Direction.DESCENDING : Query.Direction.ASCENDING;
+
         db.collection(collection)
                 .whereArrayContains(arrayAttribute, containsValue)
-                .orderBy(orderByKey, Query.Direction.DESCENDING)
+                .orderBy(orderByKey, direction)
                 .get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override

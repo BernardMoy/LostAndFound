@@ -2,6 +2,7 @@ package com.example.lostandfound.ui.ChatInbox
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -18,6 +19,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -36,6 +39,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -53,6 +57,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import coil3.compose.rememberAsyncImagePainter
 import com.example.lostandfound.CustomElements.BackToolbar
 import com.example.lostandfound.CustomElements.CustomCenteredProgressbar
+import com.example.lostandfound.CustomElements.CustomChatCard
 import com.example.lostandfound.Data.IntentExtraNames
 import com.example.lostandfound.Data.User
 import com.example.lostandfound.R
@@ -201,8 +206,6 @@ fun UserData(
             textAlign = TextAlign.Start
         )
     }
-
-    HorizontalDivider(thickness = 1.dp)
 }
 
 
@@ -212,12 +215,29 @@ fun Messages(
     context: Context,
     viewModel: ChatInboxViewModel
 ) {
+    val listState = rememberLazyListState()
+
+    // make it scroll to bottom by default
+    LaunchedEffect(viewModel.chatMessagePreviewList) {
+        listState.animateScrollToItem(viewModel.chatMessagePreviewList.size-1)
+    }
+
     LazyColumn(
         // it is assigned all the remaining height from the MainContent() composable
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(
+                horizontal = dimensionResource(id = R.dimen.title_margin),
+                vertical = dimensionResource(id = R.dimen.content_margin)
+            ),
+        state = listState,
+        verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin))
     ) {
+        // for each preview in the view model, display it
+        items(viewModel.chatMessagePreviewList){ chatMessagePreview ->
+            CustomChatCard(chatMessagePreview = chatMessagePreview)
 
-
+        }
     }
 }
 
