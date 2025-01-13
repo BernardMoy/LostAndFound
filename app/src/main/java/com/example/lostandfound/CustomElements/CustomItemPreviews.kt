@@ -494,7 +494,10 @@ fun CustomChatInboxPreview(
             .clickable {
                 // launch chat activity
                 val intent: Intent = Intent(context, ChatInboxActivity::class.java)
-                intent.putExtra(IntentExtraNames.INTENT_CHAT_USER, chatInboxPreview.recipientUser)  // put the user
+                intent.putExtra(
+                    IntentExtraNames.INTENT_CHAT_USER,
+                    chatInboxPreview.recipientUser
+                )  // put the user
                 context.startActivity(intent)
 
             }
@@ -521,7 +524,8 @@ fun CustomChatInboxPreview(
 
         // user name and last message
         Column(
-            modifier = Modifier.weight(1f)  // fill remaining space
+            modifier = Modifier.weight(1f),  // fill remaining space
+            verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin_half))
         ){
             // user name and time
             Row {
@@ -539,6 +543,7 @@ fun CustomChatInboxPreview(
                     color = Color.Gray,
                 )
             }
+
 
             // last message
             // trim the message
