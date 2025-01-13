@@ -12,6 +12,7 @@ import com.example.lostandfound.FirebaseManagers.FirebaseUtility
 import com.example.lostandfound.FirebaseManagers.UserManager
 import com.google.firebase.firestore.DocumentChange
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ListenerRegistration
 import com.google.firebase.firestore.Query
 
 interface ChatInboxPreviewCallback {
@@ -24,6 +25,8 @@ class ChatFragmentViewModel : ViewModel(){
     // a list of chat inbox previews to be displayed
     val chatInboxPreviewList: MutableList<ChatInboxPreview> = mutableStateListOf()
 
+    // keep track of the listener registration
+    var listenerRegistration: ListenerRegistration? = null
 
 
     fun loadData(callback: ChatInboxPreviewCallback){
@@ -32,7 +35,11 @@ class ChatFragmentViewModel : ViewModel(){
         // clear the list
         chatInboxPreviewList.clear()
 
-        db.collection(FirebaseNames.COLLECTION_CHATS)
+        // remove previous listener
+        listenerRegistration?.remove()
+
+        // assign new listener
+        listenerRegistration = db.collection(FirebaseNames.COLLECTION_CHATS)
             .whereArrayContains(FirebaseNames.CHAT_FROM_TO, FirebaseUtility.getUserID())
             .orderBy(FirebaseNames.CHAT_TIMESTAMP, Query.Direction.DESCENDING)
             .limit(1)  // get the latest ChatMessage object
@@ -51,23 +58,14 @@ class ChatFragmentViewModel : ViewModel(){
                         return@addSnapshotListener
                     }
 
-                    // there will be multiple calls, listen for the first call only
-                    var numberOfCalls = 0
                     for (documentChange in snapshot.documentChanges) {
                         // listen for new messages
                         if (documentChange.type == DocumentChange.Type.ADDED) {
-                            numberOfCalls ++
 
-                            if (numberOfCalls > 1){
-                                continue
-                            }
                             // clear the list
                             chatInboxPreviewList.clear()
 
-
-
-                            Log.d("New message", documentChange.document[FirebaseNames.CHAT_CONTENT].toString())
-
+                            // Log.d("NEW MSG", documentChange.document[FirebaseNames.CHAT_CONTENT].toString())
 
 
                             // the recipient user id is either the sender or recipient OF THE MESSAGE,
@@ -117,5 +115,11 @@ class ChatFragmentViewModel : ViewModel(){
                     }
                 }
             }
+    }
+
+    // clear the previous listener when the view model is destroyed
+    override fun onCleared() {
+        super.onCleared()
+        listenerRegistration?.remove()
     }
 }
