@@ -1,5 +1,6 @@
 package com.example.lostandfound.ui.ChatInbox
 
+import android.app.Activity
 import android.content.Context
 import android.os.Bundle
 import android.util.Log
@@ -83,6 +84,7 @@ class ChatInboxActivity : ComponentActivity() {
         if (passedItem != null) {
             viewModel.chatUser = passedItem
         }
+
 
         // load messages on create
         loadMessages(context = this, viewModel = viewModel)
@@ -223,21 +225,19 @@ fun Messages(
     // liststate to allow the list to scroll to bottom
     val listState = rememberLazyListState()
 
-    // trigger to enable scrolling by button
-    val triggerScrollToBottom: MutableState<Boolean> = remember {
-        mutableStateOf(false)
-    }
-
-    // whether the new messages button is shown
-    val isNewMessageButtonShown: MutableState<Boolean> = remember {
-        mutableStateOf(false)
-    }
-
     // make it scroll to bottom when triggered
-    LaunchedEffect(triggerScrollToBottom.value) {
-        if (triggerScrollToBottom.value) {
+    LaunchedEffect(viewModel.triggerScrollToBottom.value) {
+        if (viewModel.triggerScrollToBottom.value) {
             listState.animateScrollToItem(viewModel.chatMessageList.size - 1)
-            triggerScrollToBottom.value = false
+            viewModel.triggerScrollToBottom.value = false
+        }
+    }
+
+    // function to scroll to bottom immediately, for initial load
+    LaunchedEffect(viewModel.triggerScrollToBottomInstantly.value) {
+        if (viewModel.triggerScrollToBottomInstantly.value) {
+            listState.scrollToItem(viewModel.chatMessageList.size - 1)
+            viewModel.triggerScrollToBottomInstantly.value = false
         }
     }
 
@@ -245,17 +245,17 @@ fun Messages(
     LaunchedEffect(viewModel.chatMessageList.size) {
         // get the latest visible element
         val latestVisibleIndex = listState.layoutInfo.visibleItemsInfo.lastOrNull()?.index ?: 0
-        
+
         // if the latest visible index is the new message index -2, then force scroll to bottom
         // because we can assume the user is not viewing past messages
         if (latestVisibleIndex == viewModel.chatMessageList.size -2){
             // force scroll
-            triggerScrollToBottom.value = true
+            viewModel.triggerScrollToBottom.value = true
 
         }
         // if the latest visible index is less than the new message 's index, show the button
         else if (latestVisibleIndex < viewModel.chatMessageList.size - 2) {
-            isNewMessageButtonShown.value = true
+            viewModel.isNewMessageButtonShown.value = true  // else, show button
 
         }
     }
@@ -281,7 +281,7 @@ fun Messages(
 
 
     // the button to show new messages, which is overlapping
-    if (isNewMessageButtonShown.value) {
+    if (!viewModel.isInitialLoad.value && viewModel.isNewMessageButtonShown.value) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -292,10 +292,10 @@ fun Messages(
                 text = "New messages",
                 type = ButtonType.TONAL,
                 onClick = {
-                    triggerScrollToBottom.value = true
+                    viewModel.triggerScrollToBottom.value = true
 
                     // hide the button
-                    isNewMessageButtonShown.value = false
+                    viewModel.isNewMessageButtonShown.value = false
                 },
                 small = true,
             )
@@ -311,7 +311,6 @@ fun SendBar(
     context: Context,
     viewModel: ChatInboxViewModel
 ) {
-    HorizontalDivider(thickness = 1.dp)
 
     Row(
         verticalAlignment = Alignment.CenterVertically,
@@ -394,13 +393,12 @@ fun SendBar(
     }
 }
 
-// function to load all past messages
+
 fun loadMessages(
     context: Context,
     viewModel: ChatInboxViewModel
 ){
     viewModel.isLoading.value = true
-
     viewModel.fetchMessagePreviews(object: FetchMessageCallback{
         override fun onComplete(result: Boolean) {
             viewModel.isLoading.value = false
@@ -410,10 +408,17 @@ fun loadMessages(
                 return
             }
 
-            // do nothing when it loads successfully
+            // initially, scroll to bottom. This will only be triggered once
+            if (viewModel.isInitialLoad.value){
+                viewModel.triggerScrollToBottomInstantly.value = true
+
+                // turn off is initial load here
+                viewModel.isInitialLoad.value = false
+            }
         }
     })
 }
+
 
 
 

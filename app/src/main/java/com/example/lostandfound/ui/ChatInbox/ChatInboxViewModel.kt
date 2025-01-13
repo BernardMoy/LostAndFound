@@ -3,6 +3,7 @@ package com.example.lostandfound.ui.ChatInbox
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.lifecycle.ViewModel
 import com.example.lostandfound.Data.ChatMessage
 import com.example.lostandfound.Data.FirebaseNames
@@ -35,6 +36,19 @@ class ChatInboxViewModel : ViewModel() {
 
     // whether the past chats are loading
     val isLoading: MutableState<Boolean> = mutableStateOf(true)
+
+    // trigger to enable scrolling by button
+    val triggerScrollToBottom: MutableState<Boolean> = mutableStateOf(false)
+
+    // trigger to scroll to bottom immediately, initially
+    val triggerScrollToBottomInstantly: MutableState<Boolean> = mutableStateOf(false)
+
+    // whether the new messages button is shown
+    val isNewMessageButtonShown: MutableState<Boolean> = mutableStateOf(false)
+
+    // whether is initial load. If yes, it will be forced to scroll to bottom and button wont show
+    val isInitialLoad: MutableState<Boolean> = mutableStateOf(true)
+
 
     // validate if the message to send is valid
     fun validateMessage(): Boolean {
