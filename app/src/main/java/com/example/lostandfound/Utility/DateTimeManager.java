@@ -112,7 +112,7 @@ public class DateTimeManager {
                 // calculate the number of days elapsed
                 int numberOfDays = (int) ((currentEpoch - epoch) / 86400);
                 if (numberOfDays == 1) {
-                    return String.valueOf(numberOfDays) + " day ago";
+                    return "A day ago";
 
                 } else {
                     return String.valueOf(numberOfDays) + " days ago";
@@ -136,7 +136,7 @@ public class DateTimeManager {
             // return N days ago
             int numberOfDays = (int) ((currentEpoch - epoch) / 86400);
             if (numberOfDays == 1) {
-                return String.valueOf(numberOfDays) + " day ago";
+                return "A day ago";
 
             } else {
                 return String.valueOf(numberOfDays) + " days ago";

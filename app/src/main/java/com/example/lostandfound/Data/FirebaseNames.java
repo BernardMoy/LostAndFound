@@ -11,6 +11,7 @@ public final class FirebaseNames {
     public static final String COLLECTION_REPORT_ISSUE = "reported_issues";
     public static final String COLLECTION_CLAIMED_ITEMS = "claims";
     public static final String COLLECTION_CHATS = "chats";
+    public static final String COLLECTION_CHAT_INBOX = "chat_inbox";
 
     // strings that represent all key names in the map that is stored
     public static final String USERS_FIRSTNAME = "firstName";
@@ -55,5 +56,10 @@ public final class FirebaseNames {
     public static final String CHAT_FROM_TO = "from_to";  // an array for storing [from user id, to user id]
     public static final String CHAT_CONTENT = "chat_content";
     public static final String CHAT_TIMESTAMP = "timestamp";
+
+    // for chat inbox whether the message is read or unread
+    public static final String CHAT_INBOX_SENDER_USER_ID = "sender_user_id";
+    public static final String CHAT_INBOX_RECIPIENT_USER_ID = "recipient_user_id";
+    public static final String CHAT_INBOX_IS_UNREAD = "is_unread";
 
 }

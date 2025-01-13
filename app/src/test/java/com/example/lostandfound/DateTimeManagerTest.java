@@ -57,4 +57,10 @@ public class DateTimeManagerTest {
         long currentEpoch = getCurrentEpochTime();
         assertEquals("2 days ago", DateTimeManager.getDescription(currentEpoch - 86400*2-300));
     }
+
+    @Test
+    public void testGetChatTimeDescription(){
+        long currentEpoch = getCurrentEpochTime();
+        assertEquals("A day ago", DateTimeManager.getDescription(currentEpoch - 86400*1-300));
+    }
 }

@@ -3,7 +3,6 @@ package com.example.lostandfound.FirebaseManagers
 import android.net.Uri
 import android.util.Log
 import com.example.lostandfound.Data.ChatMessage
-import com.example.lostandfound.Data.ChatMessagePreview
 import com.example.lostandfound.Data.Claim
 import com.example.lostandfound.Data.ClaimPreview
 import com.example.lostandfound.Data.FirebaseNames
@@ -41,9 +40,6 @@ object ItemManager {
         fun onComplete(claimPreview: ClaimPreview?)  // return the claim preview or null if failed
     }
 
-    interface ChatMessagePreviewCallback{
-        fun onComplete(chatMessagePreview: ChatMessagePreview?)
-    }
 
 
     // method to get the lostitem as a LostItem object when given a lost item id
