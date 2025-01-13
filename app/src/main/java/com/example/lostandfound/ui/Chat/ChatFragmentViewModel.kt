@@ -1,6 +1,8 @@
 package com.example.lostandfound.ui.Chat
 
+import android.util.Log
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import com.example.lostandfound.Data.ChatInboxPreview
@@ -20,7 +22,7 @@ class ChatFragmentViewModel : ViewModel(){
     val isLoading: MutableState<Boolean> = mutableStateOf(false)
 
     // a list of chat inbox previews to be displayed
-    val chatInboxPreviewList: MutableList<ChatInboxPreview> = mutableListOf()
+    val chatInboxPreviewList: MutableList<ChatInboxPreview> = mutableStateListOf()
 
 
     fun loadData(callback: ChatInboxPreviewCallback){
@@ -51,6 +53,9 @@ class ChatFragmentViewModel : ViewModel(){
                     for (documentChange in snapshot.documentChanges) {
                         // listen for new messages
                         if (documentChange.type == DocumentChange.Type.ADDED) {
+                            // clear the list
+                            chatInboxPreviewList.clear()
+
                             // the recipient user id is either the sender or recipient OF THE MESSAGE,
                             // and equal to the one that isnt the current user.
                             val messageSenderUserID = documentChange.document[FirebaseNames.CHAT_SENDER_USER_ID].toString()
@@ -58,17 +63,16 @@ class ChatFragmentViewModel : ViewModel(){
                             val newRecipientUserID = if (messageSenderUserID != FirebaseUtility.getUserID()) messageSenderUserID
                                                     else messageRecipientUserID
 
-
                             // get the user object from id
                             UserManager.getUserFromId(newRecipientUserID, object: UserManager.UserCallback{
                                 override fun onComplete(user: User?) {
+
                                     if (user == null){
                                         callback.onComplete(false)
                                         return
                                     }
 
                                     // get the last message and last message timestamp
-                                    val recipientUserName = user.firstName + ' ' + user.lastName
                                     val newLastMessage = if (messageSenderUserID == FirebaseUtility.getUserID()) "You: " + documentChange.document[FirebaseNames.CHAT_CONTENT].toString()
                                                         else documentChange.document[FirebaseNames.CHAT_CONTENT].toString()
                                     val newLastMessageTimestamp = documentChange.document[FirebaseNames.CHAT_TIMESTAMP] as Long
@@ -97,8 +101,6 @@ class ChatFragmentViewModel : ViewModel(){
                             })
                         }
                     }
-                } else {
-                    callback.onComplete(true)
                 }
             }
     }
