@@ -1,27 +1,28 @@
 package com.example.lostandfound.ui.ChatInbox
 
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import com.example.lostandfound.Data.ChatMessage
-import com.example.lostandfound.Data.ChatMessagePreview
 import com.example.lostandfound.Data.FirebaseNames
 import com.example.lostandfound.Data.User
 import com.example.lostandfound.FirebaseManagers.FirebaseUtility
 import com.example.lostandfound.FirebaseManagers.FirestoreManager
 import com.example.lostandfound.FirebaseManagers.FirestoreManager.Callback
-import com.example.lostandfound.FirebaseManagers.ItemManager
 import com.example.lostandfound.Utility.DateTimeManager
+import com.google.firebase.firestore.DocumentChange
+import com.google.firebase.firestore.FirebaseFirestore
 
-interface SendMessageCallback{
+interface SendMessageCallback {
     fun onComplete(result: Boolean)
 }
 
-interface FetchMessageCallback{
+interface FetchMessageCallback {
     fun onComplete(result: Boolean)
 }
 
-class ChatInboxViewModel: ViewModel() {
+class ChatInboxViewModel : ViewModel() {
     // only store the user that the current user is chatting with, because the second user must be the current user
     // loaded on create
     var chatUser: User = User()
@@ -30,28 +31,28 @@ class ChatInboxViewModel: ViewModel() {
     val typedText: MutableState<String> = mutableStateOf("")
 
     // store a list of chat previews
-    var chatMessagePreviewList: MutableList<ChatMessagePreview> = mutableListOf()
+    var chatMessageList: MutableList<ChatMessage> = mutableStateListOf()  // make this listenable
 
     // whether the past chats are loading
     val isLoading: MutableState<Boolean> = mutableStateOf(true)
 
     // validate if the message to send is valid
-    fun validateMessage(): Boolean{
-        if (typedText.value.trim().isEmpty()){
-            return false
-        }
-        return true
+    fun validateMessage(): Boolean {
+        return typedText.value.trim().isNotEmpty()
     }
 
     // method to send message
-    fun sendMessage(callback: SendMessageCallback){
+    fun sendMessage(callback: SendMessageCallback) {
         val db = FirestoreManager()
 
         // create chat data
         val data = mapOf(
             FirebaseNames.CHAT_SENDER_USER_ID to FirebaseUtility.getUserID(),
             FirebaseNames.CHAT_RECIPIENT_USER_ID to chatUser.userID,
-            FirebaseNames.CHAT_FROM_TO to listOf(FirebaseUtility.getUserID(),chatUser.userID),  // [from user, to user]
+            FirebaseNames.CHAT_FROM_TO to listOf(
+                FirebaseUtility.getUserID(),
+                chatUser.userID
+            ),  // [from user, to user]
             FirebaseNames.CHAT_CONTENT to typedText.value,
             FirebaseNames.CHAT_TIMESTAMP to DateTimeManager.getCurrentEpochTime()
         )
@@ -60,9 +61,9 @@ class ChatInboxViewModel: ViewModel() {
         db.putWithUniqueId(
             FirebaseNames.COLLECTION_CHATS,
             data,
-            object: Callback<String>{
+            object : Callback<String> {
                 override fun onComplete(result: String) {
-                    if (result.isEmpty()){
+                    if (result.isEmpty()) {
                         callback.onComplete(false)
                         return
                     }
@@ -76,60 +77,43 @@ class ChatInboxViewModel: ViewModel() {
     }
 
     // method to fetch all messages and load it into chat preview
-    fun fetchMessagePreviews(callback: FetchMessageCallback){
-        val firestoreManager = FirestoreManager()
+    fun fetchMessagePreviews(callback: FetchMessageCallback) {
+        val db = FirebaseFirestore.getInstance()
 
         // clear chat message preview
-        chatMessagePreviewList.clear()
+        chatMessageList.clear()
 
-        firestoreManager.getIdsWhereArrayContains(
-            FirebaseNames.COLLECTION_CHATS,
-            FirebaseNames.CHAT_FROM_TO,
-            FirebaseUtility.getUserID(),  // contains the current user id
-            FirebaseNames.CHAT_TIMESTAMP,
-            false,  // not in reverse order
-            object: Callback<List<String>>{
-                override fun onComplete(result: List<String>?) {
-                    if (result == null){
-                        callback.onComplete(false)
-                        return
-                    }
+        // fetch all messages where the user is either the sender or recipient
+        db.collection(FirebaseNames.COLLECTION_CHATS)
+            .whereArrayContains(FirebaseNames.CHAT_FROM_TO, FirebaseUtility.getUserID())
+            .orderBy(FirebaseNames.CHAT_TIMESTAMP)
+            .addSnapshotListener { snapshot, error ->       // listen for real time updates
+                if (error != null) {
+                    callback.onComplete(false)
+                    return@addSnapshotListener
+                }
 
-                    // for each chat id, get its chat preview and add to list
-                    val totalSize = result.size
-                    var fetchedItems = 0
+                if (snapshot != null) {
+                    for (documentChange in snapshot.documentChanges) {
+                        // listen for added entries only
+                        if (documentChange.type == DocumentChange.Type.ADDED) {
+                            // create new chat message object
+                            val newChatMessage = ChatMessage(
+                                messageID = documentChange.document.id,
+                                senderUserID = documentChange.document[FirebaseNames.CHAT_SENDER_USER_ID].toString(),
+                                recipientUserID = documentChange.document[FirebaseNames.CHAT_RECIPIENT_USER_ID].toString(),
+                                text = documentChange.document[FirebaseNames.CHAT_CONTENT].toString(),
+                                timestamp = documentChange.document[FirebaseNames.CHAT_TIMESTAMP] as Long
+                            )
 
-                    // if no result return true
-                    if (totalSize == 0){
-                        callback.onComplete(true)
-                        return
-                    }
-
-                    result.forEach { chatMessageID ->
-                        ItemManager.getChatMessagePreviewFromId(chatMessageID, object: ItemManager.ChatMessagePreviewCallback{
-                            override fun onComplete(chatMessagePreview: ChatMessagePreview?) {
-                                // if any is null, fail
-                                if (chatMessagePreview == null){
-                                    callback.onComplete(false)
-                                    return
-                                }
-
-                                // add to list
-                                chatMessagePreviewList.add(chatMessagePreview)
-
-                                fetchedItems ++
-                                if (fetchedItems == totalSize){
-                                    // same problem here, need to sort by timestamp at the end
-                                    chatMessagePreviewList.sortBy { key ->
-                                        key.chatMessage.timestamp
-                                    }
-                                    callback.onComplete(true)
-                                }
-                            }
-                        })
+                            // add the chat message to list
+                            chatMessageList.add(newChatMessage)
+                        }
                     }
                 }
+
+                // return true
+                callback.onComplete(true)
             }
-        )
     }
 }

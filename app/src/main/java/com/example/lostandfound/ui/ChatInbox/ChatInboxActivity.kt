@@ -218,8 +218,8 @@ fun Messages(
     val listState = rememberLazyListState()
 
     // make it scroll to bottom by default
-    LaunchedEffect(viewModel.chatMessagePreviewList) {
-        listState.animateScrollToItem(viewModel.chatMessagePreviewList.size-1)
+    LaunchedEffect(viewModel.chatMessageList.size) {
+        listState.animateScrollToItem(viewModel.chatMessageList.size-1)
     }
 
     LazyColumn(
@@ -234,8 +234,8 @@ fun Messages(
         verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin))
     ) {
         // for each preview in the view model, display it
-        items(viewModel.chatMessagePreviewList){ chatMessagePreview ->
-            CustomChatCard(chatMessagePreview = chatMessagePreview)
+        items(viewModel.chatMessageList){ chatMessage->
+            CustomChatCard(chatMessage = chatMessage)
 
         }
     }
