@@ -224,15 +224,39 @@ fun Messages(
     val listState = rememberLazyListState()
 
     // trigger to enable scrolling by button
-    val triggerScrollToBottom: MutableState<Boolean> = remember{
+    val triggerScrollToBottom: MutableState<Boolean> = remember {
+        mutableStateOf(false)
+    }
+
+    // whether the new messages button is shown
+    val isNewMessageButtonShown: MutableState<Boolean> = remember {
         mutableStateOf(false)
     }
 
     // make it scroll to bottom when triggered
     LaunchedEffect(triggerScrollToBottom.value) {
-        if (triggerScrollToBottom.value){
-            listState.animateScrollToItem(viewModel.chatMessageList.size-1)
+        if (triggerScrollToBottom.value) {
+            listState.animateScrollToItem(viewModel.chatMessageList.size - 1)
             triggerScrollToBottom.value = false
+        }
+    }
+
+    // trigger when the last new message is NOT on the screen, showing the new messages button
+    LaunchedEffect(viewModel.chatMessageList.size) {
+        // get the latest visible element
+        val latestVisibleIndex = listState.layoutInfo.visibleItemsInfo.lastOrNull()?.index ?: 0
+        
+        // if the latest visible index is the new message index -2, then force scroll to bottom
+        // because we can assume the user is not viewing past messages
+        if (latestVisibleIndex == viewModel.chatMessageList.size -2){
+            // force scroll
+            triggerScrollToBottom.value = true
+
+        }
+        // if the latest visible index is less than the new message 's index, show the button
+        else if (latestVisibleIndex < viewModel.chatMessageList.size - 2) {
+            isNewMessageButtonShown.value = true
+
         }
     }
 
@@ -249,7 +273,7 @@ fun Messages(
         verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin))
     ) {
         // for each preview in the view model, display it
-        items(viewModel.chatMessageList){ chatMessage->
+        items(viewModel.chatMessageList) { chatMessage ->
             CustomChatCard(chatMessage = chatMessage)
 
         }
@@ -257,22 +281,29 @@ fun Messages(
 
 
     // the button to show new messages, which is overlapping
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(vertical = dimensionResource(id = R.dimen.content_margin)),
-        horizontalArrangement = Arrangement.Center
-    ){
-        CustomButton(
-            text = "New messages",
-            type = ButtonType.TONAL,
-            onClick = {
-                triggerScrollToBottom.value = true
-            },
-            small = true,
-        )
+    if (isNewMessageButtonShown.value) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = dimensionResource(id = R.dimen.content_margin)),
+            horizontalArrangement = Arrangement.Center
+        ) {
+            CustomButton(
+                text = "New messages",
+                type = ButtonType.TONAL,
+                onClick = {
+                    triggerScrollToBottom.value = true
+
+                    // hide the button
+                    isNewMessageButtonShown.value = false
+                },
+                small = true,
+            )
+        }
     }
 }
+
+
 
 // display send message bar
 @Composable
