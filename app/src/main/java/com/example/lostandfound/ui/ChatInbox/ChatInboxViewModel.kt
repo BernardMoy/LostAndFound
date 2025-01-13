@@ -14,6 +14,7 @@ import com.example.lostandfound.FirebaseManagers.FirestoreManager.Callback
 import com.example.lostandfound.Utility.DateTimeManager
 import com.google.firebase.firestore.DocumentChange
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ListenerRegistration
 
 interface SendMessageCallback {
     fun onComplete(result: Boolean)
@@ -48,6 +49,9 @@ class ChatInboxViewModel : ViewModel() {
 
     // whether is initial load. If yes, it will be forced to scroll to bottom and button wont show
     val isInitialLoad: MutableState<Boolean> = mutableStateOf(true)
+
+    // keep track of the listener registration
+    private var listenerRegistration: ListenerRegistration? = null
 
 
     // validate if the message to send is valid
@@ -98,7 +102,7 @@ class ChatInboxViewModel : ViewModel() {
         chatMessageList.clear()
 
         // fetch all messages where the user is either the sender or recipient
-        db.collection(FirebaseNames.COLLECTION_CHATS)
+        listenerRegistration = db.collection(FirebaseNames.COLLECTION_CHATS)
             .whereArrayContains(FirebaseNames.CHAT_FROM_TO, FirebaseUtility.getUserID())
             .orderBy(FirebaseNames.CHAT_TIMESTAMP)
             .addSnapshotListener { snapshot, error ->       // listen for real time updates
@@ -129,5 +133,11 @@ class ChatInboxViewModel : ViewModel() {
                 // return true
                 callback.onComplete(true)
             }
+    }
+
+    // clear the previous listener when the view model is destroyed
+    override fun onCleared() {
+        super.onCleared()
+        listenerRegistration?.remove()
     }
 }
