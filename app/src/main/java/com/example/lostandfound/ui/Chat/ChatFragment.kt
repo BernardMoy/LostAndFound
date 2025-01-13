@@ -26,6 +26,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.dimensionResource
@@ -67,6 +68,10 @@ class ChatFragment : Fragment() {
                 }
             }
         }
+
+        // refresh the chat inbox
+        refreshChatInboxes(context = requireContext(), viewModel = viewModel)
+
         return view
     }
 
@@ -99,11 +104,6 @@ fun ChatFragmentScreen(viewModel: ChatFragmentViewModel) {
 @Composable
 fun MainContent(viewModel: ChatFragmentViewModel) {
     val context = LocalContext.current
-
-    // load the chat inboxes on create
-    LaunchedEffect(Unit) {
-        refreshChatInboxes(context = context, viewModel = viewModel)
-    }
 
     if (viewModel.isLoading.value) {
         CustomCenteredProgressbar()
@@ -142,7 +142,7 @@ fun ChatInboxes(
                 )
             }
 
-            HorizontalDivider(thickness = 1.dp)
+            HorizontalDivider(thickness = 1.dp, color = Color.Gray)
         }
     }
 }
