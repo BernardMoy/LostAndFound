@@ -40,6 +40,9 @@ import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -56,6 +59,8 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil3.compose.rememberAsyncImagePainter
 import com.example.lostandfound.CustomElements.BackToolbar
+import com.example.lostandfound.CustomElements.ButtonType
+import com.example.lostandfound.CustomElements.CustomButton
 import com.example.lostandfound.CustomElements.CustomCenteredProgressbar
 import com.example.lostandfound.CustomElements.CustomChatCard
 import com.example.lostandfound.Data.IntentExtraNames
@@ -215,12 +220,22 @@ fun Messages(
     context: Context,
     viewModel: ChatInboxViewModel
 ) {
+    // liststate to allow the list to scroll to bottom
     val listState = rememberLazyListState()
 
-    // make it scroll to bottom by default
-    LaunchedEffect(viewModel.chatMessageList.size) {
-        listState.animateScrollToItem(viewModel.chatMessageList.size-1)
+    // trigger to enable scrolling by button
+    val triggerScrollToBottom: MutableState<Boolean> = remember{
+        mutableStateOf(false)
     }
+
+    // make it scroll to bottom when triggered
+    LaunchedEffect(triggerScrollToBottom.value) {
+        if (triggerScrollToBottom.value){
+            listState.animateScrollToItem(viewModel.chatMessageList.size-1)
+            triggerScrollToBottom.value = false
+        }
+    }
+
 
     LazyColumn(
         // it is assigned all the remaining height from the MainContent() composable
@@ -238,6 +253,24 @@ fun Messages(
             CustomChatCard(chatMessage = chatMessage)
 
         }
+    }
+
+
+    // the button to show new messages, which is overlapping
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = dimensionResource(id = R.dimen.content_margin)),
+        horizontalArrangement = Arrangement.Center
+    ){
+        CustomButton(
+            text = "New messages",
+            type = ButtonType.TONAL,
+            onClick = {
+                triggerScrollToBottom.value = true
+            },
+            small = true,
+        )
     }
 }
 
