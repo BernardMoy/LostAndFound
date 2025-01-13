@@ -140,10 +140,10 @@ fun CustomCard(
 
 @Composable
 fun CustomChatCard(
-    chatMessagePreview: ChatMessagePreview
+    chatMessage: ChatMessage
 ){
     // if the sender user id is the current user id, it is sent by current user
-    val isSentByCurrentUser = chatMessagePreview.chatMessage.senderUserID == FirebaseUtility.getUserID()
+    val isSentByCurrentUser = chatMessage.senderUserID == FirebaseUtility.getUserID()
 
     Column (
         modifier = Modifier.fillMaxWidth(),
@@ -151,11 +151,14 @@ fun CustomChatCard(
         verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin_half))
     ){
         // show the sender name
+        /*
         Text(
-            text = chatMessagePreview.senderUserName,
+            text = USERNAME HERE,
             style = Typography.bodyMedium,
             color = Color.Gray
         )
+
+         */
 
         Row(
             verticalAlignment = Alignment.Bottom,
@@ -164,7 +167,7 @@ fun CustomChatCard(
             // show the time posted
             if (isSentByCurrentUser){
                 Text(
-                    text = DateTimeManager.getChatTimeDescription(chatMessagePreview.chatMessage.timestamp),
+                    text = DateTimeManager.getChatTimeDescription(chatMessage.timestamp),
                     style = Typography.bodyMedium,
                     color = Color.Gray
                 )
@@ -198,7 +201,7 @@ fun CustomChatCard(
                 ){
                     // message text
                     Text(
-                        text = chatMessagePreview.chatMessage.text,
+                        text = chatMessage.text,
                         style = Typography.bodyMedium,
                         color = if (isSentByCurrentUser) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onPrimaryContainer,
                         textAlign = if (isSentByCurrentUser) TextAlign.End else TextAlign.Start
@@ -209,7 +212,7 @@ fun CustomChatCard(
             // show the time posted
             if (!isSentByCurrentUser){
                 Text(
-                    text = DateTimeManager.getChatTimeDescription(chatMessagePreview.chatMessage.timestamp),
+                    text = DateTimeManager.getChatTimeDescription(chatMessage.timestamp),
                     style = Typography.bodyMedium,
                     color = Color.Gray
                 )
