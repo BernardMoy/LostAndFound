@@ -70,7 +70,7 @@ fun Preview() {
             lastMessage = "Very long message. VEry laasiidsisdiiasjaijosjoaisijasjidjaiosdojiasijoasjiojaiosdjioasdijoasijoioasd",
             lastMessageTimestamp = 829198219L
         ))
-        
+
          */
     }
 }
