@@ -491,16 +491,16 @@ fun CustomChatInboxPreview(
     Row (
         modifier = Modifier
             .fillMaxWidth()
-            .padding(
-                vertical = dimensionResource(id = R.dimen.content_margin),
-                horizontal = dimensionResource(id = R.dimen.title_margin)
-            ).clickable {
+            .clickable {
                 // launch chat activity
                 val intent: Intent = Intent(context, ChatInboxActivity::class.java)
                 intent.putExtra(IntentExtraNames.INTENT_CHAT_USER, chatInboxPreview.recipientUser)  // put the user
                 context.startActivity(intent)
 
-            },
+            }
+            .padding(
+                vertical = dimensionResource(id = R.dimen.content_margin),
+            ),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin))
     ){
