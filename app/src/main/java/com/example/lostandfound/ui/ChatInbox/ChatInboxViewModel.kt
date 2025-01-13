@@ -63,10 +63,10 @@ class ChatInboxViewModel : ViewModel() {
         val data = mapOf(
             FirebaseNames.CHAT_SENDER_USER_ID to FirebaseUtility.getUserID(),
             FirebaseNames.CHAT_RECIPIENT_USER_ID to chatUser.userID,
-            FirebaseNames.CHAT_FROM_TO to listOf(
+            FirebaseNames.CHAT_FROM_TO to listOf(  // [from user, to user]
                 FirebaseUtility.getUserID(),
                 chatUser.userID
-            ),  // [from user, to user]
+            ),
             FirebaseNames.CHAT_CONTENT to typedText.value,
             FirebaseNames.CHAT_TIMESTAMP to DateTimeManager.getCurrentEpochTime()
         )
