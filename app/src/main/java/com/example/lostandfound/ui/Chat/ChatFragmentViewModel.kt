@@ -26,7 +26,7 @@ class ChatFragmentViewModel : ViewModel(){
     val chatInboxPreviewList: MutableList<ChatInboxPreview> = mutableStateListOf()
 
     // keep track of the listener registration
-    var listenerRegistration: ListenerRegistration? = null
+    private var listenerRegistration: ListenerRegistration? = null
 
 
     fun loadData(callback: ChatInboxPreviewCallback){
