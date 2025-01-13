@@ -130,7 +130,7 @@ public class DateTimeManager {
         if (currentEpoch - epoch < 86400) {
             // within last day, return the hour minute
             LocalDateTime localDateTime = Instant.ofEpochSecond(epoch).atZone(ZoneId.of("UTC")).toLocalDateTime();
-            return String.valueOf(localDateTime.getHour()) + ":" + String.valueOf(localDateTime.getMinute());
+            return timeToString(localDateTime.getHour(), localDateTime.getMinute());
 
         } else {
             // return N days ago
