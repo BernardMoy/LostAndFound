@@ -25,6 +25,7 @@ class ChatFragmentViewModel : ViewModel(){
     val chatInboxPreviewList: MutableList<ChatInboxPreview> = mutableStateListOf()
 
 
+
     fun loadData(callback: ChatInboxPreviewCallback){
         val db = FirebaseFirestore.getInstance()
 
@@ -50,11 +51,24 @@ class ChatFragmentViewModel : ViewModel(){
                         return@addSnapshotListener
                     }
 
+                    // there will be multiple calls, listen for the first call only
+                    var numberOfCalls = 0
                     for (documentChange in snapshot.documentChanges) {
                         // listen for new messages
                         if (documentChange.type == DocumentChange.Type.ADDED) {
+                            numberOfCalls ++
+
+                            if (numberOfCalls > 1){
+                                continue
+                            }
                             // clear the list
                             chatInboxPreviewList.clear()
+
+
+
+                            Log.d("New message", documentChange.document[FirebaseNames.CHAT_CONTENT].toString())
+
+
 
                             // the recipient user id is either the sender or recipient OF THE MESSAGE,
                             // and equal to the one that isnt the current user.
