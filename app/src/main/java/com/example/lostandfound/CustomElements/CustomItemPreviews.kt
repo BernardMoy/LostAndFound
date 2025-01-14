@@ -79,7 +79,7 @@ fun Preview() {
 
 
         CustomNotificationItemPreview(
-            0, 238983298L,
+            0, 238983298L, false
         )
 
     }
@@ -583,6 +583,7 @@ fun CustomChatInboxPreview(
 fun CustomNotificationItemPreview(
     type: Int,
     timestamp: Long,
+    isRead: Boolean,
     onClick: () -> Unit = {}  // to be implemented in notifications activity (To use that context)
 ) {
     Box(
@@ -616,12 +617,25 @@ fun CustomNotificationItemPreview(
             )
 
             Column {
-                Text(
-                    text = notificationTitle[type] ?: "",
-                    style = Typography.titleMedium,
-                    fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.onBackground,
-                )
+                Row {
+                    Text(
+                        text = notificationTitle[type] ?: "",
+                        style = Typography.titleMedium,
+                        fontWeight = FontWeight.Bold,
+                        color = MaterialTheme.colorScheme.onBackground,
+                        modifier = Modifier.weight(1f)
+                    )
+
+                    // the red dot
+                    if (!isRead){
+                        Icon(
+                            imageVector = Icons.Filled.Circle,
+                            tint = MaterialTheme.colorScheme.error,
+                            contentDescription = "Unread",
+                            modifier = Modifier.width(dimensionResource(id = R.dimen.content_margin))
+                        )
+                    }
+                }
 
                 Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.content_margin_half)))
 

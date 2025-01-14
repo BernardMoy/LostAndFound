@@ -52,7 +52,11 @@ class NotificationsViewModel : ViewModel(){
                         // listen for added entries only
                         if (documentChange.type == DocumentChange.Type.ADDED) {
                             // add the map to the items notification list
-                            val thisNotification = documentChange.document.data as Map<String, Any>
+                            val thisNotification = documentChange.document.data as MutableMap<String, Any>
+
+                            // add the snapshot id to the notification map
+                            thisNotification.put(FirebaseNames.NOTIFICATION_ID, documentChange.document.id)
+
                             itemsNotificationList.add(thisNotification)
                         }
                     }
