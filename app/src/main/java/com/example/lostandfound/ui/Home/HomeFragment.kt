@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
@@ -19,7 +18,6 @@ import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.ArrowForward
 import androidx.compose.material.icons.filled.Circle
-import androidx.compose.material.icons.outlined.Add
 import androidx.compose.material.icons.outlined.AddCircle
 import androidx.compose.material.icons.outlined.CheckCircle
 import androidx.compose.material.icons.outlined.Search
@@ -28,12 +26,10 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -44,14 +40,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.lostandfound.CustomElements.ButtonType
 import com.example.lostandfound.CustomElements.CustomActionText
-import com.example.lostandfound.CustomElements.CustomButton
 import com.example.lostandfound.CustomElements.CustomCard
 import com.example.lostandfound.R
-import com.example.lostandfound.ui.EditProfile.EditProfileViewModel
 import com.example.lostandfound.ui.HowItWorks.HowItWorksActivity
-import com.example.lostandfound.ui.ViewComparison.ViewComparisonActivity
 import com.example.lostandfound.ui.theme.ComposeTheme
 
 
@@ -62,7 +54,7 @@ class HomeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         val view = ComposeView(requireContext())
-        view.apply{
+        view.apply {
             setContent {
                 ComposeTheme {
                     HomeFragmentScreen()
@@ -88,7 +80,7 @@ fun HomeFragmentScreen() {
         modifier = Modifier
             .fillMaxSize()
             .padding(vertical = dimensionResource(id = R.dimen.title_margin))
-    ){
+    ) {
         MainContent()
     }
 }
@@ -96,7 +88,7 @@ fun HomeFragmentScreen() {
 @Composable
 fun MainContent(
     viewModel: HomeFragmentViewModel = viewModel()
-){
+) {
     val context = LocalContext.current
 
     HowItWorksPager(context = context, viewModel = viewModel)
@@ -106,46 +98,46 @@ fun MainContent(
 fun HowItWorksPager(
     context: Context,
     viewModel: HomeFragmentViewModel
-){
+) {
     // pager state
     val pagerSize = 4
-    val pagerState = rememberPagerState(pageCount = {pagerSize})
+    val pagerState = rememberPagerState(pageCount = { pagerSize })
 
     // this trigger value is set to true when the next button is clicked
-    val trigger = remember{
+    val trigger = remember {
         mutableStateOf(false)
     }
 
     // when the trigger value is checked, reset it and switch to next page
-    LaunchedEffect (trigger.value){
-        if (trigger.value){
-            val nextPage = (pagerState.currentPage+1) % pagerSize
+    LaunchedEffect(trigger.value) {
+        if (trigger.value) {
+            val nextPage = (pagerState.currentPage + 1) % pagerSize
             pagerState.animateScrollToPage(nextPage)  // this has to be called inside launchedEffect
             trigger.value = false
         }
     }
 
-    Column (
+    Column(
         modifier = Modifier.padding(vertical = dimensionResource(id = R.dimen.content_margin))
-    ){
+    ) {
         // 4 dots and the -> button
-        Row (
+        Row(
             modifier = Modifier.padding(horizontal = dimensionResource(id = R.dimen.title_margin)),
             verticalAlignment = Alignment.CenterVertically
-        ){
+        ) {
             // the 4 dots
             Row(
                 modifier = Modifier.weight(1f),  // fill all remaining space
                 horizontalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin_half))
-            ){
+            ) {
                 // for loop for each page
-                for (i in 0 until pagerSize){
+                for (i in 0 until pagerSize) {
                     Icon(
                         imageVector = Icons.Filled.Circle,
                         contentDescription = "Page",
                         modifier = Modifier.width(dimensionResource(id = R.dimen.content_margin)),
                         tint = if (pagerState.currentPage == i) MaterialTheme.colorScheme.primary
-                                else Color.Gray
+                        else Color.Gray
                     )
                 }
             }
@@ -172,7 +164,7 @@ fun HowItWorksPager(
                 modifier = Modifier.padding(
                     horizontal = dimensionResource(id = R.dimen.title_margin)
                 )
-            ){
+            ) {
                 when (page) {
                     0 -> {
                         CustomCard(
@@ -181,6 +173,7 @@ fun HowItWorksPager(
                             content = "You can report a lost item with the '+' button below."
                         )
                     }
+
                     1 -> {
                         CustomCard(
                             icon = Icons.Outlined.Search,
@@ -188,6 +181,7 @@ fun HowItWorksPager(
                             content = "Search for existing items to look for matching ones."
                         )
                     }
+
                     2 -> {
                         CustomCard(
                             icon = Icons.Outlined.TrackChanges,
@@ -195,6 +189,7 @@ fun HowItWorksPager(
                             content = "If not found, new found items will be automatically compared with your item."
                         )
                     }
+
                     3 -> {
                         CustomCard(
                             icon = Icons.Outlined.CheckCircle,
@@ -207,13 +202,14 @@ fun HowItWorksPager(
         }
 
         // the action text to go to view how it works activity
-        Box(modifier = Modifier
-            .padding(
-                horizontal = dimensionResource(id = R.dimen.title_margin),
-                vertical = dimensionResource(id = R.dimen.content_margin)
-            )
-            .align(Alignment.End)
-        ){
+        Box(
+            modifier = Modifier
+                .padding(
+                    horizontal = dimensionResource(id = R.dimen.title_margin),
+                    vertical = dimensionResource(id = R.dimen.content_margin)
+                )
+                .align(Alignment.End)
+        ) {
             CustomActionText(
                 text = "View how it works",
                 onClick = {
@@ -223,5 +219,5 @@ fun HowItWorksPager(
             )
         }
     }
-    HorizontalDivider(thickness = 1.dp)
+    HorizontalDivider(thickness = 1.dp, color = Color.Gray)
 }
