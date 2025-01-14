@@ -18,7 +18,7 @@ val notificationContent: Map<Int, String> = mapOf(
     0 to "Click to view comparison against your lost item.",
     1 to "Click to view your claim.",
     2 to "Click to view your claim.",
-    3 to "Click to view claim from the user."
+    3 to "Click to view claim from the lost user."
 )
 
 val notificationIcon: Map<Int, ImageVector> = mapOf(

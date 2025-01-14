@@ -588,6 +588,9 @@ fun CustomNotificationItemPreview(
     Box(
         modifier = Modifier
             .fillMaxWidth()
+            .clickable {
+                onClick()
+            }
             .border(
                 width = 1.dp,
                 color = Color.Gray,
@@ -596,9 +599,7 @@ fun CustomNotificationItemPreview(
                 )
             )
             .padding(dimensionResource(id = R.dimen.content_margin))
-            .clickable {
 
-            }
 
     ) {
         Row(

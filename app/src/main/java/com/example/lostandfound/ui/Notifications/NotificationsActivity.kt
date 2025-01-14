@@ -1,6 +1,7 @@
 package com.example.lostandfound.ui.Notifications
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
@@ -49,11 +50,15 @@ import com.example.lostandfound.CustomElements.CustomCenterText
 import com.example.lostandfound.CustomElements.CustomCenteredProgressbar
 import com.example.lostandfound.CustomElements.CustomChatCard
 import com.example.lostandfound.CustomElements.CustomNotificationItemPreview
+import com.example.lostandfound.Data.Claim
 import com.example.lostandfound.Data.FirebaseNames
+import com.example.lostandfound.Data.IntentExtraNames
 import com.example.lostandfound.Data.statusColor
+import com.example.lostandfound.FirebaseManagers.ItemManager
 import com.example.lostandfound.R
 import com.example.lostandfound.ui.ChatInbox.loadMessages
 import com.example.lostandfound.ui.Profile.ProfileViewModel
+import com.example.lostandfound.ui.ViewClaim.ViewClaimActivity
 import com.example.lostandfound.ui.theme.ComposeTheme
 import com.example.lostandfound.ui.theme.Typography
 
@@ -251,11 +256,7 @@ fun Items(
     LazyColumn(
         // it is assigned all the remaining height from the MainContent() composable
         modifier = Modifier
-            .fillMaxSize()
-            .padding(
-                horizontal = dimensionResource(id = R.dimen.title_margin),
-                vertical = dimensionResource(id = R.dimen.content_margin)
-            ),
+            .fillMaxSize(),
         verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin))
     ) {
         // for each preview in the view model, display it
@@ -286,18 +287,33 @@ fun Items(
 
                     }
                 )
-                3 -> CustomNotificationItemPreview(
-                    type = 3,
-                    timestamp = timeStamp,
-                    onClick = {
+                3 -> {
+                    CustomNotificationItemPreview(
+                        type = 3,
+                        timestamp = timeStamp,
+                        onClick = {
+                            val claimID = notification[FirebaseNames.NOTIFICATION_CLAIM_ID] as String
 
-                    }
-                )
+                            // pass the claim ITEM
+                            ItemManager.getClaimFromClaimId(claimID, object : ItemManager.ClaimCallback{
+                                override fun onComplete(claim: Claim?) {
+                                    if (claim == null){
+                                        Toast.makeText(context, "Failed to view claim", Toast.LENGTH_SHORT).show()
+                                        return
+                                    }
+
+                                    // start view claim activity
+                                    val intent: Intent = Intent(context, ViewClaimActivity::class.java)
+                                    intent.putExtra(IntentExtraNames.INTENT_CLAIM_ITEM, claim)
+                                    context.startActivity(intent)
+                                }
+                            })
+                        }
+                    )
+                }
             }
-
         }
     }
-
 }
 
 @Composable
