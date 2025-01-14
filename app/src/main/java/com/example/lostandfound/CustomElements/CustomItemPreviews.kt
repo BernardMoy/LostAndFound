@@ -42,6 +42,7 @@ import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.example.lostandfound.Data.ChatInboxPreview
 import com.example.lostandfound.Data.ClaimPreview
+import com.example.lostandfound.Data.FirebaseNames
 import com.example.lostandfound.Data.FoundItem
 import com.example.lostandfound.Data.IntentExtraNames
 import com.example.lostandfound.Data.LostItem
@@ -52,6 +53,8 @@ import com.example.lostandfound.Data.notificationIcon
 import com.example.lostandfound.Data.notificationTitle
 import com.example.lostandfound.Data.statusColor
 import com.example.lostandfound.FirebaseManagers.FirebaseUtility
+import com.example.lostandfound.FirebaseManagers.FirestoreManager
+import com.example.lostandfound.FirebaseManagers.FirestoreManager.Callback
 import com.example.lostandfound.R
 import com.example.lostandfound.Utility.DateTimeManager
 import com.example.lostandfound.Utility.ImageManager
@@ -79,7 +82,7 @@ fun Preview() {
 
 
         CustomNotificationItemPreview(
-            0, 238983298L, false
+            0, "",238983298L, false
         )
 
     }
@@ -582,6 +585,7 @@ fun CustomChatInboxPreview(
 @Composable
 fun CustomNotificationItemPreview(
     type: Int,
+    notificationID: String,
     timestamp: Long,
     isRead: Boolean,
     onClick: () -> Unit = {}  // to be implemented in notifications activity (To use that context)
@@ -590,7 +594,23 @@ fun CustomNotificationItemPreview(
         modifier = Modifier
             .fillMaxWidth()
             .clickable {
-                onClick()
+                // if is read is false here, mark it as true in the db
+                // the next time it reloads, the isRead will become true (Which this part will then be skipped)
+                val firestoreManager = FirestoreManager()
+                firestoreManager.update(
+                    FirebaseNames.COLLECTION_NOTIFICATIONS,
+                    notificationID,
+                    FirebaseNames.NOTIFICATION_IS_READ,
+                    true,
+                    object: Callback<Boolean>{
+                        override fun onComplete(result: Boolean) {
+                            if (result){
+                                // perform on click after modifying the db
+                                onClick()
+                            }
+                        }
+                    }
+                )
             }
             .border(
                 width = 1.dp,
