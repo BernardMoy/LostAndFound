@@ -9,8 +9,10 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
@@ -22,6 +24,7 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
+import com.example.lostandfound.Data.FirebaseNames;
 import com.example.lostandfound.Data.SharedPreferencesNames;
 import com.example.lostandfound.FirebaseManagers.FirebaseAuthManager;
 import com.example.lostandfound.FirebaseManagers.FirebaseUtility;
@@ -40,6 +43,10 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.imageview.ShapeableImageView;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.FirebaseApp;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QuerySnapshot;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -54,7 +61,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private NavigationView navigationDrawer;
     private LinearLayout navHeader;
 
-    private FirebaseAuthManager firebaseAuthManager;
+    private FirebaseFirestore db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,6 +79,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         // initialise firebase app
         FirebaseApp.initializeApp(MainActivity.this);
+        db = FirebaseFirestore.getInstance();
 
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
@@ -235,6 +243,29 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 startActivity(i);
             }
         });
+
+
+        // Display the notifications red dot based on whether there are any unread messages from the current user
+        // set up snapshot listener for any changed value of the query
+        db.collection(FirebaseNames.COLLECTION_NOTIFICATIONS)
+                .whereEqualTo(FirebaseNames.NOTIFICATION_USER_ID, FirebaseUtility.getUserID())
+                .whereEqualTo(FirebaseNames.NOTIFICATION_IS_READ, false)
+                .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                    @Override
+                    public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
+                        if (error != null){
+                            Toast.makeText(MainActivity.this, "Failed to listen for new notifications", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+
+                        // check if the query is not empty
+                        if (value != null && !value.isEmpty()){
+                            binding.notificationsDot.setVisibility(View.VISIBLE);
+                        } else {
+                            binding.notificationsDot.setVisibility(View.GONE);
+                        }
+                    }
+                });
     }
 
     @Override
