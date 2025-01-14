@@ -36,6 +36,10 @@ object ItemManager {
         fun onComplete(claimList: MutableList<Claim>)  // return the list of claims, or empty list if failed
     }
 
+    interface ClaimCallback {
+        fun onComplete(claim: Claim?)  // return the claim, or null if failed
+    }
+
     interface ClaimPreviewCallback{
         fun onComplete(claimPreview: ClaimPreview?)  // return the claim preview or null if failed
     }
@@ -286,6 +290,36 @@ object ItemManager {
                 }
             }
         )
+    }
+
+    // get claim from claim id, used to access view claim from notifications
+    fun getClaimFromClaimId(claimID: String, callback: ClaimCallback){
+        val firestoreManager = FirestoreManager()
+
+        firestoreManager.get(
+            FirebaseNames.COLLECTION_CLAIMED_ITEMS,
+            claimID,
+            object : Callback<Map<String, Any>> {
+                override fun onComplete(result: Map<String, Any>?) {
+                    if (result == null) {
+                        callback.onComplete(null)
+                        return
+                    }
+
+                    // construct the claim item
+                    val thisClaim: Claim = Claim(
+                        claimID = claimID,
+                        lostItemID = result[FirebaseNames.CLAIM_LOST_ITEM_ID].toString(),
+                        foundItemID = result[FirebaseNames.CLAIM_FOUND_ITEM_ID].toString(),
+                        isApproved = result[FirebaseNames.CLAIM_IS_APPROVED] as Boolean,
+                        timestamp = result[FirebaseNames.CLAIM_TIMESTAMP] as Long,
+                        securityQuestionAns = result[FirebaseNames.CLAIM_SECURITY_QUESTION_ANS].toString()
+                    )
+
+                    // return the claim item
+                    callback.onComplete(thisClaim)
+                }
+            })
     }
 
     // method to get a ClaimPreview object given a Claim object
