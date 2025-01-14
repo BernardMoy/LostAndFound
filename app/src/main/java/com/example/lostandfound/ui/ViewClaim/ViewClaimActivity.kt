@@ -609,19 +609,19 @@ fun AcceptButton(
         CustomTextDialog(
             icon = Icons.Outlined.CheckCircle,
             title = "Approve this claim?",
-            content = "Once you have accepted this claim, you cannot approve other claims for this item.",
+            content = "Once you have approved this claim, you cannot approve other claims for this item.",
             confirmButton = {
                 CustomButton(
                     text = "Approve",
                     type = ButtonType.FILLED,
                     onClick = {
                         // approve the claim
-                        viewModel.approveClaim(object : Callback<Boolean> {
-                            override fun onComplete(result: Boolean) {
-                                if (!result) {
+                        viewModel.approveClaim(object : ErrorCallback{
+                            override fun onComplete(error: String) {
+                                if (error.isNotEmpty()) {
                                     Toast.makeText(
                                         context,
-                                        "Approving claim failed",
+                                        error,
                                         Toast.LENGTH_SHORT
                                     ).show()
                                     return
