@@ -264,11 +264,13 @@ fun Items(
             // display different notifications type
             val type = (notification[FirebaseNames.NOTIFICATION_TYPE] as Long).toInt()
             val timeStamp = notification[FirebaseNames.NOTIFICATION_TIMESTAMP] as Long
+            val notificationID = notification[FirebaseNames.NOTIFICATION_ID].toString()
             val isRead = notification[FirebaseNames.NOTIFICATION_IS_READ] as Boolean
 
             when(type){
                 0 -> CustomNotificationItemPreview(
                     type = 0,
+                    notificationID = notificationID,
                     timestamp = timeStamp,
                     isRead = isRead,
                     onClick = {
@@ -277,6 +279,7 @@ fun Items(
                 )
                 1 -> CustomNotificationItemPreview(
                     type = 1,
+                    notificationID = notificationID,
                     timestamp = timeStamp,
                     isRead = isRead,
                     onClick = {
@@ -300,6 +303,7 @@ fun Items(
                 )
                 2 -> CustomNotificationItemPreview(
                     type = 2,
+                    notificationID = notificationID,
                     timestamp = timeStamp,
                     isRead = isRead,
                     onClick = {
@@ -309,6 +313,7 @@ fun Items(
                 3 -> {
                     CustomNotificationItemPreview(
                         type = 3,
+                        notificationID = notificationID,
                         timestamp = timeStamp,
                         isRead = isRead,
                         onClick = {
