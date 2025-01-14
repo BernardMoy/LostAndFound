@@ -2,6 +2,7 @@ package com.example.lostandfound.ui.Notifications
 
 import android.content.Context
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
@@ -13,6 +14,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
@@ -42,8 +45,14 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.lostandfound.CustomElements.BackToolbar
+import com.example.lostandfound.CustomElements.CustomCenterText
+import com.example.lostandfound.CustomElements.CustomCenteredProgressbar
+import com.example.lostandfound.CustomElements.CustomChatCard
+import com.example.lostandfound.CustomElements.CustomNotificationItemPreview
+import com.example.lostandfound.Data.FirebaseNames
 import com.example.lostandfound.Data.statusColor
 import com.example.lostandfound.R
+import com.example.lostandfound.ui.ChatInbox.loadMessages
 import com.example.lostandfound.ui.Profile.ProfileViewModel
 import com.example.lostandfound.ui.theme.ComposeTheme
 import com.example.lostandfound.ui.theme.Typography
@@ -54,6 +63,10 @@ class NotificationsActivity : ComponentActivity() { // Use ComponentActivity her
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        // load messages on create
+        loadNotifications(context = this, viewModel = viewModel)
+
         setContent {
             NotificationsScreen(activity = this, viewModel = viewModel)
         }
@@ -96,7 +109,7 @@ fun NotificationsScreen(activity: ComponentActivity, viewModel: NotificationsVie
 fun Tabs(viewModel: NotificationsViewModel){
     val context: Context = LocalContext.current
 
-    val tabNames = listOf("Matching items", "Messages")
+    val tabNames = listOf("Items", "Messages")
 
     // a variable to store the selected tab index (0 or 1)
     var selectedTabIndex by remember {
@@ -145,7 +158,7 @@ fun Tabs(viewModel: NotificationsViewModel){
 
                         // depending on the index, turn off its unread button
                         if (index == 0){
-                            viewModel.isMatchingItemsUnread.value = false
+                            viewModel.isItemsUnread.value = false
                         }
                         if (index == 1){
                             viewModel.isMessagesUnread.value = false
@@ -165,7 +178,7 @@ fun Tabs(viewModel: NotificationsViewModel){
 
                             // the unread red dot
                             if (index == 0){
-                                if (viewModel.isMatchingItemsUnread.value){
+                                if (viewModel.isItemsUnread.value){
                                     Icon(
                                         imageVector = Icons.Filled.Circle,
                                         tint = MaterialTheme.colorScheme.error,
@@ -203,15 +216,27 @@ fun Tabs(viewModel: NotificationsViewModel){
             Box(
                 modifier = Modifier
                     .padding(dimensionResource(id = R.dimen.title_margin))
-                    .verticalScroll(rememberScrollState()),
             ){
                 if (index == 0){
-                    // matching items tab
-                    MatchingItems(context = context, viewModel = viewModel)
+                    // Items tab
+                    if (viewModel.isItemsLoading.value){
+                        CustomCenteredProgressbar()
+                    } else if (viewModel.itemsNotificationList.isEmpty()){
+                        CustomCenterText(text = "You have no notifications.")
+                    } else {
+                        Items(context = context, viewModel = viewModel)
+                    }
+
 
                 } else {
                     // messages tab
-                    Messages(context = context, viewModel = viewModel)
+                    if (viewModel.isItemsLoading.value){
+                        CustomCenteredProgressbar()
+                    } else if (viewModel.itemsNotificationList.isEmpty()){
+                        CustomCenterText(text = "You have no notifications.")
+                    } else {
+                        Messages(context = context, viewModel = viewModel)
+                    }
                 }
             }
         }
@@ -219,11 +244,59 @@ fun Tabs(viewModel: NotificationsViewModel){
 }
 
 @Composable
-fun MatchingItems(
+fun Items(
     context: Context,
     viewModel: NotificationsViewModel
 ){
-    Text(text = "Matching items")
+    LazyColumn(
+        // it is assigned all the remaining height from the MainContent() composable
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(
+                horizontal = dimensionResource(id = R.dimen.title_margin),
+                vertical = dimensionResource(id = R.dimen.content_margin)
+            ),
+        verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin))
+    ) {
+        // for each preview in the view model, display it
+        items(viewModel.itemsNotificationList) { notification ->
+            // display different notifications type
+            val type = (notification[FirebaseNames.NOTIFICATION_TYPE] as Long).toInt()
+            val timeStamp = notification[FirebaseNames.NOTIFICATION_TIMESTAMP] as Long
+
+            when(type){
+                0 -> CustomNotificationItemPreview(
+                    type = 0,
+                    timestamp = timeStamp,
+                    onClick = {
+
+                    }
+                )
+                1 -> CustomNotificationItemPreview(
+                    type = 1,
+                    timestamp = timeStamp,
+                    onClick = {
+
+                    }
+                )
+                2 -> CustomNotificationItemPreview(
+                    type = 2,
+                    timestamp = timeStamp,
+                    onClick = {
+
+                    }
+                )
+                3 -> CustomNotificationItemPreview(
+                    type = 3,
+                    timestamp = timeStamp,
+                    onClick = {
+
+                    }
+                )
+            }
+
+        }
+    }
 
 }
 
@@ -234,4 +307,24 @@ fun Messages(
 ) {
     Text(text = "Messages")
 
+}
+
+// function to load notifications on create
+fun loadNotifications(
+    context: Context,
+    viewModel: NotificationsViewModel
+){
+    viewModel.isItemsLoading.value = true
+
+    viewModel.loadItemsNotifications(object: LoadNotificationsCallback{
+        override fun onComplete(result: Boolean) {
+            viewModel.isItemsLoading.value = false
+
+            if (!result){
+                Toast.makeText(context, "Load notifications failed", Toast.LENGTH_SHORT).show()
+                return
+            }
+            // do nothing when successful
+        }
+    })
 }
