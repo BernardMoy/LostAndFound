@@ -107,6 +107,8 @@ fun MainContent(viewModel: ChatFragmentViewModel) {
 
     if (viewModel.isLoading.value) {
         CustomCenteredProgressbar()
+    } else if (viewModel.chatInboxPreviewList.size == 0){
+        CustomCenterText(text = "You have no chats.")
     } else {
         ChatInboxes(context = context, viewModel = viewModel)
     }
