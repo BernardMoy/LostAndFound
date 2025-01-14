@@ -9,6 +9,7 @@ import com.example.lostandfound.Data.FoundItem
 import com.example.lostandfound.Data.LostItem
 import com.example.lostandfound.Data.User
 import com.example.lostandfound.FirebaseManagers.FirestoreManager
+import com.example.lostandfound.FirebaseManagers.NotificationManager
 import com.example.lostandfound.FirebaseManagers.UserManager
 import com.example.lostandfound.Utility.DateTimeManager
 import com.example.lostandfound.Utility.ErrorCallback
@@ -34,7 +35,8 @@ class ViewComparisonViewModel : ViewModel() {
     var foundItemData = FoundItem()
 
     // default claim item for the lost item placeholder
-    var claim = Claim()  // used to check whether the found item is the claimed item of the lost item
+    var claim =
+        Claim()  // used to check whether the found item is the claimed item of the lost item
 
     // username used to display the found user, only that is needed
     var foundUser = User()
@@ -86,8 +88,22 @@ class ViewComparisonViewModel : ViewModel() {
                         return
                     }
 
-                    // return with no errors
-                    callback.onComplete("")
+                    // send a notification to the found user, saying that a user has claimed their item
+                    NotificationManager.sendUserClaimedYourItemNotification(
+                        foundUser.userID,
+                        result,  // the claim id
+                        object : NotificationManager.NotificationSendCallback {
+                            override fun onComplete(result: Boolean) {
+                                if (!result) {
+                                    callback.onComplete("Error sending notification to user")
+                                    return
+                                }
+
+                                // return with no errors
+                                callback.onComplete("")
+                            }
+                        }
+                    )
                 }
             })
     }

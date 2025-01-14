@@ -45,6 +45,7 @@ class ChatFragmentViewModel : ViewModel(){
             .limit(1)  // get the latest ChatMessage object
             .addSnapshotListener { snapshot, error ->       // listen for real time updates
                 if (error != null) {
+                    Log.d("Snapshot error", error.message.toString())
                     callback.onComplete(false)
                     return@addSnapshotListener
                 }

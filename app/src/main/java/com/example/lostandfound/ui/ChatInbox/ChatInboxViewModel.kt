@@ -1,5 +1,6 @@
 package com.example.lostandfound.ui.ChatInbox
 
+import android.util.Log
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
@@ -107,6 +108,7 @@ class ChatInboxViewModel : ViewModel() {
             .orderBy(FirebaseNames.CHAT_TIMESTAMP)
             .addSnapshotListener { snapshot, error ->       // listen for real time updates
                 if (error != null) {
+                    Log.d("Snapshot error", error.message.toString())
                     callback.onComplete(false)
                     return@addSnapshotListener
                 }
