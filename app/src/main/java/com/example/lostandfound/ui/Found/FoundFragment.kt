@@ -7,6 +7,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.MutableTransitionState
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.scaleOut
+import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -26,6 +34,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
@@ -37,6 +46,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.lostandfound.CustomElements.CustomCenterText
 import com.example.lostandfound.CustomElements.CustomCenteredProgressbar
+import com.example.lostandfound.CustomElements.CustomChatInboxPreview
 import com.example.lostandfound.CustomElements.CustomFoundItemPreview
 import com.example.lostandfound.CustomElements.CustomSearchField
 import com.example.lostandfound.Data.IntentExtraNames
@@ -205,21 +215,33 @@ fun FoundItemsColumn(
                 }
 
             ) { itemData ->
-                CustomFoundItemPreview(
-                    data = itemData,
-                    onViewButtonClicked = {
-                        // start view item activity
-                        val intent = Intent(context, ViewFoundActivity::class.java)
 
-                        // pass only the item id as the extra value
-                        intent.putExtra(
-                            IntentExtraNames.INTENT_FOUND_ID,
-                            itemData
-                        )
-                        context.startActivity(intent)
-                    },
-                    viewButtonText = "View"
-                )
+                val visibleState = remember {
+                    MutableTransitionState(false).apply { targetState = true }
+                }
+
+                // display each preview with animation, also display the same animation when reloaded
+                AnimatedVisibility(
+                    visibleState = visibleState,
+                    enter = fadeIn() + scaleIn(),
+                    exit = fadeOut() + scaleOut()
+                ) {
+                    CustomFoundItemPreview(
+                        data = itemData,
+                        onViewButtonClicked = {
+                            // start view item activity
+                            val intent = Intent(context, ViewFoundActivity::class.java)
+
+                            // pass only the item id as the extra value
+                            intent.putExtra(
+                                IntentExtraNames.INTENT_FOUND_ID,
+                                itemData
+                            )
+                            context.startActivity(intent)
+                        },
+                        viewButtonText = "View"
+                    )
+                }
             }
         }
     }

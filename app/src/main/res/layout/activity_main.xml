@@ -58,13 +58,33 @@
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent" >
 
-                    <ImageView
-                        android:id="@+id/toolbar_notifications_icon"
-                        android:layout_width="@dimen/profile_image_size_small"
-                        android:layout_height="@dimen/profile_image_size_small"
-                        android:src="@drawable/notifications_icon"
-                        android:layout_marginEnd="@dimen/content_margin"
-                        app:tint="@color/onBackground" />
+                    <!-- overlap the red dot and notif icon -->
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="@dimen/image_button_size"
+                        android:layout_height="@dimen/image_button_size">
+
+                        <ImageView
+                            android:id="@+id/toolbar_notifications_icon"
+                            android:layout_width="@dimen/profile_image_size_small"
+                            android:layout_height="@dimen/profile_image_size_small"
+                            android:src="@drawable/notifications_icon"
+                            android:layout_marginEnd="@dimen/content_margin"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:tint="@color/onBackground" />
+
+                        <View
+                            android:id="@+id/notifications_dot"
+                            android:layout_width="12dp"
+                            android:layout_height="12dp"
+                            android:background="@drawable/red_circle"
+                            android:layout_marginStart="@dimen/content_margin_half"
+                            android:layout_marginEnd="@dimen/content_margin_half"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"/>
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
 
                     <com.google.android.material.imageview.ShapeableImageView
                         android:id="@+id/toolbar_profile_icon"
