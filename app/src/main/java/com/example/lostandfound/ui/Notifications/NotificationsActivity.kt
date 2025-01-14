@@ -102,14 +102,28 @@ fun NotificationsScreen(activity: ComponentActivity, viewModel: NotificationsVie
                         .fillMaxWidth()
                         .padding(paddingValues = innerPadding)
                 ) {
-                    // includes the top tab bar and the main content
-                    Tabs(viewModel = viewModel)
+                    // Items tab
+                    val context: Context = LocalContext.current
+
+                    Box(
+                        modifier = Modifier
+                            .padding(dimensionResource(id = R.dimen.title_margin))
+                    ){
+                        if (viewModel.isItemsLoading.value){
+                            CustomCenteredProgressbar()
+                        } else if (viewModel.itemsNotificationList.isEmpty()){
+                            CustomCenterText(text = "You have no notifications.")
+                        } else {
+                            Items(context = context, viewModel = viewModel)
+                        }
+                    }
                 }
             }
         }
     }
 }
 
+/*
 @Composable
 fun Tabs(viewModel: NotificationsViewModel){
     val context: Context = LocalContext.current
@@ -247,6 +261,8 @@ fun Tabs(viewModel: NotificationsViewModel){
         }
     }
 }
+
+ */
 
 @Composable
 fun Items(
