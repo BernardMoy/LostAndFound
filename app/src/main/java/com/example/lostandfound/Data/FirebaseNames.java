@@ -64,6 +64,7 @@ public final class FirebaseNames {
     public static final String CHAT_INBOX_IS_UNREAD = "is_unread";
 
     // for notifications
+    public static final String NOTIFICATION_ID = "notification_id";
     public static final String NOTIFICATION_USER_ID = "user_id";
     public static final String NOTIFICATION_TIMESTAMP = "timestamp";
     public static final String NOTIFICATION_TYPE = "type";  // 0 1 2 3

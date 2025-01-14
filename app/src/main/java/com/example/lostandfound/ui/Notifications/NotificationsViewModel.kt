@@ -41,6 +41,9 @@ class NotificationsViewModel : ViewModel(){
             .whereEqualTo(FirebaseNames.NOTIFICATION_USER_ID, FirebaseUtility.getUserID())
             .orderBy(FirebaseNames.NOTIFICATION_TIMESTAMP, Query.Direction.DESCENDING)
             .addSnapshotListener { snapshot, error ->       // listen for real time updates
+                // clear chat message preview
+                itemsNotificationList.clear()
+
                 if (error != null) {
                     Log.d("Snapshot error", error.message.toString())
                     callback.onComplete(false)
@@ -49,10 +52,15 @@ class NotificationsViewModel : ViewModel(){
 
                 if (snapshot != null) {
                     for (documentChange in snapshot.documentChanges) {
-                        // listen for added entries only
-                        if (documentChange.type == DocumentChange.Type.ADDED) {
+                        // listen for added entries and modified (Whether is read)
+                        if (documentChange.type == DocumentChange.Type.ADDED
+                            || documentChange.type == DocumentChange.Type.MODIFIED) {
                             // add the map to the items notification list
-                            val thisNotification = documentChange.document.data as Map<String, Any>
+                            val thisNotification = documentChange.document.data as MutableMap<String, Any>
+
+                            // add the snapshot id to the notification map
+                            thisNotification[FirebaseNames.NOTIFICATION_ID] = documentChange.document.id
+
                             itemsNotificationList.add(thisNotification)
                         }
                     }
@@ -61,5 +69,11 @@ class NotificationsViewModel : ViewModel(){
                 // return true
                 callback.onComplete(true)
             }
+    }
+
+    // clear the previous listener when the view model is destroyed
+    override fun onCleared() {
+        super.onCleared()
+        listenerRegistration?.remove()
     }
 }
