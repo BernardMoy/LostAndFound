@@ -36,6 +36,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.lostandfound.CustomElements.BackToolbar
 import com.example.lostandfound.CustomElements.CustomActionRow
 import com.example.lostandfound.CustomElements.CustomGrayTitle
+import com.example.lostandfound.Data.FirebaseNames
 import com.example.lostandfound.Data.IntentExtraNames
 import com.example.lostandfound.Data.LostItem
 import com.example.lostandfound.Data.SharedPreferencesNames
@@ -44,6 +45,7 @@ import com.example.lostandfound.ui.AboutApp.AboutAppActivity
 import com.example.lostandfound.ui.Search.SearchActivity
 import com.example.lostandfound.ui.ViewComparison.ViewComparisonActivity
 import com.example.lostandfound.ui.theme.ComposeTheme
+import com.google.firebase.firestore.FirebaseFirestore
 
 
 class SettingsActivity : ComponentActivity() {
@@ -211,6 +213,36 @@ fun Developer(
                 sp.edit().clear().apply()
 
                 Toast.makeText(context, "Shared preferences cleared", Toast.LENGTH_SHORT).show()
+            }
+        )
+
+        CustomActionRow(text = "Delete all chats data",
+            leftIcon = Icons.Outlined.Delete,
+            onClick = {
+                val db = FirebaseFirestore.getInstance()
+                // get all
+                db.collection(FirebaseNames.COLLECTION_CHATS)
+                    .get()
+                    .addOnCompleteListener{ task ->
+                        if (task.isSuccessful){
+                            // delete each reference of the collection
+                            val batch = db.batch()
+                            for ((_, item) in task.result.withIndex()){
+                                batch.delete(item.reference)
+                            }
+
+                            // commit the batch
+                            batch.commit().addOnCompleteListener{ result ->
+                                if (result.isSuccessful){
+                                    Toast.makeText(context, "Deleted chat successfully", Toast.LENGTH_SHORT).show()
+                                } else {
+                                    Toast.makeText(context, "Delete chat failed", Toast.LENGTH_SHORT).show()
+                                }
+                            }
+                        } else {
+                            Toast.makeText(context, "Delete chat failed", Toast.LENGTH_SHORT).show()
+                        }
+                }
             }
         )
 

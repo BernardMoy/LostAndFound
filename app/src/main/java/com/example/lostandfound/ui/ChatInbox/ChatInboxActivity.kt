@@ -235,7 +235,7 @@ fun Messages(
 
     // function to scroll to bottom immediately, for initial load
     LaunchedEffect(viewModel.triggerScrollToBottomInstantly.value) {
-        if (viewModel.triggerScrollToBottomInstantly.value) {
+        if (viewModel.triggerScrollToBottomInstantly.value && viewModel.chatMessageList.size>0) {
             listState.scrollToItem(viewModel.chatMessageList.size - 1)
             viewModel.triggerScrollToBottomInstantly.value = false
         }
