@@ -11,6 +11,7 @@ import com.example.lostandfound.Data.LostItem
 import com.example.lostandfound.Data.User
 import com.example.lostandfound.FirebaseManagers.FirestoreManager
 import com.example.lostandfound.FirebaseManagers.ItemManager
+import com.example.lostandfound.FirebaseManagers.NotificationManager
 import com.example.lostandfound.FirebaseManagers.UserManager
 import com.example.lostandfound.Utility.ErrorCallback
 
@@ -39,6 +40,7 @@ class ViewClaimViewModel : ViewModel() {
 
 
     // function to load the lost and found item data  (lostItemData, foundItemData)
+    // and also load the lost and found users
     // when given the claim item (claimData)
     fun loadDataWithClaim(callback: ErrorCallback) {
         val firestoreManager = FirestoreManager()
@@ -120,7 +122,7 @@ class ViewClaimViewModel : ViewModel() {
 
     // function to mark the claim as accepted
     // once a claim is approved, it cannot be un-approved
-    fun approveClaim(callback: Callback<Boolean>){
+    fun approveClaim(callback: ErrorCallback){
         val db = FirestoreManager()
         db.update(FirebaseNames.COLLECTION_CLAIMED_ITEMS,
             claimData.claimID,
@@ -129,12 +131,26 @@ class ViewClaimViewModel : ViewModel() {
             object: FirestoreManager.Callback<Boolean>{
                 override fun onComplete(result: Boolean) {
                     if (!result){
-                        callback.onComplete(false)
+                        callback.onComplete("Failed approving claim")
                         return
                     }
 
-                    // update successful, return true
-                    callback.onComplete(true)
+                    // send notification type 1 (To the target lost user) and 2 (To other lost users)
+                    NotificationManager.sendClaimApprovedNotification(
+                        lostUser.userID,
+                        claimData.claimID,  // current claim id
+                        object: NotificationManager.NotificationSendCallback{
+                            override fun onComplete(result: Boolean) {
+                                if (!result){
+                                    callback.onComplete("Failed sending notification")
+                                    return
+                                }
+
+                                // update successful, return true
+                                callback.onComplete("")
+                            }
+                        }
+                    )
                 }
             }
         )
