@@ -21,6 +21,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.ArrowForward
 import androidx.compose.material.icons.filled.Circle
+import androidx.compose.material.icons.outlined.QuestionMark
 import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -34,29 +35,27 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil3.compose.rememberAsyncImagePainter
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.example.lostandfound.Data.ChatInboxPreview
-import com.example.lostandfound.Data.Claim
 import com.example.lostandfound.Data.ClaimPreview
-import com.example.lostandfound.Data.FirebaseNames
 import com.example.lostandfound.Data.FoundItem
 import com.example.lostandfound.Data.IntentExtraNames
 import com.example.lostandfound.Data.LostItem
-import com.example.lostandfound.Data.User
 import com.example.lostandfound.Data.foundStatusText
 import com.example.lostandfound.Data.lostStatusText
+import com.example.lostandfound.Data.notificationContent
+import com.example.lostandfound.Data.notificationIcon
+import com.example.lostandfound.Data.notificationTitle
 import com.example.lostandfound.Data.statusColor
 import com.example.lostandfound.FirebaseManagers.FirebaseUtility
 import com.example.lostandfound.R
 import com.example.lostandfound.Utility.DateTimeManager
 import com.example.lostandfound.Utility.ImageManager
 import com.example.lostandfound.ui.ChatInbox.ChatInboxActivity
-import com.example.lostandfound.ui.ViewComparison.ViewComparisonActivity
 import com.example.lostandfound.ui.theme.ComposeTheme
 import com.example.lostandfound.ui.theme.Typography
 
@@ -78,12 +77,11 @@ fun Preview() {
 
          */
 
-        /*
-        CustomNotificationNewMatchingItem(null
-            LostItem(), FoundItem(), 24892489L
+
+        CustomNotificationItemPreview(
+            0, 238983298L,
         )
-        
-         */
+
     }
 }
 
@@ -101,7 +99,7 @@ fun CustomLostItemPreview(
             .fillMaxWidth()
             .border(
                 width = 1.dp,
-                color = androidx.compose.ui.graphics.Color.Gray,
+                color = Color.Gray,
                 shape = RoundedCornerShape(
                     dimensionResource(id = R.dimen.corner_radius_small)
                 )
@@ -112,11 +110,11 @@ fun CustomLostItemPreview(
         Column(
             verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin))
         ) {
-            
+
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin_half))
-            ){
+            ) {
                 Text(
                     text = "Lost Entry",
                     style = Typography.bodyMedium,
@@ -154,7 +152,7 @@ fun CustomLostItemPreview(
                         id = statusColor[data.status] ?: R.color.status0
                     ),
                     fontWeight = FontWeight.Bold,
-                    )
+                )
 
             }
 
@@ -213,7 +211,7 @@ fun CustomLostItemPreview(
                 horizontalArrangement = Arrangement.End
 
             ) {
-                if (isOwner){
+                if (isOwner) {
                     CustomButton(
                         text = "Delete",
                         type = ButtonType.WARNING,
@@ -340,7 +338,8 @@ fun CustomFoundItemPreview(
                     // date and time
                     Text(
                         text = "Date: "
-                                + DateTimeManager.dateTimeToString(data.dateTime
+                                + DateTimeManager.dateTimeToString(
+                            data.dateTime
                         ),
                         style = Typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onBackground
@@ -369,7 +368,7 @@ fun CustomFoundItemPreview(
                 horizontalArrangement = Arrangement.End
 
             ) {
-                if (isOwner){
+                if (isOwner) {
                     CustomButton(
                         text = "Delete",
                         type = ButtonType.WARNING,
@@ -401,7 +400,7 @@ fun CustomFoundItemPreview(
 fun CustomClaimPreview(
     claimPreview: ClaimPreview,
     onViewButtonClicked: () -> Unit = {}
-){
+) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -414,9 +413,9 @@ fun CustomClaimPreview(
             )
             .padding(dimensionResource(id = R.dimen.title_margin))
     ) {
-        Column (
+        Column(
             verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin))
-        ){
+        ) {
             Row(
                 horizontalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin))
             ) {
@@ -459,7 +458,10 @@ fun CustomClaimPreview(
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin_half))
                     ) {
-                        val color = if (claimPreview.claimItem.isApproved) colorResource(id = R.color.status2) else colorResource(id = R.color.status0)
+                        val color =
+                            if (claimPreview.claimItem.isApproved) colorResource(id = R.color.status2) else colorResource(
+                                id = R.color.status0
+                            )
 
                         Icon(
                             imageVector = Icons.Filled.Circle,
@@ -474,12 +476,12 @@ fun CustomClaimPreview(
                             fontWeight = FontWeight.Bold,
                         )
                     }
-                    
+
                     // done button
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.End
-                    ){
+                    ) {
                         CustomButton(
                             text = "View",
                             type = ButtonType.FILLED,
@@ -499,8 +501,8 @@ fun CustomClaimPreview(
 fun CustomChatInboxPreview(
     context: Context,
     chatInboxPreview: ChatInboxPreview,
-){
-    Row (
+) {
+    Row(
         modifier = Modifier
             .fillMaxWidth()
             .clickable {
@@ -518,11 +520,13 @@ fun CustomChatInboxPreview(
             ),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin))
-    ){
+    ) {
         // avatar
         Image(
-            painter = if (chatInboxPreview.recipientUser.avatar.isNotEmpty()) rememberAsyncImagePainter(model = ImageManager.stringToUri(context, chatInboxPreview.recipientUser.avatar))
-                    else painterResource(id = R.drawable.profile_icon),
+            painter = if (chatInboxPreview.recipientUser.avatar.isNotEmpty()) rememberAsyncImagePainter(
+                model = ImageManager.stringToUri(context, chatInboxPreview.recipientUser.avatar)
+            )
+            else painterResource(id = R.drawable.profile_icon),
             contentDescription = "User avatar",
             modifier = Modifier
                 .size(dimensionResource(R.dimen.image_button_size))
@@ -538,7 +542,7 @@ fun CustomChatInboxPreview(
         Column(
             modifier = Modifier.weight(1f),  // fill remaining space
             verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin_half))
-        ){
+        ) {
             // user name and time
             Row {
                 Text(
@@ -559,8 +563,12 @@ fun CustomChatInboxPreview(
 
             // last message
             // trim the message
-            val previewMessage = if (chatInboxPreview.lastMessage.length > 50) chatInboxPreview.lastMessage.substring(0, 50)+ "..."
-                                else chatInboxPreview.lastMessage
+            val previewMessage =
+                if (chatInboxPreview.lastMessage.length > 50) chatInboxPreview.lastMessage.substring(
+                    0,
+                    50
+                ) + "..."
+                else chatInboxPreview.lastMessage
             Text(
                 text = previewMessage,
                 style = Typography.bodyMedium,
@@ -572,63 +580,43 @@ fun CustomChatInboxPreview(
 }
 
 @Composable
-fun CustomNotificationNewMatchingItem(
-    context: Context,
-    lostItem: LostItem,
-    foundItem: FoundItem,
-    timestamp: Long
-){
+fun CustomNotificationItemPreview(
+    type: Int,
+    timestamp: Long,
+    onClick: () -> Unit = {}  // to be implemented in notifications activity (To use that context)
+) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
             .border(
                 width = 1.dp,
-                color = androidx.compose.ui.graphics.Color.Gray,
+                color = Color.Gray,
                 shape = RoundedCornerShape(
                     dimensionResource(id = R.dimen.corner_radius_small)
                 )
             )
             .padding(dimensionResource(id = R.dimen.content_margin))
             .clickable {
-                // launch view comparison activity (As if clicked from search activity)
-                val intent: Intent = Intent(context, ViewComparisonActivity::class.java)
 
-                // pass both the lost item and found item
-                intent.putExtra(
-                    IntentExtraNames.INTENT_LOST_ID,
-                    lostItem
-                )
-                intent.putExtra(
-                    IntentExtraNames.INTENT_FOUND_ID,
-                    foundItem
-                )
-
-                // also pass the claim item of the lost item
-                intent.putExtra(
-                    IntentExtraNames.INTENT_CLAIM_ITEM,
-                    Claim()   // the lost item will not have any claim item associated with it (i.e. status 1 or 2), otherwise this notif wont appear
-                )
-                context.startActivity(intent)
             }
 
-    ){
-        Row (
+    ) {
+        Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin)),
             verticalAlignment = Alignment.Top
 
-        ){
+        ) {
             Icon(
-                imageVector = Icons.Outlined.Search,
-                contentDescription = "New matching item",
+                imageVector = notificationIcon[type] ?: Icons.Outlined.QuestionMark,
+                contentDescription = "Notification icon",
                 tint = MaterialTheme.colorScheme.onPrimaryContainer,
                 modifier = Modifier.size(dimensionResource(id = R.dimen.image_button_size))
             )
 
-            Column(
-            ){
+            Column {
                 Text(
-                    text = "New matching item found!",
+                    text = notificationTitle[type] ?: "",
                     style = Typography.titleMedium,
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.onBackground,
@@ -637,7 +625,7 @@ fun CustomNotificationNewMatchingItem(
                 Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.content_margin_half)))
 
                 Text(
-                    text = "Click to view comparison against your lost item.",
+                    text = notificationContent[type] ?: "",
                     style = Typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onBackground,
                 )
@@ -672,6 +660,6 @@ fun CustomNotificationNewMatchingItem(
 @Composable
 fun CustomNotificationMessagePreview(
 
-){
+) {
 
 }
