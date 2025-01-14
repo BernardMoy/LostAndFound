@@ -26,19 +26,18 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.core.content.ContextCompat.startActivity
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.lostandfound.CustomElements.BackToolbar
 import com.example.lostandfound.CustomElements.CustomActionRow
 import com.example.lostandfound.CustomElements.CustomGrayTitle
 import com.example.lostandfound.Data.FirebaseNames
 import com.example.lostandfound.Data.IntentExtraNames
-import com.example.lostandfound.Data.LostItem
 import com.example.lostandfound.Data.SharedPreferencesNames
 import com.example.lostandfound.R
 import com.example.lostandfound.ui.AboutApp.AboutAppActivity
@@ -103,23 +102,23 @@ fun MainContent(viewModel: SettingsViewModel = viewModel()) {
     val inPreview = LocalInspectionMode.current
 
     Appearance(context = context)
-    HorizontalDivider(thickness = 1.dp)
+    HorizontalDivider(thickness = 1.dp, color = Color.Gray)
     Permissions(context = context)
-    HorizontalDivider(thickness = 1.dp)
+    HorizontalDivider(thickness = 1.dp, color = Color.Gray)
     AboutTheApp(context = context)
-    HorizontalDivider(thickness = 1.dp)
+    HorizontalDivider(thickness = 1.dp, color = Color.Gray)
     Developer(context = context, viewModel = viewModel)
 }
 
 @Composable
 fun Appearance(
     context: Context
-){
+) {
     CustomGrayTitle(text = "Appearance")
 
-    Column (
+    Column(
         verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin_half))
-    ){
+    ) {
         CustomActionRow(text = "Color theme",
             leftIcon = Icons.Outlined.Palette,
             onClick = {
@@ -139,11 +138,11 @@ fun Appearance(
 @Composable
 fun Permissions(
     context: Context
-){
+) {
     CustomGrayTitle(text = "Permissions")
-    Column (
+    Column(
         verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin_half))
-    ){
+    ) {
         CustomActionRow(text = "Notifications",
             leftIcon = Icons.Outlined.Notifications,
             onClick = {
@@ -163,9 +162,9 @@ fun Permissions(
 @Composable
 fun AboutTheApp(
     context: Context
-){
+) {
     CustomGrayTitle(text = "About the app")
-    Column (
+    Column(
         verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin_half))
     ) {
         CustomActionRow(text = "About the app",
@@ -200,16 +199,19 @@ fun AboutTheApp(
 fun Developer(
     context: Context,
     viewModel: SettingsViewModel
-){
+) {
     CustomGrayTitle(text = "Developer settings")
-    Column (
+    Column(
         verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin_half))
     ) {
         CustomActionRow(text = "Delete shared preferences data",
             leftIcon = Icons.Outlined.Delete,
             onClick = {
                 // clear shared preferences from each key defined in the names file
-                val sp: SharedPreferences = context.getSharedPreferences(SharedPreferencesNames.NAME_USERS, Context.MODE_PRIVATE)
+                val sp: SharedPreferences = context.getSharedPreferences(
+                    SharedPreferencesNames.NAME_USERS,
+                    Context.MODE_PRIVATE
+                )
                 sp.edit().clear().apply()
 
                 Toast.makeText(context, "Shared preferences cleared", Toast.LENGTH_SHORT).show()
@@ -223,26 +225,34 @@ fun Developer(
                 // get all
                 db.collection(FirebaseNames.COLLECTION_CHATS)
                     .get()
-                    .addOnCompleteListener{ task ->
-                        if (task.isSuccessful){
+                    .addOnCompleteListener { task ->
+                        if (task.isSuccessful) {
                             // delete each reference of the collection
                             val batch = db.batch()
-                            for ((_, item) in task.result.withIndex()){
+                            for ((_, item) in task.result.withIndex()) {
                                 batch.delete(item.reference)
                             }
 
                             // commit the batch
-                            batch.commit().addOnCompleteListener{ result ->
-                                if (result.isSuccessful){
-                                    Toast.makeText(context, "Deleted chat successfully", Toast.LENGTH_SHORT).show()
+                            batch.commit().addOnCompleteListener { result ->
+                                if (result.isSuccessful) {
+                                    Toast.makeText(
+                                        context,
+                                        "Deleted chat successfully",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
                                 } else {
-                                    Toast.makeText(context, "Delete chat failed", Toast.LENGTH_SHORT).show()
+                                    Toast.makeText(
+                                        context,
+                                        "Delete chat failed",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
                                 }
                             }
                         } else {
                             Toast.makeText(context, "Delete chat failed", Toast.LENGTH_SHORT).show()
                         }
-                }
+                    }
             }
         )
 
@@ -273,7 +283,6 @@ fun Developer(
                 context.startActivity(i)
             }
         )
-
 
 
     }

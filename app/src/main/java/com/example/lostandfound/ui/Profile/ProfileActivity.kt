@@ -271,7 +271,7 @@ fun AccountDetails(
             onTextChanged = {viewModel.onFirstNameChanged(it)},
         )
 
-        HorizontalDivider(thickness = 1.dp)
+        HorizontalDivider(thickness = 1.dp, color = Color.Gray)
 
         // last name field
         CustomEditText(fieldLabel = "Last name",
@@ -281,7 +281,7 @@ fun AccountDetails(
             onTextChanged = {viewModel.onLastNameChanged(it)}
         )
 
-        HorizontalDivider(thickness = 1.dp)
+        HorizontalDivider(thickness = 1.dp, color = Color.Gray)
     }
 }
 
@@ -307,7 +307,7 @@ fun Actions(
             leftIcon = Icons.AutoMirrored.Outlined.Logout
         )
 
-        HorizontalDivider(thickness = 1.dp)
+        HorizontalDivider(thickness = 1.dp, color = Color.Gray)
 
         // change password
         CustomActionRow(
@@ -316,7 +316,7 @@ fun Actions(
             leftIcon = Icons.Outlined.Lock
         )
 
-        HorizontalDivider(thickness = 1.dp)
+        HorizontalDivider(thickness = 1.dp, color = Color.Gray)
 
         // disable account
         CustomActionRow(
@@ -325,7 +325,7 @@ fun Actions(
             leftIcon = Icons.Outlined.ErrorOutline,
             tint = Color.Red
         )
-        HorizontalDivider(thickness = 1.dp)
+        HorizontalDivider(thickness = 1.dp, color = Color.Gray)
     }
 }
 

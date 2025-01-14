@@ -280,7 +280,7 @@ fun FirstAndLastNameFields(
             onTextChanged = {viewModel.onFirstNameChanged(it)},
         )
 
-        HorizontalDivider(thickness = 1.dp)
+        HorizontalDivider(thickness = 1.dp, color = Color.Gray)
 
         // last name field
         CustomEditText(fieldLabel = "Last name",
@@ -290,7 +290,7 @@ fun FirstAndLastNameFields(
             onTextChanged = {viewModel.onLastNameChanged(it)}
         )
 
-        HorizontalDivider(thickness = 1.dp)
+        HorizontalDivider(thickness = 1.dp, color = Color.Gray)
     }
 }
 
