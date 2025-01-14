@@ -1,13 +1,19 @@
 package com.example.lostandfound.FirebaseManagers
 
+import android.widget.Toast
 import com.example.lostandfound.Data.FirebaseNames
 import com.example.lostandfound.FirebaseManagers.FirestoreManager.Callback
 import com.example.lostandfound.Utility.DateTimeManager
+import com.google.firebase.firestore.FirebaseFirestore
 
 object NotificationManager {
 
     interface NotificationSendCallback{
         fun onComplete(result: Boolean)  // true if successful, false if fails
+    }
+
+    interface NotificationUpdateCallback{
+        fun onComplete(result: Boolean)
     }
 
     // method to send type 0 notification to the target user
@@ -134,5 +140,35 @@ object NotificationManager {
                 }
             }
         )
+    }
+
+    // function to mark all notifications as read (isRead = true)
+    // return true if the operation is successful (Even when all are read), false otherwise
+    fun markAllNotificationsAsRead(userID: String, callback: NotificationUpdateCallback){
+        val db = FirebaseFirestore.getInstance()
+        // get all notifications of the current user
+        db.collection(FirebaseNames.COLLECTION_NOTIFICATIONS)
+            .whereEqualTo(FirebaseNames.NOTIFICATION_USER_ID, FirebaseUtility.getUserID())
+            .get()
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    // mark each reference of the notification to be read
+                    val batch = db.batch()
+                    for ((_, item) in task.result.withIndex()) {
+                        batch.update(item.reference, FirebaseNames.NOTIFICATION_IS_READ, true)
+                    }
+
+                    // commit the batch
+                    batch.commit().addOnCompleteListener { result ->
+                        if (result.isSuccessful) {
+                            callback.onComplete(true)
+                        } else {
+                            callback.onComplete(false)
+                        }
+                    }
+                } else {
+                    callback.onComplete(false)
+                }
+            }
     }
 }
