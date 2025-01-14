@@ -2,6 +2,7 @@ package com.example.lostandfound.ui.Notifications
 
 import android.content.Context
 import android.content.Intent
+import android.media.session.PlaybackState.CustomAction
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
@@ -46,6 +47,7 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.lostandfound.CustomElements.BackToolbar
+import com.example.lostandfound.CustomElements.CustomActionText
 import com.example.lostandfound.CustomElements.CustomCenterText
 import com.example.lostandfound.CustomElements.CustomCenteredProgressbar
 import com.example.lostandfound.CustomElements.CustomChatCard
@@ -54,7 +56,9 @@ import com.example.lostandfound.Data.Claim
 import com.example.lostandfound.Data.FirebaseNames
 import com.example.lostandfound.Data.IntentExtraNames
 import com.example.lostandfound.Data.statusColor
+import com.example.lostandfound.FirebaseManagers.FirebaseUtility
 import com.example.lostandfound.FirebaseManagers.ItemManager
+import com.example.lostandfound.FirebaseManagers.NotificationManager
 import com.example.lostandfound.R
 import com.example.lostandfound.ui.ChatInbox.loadMessages
 import com.example.lostandfound.ui.Profile.ProfileViewModel
@@ -102,14 +106,28 @@ fun NotificationsScreen(activity: ComponentActivity, viewModel: NotificationsVie
                         .fillMaxWidth()
                         .padding(paddingValues = innerPadding)
                 ) {
-                    // includes the top tab bar and the main content
-                    Tabs(viewModel = viewModel)
+                    // Items tab
+                    val context: Context = LocalContext.current
+
+                    Box(
+                        modifier = Modifier
+                            .padding(dimensionResource(id = R.dimen.title_margin))
+                    ){
+                        if (viewModel.isItemsLoading.value){
+                            CustomCenteredProgressbar()
+                        } else if (viewModel.itemsNotificationList.isEmpty()){
+                            CustomCenterText(text = "You have no notifications.")
+                        } else {
+                            Items(context = context, viewModel = viewModel)
+                        }
+                    }
                 }
             }
         }
     }
 }
 
+/*
 @Composable
 fun Tabs(viewModel: NotificationsViewModel){
     val context: Context = LocalContext.current
@@ -248,34 +266,71 @@ fun Tabs(viewModel: NotificationsViewModel){
     }
 }
 
+ */
+
 @Composable
 fun Items(
     context: Context,
     viewModel: NotificationsViewModel
 ){
-    LazyColumn(
-        // it is assigned all the remaining height from the MainContent() composable
-        modifier = Modifier
-            .fillMaxSize(),
+    Column (
         verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin))
-    ) {
+    ){
+        // a text for marking all notifications as read
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.End
+        ){
+            CustomActionText(
+                text = "Mark all as read",
+                onClick = {
+                    NotificationManager.markAllNotificationsAsRead(
+                        FirebaseUtility.getUserID(),
+                        object: NotificationManager.NotificationUpdateCallback{
+                            override fun onComplete(result: Boolean) {
+                                if (!result){
+                                    Toast.makeText(context, "Failed to mark all notifications as read", Toast.LENGTH_SHORT).show()
+                                    return
+                                }
+
+                                // do nothing when success
+                            }
+                        }
+                    )
+                }
+            )
+        }
+
+
+        LazyColumn(
+                // it is assigned all the remaining height from the MainContent() composable
+                modifier = Modifier
+                    .fillMaxSize(),
+        verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin))
+        ) {
         // for each preview in the view model, display it
         items(viewModel.itemsNotificationList) { notification ->
             // display different notifications type
             val type = (notification[FirebaseNames.NOTIFICATION_TYPE] as Long).toInt()
             val timeStamp = notification[FirebaseNames.NOTIFICATION_TIMESTAMP] as Long
+            val notificationID = notification[FirebaseNames.NOTIFICATION_ID].toString()
+            val isRead = notification[FirebaseNames.NOTIFICATION_IS_READ] as Boolean
 
             when(type){
                 0 -> CustomNotificationItemPreview(
                     type = 0,
+                    notificationID = notificationID,
                     timestamp = timeStamp,
+                    isRead = isRead,
                     onClick = {
 
                     }
                 )
                 1 -> CustomNotificationItemPreview(
                     type = 1,
+                    notificationID = notificationID,
                     timestamp = timeStamp,
+                    isRead = isRead,
                     onClick = {
                         val claimID = notification[FirebaseNames.NOTIFICATION_CLAIM_ID] as String
 
@@ -297,7 +352,9 @@ fun Items(
                 )
                 2 -> CustomNotificationItemPreview(
                     type = 2,
+                    notificationID = notificationID,
                     timestamp = timeStamp,
+                    isRead = isRead,
                     onClick = {
 
                     }
@@ -305,7 +362,9 @@ fun Items(
                 3 -> {
                     CustomNotificationItemPreview(
                         type = 3,
+                        notificationID = notificationID,
                         timestamp = timeStamp,
+                        isRead = isRead,
                         onClick = {
                             val claimID = notification[FirebaseNames.NOTIFICATION_CLAIM_ID] as String
 
@@ -329,6 +388,9 @@ fun Items(
             }
         }
     }
+    }
+
+
 }
 
 @Composable
