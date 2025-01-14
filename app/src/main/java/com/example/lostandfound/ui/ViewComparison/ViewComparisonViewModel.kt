@@ -34,7 +34,7 @@ class ViewComparisonViewModel : ViewModel() {
     var foundItemData = FoundItem()
 
     // default claim item for the lost item placeholder
-    var claim = Claim()
+    var claim = Claim()  // used to check whether the found item is the claimed item of the lost item
 
     // username used to display the found user, only that is needed
     var foundUser = User()

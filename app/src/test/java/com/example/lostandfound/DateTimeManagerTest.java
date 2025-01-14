@@ -2,6 +2,7 @@ package com.example.lostandfound;
 
 import static com.example.lostandfound.Utility.DateTimeManager.getCurrentEpochTime;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import com.example.lostandfound.Utility.DateTimeManager;
 
@@ -61,6 +62,6 @@ public class DateTimeManagerTest {
     @Test
     public void testGetChatTimeDescription(){
         long currentEpoch = getCurrentEpochTime();
-        assertEquals("A day ago", DateTimeManager.getDescription(currentEpoch - 86400*1-300));
+        assertEquals("A day ago", DateTimeManager.getChatTimeDescription(currentEpoch - 86400*1-300));
     }
 }

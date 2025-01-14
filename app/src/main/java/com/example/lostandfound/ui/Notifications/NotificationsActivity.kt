@@ -140,7 +140,18 @@ fun Tabs(viewModel: NotificationsViewModel){
                 // properties of a tab
                 Tab(
                     selected = isSelected,
-                    onClick = { selectedTabIndex = index },   // change the selected index when clicked
+                    onClick = {
+                        selectedTabIndex = index  // change the selected index when clicked
+
+                        // depending on the index, turn off its unread button
+                        if (index == 0){
+                            viewModel.isMatchingItemsUnread.value = false
+                        }
+                        if (index == 1){
+                            viewModel.isMessagesUnread.value = false
+                        }
+
+                              },
                     text = {
                         Row (
                             verticalAlignment = Alignment.CenterVertically,
@@ -222,5 +233,5 @@ fun Messages(
     viewModel: NotificationsViewModel
 ) {
     Text(text = "Messages")
-    
+
 }
