@@ -12,13 +12,16 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.outlined.ArrowForward
 import androidx.compose.material.icons.filled.Circle
+import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -38,6 +41,7 @@ import coil3.compose.rememberAsyncImagePainter
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.example.lostandfound.Data.ChatInboxPreview
+import com.example.lostandfound.Data.Claim
 import com.example.lostandfound.Data.ClaimPreview
 import com.example.lostandfound.Data.FirebaseNames
 import com.example.lostandfound.Data.FoundItem
@@ -52,6 +56,7 @@ import com.example.lostandfound.R
 import com.example.lostandfound.Utility.DateTimeManager
 import com.example.lostandfound.Utility.ImageManager
 import com.example.lostandfound.ui.ChatInbox.ChatInboxActivity
+import com.example.lostandfound.ui.ViewComparison.ViewComparisonActivity
 import com.example.lostandfound.ui.theme.ComposeTheme
 import com.example.lostandfound.ui.theme.Typography
 
@@ -71,6 +76,13 @@ fun Preview() {
             lastMessageTimestamp = 829198219L
         ))
 
+         */
+
+        /*
+        CustomNotificationNewMatchingItem(null
+            LostItem(), FoundItem(), 24892489L
+        )
+        
          */
     }
 }
@@ -557,4 +569,109 @@ fun CustomChatInboxPreview(
         }
 
     }
+}
+
+@Composable
+fun CustomNotificationNewMatchingItem(
+    context: Context,
+    lostItem: LostItem,
+    foundItem: FoundItem,
+    timestamp: Long
+){
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .border(
+                width = 1.dp,
+                color = androidx.compose.ui.graphics.Color.Gray,
+                shape = RoundedCornerShape(
+                    dimensionResource(id = R.dimen.corner_radius_small)
+                )
+            )
+            .padding(dimensionResource(id = R.dimen.content_margin))
+            .clickable {
+                // launch view comparison activity (As if clicked from search activity)
+                val intent: Intent = Intent(context, ViewComparisonActivity::class.java)
+
+                // pass both the lost item and found item
+                intent.putExtra(
+                    IntentExtraNames.INTENT_LOST_ID,
+                    lostItem
+                )
+                intent.putExtra(
+                    IntentExtraNames.INTENT_FOUND_ID,
+                    foundItem
+                )
+
+                // also pass the claim item of the lost item
+                intent.putExtra(
+                    IntentExtraNames.INTENT_CLAIM_ITEM,
+                    Claim()   // the lost item will not have any claim item associated with it (i.e. status 1 or 2), otherwise this notif wont appear
+                )
+                context.startActivity(intent)
+            }
+
+    ){
+        Row (
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin)),
+            verticalAlignment = Alignment.Top
+
+        ){
+            Icon(
+                imageVector = Icons.Outlined.Search,
+                contentDescription = "New matching item",
+                tint = MaterialTheme.colorScheme.onPrimaryContainer,
+                modifier = Modifier.size(dimensionResource(id = R.dimen.image_button_size))
+            )
+
+            Column(
+            ){
+                Text(
+                    text = "New matching item found!",
+                    style = Typography.titleMedium,
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.onBackground,
+                )
+
+                Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.content_margin_half)))
+
+                Text(
+                    text = "Click to view comparison against your lost item.",
+                    style = Typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onBackground,
+                )
+
+                Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.content_margin)))
+
+
+                // show the time of the notification
+                Row {
+                    Text(
+                        text = DateTimeManager.dateTimeToString(timestamp),
+                        style = Typography.bodyMedium,
+                        color = Color.Gray,
+                        modifier = Modifier.weight(1f)
+                    )
+
+                    Icon(
+                        imageVector = Icons.AutoMirrored.Outlined.ArrowForward,
+                        contentDescription = "View",
+                        tint = Color.Gray,
+                        modifier = Modifier.size(24.dp),
+                    )
+                }
+
+            }
+
+        }
+    }
+
+}
+
+@Composable
+fun CustomNotificationMessagePreview(
+
+){
+
 }
