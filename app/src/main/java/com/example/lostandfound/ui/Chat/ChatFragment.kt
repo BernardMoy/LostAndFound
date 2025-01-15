@@ -70,9 +70,6 @@ class ChatFragment : Fragment() {
             }
         }
 
-        // refresh the chat inbox
-        refreshChatInboxes(context = requireContext(), viewModel = viewModel)
-
         return view
     }
 
@@ -81,6 +78,9 @@ class ChatFragment : Fragment() {
 
         // update the user's log in status
         isLoggedIn.value = FirebaseUtility.isUserLoggedIn()
+
+        // refresh the chat inbox
+        refreshChatInboxes(context = requireContext(), viewModel = viewModel)
     }
 }
 
@@ -127,10 +127,10 @@ fun ChatInboxes(
             viewModel.chatInboxPreviewList
 
         ) { chatInboxPreview ->
-
+            /*
             // make the visible state initially be false, and become true when loaded
             val visibleState = remember {
-                MutableTransitionState(false).apply { targetState = true }
+                MutableTransitionState(false) .apply { targetState = true }
             }
 
             // display each preview with animation, also display the same animation when reloaded
@@ -144,6 +144,13 @@ fun ChatInboxes(
                     chatInboxPreview = chatInboxPreview
                 )
             }
+
+             */
+
+            CustomChatInboxPreview(
+                context = context,
+                chatInboxPreview = chatInboxPreview
+            )
 
             HorizontalDivider(thickness = 1.dp, color = Color.Gray)
         }
