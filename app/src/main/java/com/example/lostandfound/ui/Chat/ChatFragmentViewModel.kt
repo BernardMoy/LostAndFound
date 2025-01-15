@@ -61,17 +61,18 @@ class ChatFragmentViewModel : ViewModel() {
                         return@addSnapshotListener
                     }
 
+                    // clear the list before reloading
+                    chatInboxPreviewList.clear()
+
                     for (documentChange in snapshot.documentChanges) {
                         // listen for new messages
-                        if (documentChange.type == DocumentChange.Type.ADDED) {
-
-                            // clear the list
-                            chatInboxPreviewList.clear()
+                        if (documentChange.type == DocumentChange.Type.ADDED
+                            || documentChange.type == DocumentChange.Type.MODIFIED) {
 
                             // the recipient of the chat inbox is the partipant in the participants array
                             // that does not equal to the current user, given that a user cannot chat with themselves.
                             val participants =
-                                documentChange.document[FirebaseNames.CHAT_INBOX_PARTICIPANTS] as Array<*>
+                                documentChange.document[FirebaseNames.CHAT_INBOX_PARTICIPANTS] as List<*>
                             val inboxRecipientUserID =
                                 (if (participants[0] != FirebaseUtility.getUserID()) participants[0] else participants[1]).toString()
 
