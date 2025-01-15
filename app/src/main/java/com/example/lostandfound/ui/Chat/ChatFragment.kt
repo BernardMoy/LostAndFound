@@ -80,6 +80,7 @@ class ChatFragment : Fragment() {
         isLoggedIn.value = FirebaseUtility.isUserLoggedIn()
 
         // refresh the chat inbox
+        // here, refreshing includes updating whether the chat inbox's last message is read or not
         refreshChatInboxes(context = requireContext(), viewModel = viewModel)
     }
 }
