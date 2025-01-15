@@ -581,7 +581,8 @@ fun CustomChatInboxPreview(
                 Text(
                     text = previewMessageWithUser,
                     style = Typography.bodyMedium,
-                    color = Color.Gray
+                    color = Color.Gray,
+                    modifier = Modifier.weight(1f)  // fill remaining space to push dot to end
                 )
 
                 // display dot if the last message is unread and the last message is not sent by the current user
