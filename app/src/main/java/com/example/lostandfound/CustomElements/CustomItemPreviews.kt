@@ -513,10 +513,9 @@ fun CustomChatInboxPreview(
                 val intent: Intent = Intent(context, ChatInboxActivity::class.java)
                 intent.putExtra(
                     IntentExtraNames.INTENT_CHAT_USER,
-                    chatInboxPreview.recipientUser
-                )  // put the user
+                    chatInboxPreview.recipientUser  // put the user
+                )
                 context.startActivity(intent)
-
             }
             .padding(
                 vertical = dimensionResource(id = R.dimen.content_margin),
@@ -564,7 +563,7 @@ fun CustomChatInboxPreview(
             }
 
 
-            // last message
+            // last message and red dot
             // trim the message
             val previewMessage =
                 if (chatInboxPreview.lastMessage.text.length > 50) chatInboxPreview.lastMessage.text.substring(
@@ -572,13 +571,29 @@ fun CustomChatInboxPreview(
                     50
                 ) + "..."
                 else chatInboxPreview.lastMessage.text
-            Text(
-                text = previewMessage,
-                style = Typography.bodyMedium,
-                color = Color.Gray
-            )
-        }
 
+            Row (
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin_half))
+            ){
+                Text(
+                    text = previewMessage,
+                    style = Typography.bodyMedium,
+                    color = Color.Gray
+                )
+
+                // display dot if the last message is unread and the last message is not sent by the current user
+                if (chatInboxPreview.lastMessage.senderUserID != FirebaseUtility.getUserID() &&
+                    !chatInboxPreview.lastMessage.isReadByRecipient){
+                    Icon(
+                        imageVector = Icons.Filled.Circle,
+                        tint = MaterialTheme.colorScheme.error,
+                        contentDescription = "Unread",
+                        modifier = Modifier.width(dimensionResource(id = R.dimen.content_margin))
+                    )
+                }
+            }
+        }
     }
 }
 
@@ -602,9 +617,9 @@ fun CustomNotificationItemPreview(
                     notificationID,
                     FirebaseNames.NOTIFICATION_IS_READ,
                     true,
-                    object: Callback<Boolean>{
+                    object : Callback<Boolean> {
                         override fun onComplete(result: Boolean) {
-                            if (result){
+                            if (result) {
                                 // perform on click after modifying the db
                                 onClick()
                             }
