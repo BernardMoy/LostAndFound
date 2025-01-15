@@ -572,11 +572,25 @@ fun CustomChatInboxPreview(
                     50
                 ) + "..."
                 else chatInboxPreview.lastMessage
-            Text(
-                text = previewMessage,
-                style = Typography.bodyMedium,
-                color = Color.Gray
-            )
+
+            // last message and the red dot
+            Row {
+                Text(
+                    text = previewMessage,
+                    style = Typography.bodyMedium,
+                    color = Color.Gray,
+                    modifier = Modifier.weight(1f)
+                )
+
+                if (chatInboxPreview.hasUnread){
+                    Icon(
+                        imageVector = Icons.Filled.Circle,
+                        tint = MaterialTheme.colorScheme.error,
+                        contentDescription = "Unread",
+                        modifier = Modifier.width(dimensionResource(id = R.dimen.content_margin))
+                    )
+                }
+            }
         }
 
     }
@@ -602,9 +616,9 @@ fun CustomNotificationItemPreview(
                     notificationID,
                     FirebaseNames.NOTIFICATION_IS_READ,
                     true,
-                    object: Callback<Boolean>{
+                    object : Callback<Boolean> {
                         override fun onComplete(result: Boolean) {
-                            if (result){
+                            if (result) {
                                 // perform on click after modifying the db
                                 onClick()
                             }

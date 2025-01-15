@@ -39,6 +39,7 @@ import com.example.lostandfound.ui.Notifications.NotificationsActivity;
 import com.example.lostandfound.ui.Profile.ProfileActivity;
 import com.example.lostandfound.ui.ReportIssue.ReportIssueActivity;
 import com.example.lostandfound.ui.Settings.SettingsActivity;
+import com.google.android.material.badge.BadgeDrawable;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.imageview.ShapeableImageView;
 import com.google.android.material.navigation.NavigationView;
@@ -91,6 +92,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_main);
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(binding.navView, navController);
+
+        // add badge to bottom nav view for the chat icon
+        BadgeDrawable badgeDrawable = navView.getOrCreateBadge(R.id.navigation_chat);
+        badgeDrawable.setBackgroundColor(ContextCompat.getColor(this, R.color.error));
+
 
 
         // set the menu button to open up the drawer
