@@ -572,12 +572,14 @@ fun CustomChatInboxPreview(
                 ) + "..."
                 else chatInboxPreview.lastMessage.text
 
+            val previewMessageWithUser = if (chatInboxPreview.lastMessage.senderUserID == FirebaseUtility.getUserID()) "You: $previewMessage" else previewMessage
+
             Row (
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin_half))
             ){
                 Text(
-                    text = previewMessage,
+                    text = previewMessageWithUser,
                     style = Typography.bodyMedium,
                     color = Color.Gray
                 )

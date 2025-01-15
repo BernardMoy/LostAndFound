@@ -3,10 +3,16 @@ package com.example.lostandfound.FirebaseManagers
 import android.util.Log
 import com.example.lostandfound.Data.ChatMessage
 import com.example.lostandfound.Data.FirebaseNames
+import com.example.lostandfound.FirebaseManagers.FirestoreManager.Callback
+import com.example.lostandfound.Utility.DateTimeManager
 import com.google.firebase.firestore.FirebaseFirestore
 
 interface ChatInboxUpdateCallback {
     fun onComplete(result: Boolean)
+}
+
+interface ChatMessageCallback{
+    fun onComplete(result: ChatMessage?)  // return chat message or null if failed
 }
 
 object ChatInboxManager {
@@ -34,7 +40,8 @@ object ChatInboxManager {
                     // create data
                     val data = mapOf(
                         FirebaseNames.CHAT_INBOX_PARTICIPANTS to sortedParticipants,
-                        FirebaseNames.CHAT_INBOX_LAST_MESSAGE_ID to lastMessageID
+                        FirebaseNames.CHAT_INBOX_LAST_MESSAGE_ID to lastMessageID,
+                        FirebaseNames.CHAT_INBOX_UPDATED_TIMESTAMP to DateTimeManager.getCurrentEpochTime()
                     )
 
                     db.collection(FirebaseNames.COLLECTION_CHAT_INBOXES)
@@ -70,5 +77,33 @@ object ChatInboxManager {
                 Log.d("Chat inbox update error", e.message ?: "")
                 callback.onComplete(false)
             }
+    }
+
+    fun getChatMessageFromMessageId(messageID: String, callback: ChatMessageCallback){
+        val firestoreManager = FirestoreManager()
+        firestoreManager.get(
+            FirebaseNames.COLLECTION_CHATS,
+            messageID,
+            object : Callback<Map<String, Any>>{
+                override fun onComplete(result: Map<String, Any>?) {
+                    if (result.isNullOrEmpty()){
+                        callback.onComplete(null)
+                        return
+                    }
+
+                    val chatMessage = ChatMessage(
+                        messageID = messageID,
+                        senderUserID = result[FirebaseNames.CHAT_SENDER_USER_ID] as String,
+                        recipientUserID = result[FirebaseNames.CHAT_RECIPIENT_USER_ID] as String,
+                        text = result[FirebaseNames.CHAT_CONTENT] as String,
+                        isReadByRecipient = result[FirebaseNames.CHAT_IS_READ_BY_RECIPIENT] as Boolean,
+                        timestamp = result[FirebaseNames.CHAT_TIMESTAMP] as Long
+                    )
+
+                    callback.onComplete(chatMessage)
+                }
+
+            }
+        )
     }
 }
