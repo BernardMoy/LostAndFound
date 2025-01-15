@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModel
 import com.example.lostandfound.Data.ChatInboxPreview
 import com.example.lostandfound.Data.FirebaseNames
 import com.example.lostandfound.Data.User
+import com.example.lostandfound.FirebaseManagers.ChatInboxManager
 import com.example.lostandfound.FirebaseManagers.FirebaseUtility
 import com.example.lostandfound.FirebaseManagers.UserManager
 import com.google.firebase.firestore.DocumentChange
@@ -39,10 +40,9 @@ class ChatFragmentViewModel : ViewModel(){
         listenerRegistration?.remove()
 
         // assign new listener
-        listenerRegistration = db.collection(FirebaseNames.COLLECTION_CHATS)
-            .whereArrayContains(FirebaseNames.CHAT_FROM_TO, FirebaseUtility.getUserID())
-            .orderBy(FirebaseNames.CHAT_TIMESTAMP, Query.Direction.DESCENDING)
-            .limit(1)  // get the latest ChatMessage object
+        listenerRegistration = db.collection(FirebaseNames.COLLECTION_CHAT_INBOXES)
+            .whereArrayContains(FirebaseNames.CHAT_INBOX_PARTICIPANTS, FirebaseUtility.getUserID())
+            .orderBy(FirebaseNames.CHAT_INBOX_UPDATED_TIMESTAMP, Query.Direction.DESCENDING)
             .addSnapshotListener { snapshot, error ->       // listen for real time updates
                 if (error != null) {
                     Log.d("Snapshot error", error.message.toString())
@@ -66,9 +66,6 @@ class ChatFragmentViewModel : ViewModel(){
                             // clear the list
                             chatInboxPreviewList.clear()
 
-                            // Log.d("NEW MSG", documentChange.document[FirebaseNames.CHAT_CONTENT].toString())
-
-
                             // the recipient user id is either the sender or recipient OF THE MESSAGE,
                             // and equal to the one that isnt the current user.
                             val messageSenderUserID = documentChange.document[FirebaseNames.CHAT_SENDER_USER_ID].toString()
@@ -77,7 +74,6 @@ class ChatFragmentViewModel : ViewModel(){
                                                     else messageRecipientUserID
 
                             // get the user object from id
-                            /*
                             UserManager.getUserFromId(newRecipientUserID, object: UserManager.UserCallback{
                                 override fun onComplete(user: User?) {
 
@@ -86,10 +82,9 @@ class ChatFragmentViewModel : ViewModel(){
                                         return
                                     }
 
-                                    // get the last message and last message timestamp
-                                    val newLastMessage = if (messageSenderUserID == FirebaseUtility.getUserID()) "You: " + documentChange.document[FirebaseNames.CHAT_CONTENT].toString()
-                                                        else documentChange.document[FirebaseNames.CHAT_CONTENT].toString()
-                                    val newLastMessageTimestamp = documentChange.document[FirebaseNames.CHAT_TIMESTAMP] as Long
+                                    // get the chatMessage object from id
+                                    val lastMessageID = documentChange.document[FirebaseNames.CHAT_INBOX_LAST_MESSAGE_ID] 
+                                    ChatInboxManager.getChatMessageFromMessageId(documentChange.document[FirebaseNames.])
 
 
 
@@ -114,7 +109,6 @@ class ChatFragmentViewModel : ViewModel(){
                                 }
                             })
 
-                             */
                         }
                     }
                 }

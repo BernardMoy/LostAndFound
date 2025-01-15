@@ -62,6 +62,7 @@ public final class FirebaseNames {
     // for chat inbox whether the message is read or unread
     public static final String CHAT_INBOX_PARTICIPANTS = "participants";  // sorted by alphabetical order
     public static final String CHAT_INBOX_LAST_MESSAGE_ID = "last_message_id";
+    public static final String CHAT_INBOX_UPDATED_TIMESTAMP = "updated_timestamp";
 
     // for notifications
     public static final String NOTIFICATION_ID = "notification_id";
