@@ -73,7 +73,8 @@ class ChatInboxViewModel : ViewModel() {
                 chatUser.userID
             ),
             FirebaseNames.CHAT_CONTENT to typedText.value,
-            FirebaseNames.CHAT_TIMESTAMP to DateTimeManager.getCurrentEpochTime()
+            FirebaseNames.CHAT_TIMESTAMP to DateTimeManager.getCurrentEpochTime(),
+            FirebaseNames.CHAT_IS_READ_BY_RECIPIENT to false, // default false
         )
 
         // add the message content from typedText
@@ -123,7 +124,9 @@ class ChatInboxViewModel : ViewModel() {
                                 senderUserID = documentChange.document[FirebaseNames.CHAT_SENDER_USER_ID].toString(),
                                 recipientUserID = documentChange.document[FirebaseNames.CHAT_RECIPIENT_USER_ID].toString(),
                                 text = documentChange.document[FirebaseNames.CHAT_CONTENT].toString(),
-                                timestamp = documentChange.document[FirebaseNames.CHAT_TIMESTAMP] as Long
+                                timestamp = documentChange.document[FirebaseNames.CHAT_TIMESTAMP] as Long,
+                                isReadByRecipient = documentChange.document[FirebaseNames.CHAT_IS_READ_BY_RECIPIENT] as Boolean
+
                             )
 
                             // add the chat message to list
