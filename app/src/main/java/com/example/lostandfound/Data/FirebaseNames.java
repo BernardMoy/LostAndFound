@@ -57,11 +57,12 @@ public final class FirebaseNames {
     public static final String CHAT_FROM_TO = "from_to";  // an array for storing [from user id, to user id]
     public static final String CHAT_CONTENT = "chat_content";
     public static final String CHAT_TIMESTAMP = "timestamp";
+    public static final String CHAT_IS_READ_BY_RECIPIENT = "is_read_by_recipient";
 
     // for chat inbox whether the message is read or unread
-    public static final String CHAT_INBOX_SENDER_USER_ID = "sender_user_id";
-    public static final String CHAT_INBOX_RECIPIENT_USER_ID = "recipient_user_id";
-    public static final String CHAT_INBOX_IS_UNREAD = "is_unread";
+    public static final String CHAT_INBOX_PARTICIPANTS = "participants";  // sorted by alphabetical order
+    public static final String CHAT_INBOX_LAST_MESSAGE_ID = "last_message_id";
+    public static final String CHAT_INBOX_UPDATED_TIMESTAMP = "updated_timestamp";
 
     // for notifications
     public static final String NOTIFICATION_ID = "notification_id";

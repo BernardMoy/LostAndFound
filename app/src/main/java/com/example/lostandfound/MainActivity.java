@@ -39,6 +39,7 @@ import com.example.lostandfound.ui.Notifications.NotificationsActivity;
 import com.example.lostandfound.ui.Profile.ProfileActivity;
 import com.example.lostandfound.ui.ReportIssue.ReportIssueActivity;
 import com.example.lostandfound.ui.Settings.SettingsActivity;
+import com.google.android.material.badge.BadgeDrawable;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.imageview.ShapeableImageView;
 import com.google.android.material.navigation.NavigationView;
@@ -91,6 +92,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_main);
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(binding.navView, navController);
+
+        // set up a badge (Red dot) for the chat icon
+        BadgeDrawable badgeDrawable = navView.getOrCreateBadge(R.id.navigation_chat);
+        badgeDrawable.setBackgroundColor(ContextCompat.getColor(this, R.color.error));
+
+        // initially not visible
+        badgeDrawable.setVisible(false);
 
 
         // set the menu button to open up the drawer
@@ -263,6 +271,28 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                             binding.notificationsDot.setVisibility(View.VISIBLE);
                         } else {
                             binding.notificationsDot.setVisibility(View.GONE);
+                        }
+                    }
+                });
+
+        // Display the bottom nav bar chat icon red dot
+        // based on whether there are messages sent towards the current user and is unread
+        db.collection(FirebaseNames.COLLECTION_CHATS)
+                .whereEqualTo(FirebaseNames.CHAT_RECIPIENT_USER_ID, FirebaseUtility.getUserID())
+                .whereEqualTo(FirebaseNames.CHAT_IS_READ_BY_RECIPIENT, false)
+                .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                    @Override
+                    public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
+                        if (error != null){
+                            Toast.makeText(MainActivity.this, "Failed to listen for chats", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+
+                        // check if the query is not empty
+                        if (value != null && !value.isEmpty()){
+                            badgeDrawable.setVisible(true);
+                        } else {
+                            badgeDrawable.setVisible(false);
                         }
                     }
                 });
