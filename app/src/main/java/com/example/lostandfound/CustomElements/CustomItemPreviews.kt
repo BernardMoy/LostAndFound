@@ -557,7 +557,7 @@ fun CustomChatInboxPreview(
                 )
 
                 Text(
-                    text = DateTimeManager.getChatTimeDescription(chatInboxPreview.lastMessageTimestamp),
+                    text = DateTimeManager.getChatTimeDescription(chatInboxPreview.lastMessage.timestamp),
                     style = Typography.bodyMedium,
                     color = Color.Gray,
                 )
@@ -567,11 +567,11 @@ fun CustomChatInboxPreview(
             // last message
             // trim the message
             val previewMessage =
-                if (chatInboxPreview.lastMessage.length > 50) chatInboxPreview.lastMessage.substring(
+                if (chatInboxPreview.lastMessage.text.length > 50) chatInboxPreview.lastMessage.text.substring(
                     0,
                     50
                 ) + "..."
-                else chatInboxPreview.lastMessage
+                else chatInboxPreview.lastMessage.text
             Text(
                 text = previewMessage,
                 style = Typography.bodyMedium,

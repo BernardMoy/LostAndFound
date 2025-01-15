@@ -9,6 +9,8 @@ import androidx.lifecycle.ViewModel
 import com.example.lostandfound.Data.ChatMessage
 import com.example.lostandfound.Data.FirebaseNames
 import com.example.lostandfound.Data.User
+import com.example.lostandfound.FirebaseManagers.ChatInboxManager
+import com.example.lostandfound.FirebaseManagers.ChatInboxUpdateCallback
 import com.example.lostandfound.FirebaseManagers.FirebaseUtility
 import com.example.lostandfound.FirebaseManagers.FirestoreManager
 import com.example.lostandfound.FirebaseManagers.FirestoreManager.Callback
@@ -90,7 +92,18 @@ class ChatInboxViewModel : ViewModel() {
 
                     // success, then reset the typed text
                     typedText.value = ""
-                    callback.onComplete(true)
+
+                    // update the chat inbox data
+                    ChatInboxManager.updateChatInbox(
+                        FirebaseUtility.getUserID(),
+                        chatUser.userID,
+                        result,
+                        object: ChatInboxUpdateCallback{
+                            override fun onComplete(result: Boolean) {
+                                callback.onComplete(result)
+                            }
+                        }
+                    )
                 }
             }
         )
