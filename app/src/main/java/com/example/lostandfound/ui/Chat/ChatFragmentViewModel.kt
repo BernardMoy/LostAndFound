@@ -11,6 +11,7 @@ import com.example.lostandfound.Data.FirebaseNames
 import com.example.lostandfound.Data.User
 import com.example.lostandfound.FirebaseManagers.ChatInboxManager
 import com.example.lostandfound.FirebaseManagers.ChatMessageCallback
+import com.example.lostandfound.FirebaseManagers.ChatMessageManager
 import com.example.lostandfound.FirebaseManagers.FirebaseUtility
 import com.example.lostandfound.FirebaseManagers.UserManager
 import com.google.firebase.firestore.DocumentChange
@@ -69,7 +70,7 @@ class ChatFragmentViewModel : ViewModel() {
                         if (documentChange.type == DocumentChange.Type.ADDED
                             || documentChange.type == DocumentChange.Type.MODIFIED) {
 
-                            // the recipient of the chat inbox is the partipant in the participants array
+                            // the recipient of the chat inbox is the participant in the participants array
                             // that does not equal to the current user, given that a user cannot chat with themselves.
                             val participants =
                                 documentChange.document[FirebaseNames.CHAT_INBOX_PARTICIPANTS] as List<*>
@@ -89,7 +90,7 @@ class ChatFragmentViewModel : ViewModel() {
                                         // get the chatMessage object from id
                                         val lastMessageID =
                                             documentChange.document[FirebaseNames.CHAT_INBOX_LAST_MESSAGE_ID].toString()
-                                        ChatInboxManager.getChatMessageFromMessageId(
+                                        ChatMessageManager.getChatMessageFromMessageId(
                                             lastMessageID,
                                             object : ChatMessageCallback {
                                                 override fun onComplete(result: ChatMessage?) {

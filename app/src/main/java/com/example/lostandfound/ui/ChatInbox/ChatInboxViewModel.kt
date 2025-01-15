@@ -11,9 +11,11 @@ import com.example.lostandfound.Data.FirebaseNames
 import com.example.lostandfound.Data.User
 import com.example.lostandfound.FirebaseManagers.ChatInboxManager
 import com.example.lostandfound.FirebaseManagers.ChatInboxUpdateCallback
+import com.example.lostandfound.FirebaseManagers.ChatMessageManager
 import com.example.lostandfound.FirebaseManagers.FirebaseUtility
 import com.example.lostandfound.FirebaseManagers.FirestoreManager
 import com.example.lostandfound.FirebaseManagers.FirestoreManager.Callback
+import com.example.lostandfound.FirebaseManagers.UpdateMessageCallback
 import com.example.lostandfound.Utility.DateTimeManager
 import com.google.firebase.firestore.DocumentChange
 import com.google.firebase.firestore.FirebaseFirestore
@@ -132,18 +134,29 @@ class ChatInboxViewModel : ViewModel() {
                         // listen for added entries only
                         if (documentChange.type == DocumentChange.Type.ADDED) {
                             // create new chat message object
+                            val messageID = documentChange.document.id
+                            val isReadByRecipient = documentChange.document[FirebaseNames.CHAT_IS_READ_BY_RECIPIENT] as Boolean
+                            val messageSenderID = documentChange.document[FirebaseNames.CHAT_SENDER_USER_ID].toString()
+
                             val newChatMessage = ChatMessage(
-                                messageID = documentChange.document.id,
-                                senderUserID = documentChange.document[FirebaseNames.CHAT_SENDER_USER_ID].toString(),
+                                messageID = messageID,
+                                senderUserID = messageSenderID,
                                 recipientUserID = documentChange.document[FirebaseNames.CHAT_RECIPIENT_USER_ID].toString(),
                                 text = documentChange.document[FirebaseNames.CHAT_CONTENT].toString(),
                                 timestamp = documentChange.document[FirebaseNames.CHAT_TIMESTAMP] as Long,
-                                isReadByRecipient = documentChange.document[FirebaseNames.CHAT_IS_READ_BY_RECIPIENT] as Boolean
-
+                                isReadByRecipient = isReadByRecipient
                             )
 
                             // add the chat message to list
                             chatMessageList.add(newChatMessage)
+
+                            // if the message NOT sent by the current user and is not read, mark it as read
+                            if (messageSenderID != FirebaseUtility.getUserID() && !isReadByRecipient){
+                                ChatMessageManager.markChatAsRead(messageID, object: UpdateMessageCallback{
+                                    override fun onComplete(result: Boolean) {
+                                    }
+                                })
+                            }
                         }
                     }
                 }
