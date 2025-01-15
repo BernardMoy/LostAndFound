@@ -119,17 +119,31 @@ class ChatInboxViewModel : ViewModel() {
                         // listen for added entries only
                         if (documentChange.type == DocumentChange.Type.ADDED) {
                             // create new chat message object
+                            val messageID = documentChange.document.id
+                            val recipientUserID = documentChange.document[FirebaseNames.CHAT_RECIPIENT_USER_ID].toString()
+                            val isReadByRecipient = documentChange.document[FirebaseNames.CHAT_IS_READ_BY_RECIPIENT] as Boolean  // tell db to update only when this is false
+
                             val newChatMessage = ChatMessage(
-                                messageID = documentChange.document.id,
+                                messageID = messageID,
                                 senderUserID = documentChange.document[FirebaseNames.CHAT_SENDER_USER_ID].toString(),
-                                recipientUserID = documentChange.document[FirebaseNames.CHAT_RECIPIENT_USER_ID].toString(),
+                                recipientUserID = recipientUserID,
                                 text = documentChange.document[FirebaseNames.CHAT_CONTENT].toString(),
-                                isReadByRecipient =documentChange.document[FirebaseNames.CHAT_IS_READ_BY_RECIPIENT] as Boolean,
+                                isReadByRecipient = isReadByRecipient,
                                 timestamp = documentChange.document[FirebaseNames.CHAT_TIMESTAMP] as Long
                             )
 
                             // add the chat message to list
                             chatMessageList.add(newChatMessage)
+
+                            // mark the message as read from the database, if the current user is the recipient of the msg
+                            if (!isReadByRecipient && recipientUserID == FirebaseUtility.getUserID()){
+                                db.collection(FirebaseNames.COLLECTION_CHATS)
+                                    .document(messageID)
+                                    .update(FirebaseNames.CHAT_IS_READ_BY_RECIPIENT, true)
+                                    .addOnFailureListener { e ->
+                                        Log.d("NOTIFICATION UPDATE ERROR", "Error marking message as read")
+                                    }
+                            }
                         }
                     }
                 }
