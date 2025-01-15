@@ -77,6 +77,7 @@ class ChatFragmentViewModel : ViewModel(){
                                                     else messageRecipientUserID
 
                             // get the user object from id
+                            /*
                             UserManager.getUserFromId(newRecipientUserID, object: UserManager.UserCallback{
                                 override fun onComplete(user: User?) {
 
@@ -112,6 +113,8 @@ class ChatFragmentViewModel : ViewModel(){
                                     }
                                 }
                             })
+
+                             */
                         }
                     }
                 }
