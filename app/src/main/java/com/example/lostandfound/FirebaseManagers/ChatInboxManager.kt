@@ -11,10 +11,6 @@ interface ChatInboxUpdateCallback {
     fun onComplete(result: Boolean)
 }
 
-interface ChatMessageCallback{
-    fun onComplete(result: ChatMessage?)  // return chat message or null if failed
-}
-
 object ChatInboxManager {
 
     // given a chat message, CREATE OR UPDATE the chat inbox data
@@ -77,33 +73,5 @@ object ChatInboxManager {
                 Log.d("Chat inbox update error", e.message ?: "")
                 callback.onComplete(false)
             }
-    }
-
-    fun getChatMessageFromMessageId(messageID: String, callback: ChatMessageCallback){
-        val firestoreManager = FirestoreManager()
-        firestoreManager.get(
-            FirebaseNames.COLLECTION_CHATS,
-            messageID,
-            object : Callback<Map<String, Any>>{
-                override fun onComplete(result: Map<String, Any>?) {
-                    if (result.isNullOrEmpty()){
-                        callback.onComplete(null)
-                        return
-                    }
-
-                    val chatMessage = ChatMessage(
-                        messageID = messageID,
-                        senderUserID = result[FirebaseNames.CHAT_SENDER_USER_ID] as String,
-                        recipientUserID = result[FirebaseNames.CHAT_RECIPIENT_USER_ID] as String,
-                        text = result[FirebaseNames.CHAT_CONTENT] as String,
-                        isReadByRecipient = result[FirebaseNames.CHAT_IS_READ_BY_RECIPIENT] as Boolean,
-                        timestamp = result[FirebaseNames.CHAT_TIMESTAMP] as Long
-                    )
-
-                    callback.onComplete(chatMessage)
-                }
-
-            }
-        )
     }
 }
