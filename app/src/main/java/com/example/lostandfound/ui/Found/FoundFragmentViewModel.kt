@@ -62,6 +62,9 @@ class FoundFragmentViewModel : ViewModel(){
                     val resultSize = result.size
                     var fetchedItems = 0
 
+                    // initialise the itemData array with dummy variables of found items
+                    itemData.addAll(List(resultSize) { FoundItem() })
+
                     // if no result, return
                     // as the code below would not be executed
                     if (resultSize == 0){
@@ -70,7 +73,7 @@ class FoundFragmentViewModel : ViewModel(){
                     }
 
                     // for each retrieved item id, get their data and store that data into the itemData list
-                    result.forEach { itemID ->
+                    result.forEachIndexed { index, itemID ->
                         ItemManager.getFoundItemFromId(itemID, object: ItemManager.FoundItemCallback{
                             override fun onComplete(foundItem: FoundItem?) {
                                 if (foundItem == null){
@@ -78,16 +81,12 @@ class FoundFragmentViewModel : ViewModel(){
                                     return
                                 }
 
-                                // add the data to the list
-                                itemData.add(foundItem)
+                                // add the data to the list at the specified position
+                                itemData[index] = foundItem
                                 fetchedItems ++
 
                                 // return true when all items have been fetched
                                 if (fetchedItems == resultSize){
-                                    // sort the data
-                                    itemData.sortByDescending { key ->
-                                        key.timePosted
-                                    }
                                     callback.onComplete(true)
                                 }
                             }
