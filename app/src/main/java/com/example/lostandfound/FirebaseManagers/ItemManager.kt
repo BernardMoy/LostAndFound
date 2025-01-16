@@ -2,7 +2,6 @@ package com.example.lostandfound.FirebaseManagers
 
 import android.net.Uri
 import android.util.Log
-import com.example.lostandfound.Data.ChatMessage
 import com.example.lostandfound.Data.Claim
 import com.example.lostandfound.Data.ClaimPreview
 import com.example.lostandfound.Data.FirebaseNames
@@ -12,9 +11,7 @@ import com.example.lostandfound.FirebaseManagers.FirestoreManager.Callback
 import com.example.lostandfound.R
 import com.example.lostandfound.Utility.LocationManager
 import com.example.lostandfound.Utility.isMatch
-import com.google.firebase.Firebase
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.auth.User
 
 object ItemManager {
     interface LostItemCallback {
@@ -41,15 +38,13 @@ object ItemManager {
         fun onComplete(claim: Claim?)  // return the claim, or null if failed
     }
 
-    interface ClaimPreviewCallback{
+    interface ClaimPreviewCallback {
         fun onComplete(claimPreview: ClaimPreview?)  // return the claim preview or null if failed
     }
 
-    interface MatchCallback{
+    interface MatchCallback {
         fun onComplete(result: MutableList<FoundItem>?)
     }
-
-
 
 
     // method to get the lostitem as a LostItem object when given a lost item id
@@ -284,8 +279,8 @@ object ItemManager {
                                     //add the item to the list
                                     claimList.add(thisClaim)
 
-                                    fetchedItems ++
-                                    if (fetchedItems == claimListSize){
+                                    fetchedItems++
+                                    if (fetchedItems == claimListSize) {
                                         // return the list
                                         callback.onComplete(claimList)
                                     }
@@ -299,7 +294,7 @@ object ItemManager {
     }
 
     // get claim from claim id, used to access view claim from notifications
-    fun getClaimFromClaimId(claimID: String, callback: ClaimCallback){
+    fun getClaimFromClaimId(claimID: String, callback: ClaimCallback) {
         val firestoreManager = FirestoreManager()
 
         firestoreManager.get(
@@ -329,18 +324,18 @@ object ItemManager {
     }
 
     // method to get a ClaimPreview object given a Claim object
-    fun getClaimPreviewFromClaim(claimItem: Claim, callback: ClaimPreviewCallback){
+    fun getClaimPreviewFromClaim(claimItem: Claim, callback: ClaimPreviewCallback) {
         // get the lost item name and image
-        getLostItemFromId(claimItem.lostItemID, object: LostItemCallback{
+        getLostItemFromId(claimItem.lostItemID, object : LostItemCallback {
             override fun onComplete(lostItem: LostItem?) {
-                if (lostItem == null){
+                if (lostItem == null) {
                     callback.onComplete(null)
                     return
                 }
 
-                UserManager.getUserFromId(lostItem.userID, object: UserManager.UserCallback{
+                UserManager.getUserFromId(lostItem.userID, object : UserManager.UserCallback {
                     override fun onComplete(user: com.example.lostandfound.Data.User?) {
-                        if (user == null){
+                        if (user == null) {
                             callback.onComplete(null)
                             return
                         }
@@ -446,64 +441,67 @@ object ItemManager {
         lostItem: LostItem,
         callback: MatchCallback
 
-    ){
+    ) {
         val matchingItemList: MutableList<FoundItem> = mutableListOf()
 
         // extract all found items from the database
-        val firestoreManager = FirestoreManager()
+        val db = FirebaseFirestore.getInstance()
+        db.collection(FirebaseNames.COLLECTION_FOUND_ITEMS)
+            .whereNotEqualTo(
+                FirebaseNames.LOSTFOUND_USER,
+                lostItem.userID
+            )  // the found item user id cannot be equal to the lost item uid
+            .get()   // currently there are no orderby, they are done later
+            .addOnSuccessListener { result ->
 
-        firestoreManager.getAllIds(FirebaseNames.COLLECTION_FOUND_ITEMS,
-            object : FirestoreManager.Callback<List<String>> {
-                override fun onComplete(result: List<String>?) {
-                    // if result is null, fetching data failed
-                    if (result == null){
-                        callback.onComplete(null)
-                        return
-                    }
+                // get the total length of result
+                val resultSize = result.size()
+                var fetchedItems = 0
 
-                    // get the total length of result
-                    val resultSize = result.size
-                    var fetchedItems = 0
+                // if no result, return
+                // as the code below would not be executed
+                if (resultSize == 0) {
+                    callback.onComplete(matchingItemList)
+                    return@addOnSuccessListener
+                }
 
-                    // if no result, return
-                    // as the code below would not be executed
-                    if (resultSize == 0){
-                        callback.onComplete(matchingItemList)
-                        return
-                    }
+                // for each retrieved item id, get their data and store that data into the itemData list
+                result.forEachIndexed { index, querySnapshot ->
+                    // get the found item id
+                    val itemID = querySnapshot.id
 
-                    // for each retrieved item id, get their data and store that data into the itemData list
-                    result.forEach { itemID ->
-                        // return the Found item from the item id
-                        getFoundItemFromId(itemID, object: FoundItemCallback{
-                            override fun onComplete(foundItem: FoundItem?) {
-                                if (foundItem == null){
-                                    callback.onComplete(null)
-                                    return
-                                }
-
-                                // add the data to the list only if the found item matches the lost item
-                                if (isMatch(lostItem = lostItem, foundItem = foundItem)){
-                                    matchingItemList.add(foundItem)
-                                }
-
-                                fetchedItems ++
-
-                                // return true when all items have been fetched
-                                if (fetchedItems == resultSize){
-                                    // sort the data here
-                                    matchingItemList.sortByDescending { key ->
-                                        key.timePosted
-                                    }
-
-                                    // return the matching item list
-                                    callback.onComplete(matchingItemList)
-                                }
+                    // return the Found item from the item id
+                    getFoundItemFromId(itemID, object : FoundItemCallback {
+                        override fun onComplete(foundItem: FoundItem?) {
+                            if (foundItem == null) {
+                                callback.onComplete(null)
+                                return
                             }
-                        })
-                    }
+
+                            // add the data to the list only if the found item matches the lost item
+                            if (isMatch(lostItem = lostItem, foundItem = foundItem)) {
+                                matchingItemList.add(foundItem)
+                            }
+
+                            fetchedItems++
+
+                            // return true when all items have been fetched
+                            if (fetchedItems == resultSize) {
+                                // sort the data here
+                                matchingItemList.sortByDescending { key ->
+                                    key.timePosted
+                                }
+
+                                // return the matching item list
+                                callback.onComplete(matchingItemList)
+                            }
+                        }
+                    })
                 }
             }
-        )
+            .addOnFailureListener { exception ->
+                Log.d("Matching item exception", exception.message ?: "")
+                callback.onComplete(null)
+            }
     }
 }

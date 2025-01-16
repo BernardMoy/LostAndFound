@@ -10,6 +10,10 @@ import com.example.lostandfound.FirebaseManagers.ItemManager
 import com.example.lostandfound.R
 
 // given a lost item and a found item, determine whether they are matched
+/*
+    Preconditions are performed in the initial db query:
+    1. Lost item user ID != Found item user ID
+ */
 fun isMatch(
     lostItem: LostItem,
     foundItem: FoundItem
@@ -18,7 +22,7 @@ fun isMatch(
     /* TODO implement this */
 
     // currently, return true if their users are different
-    return (lostItem.userID != foundItem.userID)
+    return true
 }
 
 
