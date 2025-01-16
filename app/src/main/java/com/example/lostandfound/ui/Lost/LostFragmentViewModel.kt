@@ -5,6 +5,7 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import com.example.lostandfound.Data.FirebaseNames
+import com.example.lostandfound.Data.FoundItem
 import com.example.lostandfound.Data.LostItem
 import com.example.lostandfound.FirebaseManagers.FirebaseStorageManager
 import com.example.lostandfound.FirebaseManagers.FirebaseUtility
@@ -61,6 +62,9 @@ class LostFragmentViewModel : ViewModel(){
                     val resultSize = result.size
                     var fetchedItems = 0
 
+                    // initialise the itemData array with dummy variables of lost items
+                    itemData.addAll(List(resultSize) { LostItem() })
+
                     // if no result, return
                     // as the code below would not be executed
                     if (resultSize == 0){
@@ -69,7 +73,7 @@ class LostFragmentViewModel : ViewModel(){
                     }
 
                     // for each retrieved item id, get their data and store that data into the itemData list
-                    result.forEach { itemID ->
+                    result.forEachIndexed { index, itemID ->
                         ItemManager.getLostItemFromId(itemID, object: ItemManager.LostItemCallback{
                             override fun onComplete(lostItem: LostItem?) {
                                 if (lostItem == null){
@@ -77,16 +81,12 @@ class LostFragmentViewModel : ViewModel(){
                                     return
                                 }
 
-                                // add the data to the list
-                                itemData.add(lostItem)
+                                // add the data to the list at the correct position
+                                itemData[index] = lostItem
                                 fetchedItems ++
 
                                 // return true when all items have been fetched
                                 if (fetchedItems == resultSize){
-                                    // sort the data
-                                    itemData.sortByDescending { key ->
-                                        key.timePosted
-                                    }
                                     callback.onComplete(true)
                                 }
                             }

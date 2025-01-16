@@ -70,7 +70,6 @@ class ChatFragmentViewModel : ViewModel() {
                         if (documentChange.type == DocumentChange.Type.ADDED
                             || documentChange.type == DocumentChange.Type.MODIFIED) {
 
-                            Log.d("TIMES", "time")
 
                             // the recipient of the chat inbox is the participant in the participants array
                             // that does not equal to the current user, given that a user cannot chat with themselves.
