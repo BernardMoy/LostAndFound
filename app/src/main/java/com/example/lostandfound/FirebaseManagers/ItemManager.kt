@@ -11,6 +11,7 @@ import com.example.lostandfound.Data.LostItem
 import com.example.lostandfound.FirebaseManagers.FirestoreManager.Callback
 import com.example.lostandfound.R
 import com.example.lostandfound.Utility.LocationManager
+import com.example.lostandfound.Utility.isMatch
 import com.google.firebase.Firebase
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.auth.User
@@ -43,6 +44,11 @@ object ItemManager {
     interface ClaimPreviewCallback{
         fun onComplete(claimPreview: ClaimPreview?)  // return the claim preview or null if failed
     }
+
+    interface MatchCallback{
+        fun onComplete(result: MutableList<FoundItem>?)
+    }
+
 
 
 
@@ -431,5 +437,73 @@ object ItemManager {
                 Log.d("Status exception", exception.message ?: "")
                 callback.onComplete(0)
             }
+    }
+
+
+    // given a lost item, return from db all the matching found items
+    // return null only when an error occurred, if there are no items return empty list
+    fun getMatchItemsFromLostItem(
+        lostItem: LostItem,
+        callback: MatchCallback
+
+    ){
+        val matchingItemList: MutableList<FoundItem> = mutableListOf()
+
+        // extract all found items from the database
+        val firestoreManager = FirestoreManager()
+
+        firestoreManager.getAllIds(FirebaseNames.COLLECTION_FOUND_ITEMS,
+            object : FirestoreManager.Callback<List<String>> {
+                override fun onComplete(result: List<String>?) {
+                    // if result is null, fetching data failed
+                    if (result == null){
+                        callback.onComplete(null)
+                        return
+                    }
+
+                    // get the total length of result
+                    val resultSize = result.size
+                    var fetchedItems = 0
+
+                    // if no result, return
+                    // as the code below would not be executed
+                    if (resultSize == 0){
+                        callback.onComplete(matchingItemList)
+                        return
+                    }
+
+                    // for each retrieved item id, get their data and store that data into the itemData list
+                    result.forEach { itemID ->
+                        // return the Found item from the item id
+                        getFoundItemFromId(itemID, object: FoundItemCallback{
+                            override fun onComplete(foundItem: FoundItem?) {
+                                if (foundItem == null){
+                                    callback.onComplete(null)
+                                    return
+                                }
+
+                                // add the data to the list only if the found item matches the lost item
+                                if (isMatch(lostItem = lostItem, foundItem = foundItem)){
+                                    matchingItemList.add(foundItem)
+                                }
+
+                                fetchedItems ++
+
+                                // return true when all items have been fetched
+                                if (fetchedItems == resultSize){
+                                    // sort the data here
+                                    matchingItemList.sortByDescending { key ->
+                                        key.timePosted
+                                    }
+
+                                    // return the matching item list
+                                    callback.onComplete(matchingItemList)
+                                }
+                            }
+                        })
+                    }
+                }
+            }
+        )
     }
 }
