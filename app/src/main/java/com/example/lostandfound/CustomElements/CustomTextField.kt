@@ -315,7 +315,7 @@ fun PreviewDoubleText() {
      */
 
     CustomChoiceTextField(title = "Choice", leadingIcon = Icons.Outlined.MonetizationOn, state = remember{
-        mutableStateOf(true)
+        true
     })
 }
 
@@ -471,8 +471,10 @@ fun CustomSearchField(
 fun CustomChoiceTextField(
     title: String,
     leadingIcon: ImageVector,
-    state: MutableState<Boolean>,   // the state that selects to true when the field is clicked
-    onClick: () -> Unit = {}
+    state: Boolean,  // the state that selects to true when the field is clicked
+    onClick: () -> Unit = {
+
+    }
     ){
     TextField(
         value = title,
@@ -486,7 +488,7 @@ fun CustomChoiceTextField(
             )
         },
         trailingIcon = {
-            if (state.value){
+            if (state){
                 Icon(
                     imageVector = Icons.Filled.Circle,
                     contentDescription = null,
@@ -504,7 +506,6 @@ fun CustomChoiceTextField(
         modifier = Modifier
             .fillMaxWidth()
             .clickable {
-                state.value = true  // when clicked, the state becomes true
                 onClick()
             }
             .padding(

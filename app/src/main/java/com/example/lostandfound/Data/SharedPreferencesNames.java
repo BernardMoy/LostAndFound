@@ -13,5 +13,5 @@ public final class SharedPreferencesNames {
     public static final String USER_AVATAR = "avatar";
 
     public static final String THEME_NAME = "device_theme";
-    public static final String THEME_VALUE = "value";  // 0 for light, 1 for dark, none for use device theme
+    public static final String THEME_VALUE = "value";  // 0 for light (Default value if not found), 1 for dark, none for use device theme
 }
