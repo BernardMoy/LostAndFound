@@ -12,6 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import com.example.lostandfound.Data.SharedPreferencesNames
+import com.example.lostandfound.ui.AboutApp.SettingsThemeViewModel
 
 private val DarkColorScheme = darkColorScheme(
     primary = PrimaryColor,
