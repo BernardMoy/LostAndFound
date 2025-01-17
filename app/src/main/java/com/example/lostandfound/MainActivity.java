@@ -28,6 +28,7 @@ import com.example.lostandfound.Data.FirebaseNames;
 import com.example.lostandfound.Data.SharedPreferencesNames;
 import com.example.lostandfound.FirebaseManagers.FirebaseAuthManager;
 import com.example.lostandfound.FirebaseManagers.FirebaseUtility;
+import com.example.lostandfound.Utility.DeviceThemeManager;
 import com.example.lostandfound.Utility.ImageManager;
 import com.example.lostandfound.databinding.ActivityMainBinding;
 import com.example.lostandfound.ui.ActivityLog.ActivityLogActivity;
@@ -81,6 +82,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // initialise firebase app
         FirebaseApp.initializeApp(MainActivity.this);
         db = FirebaseFirestore.getInstance();
+
+        // initialise the value of the device theme for device theme manager
+        DeviceThemeManager.INSTANCE.setTheme(
+                DeviceThemeManager.INSTANCE.getTheme(MainActivity.this),
+                MainActivity.this
+        );
 
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
