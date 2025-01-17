@@ -9,9 +9,11 @@ import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import com.example.lostandfound.Data.SharedPreferencesNames
+import com.example.lostandfound.Utility.DeviceThemeManager
 import com.example.lostandfound.ui.AboutApp.SettingsThemeViewModel
 
 private val DarkColorScheme = darkColorScheme(
@@ -71,12 +73,15 @@ private val LightColorScheme = lightColorScheme(
 @Composable
 fun ComposeTheme(
     // Dynamic color is available on Android 12+  (Default to false now)
-    isDarkTheme: Boolean = isSystemInDarkTheme(),
     dynamicColor: Boolean = false,
     content: @Composable () -> Unit
 ) {
     // if shared preferences does not contain value, then ignore
     val context = LocalContext.current
+
+    // observe the theme value in DeviceThemeManager
+    val themeValue by DeviceThemeManager.themeValue
+    val isDarkTheme = (themeValue == 1) || (themeValue == 2 && isSystemInDarkTheme())
 
     val colorScheme = when {
         dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
