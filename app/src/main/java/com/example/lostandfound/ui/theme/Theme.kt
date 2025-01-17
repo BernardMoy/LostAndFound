@@ -1,5 +1,6 @@
 package com.example.lostandfound.ui.theme
 
+import android.content.Context
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
@@ -10,6 +11,7 @@ import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import com.example.lostandfound.Data.SharedPreferencesNames
 
 private val DarkColorScheme = darkColorScheme(
     primary = PrimaryColor,
@@ -67,14 +69,20 @@ private val LightColorScheme = lightColorScheme(
 // "ComposeTheme" is the theme for colors developed in compose
 @Composable
 fun ComposeTheme(
-    darkTheme: Boolean = isSystemInDarkTheme(),
     // Dynamic color is available on Android 12+  (Default to false now)
     dynamicColor: Boolean = false,
     content: @Composable () -> Unit
 ) {
+    // if shared preferences does not contain value, then ignore
+    val context = LocalContext.current
+    val sp = context.getSharedPreferences(SharedPreferencesNames.THEME_NAME, Context.MODE_PRIVATE)
+
+    val darkTheme = if (sp.contains(SharedPreferencesNames.THEME_VALUE))
+        (sp.getInt(SharedPreferencesNames.THEME_NAME, 0) == 1)
+        else isSystemInDarkTheme()  // else use system default
+
     val colorScheme = when {
         dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
-            val context = LocalContext.current
             if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
         }
 
