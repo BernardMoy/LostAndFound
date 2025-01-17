@@ -12,9 +12,12 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Circle
 import androidx.compose.material.icons.outlined.AccessTime
 import androidx.compose.material.icons.outlined.CalendarMonth
+import androidx.compose.material.icons.outlined.Circle
 import androidx.compose.material.icons.outlined.Close
+import androidx.compose.material.icons.outlined.MonetizationOn
 import androidx.compose.material.icons.outlined.PestControlRodent
 import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material3.CardDefaults
@@ -38,6 +41,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -309,6 +313,10 @@ fun PreviewDoubleText() {
     )
 
      */
+
+    CustomChoiceTextField(title = "Choice", leadingIcon = Icons.Outlined.MonetizationOn, state = remember{
+        mutableStateOf(true)
+    })
 }
 
 @Composable
@@ -455,6 +463,68 @@ fun CustomSearchField(
 
             errorContainerColor = MaterialTheme.colorScheme.background,
             errorTextColor = MaterialTheme.colorScheme.onBackground
+        )
+    )
+}
+
+@Composable
+fun CustomChoiceTextField(
+    title: String,
+    leadingIcon: ImageVector,
+    state: MutableState<Boolean>   // the state that selects to true when the field is clicked
+){
+    TextField(
+        value = title,
+        onValueChange = {},
+        textStyle = Typography.bodyMedium,
+        leadingIcon = {
+            Icon(
+                imageVector = leadingIcon,
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.outline
+            )
+        },
+        trailingIcon = {
+            if (state.value){
+                Icon(
+                    imageVector = Icons.Filled.Circle,
+                    contentDescription = null,
+                    tint = colorResource(id = R.color.status2),
+                    modifier = Modifier.size(16.dp)
+                )
+            }
+
+            Icon(
+                imageVector = Icons.Outlined.Circle,
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.outline
+            )
+        },
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable {
+                state.value = true  // when clicked, the state becomes true
+            }
+            .padding(
+                horizontal = 0.dp, vertical = dimensionResource(id = R.dimen.content_margin_half)
+            ),
+
+        enabled = false,
+        isError = false,
+        colors = TextFieldDefaults.colors(
+            // for enabled (Editable) text
+            unfocusedContainerColor = Color.Transparent,
+            focusedContainerColor = Color.Transparent,
+
+            // for disabled (non-editable) text
+            disabledContainerColor = Color.Transparent,
+            disabledTextColor = MaterialTheme.colorScheme.onBackground,
+            disabledLabelColor = Color.Gray,
+
+            // remove the default bottom line
+            focusedIndicatorColor = Color.Transparent,
+            unfocusedIndicatorColor = Color.Transparent,
+            disabledIndicatorColor = Color.Transparent
         )
     )
 }
