@@ -1,6 +1,6 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Theme.LostAndFound" parent="Theme.MaterialComponents.DayNight.NoActionBar">  <!-- Disabled night mode here -->
+    <style name="Theme.LostAndFound.Dark" parent="Theme.MaterialComponents.DayNight.NoActionBar">  <!-- Disabled night mode here -->
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/primaryColor</item>
         <item name="colorPrimaryVariant">@color/primaryColorVariant</item>
