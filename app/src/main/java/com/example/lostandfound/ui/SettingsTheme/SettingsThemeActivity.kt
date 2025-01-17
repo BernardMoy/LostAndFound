@@ -15,6 +15,8 @@ import androidx.compose.material.icons.outlined.Smartphone
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalInspectionMode
@@ -83,47 +85,49 @@ fun MainContent(viewModel: SettingsThemeViewModel = viewModel()) {
     Column (
 
     ){
-        /*
+
         CustomChoiceTextField(
             title = "Light theme",
             leadingIcon = Icons.Outlined.LightMode,
-            state = viewModel.isUseLightSelected,
+            state = viewModel.selectedTheme.value == 0,
             onClick = {
-                DeviceThemeManager.setLightTheme(context)
+                viewModel.selectedTheme.value = 0
+                DeviceThemeManager.setTheme(0, context)
             }
         )
 
         CustomChoiceTextField(
             title = "Dark theme",
             leadingIcon = Icons.Outlined.DarkMode,
-            state = viewModel.isUseDarkSelected,
+            state = viewModel.selectedTheme.value == 1,
             onClick = {
-                DeviceThemeManager.setDarkTheme(context)
+                viewModel.selectedTheme.value = 1
+                DeviceThemeManager.setTheme(1, context)
             }
         )
 
         CustomChoiceTextField(
             title = "Use device theme",
             leadingIcon = Icons.Outlined.Smartphone,
-            state = viewModel.isUseDeviceThemeSelected,
+            state = viewModel.selectedTheme.value == 2,
             onClick = {
-                DeviceThemeManager.setDeviceTheme(context)
+                viewModel.selectedTheme.value = 2
+                DeviceThemeManager.setTheme(2, context)
             }
         )
 
-         */
     }
 }
 
 // load status from shared preferences
-// return 0 if light, 1 if dark, 2 if device
 fun loadStatus(
     context: Context,
     viewModel: SettingsThemeViewModel
-): Int {
-    val sp = context.getSharedPreferences(SharedPreferencesNames.THEME_NAME, Context.MODE_PRIVATE)
+){
+    val savedTheme = DeviceThemeManager.getTheme(context)
 
-    return 1
+    // set it in the view model
+    viewModel.selectedTheme.value = savedTheme
 }
 
 

@@ -1,26 +1,21 @@
 package com.example.lostandfound.Utility
 
 import android.content.Context
-import android.content.SharedPreferences
-import androidx.compose.foundation.isSystemInDarkTheme
 import com.example.lostandfound.Data.SharedPreferencesNames
-import com.example.lostandfound.Data.SharedPreferencesNames.THEME_NAME
-import com.example.lostandfound.Data.SharedPreferencesNames.THEME_VALUE
 
-object DeviceThemeManager{
-
-    fun setLightTheme(context: Context){
-        val sp = context.getSharedPreferences(THEME_NAME, Context.MODE_PRIVATE)
-        sp.edit().putInt(THEME_VALUE, 0).apply()
+object DeviceThemeManager {
+    fun getTheme(
+        context: Context
+    ): Int{
+        val sp = context.getSharedPreferences(SharedPreferencesNames.THEME_NAME, Context.MODE_PRIVATE)
+        return sp.getInt(SharedPreferencesNames.THEME_VALUE, 0) // 0 refers to the default value
     }
 
-    fun setDarkTheme(context: Context){
-        val sp = context.getSharedPreferences(THEME_NAME, Context.MODE_PRIVATE)
-        sp.edit().putInt(THEME_VALUE, 1).apply()
-    }
-
-    fun setDeviceTheme(context: Context){
-        val sp = context.getSharedPreferences(THEME_NAME, Context.MODE_PRIVATE)
-        sp.edit().remove(THEME_VALUE).apply()
+    fun setTheme(
+        themeNum: Int,  // either 0 1 2
+        context: Context
+    ){
+        val sp = context.getSharedPreferences(SharedPreferencesNames.THEME_NAME, Context.MODE_PRIVATE)
+        sp.edit().putInt(SharedPreferencesNames.THEME_VALUE, themeNum).apply()
     }
 }
