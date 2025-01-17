@@ -42,6 +42,7 @@ import com.example.lostandfound.Data.SharedPreferencesNames
 import com.example.lostandfound.R
 import com.example.lostandfound.ui.AboutApp.AboutAppActivity
 import com.example.lostandfound.ui.Search.SearchActivity
+import com.example.lostandfound.ui.SettingsTheme.SettingsThemeActivity
 import com.example.lostandfound.ui.ViewComparison.ViewComparisonActivity
 import com.example.lostandfound.ui.theme.ComposeTheme
 import com.google.firebase.firestore.FirebaseFirestore
@@ -129,7 +130,8 @@ fun Appearance(
         CustomActionRow(text = "Day / night mode",
             leftIcon = Icons.Outlined.DarkMode,
             onClick = {
-                Toast.makeText(context, "Color theme", Toast.LENGTH_SHORT).show()
+                val intent = Intent(context, SettingsThemeActivity::class.java)
+                context.startActivity(intent)
             }
         )
     }

@@ -61,6 +61,11 @@
             android:exported="false"
             android:windowSoftInputMode="adjustPan" />
         <activity
+            android:name=".ui.SettingsTheme.SettingsThemeActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:exported="false"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
             android:name=".ui.VerifyEmail.VerifyEmailActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:exported="false"
