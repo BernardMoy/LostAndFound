@@ -1,9 +1,13 @@
 package com.example.lostandfound.Utility
 
 import android.content.Context
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
 import com.example.lostandfound.Data.SharedPreferencesNames
 
 object DeviceThemeManager {
+    val themeValue = mutableIntStateOf(0)  // to be observed
+
     fun getTheme(
         context: Context
     ): Int{
@@ -17,5 +21,6 @@ object DeviceThemeManager {
     ){
         val sp = context.getSharedPreferences(SharedPreferencesNames.THEME_NAME, Context.MODE_PRIVATE)
         sp.edit().putInt(SharedPreferencesNames.THEME_VALUE, themeNum).apply()
+        themeValue.intValue = themeNum
     }
 }
