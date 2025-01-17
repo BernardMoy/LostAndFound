@@ -84,10 +84,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         db = FirebaseFirestore.getInstance();
 
         // initialise the value of the device theme for device theme manager
+        int themeInt = DeviceThemeManager.INSTANCE.getTheme(MainActivity.this);
         DeviceThemeManager.INSTANCE.setTheme(
-                DeviceThemeManager.INSTANCE.getTheme(MainActivity.this),
+                themeInt,
                 MainActivity.this
         );
+        /*
+
+        if (themeInt == 0){
+            setTheme(R.style.Theme_LostAndFound_Light);
+        } else if (themeInt == 1){
+            setTheme(R.style.Theme_LostAndFound_Dark);
+        }
+
+         */
 
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.

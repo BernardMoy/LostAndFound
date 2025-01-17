@@ -8,6 +8,7 @@ import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -81,7 +82,6 @@ fun SettingsScreen(activity: ComponentActivity) {
                     modifier = Modifier
                         .fillMaxSize()
                         .padding(paddingValues = innerPadding)
-                        .padding(dimensionResource(id = R.dimen.title_margin))
                         .verticalScroll(rememberScrollState())   // make screen scrollable
                 ) {
                     // content goes here
@@ -115,10 +115,14 @@ fun MainContent(viewModel: SettingsViewModel = viewModel()) {
 fun Appearance(
     context: Context
 ) {
-    CustomGrayTitle(text = "Appearance")
+    Box(modifier = Modifier.padding(
+        horizontal = dimensionResource(id = R.dimen.content_margin))
+    ){
+        CustomGrayTitle(text = "Appearance")
+    }
 
     Column(
-        verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin_half))
+        //verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin_half))
     ) {
         CustomActionRow(text = "Color theme",
             leftIcon = Icons.Outlined.Palette,
@@ -141,7 +145,12 @@ fun Appearance(
 fun Permissions(
     context: Context
 ) {
-    CustomGrayTitle(text = "Permissions")
+    Box(modifier = Modifier.padding(
+        horizontal = dimensionResource(id = R.dimen.content_margin))
+    ) {
+        CustomGrayTitle(text = "Permissions")
+    }
+
     Column(
         verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin_half))
     ) {
@@ -165,7 +174,11 @@ fun Permissions(
 fun AboutTheApp(
     context: Context
 ) {
-    CustomGrayTitle(text = "About the app")
+    Box(modifier = Modifier.padding(
+        horizontal = dimensionResource(id = R.dimen.content_margin))
+    ){
+        CustomGrayTitle(text = "About the app")
+    }
     Column(
         verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin_half))
     ) {
@@ -202,7 +215,11 @@ fun Developer(
     context: Context,
     viewModel: SettingsViewModel
 ) {
-    CustomGrayTitle(text = "Developer settings")
+    Box(modifier = Modifier.padding(
+        horizontal = dimensionResource(id = R.dimen.content_margin))
+    ) {
+        CustomGrayTitle(text = "Developer settings")
+    }
     Column(
         verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin_half))
     ) {
