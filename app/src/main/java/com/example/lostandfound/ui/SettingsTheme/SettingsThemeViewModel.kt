@@ -1,12 +1,14 @@
 package com.example.lostandfound.ui.AboutApp
 
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
+import com.example.lostandfound.Utility.DeviceThemeManager
+import com.example.lostandfound.Utility.DeviceThemeManager.themeValue
 
 class SettingsThemeViewModel: ViewModel() {
-    val selectedTheme: MutableState<Int> = mutableIntStateOf(0)
-
+    val selectedTheme by themeValue
 
 }

@@ -89,9 +89,8 @@ fun MainContent(viewModel: SettingsThemeViewModel = viewModel()) {
         CustomChoiceTextField(
             title = "Light theme",
             leadingIcon = Icons.Outlined.LightMode,
-            state = viewModel.selectedTheme.value == 0,
+            state = viewModel.selectedTheme == 0,
             onClick = {
-                viewModel.selectedTheme.value = 0
                 DeviceThemeManager.setTheme(0, context)
             }
         )
@@ -99,9 +98,8 @@ fun MainContent(viewModel: SettingsThemeViewModel = viewModel()) {
         CustomChoiceTextField(
             title = "Dark theme",
             leadingIcon = Icons.Outlined.DarkMode,
-            state = viewModel.selectedTheme.value == 1,
+            state = viewModel.selectedTheme == 1,
             onClick = {
-                viewModel.selectedTheme.value = 1
                 DeviceThemeManager.setTheme(1, context)
             }
         )
@@ -109,25 +107,13 @@ fun MainContent(viewModel: SettingsThemeViewModel = viewModel()) {
         CustomChoiceTextField(
             title = "Use device theme",
             leadingIcon = Icons.Outlined.Smartphone,
-            state = viewModel.selectedTheme.value == 2,
+            state = viewModel.selectedTheme == 2,
             onClick = {
-                viewModel.selectedTheme.value = 2
                 DeviceThemeManager.setTheme(2, context)
             }
         )
 
     }
-}
-
-// load status from shared preferences
-fun loadStatus(
-    context: Context,
-    viewModel: SettingsThemeViewModel
-){
-    val savedTheme = DeviceThemeManager.getTheme(context)
-
-    // set it in the view model
-    viewModel.selectedTheme.value = savedTheme
 }
 
 
