@@ -1,8 +1,10 @@
 package com.example.lostandfound.ui.SettingsTheme
 
+import android.content.Context
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -20,6 +22,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.lostandfound.CustomElements.BackToolbar
 import com.example.lostandfound.CustomElements.CustomChoiceTextField
+import com.example.lostandfound.Data.SharedPreferencesNames
+import com.example.lostandfound.Utility.DeviceThemeManager
 import com.example.lostandfound.ui.AboutApp.SettingsThemeViewModel
 import com.example.lostandfound.ui.theme.ComposeTheme
 
@@ -79,25 +83,47 @@ fun MainContent(viewModel: SettingsThemeViewModel = viewModel()) {
     Column (
 
     ){
+        /*
         CustomChoiceTextField(
             title = "Light theme",
             leadingIcon = Icons.Outlined.LightMode,
-            state = viewModel.isUseLightSelected
+            state = viewModel.isUseLightSelected,
+            onClick = {
+                DeviceThemeManager.setLightTheme(context)
+            }
         )
 
         CustomChoiceTextField(
             title = "Dark theme",
             leadingIcon = Icons.Outlined.DarkMode,
-            state = viewModel.isUseDarkSelected
+            state = viewModel.isUseDarkSelected,
+            onClick = {
+                DeviceThemeManager.setDarkTheme(context)
+            }
         )
 
         CustomChoiceTextField(
             title = "Use device theme",
             leadingIcon = Icons.Outlined.Smartphone,
-            state = viewModel.isUseDeviceThemeSelected
+            state = viewModel.isUseDeviceThemeSelected,
+            onClick = {
+                DeviceThemeManager.setDeviceTheme(context)
+            }
         )
+
+         */
     }
 }
 
+// load status from shared preferences
+// return 0 if light, 1 if dark, 2 if device
+fun loadStatus(
+    context: Context,
+    viewModel: SettingsThemeViewModel
+): Int {
+    val sp = context.getSharedPreferences(SharedPreferencesNames.THEME_NAME, Context.MODE_PRIVATE)
+
+    return 1
+}
 
 

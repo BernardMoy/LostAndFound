@@ -471,8 +471,9 @@ fun CustomSearchField(
 fun CustomChoiceTextField(
     title: String,
     leadingIcon: ImageVector,
-    state: MutableState<Boolean>   // the state that selects to true when the field is clicked
-){
+    state: MutableState<Boolean>,   // the state that selects to true when the field is clicked
+    onClick: () -> Unit = {}
+    ){
     TextField(
         value = title,
         onValueChange = {},
@@ -504,6 +505,7 @@ fun CustomChoiceTextField(
             .fillMaxWidth()
             .clickable {
                 state.value = true  // when clicked, the state becomes true
+                onClick()
             }
             .padding(
                 horizontal = 0.dp, vertical = dimensionResource(id = R.dimen.content_margin_half)

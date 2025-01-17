@@ -2,6 +2,8 @@ package com.example.lostandfound.Utility
 
 import android.content.Context
 import android.content.SharedPreferences
+import androidx.compose.foundation.isSystemInDarkTheme
+import com.example.lostandfound.Data.SharedPreferencesNames
 import com.example.lostandfound.Data.SharedPreferencesNames.THEME_NAME
 import com.example.lostandfound.Data.SharedPreferencesNames.THEME_VALUE
 
@@ -21,5 +23,4 @@ object DeviceThemeManager{
         val sp = context.getSharedPreferences(THEME_NAME, Context.MODE_PRIVATE)
         sp.edit().remove(THEME_VALUE).apply()
     }
-
 }

@@ -2,15 +2,18 @@ package com.example.lostandfound.ui.Home
 
 import android.content.Context
 import android.content.Intent
+import android.graphics.Paint.Align
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.pager.HorizontalPager
@@ -33,6 +36,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.dimensionResource
@@ -40,10 +44,15 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.viewmodel.compose.viewModel
+import coil3.compose.rememberAsyncImagePainter
+import com.example.lostandfound.CustomElements.ButtonType
 import com.example.lostandfound.CustomElements.CustomActionText
+import com.example.lostandfound.CustomElements.CustomButton
 import com.example.lostandfound.CustomElements.CustomCard
 import com.example.lostandfound.R
 import com.example.lostandfound.ui.HowItWorks.HowItWorksActivity
+import com.example.lostandfound.ui.NewFound.NewFoundActivity
+import com.example.lostandfound.ui.NewLost.NewLostActivity
 import com.example.lostandfound.ui.theme.ComposeTheme
 
 
@@ -79,7 +88,7 @@ fun HomeFragmentScreen() {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(vertical = dimensionResource(id = R.dimen.title_margin))
+
     ) {
         MainContent()
     }
@@ -91,7 +100,58 @@ fun MainContent(
 ) {
     val context = LocalContext.current
 
-    HowItWorksPager(context = context, viewModel = viewModel)
+    Column {
+        ImageAndButton(context = context, viewModel = viewModel)
+        HowItWorksPager(context = context, viewModel = viewModel)
+    }
+}
+
+@Composable
+fun ImageAndButton(
+    context: Context,
+    viewModel: HomeFragmentViewModel
+) {
+    Box(
+        modifier = Modifier.fillMaxWidth(),
+    ) {
+        Image(
+            painter = rememberAsyncImagePainter(model = R.drawable.placeholder_image),
+            contentDescription = "Background image",
+            modifier = Modifier.fillMaxWidth(),
+            contentScale = ContentScale.Crop  // use it to fill the screen
+        )
+
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .align(Alignment.BottomCenter)
+                .padding(
+                    bottom = dimensionResource(
+                        id = R.dimen.header_margin
+                    )
+                ),
+            horizontalArrangement = Arrangement.SpaceEvenly,
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            CustomButton(
+                text = "I have lost",
+                type = ButtonType.FILLED,
+                onClick = {
+                    val intent = Intent(context, NewLostActivity::class.java)
+                    context.startActivity(intent)
+                },
+            )
+
+            CustomButton(
+                text = "I have found",
+                type = ButtonType.TONAL,
+                onClick = {
+                    val intent = Intent(context, NewFoundActivity::class.java)
+                    context.startActivity(intent)
+                },
+            )
+        }
+    }
 }
 
 @Composable
