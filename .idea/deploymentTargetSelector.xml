@@ -16,9 +16,6 @@
       <SelectionState runConfigName="FirestoreManagerTest">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="FirebaseStorageManagerTest">
-        <option name="selectionMode" value="DROPDOWN" />
-      </SelectionState>
       <SelectionState runConfigName="Tests in 'com.example.lostandfound'">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
