@@ -122,7 +122,8 @@ fun CustomInputField(
     onTextChanged: ((String) -> Unit)? = null,
     isError: Boolean = false,
     isMultiLine: Boolean = false,
-    testTag: String = ""
+    testTag: String = "",
+    leadingIcon: ImageVector? = null
 ){
     var varFieldContent by remember{ mutableStateOf(fieldContent)}
 
@@ -163,7 +164,16 @@ fun CustomInputField(
 
             errorContainerColor = MaterialTheme.colorScheme.background,
             errorTextColor = MaterialTheme.colorScheme.onBackground
-        )
+        ),
+        leadingIcon = {
+            if (leadingIcon != null){
+                Icon(
+                    imageVector = leadingIcon,
+                    contentDescription = "Icon",
+                    tint = Color.Gray
+                )
+            }
+        }
     )
 }
 
