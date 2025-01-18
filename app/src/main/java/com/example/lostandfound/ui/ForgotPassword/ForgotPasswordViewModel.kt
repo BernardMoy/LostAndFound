@@ -15,8 +15,12 @@ class ForgotPasswordViewModel: ViewModel() {
     fun validateEmail(): Boolean{
         error.value = ""
 
-        if (email.value.isEmpty()){
+        if (email.value.trim().isEmpty()){
             error.value = "Email cannot be empty"
+            return false
+
+        } else if (!email.value.contains("@") || !email.value.endsWith("warwick.ac.uk")){
+            error.value = "Emails must be university email (@warwick.ac.uk)"
             return false
         }
 

@@ -1,7 +1,9 @@
 package com.example.lostandfound.ui.ForgotPassword
 
+import android.app.Activity
 import android.content.Context
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Arrangement
@@ -33,7 +35,9 @@ import com.example.lostandfound.CustomElements.ButtonType
 import com.example.lostandfound.CustomElements.CustomButton
 import com.example.lostandfound.CustomElements.CustomErrorText
 import com.example.lostandfound.CustomElements.CustomInputField
+import com.example.lostandfound.FirebaseManagers.FirebaseAuthManager
 import com.example.lostandfound.R
+import com.example.lostandfound.Utility.ErrorCallback
 import com.example.lostandfound.ui.theme.ComposeTheme
 import com.example.lostandfound.ui.theme.Typography
 
@@ -168,8 +172,25 @@ fun Button(
                     return@CustomButton
                 }
 
-                // start verify email for forgot password activity
+                // send password reset email
+                val firebaseAuthManager: FirebaseAuthManager = FirebaseAuthManager(context)
+                firebaseAuthManager.sendPasswordResetEmail(
+                    viewModel.email.value,
+                    object: ErrorCallback{
+                        override fun onComplete(error: String) {
+                            if (error.isNotEmpty()){
+                                Toast.makeText(context, "Error sending password reset email", Toast.LENGTH_SHORT).show()
+                                return
+                            }
 
+                            // sent email successful
+                            Toast.makeText(context, "A password reset email has been sent.", Toast.LENGTH_SHORT).show()
+
+                            // exit activity
+                            (context as Activity).finish()
+                        }
+                    }
+                )
             }
         )
     }

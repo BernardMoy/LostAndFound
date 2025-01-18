@@ -173,6 +173,21 @@ public class FirebaseAuthManager {
         });
     }
 
+    // method to update a user's password given email
+    public void sendPasswordResetEmail(String emailAddress, ErrorCallback callback){
+        mAuth.sendPasswordResetEmail(emailAddress)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()){
+                            callback.onComplete("");
+                        } else {
+                            callback.onComplete("Failed sending password reset email");
+                        }
+                    }
+                });
+    }
+
     // method to logout
     public void logoutUser(){
         mAuth.signOut();
