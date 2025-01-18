@@ -133,6 +133,36 @@
 
                 </com.google.android.material.textfield.TextInputLayout>
 
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:passwordToggleEnabled="true"
+                    app:boxBackgroundMode = "none"
+                    android:layout_marginTop="@dimen/content_margin_half"
+                    android:layout_marginBottom="@dimen/content_margin_half"
+                    app:hintEnabled="false"
+                    >
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/register_password_confirm"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:minHeight="@dimen/title_font_size"
+                        android:drawableStart="@drawable/lock_icon"
+                        android:drawableTint="@color/gray"
+                        android:background="@drawable/background_light_gray_selector"
+                        android:textSize="@dimen/content_font_size"
+                        android:textColor="?attr/colorOnBackground"
+                        android:padding="@dimen/content_margin"
+                        android:textColorHint="@color/gray"
+                        android:hint="Confirm password"
+                        android:inputType="textPassword"
+                        android:drawablePadding="@dimen/content_margin"
+
+                        />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
                 <TextView
                     android:layout_gravity="start"
                     android:textAlignment="textStart"

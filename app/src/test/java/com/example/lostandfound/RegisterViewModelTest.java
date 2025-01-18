@@ -78,29 +78,31 @@ public class RegisterViewModelTest {
     @Test
     public void testValidatePassword(){
         // test for invalid inputs
-        assertFalse(viewModel.validatePassword(""));
+        assertFalse(viewModel.validatePassword("", ""));
         assertEquals("Password cannot be empty", viewModel.getRegisterError().getValue());
 
-        assertFalse(viewModel.validatePassword("5tY*)io"));
+        assertFalse(viewModel.validatePassword("5tY*)io", "5tY*)io"));
         assertEquals("Password must be at least 8 characters long",
                 viewModel.getRegisterError().getValue());
 
-        assertFalse(viewModel.validatePassword("weiwewiiw=9*"));
+        assertFalse(viewModel.validatePassword("weiwewiiw=9*", "weiwewiiw=9*"));
         assertEquals("Password must have at least one uppercase and lowercase character",
                 viewModel.getRegisterError().getValue());
 
-        assertFalse(viewModel.validatePassword("weiweweuUE)"));
+        assertFalse(viewModel.validatePassword("weiweweuUE)", "weiweweuUE)"));
         assertEquals("Password must have at least one numerical character",
                 viewModel.getRegisterError().getValue());
 
-        assertFalse(viewModel.validatePassword("weiweEiw5"));
+        assertFalse(viewModel.validatePassword("weiweEiw5", "weiweEiw5"));
         assertEquals("Password must have at least one special character",
                 viewModel.getRegisterError().getValue());
 
-
+        assertFalse(viewModel.validatePassword("weiweEiw5(", "weiweEiw5e("));
+        assertEquals("Confirm password does not match",
+                viewModel.getRegisterError().getValue());
 
         // test for the valid input
-        assertTrue(viewModel.validatePassword(VALID_PASSWORD));
+        assertTrue(viewModel.validatePassword(VALID_PASSWORD, VALID_PASSWORD));
     }
 
 }
