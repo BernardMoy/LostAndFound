@@ -291,9 +291,7 @@ fun Actions(
     viewModel: ProfileViewModel
 ){
     Column(
-        verticalArrangement = Arrangement.spacedBy(
-            dimensionResource(id = R.dimen.content_margin_half)
-        )
+
     ){
         CustomGrayTitle(text = "Actions")
 

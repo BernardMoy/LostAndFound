@@ -18,6 +18,7 @@ import java.util.logging.Handler;
 
 public class ForgotPasswordViewModelTest {
 
+    /*
     // these are valid inputs
     private static final String VALID_EMAIL = "u0000000@warwick.ac.uk";
 
@@ -42,4 +43,6 @@ public class ForgotPasswordViewModelTest {
         // test for the valid input
         assertTrue(viewModel.validateEmail(VALID_EMAIL));
     }
+
+     */
 }

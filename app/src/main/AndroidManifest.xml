@@ -56,7 +56,7 @@
             android:exported="false"
             android:windowSoftInputMode="adjustPan" />
         <activity
-            android:name=".ui.ForgotPassword.ForgotPassword"
+            android:name=".ui.ForgotPassword.ForgotPasswordActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:exported="false"
             android:windowSoftInputMode="adjustPan" />
