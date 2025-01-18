@@ -11,4 +11,15 @@ class ForgotPasswordViewModel: ViewModel() {
     fun onEmailChanged(s: String){
         email.value = s
     }
+
+    fun validateEmail(): Boolean{
+        error.value = ""
+
+        if (email.value.isEmpty()){
+            error.value = "Email cannot be empty"
+            return false
+        }
+
+        return true
+    }
 }

@@ -18,6 +18,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.example.lostandfound.Utility.ErrorCallback;
 import com.example.lostandfound.R;
 import com.example.lostandfound.databinding.ActivityLoginBinding;
+import com.example.lostandfound.ui.ForgotPassword.ForgotPasswordActivity;
 import com.example.lostandfound.ui.Register.RegisterActivity;
 
 public class LoginActivity extends AppCompatActivity {
@@ -60,6 +61,14 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent i = new Intent(LoginActivity.this, RegisterActivity.class);
+                startActivity(i);
+            }
+        });
+
+        binding.forgotPassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(LoginActivity.this, ForgotPasswordActivity.class);
                 startActivity(i);
             }
         });
