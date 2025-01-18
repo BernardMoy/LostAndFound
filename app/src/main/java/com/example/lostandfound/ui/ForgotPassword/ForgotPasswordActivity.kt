@@ -164,6 +164,11 @@ fun Button(
             text = "Done",
             type = ButtonType.FILLED,
             onClick = {
+                if (!viewModel.validateEmail()){
+                    return@CustomButton
+                }
+
+                // start verify email for forgot password activity
 
             }
         )
