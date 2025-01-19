@@ -54,6 +54,7 @@ import com.example.lostandfound.CustomElements.CustomCenteredProgressbar
 import com.example.lostandfound.CustomElements.CustomEditText
 import com.example.lostandfound.CustomElements.CustomPickLocationDialog
 import com.example.lostandfound.CustomElements.CustomGrayTitle
+import com.example.lostandfound.CustomElements.CustomProgressBar
 import com.example.lostandfound.CustomElements.CustomUserDialog
 import com.example.lostandfound.CustomElements.CustomViewLocationDialog
 import com.example.lostandfound.Data.Claim
@@ -150,6 +151,7 @@ fun MainContent(viewModel: ViewLostViewModel) {
             Reference(viewModel = viewModel)
             Status(viewModel = viewModel)
             ItemImage(viewModel = viewModel)
+            TrackButton(context=context, viewModel = viewModel)
             ItemDetails(viewModel = viewModel)
             LocationData(viewModel = viewModel)
             UserData(context = context, viewModel = viewModel)
@@ -207,6 +209,39 @@ fun ItemImage(viewModel: ViewLostViewModel){
             contentDescription = "Item image",
             modifier = Modifier.fillMaxWidth(),
             alignment = Alignment.Center
+        )
+    }
+}
+
+@Composable
+fun TrackButton(context: Context, viewModel: ViewLostViewModel){
+    Column(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ){
+        if (viewModel.isTrackUpdateLoading.value){
+            CustomProgressBar()
+        }
+
+        CustomButton(
+            text = "Track this item",
+            type = ButtonType.FILLED,
+            enabled = !viewModel.isTrackUpdateLoading.value,
+            onClick = {
+                // update the track status to true
+                viewModel.isTrackUpdateLoading.value = true
+                viewModel.updateIsTracking(true, object: Callback<Boolean>{
+                    override fun onComplete(result: Boolean) {
+                        viewModel.isTrackUpdateLoading.value = false
+                        if (!result){
+                            Toast.makeText(context, "Tracking failed", Toast.LENGTH_SHORT).show()
+                            return
+                        }
+
+                    }
+                })
+            },
+            small = true
         )
     }
 }

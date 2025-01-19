@@ -19,6 +19,7 @@ interface Callback<T> {
 
 class ViewLostViewModel : ViewModel(){
     val isLoading: MutableState<Boolean> = mutableStateOf(true)
+    val isTrackUpdateLoading: MutableState<Boolean> = mutableStateOf(false)
     val isLocationDialogShown: MutableState<Boolean> = mutableStateOf(false)
     val isContactUserDialogShown: MutableState<Boolean> = mutableStateOf(false)
 
@@ -43,5 +44,25 @@ class ViewLostViewModel : ViewModel(){
             }
 
         })
+    }
+
+    // function to update the tracking status of the lost item to the isTracking value
+    // return true if successful, false otherwise
+    fun updateIsTracking(
+        isTracking: Boolean,
+        callback: Callback<Boolean>
+    ){
+        val firestoreManager: FirestoreManager = FirestoreManager()
+        firestoreManager.update(
+            FirebaseNames.COLLECTION_LOST_ITEMS,
+            itemData.itemID,
+            FirebaseNames.LOST_IS_TRACKING,
+            isTracking,
+            object: FirestoreManager.Callback<Boolean>{
+                override fun onComplete(result: Boolean) {
+                    callback.onComplete(result)
+                }
+            }
+        )
     }
 }
