@@ -11,6 +11,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -80,6 +81,8 @@ import com.example.lostandfound.Utility.DateTimeManager
 import com.example.lostandfound.Utility.ErrorCallback
 import com.example.lostandfound.Utility.LocationManager
 import com.example.lostandfound.ui.Done.DoneActivity
+import com.example.lostandfound.ui.ViewFound.ViewFoundActivity
+import com.example.lostandfound.ui.ViewLost.ViewLostActivity
 import com.example.lostandfound.ui.theme.ComposeTheme
 import com.example.lostandfound.ui.theme.Typography
 
@@ -159,7 +162,7 @@ fun MainContent(viewModel: ViewClaimViewModel) {
             verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin))
         ) {
             ClaimStatus(viewModel = viewModel)
-            Reference(viewModel = viewModel)
+            Reference(context = context, viewModel = viewModel)
             Status(viewModel = viewModel)
             ItemImage(viewModel = viewModel)
             ItemDetails(viewModel = viewModel)
@@ -228,7 +231,10 @@ fun ClaimStatus(
 }
 
 @Composable
-fun Reference(viewModel: ViewClaimViewModel) {
+fun Reference(
+    context: Context,
+    viewModel: ViewClaimViewModel
+) {
     Column(
         modifier = Modifier.fillMaxWidth(),
         verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin))
@@ -243,7 +249,15 @@ fun Reference(viewModel: ViewClaimViewModel) {
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.primary,
                     textDecoration = TextDecoration.Underline,
-                    textAlign = TextAlign.Center
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.clickable {
+                        val intent = Intent(context, ViewLostActivity::class.java)
+                        intent.putExtra(
+                            IntentExtraNames.INTENT_LOST_ID,
+                            viewModel.lostItemData
+                        )
+                        context.startActivity(intent)
+                    }
                 )
             },
             contentRight = {
@@ -253,7 +267,15 @@ fun Reference(viewModel: ViewClaimViewModel) {
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.secondary,
                     textDecoration = TextDecoration.Underline,
-                    textAlign = TextAlign.Center
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.clickable {
+                        val intent = Intent(context, ViewFoundActivity::class.java)
+                        intent.putExtra(
+                            IntentExtraNames.INTENT_FOUND_ID,
+                            viewModel.foundItemData
+                        )
+                        context.startActivity(intent)
+                    }
                 )
             }
         )
