@@ -42,8 +42,12 @@ object ItemManager {
         fun onComplete(claimPreview: ClaimPreview?)  // return the claim preview or null if failed
     }
 
-    interface MatchCallback {
+    interface MatchFoundCallback {
         fun onComplete(result: MutableList<FoundItem>?)
+    }
+
+    interface MatchLostCallback {
+        fun onComplete(result: MutableList<LostItem>?)
     }
 
     interface UpdateLostCallback {
@@ -470,7 +474,7 @@ object ItemManager {
     // return null only when an error occurred, if there are no items return empty list
     fun getMatchItemsFromLostItem(
         lostItem: LostItem,
-        callback: MatchCallback
+        callback: MatchFoundCallback
 
     ) {
         val matchingItemList: MutableList<FoundItem> = mutableListOf()
@@ -512,6 +516,79 @@ object ItemManager {
                             // add the data to the list only if the found item matches the lost item
                             if (isMatch(lostItem = lostItem, foundItem = foundItem)) {
                                 matchingItemList.add(foundItem)
+                            }
+
+                            fetchedItems++
+
+                            // return true when all items have been fetched
+                            if (fetchedItems == resultSize) {
+                                // sort the data here
+                                matchingItemList.sortByDescending { key ->
+                                    key.timePosted
+                                }
+
+                                // return the matching item list
+                                callback.onComplete(matchingItemList)
+                            }
+                        }
+                    })
+                }
+            }
+            .addOnFailureListener { exception ->
+                Log.d("Matching item exception", exception.message ?: "")
+                callback.onComplete(null)
+            }
+    }
+
+    // given a found item, return all lost items that matches it which are also being tracked.
+    // return a list (Can be empty) if successful, null otherwise
+    fun getTrackingMatchItemsFromFoundItem(
+        foundItem: FoundItem,
+        callback: MatchLostCallback
+    ) {
+        val matchingItemList: MutableList<LostItem> = mutableListOf()
+
+        // extract all found items from the database
+        val db = FirebaseFirestore.getInstance()
+        db.collection(FirebaseNames.COLLECTION_LOST_ITEMS)
+            .whereEqualTo(
+                FirebaseNames.LOST_IS_TRACKING,
+                true   // only consider tracking items
+            )
+            .whereNotEqualTo(
+                FirebaseNames.LOSTFOUND_USER,
+                foundItem.userID
+            )  // the lost user id cannot be same as the current one (Found user id)
+            .get()    // no need order by
+            .addOnSuccessListener { result ->
+
+                // get the total length of result
+                val resultSize = result.size()
+                var fetchedItems = 0
+
+                // if no result, return
+                // as the code below would not be executed
+                if (resultSize == 0) {
+                    callback.onComplete(matchingItemList)
+                    return@addOnSuccessListener
+                }
+
+                // for each retrieved item id, get their data and store that data into the itemData list
+                result.forEachIndexed { index, querySnapshot ->
+                    // get the found item id
+                    val itemID = querySnapshot.id
+
+                    // return the Found item from the item id
+                    getLostItemFromId(itemID, object : LostItemCallback {
+                        override fun onComplete(lostItem: LostItem?) {
+                            if (lostItem == null) {
+                                callback.onComplete(null)
+                                return
+                            }
+
+                            // add the data to the list only if the found item matches the lost item
+                            if (isMatch(lostItem = lostItem, foundItem = foundItem)) {
+                                matchingItemList.add(lostItem)
                             }
 
                             fetchedItems++

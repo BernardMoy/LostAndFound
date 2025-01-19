@@ -9,6 +9,7 @@ import com.example.lostandfound.Data.FoundItem
 import com.example.lostandfound.Data.LostItem
 import com.example.lostandfound.Data.User
 import com.example.lostandfound.FirebaseManagers.FirestoreManager
+import com.example.lostandfound.FirebaseManagers.ItemManager
 import com.example.lostandfound.FirebaseManagers.NotificationManager
 import com.example.lostandfound.FirebaseManagers.UserManager
 import com.example.lostandfound.Utility.DateTimeManager
@@ -99,8 +100,22 @@ class ViewComparisonViewModel : ViewModel() {
                                     return
                                 }
 
-                                // return with no errors
-                                callback.onComplete("")
+                                // force mark the lost item as no longer tracking
+                                ItemManager.updateIsTracking(
+                                    lostItemData.itemID,
+                                    false,
+                                    object: ItemManager.UpdateLostCallback{
+                                        override fun onComplete(result: Boolean) {
+                                            if (!result) {
+                                                callback.onComplete("Error updating item data")
+                                                return
+                                            }
+
+                                            // return with no errors
+                                            callback.onComplete("")
+                                        }
+                                    }
+                                )
                             }
                         }
                     )
