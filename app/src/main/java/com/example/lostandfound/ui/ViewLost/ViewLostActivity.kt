@@ -350,12 +350,15 @@ fun ItemDetails(viewModel: ViewLostViewModel) {
         HorizontalDivider(thickness = 1.dp)
 
         // color
+        /*
         CustomEditText(
             fieldLabel = "Color",
             fieldContent = viewModel.itemData.color,
             leftIcon = Icons.Outlined.Palette,
             isEditable = false
         )
+
+         */
         HorizontalDivider(thickness = 1.dp)
 
         // brand (Optional)

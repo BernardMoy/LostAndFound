@@ -11,7 +11,6 @@ import com.example.lostandfound.FirebaseManagers.FirebaseStorageManager
 import com.example.lostandfound.FirebaseManagers.FirebaseUtility
 import com.example.lostandfound.FirebaseManagers.FirestoreManager
 import com.example.lostandfound.Data.Category
-import com.example.lostandfound.Data.Colors
 import com.example.lostandfound.Utility.DateTimeManager
 import com.example.lostandfound.Data.FirebaseNames
 import com.example.lostandfound.Data.LostItem
@@ -43,7 +42,7 @@ class NewLostViewModel: ViewModel() {
     val selectedSubCategory = mutableStateOf("")
 
     // the selected color is also null
-    var selectedColor by mutableStateOf<Colors?>(null)
+    val selectedColor = mutableSetOf<String>()
 
 
     // error fields
@@ -77,14 +76,15 @@ class NewLostViewModel: ViewModel() {
     fun onCategorySelected(c: Category?){
         selectedCategory = c
     }
-    fun onColorSelected(c: Colors?){
-        selectedColor = c
+    fun onColorSelected(c: String){
+        selectedColor.add(c)
     }
     fun isCategorySelected(c: Category): Boolean{
         return selectedCategory == c
     }
-    fun isColorSelected(c: Colors): Boolean {
-        return selectedColor == c
+    fun isColorSelected(c: String): Boolean {
+        // return true if the color exist in the set
+        return selectedColor.contains(c)
     }
     fun onSubCategorySelected(s: String){
         selectedSubCategory.value = s
@@ -112,7 +112,7 @@ class NewLostViewModel: ViewModel() {
             subCategoryError.value = "Subcategory cannot be empty"
             return false
         }
-        if (selectedColor == null){
+        if (selectedColor.isEmpty()){
             colorError.value = "Color cannot be empty"
             return false
         }
@@ -150,7 +150,7 @@ class NewLostViewModel: ViewModel() {
             FirebaseNames.LOSTFOUND_ITEMNAME to itemName.value,
             FirebaseNames.LOSTFOUND_CATEGORY to selectedCategory!!.name,      // wont be null, otherwise it is captured above
             FirebaseNames.LOSTFOUND_SUBCATEGORY to selectedSubCategory.value,
-            FirebaseNames.LOSTFOUND_COLOR to selectedColor!!.name,   // null is checked
+            FirebaseNames.LOSTFOUND_COLOR to selectedColor.toList().sorted(),
             FirebaseNames.LOSTFOUND_EPOCHDATETIME to DateTimeManager.getDateTimeEpoch(
                 selectedDate.value?:0L, selectedHour.value?:0, selectedMinute.value?:0
             ),
@@ -193,7 +193,7 @@ class NewLostViewModel: ViewModel() {
                                 itemName = itemName.value,
                                 category = selectedCategory!!.name,
                                 subCategory = selectedSubCategory.value,
-                                color = selectedColor!!.name,
+                                color = selectedColor.toList().sorted(),
                                 brand = itemBrand.value,
                                 dateTime = DateTimeManager.getDateTimeEpoch(
                                     selectedDate.value?:0L, selectedHour.value?:0, selectedMinute.value?:0
@@ -219,7 +219,7 @@ class NewLostViewModel: ViewModel() {
                         itemName = itemName.value,
                         category = selectedCategory!!.name,
                         subCategory = selectedSubCategory.value,
-                        color = selectedColor!!.name,
+                        color = selectedColor.toList().sorted(),
                         brand = itemBrand.value,
                         dateTime = DateTimeManager.getDateTimeEpoch(
                             selectedDate.value?:0L, selectedHour.value?:0, selectedMinute.value?:0

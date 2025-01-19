@@ -24,7 +24,6 @@ import androidx.compose.material.icons.outlined.Description
 import androidx.compose.material.icons.outlined.Edit
 import androidx.compose.material.icons.outlined.Folder
 import androidx.compose.material.icons.outlined.Lock
-import androidx.compose.material.icons.outlined.Palette
 import androidx.compose.material.icons.outlined.Title
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Scaffold
@@ -237,12 +236,15 @@ fun ItemDetails(viewModel: ViewFoundViewModel) {
         HorizontalDivider(thickness = 1.dp)
 
         // color
+        /*
         CustomEditText(
             fieldLabel = "Color",
             fieldContent = viewModel.itemData.color,
             leftIcon = Icons.Outlined.Palette,
             isEditable = false
         )
+
+         */
         HorizontalDivider(thickness = 1.dp)
 
         // brand (Optional)

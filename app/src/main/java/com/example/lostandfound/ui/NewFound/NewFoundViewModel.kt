@@ -6,27 +6,29 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
-import com.example.lostandfound.Utility.ErrorCallback
+import com.example.lostandfound.Data.Category
+import com.example.lostandfound.Data.FirebaseNames
 import com.example.lostandfound.FirebaseManagers.FirebaseStorageManager
 import com.example.lostandfound.FirebaseManagers.FirebaseUtility
 import com.example.lostandfound.FirebaseManagers.FirestoreManager
-import com.example.lostandfound.Data.Category
-import com.example.lostandfound.Data.Colors
 import com.example.lostandfound.Utility.DateTimeManager
-import com.example.lostandfound.Data.FirebaseNames
+import com.example.lostandfound.Utility.ErrorCallback
 import com.google.android.gms.maps.model.LatLng
 
-class NewFoundViewModel: ViewModel() {
+class NewFoundViewModel : ViewModel() {
 
     val itemName: MutableState<String> = mutableStateOf("")
-    val itemImage: MutableState<Uri?> = mutableStateOf(null)   // stores the image to be added to storage
+    val itemImage: MutableState<Uri?> =
+        mutableStateOf(null)   // stores the image to be added to storage
     val itemBrand: MutableState<String> = mutableStateOf("")
-    val selectedDate: MutableState<Long?> = mutableStateOf(null)     // date, time can be null if not selected
+    val selectedDate: MutableState<Long?> =
+        mutableStateOf(null)     // date, time can be null if not selected
     val isDateDialogShown: MutableState<Boolean> = mutableStateOf(false)
     val selectedHour: MutableState<Int?> = mutableStateOf(null)
     val selectedMinute: MutableState<Int?> = mutableStateOf(null)
     val isTimeDialogShown: MutableState<Boolean> = mutableStateOf(false)
-    val selectedLocation: MutableState<LatLng> = mutableStateOf(LatLng(52.37930763817003,-1.5614912710215834)) // default location
+    val selectedLocation: MutableState<LatLng> =
+        mutableStateOf(LatLng(52.37930763817003, -1.5614912710215834)) // default location
     val isLocationDialogShown: MutableState<Boolean> = mutableStateOf(false)
     val additionalDescription: MutableState<String> = mutableStateOf("")
     val securityQuestion: MutableState<String> = mutableStateOf("")
@@ -39,7 +41,7 @@ class NewFoundViewModel: ViewModel() {
     val selectedSubCategory = mutableStateOf("")
 
     // the selected color is also null
-    var selectedColor by mutableStateOf<Colors?>(null)
+    val selectedColor = mutableSetOf<String>()
 
 
     // error fields
@@ -51,50 +53,57 @@ class NewFoundViewModel: ViewModel() {
     val timeError: MutableState<String> = mutableStateOf("")
     val securityQuestionAnsError: MutableState<String> = mutableStateOf("")
 
-    fun onImagePicked(uri: Uri?){
+    fun onImagePicked(uri: Uri?) {
         itemImage.value = uri
     }
 
-    fun onImageCrossClicked(){
+    fun onImageCrossClicked() {
         itemImage.value = null
     }
 
-    fun onItemNameChanged(s: String){
+    fun onItemNameChanged(s: String) {
         itemName.value = s
     }
 
-    fun onItemBrandChanged(s: String){
+    fun onItemBrandChanged(s: String) {
         itemBrand.value = s
     }
 
-    fun onSecurityQuestionChanged(s: String){
+    fun onSecurityQuestionChanged(s: String) {
         securityQuestion.value = s
     }
-    fun onSecurityQuestionAnsChanged(s: String){
+
+    fun onSecurityQuestionAnsChanged(s: String) {
         securityQuestionAns.value = s
     }
 
-    fun onCategorySelected(c: Category?){
+    fun onCategorySelected(c: Category?) {
         selectedCategory = c
     }
-    fun onColorSelected(c: Colors?){
-        selectedColor = c
+
+    fun onColorSelected(c: String) {
+        selectedColor.add(c)
     }
-    fun isCategorySelected(c: Category): Boolean{
+
+    fun isCategorySelected(c: Category): Boolean {
         return selectedCategory == c
     }
-    fun isColorSelected(c: Colors): Boolean {
-        return selectedColor == c
+
+    fun isColorSelected(c: String): Boolean {
+        // return true if the color exist in the set
+        return selectedColor.contains(c)
     }
-    fun onSubCategorySelected(s: String){
+
+    fun onSubCategorySelected(s: String) {
         selectedSubCategory.value = s
     }
-    fun onDescriptionChanged(s: String){
+
+    fun onDescriptionChanged(s: String) {
         additionalDescription.value = s
     }
 
     // function to validate the input fields
-    fun validateInput(): Boolean{
+    fun validateInput(): Boolean {
         // initially reset all error fields
         nameError.value = ""
         categoryError.value = ""
@@ -103,11 +112,11 @@ class NewFoundViewModel: ViewModel() {
         timeError.value = ""
 
         // check each of them
-        if (itemName.value.trim().isEmpty()){
+        if (itemName.value.trim().isEmpty()) {
             nameError.value = "Item name cannot be empty"
             return false
         }
-        if (selectedCategory == null){
+        if (selectedCategory == null) {
             categoryError.value = "Category cannot be empty"
             return false
         }
@@ -115,15 +124,15 @@ class NewFoundViewModel: ViewModel() {
             subCategoryError.value = "Subcategory cannot be empty"
             return false
         }
-        if (selectedColor == null){
+        if (selectedColor == null) {
             colorError.value = "Color cannot be empty"
             return false
         }
-        if (selectedDate.value == null){
+        if (selectedDate.value == null) {
             dateError.value = "Date cannot be empty"
             return false
         }
-        if (selectedHour.value == null || selectedMinute.value == null){
+        if (selectedHour.value == null || selectedMinute.value == null) {
             timeError.value = "Time cannot be empty"
             return false
         }
@@ -132,7 +141,9 @@ class NewFoundViewModel: ViewModel() {
                 DateTimeManager.getDateTimeEpoch(
                     selectedDate.value!!,
                     selectedHour.value!!, selectedMinute.value!!
-                ))){
+                )
+            )
+        ) {
             timeError.value = "The date and time cannot be in future"
             return false
         }
@@ -140,7 +151,9 @@ class NewFoundViewModel: ViewModel() {
         // implement location error
 
         // if security question is not empty, then security answer cannot be empty
-        if (securityQuestion.value.trim().isNotEmpty() && securityQuestionAns.value.trim().isEmpty()){
+        if (securityQuestion.value.trim().isNotEmpty() && securityQuestionAns.value.trim()
+                .isEmpty()
+        ) {
             securityQuestionAnsError.value = "Security question answer cannot be empty"
             return false
         }
@@ -149,16 +162,16 @@ class NewFoundViewModel: ViewModel() {
     }
 
     // when the done button is clicked, add data to db
-    fun onDoneButtonClicked(callback: ErrorCallback){
+    fun onDoneButtonClicked(callback: ErrorCallback) {
         val data = mapOf(
             FirebaseNames.LOSTFOUND_USER to FirebaseUtility.getUserID(),
             FirebaseNames.LOSTFOUND_ITEMNAME to itemName.value,
             FirebaseNames.LOSTFOUND_CATEGORY to selectedCategory!!.name,      // wont be null, otherwise it is captured above
             FirebaseNames.LOSTFOUND_SUBCATEGORY to selectedSubCategory.value,
-            FirebaseNames.LOSTFOUND_COLOR to selectedColor!!.name,   // null is checked
+            FirebaseNames.LOSTFOUND_COLOR to selectedColor.toList().sorted(),   // null is checked
             FirebaseNames.LOSTFOUND_BRAND to itemBrand.value,
             FirebaseNames.LOSTFOUND_EPOCHDATETIME to DateTimeManager.getDateTimeEpoch(
-                selectedDate.value?:0L, selectedHour.value?:0, selectedMinute.value?:0
+                selectedDate.value ?: 0L, selectedHour.value ?: 0, selectedMinute.value ?: 0
             ),
             FirebaseNames.LOSTFOUND_DESCRIPTION to additionalDescription.value,
             FirebaseNames.FOUND_SECURITY_Q to securityQuestion.value,
@@ -171,35 +184,45 @@ class NewFoundViewModel: ViewModel() {
         val firestoreManager = FirestoreManager()
         val storageManager = FirebaseStorageManager()
 
-        firestoreManager.putWithUniqueId(FirebaseNames.COLLECTION_FOUND_ITEMS, data, object: FirestoreManager.Callback<String>{
-            override fun onComplete(result: String) {     // the unique id generated is returned
-                if (result.trim().isEmpty()){
-                    callback.onComplete("Error adding item to database")
-                    return
-                }
+        firestoreManager.putWithUniqueId(
+            FirebaseNames.COLLECTION_FOUND_ITEMS,
+            data,
+            object : FirestoreManager.Callback<String> {
+                override fun onComplete(result: String) {     // the unique id generated is returned
+                    if (result.trim().isEmpty()) {
+                        callback.onComplete("Error adding item to database")
+                        return
+                    }
 
-                // add the image to firebase storage if it is not null
-                if (itemImage.value != null){
-                    storageManager.putImage(FirebaseNames.FOLDER_FOUND_IMAGE, result, itemImage.value, object: FirebaseStorageManager.Callback<Boolean>{
-                        override fun onComplete(resultImage: Boolean) {
-                            if (!resultImage){
-                                // delete the previously uploaded firestore object if image uploading fails
-                                firestoreManager.delete(FirebaseNames.COLLECTION_LOST_ITEMS, result, object: FirestoreManager.Callback<Boolean>{
-                                    override fun onComplete(result: Boolean?) {
+                    // add the image to firebase storage if it is not null
+                    if (itemImage.value != null) {
+                        storageManager.putImage(
+                            FirebaseNames.FOLDER_FOUND_IMAGE,
+                            result,
+                            itemImage.value,
+                            object : FirebaseStorageManager.Callback<Boolean> {
+                                override fun onComplete(resultImage: Boolean) {
+                                    if (!resultImage) {
+                                        // delete the previously uploaded firestore object if image uploading fails
+                                        firestoreManager.delete(
+                                            FirebaseNames.COLLECTION_LOST_ITEMS,
+                                            result,
+                                            object : FirestoreManager.Callback<Boolean> {
+                                                override fun onComplete(result: Boolean?) {
+                                                }
+                                            })
+                                        callback.onComplete("Error adding image to database")
+                                        return
                                     }
-                                })
-                                callback.onComplete("Error adding image to database")
-                                return
-                            }
 
-                            callback.onComplete("")  // exit with no errors
-                        }
-                    })
-                } else {
-                    // if image is null, exit activity
-                    callback.onComplete("")
+                                    callback.onComplete("")  // exit with no errors
+                                }
+                            })
+                    } else {
+                        // if image is null, exit activity
+                        callback.onComplete("")
+                    }
                 }
-            }
-        })
+            })
     }
 }

@@ -14,7 +14,7 @@ data class FoundItem(
     val itemName: String = "Unknown",
     val category: String = "Unknown",
     val subCategory: String = "Unknown",
-    val color: String = "Unknown",
+    val color: List<String> = listOf(),
     val brand: String = "",  // can be empty
     val dateTime: Long = 0L,  // in epoch
     val location: Pair<Double, Double> = Pair(52.37930763817003,-1.5614912710215834), // store the latlng value as latitude and longitude
