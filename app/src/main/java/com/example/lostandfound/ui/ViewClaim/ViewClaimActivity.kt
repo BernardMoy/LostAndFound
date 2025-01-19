@@ -9,6 +9,8 @@ import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -18,9 +20,11 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.HelpOutline
+import androidx.compose.material.icons.filled.Circle
 import androidx.compose.material.icons.outlined.AccountCircle
 import androidx.compose.material.icons.outlined.CalendarMonth
 import androidx.compose.material.icons.outlined.Cancel
@@ -69,6 +73,7 @@ import com.example.lostandfound.Data.IntentExtraNames
 import com.example.lostandfound.Data.foundStatusText
 import com.example.lostandfound.Data.lostStatusText
 import com.example.lostandfound.Data.statusColor
+import com.example.lostandfound.Data.stringToColor
 import com.example.lostandfound.FirebaseManagers.FirebaseUtility
 import com.example.lostandfound.R
 import com.example.lostandfound.Utility.DateTimeManager
@@ -380,15 +385,90 @@ fun ItemDetails(viewModel: ViewClaimViewModel) {
         HorizontalDivider(thickness = 1.dp)
 
         // color
-        /*
-        CustomComparisonTextField(
-            centerLabel = "Category",
-            contentLeft = viewModel.lostItemData.color,
-            contentRight = viewModel.foundItemData.color,
-            icon = Icons.Outlined.Palette
+
+        CustomComparisonField(
+            centerLabel = {
+                Row (
+                    horizontalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin)),
+                    verticalAlignment = Alignment.CenterVertically
+                ){
+                    Icon(
+                        imageVector = Icons.Outlined.Palette,
+                        contentDescription = "color",
+                        tint = Color.Gray
+                    )
+
+                    Text(
+                        text = "Color",
+                        style = Typography.bodyMedium,
+                        color = Color.Gray
+                    )
+                }
+            },
+            contentLeft = {
+                val colorText = viewModel.lostItemData.color.joinToString(", ")
+                Column (
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin_half))
+                ){
+                    Text(
+                        text = colorText,
+                        style = Typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onBackground,
+                        textAlign = TextAlign.Center
+                    )
+                    Row(
+                        horizontalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin_half))
+                    ){
+                        // display colors in circles
+                        for (colorString in viewModel.lostItemData.color){
+                            Icon(
+                                imageVector = Icons.Filled.Circle,
+                                contentDescription = "Color",
+                                modifier = Modifier.size(dimensionResource(id = R.dimen.content_margin))
+                                    .border(
+                                        border = BorderStroke(1.dp, MaterialTheme.colorScheme.onBackground),
+                                        shape = CircleShape
+                                    ),
+                                tint = stringToColor[colorString] ?: Color.Gray
+                            )
+                        }
+                    }
+                }
+            },
+            contentRight = {
+                val colorText = viewModel.foundItemData.color.joinToString(", ")
+                Column (
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin_half))
+                ){
+                    Text(
+                        text = colorText,
+                        style = Typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onBackground,
+                        textAlign = TextAlign.Center
+                    )
+                    Row(
+                        horizontalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin_half))
+                    ){
+                        // display colors in circles
+                        for (colorString in viewModel.foundItemData.color){
+                            Icon(
+                                imageVector = Icons.Filled.Circle,
+                                contentDescription = "Color",
+                                modifier = Modifier.size(dimensionResource(id = R.dimen.content_margin))
+                                    .border(
+                                        border = BorderStroke(1.dp, MaterialTheme.colorScheme.onBackground),
+                                        shape = CircleShape
+                                    ),
+                                tint = stringToColor[colorString] ?: Color.Gray
+                            )
+                        }
+                    }
+                }
+            }
         )
 
-         */
         HorizontalDivider(thickness = 1.dp)
 
         // brand (Optional)
