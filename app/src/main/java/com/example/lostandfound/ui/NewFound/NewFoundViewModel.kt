@@ -3,8 +3,10 @@ package com.example.lostandfound.ui.NewFound
 import android.net.Uri
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.lifecycle.ViewModel
 import com.example.lostandfound.Data.Category
 import com.example.lostandfound.Data.FirebaseNames
@@ -40,8 +42,8 @@ class NewFoundViewModel : ViewModel() {
     // the subcategory is also null
     val selectedSubCategory = mutableStateOf("")
 
-    // the selected color is also null
-    val selectedColor = mutableSetOf<String>()
+
+    val selectedColor: SnapshotStateList<String> = mutableStateListOf()
 
 
     // error fields
@@ -82,7 +84,11 @@ class NewFoundViewModel : ViewModel() {
     }
 
     fun onColorSelected(c: String) {
-        selectedColor.add(c)
+        if (selectedColor.contains(c)){
+            selectedColor.remove(c)
+        } else {
+            selectedColor.add(c)
+        }
     }
 
     fun isCategorySelected(c: Category): Boolean {
@@ -90,7 +96,6 @@ class NewFoundViewModel : ViewModel() {
     }
 
     fun isColorSelected(c: String): Boolean {
-        // return true if the color exist in the set
         return selectedColor.contains(c)
     }
 
@@ -108,6 +113,7 @@ class NewFoundViewModel : ViewModel() {
         nameError.value = ""
         categoryError.value = ""
         subCategoryError.value = ""
+        colorError.value = ""
         dateError.value = ""
         timeError.value = ""
 
