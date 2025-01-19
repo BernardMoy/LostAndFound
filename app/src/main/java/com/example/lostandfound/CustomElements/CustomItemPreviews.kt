@@ -23,6 +23,7 @@ import androidx.compose.material.icons.automirrored.outlined.ArrowForward
 import androidx.compose.material.icons.filled.Circle
 import androidx.compose.material.icons.outlined.QuestionMark
 import androidx.compose.material.icons.outlined.Search
+import androidx.compose.material.icons.outlined.TrackChanges
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -37,6 +38,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import coil3.compose.rememberAsyncImagePainter
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
@@ -81,9 +83,14 @@ fun Preview() {
          */
 
 
+        /*
         CustomNotificationItemPreview(
             0, "",238983298L, false
         )
+        
+         */
+        
+        CustomLostItemPreview(data = LostItem())
 
     }
 }
@@ -113,7 +120,6 @@ fun CustomLostItemPreview(
         Column(
             verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin))
         ) {
-
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin_half))
@@ -135,28 +141,49 @@ fun CustomLostItemPreview(
 
 
             Row(
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin_half))
             ) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin_half)),
+                    modifier = Modifier.weight(1f)
+                ){
+                    Icon(
+                        imageVector = Icons.Filled.Circle,
+                        tint = colorResource(
+                            id = statusColor[data.status] ?: R.color.status0
+                        ),
+                        contentDescription = "Status of item",
+                        modifier = Modifier.width(dimensionResource(id = R.dimen.content_margin))
+                    )
 
-                Icon(
-                    imageVector = Icons.Filled.Circle,
-                    tint = colorResource(
-                        id = statusColor[data.status] ?: R.color.status0
-                    ),
-                    contentDescription = "Status of item",
-                    modifier = Modifier.width(dimensionResource(id = R.dimen.content_margin))
-                )
+                    Text(
+                        text = "Status: " + lostStatusText[data.status],
+                        style = Typography.bodyMedium,
+                        color = colorResource(
+                            id = statusColor[data.status] ?: R.color.status0
+                        ),
+                        fontWeight = FontWeight.Bold,
+                    )
+                }
 
-                Text(
-                    text = "Status: " + lostStatusText[data.status],
-                    style = Typography.bodyMedium,
-                    color = colorResource(
-                        id = statusColor[data.status] ?: R.color.status0
-                    ),
-                    fontWeight = FontWeight.Bold,
-                )
+                Row (
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin_half))
+                ){
+                    Icon(
+                        imageVector = Icons.Outlined.TrackChanges,
+                        tint = if (data.isTracking) MaterialTheme.colorScheme.error else Color.Gray,
+                        contentDescription = "Status of item",
+                        modifier = Modifier.width(16.dp)
+                    )
 
+                    Text(
+                        text = if (data.isTracking) "Tracking" else "Not tracking",
+                        style = Typography.bodyMedium,
+                        color = if (data.isTracking) MaterialTheme.colorScheme.error else Color.Gray,
+                        fontWeight = FontWeight.Bold,
+                    )
+                }
             }
 
 

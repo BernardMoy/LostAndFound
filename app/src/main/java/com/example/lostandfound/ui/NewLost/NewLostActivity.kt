@@ -32,6 +32,9 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Circle
 import androidx.compose.material.icons.outlined.Cancel
 import androidx.compose.material.icons.outlined.Close
+import androidx.compose.material.icons.outlined.Description
+import androidx.compose.material.icons.outlined.Edit
+import androidx.compose.material.icons.outlined.Title
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -237,7 +240,8 @@ fun ItemName(
         isEditable = true,
         onTextChanged = { viewModel.onItemNameChanged(it) },
         placeholder = "e.g. Bluetooth earbuds",
-        isError = viewModel.nameError.value.isNotEmpty()
+        isError = viewModel.nameError.value.isNotEmpty(),
+        leadingIcon = Icons.Outlined.Edit
     )
 
     CustomErrorText(
@@ -432,6 +436,7 @@ fun ItemBrand(
         isEditable = true,
         onTextChanged = { viewModel.onItemBrandChanged(it) },
         placeholder = "What is the brand of your item?",
+        leadingIcon = Icons.Outlined.Title,
         isError = false // wont have error
     )
 }
@@ -505,6 +510,7 @@ fun AdditionalDescription(
     CustomInputField(
         fieldContent = viewModel.additionalDescription.value,
         isEditable = true,
+        leadingIcon = Icons.Outlined.Description,
         onTextChanged = { viewModel.onDescriptionChanged(it) },
         placeholder = "What should be noted of about your item?",
         isMultiLine = true
