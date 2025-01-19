@@ -4,7 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
+import android.widget.Space
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -13,9 +13,11 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -26,13 +28,15 @@ import androidx.compose.material.icons.outlined.Edit
 import androidx.compose.material.icons.outlined.Folder
 import androidx.compose.material.icons.outlined.Palette
 import androidx.compose.material.icons.outlined.Title
+import androidx.compose.material.icons.outlined.TrackChanges
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -52,7 +56,6 @@ import com.example.lostandfound.CustomElements.CustomActionText
 import com.example.lostandfound.CustomElements.CustomButton
 import com.example.lostandfound.CustomElements.CustomCenteredProgressbar
 import com.example.lostandfound.CustomElements.CustomEditText
-import com.example.lostandfound.CustomElements.CustomPickLocationDialog
 import com.example.lostandfound.CustomElements.CustomGrayTitle
 import com.example.lostandfound.CustomElements.CustomProgressBar
 import com.example.lostandfound.CustomElements.CustomUserDialog
@@ -82,8 +85,10 @@ class ViewLostActivity : ComponentActivity() {
 
         // load the passed intent data into the view model
         val passedItem = intent.getParcelableExtra<LostItem>(IntentExtraNames.INTENT_LOST_ID)
-        if (passedItem != null){
-            viewModel.itemData = passedItem
+        if (passedItem != null) {
+            viewModel.itemData = passedItem  // update the item data
+            viewModel.isItemTracking.value =
+                viewModel.itemData.isTracking  // update the is tracking status
         }
 
         setContent {
@@ -117,7 +122,7 @@ fun ViewLostScreen(activity: ComponentActivity, viewModel: ViewLostViewModel) {
                         .padding(paddingValues = innerPadding)
                         .padding(dimensionResource(id = R.dimen.title_margin))
                         .verticalScroll(rememberScrollState()),   // make screen scrollable
-                    ) {
+                ) {
                     // content goes here
                     MainContent(viewModel = viewModel)
                 }
@@ -147,11 +152,16 @@ fun MainContent(viewModel: ViewLostViewModel) {
     } else {
         Column(
             verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin))
-        ){
+        ) {
+            // show the track button only when the lost item user is the current user
+            if (viewModel.itemData.userID == FirebaseUtility.getUserID()) {
+                TrackButton(context = context, viewModel = viewModel)
+                Spacer(modifier = Modifier.width(dimensionResource(id = R.dimen.title_margin)))
+            }
+
             Reference(viewModel = viewModel)
             Status(viewModel = viewModel)
             ItemImage(viewModel = viewModel)
-            TrackButton(context=context, viewModel = viewModel)
             ItemDetails(viewModel = viewModel)
             LocationData(viewModel = viewModel)
             UserData(context = context, viewModel = viewModel)
@@ -165,10 +175,10 @@ fun MainContent(viewModel: ViewLostViewModel) {
 }
 
 @Composable
-fun Reference(viewModel: ViewLostViewModel){
+fun Reference(viewModel: ViewLostViewModel) {
     Row(
         modifier = Modifier.fillMaxWidth()
-    ){
+    ) {
         Text(
             text = "Reference: #" + viewModel.itemData.itemID,
             style = Typography.bodyMedium,
@@ -199,10 +209,10 @@ fun Status(viewModel: ViewLostViewModel) {
 
 @OptIn(ExperimentalGlideComposeApi::class)
 @Composable
-fun ItemImage(viewModel: ViewLostViewModel){
+fun ItemImage(viewModel: ViewLostViewModel) {
     Row(
         modifier = Modifier.fillMaxWidth()
-    ){
+    ) {
         // image of the item
         GlideImage(
             model = Uri.parse(viewModel.itemData.image),
@@ -214,42 +224,102 @@ fun ItemImage(viewModel: ViewLostViewModel){
 }
 
 @Composable
-fun TrackButton(context: Context, viewModel: ViewLostViewModel){
+fun TrackButton(context: Context, viewModel: ViewLostViewModel) {
     Column(
         modifier = Modifier.fillMaxWidth(),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ){
-        if (viewModel.isTrackUpdateLoading.value){
-            CustomProgressBar()
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin))
+    ) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin_half))
+        ) {
+            Icon(
+                imageVector = Icons.Outlined.TrackChanges,
+                tint = if (viewModel.isItemTracking.value) MaterialTheme.colorScheme.error else Color.Gray,
+                contentDescription = "Status of item",
+                modifier = Modifier.width(16.dp)
+            )
+
+            Text(
+                text = if (viewModel.isItemTracking.value) "Tracking" else "This item is not being tracked",
+                style = Typography.bodyMedium,
+                color = if (viewModel.isItemTracking.value) MaterialTheme.colorScheme.error else Color.Gray,
+                fontWeight = FontWeight.Bold,
+            )
+        }
+        if (!viewModel.isItemTracking.value) {
+            Row {
+                Text(
+                    text = "You will not receive notifications about new matching found items.",
+                    style = Typography.bodyMedium,
+                    color = Color.Gray,
+                    textAlign = TextAlign.Center
+                )
+            }
         }
 
-        CustomButton(
-            text = "Track this item",
-            type = ButtonType.FILLED,
-            enabled = !viewModel.isTrackUpdateLoading.value,
-            onClick = {
-                // update the track status to true
-                viewModel.isTrackUpdateLoading.value = true
-                viewModel.updateIsTracking(true, object: Callback<Boolean>{
-                    override fun onComplete(result: Boolean) {
-                        viewModel.isTrackUpdateLoading.value = false
-                        if (!result){
-                            Toast.makeText(context, "Tracking failed", Toast.LENGTH_SHORT).show()
-                            return
+        if (viewModel.isTrackUpdateLoading.value) {
+            CustomProgressBar()
+        } else if (viewModel.isItemTracking.value) {
+            // when the item is tracking
+            CustomButton(
+                text = "Untrack this item",
+                type = ButtonType.OUTLINED,
+                enabled = !viewModel.isTrackUpdateLoading.value,
+                onClick = {
+                    // update the track status to true
+                    viewModel.isTrackUpdateLoading.value = true
+                    viewModel.updateIsTracking(false, object : Callback<Boolean> {
+                        override fun onComplete(result: Boolean) {
+                            viewModel.isTrackUpdateLoading.value = false
+                            if (!result) {
+                                Toast.makeText(
+                                    context,
+                                    "Tracking update failed",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                                return
+                            }
                         }
+                    })
+                },
+                small = true
+            )
 
-                    }
-                })
-            },
-            small = true
-        )
+        } else {
+            // when the item is not tracking
+            CustomButton(
+                text = "Track this item",
+                type = ButtonType.FILLED,
+                enabled = !viewModel.isTrackUpdateLoading.value,
+                onClick = {
+                    // update the track status to true
+                    viewModel.isTrackUpdateLoading.value = true
+                    viewModel.updateIsTracking(true, object : Callback<Boolean> {
+                        override fun onComplete(result: Boolean) {
+                            viewModel.isTrackUpdateLoading.value = false
+                            if (!result) {
+                                Toast.makeText(
+                                    context,
+                                    "Tracking update failed",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                                return
+                            }
+                        }
+                    })
+                },
+                small = true
+            )
+        }
+
     }
 }
 
 @Composable
-fun ItemDetails(viewModel: ViewLostViewModel){
-    Column(
-    ){
+fun ItemDetails(viewModel: ViewLostViewModel) {
+    Column {
         CustomGrayTitle(text = "Item details")
 
         // Name of item
@@ -262,7 +332,8 @@ fun ItemDetails(viewModel: ViewLostViewModel){
         HorizontalDivider(thickness = 1.dp)
 
         // category and subcategory
-        CustomEditText(fieldLabel = "Category",
+        CustomEditText(
+            fieldLabel = "Category",
             fieldContent = viewModel.itemData.category + ", " + viewModel.itemData.subCategory,
             leftIcon = Icons.Outlined.Folder,
             isEditable = false
@@ -270,7 +341,8 @@ fun ItemDetails(viewModel: ViewLostViewModel){
         HorizontalDivider(thickness = 1.dp)
 
         // date and time
-        CustomEditText(fieldLabel = "Date and time",
+        CustomEditText(
+            fieldLabel = "Date and time",
             fieldContent = DateTimeManager.dateTimeToString(viewModel.itemData.dateTime),
             leftIcon = Icons.Outlined.CalendarMonth,
             isEditable = false
@@ -278,7 +350,8 @@ fun ItemDetails(viewModel: ViewLostViewModel){
         HorizontalDivider(thickness = 1.dp)
 
         // color
-        CustomEditText(fieldLabel = "Color",
+        CustomEditText(
+            fieldLabel = "Color",
             fieldContent = viewModel.itemData.color,
             leftIcon = Icons.Outlined.Palette,
             isEditable = false
@@ -286,7 +359,8 @@ fun ItemDetails(viewModel: ViewLostViewModel){
         HorizontalDivider(thickness = 1.dp)
 
         // brand (Optional)
-        CustomEditText(fieldLabel = "Brand",
+        CustomEditText(
+            fieldLabel = "Brand",
             fieldContent = if (viewModel.itemData.brand.isNotEmpty()) viewModel.itemData.brand else "Not provided",
             leftIcon = Icons.Outlined.Title,
             isEditable = false
@@ -294,7 +368,8 @@ fun ItemDetails(viewModel: ViewLostViewModel){
         HorizontalDivider(thickness = 1.dp)
 
         // description (Optional)
-        CustomEditText(fieldLabel = "Description",
+        CustomEditText(
+            fieldLabel = "Description",
             fieldContent = if (viewModel.itemData.description.isNotEmpty()) viewModel.itemData.description else "Not provided",
             leftIcon = Icons.Outlined.Description,
             isEditable = false
@@ -306,7 +381,7 @@ fun ItemDetails(viewModel: ViewLostViewModel){
 @Composable
 fun LocationData(
     viewModel: ViewLostViewModel
-){
+) {
     Column {
         CustomGrayTitle(text = "Location")
 
@@ -330,9 +405,8 @@ fun LocationData(
 fun UserData(
     context: Context,
     viewModel: ViewLostViewModel
-){
-    Column(
-    ) {
+) {
+    Column {
         CustomGrayTitle(text = "User information")
 
         // Name of user
@@ -343,9 +417,11 @@ fun UserData(
                 modifier = Modifier.weight(1f)
             ) {
                 // Name of user
+                val userDisplayName = viewModel.lostUser.firstName + ' ' + viewModel.lostUser.lastName
+
                 CustomEditText(
                     fieldLabel = "User",
-                    fieldContent = viewModel.lostUser.firstName + ' ' + viewModel.lostUser.lastName,
+                    fieldContent = if (viewModel.itemData.userID == FirebaseUtility.getUserID()) "$userDisplayName (You)" else userDisplayName,
                     leftIcon = Icons.Outlined.AccountCircle,
                     isEditable = false
                 )
@@ -387,19 +463,19 @@ fun ActionButtons(
     context: Context,
     inPreview: Boolean,
     viewModel: ViewLostViewModel
-){
+) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = dimensionResource(id = R.dimen.content_margin))
-    ){
+    ) {
         // only display buttons when the lost item is reported by the current user
-        if (inPreview || FirebaseUtility.getUserID() == viewModel.itemData.userID){
+        if (inPreview || FirebaseUtility.getUserID() == viewModel.itemData.userID) {
             Column(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin))
-            ){
+            ) {
                 // if the status is 1 or 2, display this
                 if (inPreview || viewModel.itemData.status == 1 || viewModel.itemData.status == 2) {
                     CustomButton(
@@ -410,29 +486,35 @@ fun ActionButtons(
                             val intent = Intent(context, ViewClaimActivity::class.java)
 
                             // get the claim item associated with the lost id
-                            ItemManager.getClaimFromLostId(viewModel.itemData.itemID, object: ItemManager.LostClaimCallback{
-                                override fun onComplete(claim: Claim?) {
-                                    if (claim == null){
-                                        Toast.makeText(context, "Fetching claim data failed", Toast.LENGTH_SHORT).show()
-                                        return
+                            ItemManager.getClaimFromLostId(
+                                viewModel.itemData.itemID,
+                                object : ItemManager.LostClaimCallback {
+                                    override fun onComplete(claim: Claim?) {
+                                        if (claim == null) {
+                                            Toast.makeText(
+                                                context,
+                                                "Fetching claim data failed",
+                                                Toast.LENGTH_SHORT
+                                            ).show()
+                                            return
+                                        }
+
+                                        // pass the claim object to the intent
+                                        intent.putExtra(
+                                            IntentExtraNames.INTENT_CLAIM_ITEM,
+                                            claim
+                                        )
+
+                                        // start view claim activity
+                                        context.startActivity(intent)
                                     }
-
-                                    // pass the claim object to the intent
-                                    intent.putExtra(
-                                        IntentExtraNames.INTENT_CLAIM_ITEM,
-                                        claim
-                                    )
-
-                                    // start view claim activity
-                                    context.startActivity(intent)
-                                }
-                            })
+                                })
                         }
                     )
                 }
 
                 // if the status is 0 or 1, display this
-                if (inPreview || viewModel.itemData.status == 0 || viewModel.itemData.status == 1){
+                if (inPreview || viewModel.itemData.status == 0 || viewModel.itemData.status == 1) {
                     CustomButton(
                         text = "View matching items",
                         type = if (viewModel.itemData.status == 0) ButtonType.FILLED else ButtonType.OUTLINED,
@@ -458,16 +540,16 @@ fun ActionButtons(
 fun loadData(
     context: Context,
     viewModel: ViewLostViewModel
-){
+) {
     // is loading initially
     viewModel.isLoading.value = true
 
     // load lost item data of the current user from the view model
-    viewModel.getUser(object : com.example.lostandfound.ui.ViewLost.Callback<Boolean>{
+    viewModel.getUser(object : Callback<Boolean> {
         override fun onComplete(result: Boolean) {
             viewModel.isLoading.value = false
 
-            if (!result){
+            if (!result) {
                 // display toast message for failed data retrieval
                 Toast.makeText(context, "Fetching data failed", Toast.LENGTH_SHORT).show()
             }

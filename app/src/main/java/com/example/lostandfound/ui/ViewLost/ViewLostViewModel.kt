@@ -26,6 +26,7 @@ class ViewLostViewModel : ViewModel(){
     // default lost item placeholder data
     // will be replaced by method below
     var itemData = LostItem()
+    val isItemTracking: MutableState<Boolean> = mutableStateOf(false)  // to be reflected in the ui after pressing button
 
     // username used to display the user
     var lostUser = User()
@@ -60,7 +61,18 @@ class ViewLostViewModel : ViewModel(){
             isTracking,
             object: FirestoreManager.Callback<Boolean>{
                 override fun onComplete(result: Boolean) {
-                    callback.onComplete(result)
+                    if (!result){
+                        callback.onComplete(false)
+                        return
+                    }
+                    // update the data in the LostItem object
+                    itemData.isTracking = isTracking
+
+                    // update the mutable state to be displayed in the ui
+                    isItemTracking.value = isTracking
+
+                    // return successful
+                    callback.onComplete(true)
                 }
             }
         )
