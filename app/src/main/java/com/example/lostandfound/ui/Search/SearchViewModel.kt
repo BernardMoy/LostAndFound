@@ -62,4 +62,25 @@ class SearchViewModel : ViewModel() {
             }
         })
     }
+
+    // to be called when the "We will track it for you" button is clicked
+    // return true if successful, false otherwise
+    fun onWeWillTrackClicked(
+        callback: Callback<Boolean>
+    ){
+        ItemManager.updateIsTracking(
+            lostItem.itemID,
+            true,  // set it to is tracking
+            object: ItemManager.UpdateLostCallback{
+                override fun onComplete(result: Boolean) {
+                    if (!result){
+                        callback.onComplete(false)
+                        return
+                    }
+
+                    callback.onComplete(true)
+                }
+            }
+        )
+    }
 }

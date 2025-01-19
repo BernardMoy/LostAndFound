@@ -73,6 +73,7 @@ public class RegisterActivity extends AppCompatActivity {
                 String lastName = binding.registerLastName.getText().toString();
                 String email = binding.registerEmail.getText().toString();
                 String password = binding.registerPassword.getText().toString();
+                String confirmPassword = binding.registerPasswordConfirm.getText().toString();
 
                 // reset error field
                 resetErrorFields();
@@ -96,8 +97,9 @@ public class RegisterActivity extends AppCompatActivity {
                 }
 
                 // validate password
-                if (!registerViewModel.validatePassword(password)){
+                if (!registerViewModel.validatePassword(password, confirmPassword)){
                     binding.registerPassword.setBackgroundResource(R.drawable.background_light_gray_error);
+                    binding.registerPasswordConfirm.setBackgroundResource(R.drawable.background_light_gray_error);
                     return;
                 }
 
@@ -125,5 +127,6 @@ public class RegisterActivity extends AppCompatActivity {
         binding.registerLastName.setBackgroundResource(R.drawable.background_light_gray_selector);
         binding.registerEmail.setBackgroundResource(R.drawable.background_light_gray_selector);
         binding.registerPassword.setBackgroundResource(R.drawable.background_light_gray_selector);
+        binding.registerPasswordConfirm.setBackgroundResource(R.drawable.background_light_gray_selector);
     }
 }
