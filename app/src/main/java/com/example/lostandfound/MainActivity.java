@@ -14,6 +14,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
@@ -84,12 +85,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         db = FirebaseFirestore.getInstance();
 
         // initialise the value of the device theme for device theme manager
+         /*
         int themeInt = DeviceThemeManager.INSTANCE.getTheme(MainActivity.this);
         DeviceThemeManager.INSTANCE.setTheme(
                 themeInt,
                 MainActivity.this
         );
-        /*
 
         if (themeInt == 0){
             setTheme(R.style.Theme_LostAndFound_Light);

@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -29,6 +30,7 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
@@ -40,8 +42,11 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil3.compose.rememberAsyncImagePainter
@@ -54,6 +59,7 @@ import com.example.lostandfound.ui.HowItWorks.HowItWorksActivity
 import com.example.lostandfound.ui.NewFound.NewFoundActivity
 import com.example.lostandfound.ui.NewLost.NewLostActivity
 import com.example.lostandfound.ui.theme.ComposeTheme
+import com.example.lostandfound.ui.theme.Typography
 
 
 class HomeFragment : Fragment() {
@@ -115,41 +121,60 @@ fun ImageAndButton(
         modifier = Modifier.fillMaxWidth(),
     ) {
         Image(
-            painter = rememberAsyncImagePainter(model = R.drawable.placeholder_image),
+            painter = rememberAsyncImagePainter(
+                model = R.drawable.homeuicompressed
+            ),
             contentDescription = "Background image",
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .aspectRatio(1.5f),
             contentScale = ContentScale.Crop  // use it to fill the screen
         )
 
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .align(Alignment.BottomCenter)
-                .padding(
-                    bottom = dimensionResource(
-                        id = R.dimen.header_margin
-                    )
-                ),
-            horizontalArrangement = Arrangement.SpaceEvenly,
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            CustomButton(
-                text = "I have lost",
-                type = ButtonType.FILLED,
-                onClick = {
-                    val intent = Intent(context, NewLostActivity::class.java)
-                    context.startActivity(intent)
-                },
+        Column(
+            modifier = Modifier.matchParentSize(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.SpaceEvenly
+
+        ){
+            Text(
+                text = "Fancy Title",
+                fontSize = 26.sp,
+                fontWeight = FontWeight.Bold,
+                color = MaterialTheme.colorScheme.onPrimary,
+                textAlign = TextAlign.Center,
+                modifier = Modifier.padding(
+                    top = dimensionResource(id = R.dimen.title_margin)
+                )
             )
 
-            CustomButton(
-                text = "I have found",
-                type = ButtonType.TONAL,
-                onClick = {
-                    val intent = Intent(context, NewFoundActivity::class.java)
-                    context.startActivity(intent)
-                },
-            )
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(
+                        bottom = dimensionResource(id = R.dimen.content_margin)
+                    ),
+                horizontalArrangement = Arrangement.SpaceEvenly,
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                CustomButton(
+                    text = "I have lost",
+                    type = ButtonType.FILLED,
+                    onClick = {
+                        val intent = Intent(context, NewLostActivity::class.java)
+                        context.startActivity(intent)
+                    },
+                )
+
+                CustomButton(
+                    text = "I have found",
+                    type = ButtonType.TONAL,
+                    onClick = {
+                        val intent = Intent(context, NewFoundActivity::class.java)
+                        context.startActivity(intent)
+                    },
+                )
+            }
         }
     }
 }

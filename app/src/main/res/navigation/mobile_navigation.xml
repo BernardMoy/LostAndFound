@@ -21,11 +21,6 @@
         android:label="@string/title_found" />
 
     <fragment
-        android:id="@+id/navigation_search"
-        android:name="com.example.lostandfound.ui.Search.SearchFragment"
-        android:label="@string/title_search" />
-
-    <fragment
         android:id="@+id/navigation_chat"
         android:name="com.example.lostandfound.ui.Chat.ChatFragment"
         android:label="@string/title_chat" />

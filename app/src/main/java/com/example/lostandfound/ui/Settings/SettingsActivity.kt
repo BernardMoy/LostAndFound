@@ -138,6 +138,8 @@ fun Appearance(
                 context.startActivity(intent)
             }
         )
+
+        // also control the font size
     }
 }
 
