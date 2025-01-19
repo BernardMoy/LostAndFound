@@ -54,7 +54,9 @@ import com.example.lostandfound.CustomElements.CustomChatCard
 import com.example.lostandfound.CustomElements.CustomNotificationItemPreview
 import com.example.lostandfound.Data.Claim
 import com.example.lostandfound.Data.FirebaseNames
+import com.example.lostandfound.Data.FoundItem
 import com.example.lostandfound.Data.IntentExtraNames
+import com.example.lostandfound.Data.LostItem
 import com.example.lostandfound.Data.statusColor
 import com.example.lostandfound.FirebaseManagers.FirebaseUtility
 import com.example.lostandfound.FirebaseManagers.ItemManager
@@ -63,6 +65,7 @@ import com.example.lostandfound.R
 import com.example.lostandfound.ui.ChatInbox.loadMessages
 import com.example.lostandfound.ui.Profile.ProfileViewModel
 import com.example.lostandfound.ui.ViewClaim.ViewClaimActivity
+import com.example.lostandfound.ui.ViewComparison.ViewComparisonActivity
 import com.example.lostandfound.ui.theme.ComposeTheme
 import com.example.lostandfound.ui.theme.Typography
 
@@ -323,10 +326,71 @@ fun Items(
                     timestamp = timeStamp,
                     isRead = isRead,
                     onClick = {
-                        val lostItemID = notification[FirebaseNames.NOTIFICATION_LOST_ITEM_ID]
-                        val foundItemID = notification[FirebaseNames.NOTIFICATION_FOUND_ITEM_ID]
+                        val lostItemID = notification[FirebaseNames.NOTIFICATION_LOST_ITEM_ID].toString()
+                        val foundItemID = notification[FirebaseNames.NOTIFICATION_FOUND_ITEM_ID].toString()
 
-                        
+                        ItemManager.getLostItemFromId(lostItemID = lostItemID, object : ItemManager.LostItemCallback{
+                            override fun onComplete(lostItem: LostItem?) {
+                                if (lostItem == null){
+                                    Toast.makeText(context, "Failed to get lost item data", Toast.LENGTH_SHORT).show()
+                                    return
+                                }
+
+                                ItemManager.getFoundItemFromId(foundItemID, object: ItemManager.FoundItemCallback{
+                                    override fun onComplete(foundItem: FoundItem?) {
+                                        if (foundItem == null){
+                                            Toast.makeText(context, "Failed to get found item data", Toast.LENGTH_SHORT).show()
+                                            return
+                                        }
+                                        // get claim if status != 0
+                                        if (lostItem.status == 1 || lostItem.status == 2){
+                                            ItemManager.getClaimFromLostId(lostItemID, object: ItemManager.LostClaimCallback{
+                                                override fun onComplete(claim: Claim?) {
+                                                    if (claim == null){
+                                                        Toast.makeText(context, "Failed to claim data", Toast.LENGTH_SHORT).show()
+                                                        return
+                                                    }
+                                                   // start view comparison activity here
+                                                    val intent = Intent(context, ViewComparisonActivity::class.java)
+                                                    // pass both the lost item and found item
+                                                    intent.putExtra(
+                                                        IntentExtraNames.INTENT_LOST_ID,
+                                                        lostItem
+                                                    )
+                                                    intent.putExtra(
+                                                        IntentExtraNames.INTENT_FOUND_ID,
+                                                        foundItem
+                                                    )
+                                                    // also pass the claim item of the lost item
+                                                    intent.putExtra(
+                                                        IntentExtraNames.INTENT_CLAIM_ITEM,
+                                                        claim
+                                                    )
+                                                    context.startActivity(intent)
+                                                }
+                                            })
+                                        } else {
+                                            val intent = Intent(context, ViewComparisonActivity::class.java)
+                                            // pass both the lost item and found item
+                                            intent.putExtra(
+                                                IntentExtraNames.INTENT_LOST_ID,
+                                                lostItem
+                                            )
+                                            intent.putExtra(
+                                                IntentExtraNames.INTENT_FOUND_ID,
+                                                foundItem
+                                            )
+                                            // also pass the claim item of the lost item
+                                            intent.putExtra(
+                                                IntentExtraNames.INTENT_CLAIM_ITEM,
+                                                Claim()  // no claim data
+                                            )
+                                            context.startActivity(intent)
+                                        }
+                                    }
+                                })
+                            }
+                        })
                     }
                 )
                 1 -> CustomNotificationItemPreview(
