@@ -76,7 +76,7 @@ import com.example.lostandfound.CustomElements.CustomTimePickerTextField
 import com.example.lostandfound.Data.IntentExtraNames
 import com.example.lostandfound.Utility.ErrorCallback
 import com.example.lostandfound.Data.categories
-import com.example.lostandfound.Data.itemColors
+import com.example.lostandfound.Data.stringToColor
 import com.example.lostandfound.FirebaseManagers.FirebaseUtility
 import com.example.lostandfound.ui.Done.DoneActivity
 import com.example.lostandfound.ui.Login.LoginActivity
@@ -401,19 +401,18 @@ fun ItemColor(
     FlowRow(
         horizontalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin_half))
     ) {
-        // for each category, create a custom filter chip for that
-        itemColors.forEach { col ->
+        for ((name, color) in stringToColor){
             CustomFilterChip(
-                label = col.name,
+                label = name,
                 leadingIcon = Icons.Filled.Circle,
-                leadingIconTint = col.color,
+                leadingIconTint = color,
 
                 // change the selected category var
                 // to ensure only one can be selected at a time
                 onClick = {
-                    viewModel.onColorSelected(col)
+                    viewModel.onColorSelected(name)
                 },
-                isSelected = viewModel.isColorSelected(col),
+                isSelected = viewModel.isColorSelected(name),
                 isError = viewModel.colorError.value.isNotEmpty()
             )
         }

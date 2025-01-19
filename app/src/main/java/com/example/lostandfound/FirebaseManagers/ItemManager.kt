@@ -91,7 +91,7 @@ object ItemManager {
                                             itemName = itemResult[FirebaseNames.LOSTFOUND_ITEMNAME] as String,
                                             category = itemResult[FirebaseNames.LOSTFOUND_CATEGORY] as String,
                                             subCategory = itemResult[FirebaseNames.LOSTFOUND_SUBCATEGORY] as String,
-                                            color = itemResult[FirebaseNames.LOSTFOUND_COLOR] as String,
+                                            color = itemResult[FirebaseNames.LOSTFOUND_COLOR] as List<String>,
                                             brand = itemResult[FirebaseNames.LOSTFOUND_BRAND] as String,
                                             dateTime = itemResult[FirebaseNames.LOSTFOUND_EPOCHDATETIME] as Long,
                                             location = LocationManager.LocationToPair(
@@ -188,7 +188,7 @@ object ItemManager {
                                                 itemName = itemResult[FirebaseNames.LOSTFOUND_ITEMNAME] as String,
                                                 category = itemResult[FirebaseNames.LOSTFOUND_CATEGORY] as String,
                                                 subCategory = itemResult[FirebaseNames.LOSTFOUND_SUBCATEGORY] as String,
-                                                color = itemResult[FirebaseNames.LOSTFOUND_COLOR] as String,
+                                                color = itemResult[FirebaseNames.LOSTFOUND_COLOR] as List<String>,
                                                 brand = itemResult[FirebaseNames.LOSTFOUND_BRAND] as String,
                                                 dateTime = itemResult[FirebaseNames.LOSTFOUND_EPOCHDATETIME] as Long,
                                                 location = LocationManager.LocationToPair(

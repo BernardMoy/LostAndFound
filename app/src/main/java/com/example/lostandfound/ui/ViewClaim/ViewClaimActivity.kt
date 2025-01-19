@@ -380,12 +380,15 @@ fun ItemDetails(viewModel: ViewClaimViewModel) {
         HorizontalDivider(thickness = 1.dp)
 
         // color
+        /*
         CustomComparisonTextField(
             centerLabel = "Category",
             contentLeft = viewModel.lostItemData.color,
             contentRight = viewModel.foundItemData.color,
             icon = Icons.Outlined.Palette
         )
+
+         */
         HorizontalDivider(thickness = 1.dp)
 
         // brand (Optional)
