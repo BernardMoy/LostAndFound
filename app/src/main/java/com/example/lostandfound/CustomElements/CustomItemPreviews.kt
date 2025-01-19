@@ -83,14 +83,11 @@ fun Preview() {
          */
 
 
-        /*
+
         CustomNotificationItemPreview(
             0, "",238983298L, false
         )
-        
-         */
-        
-        CustomLostItemPreview(data = LostItem())
+
 
     }
 }
@@ -166,23 +163,26 @@ fun CustomLostItemPreview(
                     )
                 }
 
-                Row (
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin_half))
-                ){
-                    Icon(
-                        imageVector = Icons.Outlined.TrackChanges,
-                        tint = if (data.isTracking) MaterialTheme.colorScheme.error else Color.Gray,
-                        contentDescription = "Status of item",
-                        modifier = Modifier.width(16.dp)
-                    )
+                // tracking data is only shown for lost items with status = 0 or 1
+                if (data.status == 0 || data.status == 1){
+                    Row (
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin_half))
+                    ){
+                        Icon(
+                            imageVector = Icons.Outlined.TrackChanges,
+                            tint = if (data.isTracking) MaterialTheme.colorScheme.error else Color.Gray,
+                            contentDescription = "Status of item",
+                            modifier = Modifier.width(16.dp)
+                        )
 
-                    Text(
-                        text = if (data.isTracking) "Tracking" else "Not tracking",
-                        style = Typography.bodyMedium,
-                        color = if (data.isTracking) MaterialTheme.colorScheme.error else Color.Gray,
-                        fontWeight = FontWeight.Bold,
-                    )
+                        Text(
+                            text = if (data.isTracking) "Tracking" else "Not tracking",
+                            style = Typography.bodyMedium,
+                            color = if (data.isTracking) MaterialTheme.colorScheme.error else Color.Gray,
+                            fontWeight = FontWeight.Bold,
+                        )
+                    }
                 }
             }
 
