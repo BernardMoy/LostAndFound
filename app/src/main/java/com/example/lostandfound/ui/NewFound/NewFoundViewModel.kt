@@ -1,6 +1,8 @@
 package com.example.lostandfound.ui.NewFound
 
 import android.net.Uri
+import android.util.Log
+import android.widget.Toast
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
@@ -10,12 +12,22 @@ import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.lifecycle.ViewModel
 import com.example.lostandfound.Data.Category
 import com.example.lostandfound.Data.FirebaseNames
+import com.example.lostandfound.Data.FoundItem
+import com.example.lostandfound.Data.LostItem
 import com.example.lostandfound.FirebaseManagers.FirebaseStorageManager
 import com.example.lostandfound.FirebaseManagers.FirebaseUtility
 import com.example.lostandfound.FirebaseManagers.FirestoreManager
+import com.example.lostandfound.FirebaseManagers.ItemManager
+import com.example.lostandfound.FirebaseManagers.NotificationManager
+import com.example.lostandfound.R
 import com.example.lostandfound.Utility.DateTimeManager
 import com.example.lostandfound.Utility.ErrorCallback
+import com.example.lostandfound.Utility.LocationManager
 import com.google.android.gms.maps.model.LatLng
+
+interface NotifyLostUsersCallback{
+    fun onComplete(result: Boolean)
+}
 
 class NewFoundViewModel : ViewModel() {
 
@@ -169,6 +181,8 @@ class NewFoundViewModel : ViewModel() {
 
     // when the done button is clicked, add data to db
     fun onDoneButtonClicked(callback: ErrorCallback) {
+        val currentTime = DateTimeManager.getCurrentEpochTime()
+
         val data = mapOf(
             FirebaseNames.LOSTFOUND_USER to FirebaseUtility.getUserID(),
             FirebaseNames.LOSTFOUND_ITEMNAME to itemName.value,
@@ -182,7 +196,7 @@ class NewFoundViewModel : ViewModel() {
             FirebaseNames.LOSTFOUND_DESCRIPTION to additionalDescription.value,
             FirebaseNames.FOUND_SECURITY_Q to securityQuestion.value,
             FirebaseNames.FOUND_SECURITY_Q_ANS to securityQuestionAns.value,
-            FirebaseNames.LOSTFOUND_TIMEPOSTED to DateTimeManager.getCurrentEpochTime(),
+            FirebaseNames.LOSTFOUND_TIMEPOSTED to currentTime,
             FirebaseNames.LOSTFOUND_LOCATION to selectedLocation.value
         )
 
@@ -221,14 +235,104 @@ class NewFoundViewModel : ViewModel() {
                                         return
                                     }
 
-                                    callback.onComplete("")  // exit with no errors
+                                    // create the newly found item
+                                    val thisFoundItem = FoundItem(
+                                        itemID = result,
+                                        userID = FirebaseUtility.getUserID(),
+                                        itemName = itemName.value,
+                                        category = selectedCategory!!.name,
+                                        subCategory = selectedSubCategory.value,
+                                        color = selectedColor.toList().sorted(),
+                                        brand = itemBrand.value,
+                                        dateTime = DateTimeManager.getDateTimeEpoch(
+                                            selectedDate.value ?: 0L, selectedHour.value ?: 0, selectedMinute.value ?: 0
+                                        ),
+                                        location = LocationManager.latLngToPair(
+                                            selectedLocation.value
+                                        ),
+                                        description = additionalDescription.value,
+                                        timePosted = currentTime,
+                                        status = 0, // newly posted found item always status 0
+                                        image = itemImage.toString(),  // uri to string
+                                        securityQuestion = securityQuestion.value,
+                                        securityQuestionAns = securityQuestionAns.value,
+                                    )
+
+                                    // send notifications
+                                    notifyTrackingLostUsers(thisFoundItem, object: NotifyLostUsersCallback{
+                                        override fun onComplete(result: Boolean) {
+                                                // still proceed, since this is not important to the current user
+                                                // if decide not to proceed here, the uploaded image will also have to be deleted
+                                                callback.onComplete("")
+                                        }
+                                    })
                                 }
                             })
                     } else {
-                        // if image is null, exit activity
-                        callback.onComplete("")
+                        // create the newly found item
+                        val thisFoundItem = FoundItem(
+                            itemID = result,
+                            userID = FirebaseUtility.getUserID(),
+                            itemName = itemName.value,
+                            category = selectedCategory!!.name,
+                            subCategory = selectedSubCategory.value,
+                            color = selectedColor.toList().sorted(),
+                            brand = itemBrand.value,
+                            dateTime = DateTimeManager.getDateTimeEpoch(
+                                selectedDate.value ?: 0L, selectedHour.value ?: 0, selectedMinute.value ?: 0
+                            ),
+                            location = LocationManager.latLngToPair(
+                                selectedLocation.value
+                            ),
+                            description = additionalDescription.value,
+                            timePosted = currentTime,
+                            status = 0, // newly posted found item always status 0
+                            image = "android.resource://com.example.lostandfound/" + R.drawable.placeholder_image,
+                            securityQuestion = securityQuestion.value,
+                            securityQuestionAns = securityQuestionAns.value,
+                        )
+
+                        // send notifications
+                        notifyTrackingLostUsers(thisFoundItem, object: NotifyLostUsersCallback{
+                            override fun onComplete(result: Boolean) {
+                                // still proceed, since this is not important to the current user
+                                // if decide not to proceed here, the uploaded image will also have to be deleted
+                                callback.onComplete("")
+                            }
+                        })
                     }
                 }
             })
+    }
+
+    // method to notify all lost users that are tracking and matches this newly found item
+    fun notifyTrackingLostUsers(foundItem: FoundItem, callback: NotifyLostUsersCallback){
+        ItemManager.getTrackingMatchItemsFromFoundItem(foundItem, object: ItemManager.MatchLostCallback{
+            override fun onComplete(result: MutableList<LostItem>?) {
+                if (result == null){
+                    callback.onComplete(false)
+                    return
+                }
+
+                // for each lost item in result, notify the user
+                for (item in result){
+                    NotificationManager.sendNewMatchingItemNotification(
+                        targetUserId = item.userID,
+                        lostItemID = item.itemID,
+                        foundItemID = foundItem.itemID,
+                        object: NotificationManager.NotificationSendCallback{
+                            override fun onComplete(result: Boolean) {
+                                if (!result){
+                                    callback.onComplete(false)
+                                    return
+                                }
+
+                                callback.onComplete(true)
+                            }
+                        }
+                    )
+                }
+            }
+        })
     }
 }

@@ -323,7 +323,10 @@ fun Items(
                     timestamp = timeStamp,
                     isRead = isRead,
                     onClick = {
+                        val lostItemID = notification[FirebaseNames.NOTIFICATION_LOST_ITEM_ID]
+                        val foundItemID = notification[FirebaseNames.NOTIFICATION_FOUND_ITEM_ID]
 
+                        
                     }
                 )
                 1 -> CustomNotificationItemPreview(
