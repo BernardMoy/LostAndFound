@@ -27,7 +27,7 @@ object ItemManager {
     }
 
     interface LostClaimCallback {
-        fun onComplete(claim: Claim?)  // return the claim, or null if failed
+        fun onComplete(claim: Claim?)  // return the claim, or null if there arent any
     }
 
     interface FoundClaimCallback {
