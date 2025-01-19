@@ -46,6 +46,10 @@ object ItemManager {
         fun onComplete(result: MutableList<FoundItem>?)
     }
 
+    interface UpdateLostCallback {
+        fun onComplete(result: Boolean)
+    }
+
     // method to get the lostitem as a LostItem object when given a lost item id
     fun getLostItemFromId(lostItemID: String, callback: LostItemCallback) {
         val firestoreManager = FirestoreManager()
@@ -107,6 +111,34 @@ object ItemManager {
                             }
                         }
                     )
+                }
+            }
+        )
+    }
+
+
+    // function to update the tracking status of the lost item to the isTracking value
+    // return true if successful, false otherwise
+    fun updateIsTracking(
+        lostItemID: String,
+        isTracking: Boolean,
+        callback: UpdateLostCallback
+    ){
+        val firestoreManager: FirestoreManager = FirestoreManager()
+        firestoreManager.update(
+            FirebaseNames.COLLECTION_LOST_ITEMS,
+            lostItemID,
+            FirebaseNames.LOST_IS_TRACKING,
+            isTracking,
+            object: FirestoreManager.Callback<Boolean>{
+                override fun onComplete(result: Boolean) {
+                    if (!result){
+                        callback.onComplete(false)
+                        return
+                    }
+
+                    // return successful
+                    callback.onComplete(true)
                 }
             }
         )

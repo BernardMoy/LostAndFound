@@ -9,6 +9,7 @@ import com.example.lostandfound.Data.LostItem
 import com.example.lostandfound.Data.User
 import com.example.lostandfound.FirebaseManagers.FirebaseStorageManager
 import com.example.lostandfound.FirebaseManagers.FirestoreManager
+import com.example.lostandfound.FirebaseManagers.ItemManager
 import com.example.lostandfound.FirebaseManagers.UserManager
 import com.example.lostandfound.R
 import com.google.android.gms.maps.model.LatLng
@@ -47,31 +48,27 @@ class ViewLostViewModel : ViewModel(){
         })
     }
 
-    // function to update the tracking status of the lost item to the isTracking value
-    // return true if successful, false otherwise
+    // function to update the lost item to be tracking
     fun updateIsTracking(
         isTracking: Boolean,
         callback: Callback<Boolean>
     ){
-        val firestoreManager: FirestoreManager = FirestoreManager()
-        firestoreManager.update(
-            FirebaseNames.COLLECTION_LOST_ITEMS,
+        ItemManager.updateIsTracking(
             itemData.itemID,
-            FirebaseNames.LOST_IS_TRACKING,
             isTracking,
-            object: FirestoreManager.Callback<Boolean>{
+            object: ItemManager.UpdateLostCallback{
                 override fun onComplete(result: Boolean) {
                     if (!result){
                         callback.onComplete(false)
                         return
                     }
+
                     // update the data in the LostItem object
                     itemData.isTracking = isTracking
 
                     // update the mutable state to be displayed in the ui
                     isItemTracking.value = isTracking
 
-                    // return successful
                     callback.onComplete(true)
                 }
             }
