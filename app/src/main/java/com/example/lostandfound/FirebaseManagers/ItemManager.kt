@@ -97,7 +97,8 @@ object ItemManager {
                                             description = itemResult[FirebaseNames.LOSTFOUND_DESCRIPTION] as String,
                                             timePosted = itemResult[FirebaseNames.LOSTFOUND_TIMEPOSTED] as Long,
                                             status = status,
-                                            image = itemImage.toString()  // uri to string
+                                            image = itemImage.toString(),  // uri to string
+                                            isTracking = itemResult[FirebaseNames.LOST_IS_TRACKING] as Boolean
                                         )
 
                                         // return the generated lost item
