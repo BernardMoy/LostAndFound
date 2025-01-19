@@ -8,6 +8,8 @@ import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -17,6 +19,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Circle
@@ -30,6 +33,7 @@ import androidx.compose.material.icons.outlined.Palette
 import androidx.compose.material.icons.outlined.Title
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -261,7 +265,13 @@ fun ItemDetails(viewModel: ViewFoundViewModel) {
                 Icon(
                     imageVector = Icons.Filled.Circle,
                     contentDescription = "Color",
-                    modifier = Modifier.size(dimensionResource(id = R.dimen.title_margin)),
+                    modifier = Modifier
+                        .size(dimensionResource(id = R.dimen.title_margin))
+                        .border(
+                            border = BorderStroke(1.dp, MaterialTheme.colorScheme.onBackground),
+                            shape = CircleShape
+                        ),
+
                     tint = stringToColor[colorString] ?: Color.Gray
                 )
             }
