@@ -720,9 +720,11 @@ fun AcceptButton(
                     text = "Approve",
                     type = ButtonType.FILLED,
                     onClick = {
+                        viewModel.isApproveLoading.value = true
                         // approve the claim
                         viewModel.approveClaim(object : ErrorCallback{
                             override fun onComplete(error: String) {
+                                viewModel.isApproveLoading.value = false
                                 if (error.isNotEmpty()) {
                                     Toast.makeText(
                                         context,
@@ -741,7 +743,8 @@ fun AcceptButton(
                                 context.startActivity(intent)
                             }
                         })
-                    }
+                    },
+                    enabled = !viewModel.isApproveLoading.value
                 )
             },
             dismissButton = {

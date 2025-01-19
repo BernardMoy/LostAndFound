@@ -24,6 +24,7 @@ class ViewClaimViewModel : ViewModel() {
     val isLocationDialogShown: MutableState<Boolean> = mutableStateOf(false)
     var isAcceptClaimDialogShown: MutableState<Boolean> = mutableStateOf(false)
     val isContactUserDialogShown: MutableState<Boolean> = mutableStateOf(false)
+    val isApproveLoading: MutableState<Boolean> = mutableStateOf(false)
 
     // default claim placeholder data
     var claimData = Claim()
