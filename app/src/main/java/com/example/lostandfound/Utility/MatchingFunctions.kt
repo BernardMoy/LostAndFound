@@ -26,3 +26,6 @@ fun isMatch(
 }
 
 
+// only consider the image when it is not the placeholder image.
+// As the lost and found OBJECTS may contain that image!
+
