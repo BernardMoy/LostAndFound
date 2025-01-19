@@ -46,7 +46,6 @@ object ItemManager {
         fun onComplete(result: MutableList<FoundItem>?)
     }
 
-
     // method to get the lostitem as a LostItem object when given a lost item id
     fun getLostItemFromId(lostItemID: String, callback: LostItemCallback) {
         val firestoreManager = FirestoreManager()
@@ -434,7 +433,6 @@ object ItemManager {
                 callback.onComplete(0)
             }
     }
-
 
     // given a lost item, return from db all the matching found items
     // return null only when an error occurred, if there are no items return empty list
