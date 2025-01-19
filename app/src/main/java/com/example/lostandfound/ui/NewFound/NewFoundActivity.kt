@@ -32,6 +32,11 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Circle
 import androidx.compose.material.icons.outlined.Cancel
 import androidx.compose.material.icons.outlined.Close
+import androidx.compose.material.icons.outlined.Description
+import androidx.compose.material.icons.outlined.Edit
+import androidx.compose.material.icons.outlined.Lock
+import androidx.compose.material.icons.outlined.QuestionAnswer
+import androidx.compose.material.icons.outlined.Title
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -238,6 +243,7 @@ fun ItemName(
         isEditable = true,
         onTextChanged = { viewModel.onItemNameChanged(it) },
         placeholder = "e.g. Bluetooth earbuds",
+        leadingIcon = Icons.Outlined.Edit,
         isError = viewModel.nameError.value.isNotEmpty()
     )
 
@@ -432,6 +438,7 @@ fun ItemBrand(
         isEditable = true,
         onTextChanged = { viewModel.onItemBrandChanged(it) },
         placeholder = "What is the brand of your item?",
+        leadingIcon = Icons.Outlined.Title,
         isError = false // wont have error
     )
 }
@@ -494,6 +501,7 @@ fun AdditionalDescription(
     CustomInputField(
         fieldContent = viewModel.additionalDescription.value,
         isEditable = true,
+        leadingIcon = Icons.Outlined.Description,
         onTextChanged = { viewModel.onDescriptionChanged(it) },
         placeholder = "What should be noted of about the item?",
         isMultiLine = true
@@ -513,6 +521,7 @@ fun SecurityQuestion(
     CustomInputField(
         fieldContent = viewModel.securityQuestion.value,
         isEditable = true,
+        leadingIcon = Icons.Outlined.Lock,
         onTextChanged = { viewModel.onSecurityQuestionChanged(it) },
         placeholder = "Question",
         isMultiLine = true
@@ -531,6 +540,7 @@ fun SecurityQuestionAns(
         onTextChanged = { viewModel.onSecurityQuestionAnsChanged(it) },
         placeholder = "Answer",
         isMultiLine = true,
+        leadingIcon = Icons.Outlined.QuestionAnswer,
         isError = viewModel.securityQuestionAnsError.value.isNotEmpty()
     )
     CustomErrorText(text = viewModel.securityQuestionAnsError.value)
