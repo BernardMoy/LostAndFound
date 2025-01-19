@@ -17,10 +17,12 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Circle
 import androidx.compose.material.icons.outlined.AccountCircle
 import androidx.compose.material.icons.outlined.CalendarMonth
 import androidx.compose.material.icons.outlined.Description
@@ -65,6 +67,7 @@ import com.example.lostandfound.Data.IntentExtraNames
 import com.example.lostandfound.Data.LostItem
 import com.example.lostandfound.Data.lostStatusText
 import com.example.lostandfound.Data.statusColor
+import com.example.lostandfound.Data.stringToColor
 import com.example.lostandfound.FirebaseManagers.FirebaseUtility
 import com.example.lostandfound.FirebaseManagers.ItemManager
 import com.example.lostandfound.R
@@ -350,15 +353,33 @@ fun ItemDetails(viewModel: ViewLostViewModel) {
         HorizontalDivider(thickness = 1.dp)
 
         // color
-        /*
-        CustomEditText(
-            fieldLabel = "Color",
-            fieldContent = viewModel.itemData.color,
-            leftIcon = Icons.Outlined.Palette,
-            isEditable = false
-        )
+        val colorText = viewModel.itemData.color.joinToString(", ")
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin_half))
+        ){
+            // display colors in text
+            Box(modifier = Modifier.weight(1f)){
+                CustomEditText(
+                    fieldLabel = "Color",
+                    fieldContent = colorText,
+                    leftIcon = Icons.Outlined.Palette,
+                    isEditable = false
+                )
+            }
 
-         */
+            // display colors in circles
+            for (colorString in viewModel.itemData.color){
+                Icon(
+                    imageVector = Icons.Filled.Circle,
+                    contentDescription = "Color",
+                    modifier = Modifier.size(dimensionResource(id = R.dimen.title_margin)),
+                    tint = stringToColor[colorString] ?: Color.Gray
+                )
+            }
+        }
+
+
         HorizontalDivider(thickness = 1.dp)
 
         // brand (Optional)

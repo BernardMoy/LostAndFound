@@ -17,6 +17,7 @@ import androidx.compose.material.icons.outlined.CalendarMonth
 import androidx.compose.material.icons.outlined.Circle
 import androidx.compose.material.icons.outlined.Close
 import androidx.compose.material.icons.outlined.MonetizationOn
+import androidx.compose.material.icons.outlined.Palette
 import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
