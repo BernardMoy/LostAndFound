@@ -26,7 +26,7 @@ data class LostItem(
     val location: Pair<Double, Double> = Pair(52.37930763817003,-1.5614912710215834), // store the latlng value as latitude and longitude
     val description: String = "",    // can be empty
     val status: Int = 0,
-    val isTracking: Boolean = false,
+    var isTracking: Boolean = false,
 
     // time posted info
     val timePosted: Long = 0L,
