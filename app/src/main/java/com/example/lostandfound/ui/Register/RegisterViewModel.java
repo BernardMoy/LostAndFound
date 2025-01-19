@@ -49,7 +49,7 @@ public class RegisterViewModel extends ViewModel {
     }
 
     // validate password
-    public boolean validatePassword(String password){
+    public boolean validatePassword(String password, String confirmPassword){
         if (password.trim().isEmpty()){
             setRegisterError("Password cannot be empty");
             return false;
@@ -68,9 +68,13 @@ public class RegisterViewModel extends ViewModel {
             setRegisterError("Password must have at least one numerical character");
             return false;
 
-        } else if (password.matches("[a-zA-Z0-9 ]*")){
+        } else if (password.matches("[a-zA-Z0-9 ]*")) {
             // if password matches that regex, password does not have special character
             setRegisterError("Password must have at least one special character");
+            return false;
+
+        } else if (!password.equals(confirmPassword)){
+            setRegisterError("Confirm password does not match");
             return false;
         }
 

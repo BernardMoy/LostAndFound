@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Circle
@@ -18,10 +17,7 @@ import androidx.compose.material.icons.outlined.CalendarMonth
 import androidx.compose.material.icons.outlined.Circle
 import androidx.compose.material.icons.outlined.Close
 import androidx.compose.material.icons.outlined.MonetizationOn
-import androidx.compose.material.icons.outlined.PestControlRodent
 import androidx.compose.material.icons.outlined.Search
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -39,19 +35,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.lostandfound.Data.ChatMessage
 import com.example.lostandfound.R
 import com.example.lostandfound.Utility.DateTimeManager
-import com.example.lostandfound.ui.theme.ComposeTheme
 import com.example.lostandfound.ui.theme.Typography
-import kotlin.math.max
 
 @Composable
 fun CustomEditText(
@@ -62,9 +54,9 @@ fun CustomEditText(
     rightIcon: ImageVector? = null,
     onTextChanged: ((String) -> Unit)? = null,
     isError: Boolean = false
-){
+) {
     // mutable field content text
-    var varFieldContent by remember{ mutableStateOf(fieldContent)}
+    var varFieldContent by remember { mutableStateOf(fieldContent) }
 
     TextField(
         // varFieldContent is a mutable version of field content, that would be used when editable is true
@@ -72,7 +64,7 @@ fun CustomEditText(
         value = if (isEditable) varFieldContent else fieldContent,
         textStyle = Typography.bodyMedium,   // style for the content
         onValueChange = { newText ->
-            if (isEditable){
+            if (isEditable) {
                 varFieldContent = newText
                 onTextChanged?.invoke(varFieldContent)
             }
@@ -81,12 +73,20 @@ fun CustomEditText(
             Text(text = fieldLabel, style = Typography.bodySmall)   // style for the label
         },
         leadingIcon = {
-            Icon(imageVector = leftIcon, contentDescription = null, tint = MaterialTheme.colorScheme.outline)
+            Icon(
+                imageVector = leftIcon,
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.outline
+            )
         },
         trailingIcon = {
             // right icon can be null
-            if (rightIcon != null){
-                Icon(imageVector = rightIcon, contentDescription = null, tint = MaterialTheme.colorScheme.outline)
+            if (rightIcon != null) {
+                Icon(
+                    imageVector = rightIcon,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.outline
+                )
             }
         },
         modifier = Modifier
@@ -124,8 +124,8 @@ fun CustomInputField(
     isMultiLine: Boolean = false,
     testTag: String = "",
     leadingIcon: ImageVector? = null
-){
-    var varFieldContent by remember{ mutableStateOf(fieldContent)}
+) {
+    var varFieldContent by remember { mutableStateOf(fieldContent) }
 
     OutlinedTextField(
         value = varFieldContent,
@@ -133,7 +133,7 @@ fun CustomInputField(
             Text(text = placeholder, style = Typography.bodyMedium, color = Color.Gray)
         },
         onValueChange = { newText ->
-            if (isEditable){
+            if (isEditable) {
                 varFieldContent = newText
                 onTextChanged?.invoke(varFieldContent)
             }
@@ -165,10 +165,10 @@ fun CustomInputField(
             errorContainerColor = MaterialTheme.colorScheme.background,
             errorTextColor = MaterialTheme.colorScheme.onBackground
         ),
-        leadingIcon = {
-            if (leadingIcon != null){
+        leadingIcon = leadingIcon?.let {
+            {
                 Icon(
-                    imageVector = leadingIcon,
+                    imageVector = it,
                     contentDescription = "Icon",
                     tint = Color.Gray
                 )
@@ -186,14 +186,17 @@ fun CustomDatePickerTextField(
     isDialogShown: MutableState<Boolean>,
     placeholder: String,
     isError: Boolean = false
-){
+) {
 
     Column {
         // the text field to prompt user to open date picker
         OutlinedTextField(
-            value = if (selectedDate.value == null) "" else DateTimeManager.dateToString(selectedDate.value!!),
+            value = if (selectedDate.value == null) "" else DateTimeManager.dateToString(
+                selectedDate.value!!
+            ),
             placeholder = {
-                Text(text = placeholder,
+                Text(
+                    text = placeholder,
                     style = Typography.bodyMedium,
                     color = Color.Gray
                 )
@@ -231,7 +234,11 @@ fun CustomDatePickerTextField(
 
                 ),
             trailingIcon = {
-                Icon(imageVector = Icons.Outlined.CalendarMonth, contentDescription = "Pick a date", tint = MaterialTheme.colorScheme.onBackground)
+                Icon(
+                    imageVector = Icons.Outlined.CalendarMonth,
+                    contentDescription = "Pick a date",
+                    tint = MaterialTheme.colorScheme.onBackground
+                )
             },
         )
 
@@ -244,7 +251,6 @@ fun CustomDatePickerTextField(
 }
 
 
-
 @Composable
 fun CustomTimePickerTextField(
     selectedHour: MutableState<Int?>,
@@ -252,7 +258,7 @@ fun CustomTimePickerTextField(
     isDialogShown: MutableState<Boolean>,
     placeholder: String,
     isError: Boolean = false
-){
+) {
 
     Column {
         // the text field to prompt user to open date picker
@@ -260,7 +266,8 @@ fun CustomTimePickerTextField(
             value = if (selectedHour.value == null || selectedMinute.value == null) "" else
                 DateTimeManager.timeToString(selectedHour.value!!, selectedMinute.value!!),
             placeholder = {
-                Text(text = placeholder,
+                Text(
+                    text = placeholder,
                     style = Typography.bodyMedium,
                     color = Color.Gray
                 )
@@ -297,7 +304,11 @@ fun CustomTimePickerTextField(
                 disabledTextColor = MaterialTheme.colorScheme.onBackground
             ),
             trailingIcon = {
-                Icon(imageVector = Icons.Outlined.AccessTime, contentDescription = "Pick a time", tint = MaterialTheme.colorScheme.onBackground)
+                Icon(
+                    imageVector = Icons.Outlined.AccessTime,
+                    contentDescription = "Pick a time",
+                    tint = MaterialTheme.colorScheme.onBackground
+                )
             },
         )
 
@@ -324,9 +335,12 @@ fun PreviewDoubleText() {
 
      */
 
-    CustomChoiceTextField(title = "Choice", leadingIcon = Icons.Outlined.MonetizationOn, state = remember{
-        true
-    })
+    CustomChoiceTextField(
+        title = "Choice",
+        leadingIcon = Icons.Outlined.MonetizationOn,
+        state = remember {
+            true
+        })
 }
 
 @Composable
@@ -335,11 +349,11 @@ fun CustomComparisonTextField(
     contentLeft: String,    // val is passed if not editable, var if editable
     contentRight: String,
     icon: ImageVector?
-){
+) {
     // partition the row into 3 parts (1:1:1)
     Row(
         verticalAlignment = Alignment.CenterVertically,
-    ){
+    ) {
         Text(
             text = contentLeft,
             style = Typography.bodyMedium,
@@ -356,8 +370,8 @@ fun CustomComparisonTextField(
             modifier = Modifier.weight(3f),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Center
-        ){
-            if (icon != null){
+        ) {
+            if (icon != null) {
                 Icon(
                     imageVector = icon,
                     contentDescription = "Attribute icon",
@@ -393,29 +407,29 @@ fun CustomComparisonField(
     centerLabel: @Composable () -> Unit,
     contentLeft: @Composable () -> Unit,
     contentRight: @Composable () -> Unit
-){
+) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceEvenly
-    ){
+    ) {
         Box(
             modifier = Modifier.weight(3f),
             contentAlignment = Alignment.Center
-        ){
+        ) {
             contentLeft()
         }
 
         Box(
             modifier = Modifier.weight(3f),
             contentAlignment = Alignment.Center
-        ){
+        ) {
             centerLabel()
         }
 
         Box(
             modifier = Modifier.weight(3f),
             contentAlignment = Alignment.Center
-        ){
+        ) {
             contentRight()
         }
     }
@@ -426,7 +440,7 @@ fun CustomComparisonField(
 fun CustomSearchField(
     placeholder: String,
     fieldContent: MutableState<String>
-){
+) {
 
     OutlinedTextField(
         value = fieldContent.value,
@@ -439,7 +453,11 @@ fun CustomSearchField(
         enabled = true,
         singleLine = true,
         leadingIcon = {
-            Icon(imageVector = Icons.Outlined.Search, contentDescription = "Search", tint = Color.Gray)
+            Icon(
+                imageVector = Icons.Outlined.Search,
+                contentDescription = "Search",
+                tint = Color.Gray
+            )
         },
         shape = RoundedCornerShape(dimensionResource(id = R.dimen.corner_radius_small)),
         trailingIcon = {
@@ -448,7 +466,11 @@ fun CustomSearchField(
                     fieldContent.value = ""
                 }
             ) {
-                Icon(imageVector = Icons.Outlined.Close, contentDescription = "Clear", tint = Color.Gray)
+                Icon(
+                    imageVector = Icons.Outlined.Close,
+                    contentDescription = "Clear",
+                    tint = Color.Gray
+                )
             }
         },
         modifier = Modifier
@@ -485,7 +507,7 @@ fun CustomChoiceTextField(
     onClick: () -> Unit = {
 
     }
-    ){
+) {
     TextField(
         value = title,
         onValueChange = {},
@@ -498,7 +520,7 @@ fun CustomChoiceTextField(
             )
         },
         trailingIcon = {
-            if (state){
+            if (state) {
                 Icon(
                     imageVector = Icons.Filled.Circle,
                     contentDescription = null,

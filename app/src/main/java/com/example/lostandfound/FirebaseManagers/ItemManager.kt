@@ -46,6 +46,9 @@ object ItemManager {
         fun onComplete(result: MutableList<FoundItem>?)
     }
 
+    interface UpdateLostCallback {
+        fun onComplete(result: Boolean)
+    }
 
     // method to get the lostitem as a LostItem object when given a lost item id
     fun getLostItemFromId(lostItemID: String, callback: LostItemCallback) {
@@ -97,7 +100,8 @@ object ItemManager {
                                             description = itemResult[FirebaseNames.LOSTFOUND_DESCRIPTION] as String,
                                             timePosted = itemResult[FirebaseNames.LOSTFOUND_TIMEPOSTED] as Long,
                                             status = status,
-                                            image = itemImage.toString()  // uri to string
+                                            image = itemImage.toString(),  // uri to string
+                                            isTracking = itemResult[FirebaseNames.LOST_IS_TRACKING] as Boolean
                                         )
 
                                         // return the generated lost item
@@ -107,6 +111,34 @@ object ItemManager {
                             }
                         }
                     )
+                }
+            }
+        )
+    }
+
+
+    // function to update the tracking status of the lost item to the isTracking value
+    // return true if successful, false otherwise
+    fun updateIsTracking(
+        lostItemID: String,
+        isTracking: Boolean,
+        callback: UpdateLostCallback
+    ){
+        val firestoreManager: FirestoreManager = FirestoreManager()
+        firestoreManager.update(
+            FirebaseNames.COLLECTION_LOST_ITEMS,
+            lostItemID,
+            FirebaseNames.LOST_IS_TRACKING,
+            isTracking,
+            object: FirestoreManager.Callback<Boolean>{
+                override fun onComplete(result: Boolean) {
+                    if (!result){
+                        callback.onComplete(false)
+                        return
+                    }
+
+                    // return successful
+                    callback.onComplete(true)
                 }
             }
         )
@@ -433,7 +465,6 @@ object ItemManager {
                 callback.onComplete(0)
             }
     }
-
 
     // given a lost item, return from db all the matching found items
     // return null only when an error occurred, if there are no items return empty list

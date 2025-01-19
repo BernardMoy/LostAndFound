@@ -275,6 +275,158 @@ fun Developer(
             }
         )
 
+        CustomActionRow(text = "Delete all lost item data",
+            leftIcon = Icons.Outlined.Delete,
+            onClick = {
+                val db = FirebaseFirestore.getInstance()
+                // get all
+                db.collection(FirebaseNames.COLLECTION_LOST_ITEMS)
+                    .get()
+                    .addOnCompleteListener { task ->
+                        if (task.isSuccessful) {
+                            // delete each reference of the collection
+                            val batch = db.batch()
+                            for ((_, item) in task.result.withIndex()) {
+                                batch.delete(item.reference)
+                            }
+
+                            // commit the batch
+                            batch.commit().addOnCompleteListener { result ->
+                                if (result.isSuccessful) {
+                                    Toast.makeText(
+                                        context,
+                                        "Deleted lost items successfully",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                } else {
+                                    Toast.makeText(
+                                        context,
+                                        "Delete lost items failed",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                }
+                            }
+                        } else {
+                            Toast.makeText(context, "Delete lost items failed", Toast.LENGTH_SHORT).show()
+                        }
+                    }
+            }
+        )
+
+        CustomActionRow(text = "Delete all found item data",
+            leftIcon = Icons.Outlined.Delete,
+            onClick = {
+                val db = FirebaseFirestore.getInstance()
+                // get all
+                db.collection(FirebaseNames.COLLECTION_FOUND_ITEMS)
+                    .get()
+                    .addOnCompleteListener { task ->
+                        if (task.isSuccessful) {
+                            // delete each reference of the collection
+                            val batch = db.batch()
+                            for ((_, item) in task.result.withIndex()) {
+                                batch.delete(item.reference)
+                            }
+
+                            // commit the batch
+                            batch.commit().addOnCompleteListener { result ->
+                                if (result.isSuccessful) {
+                                    Toast.makeText(
+                                        context,
+                                        "Deleted found items successfully",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                } else {
+                                    Toast.makeText(
+                                        context,
+                                        "Delete found items failed",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                }
+                            }
+                        } else {
+                            Toast.makeText(context, "Delete found items failed", Toast.LENGTH_SHORT).show()
+                        }
+                    }
+            }
+        )
+
+        CustomActionRow(text = "Delete all claims data",
+            leftIcon = Icons.Outlined.Delete,
+            onClick = {
+                val db = FirebaseFirestore.getInstance()
+                // get all
+                db.collection(FirebaseNames.COLLECTION_CLAIMED_ITEMS)
+                    .get()
+                    .addOnCompleteListener { task ->
+                        if (task.isSuccessful) {
+                            // delete each reference of the collection
+                            val batch = db.batch()
+                            for ((_, item) in task.result.withIndex()) {
+                                batch.delete(item.reference)
+                            }
+
+                            // commit the batch
+                            batch.commit().addOnCompleteListener { result ->
+                                if (result.isSuccessful) {
+                                    Toast.makeText(
+                                        context,
+                                        "Deleted claims successfully",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                } else {
+                                    Toast.makeText(
+                                        context,
+                                        "Delete claims failed",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                }
+                            }
+                        } else {
+                            Toast.makeText(context, "Delete claims failed", Toast.LENGTH_SHORT).show()
+                        }
+                    }
+            }
+        )
+
+        CustomActionRow(text = "Delete all notifications data",
+            leftIcon = Icons.Outlined.Delete,
+            onClick = {
+                val db = FirebaseFirestore.getInstance()
+                // get all
+                db.collection(FirebaseNames.COLLECTION_NOTIFICATIONS)
+                    .get()
+                    .addOnCompleteListener { task ->
+                        if (task.isSuccessful) {
+                            // delete each reference of the collection
+                            val batch = db.batch()
+                            for ((_, item) in task.result.withIndex()) {
+                                batch.delete(item.reference)
+                            }
+
+                            // commit the batch
+                            batch.commit().addOnCompleteListener { result ->
+                                if (result.isSuccessful) {
+                                    Toast.makeText(
+                                        context,
+                                        "Deleted notifications successfully",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                } else {
+                                    Toast.makeText(
+                                        context,
+                                        "Delete notifications failed",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                }
+                            }
+                        } else {
+                            Toast.makeText(context, "Delete notifications failed", Toast.LENGTH_SHORT).show()
+                        }
+                    }
+            }
+        )
+
         CustomActionRow(text = "Open comparison activity",
             leftIcon = Icons.Outlined.Android,
             onClick = {

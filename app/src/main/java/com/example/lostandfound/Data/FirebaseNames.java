@@ -35,6 +35,7 @@ public final class FirebaseNames {
     public static final String FOUND_SECURITY_Q = "security_question";
     public static final String FOUND_SECURITY_Q_ANS = "security_question_answer";
     public static final String LOSTFOUND_TIMEPOSTED = "time_posted";
+    public static final String LOST_IS_TRACKING = "is_tracking";
 
     // for use in claimed items
     public static final String CLAIM_LOST_ITEM_ID = "lost_item_id";

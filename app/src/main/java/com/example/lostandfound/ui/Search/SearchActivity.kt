@@ -1,5 +1,6 @@
 package com.example.lostandfound.ui.Search
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -133,7 +134,7 @@ fun MainContent(viewModel: SearchViewModel) {
     }
 
     // display content
-    if (viewModel.isLoading.value){
+    if (!inPreview && viewModel.isLoading.value){
         CustomCenteredProgressbar()
 
     } else {
@@ -141,7 +142,9 @@ fun MainContent(viewModel: SearchViewModel) {
             modifier = Modifier.fillMaxWidth(),
             verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin))
         ){
-            TopDescription(viewModel = viewModel)
+            if (viewModel.lostItem.userID == FirebaseUtility.getUserID()){
+                TopDescription(context= context, viewModel = viewModel)
+            }
             MatchingItemsColumn(context = context, viewModel = viewModel)
         }
     }
@@ -149,6 +152,7 @@ fun MainContent(viewModel: SearchViewModel) {
 
 @Composable
 fun TopDescription(
+    context: Context,
     viewModel: SearchViewModel
 ){
     Column(
@@ -182,7 +186,20 @@ fun TopDescription(
             fontWeight = FontWeight.Bold,
             textDecoration = TextDecoration.Underline,
             modifier = Modifier.clickable { 
+                viewModel.onWeWillTrackClicked(
+                    object: Callback<Boolean>{
+                        override fun onComplete(result: Boolean) {
+                            if (!result){
+                                Toast.makeText(context, "Failed to update track status", Toast.LENGTH_SHORT).show()
+                                return
+                            }
 
+                            // exit activity after doing this
+                            Toast.makeText(context, "Your lost item is now being tracked!", Toast.LENGTH_SHORT).show()
+                            (context as Activity).finish()
+                        }
+                    }
+                )
             }
         )
     }
