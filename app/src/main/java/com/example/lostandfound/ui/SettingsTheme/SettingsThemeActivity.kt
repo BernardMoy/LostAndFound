@@ -1,10 +1,9 @@
 package com.example.lostandfound.ui.SettingsTheme
 
-import android.content.Context
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -15,8 +14,6 @@ import androidx.compose.material.icons.outlined.Smartphone
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalInspectionMode
@@ -24,7 +21,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.lostandfound.CustomElements.BackToolbar
 import com.example.lostandfound.CustomElements.CustomChoiceTextField
-import com.example.lostandfound.Data.SharedPreferencesNames
 import com.example.lostandfound.Utility.DeviceThemeManager
 import com.example.lostandfound.ui.AboutApp.SettingsThemeViewModel
 import com.example.lostandfound.ui.theme.ComposeTheme
@@ -92,6 +88,11 @@ fun MainContent(viewModel: SettingsThemeViewModel = viewModel()) {
             state = viewModel.selectedTheme == 0,
             onClick = {
                 DeviceThemeManager.setTheme(0, context)
+
+                // change the xml to day mode
+                AppCompatDelegate.setDefaultNightMode(
+                    AppCompatDelegate.MODE_NIGHT_NO
+                )
             }
         )
 
@@ -101,6 +102,11 @@ fun MainContent(viewModel: SettingsThemeViewModel = viewModel()) {
             state = viewModel.selectedTheme == 1,
             onClick = {
                 DeviceThemeManager.setTheme(1, context)
+
+                // change the xml to night mode
+                AppCompatDelegate.setDefaultNightMode(
+                    AppCompatDelegate.MODE_NIGHT_YES
+                )
             }
         )
 
@@ -110,9 +116,13 @@ fun MainContent(viewModel: SettingsThemeViewModel = viewModel()) {
             state = viewModel.selectedTheme == 2,
             onClick = {
                 DeviceThemeManager.setTheme(2, context)
+
+                // change the xml to auto
+                AppCompatDelegate.setDefaultNightMode(
+                    AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
+                )
             }
         )
-
     }
 }
 
