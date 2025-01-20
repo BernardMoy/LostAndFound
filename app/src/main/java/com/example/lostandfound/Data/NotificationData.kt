@@ -7,6 +7,11 @@ import androidx.compose.material.icons.outlined.SentimentDissatisfied
 import androidx.compose.material.icons.outlined.SentimentSatisfied
 import androidx.compose.ui.graphics.vector.ImageVector
 
+/*
+    A notification is identified by an id (0,1,2)
+    as Image vectors cannot be stored in firebase
+    the numbers are stored instead
+ */
 val notificationTitle: Map<Int, String> = mapOf(
     0 to "New matching item found!",
     1 to "Your claim has been approved!",

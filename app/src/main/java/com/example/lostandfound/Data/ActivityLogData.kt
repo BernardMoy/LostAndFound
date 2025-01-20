@@ -1,0 +1,38 @@
+package com.example.lostandfound.Data
+
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.AddCircleOutline
+import androidx.compose.material.icons.outlined.CheckCircle
+import androidx.compose.material.icons.outlined.Search
+import androidx.compose.material.icons.outlined.SentimentDissatisfied
+import androidx.compose.material.icons.outlined.SentimentSatisfied
+import androidx.compose.material.icons.outlined.TrackChanges
+import androidx.compose.ui.graphics.vector.ImageVector
+
+val activityLogTitles: Map<Int, String> = mapOf(
+    0 to "You posted a new lost item",
+    1 to "You posted a new found item",
+    2 to "You marked a lost item as tracked",
+    3 to "You marked a lost item as untracked",
+    4 to "You have made a claim on your lost item",
+    5 to "You have approved a claim",
+)
+
+// activity log content:
+/*
+    0: show the lost id
+    1: show the found id
+    2: show the lost id
+    3: show the lost id
+    4: show the lost id  (Must be done by lost user)
+    5: show the found id  (Must be done by found user)
+ */
+
+val activityLogIcons: Map<Int, ImageVector> = mapOf(
+    0 to Icons.Outlined.AddCircleOutline,
+    1 to Icons.Outlined.AddCircleOutline,
+    2 to Icons.Outlined.TrackChanges,
+    3 to Icons.Outlined.TrackChanges,
+    4 to Icons.Outlined.AddCircleOutline,
+    5 to Icons.Outlined.CheckCircle,
+)
