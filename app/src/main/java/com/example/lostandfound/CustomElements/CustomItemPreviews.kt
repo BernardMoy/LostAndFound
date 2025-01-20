@@ -32,6 +32,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
@@ -42,12 +43,15 @@ import androidx.compose.ui.unit.sp
 import coil3.compose.rememberAsyncImagePainter
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
+import com.example.lostandfound.Data.ActivityLogItem
 import com.example.lostandfound.Data.ChatInboxPreview
 import com.example.lostandfound.Data.ClaimPreview
 import com.example.lostandfound.Data.FirebaseNames
 import com.example.lostandfound.Data.FoundItem
 import com.example.lostandfound.Data.IntentExtraNames
 import com.example.lostandfound.Data.LostItem
+import com.example.lostandfound.Data.activityLogIcons
+import com.example.lostandfound.Data.activityLogTitles
 import com.example.lostandfound.Data.foundStatusText
 import com.example.lostandfound.Data.lostStatusText
 import com.example.lostandfound.Data.notificationContent
@@ -83,10 +87,16 @@ fun Preview() {
          */
 
 
-
+        /*
         CustomNotificationItemPreview(
             0, "",238983298L, false
         )
+
+         */
+
+        CustomActivityLogItemPreview(activityLogItem = ActivityLogItem())
+
+
 
 
     }
@@ -737,9 +747,68 @@ fun CustomNotificationItemPreview(
 
 }
 
+
 @Composable
-fun CustomNotificationMessagePreview(
+fun CustomActivityLogItemPreview(
+    activityLogItem: ActivityLogItem
+){
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .border(
+                width = 1.dp,
+                color = Color.Gray,
+                shape = RoundedCornerShape(
+                    dimensionResource(id = R.dimen.corner_radius_small)
+                )
+            )
+            .padding(dimensionResource(id = R.dimen.content_margin))
+    ) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin)),
+            verticalAlignment = Alignment.Top
 
-) {
+        ) {
+            Icon(
+                imageVector = activityLogIcons[activityLogItem.type] ?: Icons.Outlined.QuestionMark,
+                contentDescription = "Icon",
+                tint = MaterialTheme.colorScheme.onPrimaryContainer,
+                modifier = Modifier.size(dimensionResource(id = R.dimen.image_button_size))
+            )
 
+            Column {
+                Row {
+                    Text(
+                        text = activityLogTitles[activityLogItem.type] ?: "",
+                        style = Typography.titleMedium,
+                        fontWeight = FontWeight.Bold,
+                        color = MaterialTheme.colorScheme.onBackground,
+                        modifier = Modifier.weight(1f)
+                    )
+                }
+
+                Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.content_margin_half)))
+
+                Text(
+                    text = activityLogItem.content,
+                    style = Typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onBackground,
+                )
+
+                Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.content_margin)))
+
+
+                // show the time of the notification
+                Row {
+                    Text(
+                        text = DateTimeManager.dateTimeToString(activityLogItem.timestamp),
+                        style = Typography.bodyMedium,
+                        color = Color.Gray,
+                        modifier = Modifier.weight(1f)
+                    )
+                }
+            }
+        }
+    }
 }
