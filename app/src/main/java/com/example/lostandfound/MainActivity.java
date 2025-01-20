@@ -100,6 +100,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
          */
 
+        // load the theme from theme manager
+        DeviceThemeManager.INSTANCE.loadTheme(
+                MainActivity.this
+        );
+
+
+
+
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         BottomNavigationView navView = findViewById(R.id.nav_view);
