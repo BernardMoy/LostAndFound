@@ -13,6 +13,7 @@ public final class FirebaseNames {
     public static final String COLLECTION_CHATS = "chats";
     public static final String COLLECTION_CHAT_INBOXES = "chat_inboxes";
     public static final String COLLECTION_NOTIFICATIONS = "notifications";
+    public static final String COLLECTION_ACTIVITY_LOG_ITEMS = "activity_log_items";
 
     // strings that represent all key names in the map that is stored
     public static final String USERS_FIRSTNAME = "firstName";
@@ -74,5 +75,11 @@ public final class FirebaseNames {
     public static final String NOTIFICATION_LOST_ITEM_ID = "lost_item_id";   // for type 0 only
     public static final String NOTIFICATION_FOUND_ITEM_ID = "found_item_id";   // for type 0 only
     public static final String NOTIFICATION_CLAIM_ID = "claim_id";   // for type 1 2 3
+
+    // for activity log items
+    public static final String ACTIVITY_LOG_ITEM_TYPE = "type";  // 0 1 2 3 4 5
+    public static final String ACTIVITY_LOG_ITEM_CONTENT = "content";
+    public static final String ACTIVITY_LOG_ITEM_USER_ID = "user_id";
+    public static final String ACTIVITY_LOG_ITEM_TIMESTAMP = "timestamp";
 
 }
