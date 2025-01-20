@@ -214,7 +214,22 @@ class NewLostViewModel: ViewModel() {
                                 isTracking = false
                             )
 
-                            callback.onComplete(generatedLostItem)  //return the lost item added
+                            // add activity log item
+                            firestoreManager.putWithUniqueId(
+                                FirebaseNames.COLLECTION_ACTIVITY_LOG_ITEMS,
+                                mapOf(
+                                    FirebaseNames.ACTIVITY_LOG_ITEM_TYPE to 0,
+                                    FirebaseNames.ACTIVITY_LOG_ITEM_CONTENT to itemName.value + " (#" + result + ")",
+                                    FirebaseNames.ACTIVITY_LOG_ITEM_USER_ID to FirebaseUtility.getUserID(),
+                                    FirebaseNames.ACTIVITY_LOG_ITEM_TIMESTAMP to DateTimeManager.getCurrentEpochTime()
+                                ),
+                                object: FirestoreManager.Callback<String>{
+                                    override fun onComplete(result: String?) {
+                                        // not necessary to throw an error if failed here
+                                        callback.onComplete(generatedLostItem)  //return the lost item added
+                                    }
+                                }
+                            )
                         }
                     })
 
@@ -240,7 +255,22 @@ class NewLostViewModel: ViewModel() {
                         isTracking = false
                     )
 
-                    callback.onComplete(generatedLostItem)  //return the lost item added
+                    // add activity log item
+                    firestoreManager.putWithUniqueId(
+                        FirebaseNames.COLLECTION_ACTIVITY_LOG_ITEMS,
+                        mapOf(
+                            FirebaseNames.ACTIVITY_LOG_ITEM_TYPE to 0,
+                            FirebaseNames.ACTIVITY_LOG_ITEM_CONTENT to itemName.value + " (#" + result + ")",
+                            FirebaseNames.ACTIVITY_LOG_ITEM_USER_ID to FirebaseUtility.getUserID(),
+                            FirebaseNames.ACTIVITY_LOG_ITEM_TIMESTAMP to DateTimeManager.getCurrentEpochTime()
+                        ),
+                        object: FirestoreManager.Callback<String>{
+                            override fun onComplete(result: String?) {
+                                // not necessary to throw an error if failed here
+                                callback.onComplete(generatedLostItem)  //return the lost item added
+                            }
+                        }
+                    )
                 }
             }
         })

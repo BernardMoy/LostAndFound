@@ -236,7 +236,7 @@ class NewFoundViewModel : ViewModel() {
                                     }
 
                                     // create the newly found item
-                                    val thisFoundItem = FoundItem(
+                                    val generatedFoundItem = FoundItem(
                                         itemID = result,
                                         userID = FirebaseUtility.getUserID(),
                                         itemName = itemName.value,
@@ -259,18 +259,33 @@ class NewFoundViewModel : ViewModel() {
                                     )
 
                                     // send notifications
-                                    notifyTrackingLostUsers(thisFoundItem, object: NotifyLostUsersCallback{
+                                    notifyTrackingLostUsers(generatedFoundItem, object: NotifyLostUsersCallback{
                                         override fun onComplete(result: Boolean) {
                                                 // still proceed, since this is not important to the current user
                                                 // if decide not to proceed here, the uploaded image will also have to be deleted
-                                                callback.onComplete("")
+                                            // add activity log item
+                                            firestoreManager.putWithUniqueId(
+                                                FirebaseNames.COLLECTION_ACTIVITY_LOG_ITEMS,
+                                                mapOf(
+                                                    FirebaseNames.ACTIVITY_LOG_ITEM_TYPE to 0,
+                                                    FirebaseNames.ACTIVITY_LOG_ITEM_CONTENT to itemName.value + " (#" + result + ")",
+                                                    FirebaseNames.ACTIVITY_LOG_ITEM_USER_ID to FirebaseUtility.getUserID(),
+                                                    FirebaseNames.ACTIVITY_LOG_ITEM_TIMESTAMP to DateTimeManager.getCurrentEpochTime()
+                                                ),
+                                                object: FirestoreManager.Callback<String>{
+                                                    override fun onComplete(result: String?) {
+                                                        // not necessary to throw an error if failed here
+                                                        callback.onComplete("")
+                                                    }
+                                                }
+                                            )
                                         }
                                     })
                                 }
                             })
                     } else {
                         // create the newly found item
-                        val thisFoundItem = FoundItem(
+                        val generatedFoundItem = FoundItem(
                             itemID = result,
                             userID = FirebaseUtility.getUserID(),
                             itemName = itemName.value,
@@ -293,11 +308,25 @@ class NewFoundViewModel : ViewModel() {
                         )
 
                         // send notifications
-                        notifyTrackingLostUsers(thisFoundItem, object: NotifyLostUsersCallback{
+                        notifyTrackingLostUsers(generatedFoundItem, object: NotifyLostUsersCallback{
                             override fun onComplete(result: Boolean) {
                                 // still proceed, since this is not important to the current user
                                 // if decide not to proceed here, the uploaded image will also have to be deleted
-                                callback.onComplete("")
+                                firestoreManager.putWithUniqueId(
+                                    FirebaseNames.COLLECTION_ACTIVITY_LOG_ITEMS,
+                                    mapOf(
+                                        FirebaseNames.ACTIVITY_LOG_ITEM_TYPE to 0,
+                                        FirebaseNames.ACTIVITY_LOG_ITEM_CONTENT to itemName.value + " (#" + result + ")",
+                                        FirebaseNames.ACTIVITY_LOG_ITEM_USER_ID to FirebaseUtility.getUserID(),
+                                        FirebaseNames.ACTIVITY_LOG_ITEM_TIMESTAMP to DateTimeManager.getCurrentEpochTime()
+                                    ),
+                                    object: FirestoreManager.Callback<String>{
+                                        override fun onComplete(result: String?) {
+                                            // not necessary to throw an error if failed here
+                                            callback.onComplete("")
+                                        }
+                                    }
+                                )
                             }
                         })
                     }

@@ -1,16 +1,22 @@
 package com.example.lostandfound.ui.ActivityLog
 
+import android.app.Activity
+import android.content.Context
 import android.os.Bundle
+import android.util.Log
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalInspectionMode
@@ -18,6 +24,8 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.lostandfound.CustomElements.BackToolbar
+import com.example.lostandfound.CustomElements.CustomCenterText
+import com.example.lostandfound.CustomElements.CustomCenteredProgressbar
 import com.example.lostandfound.R
 import com.example.lostandfound.ui.theme.ComposeTheme
 
@@ -55,8 +63,7 @@ fun ActivityLogScreen(activity: ComponentActivity) {
                     modifier = Modifier
                         .fillMaxSize()
                         .padding(paddingValues = innerPadding)
-                        .padding(dimensionResource(id = R.dimen.title_margin))
-                        .verticalScroll(rememberScrollState())   // make screen scrollable
+                        .padding(dimensionResource(id = R.dimen.title_margin)) // make screen scrollable
                 ) {
                     // content goes here
                     MainContent()
@@ -76,5 +83,49 @@ fun MainContent(viewModel: ActivityLogViewModel = viewModel()) {
     // boolean to determine if it is being rendered in preview
     val inPreview = LocalInspectionMode.current
 
-    // content goes here
+    // fetch data
+    LaunchedEffect (Unit){
+        loadData(context = context, viewModel = viewModel)
+    }
+
+    if (!inPreview && viewModel.isLoading.value){
+        CustomCenteredProgressbar()
+    } else if (viewModel.itemData.size == 0){
+        CustomCenterText(text = "Your activity log is empty.")
+    } else {
+        ActivityLogItems(context = context, viewModel = viewModel)
+    }
+
+}
+
+@Composable
+fun ActivityLogItems(
+    context: Context,
+    viewModel: ActivityLogViewModel
+){
+    LazyColumn {
+        
+    }
+}
+
+
+// function to load data on create
+fun loadData(
+    context: Context,
+    viewModel: ActivityLogViewModel
+){
+    viewModel.isLoading.value = true
+
+    viewModel.fetchActivityLogItems(
+        object: FetchActivityLogCallback{
+            override fun onComplete(result: Boolean) {
+                viewModel.isLoading.value = false
+                if (!result){
+                    Toast.makeText(context, "Fetching data failed", Toast.LENGTH_SHORT).show()
+                    return
+                }
+                // do nothing when successful
+            }
+        }
+    )
 }
