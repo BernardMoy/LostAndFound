@@ -8,10 +8,12 @@ import com.example.lostandfound.Data.FirebaseNames
 import com.example.lostandfound.Data.LostItem
 import com.example.lostandfound.Data.User
 import com.example.lostandfound.FirebaseManagers.FirebaseStorageManager
+import com.example.lostandfound.FirebaseManagers.FirebaseUtility
 import com.example.lostandfound.FirebaseManagers.FirestoreManager
 import com.example.lostandfound.FirebaseManagers.ItemManager
 import com.example.lostandfound.FirebaseManagers.UserManager
 import com.example.lostandfound.R
+import com.example.lostandfound.Utility.DateTimeManager
 import com.google.android.gms.maps.model.LatLng
 
 interface Callback<T> {
@@ -69,7 +71,24 @@ class ViewLostViewModel : ViewModel(){
                     // update the mutable state to be displayed in the ui
                     isItemTracking.value = isTracking
 
-                    callback.onComplete(true)
+
+                    // add activity log item
+                    val firestoreManager = FirestoreManager()
+                    firestoreManager.putWithUniqueId(
+                        FirebaseNames.COLLECTION_ACTIVITY_LOG_ITEMS,
+                        mapOf(
+                            FirebaseNames.ACTIVITY_LOG_ITEM_TYPE to if (isTracking) 2 else 3,
+                            FirebaseNames.ACTIVITY_LOG_ITEM_CONTENT to itemData.itemName + " (#" + itemData.itemID + ")",
+                            FirebaseNames.ACTIVITY_LOG_ITEM_USER_ID to FirebaseUtility.getUserID(),
+                            FirebaseNames.ACTIVITY_LOG_ITEM_TIMESTAMP to DateTimeManager.getCurrentEpochTime()
+                        ),
+                        object: FirestoreManager.Callback<String>{
+                            override fun onComplete(result: String?) {
+                                // not necessary to throw an error if failed here
+                                callback.onComplete(true)
+                            }
+                        }
+                    )
                 }
             }
         )

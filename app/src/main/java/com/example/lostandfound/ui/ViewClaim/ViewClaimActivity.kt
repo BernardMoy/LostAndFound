@@ -70,12 +70,14 @@ import com.example.lostandfound.CustomElements.CustomTextDialog
 import com.example.lostandfound.CustomElements.CustomUserDialog
 import com.example.lostandfound.CustomElements.CustomViewTwoLocationsDialog
 import com.example.lostandfound.Data.Claim
+import com.example.lostandfound.Data.FirebaseNames
 import com.example.lostandfound.Data.IntentExtraNames
 import com.example.lostandfound.Data.foundStatusText
 import com.example.lostandfound.Data.lostStatusText
 import com.example.lostandfound.Data.statusColor
 import com.example.lostandfound.Data.stringToColor
 import com.example.lostandfound.FirebaseManagers.FirebaseUtility
+import com.example.lostandfound.FirebaseManagers.FirestoreManager
 import com.example.lostandfound.R
 import com.example.lostandfound.Utility.DateTimeManager
 import com.example.lostandfound.Utility.ErrorCallback
@@ -734,13 +736,31 @@ fun AcceptButton(
                                     return
                                 }
 
-                                // open done activity
-                                val intent: Intent = Intent(context, DoneActivity::class.java)
-                                intent.putExtra(
-                                    IntentExtraNames.INTENT_DONE_ACTIVITY_TITLE,
-                                    "Claim approved!"
+                                // add activity log
+                                val firestoreManager = FirestoreManager()
+                                firestoreManager.putWithUniqueId(
+                                    FirebaseNames.COLLECTION_ACTIVITY_LOG_ITEMS,
+                                    mapOf(
+                                        FirebaseNames.ACTIVITY_LOG_ITEM_TYPE to 5,
+                                        FirebaseNames.ACTIVITY_LOG_ITEM_CONTENT to
+                                                "Approved " + viewModel.lostItemData.itemName + " (#" + viewModel.lostItemData.itemID + ") to "
+                                                + viewModel.foundItemData.itemName + " (#" + viewModel.foundItemData.itemID + ")",
+                                        FirebaseNames.ACTIVITY_LOG_ITEM_USER_ID to FirebaseUtility.getUserID(),
+                                        FirebaseNames.ACTIVITY_LOG_ITEM_TIMESTAMP to DateTimeManager.getCurrentEpochTime()
+                                    ),
+                                    object: FirestoreManager.Callback<String>{
+                                        override fun onComplete(result: String?) {
+                                            // not necessary to throw an error if failed here
+                                            // open done activity
+                                            val intent: Intent = Intent(context, DoneActivity::class.java)
+                                            intent.putExtra(
+                                                IntentExtraNames.INTENT_DONE_ACTIVITY_TITLE,
+                                                "Claim approved!"
+                                            )
+                                            context.startActivity(intent)
+                                        }
+                                    }
                                 )
-                                context.startActivity(intent)
                             }
                         })
                     },
