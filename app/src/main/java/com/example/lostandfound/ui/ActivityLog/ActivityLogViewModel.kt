@@ -24,6 +24,8 @@ class ActivityLogViewModel : ViewModel(){
     fun fetchActivityLogItems(
         callback: FetchActivityLogCallback
     ){
+        itemData.clear()
+
         val db = FirebaseFirestore.getInstance()
         db.collection(FirebaseNames.COLLECTION_ACTIVITY_LOG_ITEMS)
             .whereEqualTo(FirebaseNames.ACTIVITY_LOG_ITEM_USER_ID, FirebaseUtility.getUserID())
