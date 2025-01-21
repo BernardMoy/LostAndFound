@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -325,6 +326,9 @@ fun RecentlyLostItem(
             fontWeight = FontWeight.Bold,
             color = MaterialTheme.colorScheme.onBackground
         )
+
+        // display the lost item in simple format
+
     }
 
 
@@ -338,4 +342,21 @@ fun QuickAccess(
     viewModel: HomeFragmentViewModel
 ){
 
+}
+
+
+fun loadData(
+    context: Context,
+    viewModel: HomeFragmentViewModel
+){
+    viewModel.loadLatestLostItem(object: Callback<Boolean>{
+        override fun onComplete(result: Boolean) {
+            if (!result){
+                Toast.makeText(context, "Fetching item data failed", Toast.LENGTH_SHORT).show()
+                return
+            }
+
+            // do nothing when successful
+        }
+    })
 }

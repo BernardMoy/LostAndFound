@@ -94,7 +94,12 @@ fun Preview() {
 
          */
 
+        /*
         CustomActivityLogItemPreview(activityLogItem = ActivityLogItem())
+
+         */
+
+        CustomLostItemPreviewSmall(data = LostItem(), 3)
 
 
 
@@ -274,6 +279,92 @@ fun CustomLostItemPreview(
                     small = true
                 )
 
+            }
+        }
+    }
+}
+
+
+
+
+@OptIn(ExperimentalGlideComposeApi::class)
+@Composable
+fun CustomLostItemPreviewSmall(
+    data: LostItem,
+    numberOfMatches: Int,
+    onItemClicked: () -> Unit = {}
+) {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .border(
+                width = 1.dp,
+                color = Color.Gray,
+                shape = RoundedCornerShape(
+                    dimensionResource(id = R.dimen.corner_radius_small)
+                )
+            )
+            .clickable {
+                onItemClicked()
+            }
+            .padding(dimensionResource(id = R.dimen.title_margin))
+
+    ) {
+        Column(
+            verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin))
+        ) {
+
+            // the main content of the item goes here
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin))
+            ) {
+                // image of the item is loaded using GlideImage
+                GlideImage(
+                    model = Uri.parse(data.image),  // parse the string stored back to uri
+                    contentDescription = "Item image",
+                    modifier = Modifier.weight(1F)
+                )
+
+                // other attributes of the item
+                Column(
+                    modifier = Modifier.weight(2F),
+                    verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin_half))
+                ) {
+                    // name
+                    Text(
+                        text = data.itemName,
+                        style = Typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onBackground,
+                        fontWeight = FontWeight.Bold,
+                    )
+
+                    // date and time
+                    Text(
+                        text = "Date: "
+                                + DateTimeManager.dateTimeToString(data.dateTime),
+                        style = Typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onBackground
+                    )
+
+
+                    // number of matches found
+                    Row (
+                        verticalAlignment = Alignment.CenterVertically
+                    ){
+                        Text(
+                            text = "Posted " + DateTimeManager.getDescription(data.timePosted),
+                            style = Typography.bodyMedium,
+                            color = Color.Gray,
+                            modifier = Modifier.weight(1f)
+                        )
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Outlined.ArrowForward,
+                            contentDescription = "View",
+                            tint = Color.Gray,
+                            modifier = Modifier.size(24.dp),
+                        )
+                    }
+                }
             }
         }
     }

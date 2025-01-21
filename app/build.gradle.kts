@@ -99,4 +99,6 @@ dependencies {
     implementation("com.google.maps.android:maps-compose:6.2.1")
     implementation("com.google.maps.android:maps-compose-utils:6.2.1")
     implementation("com.google.maps.android:maps-compose-widgets:6.2.1")
+
+    implementation ("org.tensorflow:tensorflow-lite-gpu:2.12.0")
 }
