@@ -2,7 +2,6 @@ package com.example.lostandfound.ui.Notifications
 
 import android.content.Context
 import android.content.Intent
-import android.media.session.PlaybackState.CustomAction
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
@@ -15,34 +14,14 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.pager.HorizontalPager
-import androidx.compose.foundation.pager.rememberPagerState
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Circle
-import androidx.compose.material3.Button
-import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Tab
-import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -50,24 +29,19 @@ import com.example.lostandfound.CustomElements.BackToolbar
 import com.example.lostandfound.CustomElements.CustomActionText
 import com.example.lostandfound.CustomElements.CustomCenterText
 import com.example.lostandfound.CustomElements.CustomCenteredProgressbar
-import com.example.lostandfound.CustomElements.CustomChatCard
 import com.example.lostandfound.CustomElements.CustomNotificationItemPreview
 import com.example.lostandfound.Data.Claim
 import com.example.lostandfound.Data.FirebaseNames
 import com.example.lostandfound.Data.FoundItem
 import com.example.lostandfound.Data.IntentExtraNames
 import com.example.lostandfound.Data.LostItem
-import com.example.lostandfound.Data.statusColor
 import com.example.lostandfound.FirebaseManagers.FirebaseUtility
 import com.example.lostandfound.FirebaseManagers.ItemManager
 import com.example.lostandfound.FirebaseManagers.NotificationManager
 import com.example.lostandfound.R
-import com.example.lostandfound.ui.ChatInbox.loadMessages
-import com.example.lostandfound.ui.Profile.ProfileViewModel
 import com.example.lostandfound.ui.ViewClaim.ViewClaimActivity
 import com.example.lostandfound.ui.ViewComparison.ViewComparisonActivity
 import com.example.lostandfound.ui.theme.ComposeTheme
-import com.example.lostandfound.ui.theme.Typography
 
 class NotificationsActivity : ComponentActivity() { // Use ComponentActivity here
 
@@ -115,10 +89,10 @@ fun NotificationsScreen(activity: ComponentActivity, viewModel: NotificationsVie
                     Box(
                         modifier = Modifier
                             .padding(dimensionResource(id = R.dimen.title_margin))
-                    ){
-                        if (viewModel.isItemsLoading.value){
+                    ) {
+                        if (viewModel.isItemsLoading.value) {
                             CustomCenteredProgressbar()
-                        } else if (viewModel.itemsNotificationList.isEmpty()){
+                        } else if (viewModel.itemsNotificationList.isEmpty()) {
                             CustomCenterText(text = "You have no notifications.")
                         } else {
                             Items(context = context, viewModel = viewModel)
@@ -275,24 +249,28 @@ fun Tabs(viewModel: NotificationsViewModel){
 fun Items(
     context: Context,
     viewModel: NotificationsViewModel
-){
-    Column (
+) {
+    Column(
         verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin))
-    ){
+    ) {
         // a text for marking all notifications as read
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.End
-        ){
+        ) {
             CustomActionText(
                 text = "Mark all as read",
                 onClick = {
                     NotificationManager.markAllNotificationsAsRead(
                         FirebaseUtility.getUserID(),
-                        object: NotificationManager.NotificationUpdateCallback{
+                        object : NotificationManager.NotificationUpdateCallback {
                             override fun onComplete(result: Boolean) {
-                                if (!result){
-                                    Toast.makeText(context, "Failed to mark all notifications as read", Toast.LENGTH_SHORT).show()
+                                if (!result) {
+                                    Toast.makeText(
+                                        context,
+                                        "Failed to mark all notifications as read",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
                                     return
                                 }
 
@@ -306,170 +284,226 @@ fun Items(
 
 
         LazyColumn(
-                // it is assigned all the remaining height from the MainContent() composable
-                modifier = Modifier
-                    .fillMaxSize(),
-        verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin))
+            // it is assigned all the remaining height from the MainContent() composable
+            modifier = Modifier
+                .fillMaxSize(),
+            verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin))
         ) {
-        // for each preview in the view model, display it
-        items(viewModel.itemsNotificationList) { notification ->
-            // display different notifications type
-            val type = (notification[FirebaseNames.NOTIFICATION_TYPE] as Long).toInt()
-            val timeStamp = notification[FirebaseNames.NOTIFICATION_TIMESTAMP] as Long
-            val notificationID = notification[FirebaseNames.NOTIFICATION_ID].toString()
-            val isRead = notification[FirebaseNames.NOTIFICATION_IS_READ] as Boolean
+            // for each preview in the view model, display it
+            items(viewModel.itemsNotificationList) { notification ->
+                // display different notifications type
+                val type = (notification[FirebaseNames.NOTIFICATION_TYPE] as Long).toInt()
+                val timeStamp = notification[FirebaseNames.NOTIFICATION_TIMESTAMP] as Long
+                val notificationID = notification[FirebaseNames.NOTIFICATION_ID].toString()
+                val isRead = notification[FirebaseNames.NOTIFICATION_IS_READ] as Boolean
 
-            when(type){
-                0 -> CustomNotificationItemPreview(
-                    type = 0,
-                    notificationID = notificationID,
-                    timestamp = timeStamp,
-                    isRead = isRead,
-                    onClick = {
-                        val lostItemID = notification[FirebaseNames.NOTIFICATION_LOST_ITEM_ID].toString()
-                        val foundItemID = notification[FirebaseNames.NOTIFICATION_FOUND_ITEM_ID].toString()
-
-                        ItemManager.getLostItemFromId(lostItemID = lostItemID, object : ItemManager.LostItemCallback{
-                            override fun onComplete(lostItem: LostItem?) {
-                                if (lostItem == null){
-                                    Toast.makeText(context, "Failed to get lost item data", Toast.LENGTH_SHORT).show()
-                                    return
-                                }
-
-                                ItemManager.getFoundItemFromId(foundItemID, object: ItemManager.FoundItemCallback{
-                                    override fun onComplete(foundItem: FoundItem?) {
-                                        if (foundItem == null){
-                                            Toast.makeText(context, "Failed to get found item data", Toast.LENGTH_SHORT).show()
-                                            return
-                                        }
-                                        // get claim if status != 0
-                                        if (lostItem.status == 1 || lostItem.status == 2){
-                                            ItemManager.getClaimFromLostId(lostItemID, object: ItemManager.LostClaimCallback{
-                                                override fun onComplete(claim: Claim?) {
-                                                    if (claim == null){
-                                                        Toast.makeText(context, "Failed to claim data", Toast.LENGTH_SHORT).show()
-                                                        return
-                                                    }
-                                                   // start view comparison activity here
-                                                    val intent = Intent(context, ViewComparisonActivity::class.java)
-                                                    // pass both the lost item and found item
-                                                    intent.putExtra(
-                                                        IntentExtraNames.INTENT_LOST_ID,
-                                                        lostItem
-                                                    )
-                                                    intent.putExtra(
-                                                        IntentExtraNames.INTENT_FOUND_ID,
-                                                        foundItem
-                                                    )
-                                                    // also pass the claim item of the lost item
-                                                    intent.putExtra(
-                                                        IntentExtraNames.INTENT_CLAIM_ITEM,
-                                                        claim
-                                                    )
-                                                    context.startActivity(intent)
-                                                }
-                                            })
-                                        } else {
-                                            val intent = Intent(context, ViewComparisonActivity::class.java)
-                                            // pass both the lost item and found item
-                                            intent.putExtra(
-                                                IntentExtraNames.INTENT_LOST_ID,
-                                                lostItem
-                                            )
-                                            intent.putExtra(
-                                                IntentExtraNames.INTENT_FOUND_ID,
-                                                foundItem
-                                            )
-                                            // also pass the claim item of the lost item
-                                            intent.putExtra(
-                                                IntentExtraNames.INTENT_CLAIM_ITEM,
-                                                Claim()  // no claim data
-                                            )
-                                            context.startActivity(intent)
-                                        }
-                                    }
-                                })
-                            }
-                        })
-                    }
-                )
-                1 -> CustomNotificationItemPreview(
-                    type = 1,
-                    notificationID = notificationID,
-                    timestamp = timeStamp,
-                    isRead = isRead,
-                    onClick = {
-                        val claimID = notification[FirebaseNames.NOTIFICATION_CLAIM_ID] as String
-
-                        // pass the claim ITEM
-                        ItemManager.getClaimFromClaimId(claimID, object : ItemManager.ClaimCallback{
-                            override fun onComplete(claim: Claim?) {
-                                if (claim == null){
-                                    Toast.makeText(context, "Failed to view claim", Toast.LENGTH_SHORT).show()
-                                    return
-                                }
-
-                                // start view claim activity
-                                val intent: Intent = Intent(context, ViewClaimActivity::class.java)
-                                intent.putExtra(IntentExtraNames.INTENT_CLAIM_ITEM, claim)
-                                context.startActivity(intent)
-                            }
-                        })
-                    }
-                )
-                2 -> CustomNotificationItemPreview(
-                    type = 2,
-                    notificationID = notificationID,
-                    timestamp = timeStamp,
-                    isRead = isRead,
-                    onClick = {
-                        val claimID = notification[FirebaseNames.NOTIFICATION_CLAIM_ID] as String
-
-                        // pass the claim ITEM
-                        ItemManager.getClaimFromClaimId(claimID, object : ItemManager.ClaimCallback{
-                            override fun onComplete(claim: Claim?) {
-                                if (claim == null){
-                                    Toast.makeText(context, "Failed to view claim", Toast.LENGTH_SHORT).show()
-                                    return
-                                }
-
-                                // start view claim activity
-                                val intent: Intent = Intent(context, ViewClaimActivity::class.java)
-                                intent.putExtra(IntentExtraNames.INTENT_CLAIM_ITEM, claim)
-                                context.startActivity(intent)
-                            }
-                        })
-                    }
-                )
-                3 -> {
-                    CustomNotificationItemPreview(
-                        type = 3,
+                when (type) {
+                    0 -> CustomNotificationItemPreview(
+                        type = 0,
                         notificationID = notificationID,
                         timestamp = timeStamp,
                         isRead = isRead,
                         onClick = {
-                            val claimID = notification[FirebaseNames.NOTIFICATION_CLAIM_ID] as String
+                            val lostItemID =
+                                notification[FirebaseNames.NOTIFICATION_LOST_ITEM_ID].toString()
+                            val foundItemID =
+                                notification[FirebaseNames.NOTIFICATION_FOUND_ITEM_ID].toString()
 
-                            // pass the claim ITEM
-                            ItemManager.getClaimFromClaimId(claimID, object : ItemManager.ClaimCallback{
-                                override fun onComplete(claim: Claim?) {
-                                    if (claim == null){
-                                        Toast.makeText(context, "Failed to view claim", Toast.LENGTH_SHORT).show()
-                                        return
+                            ItemManager.getLostItemFromId(
+                                lostItemID = lostItemID,
+                                object : ItemManager.LostItemCallback {
+                                    override fun onComplete(lostItem: LostItem?) {
+                                        if (lostItem == null) {
+                                            Toast.makeText(
+                                                context,
+                                                "Failed to get lost item data",
+                                                Toast.LENGTH_SHORT
+                                            ).show()
+                                            return
+                                        }
+
+                                        ItemManager.getFoundItemFromId(
+                                            foundItemID,
+                                            object : ItemManager.FoundItemCallback {
+                                                override fun onComplete(foundItem: FoundItem?) {
+                                                    if (foundItem == null) {
+                                                        Toast.makeText(
+                                                            context,
+                                                            "Failed to get found item data",
+                                                            Toast.LENGTH_SHORT
+                                                        ).show()
+                                                        return
+                                                    }
+                                                    // get claim if status != 0
+                                                    if (lostItem.status == 1 || lostItem.status == 2) {
+                                                        ItemManager.getClaimFromLostId(
+                                                            lostItemID,
+                                                            object : ItemManager.LostClaimCallback {
+                                                                override fun onComplete(claim: Claim?) {
+                                                                    if (claim == null) {
+                                                                        Toast.makeText(
+                                                                            context,
+                                                                            "Failed to claim data",
+                                                                            Toast.LENGTH_SHORT
+                                                                        ).show()
+                                                                        return
+                                                                    }
+                                                                    // start view comparison activity here
+                                                                    val intent = Intent(
+                                                                        context,
+                                                                        ViewComparisonActivity::class.java
+                                                                    )
+                                                                    // pass both the lost item and found item
+                                                                    intent.putExtra(
+                                                                        IntentExtraNames.INTENT_LOST_ID,
+                                                                        lostItem
+                                                                    )
+                                                                    intent.putExtra(
+                                                                        IntentExtraNames.INTENT_FOUND_ID,
+                                                                        foundItem
+                                                                    )
+                                                                    // also pass the claim item of the lost item
+                                                                    intent.putExtra(
+                                                                        IntentExtraNames.INTENT_CLAIM_ITEM,
+                                                                        claim
+                                                                    )
+                                                                    context.startActivity(intent)
+                                                                }
+                                                            })
+                                                    } else {
+                                                        val intent = Intent(
+                                                            context,
+                                                            ViewComparisonActivity::class.java
+                                                        )
+                                                        // pass both the lost item and found item
+                                                        intent.putExtra(
+                                                            IntentExtraNames.INTENT_LOST_ID,
+                                                            lostItem
+                                                        )
+                                                        intent.putExtra(
+                                                            IntentExtraNames.INTENT_FOUND_ID,
+                                                            foundItem
+                                                        )
+                                                        // also pass the claim item of the lost item
+                                                        intent.putExtra(
+                                                            IntentExtraNames.INTENT_CLAIM_ITEM,
+                                                            Claim()  // no claim data
+                                                        )
+                                                        context.startActivity(intent)
+                                                    }
+                                                }
+                                            })
                                     }
-
-                                    // start view claim activity
-                                    val intent: Intent = Intent(context, ViewClaimActivity::class.java)
-                                    intent.putExtra(IntentExtraNames.INTENT_CLAIM_ITEM, claim)
-                                    context.startActivity(intent)
-                                }
-                            })
+                                })
                         }
                     )
+
+                    1 -> CustomNotificationItemPreview(
+                        type = 1,
+                        notificationID = notificationID,
+                        timestamp = timeStamp,
+                        isRead = isRead,
+                        onClick = {
+                            val claimID =
+                                notification[FirebaseNames.NOTIFICATION_CLAIM_ID] as String
+
+                            // pass the claim ITEM
+                            ItemManager.getClaimFromClaimId(
+                                claimID,
+                                object : ItemManager.ClaimCallback {
+                                    override fun onComplete(claim: Claim?) {
+                                        if (claim == null) {
+                                            Toast.makeText(
+                                                context,
+                                                "Failed to view claim",
+                                                Toast.LENGTH_SHORT
+                                            ).show()
+                                            return
+                                        }
+
+                                        // start view claim activity
+                                        val intent: Intent =
+                                            Intent(context, ViewClaimActivity::class.java)
+                                        intent.putExtra(IntentExtraNames.INTENT_CLAIM_ITEM, claim)
+                                        context.startActivity(intent)
+                                    }
+                                })
+                        }
+                    )
+
+                    2 -> CustomNotificationItemPreview(
+                        type = 2,
+                        notificationID = notificationID,
+                        timestamp = timeStamp,
+                        isRead = isRead,
+                        onClick = {
+                            val claimID =
+                                notification[FirebaseNames.NOTIFICATION_CLAIM_ID] as String
+
+                            // pass the claim ITEM
+                            ItemManager.getClaimFromClaimId(
+                                claimID,
+                                object : ItemManager.ClaimCallback {
+                                    override fun onComplete(claim: Claim?) {
+                                        if (claim == null) {
+                                            Toast.makeText(
+                                                context,
+                                                "Failed to view claim",
+                                                Toast.LENGTH_SHORT
+                                            ).show()
+                                            return
+                                        }
+
+                                        // start view claim activity
+                                        val intent: Intent =
+                                            Intent(context, ViewClaimActivity::class.java)
+                                        intent.putExtra(IntentExtraNames.INTENT_CLAIM_ITEM, claim)
+                                        context.startActivity(intent)
+                                    }
+                                })
+                        }
+                    )
+
+                    3 -> {
+                        CustomNotificationItemPreview(
+                            type = 3,
+                            notificationID = notificationID,
+                            timestamp = timeStamp,
+                            isRead = isRead,
+                            onClick = {
+                                val claimID =
+                                    notification[FirebaseNames.NOTIFICATION_CLAIM_ID] as String
+
+                                // pass the claim ITEM
+                                ItemManager.getClaimFromClaimId(
+                                    claimID,
+                                    object : ItemManager.ClaimCallback {
+                                        override fun onComplete(claim: Claim?) {
+                                            if (claim == null) {
+                                                Toast.makeText(
+                                                    context,
+                                                    "Failed to view claim",
+                                                    Toast.LENGTH_SHORT
+                                                ).show()
+                                                return
+                                            }
+
+                                            // start view claim activity
+                                            val intent: Intent =
+                                                Intent(context, ViewClaimActivity::class.java)
+                                            intent.putExtra(
+                                                IntentExtraNames.INTENT_CLAIM_ITEM,
+                                                claim
+                                            )
+                                            context.startActivity(intent)
+                                        }
+                                    })
+                            }
+                        )
+                    }
                 }
             }
         }
-    }
     }
 
 
@@ -488,14 +522,14 @@ fun Messages(
 fun loadNotifications(
     context: Context,
     viewModel: NotificationsViewModel
-){
+) {
     viewModel.isItemsLoading.value = true
 
-    viewModel.loadItemsNotifications(object: LoadNotificationsCallback{
+    viewModel.loadItemsNotifications(object : LoadNotificationsCallback {
         override fun onComplete(result: Boolean) {
             viewModel.isItemsLoading.value = false
 
-            if (!result){
+            if (!result) {
                 Toast.makeText(context, "Load notifications failed", Toast.LENGTH_SHORT).show()
                 return
             }
