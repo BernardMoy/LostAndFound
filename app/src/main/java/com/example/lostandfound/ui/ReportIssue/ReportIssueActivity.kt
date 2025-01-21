@@ -190,23 +190,27 @@ fun DoneButton(
     context: Context,
     viewModel: ReportIssueViewModel
 ) {
+    if (viewModel.isLoading.value){
+        CustomProgressBar()
+    }
+
     Box(
         modifier = Modifier
             .fillMaxWidth()
             .padding(top = dimensionResource(id = R.dimen.title_margin)),
         contentAlignment = Alignment.Center
     ) {
-        var isLoading by remember { mutableStateOf(false) }
-        if (isLoading) { CustomProgressBar() }
-
         CustomButton(
             text = "Done",
             type = ButtonType.FILLED,
+            enabled = !viewModel.isLoading.value,
             onClick = {
+                viewModel.isLoading.value = true
+
                 viewModel.onDoneButtonClicked(object: ErrorCallback{
                     override fun onComplete(error: String) {
                         // stop loading
-                        isLoading = false
+                        viewModel.isLoading.value = false
 
                         if (error.isEmpty()) {
                             // if no errors, exit activity and display success message
