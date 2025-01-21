@@ -8,9 +8,7 @@ import androidx.lifecycle.ViewModel
 import com.example.lostandfound.Data.ChatInboxPreview
 import com.example.lostandfound.Data.ChatMessage
 import com.example.lostandfound.Data.FirebaseNames
-import com.example.lostandfound.Data.FoundItem
 import com.example.lostandfound.Data.User
-import com.example.lostandfound.FirebaseManagers.ChatInboxManager
 import com.example.lostandfound.FirebaseManagers.ChatMessageCallback
 import com.example.lostandfound.FirebaseManagers.ChatMessageManager
 import com.example.lostandfound.FirebaseManagers.FirebaseUtility
@@ -69,10 +67,11 @@ class ChatFragmentViewModel : ViewModel() {
                     // initialise the itemData array with dummy variables of chat inbox previews
                     chatInboxPreviewList.addAll(List(totalSize) { ChatInboxPreview() })
 
-                    snapshot.documentChanges.forEachIndexed{ index, documentChange ->
+                    snapshot.documentChanges.forEachIndexed { index, documentChange ->
                         // listen for new messages
                         if (documentChange.type == DocumentChange.Type.ADDED
-                            || documentChange.type == DocumentChange.Type.MODIFIED) {
+                            || documentChange.type == DocumentChange.Type.MODIFIED
+                        ) {
 
                             // the recipient of the chat inbox is the participant in the participants array
                             // that does not equal to the current user, given that a user cannot chat with themselves.
@@ -110,7 +109,8 @@ class ChatFragmentViewModel : ViewModel() {
                                                     )
 
                                                     // add to list
-                                                    chatInboxPreviewList[index] = newChatInboxPreview
+                                                    chatInboxPreviewList[index] =
+                                                        newChatInboxPreview
 
                                                     // if all fetched, sort and return
                                                     fetchedItems++

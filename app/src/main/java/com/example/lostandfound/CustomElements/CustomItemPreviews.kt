@@ -602,12 +602,15 @@ fun CustomChatInboxPreview(
 
             // last message and red dot
             // trim the message
-            val previewMessage =
+            var previewMessage =
                 if (chatInboxPreview.lastMessage.text.length > 50) chatInboxPreview.lastMessage.text.substring(
                     0,
                     50
                 ) + "..."
                 else chatInboxPreview.lastMessage.text
+
+            // replace all linebreaks of the message
+            previewMessage = previewMessage.replace("\n", " ")
 
             val previewMessageWithUser = if (chatInboxPreview.lastMessage.senderUserID == FirebaseUtility.getUserID()) "You: $previewMessage" else previewMessage
 
