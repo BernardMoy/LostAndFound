@@ -207,6 +207,13 @@ class ViewClaimViewModel : ViewModel() {
         ItemManager.getClaimsFromFoundId(foundItemData.itemID, object: ItemManager.FoundClaimCallback{
             override fun onComplete(claimList: MutableList<Claim>) {
                 // For every claim, get the user id of the lost item
+                val claimListSize = claimList.size
+                var sentItems = 0
+                if (claimListSize == 0){
+                    callback.onComplete(true)
+                    return
+                }
+
                 for (claim in claimList){
                     ItemManager.getLostItemFromId(claim.lostItemID, object : ItemManager.LostItemCallback{
                         override fun onComplete(lostItem: LostItem?) {
@@ -219,20 +226,30 @@ class ViewClaimViewModel : ViewModel() {
                             if (lostItem.userID != lostUser.userID){
                                 NotificationManager.sendClaimRejectedNotification(
                                     lostItem.userID,
-                                    claimData.claimID,
+                                    claim.claimID,  // pass the current claim data
                                     object: NotificationManager.NotificationSendCallback{
                                         override fun onComplete(result: Boolean) {
-                                            // skip the result
+                                            // continue regardless of result
+                                            // return true after all has been sent
+                                            sentItems++
+                                            if (sentItems == claimListSize){
+                                                callback.onComplete(true)
+                                                return
+                                            }
                                         }
                                     }
                                 )
+                            } else {
+                                // return true after all has been sent
+                                sentItems++
+                                if (sentItems == claimListSize){
+                                    callback.onComplete(true)
+                                    return
+                                }
                             }
                         }
                     })
                 }
-
-                // return true after all has been sent
-                callback.onComplete(true)
             }
         })
     }

@@ -344,6 +344,13 @@ class NewFoundViewModel : ViewModel() {
                 }
 
                 // for each lost item in result, notify the user
+                val resultSize = result.size
+                var sentItems = 0
+                if (resultSize == 0){
+                    callback.onComplete(true)
+                    return
+                }
+
                 for (item in result){
                     NotificationManager.sendNewMatchingItemNotification(
                         targetUserId = item.userID,
@@ -355,12 +362,16 @@ class NewFoundViewModel : ViewModel() {
                                     callback.onComplete(false)
                                     return
                                 }
+
+                                sentItems ++
+                                if (sentItems == resultSize){
+                                    callback.onComplete(true)
+                                    return
+                                }
                             }
                         }
                     )
                 }
-
-                callback.onComplete(true)
             }
         })
     }
