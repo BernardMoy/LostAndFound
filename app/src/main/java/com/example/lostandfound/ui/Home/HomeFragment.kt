@@ -109,6 +109,8 @@ fun MainContent(
     Column {
         ImageAndButton(context = context, viewModel = viewModel)
         HowItWorksPager(context = context, viewModel = viewModel)
+        RecentlyLostItem(context = context, viewModel = viewModel)
+        QuickAccess(context = context, viewModel = viewModel)
     }
 }
 
@@ -305,4 +307,35 @@ fun HowItWorksPager(
         }
     }
     HorizontalDivider(thickness = 1.dp, color = Color.Gray)
+}
+
+@Composable
+fun RecentlyLostItem(
+    context: Context,
+    viewModel: HomeFragmentViewModel
+){
+    Box(
+        modifier = Modifier.padding(
+            dimensionResource(id = R.dimen.title_margin)
+        )
+    ){
+        Text(
+            text = "Your recently lost item",
+            style = Typography.titleMedium,
+            fontWeight = FontWeight.Bold,
+            color = MaterialTheme.colorScheme.onBackground
+        )
+    }
+
+
+    HorizontalDivider(thickness = 1.dp, color = Color.Gray)
+    
+}
+
+@Composable
+fun QuickAccess(
+    context: Context,
+    viewModel: HomeFragmentViewModel
+){
+
 }
