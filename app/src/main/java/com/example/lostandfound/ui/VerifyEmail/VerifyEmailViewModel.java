@@ -10,7 +10,10 @@ import com.example.lostandfound.Utility.ErrorCallback;
 import com.example.lostandfound.FirebaseManagers.FirebaseAuthManager;
 import com.example.lostandfound.Utility.VerificationCodeManager;
 
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 public class VerifyEmailViewModel extends ViewModel {
 
@@ -27,17 +30,23 @@ public class VerifyEmailViewModel extends ViewModel {
 
 
     /*
-    emails with special access.
+    A list of emails with special access.
     When registered with this email, an email wont be sent
     and also user can bypass the verify email process.
      */
-    private final String DEV_EMAIL = "testdevholo@warwick.ac.uk";
+    private final Set<String> DEV_EMAILS = new HashSet<>(
+            Arrays.asList(
+                    "testdevholo@warwick.ac.uk",
+                    "testdevholo2@warwick.ac.uk",
+                    "testdevholo3@warwick.ac.uk"
+            )
+    );
 
 
     // method to send an email containing verification code to the user, if the user has not generated another code last min
     public void sendVerificationEmail(Context ctx, String emailAddress, boolean hasToastMessage){
         // dont send email if the email is DEV EMAIL
-        if (Objects.equals(emailAddress, DEV_EMAIL)){
+        if (DEV_EMAILS.contains(emailAddress)){
             return;
         }
 
@@ -66,7 +75,7 @@ public class VerifyEmailViewModel extends ViewModel {
         /*
         Special permission is given to the user testDevHolo@warwick.ac.uk.
          */
-        if (Objects.equals(emailAddress, DEV_EMAIL)){
+        if (DEV_EMAILS.contains(emailAddress)){
             callback.onComplete("");
         }
 

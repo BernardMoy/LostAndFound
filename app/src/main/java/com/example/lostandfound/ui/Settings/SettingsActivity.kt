@@ -263,11 +263,37 @@ fun Developer(
                             // commit the batch
                             batch.commit().addOnCompleteListener { result ->
                                 if (result.isSuccessful) {
-                                    Toast.makeText(
-                                        context,
-                                        "Deleted chat successfully",
-                                        Toast.LENGTH_SHORT
-                                    ).show()
+                                    // get all chat inboxes also
+                                    db.collection(FirebaseNames.COLLECTION_CHAT_INBOXES)
+                                        .get()
+                                        .addOnCompleteListener { task ->
+                                            if (task.isSuccessful) {
+                                                // delete each reference of the collection
+                                                val batch2 = db.batch()
+                                                for ((_, item) in task.result.withIndex()) {
+                                                    batch2.delete(item.reference)
+                                                }
+
+                                                // commit the batch
+                                                batch2.commit().addOnCompleteListener { result ->
+                                                    if (result.isSuccessful) {
+                                                        Toast.makeText(
+                                                            context,
+                                                            "Deleted chat successfully",
+                                                            Toast.LENGTH_SHORT
+                                                        ).show()
+                                                    } else {
+                                                        Toast.makeText(
+                                                            context,
+                                                            "Delete chat failed",
+                                                            Toast.LENGTH_SHORT
+                                                        ).show()
+                                                    }
+                                                }
+                                            } else {
+                                                Toast.makeText(context, "Delete chat failed", Toast.LENGTH_SHORT).show()
+                                            }
+                                        }
                                 } else {
                                     Toast.makeText(
                                         context,
