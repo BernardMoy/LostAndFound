@@ -615,7 +615,7 @@ fun UserData(
 
     // common dialog for contacting user
     CustomUserDialog(
-        user = viewModel.foundUser,
+        user = if (viewModel.lostItemData.userID == FirebaseUtility.getUserID()) viewModel.foundUser else viewModel.lostUser,
         context = context,
         isDialogShown = viewModel.isContactUserDialogShown
     )
