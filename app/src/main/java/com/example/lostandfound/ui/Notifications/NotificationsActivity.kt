@@ -423,7 +423,22 @@ fun Items(
                     timestamp = timeStamp,
                     isRead = isRead,
                     onClick = {
+                        val claimID = notification[FirebaseNames.NOTIFICATION_CLAIM_ID] as String
 
+                        // pass the claim ITEM
+                        ItemManager.getClaimFromClaimId(claimID, object : ItemManager.ClaimCallback{
+                            override fun onComplete(claim: Claim?) {
+                                if (claim == null){
+                                    Toast.makeText(context, "Failed to view claim", Toast.LENGTH_SHORT).show()
+                                    return
+                                }
+
+                                // start view claim activity
+                                val intent: Intent = Intent(context, ViewClaimActivity::class.java)
+                                intent.putExtra(IntentExtraNames.INTENT_CLAIM_ITEM, claim)
+                                context.startActivity(intent)
+                            }
+                        })
                     }
                 )
                 3 -> {
