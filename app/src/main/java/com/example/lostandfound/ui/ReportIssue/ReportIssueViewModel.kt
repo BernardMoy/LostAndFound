@@ -12,6 +12,7 @@ import com.example.lostandfound.FirebaseManagers.FirestoreManager
 import com.example.lostandfound.Data.FirebaseNames
 
 class ReportIssueViewModel: ViewModel() {
+    val isLoading: MutableState<Boolean> = mutableStateOf(false)
     val description: MutableState<String> = mutableStateOf("")
     val descriptionError: MutableState<String> = mutableStateOf("")
 
