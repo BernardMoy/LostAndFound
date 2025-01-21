@@ -736,31 +736,13 @@ fun AcceptButton(
                                     return
                                 }
 
-                                // add activity log
-                                val firestoreManager = FirestoreManager()
-                                firestoreManager.putWithUniqueId(
-                                    FirebaseNames.COLLECTION_ACTIVITY_LOG_ITEMS,
-                                    mapOf(
-                                        FirebaseNames.ACTIVITY_LOG_ITEM_TYPE to 5,
-                                        FirebaseNames.ACTIVITY_LOG_ITEM_CONTENT to
-                                                "Approved " + viewModel.lostItemData.itemName + " (#" + viewModel.lostItemData.itemID + ") to "
-                                                + viewModel.foundItemData.itemName + " (#" + viewModel.foundItemData.itemID + ")",
-                                        FirebaseNames.ACTIVITY_LOG_ITEM_USER_ID to FirebaseUtility.getUserID(),
-                                        FirebaseNames.ACTIVITY_LOG_ITEM_TIMESTAMP to DateTimeManager.getCurrentEpochTime()
-                                    ),
-                                    object: FirestoreManager.Callback<String>{
-                                        override fun onComplete(result: String?) {
-                                            // not necessary to throw an error if failed here
-                                            // open done activity
-                                            val intent: Intent = Intent(context, DoneActivity::class.java)
-                                            intent.putExtra(
-                                                IntentExtraNames.INTENT_DONE_ACTIVITY_TITLE,
-                                                "Claim approved!"
-                                            )
-                                            context.startActivity(intent)
-                                        }
-                                    }
+                                // start done activity
+                                val intent: Intent = Intent(context, DoneActivity::class.java)
+                                intent.putExtra(
+                                    IntentExtraNames.INTENT_DONE_ACTIVITY_TITLE,
+                                    "Claim approved!"
                                 )
+                                context.startActivity(intent)
                             }
                         })
                     },

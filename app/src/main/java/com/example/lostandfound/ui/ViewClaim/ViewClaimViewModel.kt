@@ -1,5 +1,6 @@
 package com.example.lostandfound.ui.ViewClaim
 
+import android.content.Intent
 import android.util.Log
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
@@ -7,13 +8,17 @@ import androidx.lifecycle.ViewModel
 import com.example.lostandfound.Data.Claim
 import com.example.lostandfound.Data.FirebaseNames
 import com.example.lostandfound.Data.FoundItem
+import com.example.lostandfound.Data.IntentExtraNames
 import com.example.lostandfound.Data.LostItem
 import com.example.lostandfound.Data.User
+import com.example.lostandfound.FirebaseManagers.FirebaseUtility
 import com.example.lostandfound.FirebaseManagers.FirestoreManager
 import com.example.lostandfound.FirebaseManagers.ItemManager
 import com.example.lostandfound.FirebaseManagers.NotificationManager
 import com.example.lostandfound.FirebaseManagers.UserManager
+import com.example.lostandfound.Utility.DateTimeManager
 import com.example.lostandfound.Utility.ErrorCallback
+import com.example.lostandfound.ui.Done.DoneActivity
 
 interface Callback<T> {
     fun onComplete(result: T)
@@ -124,8 +129,8 @@ class ViewClaimViewModel : ViewModel() {
     // function to mark the claim as accepted
     // once a claim is approved, it cannot be un-approved
     fun approveClaim(callback: ErrorCallback){
-        val db = FirestoreManager()
-        db.update(FirebaseNames.COLLECTION_CLAIMED_ITEMS,
+        val firestoreManager = FirestoreManager()
+        firestoreManager.update(FirebaseNames.COLLECTION_CLAIMED_ITEMS,
             claimData.claimID,
             FirebaseNames.CLAIM_IS_APPROVED,
             true,  // set is approved to true
@@ -147,8 +152,25 @@ class ViewClaimViewModel : ViewModel() {
                                     return
                                 }
 
-                                // update successful, return true
-                                callback.onComplete("")
+                                // add to activity log
+                                firestoreManager.putWithUniqueId(
+                                    FirebaseNames.COLLECTION_ACTIVITY_LOG_ITEMS,
+                                    mapOf(
+                                        FirebaseNames.ACTIVITY_LOG_ITEM_TYPE to 5,
+                                        FirebaseNames.ACTIVITY_LOG_ITEM_CONTENT to
+                                                "Approved " + lostItemData.itemName + " (#" + lostItemData.itemID + ") to "
+                                                + foundItemData.itemName + " (#" + foundItemData.itemID + ")",
+                                        FirebaseNames.ACTIVITY_LOG_ITEM_USER_ID to FirebaseUtility.getUserID(),
+                                        FirebaseNames.ACTIVITY_LOG_ITEM_TIMESTAMP to DateTimeManager.getCurrentEpochTime()
+                                    ),
+                                    object: FirestoreManager.Callback<String>{
+                                        override fun onComplete(result: String?) {
+                                            // not necessary to throw an error if failed here
+                                            // open done activity
+                                            callback.onComplete("")
+                                        }
+                                    }
+                                )
                             }
                         }
                     )
