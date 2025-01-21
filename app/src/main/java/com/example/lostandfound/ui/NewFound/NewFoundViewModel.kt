@@ -355,12 +355,12 @@ class NewFoundViewModel : ViewModel() {
                                     callback.onComplete(false)
                                     return
                                 }
-
-                                callback.onComplete(true)
                             }
                         }
                     )
                 }
+
+                callback.onComplete(true)
             }
         })
     }
