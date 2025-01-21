@@ -156,12 +156,15 @@ fun Permissions(
     Column(
         verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin_half))
     ) {
+        /*
         CustomActionRow(text = "Notifications",
             leftIcon = Icons.Outlined.Notifications,
             onClick = {
                 Toast.makeText(context, "Color theme", Toast.LENGTH_SHORT).show()
             }
         )
+
+         */
 
         CustomActionRow(text = "Location",
             leftIcon = Icons.Outlined.LocationOn,
