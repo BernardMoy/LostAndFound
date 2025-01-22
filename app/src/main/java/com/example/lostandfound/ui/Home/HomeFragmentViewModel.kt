@@ -3,6 +3,8 @@ package com.example.lostandfound.ui.Home
 import android.net.Uri
 import android.util.Log
 import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -24,6 +26,8 @@ interface Callback<T>{
 }
 
 class HomeFragmentViewModel : ViewModel(){
+
+    val isLoggedIn: MutableState<Boolean> = mutableStateOf(FirebaseUtility.isUserLoggedIn())
 
     // for displaying the small lost item
     var latestLostItem: LostItem? = null   // if this is null, then the user has no recently lost items
@@ -53,7 +57,7 @@ class HomeFragmentViewModel : ViewModel(){
 
                 } else {
                     // get the lost item id
-                    val lostItemID = result.documents[0].getString(FirebaseNames.CLAIM_LOST_ITEM_ID).toString()
+                    val lostItemID = result.documents[0].id
 
                     // get the lost item
                     ItemManager.getLostItemFromId(lostItemID, object: ItemManager.LostItemCallback{

@@ -99,7 +99,7 @@ fun Preview() {
 
          */
 
-        CustomLostItemPreviewSmall(data = LostItem(), 3)
+        CustomLostItemPreviewSmall(data = LostItem())
 
 
 
@@ -291,7 +291,6 @@ fun CustomLostItemPreview(
 @Composable
 fun CustomLostItemPreviewSmall(
     data: LostItem,
-    numberOfMatches: Int,
     onItemClicked: () -> Unit = {}
 ) {
     Box(
