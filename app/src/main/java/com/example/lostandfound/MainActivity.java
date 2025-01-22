@@ -33,6 +33,7 @@ import com.example.lostandfound.Utility.DeviceThemeManager;
 import com.example.lostandfound.Utility.ImageManager;
 import com.example.lostandfound.databinding.ActivityMainBinding;
 import com.example.lostandfound.ui.ActivityLog.ActivityLogActivity;
+import com.example.lostandfound.ui.Home.HomeFragmentViewModel;
 import com.example.lostandfound.ui.HowItWorks.HowItWorksActivity;
 import com.example.lostandfound.ui.Login.LoginActivity;
 import com.example.lostandfound.ui.NewFound.NewFoundActivity;

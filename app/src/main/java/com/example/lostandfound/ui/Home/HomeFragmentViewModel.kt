@@ -27,10 +27,12 @@ interface Callback<T>{
 
 class HomeFragmentViewModel : ViewModel(){
 
+    val isLoadingLostItem: MutableState<Boolean> = mutableStateOf(false)
+
     val isLoggedIn: MutableState<Boolean> = mutableStateOf(FirebaseUtility.isUserLoggedIn())
 
     // for displaying the small lost item
-    var latestLostItem: LostItem? = null   // if this is null, then the user has no recently lost items
+    var latestLostItem: MutableState<LostItem?> = mutableStateOf(null)  // if this is null, then the user has no recently lost items
 
     // load data into latestLostItem and latestLostItemMatches
     fun loadLatestLostItem(
@@ -38,7 +40,7 @@ class HomeFragmentViewModel : ViewModel(){
     ){
         // if not logged in, reset it
         if (!FirebaseUtility.isUserLoggedIn()){
-            latestLostItem = null
+            latestLostItem.value = null
             callback.onComplete(true)
             return
         }
@@ -52,7 +54,7 @@ class HomeFragmentViewModel : ViewModel(){
             .addOnSuccessListener { result ->
                 if (result.isEmpty){
                     // set the latest item to null
-                    latestLostItem = null
+                    latestLostItem.value = null
                     callback.onComplete(true)
 
                 } else {
@@ -68,7 +70,7 @@ class HomeFragmentViewModel : ViewModel(){
                             }
 
                             // set data
-                            latestLostItem = lostItem
+                            latestLostItem.value = lostItem
                             callback.onComplete(true)
                         }
                     })
