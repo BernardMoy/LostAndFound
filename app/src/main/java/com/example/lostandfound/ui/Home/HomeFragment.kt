@@ -440,90 +440,103 @@ fun FoundItemData(
             color = MaterialTheme.colorScheme.onBackground,
             textAlign = TextAlign.Center
         )
-        Card(
-            colors = CardDefaults.cardColors(
-                containerColor = Color.Transparent
-            ),
-            shape = RoundedCornerShape(dimensionResource(id = R.dimen.corner_radius_small)),
-            modifier = Modifier
-                .fillMaxWidth()
-                .clip(RoundedCornerShape(dimensionResource(id = R.dimen.corner_radius_small)))  // add rounded corners
-                .background(
-                    brush = Brush.horizontalGradient(
-                        colors = listOf(
-                            MaterialTheme.colorScheme.primary,
-                            MaterialTheme.colorScheme.secondary
-                        )
-                    ),
-                )
-                .padding(dimensionResource(R.dimen.content_margin))
-
-        ) {
+        if (viewModel.isLoadingFoundItem.value){
             Row(
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                // large icon
-                Icon(
-                    imageVector = Icons.Outlined.CheckCircle,
-                    contentDescription = "Icon",
-                    tint = MaterialTheme.colorScheme.onPrimary,
-                    modifier = Modifier
-                        .weight(1f)
-                        .size(dimensionResource(id = R.dimen.image_button_size))
-                )
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(
+                        top = dimensionResource(id = R.dimen.title_margin),
+                        bottom = dimensionResource(id = R.dimen.content_margin)
+                    ),
+                horizontalArrangement = Arrangement.Center
+            ){
+                CustomProgressBar()
+            }
+        } else {
+            Card(
+                colors = CardDefaults.cardColors(
+                    containerColor = Color.Transparent
+                ),
+                shape = RoundedCornerShape(dimensionResource(id = R.dimen.corner_radius_small)),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clip(RoundedCornerShape(dimensionResource(id = R.dimen.corner_radius_small)))  // add rounded corners
+                    .background(
+                        brush = Brush.horizontalGradient(
+                            colors = listOf(
+                                MaterialTheme.colorScheme.primary,
+                                MaterialTheme.colorScheme.secondary
+                            )
+                        ),
+                    )
+                    .padding(dimensionResource(R.dimen.content_margin))
 
+            ) {
                 Row(
-                    modifier = Modifier.weight(4f),
-                    horizontalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin)),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Column (
-                        verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin)),
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        modifier = Modifier.weight(1f)
-
-                    ){
-                        Text(
-                            text = "No. of items found",
-                            style = Typography.bodyMedium,
-                            color = MaterialTheme.colorScheme.onPrimary,
-                            textAlign = TextAlign.Center
-                        )
-                        Text(
-                            text = viewModel.numberFound.value.toString(),
-                            style = Typography.bodyMedium,
-                            fontWeight = FontWeight.Bold,
-                            color = MaterialTheme.colorScheme.onPrimary,
-                            textAlign = TextAlign.Center
-                        )
-                    }
-
-                    Column (
-                        verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin)),
-                        horizontalAlignment = Alignment.CenterHorizontally,
+                    // large icon
+                    Icon(
+                        imageVector = Icons.Outlined.CheckCircle,
+                        contentDescription = "Icon",
+                        tint = MaterialTheme.colorScheme.onPrimary,
                         modifier = Modifier
                             .weight(1f)
-                    ){
-                        Text(
-                            text = "No. of claims approved",
-                            style = Typography.bodyMedium,
-                            color = MaterialTheme.colorScheme.onPrimary,
-                            textAlign = TextAlign.Center
-                        )
-                        Text(
-                            text = viewModel.numberClaimApproved.value.toString(),
-                            style = Typography.bodyMedium,
-                            fontWeight = FontWeight.Bold,
-                            color = MaterialTheme.colorScheme.onPrimary,
-                            textAlign = TextAlign.Center
-                        )
-                    }
+                            .size(dimensionResource(id = R.dimen.image_button_size))
+                    )
 
+                    Row(
+                        modifier = Modifier.weight(4f),
+                        horizontalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin)),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Column (
+                            verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin)),
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            modifier = Modifier.weight(1f)
+
+                        ){
+                            Text(
+                                text = "No. of items found",
+                                style = Typography.bodyMedium,
+                                color = MaterialTheme.colorScheme.onPrimary,
+                                textAlign = TextAlign.Center
+                            )
+                            Text(
+                                text = viewModel.numberFound.value.toString(),
+                                style = Typography.bodyMedium,
+                                fontWeight = FontWeight.Bold,
+                                color = MaterialTheme.colorScheme.onPrimary,
+                                textAlign = TextAlign.Center
+                            )
+                        }
+
+                        Column (
+                            verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin)),
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            modifier = Modifier
+                                .weight(1f)
+                        ){
+                            Text(
+                                text = "No. of claims approved",
+                                style = Typography.bodyMedium,
+                                color = MaterialTheme.colorScheme.onPrimary,
+                                textAlign = TextAlign.Center
+                            )
+                            Text(
+                                text = viewModel.numberClaimApproved.value.toString(),
+                                style = Typography.bodyMedium,
+                                fontWeight = FontWeight.Bold,
+                                color = MaterialTheme.colorScheme.onPrimary,
+                                textAlign = TextAlign.Center
+                            )
+                        }
+
+                    }
                 }
             }
         }
     }
-
     HorizontalDivider(thickness = 1.dp, color = Color.Gray)
 }
 
@@ -604,7 +617,6 @@ fun loadData(
     viewModel: HomeFragmentViewModel,
 ){
     viewModel.isLoadingLostItem.value = true
-
     viewModel.loadLatestLostItem(object: Callback<Boolean>{
         override fun onComplete(result: Boolean) {
             viewModel.isLoadingLostItem.value = false
@@ -613,6 +625,29 @@ fun loadData(
                 Toast.makeText(context, "Fetching item data failed", Toast.LENGTH_SHORT).show()
                 return
             }
+        }
+    })
+
+    viewModel.isLoadingFoundItem.value = true
+    viewModel.loadFoundItemCount(object: Callback<Boolean>{
+        override fun onComplete(result: Boolean) {
+            viewModel.isLoadingFoundItem.value = false
+
+            if (!result){
+                Toast.makeText(context, "Fetching item data failed", Toast.LENGTH_SHORT).show()
+                return
+            }
+
+            viewModel.loadApprovedClaimsCount(object: Callback<Boolean>{
+                override fun onComplete(result: Boolean) {
+                    viewModel.isLoadingFoundItem.value = false
+
+                    if (!result){
+                        Toast.makeText(context, "Fetching item data failed", Toast.LENGTH_SHORT).show()
+                        return
+                    }
+                }
+            })
         }
     })
 }
