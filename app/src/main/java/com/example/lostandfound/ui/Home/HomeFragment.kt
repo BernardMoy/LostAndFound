@@ -427,60 +427,99 @@ fun FoundItemData(
     context: Context,
     viewModel: HomeFragmentViewModel
 ){
-    Card(
-        colors = CardDefaults.cardColors(
-            containerColor = Color.Transparent
+    Column(
+        modifier = Modifier.padding(
+            dimensionResource(id = R.dimen.title_margin)
         ),
-        shape = RoundedCornerShape(dimensionResource(id = R.dimen.corner_radius_small)),
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(dimensionResource(id = R.dimen.title_margin))
-            .clip(RoundedCornerShape(dimensionResource(id = R.dimen.corner_radius_small)))  // add rounded corners
-            .background(
-                brush = Brush.horizontalGradient(
-                    colors = listOf(
-                        MaterialTheme.colorScheme.primaryContainer,
-                        MaterialTheme.colorScheme.secondaryContainer
-                    )
-                ),
-            )
-            .padding(dimensionResource(R.dimen.content_margin))
+        verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.title_margin))
+    ) {
+        Text(
+            text = "Your found items",
+            style = Typography.titleMedium,
+            fontWeight = FontWeight.Bold,
+            color = MaterialTheme.colorScheme.onBackground,
+            textAlign = TextAlign.Center
+        )
+        Card(
+            colors = CardDefaults.cardColors(
+                containerColor = Color.Transparent
+            ),
+            shape = RoundedCornerShape(dimensionResource(id = R.dimen.corner_radius_small)),
+            modifier = Modifier
+                .fillMaxWidth()
+                .clip(RoundedCornerShape(dimensionResource(id = R.dimen.corner_radius_small)))  // add rounded corners
+                .background(
+                    brush = Brush.horizontalGradient(
+                        colors = listOf(
+                            MaterialTheme.colorScheme.primary,
+                            MaterialTheme.colorScheme.secondary
+                        )
+                    ),
+                )
+                .padding(dimensionResource(R.dimen.content_margin))
 
-    ){
-        Row (
-            verticalAlignment = Alignment.CenterVertically
-        ){
-            // large icon
-            Icon(
-                imageVector = Icons.AutoMirrored.Outlined.Login,
-                contentDescription = "Icon",
-                tint = MaterialTheme.colorScheme.onPrimary,
-                modifier = Modifier
-                    .weight(1f)
-                    .size(dimensionResource(id = R.dimen.image_button_size))
-            )
-
-            Column (
-                modifier = Modifier.weight(4f),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin))
-            ){
-                // title text
-                Text(
-                    text = "Log in to get started",
-                    style = Typography.titleLarge,
-                    fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.onPrimary,
-                    textAlign = TextAlign.Center
+        ) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                // large icon
+                Icon(
+                    imageVector = Icons.Outlined.CheckCircle,
+                    contentDescription = "Icon",
+                    tint = MaterialTheme.colorScheme.onPrimary,
+                    modifier = Modifier
+                        .weight(1f)
+                        .size(dimensionResource(id = R.dimen.image_button_size))
                 )
 
-                // content text
-                Text(
-                    text = "Access all features using your university email.",
-                    style = Typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onPrimary,
-                    textAlign = TextAlign.Center
-                )
+                Row(
+                    modifier = Modifier.weight(4f),
+                    horizontalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin)),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Column (
+                        verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin)),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        modifier = Modifier.weight(1f)
+
+                    ){
+                        Text(
+                            text = "No. of items found",
+                            style = Typography.bodyMedium,
+                            color = MaterialTheme.colorScheme.onPrimary,
+                            textAlign = TextAlign.Center
+                        )
+                        Text(
+                            text = viewModel.numberFound.value.toString(),
+                            style = Typography.bodyMedium,
+                            fontWeight = FontWeight.Bold,
+                            color = MaterialTheme.colorScheme.onPrimary,
+                            textAlign = TextAlign.Center
+                        )
+                    }
+
+                    Column (
+                        verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin)),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        modifier = Modifier
+                            .weight(1f)
+                    ){
+                        Text(
+                            text = "No. of claims approved",
+                            style = Typography.bodyMedium,
+                            color = MaterialTheme.colorScheme.onPrimary,
+                            textAlign = TextAlign.Center
+                        )
+                        Text(
+                            text = viewModel.numberClaimApproved.value.toString(),
+                            style = Typography.bodyMedium,
+                            fontWeight = FontWeight.Bold,
+                            color = MaterialTheme.colorScheme.onPrimary,
+                            textAlign = TextAlign.Center
+                        )
+                    }
+
+                }
             }
         }
     }

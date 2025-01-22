@@ -34,6 +34,9 @@ class HomeFragmentViewModel : ViewModel(){
 
     // for displaying the small lost item
     var latestLostItem: MutableState<LostItem?> = mutableStateOf(null)  // if this is null, then the user has no recently lost items
+    var numberFound: MutableState<Int> = mutableStateOf(0)
+    var numberClaimApproved: MutableState<Int> = mutableStateOf(0)
+
 
     // load data into latestLostItem and latestLostItemMatches
     fun loadLatestLostItem(
