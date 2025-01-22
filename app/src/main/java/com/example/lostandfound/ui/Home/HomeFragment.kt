@@ -10,6 +10,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.ScrollState
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -18,16 +20,22 @@ import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.ArrowForward
+import androidx.compose.material.icons.automirrored.outlined.Login
 import androidx.compose.material.icons.filled.Circle
 import androidx.compose.material.icons.outlined.AddCircle
 import androidx.compose.material.icons.outlined.CheckCircle
 import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material.icons.outlined.TrackChanges
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -39,6 +47,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.ComposeView
@@ -133,13 +143,15 @@ fun MainContent(
 ) {
     val context = LocalContext.current
 
-    Column {
+    Column (
+        modifier = Modifier.verticalScroll(state = ScrollState(0))
+    ){
         ImageAndButton(context = context, viewModel = viewModel)
         HowItWorksPager(context = context, viewModel = viewModel)
         if (viewModel.isLoggedIn.value){
             RecentlyLostItem(context = context, viewModel = viewModel)
         }
-        QuickAccess(context = context, viewModel = viewModel)
+        LargeLoginButton(context = context, viewModel = viewModel)
     }
 }
 
@@ -403,18 +415,73 @@ fun RecentlyLostItem(
             )
         }
     }
-
-
     HorizontalDivider(thickness = 1.dp, color = Color.Gray)
-    
 }
 
 @Composable
-fun QuickAccess(
+fun LargeLoginButton(
     context: Context,
     viewModel: HomeFragmentViewModel
 ){
+    Card(
+        colors = CardDefaults.cardColors(
+            containerColor = Color.Transparent
+        ),
+        shape = RoundedCornerShape(dimensionResource(id = R.dimen.corner_radius_small)),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(dimensionResource(id = R.dimen.title_margin))
+            .clip(RoundedCornerShape(dimensionResource(id = R.dimen.corner_radius_small)))  // add rounded corners
+            .background(
+                brush = Brush.horizontalGradient(
+                    colors = listOf(
+                        MaterialTheme.colorScheme.primaryContainer,
+                        MaterialTheme.colorScheme.secondaryContainer
+                    )
+                ),
+            )
+            .padding(dimensionResource(R.dimen.content_margin))
 
+    ){
+        Row (
+            verticalAlignment = Alignment.CenterVertically
+        ){
+            // large icon
+            Icon(
+                imageVector = Icons.AutoMirrored.Outlined.Login,
+                contentDescription = "Icon",
+                tint = MaterialTheme.colorScheme.onPrimary,
+                modifier = Modifier
+                    .weight(1f)
+                    .size(dimensionResource(id = R.dimen.image_button_size))
+            )
+
+            Column (
+                modifier = Modifier.weight(4f),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin))
+            ){
+                // title text
+                Text(
+                    text = "Log in to get started",
+                    style = Typography.titleLarge,
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.onPrimary,
+                    textAlign = TextAlign.Center
+                )
+
+                // content text
+                Text(
+                    text = "Access all features using your university email.",
+                    style = Typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onPrimary,
+                    textAlign = TextAlign.Center
+                )
+            }
+        }
+    }
+
+    HorizontalDivider(thickness = 1.dp, color = Color.Gray)
 }
 
 
