@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Paint.Align
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -49,35 +50,60 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil3.compose.rememberAsyncImagePainter
 import com.example.lostandfound.CustomElements.ButtonType
 import com.example.lostandfound.CustomElements.CustomActionText
 import com.example.lostandfound.CustomElements.CustomButton
 import com.example.lostandfound.CustomElements.CustomCard
+import com.example.lostandfound.CustomElements.CustomLostItemPreviewSmall
+import com.example.lostandfound.Data.IntentExtraNames
+import com.example.lostandfound.Data.LostItem
+import com.example.lostandfound.FirebaseManagers.FirebaseUtility
 import com.example.lostandfound.R
+import com.example.lostandfound.ui.Found.FoundFragmentViewModel
+import com.example.lostandfound.ui.Found.refreshData
 import com.example.lostandfound.ui.HowItWorks.HowItWorksActivity
 import com.example.lostandfound.ui.NewFound.NewFoundActivity
 import com.example.lostandfound.ui.NewLost.NewLostActivity
+import com.example.lostandfound.ui.ViewLost.ViewLostActivity
 import com.example.lostandfound.ui.theme.ComposeTheme
 import com.example.lostandfound.ui.theme.Typography
 
 
 class HomeFragment : Fragment() {
+
+    // create the view model here
+    val viewModel: HomeFragmentViewModel by viewModels()
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         val view = ComposeView(requireContext())
+
         view.apply {
             setContent {
                 ComposeTheme {
-                    HomeFragmentScreen()
+                    HomeFragmentScreen(viewModel = viewModel)
                 }
             }
         }
+
         return view
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        // update the user's log in status
+        viewModel.isLoggedIn.value = FirebaseUtility.isUserLoggedIn()
+
+        // refresh the data everytime the screen is reloaded
+        loadData(requireContext(), viewModel)
+
     }
 }
 
@@ -86,31 +112,33 @@ class HomeFragment : Fragment() {
 @Composable
 fun Preview() {
     ComposeTheme {
-        HomeFragmentScreen()
+        HomeFragmentScreen(viewModel = viewModel())
     }
 }
 
 @Composable
-fun HomeFragmentScreen() {
+fun HomeFragmentScreen(viewModel: HomeFragmentViewModel) {
     Column(
         modifier = Modifier
             .fillMaxSize()
 
     ) {
-        MainContent()
+        MainContent(viewModel = viewModel)
     }
 }
 
 @Composable
 fun MainContent(
-    viewModel: HomeFragmentViewModel = viewModel()
+    viewModel: HomeFragmentViewModel
 ) {
     val context = LocalContext.current
 
     Column {
         ImageAndButton(context = context, viewModel = viewModel)
         HowItWorksPager(context = context, viewModel = viewModel)
-        RecentlyLostItem(context = context, viewModel = viewModel)
+        if (viewModel.isLoggedIn.value){
+            RecentlyLostItem(context = context, viewModel = viewModel)
+        }
         QuickAccess(context = context, viewModel = viewModel)
     }
 }
@@ -315,20 +343,53 @@ fun RecentlyLostItem(
     context: Context,
     viewModel: HomeFragmentViewModel
 ){
-    Box(
+    Column(
         modifier = Modifier.padding(
             dimensionResource(id = R.dimen.title_margin)
-        )
+        ),
+        verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.title_margin))
     ){
         Text(
             text = "Your recently lost item",
             style = Typography.titleMedium,
             fontWeight = FontWeight.Bold,
-            color = MaterialTheme.colorScheme.onBackground
+            color = MaterialTheme.colorScheme.onBackground,
+            textAlign = TextAlign.Center
         )
+        
 
         // display the lost item in simple format
-
+        if (viewModel.latestLostItem == null){
+            Row (
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(
+                        top = dimensionResource(id = R.dimen.title_margin),
+                        bottom = dimensionResource(id = R.dimen.content_margin)
+                    ),
+                horizontalArrangement = Arrangement.Center
+            ){
+                Text(
+                    text = "You have no recently lost items.",
+                    style = Typography.bodyMedium,
+                    color = Color.Gray
+                )
+            }
+            
+        } else {
+            CustomLostItemPreviewSmall(
+                data = viewModel.latestLostItem ?: LostItem(),
+                onItemClicked = {
+                    // launch view lost activity
+                    val intent: Intent = Intent(context, ViewLostActivity::class.java)
+                    intent.putExtra(
+                        IntentExtraNames.INTENT_LOST_ID,
+                        viewModel.latestLostItem
+                    )
+                    context.startActivity(intent)
+                }
+            )
+        }
     }
 
 
