@@ -58,6 +58,7 @@ import com.example.lostandfound.CustomElements.CustomActionText
 import com.example.lostandfound.CustomElements.CustomButton
 import com.example.lostandfound.CustomElements.CustomCard
 import com.example.lostandfound.CustomElements.CustomLostItemPreviewSmall
+import com.example.lostandfound.CustomElements.CustomProgressBar
 import com.example.lostandfound.Data.IntentExtraNames
 import com.example.lostandfound.Data.LostItem
 import com.example.lostandfound.FirebaseManagers.FirebaseUtility
@@ -103,7 +104,6 @@ class HomeFragment : Fragment() {
 
         // refresh the data everytime the screen is reloaded
         loadData(requireContext(), viewModel)
-
     }
 }
 
@@ -356,10 +356,22 @@ fun RecentlyLostItem(
             color = MaterialTheme.colorScheme.onBackground,
             textAlign = TextAlign.Center
         )
-        
 
         // display the lost item in simple format
-        if (viewModel.latestLostItem == null){
+        if (viewModel.isLoadingLostItem.value){
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(
+                        top = dimensionResource(id = R.dimen.title_margin),
+                        bottom = dimensionResource(id = R.dimen.content_margin)
+                    ),
+                horizontalArrangement = Arrangement.Center
+            ){
+                CustomProgressBar()
+            }
+
+        } else if (viewModel.latestLostItem.value == null){
             Row (
                 modifier = Modifier
                     .fillMaxWidth()
@@ -378,13 +390,13 @@ fun RecentlyLostItem(
             
         } else {
             CustomLostItemPreviewSmall(
-                data = viewModel.latestLostItem ?: LostItem(),
+                data = viewModel.latestLostItem.value ?: LostItem(),
                 onItemClicked = {
                     // launch view lost activity
                     val intent: Intent = Intent(context, ViewLostActivity::class.java)
                     intent.putExtra(
                         IntentExtraNames.INTENT_LOST_ID,
-                        viewModel.latestLostItem
+                        viewModel.latestLostItem.value
                     )
                     context.startActivity(intent)
                 }
@@ -408,16 +420,18 @@ fun QuickAccess(
 
 fun loadData(
     context: Context,
-    viewModel: HomeFragmentViewModel
+    viewModel: HomeFragmentViewModel,
 ){
+    viewModel.isLoadingLostItem.value = true
+
     viewModel.loadLatestLostItem(object: Callback<Boolean>{
         override fun onComplete(result: Boolean) {
+            viewModel.isLoadingLostItem.value = false
+
             if (!result){
                 Toast.makeText(context, "Fetching item data failed", Toast.LENGTH_SHORT).show()
                 return
             }
-
-            // do nothing when successful
         }
     })
 }
