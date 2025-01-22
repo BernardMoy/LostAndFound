@@ -12,6 +12,7 @@ import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -76,6 +77,7 @@ import com.example.lostandfound.R
 import com.example.lostandfound.ui.Found.FoundFragmentViewModel
 import com.example.lostandfound.ui.Found.refreshData
 import com.example.lostandfound.ui.HowItWorks.HowItWorksActivity
+import com.example.lostandfound.ui.Login.LoginActivity
 import com.example.lostandfound.ui.NewFound.NewFoundActivity
 import com.example.lostandfound.ui.NewLost.NewLostActivity
 import com.example.lostandfound.ui.ViewLost.ViewLostActivity
@@ -150,8 +152,10 @@ fun MainContent(
         HowItWorksPager(context = context, viewModel = viewModel)
         if (viewModel.isLoggedIn.value){
             RecentlyLostItem(context = context, viewModel = viewModel)
+            FoundItemData(context = context, viewModel = viewModel)
+        } else {
+            LargeLoginButton(context = context, viewModel = viewModel)
         }
-        LargeLoginButton(context = context, viewModel = viewModel)
     }
 }
 
@@ -419,6 +423,72 @@ fun RecentlyLostItem(
 }
 
 @Composable
+fun FoundItemData(
+    context: Context,
+    viewModel: HomeFragmentViewModel
+){
+    Card(
+        colors = CardDefaults.cardColors(
+            containerColor = Color.Transparent
+        ),
+        shape = RoundedCornerShape(dimensionResource(id = R.dimen.corner_radius_small)),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(dimensionResource(id = R.dimen.title_margin))
+            .clip(RoundedCornerShape(dimensionResource(id = R.dimen.corner_radius_small)))  // add rounded corners
+            .background(
+                brush = Brush.horizontalGradient(
+                    colors = listOf(
+                        MaterialTheme.colorScheme.primaryContainer,
+                        MaterialTheme.colorScheme.secondaryContainer
+                    )
+                ),
+            )
+            .padding(dimensionResource(R.dimen.content_margin))
+
+    ){
+        Row (
+            verticalAlignment = Alignment.CenterVertically
+        ){
+            // large icon
+            Icon(
+                imageVector = Icons.AutoMirrored.Outlined.Login,
+                contentDescription = "Icon",
+                tint = MaterialTheme.colorScheme.onPrimary,
+                modifier = Modifier
+                    .weight(1f)
+                    .size(dimensionResource(id = R.dimen.image_button_size))
+            )
+
+            Column (
+                modifier = Modifier.weight(4f),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin))
+            ){
+                // title text
+                Text(
+                    text = "Log in to get started",
+                    style = Typography.titleLarge,
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.onPrimary,
+                    textAlign = TextAlign.Center
+                )
+
+                // content text
+                Text(
+                    text = "Access all features using your university email.",
+                    style = Typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onPrimary,
+                    textAlign = TextAlign.Center
+                )
+            }
+        }
+    }
+
+    HorizontalDivider(thickness = 1.dp, color = Color.Gray)
+}
+
+@Composable
 fun LargeLoginButton(
     context: Context,
     viewModel: HomeFragmentViewModel
@@ -440,6 +510,11 @@ fun LargeLoginButton(
                     )
                 ),
             )
+            .clickable {
+                // start log in intent
+                val intent = Intent(context, LoginActivity::class.java)
+                context.startActivity(intent)
+            }
             .padding(dimensionResource(R.dimen.content_margin))
 
     ){

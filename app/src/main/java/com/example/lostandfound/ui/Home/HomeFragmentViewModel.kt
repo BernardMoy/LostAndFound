@@ -12,6 +12,7 @@ import com.example.lostandfound.Data.FirebaseNames
 import com.example.lostandfound.Data.LostItem
 import com.example.lostandfound.FirebaseManagers.FirebaseStorageManager
 import com.example.lostandfound.FirebaseManagers.FirebaseUtility
+import com.example.lostandfound.FirebaseManagers.FirestoreManager
 import com.example.lostandfound.FirebaseManagers.ItemManager
 import com.example.lostandfound.FirebaseManagers.ItemManager.StatusCallback
 import com.example.lostandfound.FirebaseManagers.ItemManager.getLostItemStatus
@@ -78,6 +79,72 @@ class HomeFragmentViewModel : ViewModel(){
             }.addOnFailureListener { error ->
                 Log.d("HOME PAGE LOST ITEM LOAD ERROR", error.message.toString())
                 callback.onComplete(false)
+            }
+    }
+
+
+    // method to get number of found items from the current user
+    fun getFoundItemCount(
+        callback: Callback<Int?>  // return null if failed
+    ){
+        val db = FirebaseFirestore.getInstance()
+        db.collection(FirebaseNames.COLLECTION_FOUND_ITEMS)
+            .whereEqualTo(FirebaseNames.LOSTFOUND_USER, FirebaseUtility.getUserID())
+            .get()
+            .addOnSuccessListener { querySnapshot ->
+                callback.onComplete(querySnapshot.size())
+            }.addOnFailureListener { error ->
+                Log.d("FIRESTORE ERROR", error.message.toString())
+                callback.onComplete(null)
+            }
+    }
+
+
+    // method to get number of approved claims where the found item id
+    fun getApprovedClaimsCount(
+        callback: Callback<Int?>
+    ){
+        val db = FirebaseFirestore.getInstance()
+        val firestoreManager = FirestoreManager()
+        db.collection(FirebaseNames.COLLECTION_CLAIMED_ITEMS)
+            .whereEqualTo(FirebaseNames.CLAIM_IS_APPROVED, true)
+            .get()
+            .addOnSuccessListener { querySnapshot ->
+                // for each query, find its found item user
+                if (querySnapshot.isEmpty){
+                    // return 0
+                    callback.onComplete(0)
+
+                } else {
+                    var count = 0
+                    var fetchedItem = 0
+                    val totalCount = querySnapshot.size()
+
+                    for (document in querySnapshot) {
+                        val foundItemID = document[FirebaseNames.CLAIM_FOUND_ITEM_ID].toString()
+                        firestoreManager.get(FirebaseNames.COLLECTION_FOUND_ITEMS, foundItemID, object: FirestoreManager.Callback<Map<String, Any>>{
+                            override fun onComplete(result: Map<String, Any>?) {
+                                if (result == null){
+                                    callback.onComplete(null)
+                                    return
+                                }
+
+                                if (result[FirebaseNames.LOSTFOUND_USER] == FirebaseUtility.getUserID()){
+                                    count++
+                                }
+
+                                fetchedItem++
+                                if (fetchedItem == totalCount){
+                                    callback.onComplete(count)
+                                }
+                            }
+                        })
+                    }
+                }
+
+            }.addOnFailureListener { error ->
+                Log.d("FIRESTORE ERROR", error.message.toString())
+                callback.onComplete(null)
             }
     }
 }
