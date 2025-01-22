@@ -12,7 +12,7 @@ val LightGray = Color(0xFFE7E7E7)
 // Primary colors
 val PrimaryColor = Color(0xFF5DAADE)
 val PrimaryColorVariant = Color(0xFF4099BC)
-val PrimaryColorLight = Color(0xFFD2EDF1)
+val PrimaryColorLight = Color(0xFFC1E5EB)
 val OnPrimary = Color(0xFFFFFFFF)
 
 // Secondary colors
