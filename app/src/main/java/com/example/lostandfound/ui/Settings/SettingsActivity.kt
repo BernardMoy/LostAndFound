@@ -22,6 +22,7 @@ import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.LocationOn
 import androidx.compose.material.icons.outlined.Notifications
 import androidx.compose.material.icons.outlined.Palette
+import androidx.compose.material.icons.outlined.TextFields
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
@@ -43,6 +44,7 @@ import com.example.lostandfound.Data.SharedPreferencesNames
 import com.example.lostandfound.R
 import com.example.lostandfound.ui.AboutApp.AboutAppActivity
 import com.example.lostandfound.ui.Search.SearchActivity
+import com.example.lostandfound.ui.SettingsFontSize.SettingsFontSizeActivity
 import com.example.lostandfound.ui.SettingsTheme.SettingsThemeActivity
 import com.example.lostandfound.ui.ViewComparison.ViewComparisonActivity
 import com.example.lostandfound.ui.theme.ComposeTheme
@@ -143,6 +145,13 @@ fun Appearance(
         )
 
         // also control the font size
+        CustomActionRow(text = "Font size",
+            leftIcon = Icons.Outlined.TextFields,
+            onClick = {
+                val intent = Intent(context, SettingsFontSizeActivity::class.java)
+                context.startActivity(intent)
+            }
+        )
     }
 }
 
