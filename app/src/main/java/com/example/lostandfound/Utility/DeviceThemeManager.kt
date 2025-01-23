@@ -3,7 +3,6 @@ package com.example.lostandfound.Utility
 import android.content.Context
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateOf
 import com.example.lostandfound.Data.SharedPreferencesNames
 
 object DeviceThemeManager {
@@ -13,7 +12,7 @@ object DeviceThemeManager {
         themeNum: Int,  // either 0 1 2
         context: Context
     ){
-        val sp = context.getSharedPreferences(SharedPreferencesNames.THEME_NAME, Context.MODE_PRIVATE)
+        val sp = context.getSharedPreferences(SharedPreferencesNames.NAME_THEME, Context.MODE_PRIVATE)
         sp.edit().putInt(SharedPreferencesNames.THEME_VALUE, themeNum).apply()
         themeValue.intValue = themeNum
 
@@ -26,7 +25,7 @@ object DeviceThemeManager {
         context: Context
     ){
         // first get the theme from sp, or =2 if not exist yet
-        val sp = context.getSharedPreferences(SharedPreferencesNames.THEME_NAME, Context.MODE_PRIVATE)
+        val sp = context.getSharedPreferences(SharedPreferencesNames.NAME_THEME, Context.MODE_PRIVATE)
         val currentThemeNum = sp.getInt(SharedPreferencesNames.THEME_VALUE, 2) // 2 refers to using device theme
 
         // modify the theme value
