@@ -21,31 +21,31 @@ data class Category(
 // subcategories should be in the plural format
 val categories: List<Category> = listOf(
     Category(name = "Personal items",
-        subCategories = listOf("Wallet", "Key", "Watch", "Umbrella", "Eyeglasses", "ID/Personal documents"),
+        subCategories = listOf("Wallet", "Key", "Watch", "Umbrella", "Eyeglasses", "ID/Personal document"),
         leadingIcon = Icons.Outlined.AccountBox
     ),
     Category(name = "Electronics",
-        subCategories = listOf("Earphones/Headphones", "Laptop/tablet", "Camera", "Charger", "USB", "Mouse", "Digital pen"),
+        subCategories = listOf("Earphone", "Headphone", "Laptop", "Phone", "Tablet", "Camera", "Charger", "USB", "Mouse", "Digital Pen", "EReader"),
         leadingIcon = Icons.Outlined.Headset
     ),
     Category(name = "Bags and Suitcases",
-        subCategories = listOf("backpack", "handbag", "shopping bag", "suitcase"),
+        subCategories = listOf("Backpack", "Handbag", "Shopping Bag", "Suitcase"),
         leadingIcon = Icons.Outlined.ShoppingBag
     ),
-    Category(name = "Books and Stationeries",
-        subCategories = listOf("Stationeries", "Pencil cases", "Books"),
+    Category(name = "Books and Stationery",
+        subCategories = listOf("Stationery", "Pencil Cases", "Books"),
         leadingIcon = Icons.Outlined.Edit
     ),
-    Category(name = "Clothings",
-        subCategories = listOf("Hats", "Gloves", "Scarf", "Jacket"),
+    Category(name = "Clothing",
+        subCategories = listOf("Hat", "Gloves", "Scarf", "Jacket"),
         leadingIcon = Icons.Outlined.Checkroom
     ),
     Category(name = "Sports",
-        subCategories = listOf("Balls", "Helmets", "Rackets"),
+        subCategories = listOf("Ball", "Helmet", "Racket", "Boxing Gloves"),
         leadingIcon = Icons.Outlined.SportsBasketball
     ),
     Category(name = "Food and Drink",
-        subCategories = listOf("Lunchboxes", "Utensils", "Water bottle", "Cups"),
+        subCategories = listOf("Lunchbox", "Utensils", "Water bottle", "Cup"),
         leadingIcon = Icons.Outlined.Restaurant
     ),
     Category(name = "Others",
