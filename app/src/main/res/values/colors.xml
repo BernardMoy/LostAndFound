@@ -25,6 +25,9 @@
     <color name="gray">#908A8A</color>
     <color name="lightGray">#E7E7E7</color>
 
+    <!-- semi transparent overlay for background -->
+    <color name = "overlay"> #80000000 </color>
+
     <!-- Custom colors for lost and found item statuses -->
     <color name="status0">#C73A6B</color>
     <color name="status1">#CC923C</color>
