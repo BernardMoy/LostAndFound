@@ -138,6 +138,35 @@
             app:layout_constraintTop_toBottomOf="@id/toolbar"
             app:navGraph="@navigation/mobile_navigation" />
 
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/nav_view"
+            android:paddingBottom="@dimen/content_margin_half"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/bottom_view_height"
+            android:layout_marginStart="0dp"
+            android:layout_marginEnd="0dp"
+            android:background="?android:attr/windowBackground"
+            app:labelVisibilityMode="labeled"
+            app:itemActiveIndicatorStyle="@android:transition/fade"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:menu="@menu/bottom_nav_menu" />
+
+        <!-- Things below this overlay appear on top of the overlay -->
+        <View
+            android:id="@+id/overlay"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/overlay"
+            android:visibility="visible"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            />
+
+
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/lost_floating_action_button"
             android:layout_width="@dimen/floating_button_size"
@@ -204,7 +233,6 @@
             android:background="@drawable/secondary_color_variant_background"
             />
 
-
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/floating_action_button"
             android:layout_width="@dimen/floating_button_size"
@@ -221,20 +249,6 @@
             app:srcCompat="@drawable/add_icon"
             app:tint = "@color/white"/>
 
-        <com.google.android.material.bottomnavigation.BottomNavigationView
-            android:id="@+id/nav_view"
-            android:paddingBottom="@dimen/content_margin_half"
-            android:layout_width="0dp"
-            android:layout_height="@dimen/bottom_view_height"
-            android:layout_marginStart="0dp"
-            android:layout_marginEnd="0dp"
-            android:background="?android:attr/windowBackground"
-            app:labelVisibilityMode="labeled"
-            app:itemActiveIndicatorStyle="@android:transition/fade"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:menu="@menu/bottom_nav_menu" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
