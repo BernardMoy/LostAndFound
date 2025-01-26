@@ -11,7 +11,7 @@ import com.example.lostandfound.R
 import com.example.lostandfound.Utility.FontSizeManager
 
 // Set of Material typography styles to start with
-val isLargeFont by FontSizeManager.isLargeFontSize
+val isLargeFont by FontSizeManager.isLargeFontSizeValue
 
 val Typography = Typography(
     bodySmall = TextStyle(

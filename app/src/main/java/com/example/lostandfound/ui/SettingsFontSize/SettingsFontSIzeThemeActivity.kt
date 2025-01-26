@@ -1,5 +1,6 @@
 package com.example.lostandfound.ui.SettingsFontSize
 
+import android.content.Context
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -13,18 +14,26 @@ import androidx.compose.material.icons.outlined.LightMode
 import androidx.compose.material.icons.outlined.Smartphone
 import androidx.compose.material.icons.outlined.TextFormat
 import androidx.compose.material.icons.outlined.TextIncrease
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalInspectionMode
+import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.lostandfound.CustomElements.BackToolbar
 import com.example.lostandfound.CustomElements.CustomChoiceTextField
+import com.example.lostandfound.R
 import com.example.lostandfound.Utility.DeviceThemeManager
+import com.example.lostandfound.Utility.FontSizeManager
 import com.example.lostandfound.ui.AboutApp.SettingsFontSizeViewModel
+import com.example.lostandfound.ui.NewLost.NewLostViewModel
 import com.example.lostandfound.ui.theme.ComposeTheme
 
 
@@ -85,22 +94,44 @@ fun MainContent(viewModel: SettingsFontSizeViewModel = viewModel()) {
         CustomChoiceTextField(
             title = "Normal text",
             leadingIcon = Icons.Outlined.TextFormat,
-            state = !viewModel.isLargeFontSize.value,
+            state = !viewModel.isLargeFontSize,
             onClick = {
                 // set is large font size to false
-                viewModel.isLargeFontSize.value = false
+                FontSizeManager.setFontSize(false, context)
             }
         )
 
         CustomChoiceTextField(
             title = "Large text",
             leadingIcon = Icons.Outlined.TextIncrease,
-            state = viewModel.isLargeFontSize.value,
+            state = viewModel.isLargeFontSize,
             onClick = {
-                viewModel.isLargeFontSize.value = true
+                FontSizeManager.setFontSize(true, context)
             }
         )
+
+        // reminder to reload for changes to take effect
+        ReminderMessage(context = context, viewModel = viewModel)
     }
+}
+
+
+@Composable
+fun ReminderMessage(
+    context: Context,
+    viewModel: SettingsFontSizeViewModel
+) {
+    Text(
+        text = "Please reload the app for the changes to take effect.",
+        style = MaterialTheme.typography.bodyMedium,
+        color = Color.Gray,
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(
+                dimensionResource(id = R.dimen.header_margin),
+            ),
+        textAlign = TextAlign.Center   // center text
+    )
 }
 
 
