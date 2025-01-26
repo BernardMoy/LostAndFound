@@ -345,6 +345,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         float firstButtonDistance = -(getResources().getDimension(R.dimen.floating_button_size) + getResources().getDimension(R.dimen.content_margin));
         float secondButtonDistance = firstButtonDistance * 2;
 
+        // make the overlay appear
+        binding.overlay.animate().alpha(1f);
+
         // enable the buttons
         binding.lostFloatingActionButton.setEnabled(true);
         binding.foundFloatingActionButton.setEnabled(true);
@@ -367,6 +370,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     public void collapseMenu(){
         isMenuExpanded = false;
+
+        // make the overlay not appear
+        binding.overlay.animate().alpha(0f);
 
         // disable the buttons
         binding.lostFloatingActionButton.setEnabled(false);
