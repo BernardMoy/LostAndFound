@@ -6,25 +6,25 @@ import androidx.compose.runtime.mutableStateOf
 import com.example.lostandfound.Data.SharedPreferencesNames
 
 object FontSizeManager {
-    val isLargeFontSize: MutableState<Boolean> = mutableStateOf(false)
+    val isLargeFontSizeValue: MutableState<Boolean> = mutableStateOf(false)
 
-    fun setTheme(
+    fun setFontSize(
         isLargeFont: Boolean,
         context: Context
     ){
         val sp = context.getSharedPreferences(SharedPreferencesNames.NAME_ISLARGEFONT, Context.MODE_PRIVATE)
         sp.edit().putBoolean(SharedPreferencesNames.ISLARGEFONT_VALUE, isLargeFont).apply()
-        isLargeFontSize.value = isLargeFont
+        isLargeFontSizeValue.value = isLargeFont
     }
 
-    fun loadTheme(
+    fun loadFontSize(
         context: Context
     ){
-        // first get the theme from sp, or false if not exist yet
+        // first get the font size from sp, or false if not exist yet
         val sp = context.getSharedPreferences(SharedPreferencesNames.NAME_ISLARGEFONT, Context.MODE_PRIVATE)
         val currentIsLargeFont = sp.getBoolean(SharedPreferencesNames.ISLARGEFONT_VALUE, false)
 
         // modify the theme value
-        isLargeFontSize.value = currentIsLargeFont
+        isLargeFontSizeValue.value = currentIsLargeFont
     }
 }
