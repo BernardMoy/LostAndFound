@@ -1,11 +1,16 @@
 package com.example.lostandfound.ui.SettingsFontSize
 
+import android.app.Activity
 import android.content.Context
+import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
@@ -26,9 +31,13 @@ import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.core.content.ContextCompat.startActivity
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.lostandfound.CustomElements.BackToolbar
+import com.example.lostandfound.CustomElements.ButtonType
+import com.example.lostandfound.CustomElements.CustomButton
 import com.example.lostandfound.CustomElements.CustomChoiceTextField
+import com.example.lostandfound.MainActivity
 import com.example.lostandfound.R
 import com.example.lostandfound.Utility.DeviceThemeManager
 import com.example.lostandfound.Utility.FontSizeManager
@@ -112,6 +121,8 @@ fun MainContent(viewModel: SettingsFontSizeViewModel = viewModel()) {
 
         // reminder to reload for changes to take effect
         ReminderMessage(context = context, viewModel = viewModel)
+
+        RestartButton(context = context, viewModel = viewModel)
     }
 }
 
@@ -122,7 +133,7 @@ fun ReminderMessage(
     viewModel: SettingsFontSizeViewModel
 ) {
     Text(
-        text = "Please reload the app for the changes to take effect.",
+        text = "Please restart the app for the changes to take effect.",
         style = MaterialTheme.typography.bodyMedium,
         color = Color.Gray,
         modifier = Modifier
@@ -133,5 +144,33 @@ fun ReminderMessage(
         textAlign = TextAlign.Center   // center text
     )
 }
+
+
+@Composable
+fun RestartButton(
+    context: Context,
+    viewModel: SettingsFontSizeViewModel
+){
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.Center
+    ){
+        CustomButton(
+            text = "Restart now",
+            type = ButtonType.TONAL,
+            onClick = {
+                val packageManager = context.packageManager
+                val intent = packageManager.getLaunchIntentForPackage(context.packageName)!!
+                val componentName = intent.component!!
+                val restartIntent = Intent.makeRestartActivityTask(componentName)
+                context.startActivity(restartIntent)
+
+                // exit current app
+                Runtime.getRuntime().exit(0)
+            }
+        )
+    }
+}
+
 
 
