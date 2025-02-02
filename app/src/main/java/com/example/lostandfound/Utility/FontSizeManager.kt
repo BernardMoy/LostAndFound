@@ -37,7 +37,6 @@ object FontSizeManager {
     // function to update all child recursively in a viewgroup, used for XML
     fun setFontSizeXML(
         parentView: ViewGroup,
-        isLargeFont: Boolean,
         context: Context
     ){
         // first get the font size from sp
@@ -53,7 +52,7 @@ object FontSizeManager {
                         TypedValue.COMPLEX_UNIT_SP,
                         child.textSize/context.resources.displayMetrics.scaledDensity*1.38F   // convert the dp from child.textSize to sp
                     )
-                    is ViewGroup -> setFontSizeXML(child, isLargeFont, context)  // recursive call for nested components
+                    is ViewGroup -> setFontSizeXML(child, context)  // recursive call for nested components
                 }
             }
         }

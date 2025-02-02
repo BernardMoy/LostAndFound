@@ -78,6 +78,8 @@
             android:text="You are not signed in."
             app:layout_constraintBottom_toBottomOf="@+id/rectangle_background"
             app:layout_constraintStart_toStartOf="parent"
+            android:layout_width="match_parent"
+            app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginBottom="@dimen/content_margin"
             style="@style/whiteBoldTitle"/>
 
