@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -111,6 +112,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         FontSizeManager.INSTANCE.loadFontSize(
                 MainActivity.this
         );
+
+        // set font size for this XML activity
+        ViewGroup parentView = binding.drawerLayout;
+        FontSizeManager.INSTANCE.setFontSizeXML(parentView, true, MainActivity.this);
 
 
 
