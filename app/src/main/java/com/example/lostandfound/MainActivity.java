@@ -1,5 +1,6 @@
 package com.example.lostandfound;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -47,6 +48,7 @@ import com.example.lostandfound.ui.Settings.SettingsActivity;
 import com.google.android.material.badge.BadgeDrawable;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.imageview.ShapeableImageView;
+import com.google.android.material.internal.NavigationMenuView;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.firestore.EventListener;
@@ -76,7 +78,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        // set up main model
+        // set up main view model
         MainViewModel mainViewModel = new ViewModelProvider(this).get(MainViewModel.class);
 
         // Set toolbar as the topActionbar
@@ -115,8 +117,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         // set font size for this XML activity
         ViewGroup parentView = binding.drawerLayout;
-        FontSizeManager.INSTANCE.setFontSizeXML(parentView, true, MainActivity.this);
+        FontSizeManager.INSTANCE.setFontSizeXML(parentView, MainActivity.this);
 
+        // set font size for the XML of the nav drawer layout
+        ViewGroup parentViewNavDrawer = (ViewGroup) binding.navDrawerView.getHeaderView(0);
+        FontSizeManager.INSTANCE.setFontSizeXML(parentViewNavDrawer, MainActivity.this);
 
 
         // Passing each menu ID as a set of Ids because each
