@@ -11,6 +11,7 @@ import com.example.lostandfound.R
 import com.example.lostandfound.Utility.FontSizeManager
 
 // Set of Material typography styles to start with
+// technically large font size = original font size *1.38
 val isLargeFont by FontSizeManager.isLargeFontSizeValue
 
 val Typography = Typography(
@@ -31,8 +32,8 @@ val Typography = Typography(
     titleMedium = TextStyle(
         fontFamily = FontFamily.Default,
         fontWeight = FontWeight.Medium, // Medium weight text
-        fontSize = if (isLargeFont) 26.sp else 18.sp, // Smaller than titleLarge but still prominent
-        lineHeight = if (isLargeFont) 28.sp else 24.sp,
+        fontSize = if (isLargeFont) 25.sp else 18.sp, // Smaller than titleLarge but still prominent
+        lineHeight = if (isLargeFont) 27.sp else 24.sp,
         letterSpacing = 0.sp
     ),
 )

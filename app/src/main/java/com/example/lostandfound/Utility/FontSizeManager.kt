@@ -12,6 +12,7 @@ import com.example.lostandfound.Data.SharedPreferencesNames
 object FontSizeManager {
     val isLargeFontSizeValue: MutableState<Boolean> = mutableStateOf(false)
 
+    // set font size through changing the value in shared preferences and also change the compose value
     fun setFontSize(
         isLargeFont: Boolean,
         context: Context
@@ -39,14 +40,21 @@ object FontSizeManager {
         isLargeFont: Boolean,
         context: Context
     ){
-        for (i in 0 until parentView.childCount) {
-            val child = parentView.getChildAt(i)
-            when (child) {
-                is TextView -> if (isLargeFont) child.setTextSize(
-                    TypedValue.COMPLEX_UNIT_SP,
-                    child.textSize/context.resources.displayMetrics.scaledDensity*1.38F
+        // first get the font size from sp
+        val sp = context.getSharedPreferences(SharedPreferencesNames.NAME_ISLARGEFONT, Context.MODE_PRIVATE)
+        val currentIsLargeFont = sp.getBoolean(SharedPreferencesNames.ISLARGEFONT_VALUE, false)
+
+        // if the font size is large, modify its child
+        if (currentIsLargeFont){
+            for (i in 0 until parentView.childCount) {
+                val child = parentView.getChildAt(i)
+                when (child) {
+                    is TextView -> child.setTextSize(
+                        TypedValue.COMPLEX_UNIT_SP,
+                        child.textSize/context.resources.displayMetrics.scaledDensity*1.38F   // convert the dp from child.textSize to sp
                     )
-                is ViewGroup -> setFontSizeXML(child, isLargeFont, context)  // recursive call for nested components
+                    is ViewGroup -> setFontSizeXML(child, isLargeFont, context)  // recursive call for nested components
+                }
             }
         }
     }
