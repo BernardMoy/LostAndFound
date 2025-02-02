@@ -200,6 +200,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     startActivity(i);
 
                 } else if (clickedId == R.id.nav_drawer_take_a_tour){
+                    
 
                 } else if (clickedId == R.id.nav_drawer_how_it_works){
                     Intent i = new Intent(MainActivity.this, HowItWorksActivity.class);

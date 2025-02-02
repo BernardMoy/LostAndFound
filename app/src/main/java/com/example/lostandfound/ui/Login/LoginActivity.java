@@ -4,7 +4,10 @@ import android.content.Intent;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.text.method.PasswordTransformationMethod;
+import android.util.TypedValue;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -17,6 +20,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.lostandfound.Utility.ErrorCallback;
 import com.example.lostandfound.R;
+import com.example.lostandfound.Utility.FontSizeManager;
 import com.example.lostandfound.databinding.ActivityLoginBinding;
 import com.example.lostandfound.ui.ForgotPassword.ForgotPasswordActivity;
 import com.example.lostandfound.ui.Register.RegisterActivity;
@@ -43,6 +47,10 @@ public class LoginActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        // set font size
+        ViewGroup parentView = binding.content;
+        FontSizeManager.INSTANCE.setFontSizeXML(parentView, true);
 
         // button to exit activity
         binding.backButton.setOnClickListener(new View.OnClickListener() {
