@@ -1,5 +1,7 @@
 package com.example.lostandfound.ui.VerifyEmail;
 
+import com.example.lostandfound.Data.Emails;
+
 import android.content.Context;
 
 import androidx.lifecycle.MutableLiveData;
@@ -29,24 +31,11 @@ public class VerifyEmailViewModel extends ViewModel {
     }
 
 
-    /*
-    A list of emails with special access.
-    When registered with this email, an email wont be sent
-    and also user can bypass the verify email process.
-     */
-    private final Set<String> DEV_EMAILS = new HashSet<>(
-            Arrays.asList(
-                    "testdevholo@warwick.ac.uk",
-                    "testdevholo2@warwick.ac.uk",
-                    "testdevholo3@warwick.ac.uk"
-            )
-    );
-
 
     // method to send an email containing verification code to the user, if the user has not generated another code last min
     public void sendVerificationEmail(Context ctx, String emailAddress, boolean hasToastMessage){
         // dont send email if the email is DEV EMAIL
-        if (DEV_EMAILS.contains(emailAddress)){
+        if (Emails.DEV_EMAILS.contains(emailAddress)){
             return;
         }
 
@@ -75,7 +64,7 @@ public class VerifyEmailViewModel extends ViewModel {
         /*
         Special permission is given to the user testDevHolo@warwick.ac.uk.
          */
-        if (DEV_EMAILS.contains(emailAddress)){
+        if (Emails.DEV_EMAILS.contains(emailAddress)){
             callback.onComplete("");
         }
 
