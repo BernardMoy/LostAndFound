@@ -50,7 +50,7 @@ public class LoginActivity extends AppCompatActivity {
 
         // set font size
         ViewGroup parentView = binding.content;
-        FontSizeManager.INSTANCE.setFontSizeXML(parentView, true);
+        FontSizeManager.INSTANCE.setFontSizeXML(parentView, true, LoginActivity.this);
 
         // button to exit activity
         binding.backButton.setOnClickListener(new View.OnClickListener() {
