@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.ui.unit.sp
 import com.example.lostandfound.Data.SharedPreferencesNames
 
 object FontSizeManager {
@@ -35,14 +36,17 @@ object FontSizeManager {
     // function to update all child recursively in a viewgroup, used for XML
     fun setFontSizeXML(
         parentView: ViewGroup,
-        isLargeFont: Boolean
+        isLargeFont: Boolean,
+        context: Context
     ){
         for (i in 0 until parentView.childCount) {
             val child = parentView.getChildAt(i)
             when (child) {
-                is TextView -> if (isLargeFont) child.setTextSize(TypedValue.COMPLEX_UNIT_SP, 22F)
-                                else child.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16F)
-                is ViewGroup -> setFontSizeXML(child, isLargeFont)  // recursive call for nested components
+                is TextView -> if (isLargeFont) child.setTextSize(
+                    TypedValue.COMPLEX_UNIT_SP,
+                    child.textSize/context.resources.displayMetrics.scaledDensity*1.38F
+                    )
+                is ViewGroup -> setFontSizeXML(child, isLargeFont, context)  // recursive call for nested components
             }
         }
     }
