@@ -18,6 +18,7 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.example.lostandfound.MainActivity;
 import com.example.lostandfound.Utility.ErrorCallback;
 import com.example.lostandfound.R;
 import com.example.lostandfound.Utility.FontSizeManager;
@@ -55,6 +56,11 @@ public class LoginActivity extends AppCompatActivity {
                 getOnBackPressedDispatcher().onBackPressed();
             }
         });
+
+        // set font size for this XML activity
+        ViewGroup parentView = binding.main;
+        FontSizeManager.INSTANCE.setFontSizeXML(parentView, LoginActivity.this);
+
 
         // set underlined text for the Register and forgot password textview
         binding.register.setPaintFlags(binding.register.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);

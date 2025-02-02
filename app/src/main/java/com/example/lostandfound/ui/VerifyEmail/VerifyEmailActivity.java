@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -19,7 +20,9 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.lostandfound.Utility.ErrorCallback;
 import com.example.lostandfound.R;
+import com.example.lostandfound.Utility.FontSizeManager;
 import com.example.lostandfound.databinding.ActivityVerifyEmailBinding;
+import com.example.lostandfound.ui.Login.LoginActivity;
 
 public class VerifyEmailActivity extends AppCompatActivity {
 
@@ -54,6 +57,10 @@ public class VerifyEmailActivity extends AppCompatActivity {
                 getOnBackPressedDispatcher().onBackPressed();
             }
         });
+
+        // set font size for this XML activity
+        ViewGroup parentView = binding.main;
+        FontSizeManager.INSTANCE.setFontSizeXML(parentView, VerifyEmailActivity.this);
 
         // set listeners to move focus when an edittext is filled
         setTextFocusChanger(binding.code1, binding.code2);

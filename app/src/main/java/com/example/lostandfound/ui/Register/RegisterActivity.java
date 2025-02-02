@@ -3,6 +3,7 @@ package com.example.lostandfound.ui.Register;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.view.ViewGroup;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -13,7 +14,9 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.lostandfound.R;
+import com.example.lostandfound.Utility.FontSizeManager;
 import com.example.lostandfound.databinding.ActivityRegisterBinding;
+import com.example.lostandfound.ui.Login.LoginActivity;
 import com.example.lostandfound.ui.VerifyEmail.VerifyEmailActivity;
 
 public class RegisterActivity extends AppCompatActivity {
@@ -47,6 +50,10 @@ public class RegisterActivity extends AppCompatActivity {
                 getOnBackPressedDispatcher().onBackPressed();
             }
         });
+
+        // set font size for this XML activity
+        ViewGroup parentView = binding.main;
+        FontSizeManager.INSTANCE.setFontSizeXML(parentView, RegisterActivity.this);
 
         // set up viewmodel observer for first, last name error, and email and password error
         registerViewModel.getRegisterError().observe(this, new Observer<String>() {
