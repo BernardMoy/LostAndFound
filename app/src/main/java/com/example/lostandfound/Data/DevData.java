@@ -1,11 +1,9 @@
 package com.example.lostandfound.Data;
 
-import java.util.Arrays;
-import java.util.HashSet;
 import java.util.Set;
 
-public final class Emails {
-    private Emails(){}
+public final class DevData {
+    private DevData(){}
 
     /*
     A list of emails with special access.

@@ -20,7 +20,7 @@ class ForgotPasswordViewModel: ViewModel() {
             return false
 
         } else if (!email.value.contains("@") || !email.value.endsWith("warwick.ac.uk")){
-            error.value = "Emails must be university email (@warwick.ac.uk)"
+            error.value = "DevData must be university email (@warwick.ac.uk)"
             return false
         }
 
