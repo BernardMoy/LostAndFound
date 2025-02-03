@@ -1,6 +1,6 @@
 package com.example.lostandfound.ui.VerifyEmail;
 
-import com.example.lostandfound.Data.Emails;
+import com.example.lostandfound.Data.DevData;
 
 import android.content.Context;
 
@@ -11,11 +11,6 @@ import com.example.lostandfound.Utility.EmailSender;
 import com.example.lostandfound.Utility.ErrorCallback;
 import com.example.lostandfound.FirebaseManagers.FirebaseAuthManager;
 import com.example.lostandfound.Utility.VerificationCodeManager;
-
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
 
 public class VerifyEmailViewModel extends ViewModel {
 
@@ -35,7 +30,7 @@ public class VerifyEmailViewModel extends ViewModel {
     // method to send an email containing verification code to the user, if the user has not generated another code last min
     public void sendVerificationEmail(Context ctx, String emailAddress, boolean hasToastMessage){
         // dont send email if the email is DEV EMAIL
-        if (Emails.DEV_EMAILS.contains(emailAddress)){
+        if (DevData.DEV_EMAILS.contains(emailAddress)){
             return;
         }
 
@@ -64,7 +59,7 @@ public class VerifyEmailViewModel extends ViewModel {
         /*
         Special permission is given to the user testDevHolo@warwick.ac.uk.
          */
-        if (Emails.DEV_EMAILS.contains(emailAddress)){
+        if (DevData.DEV_EMAILS.contains(emailAddress)){
             callback.onComplete("");
         }
 
