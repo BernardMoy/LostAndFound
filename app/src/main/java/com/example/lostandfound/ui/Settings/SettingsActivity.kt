@@ -18,6 +18,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Android
 import androidx.compose.material.icons.outlined.DarkMode
 import androidx.compose.material.icons.outlined.Delete
+import androidx.compose.material.icons.outlined.Image
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.LocationOn
 import androidx.compose.material.icons.outlined.Notifications
@@ -45,6 +46,7 @@ import com.example.lostandfound.Data.SharedPreferencesNames
 import com.example.lostandfound.FirebaseManagers.FirebaseUtility
 import com.example.lostandfound.R
 import com.example.lostandfound.ui.AboutApp.AboutAppActivity
+import com.example.lostandfound.ui.ImageComparison.ImageComparisonActivity
 import com.example.lostandfound.ui.Search.SearchActivity
 import com.example.lostandfound.ui.SettingsFontSize.SettingsFontSizeActivity
 import com.example.lostandfound.ui.SettingsTheme.SettingsThemeActivity
@@ -503,6 +505,14 @@ fun Developer(
                     IntentExtraNames.INTENT_LOST_ID,
                     viewModel.placeholderLostItem
                 )
+                context.startActivity(i)
+            }
+        )
+
+        CustomActionRow(text = "Open image comparison activity",
+            leftIcon = Icons.Outlined.Image,
+            onClick = {
+                val i: Intent = Intent(context, ImageComparisonActivity::class.java)
                 context.startActivity(i)
             }
         )
