@@ -26,6 +26,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -39,9 +40,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil3.compose.rememberAsyncImagePainter
 import com.example.lostandfound.CustomElements.BackToolbar
+import com.example.lostandfound.CustomElements.ButtonType
 import com.example.lostandfound.CustomElements.CustomActionText
+import com.example.lostandfound.CustomElements.CustomButton
 import com.example.lostandfound.R
 import com.example.lostandfound.ui.theme.ComposeTheme
+import com.example.lostandfound.ui.theme.Typography
 
 
 class ImageComparisonActivity : ComponentActivity() {
@@ -107,7 +111,14 @@ fun MainContent(viewModel: ImageComparisonViewModel = viewModel()) {
     )
 
     // content goes here
-    TwoImages(context = context, viewModel = viewModel, launcher1, launcher2)
+    Column (
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.title_margin))
+    ){
+        TwoImages(context = context, viewModel = viewModel, launcher1, launcher2)
+        CompareButton(context = context, viewModel = viewModel)
+        Distance(context = context, viewModel = viewModel)
+    }
 }
 
 @Composable
@@ -143,7 +154,8 @@ fun TwoImages(
             }
             // the clickable text to add new image
             Box(
-                modifier = Modifier.padding(vertical = dimensionResource(id = R.dimen.content_margin))
+                modifier = Modifier.fillMaxWidth().padding(vertical = dimensionResource(id = R.dimen.content_margin)),
+                contentAlignment = Alignment.Center
             ) {
                 CustomActionText(
                     text = "Add Image",
@@ -178,7 +190,8 @@ fun TwoImages(
             }
             // the clickable text to add new image
             Box(
-                modifier = Modifier.padding(vertical = dimensionResource(id = R.dimen.content_margin))
+                modifier = Modifier.fillMaxWidth().padding(vertical = dimensionResource(id = R.dimen.content_margin)),
+                contentAlignment = Alignment.Center
             ) {
                 CustomActionText(
                     text = "Add Image",
@@ -196,12 +209,22 @@ fun TwoImages(
 
 @Composable
 fun CompareButton(context: Context, viewModel: ImageComparisonViewModel){
-
+    CustomButton(
+        text = "Compare",
+        type = ButtonType.FILLED,
+        onClick = {
+            viewModel.onCompareClicked()
+        }
+    )
 }
 
 @Composable
 fun Distance(context: Context, viewModel: ImageComparisonViewModel){
-
+    Text(
+        text = "Distance: " + viewModel.distance.value.toString(),
+        style = Typography.bodyMedium,
+        color = MaterialTheme.colorScheme.onBackground
+    )
 }
 
 
