@@ -22,8 +22,8 @@ core-testing = "2.2.0"
 kotlin = "2.1.0"
 coreKtx = "1.15.0"
 firebaseStorage = "21.0.1"
-tensorflowLiteSupport = "0.1.0"
-tensorflowLiteMetadata = "0.1.0"
+tensorflowLiteSupport = "0.4.4"
+tensorflowLiteMetadata = "0.4.4"
 
 [libraries]
 junit = { group = "junit", name = "junit", version.ref = "junit" }

@@ -21,7 +21,7 @@ class ImageClassifier (private val context: Context){
     val model = SiameseModel.newInstance(context)
     val imageSize = 448
 
-    fun predict_bitmap(image1: Bitmap, image2: Bitmap): Float{
+    fun predictBitmap(image1: Bitmap, image2: Bitmap): Float{
 
         // Creates inputs for reference.
         val inputFeature0 = TensorBuffer.createFixedSize(intArrayOf(1, imageSize, imageSize, 3), DataType.FLOAT32)
@@ -45,14 +45,18 @@ class ImageClassifier (private val context: Context){
         // convert the uris to bitmaps
         val image1src = ImageDecoder.createSource(context.contentResolver, image1)
         val image2src = ImageDecoder.createSource(context.contentResolver, image2)
-        val image1bm = ImageDecoder.decodeBitmap(image1src)
-        val image2bm = ImageDecoder.decodeBitmap(image2src)
+        val image1bm = ImageDecoder.decodeBitmap(image1src){decoder, _, _ ->
+            decoder.isMutableRequired = true
+        }
+        val image2bm = ImageDecoder.decodeBitmap(image2src){decoder, _, _ ->
+            decoder.isMutableRequired = true
+        }
 
         // resize the bitmaps to the size required by the model
         val image1bmResized = Bitmap.createScaledBitmap(image1bm, imageSize, imageSize, false)
         val image2bmResized = Bitmap.createScaledBitmap(image2bm, imageSize, imageSize, false)
 
-        return predict_bitmap(image1bmResized, image2bmResized)
+        return predictBitmap(image1bmResized, image2bmResized)
     }
 
     // method to close the model after finish using it
