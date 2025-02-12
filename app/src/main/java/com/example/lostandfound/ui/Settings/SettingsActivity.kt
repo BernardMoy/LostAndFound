@@ -47,6 +47,7 @@ import com.example.lostandfound.FirebaseManagers.FirebaseUtility
 import com.example.lostandfound.R
 import com.example.lostandfound.ui.AboutApp.AboutAppActivity
 import com.example.lostandfound.ui.ImageComparison.ImageComparisonActivity
+import com.example.lostandfound.ui.PermissionsTest.PermissionsTestActivity
 import com.example.lostandfound.ui.Search.SearchActivity
 import com.example.lostandfound.ui.SettingsFontSize.SettingsFontSizeActivity
 import com.example.lostandfound.ui.SettingsTheme.SettingsThemeActivity
@@ -517,6 +518,12 @@ fun Developer(
             }
         )
 
-
+        CustomActionRow(text = "Open permissions test activity",
+            leftIcon = Icons.Outlined.LocationOn,
+            onClick = {
+                val i: Intent = Intent(context, PermissionsTestActivity::class.java)
+                context.startActivity(i)
+            }
+        )
     }
 }
