@@ -3,6 +3,7 @@ package com.example.lostandfound.ui.ImageComparison
 import android.content.Context
 import android.net.Uri
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.ManagedActivityResultLauncher
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -44,6 +45,7 @@ import com.example.lostandfound.CustomElements.ButtonType
 import com.example.lostandfound.CustomElements.CustomActionText
 import com.example.lostandfound.CustomElements.CustomButton
 import com.example.lostandfound.R
+import com.example.lostandfound.TFLiteManager.ImageClassifier
 import com.example.lostandfound.ui.theme.ComposeTheme
 import com.example.lostandfound.ui.theme.Typography
 
@@ -213,7 +215,14 @@ fun CompareButton(context: Context, viewModel: ImageComparisonViewModel){
         text = "Compare",
         type = ButtonType.FILLED,
         onClick = {
-            viewModel.onCompareClicked()
+            // create image classifier instance
+            if (viewModel.image1.value == null || viewModel.image2.value == null){
+                Toast.makeText(context, "One of the images are null", Toast.LENGTH_SHORT).show()
+                return@CustomButton
+            }
+            val imageClassifier = ImageClassifier(context)
+            val predicted_distance: Float = imageClassifier.predict(viewModel.image1.value!!, viewModel.image2.value!!)
+            viewModel.distance.value = predicted_distance
         }
     )
 }
