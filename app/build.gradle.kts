@@ -37,6 +37,7 @@ android {
     buildFeatures {
         viewBinding = true
         compose = true
+        mlModelBinding = true
     }
 
     packaging {
@@ -65,6 +66,8 @@ dependencies {
     implementation(libs.jakarta.mail)
     implementation(libs.jakarta.activation)
     implementation(libs.core.ktx)
+    implementation(libs.tensorflow.lite.support)
+    implementation(libs.tensorflow.lite.metadata)
     testImplementation(libs.junit)
     testImplementation (libs.mockito.core)
     testImplementation (libs.coreTesting)
