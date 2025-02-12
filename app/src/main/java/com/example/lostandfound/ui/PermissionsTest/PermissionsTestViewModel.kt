@@ -8,13 +8,13 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 
 class PermissionsTestViewModel: ViewModel() {
-    val image1: MutableState<Uri?> = mutableStateOf(null)
+    val image: MutableState<Uri?> = mutableStateOf(null)
 
     val currentLat: MutableState<Double> = mutableDoubleStateOf(0.0)
     val currentLng: MutableState<Double> = mutableDoubleStateOf(0.0)
 
     fun onImagePicked(uri: Uri?){
-        image1.value = uri
+        image.value = uri
     }
 
 
