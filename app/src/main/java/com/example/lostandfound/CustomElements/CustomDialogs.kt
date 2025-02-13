@@ -1,9 +1,15 @@
 package com.example.lostandfound.CustomElements
 
+import android.Manifest
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.util.TypedValue
+import android.widget.Toast
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -64,6 +70,8 @@ import com.example.lostandfound.Utility.ImageManager
 import com.example.lostandfound.ui.ChatInbox.ChatInboxActivity
 import com.example.lostandfound.ui.theme.ComposeTheme
 import com.example.lostandfound.ui.theme.Typography
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.model.BitmapDescriptor
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
@@ -472,12 +480,42 @@ fun CustomLoginDialog(
 
 @Composable
 fun CustomPickLocationDialog(
+    context: Context,
     isDialogShown: MutableState<Boolean>,
     selectedLocation: MutableState<LatLng>,   // this is the state that will ONLY BE UPDATED WHEN THE DONE BUTTON IS CLICKED
 ){
     var currentLocation by remember {
         mutableStateOf(selectedLocation.value)
     }
+
+
+
+    // objects for getting device location
+    val fusedLocationClient = remember{
+        LocationServices.getFusedLocationProviderClient(context)
+    }
+
+    val locationPermissions = arrayOf(
+        Manifest.permission.ACCESS_COARSE_LOCATION,
+        Manifest.permission.ACCESS_FINE_LOCATION
+    )
+
+    val launcherMultiplePermissions = rememberLauncherForActivityResult(
+        ActivityResultContracts.RequestMultiplePermissions()
+    ) { permissionMaps ->
+        val areGranted = permissionMaps.values.reduce{acc, next -> acc && next}
+        if (areGranted){
+            // if permissions are granted, get current user location
+            getCurrentLocation(fusedLocationClient, context, onSuccess = {latlng ->
+                currentLocation = latlng
+            })
+        } else {
+            Toast.makeText(context, "Location permission denied", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+
+
 
     // Code is executed everytime the dialog becomes shown
     LaunchedEffect(isDialogShown.value) {
@@ -577,16 +615,34 @@ fun CustomPickLocationDialog(
                             modifier = Modifier.fillMaxWidth(),
                             horizontalArrangement = Arrangement.SpaceEvenly
                         ){
+                            // button to get device location and use it to replace currentLocation
                             CustomButton(
                                 text = "Use device location",
                                 type = ButtonType.OUTLINED,
                                 small = true,
                                 onClick = {
-
+                                    // check if permissions are granted
+                                    if (locationPermissions.all {
+                                            // location permissions are granted
+                                            ContextCompat.checkSelfPermission(context, it) == PackageManager.PERMISSION_GRANTED
+                                        }){
+                                        // get device location
+                                        getCurrentLocation(fusedLocationClient, context, onSuccess = {latlng ->
+                                            currentLocation = latlng
+                                        })
+                                    } else {
+                                        // location permissions are not yet granted
+                                        launcherMultiplePermissions.launch(
+                                            arrayOf(
+                                                Manifest.permission.ACCESS_FINE_LOCATION,
+                                                Manifest.permission.ACCESS_COARSE_LOCATION
+                                            )
+                                        )
+                                    }
                                 }
                             )
 
-
+                            // done button after the location is selected, otherwise use default location
                             CustomButton(
                                 text = "Done",
                                 type = ButtonType.FILLED,
@@ -625,6 +681,26 @@ fun CustomPickLocationDialog(
 
             }
         )
+    }
+}
+
+
+// get last location in latlng. Only called when the location permission is granted
+// This is to distinguish between getting location failed and permission not granted
+@SuppressLint("MissingPermission")
+private fun getCurrentLocation(
+    fusedLocationClient: FusedLocationProviderClient,
+    context: Context,
+    onSuccess: (LatLng) -> Unit,
+){
+    fusedLocationClient.lastLocation.addOnSuccessListener { location ->
+        location?.let {
+            // Return the latlng value
+            onSuccess.invoke(LatLng(it.latitude, it.longitude))
+        }
+    }.addOnFailureListener { exception ->
+        // Display failed toast message
+        Toast.makeText(context, "Failed to get location", Toast.LENGTH_SHORT).show()
     }
 }
 
