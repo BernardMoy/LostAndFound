@@ -224,7 +224,7 @@ fun MainContent(viewModel: NewLostViewModel) {
         verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin_half))
     ){
         ItemName(viewModel = viewModel)
-        ItemImage(context = context, viewModel = viewModel)
+        ItemImage(viewModel = viewModel)
         Category(viewModel = viewModel)
         Subcategory(viewModel = viewModel)
         ItemColor(viewModel = viewModel)
@@ -259,7 +259,6 @@ fun ItemName(
 
 @Composable
 fun ItemImage(
-    context: Context,
     viewModel: NewLostViewModel,
 ) {
     CustomGrayTitle(text = "Item image (Optional)")
