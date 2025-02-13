@@ -19,6 +19,8 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -87,6 +89,7 @@ fun PermissionsTestScreen(activity:PermissionsTestActivity, viewModel: Permissio
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(paddingValues = innerPadding)
+                        .verticalScroll(rememberScrollState())
                 ) {
                     // includes the top tab bar and the main content
                     MainContent(activity = activity, viewModel = viewModel)

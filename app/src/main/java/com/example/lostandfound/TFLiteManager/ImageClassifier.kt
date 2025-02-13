@@ -5,7 +5,7 @@ import android.graphics.Bitmap
 import android.graphics.ImageDecoder
 import android.net.Uri
 import android.provider.MediaStore
-import com.example.lostandfound.ml.SiameseModel
+import com.example.lostandfound.ml.Siamesemodel224
 import org.tensorflow.lite.DataType
 import org.tensorflow.lite.TensorFlowLite
 import org.tensorflow.lite.support.tensorbuffer.TensorBuffer
@@ -17,9 +17,10 @@ val modelFile = context.assets.open(modelFileName).use { it.readBytes() }
         interpreter = Interpreter(modelFile)
  */
 
+
 class ImageClassifier (private val context: Context){
-    val model = SiameseModel.newInstance(context)
-    val imageSize = 448
+    val model = Siamesemodel224.newInstance(context)
+    val imageSize = 224
 
     fun predictBitmap(image1: Bitmap, image2: Bitmap): Float{
 
