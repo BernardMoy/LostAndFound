@@ -54,40 +54,6 @@ class PermissionsTestActivity : ComponentActivity() {
 
     val viewModel: PermissionsTestViewModel by viewModels()
 
-    /*
-    // launcher to request camera permission
-    private val requestCameraPermissionLauncher = registerForActivityResult(
-        ActivityResultContracts.RequestPermission()
-    ){ isGranted ->
-        if (isGranted){
-
-        } else {
-
-        }
-    }
-
-    // public function to request for camera permission
-    fun requestCameraPermission(){
-        when {
-            ContextCompat.checkSelfPermission(
-                this, android.Manifest.permission.CAMERA
-            ) == PackageManager.PERMISSION_GRANTED -> {
-                // camera permission is granted
-            }
-            ActivityCompat.shouldShowRequestPermissionRationale(
-                this, android.Manifest.permission.CAMERA
-            ) -> {
-                // camera permission has been denied by the user before
-            }
-            else -> {
-                // request camera permission
-                requestCameraPermissionLauncher.launch(android.Manifest.permission.CAMERA)
-            }
-        }
-    }
-
-     */
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -99,11 +65,13 @@ class PermissionsTestActivity : ComponentActivity() {
 
 // mock activity for previews
 // class MockActivity : PermissionsTestActivity()
+/*
 @Preview(showBackground = true)
 @Composable
 fun Preview() {
     // PermissionsTestScreen(activity = this)
 }
+ */
 
 @Composable
 fun PermissionsTestScreen(activity:PermissionsTestActivity, viewModel: PermissionsTestViewModel) {
@@ -173,6 +141,7 @@ fun TestImage(activity: PermissionsTestActivity, context: Context, viewModel: Pe
         cameraImageFile
     )
 
+    // launcher to take image from camera
     val cameraLauncher = rememberLauncherForActivityResult(ActivityResultContracts.TakePicture()) {success ->
         if (success){
             viewModel.image.value = cameraImageUri   // Update the image uri with the taken photo
@@ -181,6 +150,7 @@ fun TestImage(activity: PermissionsTestActivity, context: Context, viewModel: Pe
         }
     }
 
+    // launcher to request camera permission
     val cameraPermissionLauncher = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) {success ->
         if (success){
             // launch camera if permission is granted
@@ -249,6 +219,9 @@ fun TestImage(activity: PermissionsTestActivity, context: Context, viewModel: Pe
     }
 }
 
+
+
+
 @Composable
 fun TestLocation(context: Context, viewModel: PermissionsTestViewModel){
     Column(
@@ -278,6 +251,8 @@ fun TestLocation(context: Context, viewModel: PermissionsTestViewModel){
         }
     }
 }
+
+
 
 @Composable
 fun TestNotification(context: Context, viewModel: PermissionsTestViewModel){
