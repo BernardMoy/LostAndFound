@@ -504,6 +504,7 @@ fun Location(
     CustomPickLocationDialog(
         isDialogShown = viewModel.isLocationDialogShown,
         selectedLocation = viewModel.selectedLocation,
+        context = context
     )
 }
 
