@@ -246,16 +246,7 @@ fun TestLocation(context: Context, viewModel: PermissionsTestViewModel){
         val areGranted = permissionMaps.values.reduce{acc, next -> acc && next}
         if (areGranted){
             // if permissions are granted, get current user location
-            getLastLocation(
-                fusedLocationClient,
-                onGetLastLocationSuccess = { latlng ->
-                    // modify the latlng value in the viewmodel
-                    viewModel.currentLocation.value = latlng
-                },
-                onGetLastLocationFailed =  { exception ->
-                    Toast.makeText(context, exception.message.toString(), Toast.LENGTH_SHORT).show()
-                }
-            )
+            getCurrentLocation(fusedLocationClient, context, viewModel)
         } else {
             Toast.makeText(context, "Location permission denied", Toast.LENGTH_SHORT).show()
         }
@@ -289,16 +280,7 @@ fun TestLocation(context: Context, viewModel: PermissionsTestViewModel){
                         ContextCompat.checkSelfPermission(context, it) == PackageManager.PERMISSION_GRANTED
                         }){
                         // get device location
-                        getLastLocation(
-                            fusedLocationClient,
-                            onGetLastLocationSuccess = { latlng ->
-                                // modify the latlng value in the viewmodel
-                                viewModel.currentLocation.value = latlng
-                            },
-                            onGetLastLocationFailed =  { exception ->
-                                Toast.makeText(context, exception.message.toString(), Toast.LENGTH_SHORT).show()
-                            }
-                        )
+                        getCurrentLocation(fusedLocationClient, context, viewModel)
                     } else {
                         // location permissions are not yet granted
                         launcherMultiplePermissions.launch(
@@ -317,19 +299,19 @@ fun TestLocation(context: Context, viewModel: PermissionsTestViewModel){
 // get last location in latlng. Only called when the location permission is granted
 // This is to distinguish between getting location failed and permission not granted
 @SuppressLint("MissingPermission")
-private fun getLastLocation(
+private fun getCurrentLocation(
     fusedLocationClient: FusedLocationProviderClient,
-    onGetLastLocationSuccess: (LatLng) -> Unit,
-    onGetLastLocationFailed: (Exception) -> Unit
+    context: Context,
+    viewModel: PermissionsTestViewModel,
 ){
     fusedLocationClient.lastLocation.addOnSuccessListener { location ->
         location?.let {
-            // Return the pair of location
-            onGetLastLocationSuccess(LatLng(it.latitude, it.longitude))
+            // Set the location in viewmodel
+            viewModel.currentLocation.value = LatLng(it.latitude, it.longitude)
         }
     }.addOnFailureListener { exception ->
-        // Return exception
-        onGetLastLocationFailed(exception)
+        // Display failed toast message
+        Toast.makeText(context, "Failed to get location", Toast.LENGTH_SHORT).show()
     }
 }
 
