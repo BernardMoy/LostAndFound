@@ -47,6 +47,9 @@ class NewLostViewModel: ViewModel() {
 
     val selectedColor: SnapshotStateList<String> = mutableStateListOf()
 
+    // the bottom sheet for displaying camera and gallery options
+    val isSheetOpen: MutableState<Boolean> = mutableStateOf(false)
+
 
     // error fields
     val nameError: MutableState<String> = mutableStateOf("")

@@ -107,4 +107,7 @@ dependencies {
 
     implementation ("org.tensorflow:tensorflow-lite:2.12.0")
     implementation ("org.tensorflow:tensorflow-lite-support:0.4.4")
+
+    implementation ("androidx.core:core-ktx:1.15.0")
+
 }
