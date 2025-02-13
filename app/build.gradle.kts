@@ -68,6 +68,7 @@ dependencies {
     implementation(libs.core.ktx)
     implementation(libs.tensorflow.lite.support)
     implementation(libs.tensorflow.lite.metadata)
+    implementation(libs.tensorflow.lite.gpu)
     testImplementation(libs.junit)
     testImplementation (libs.mockito.core)
     testImplementation (libs.coreTesting)
