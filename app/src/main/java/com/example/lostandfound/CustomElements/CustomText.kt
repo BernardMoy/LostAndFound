@@ -38,13 +38,14 @@ fun CustomGrayTitle(
 @Composable
 fun CustomActionText(
     text: String,
-    onClick: () -> Unit
+    onClick: () -> Unit,
+    color: Color = MaterialTheme.colorScheme.onPrimaryContainer
 ){
     Text(
         // make the text clickable
         text = text,
         style = Typography.bodyMedium,
-        color = MaterialTheme.colorScheme.onPrimaryContainer,
+        color = color,
         fontWeight = FontWeight.Bold,  // make text bold
         textDecoration = TextDecoration.Underline,  // make text underline
         modifier = Modifier
