@@ -1,6 +1,7 @@
 package com.example.lostandfound.ui.PermissionsTest
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.pm.PackageManager
 import android.net.Uri
@@ -49,6 +50,9 @@ import com.example.lostandfound.ui.Profile.ProfileViewModel
 import com.example.lostandfound.ui.theme.ComposeTheme
 import com.example.lostandfound.ui.theme.Typography
 import com.google.android.gms.common.internal.Objects
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
+import com.google.android.gms.maps.model.LatLng
 import java.io.File
 
 
@@ -120,7 +124,7 @@ fun MainContent(
 
 
 
-    TestImage(activity, context, viewModel, launcher)
+    TestImage(context, viewModel, launcher)
     HorizontalDivider(thickness = 1.dp, color = Color.Gray)
     TestLocation(context, viewModel)
     HorizontalDivider(thickness = 1.dp, color = Color.Gray)
@@ -130,7 +134,7 @@ fun MainContent(
 
 
 @Composable
-fun TestImage(activity: PermissionsTestActivity, context: Context, viewModel: PermissionsTestViewModel, launcher: ManagedActivityResultLauncher<PickVisualMediaRequest, Uri?>){
+fun TestImage(context: Context, viewModel: PermissionsTestViewModel, launcher: ManagedActivityResultLauncher<PickVisualMediaRequest, Uri?>){
 
     // stores the file of the image taken by camera
     val cameraImageFile = remember {
@@ -227,16 +231,47 @@ fun TestImage(activity: PermissionsTestActivity, context: Context, viewModel: Pe
 
 @Composable
 fun TestLocation(context: Context, viewModel: PermissionsTestViewModel){
+    val fusedLocationClient = remember{
+        LocationServices.getFusedLocationProviderClient(context)
+    }
+
+    val locationPermissions = arrayOf(
+        Manifest.permission.ACCESS_COARSE_LOCATION,
+        Manifest.permission.ACCESS_FINE_LOCATION
+    )
+
+    val launcherMultiplePermissions = rememberLauncherForActivityResult(
+        ActivityResultContracts.RequestMultiplePermissions()
+    ) { permissionMaps ->
+        val areGranted = permissionMaps.values.reduce{acc, next -> acc && next}
+        if (areGranted){
+            // if permissions are granted, get current user location
+            getLastLocation(
+                fusedLocationClient,
+                onGetLastLocationSuccess = { latlng ->
+                    // modify the latlng value in the viewmodel
+                    viewModel.currentLocation.value = latlng
+                },
+                onGetLastLocationFailed =  { exception ->
+                    Toast.makeText(context, exception.message.toString(), Toast.LENGTH_SHORT).show()
+                }
+            )
+        } else {
+            Toast.makeText(context, "Location permission denied", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+
     Column(
         modifier = Modifier.padding(dimensionResource(R.dimen.title_margin))
     ){
         Text(
-            text = "Lat: " + viewModel.currentLat.value.toString(),
+            text = "Lat: " + viewModel.currentLocation.value.latitude.toString(),
             style = Typography.bodyMedium,
             color = MaterialTheme.colorScheme.onBackground
         )
         Text(
-            text = "Lng: " + viewModel.currentLng.value.toString(),
+            text = "Lng: " + viewModel.currentLocation.value.longitude.toString(),
             style = Typography.bodyMedium,
             color = MaterialTheme.colorScheme.onBackground
         )
@@ -248,10 +283,53 @@ fun TestLocation(context: Context, viewModel: PermissionsTestViewModel){
             CustomActionText(
                 text = "Get current location",
                 onClick = {
-
-                },
+                    // check if permissions are granted
+                    if (locationPermissions.all {
+                        // location permissions are granted
+                        ContextCompat.checkSelfPermission(context, it) == PackageManager.PERMISSION_GRANTED
+                        }){
+                        // get device location
+                        getLastLocation(
+                            fusedLocationClient,
+                            onGetLastLocationSuccess = { latlng ->
+                                // modify the latlng value in the viewmodel
+                                viewModel.currentLocation.value = latlng
+                            },
+                            onGetLastLocationFailed =  { exception ->
+                                Toast.makeText(context, exception.message.toString(), Toast.LENGTH_SHORT).show()
+                            }
+                        )
+                    } else {
+                        // location permissions are not yet granted
+                        launcherMultiplePermissions.launch(
+                            arrayOf(
+                                Manifest.permission.ACCESS_FINE_LOCATION,
+                                Manifest.permission.ACCESS_COARSE_LOCATION
+                            )
+                        )
+                    }
+                }
             )
         }
+    }
+}
+
+// get last location in latlng. Only called when the location permission is granted
+// This is to distinguish between getting location failed and permission not granted
+@SuppressLint("MissingPermission")
+private fun getLastLocation(
+    fusedLocationClient: FusedLocationProviderClient,
+    onGetLastLocationSuccess: (LatLng) -> Unit,
+    onGetLastLocationFailed: (Exception) -> Unit
+){
+    fusedLocationClient.lastLocation.addOnSuccessListener { location ->
+        location?.let {
+            // Return the pair of location
+            onGetLastLocationSuccess(LatLng(it.latitude, it.longitude))
+        }
+    }.addOnFailureListener { exception ->
+        // Return exception
+        onGetLastLocationFailed(exception)
     }
 }
 
