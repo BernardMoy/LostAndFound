@@ -8,6 +8,8 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Animation
+import androidx.compose.material.icons.outlined.Cancel
 import androidx.compose.material.icons.outlined.DarkMode
 import androidx.compose.material.icons.outlined.LightMode
 import androidx.compose.material.icons.outlined.Smartphone
@@ -21,6 +23,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.lostandfound.CustomElements.BackToolbar
 import com.example.lostandfound.CustomElements.CustomChoiceTextField
+import com.example.lostandfound.Utility.AnimationManager
 import com.example.lostandfound.Utility.DeviceThemeManager
 import com.example.lostandfound.ui.AboutApp.SettingsAnimationViewModel
 import com.example.lostandfound.ui.theme.ComposeTheme
@@ -82,18 +85,25 @@ fun MainContent(viewModel: SettingsAnimationViewModel = viewModel()) {
 
         CustomChoiceTextField(
             title = "Enable animation",
-            leadingIcon = Icons.Outlined.LightMode,
+            leadingIcon = Icons.Outlined.Animation,
             state = viewModel.showAnimation,
             onClick = {
-
+                AnimationManager.setAnimationEnabled(
+                    enabled = true,
+                    context = context
+                )
             }
         )
 
         CustomChoiceTextField(
             title = "Disable animation",
-            leadingIcon = Icons.Outlined.DarkMode,
+            leadingIcon = Icons.Outlined.Cancel,
             state = !viewModel.showAnimation,
             onClick = {
+                AnimationManager.setAnimationEnabled(
+                    enabled = false,
+                    context = context
+                )
             }
         )
     }
