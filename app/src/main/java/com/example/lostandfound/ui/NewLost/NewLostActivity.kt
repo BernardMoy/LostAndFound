@@ -497,25 +497,27 @@ fun Location(
      */
 
     // text message to show that location has been selected
-    Row(
-        horizontalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.content_margin)),
-        verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier.padding(bottom = dimensionResource(R.dimen.content_margin))
-    ){
-        Icon(
-            imageVector = Icons.Filled.CheckCircle,
-            tint = colorResource(R.color.status2),
-            contentDescription = "Checkmark",
-            modifier = Modifier.width(dimensionResource(id = R.dimen.title_margin))
-        )
-
-        Text(
-            text = "Location added",
-            color = colorResource(R.color.status2),
-            style = Typography.bodyMedium,
-            fontWeight = FontWeight.Bold,
-        )
+    if (viewModel.selectedLocation.value != null){
+        Row(
+            horizontalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.content_margin)),
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.padding(bottom = dimensionResource(R.dimen.content_margin))
+        ){
+            Icon(
+                imageVector = Icons.Filled.CheckCircle,
+                tint = colorResource(R.color.status2),
+                contentDescription = "Checkmark",
+                modifier = Modifier.width(dimensionResource(id = R.dimen.title_margin))
+            )
+            Text(
+                text = "Location added",
+                color = colorResource(R.color.status2),
+                style = Typography.bodyMedium,
+                fontWeight = FontWeight.Bold
+            )
+        }
     }
+
 
 
     // the action text to choose a location from google maps or delete it
@@ -532,13 +534,16 @@ fun Location(
             },
         )
 
-        CustomActionText(
-            text = "Remove location",
-            color = MaterialTheme.colorScheme.error,
-            onClick = {
-
-            },
-        )
+        if (viewModel.selectedLocation.value != null){
+            CustomActionText(
+                text = "Remove location",
+                color = MaterialTheme.colorScheme.error,
+                onClick = {
+                    // reset the selected location
+                    viewModel.selectedLocation.value = null
+                },
+            )
+        }
     }
 
 

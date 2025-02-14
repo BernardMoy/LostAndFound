@@ -21,14 +21,17 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Circle
 import androidx.compose.material.icons.outlined.CameraAlt
 import androidx.compose.material.icons.outlined.Cancel
@@ -61,7 +64,9 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -480,6 +485,7 @@ fun DateAndTime(
 
 }
 
+
 @Composable
 fun Location(
     context: Context,
@@ -487,14 +493,67 @@ fun Location(
 ) {
     CustomGrayTitle(text = "Location")
 
-    // the action text to choose a location from google maps
-    CustomActionText(
-        text = "Add location",
-        onClick = {
-            // is dialog shown become true
-            viewModel.onAddLocationClicked()
-        },
+    /*
+    // not necessary to display location description
+    Text(
+        text = LocationManager.getLocationDescription(context, viewModel.selectedLocation.value),
+        style = Typography.bodyMedium,
+        color = MaterialTheme.colorScheme.onBackground
     )
+
+     Spacer(modifier = Modifier.padding(dimensionResource(id = R.dimen.content_margin_half)))
+     */
+
+    // text message to show that location has been selected
+    if (viewModel.selectedLocation.value != null){
+        Row(
+            horizontalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.content_margin)),
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.padding(bottom = dimensionResource(R.dimen.content_margin))
+        ){
+            Icon(
+                imageVector = Icons.Filled.CheckCircle,
+                tint = colorResource(R.color.status2),
+                contentDescription = "Checkmark",
+                modifier = Modifier.width(dimensionResource(id = R.dimen.title_margin))
+            )
+            Text(
+                text = "Location added",
+                color = colorResource(R.color.status2),
+                style = Typography.bodyMedium,
+                fontWeight = FontWeight.Bold
+            )
+        }
+    }
+
+
+
+    // the action text to choose a location from google maps or delete it
+    Row(
+        horizontalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.content_margin)),
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier.padding(bottom = dimensionResource(R.dimen.content_margin))
+    ){
+        CustomActionText(
+            text = "Add location",
+            onClick = {
+                // is dialog shown become true
+                viewModel.onAddLocationClicked()
+            },
+        )
+
+        if (viewModel.selectedLocation.value != null){
+            CustomActionText(
+                text = "Remove location",
+                color = MaterialTheme.colorScheme.error,
+                onClick = {
+                    // reset the selected location
+                    viewModel.selectedLocation.value = null
+                },
+            )
+        }
+    }
+
 
     // the google maps dialog
     CustomPickLocationDialog(
@@ -502,7 +561,6 @@ fun Location(
         selectedLocation = viewModel.selectedLocation,
         context = context
     )
-
 }
 
 @Composable

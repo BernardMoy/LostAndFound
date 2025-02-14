@@ -1,18 +1,13 @@
 package com.example.lostandfound.ui.Found
 
-import android.net.Uri
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import com.example.lostandfound.Data.FirebaseNames
 import com.example.lostandfound.Data.FoundItem
-import com.example.lostandfound.Data.LostItem
-import com.example.lostandfound.FirebaseManagers.FirebaseStorageManager
 import com.example.lostandfound.FirebaseManagers.FirebaseUtility
 import com.example.lostandfound.FirebaseManagers.FirestoreManager
 import com.example.lostandfound.FirebaseManagers.ItemManager
-import com.example.lostandfound.R
-import com.example.lostandfound.Utility.LocationManager
 
 interface Callback<T> {
     fun onComplete(result: T)

@@ -98,9 +98,9 @@ object ItemManager {
                                             color = itemResult[FirebaseNames.LOSTFOUND_COLOR] as List<String>,
                                             brand = itemResult[FirebaseNames.LOSTFOUND_BRAND] as String,
                                             dateTime = itemResult[FirebaseNames.LOSTFOUND_EPOCHDATETIME] as Long,
-                                            location = LocationManager.LocationToPair(
+                                            location = if (itemResult[FirebaseNames.LOSTFOUND_LOCATION] != null) LocationManager.LocationToPair(
                                                 itemResult[FirebaseNames.LOSTFOUND_LOCATION] as HashMap<*, *>
-                                            ),
+                                            ) else null,
                                             description = itemResult[FirebaseNames.LOSTFOUND_DESCRIPTION] as String,
                                             timePosted = itemResult[FirebaseNames.LOSTFOUND_TIMEPOSTED] as Long,
                                             status = status,
@@ -195,9 +195,9 @@ object ItemManager {
                                                 color = itemResult[FirebaseNames.LOSTFOUND_COLOR] as List<String>,
                                                 brand = itemResult[FirebaseNames.LOSTFOUND_BRAND] as String,
                                                 dateTime = itemResult[FirebaseNames.LOSTFOUND_EPOCHDATETIME] as Long,
-                                                location = LocationManager.LocationToPair(
+                                                location = if (itemResult[FirebaseNames.LOSTFOUND_LOCATION] != null) LocationManager.LocationToPair(
                                                     itemResult[FirebaseNames.LOSTFOUND_LOCATION] as HashMap<*, *>
-                                                ),
+                                                ) else null,
                                                 description = itemResult[FirebaseNames.LOSTFOUND_DESCRIPTION] as String,
                                                 timePosted = itemResult[FirebaseNames.LOSTFOUND_TIMEPOSTED] as Long,
                                                 status = status,
