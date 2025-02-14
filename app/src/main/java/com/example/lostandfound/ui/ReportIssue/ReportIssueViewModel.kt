@@ -35,11 +35,6 @@ class ReportIssueViewModel: ViewModel() {
     // add the issue to the database when done button is clicked
     fun onDoneButtonClicked(callback: ErrorCallback){
 
-        // validate input
-        if (!validateInput()) {
-            return
-        }
-
         // add the issue to database with the user id
         val data = mapOf(
             FirebaseNames.REPORT_ISSUE_USER to FirebaseUtility.getUserID(),

@@ -205,8 +205,13 @@ fun DoneButton(
             type = ButtonType.FILLED,
             enabled = !viewModel.isLoading.value,
             onClick = {
-                viewModel.isLoading.value = true
+                // validate input
+                if (!viewModel.validateInput()) {
+                    return@CustomButton
+                }
 
+                
+                viewModel.isLoading.value = true
                 viewModel.onDoneButtonClicked(object: ErrorCallback{
                     override fun onComplete(error: String) {
                         // stop loading
