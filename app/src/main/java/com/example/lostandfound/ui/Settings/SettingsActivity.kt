@@ -3,7 +3,9 @@ package com.example.lostandfound.ui.Settings
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
+import android.net.Uri
 import android.os.Bundle
+import android.provider.Settings
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -16,6 +18,8 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Android
+import androidx.compose.material.icons.outlined.Animation
+import androidx.compose.material.icons.outlined.CameraAlt
 import androidx.compose.material.icons.outlined.DarkMode
 import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material.icons.outlined.Image
@@ -23,6 +27,7 @@ import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.LocationOn
 import androidx.compose.material.icons.outlined.Notifications
 import androidx.compose.material.icons.outlined.Palette
+import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material.icons.outlined.TextFields
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Scaffold
@@ -49,6 +54,7 @@ import com.example.lostandfound.ui.AboutApp.AboutAppActivity
 import com.example.lostandfound.ui.ImageComparison.ImageComparisonActivity
 import com.example.lostandfound.ui.PermissionsTest.PermissionsTestActivity
 import com.example.lostandfound.ui.Search.SearchActivity
+import com.example.lostandfound.ui.SettingsAnimation.SettingsAnimationActivity
 import com.example.lostandfound.ui.SettingsFontSize.SettingsFontSizeActivity
 import com.example.lostandfound.ui.SettingsTheme.SettingsThemeActivity
 import com.example.lostandfound.ui.ViewComparison.ViewComparisonActivity
@@ -163,6 +169,15 @@ fun Appearance(
                 context.startActivity(intent)
             }
         )
+
+        // able to toggle on or off animations
+        CustomActionRow(text = "Animations",
+            leftIcon = Icons.Outlined.Animation,
+            onClick = {
+                val intent = Intent(context, SettingsAnimationActivity::class.java)
+                context.startActivity(intent)
+            }
+        )
     }
 }
 
@@ -179,20 +194,14 @@ fun Permissions(
     Column(
         verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin_half))
     ) {
-
-        CustomActionRow(text = "Notifications",
-            leftIcon = Icons.Outlined.Notifications,
+        CustomActionRow(text = "Manage app permissions",
+            leftIcon = Icons.Outlined.Settings,
             onClick = {
-                Toast.makeText(context, "Color theme", Toast.LENGTH_SHORT).show()
-            }
-        )
-
-
-
-        CustomActionRow(text = "Location",
-            leftIcon = Icons.Outlined.LocationOn,
-            onClick = {
-                Toast.makeText(context, "Color theme", Toast.LENGTH_SHORT).show()
+                // redirect to the settings page of the os
+                val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+                    Uri.fromParts("package", context.packageName, null)
+                )
+                context.startActivity(intent)
             }
         )
     }
