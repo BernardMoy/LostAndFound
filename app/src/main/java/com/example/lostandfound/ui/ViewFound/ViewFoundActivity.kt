@@ -323,9 +323,7 @@ fun LocationData(
 
     CustomViewLocationDialog(
         isDialogShown = viewModel.isLocationDialogShown,
-        selectedLocation = LocationManager.pairToLatlng(
-            viewModel.itemData.location
-        )
+        selectedLocation = if (viewModel.itemData.location != null) LocationManager.pairToLatlng(viewModel.itemData.location!!) else null
     )
 }
 

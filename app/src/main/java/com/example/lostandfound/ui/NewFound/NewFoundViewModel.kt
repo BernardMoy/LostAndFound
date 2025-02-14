@@ -41,8 +41,7 @@ class NewFoundViewModel : ViewModel() {
     val selectedHour: MutableState<Int?> = mutableStateOf(null)
     val selectedMinute: MutableState<Int?> = mutableStateOf(null)
     val isTimeDialogShown: MutableState<Boolean> = mutableStateOf(false)
-    val selectedLocation: MutableState<LatLng> =
-        mutableStateOf(LatLng(52.37930763817003, -1.5614912710215834)) // default location
+    val selectedLocation: MutableState<LatLng?> = mutableStateOf(null) // default location
     val isLocationDialogShown: MutableState<Boolean> = mutableStateOf(false)
     val additionalDescription: MutableState<String> = mutableStateOf("")
     val securityQuestion: MutableState<String> = mutableStateOf("")
@@ -119,6 +118,11 @@ class NewFoundViewModel : ViewModel() {
 
     fun onDescriptionChanged(s: String) {
         additionalDescription.value = s
+    }
+
+    fun onAddLocationClicked(){
+        // make the dialog appear
+        isLocationDialogShown.value = true
     }
 
     // function to validate the input fields
@@ -249,9 +253,7 @@ class NewFoundViewModel : ViewModel() {
                                         dateTime = DateTimeManager.getDateTimeEpoch(
                                             selectedDate.value ?: 0L, selectedHour.value ?: 0, selectedMinute.value ?: 0
                                         ),
-                                        location = LocationManager.latLngToPair(
-                                            selectedLocation.value
-                                        ),
+                                        location = if (selectedLocation.value != null) LocationManager.latLngToPair(selectedLocation.value!!) else null,
                                         description = additionalDescription.value,
                                         timePosted = currentTime,
                                         status = 0, // newly posted found item always status 0
@@ -298,9 +300,7 @@ class NewFoundViewModel : ViewModel() {
                             dateTime = DateTimeManager.getDateTimeEpoch(
                                 selectedDate.value ?: 0L, selectedHour.value ?: 0, selectedMinute.value ?: 0
                             ),
-                            location = LocationManager.latLngToPair(
-                                selectedLocation.value
-                            ),
+                            location = if (selectedLocation.value != null) LocationManager.latLngToPair(selectedLocation.value!!) else null,
                             description = additionalDescription.value,
                             timePosted = currentTime,
                             status = 0, // newly posted found item always status 0

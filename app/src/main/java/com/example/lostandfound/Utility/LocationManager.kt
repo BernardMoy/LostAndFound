@@ -6,6 +6,9 @@ import com.google.android.gms.maps.model.LatLng
 import java.util.Locale
 
 object LocationManager {
+    // stores the default location to be used when location is null
+    val DEFAULT_LOCATION = LatLng(52.37930763817003,-1.5614912710215834)
+
     // get location description given a latlng value
     fun getLocationDescription(context: Context, latlng: LatLng): String {
         val geocoder = Geocoder(context, Locale.UK)
@@ -33,7 +36,7 @@ object LocationManager {
         )
     }
 
-    // convert a latlng to pair
+    // convert a latlng to pair (Provided the latlng is not null)
     fun latLngToPair(location: LatLng): Pair<Double, Double>{
         return Pair<Double, Double>(
             location.latitude,

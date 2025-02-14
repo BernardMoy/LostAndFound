@@ -34,7 +34,7 @@ class NewLostViewModel: ViewModel() {
     val selectedHour: MutableState<Int?> = mutableStateOf(null)
     val selectedMinute: MutableState<Int?> = mutableStateOf(null)
     val isTimeDialogShown: MutableState<Boolean> = mutableStateOf(false)
-    val selectedLocation: MutableState<LatLng> = mutableStateOf(LatLng(52.37930763817003,-1.5614912710215834)) // default location
+    val selectedLocation: MutableState<LatLng?> = mutableStateOf(null) // default location
     val additionalDescription: MutableState<String> = mutableStateOf("")
     val isLocationDialogShown: MutableState<Boolean> = mutableStateOf(false)
 
@@ -98,6 +98,11 @@ class NewLostViewModel: ViewModel() {
     }
     fun onSubCategorySelected(s: String){
         selectedSubCategory.value = s
+    }
+
+    fun onAddLocationClicked(){
+        // make the dialog appear
+        isLocationDialogShown.value = true
     }
 
     // function to validate the input fields
@@ -209,7 +214,7 @@ class NewLostViewModel: ViewModel() {
                                 dateTime = DateTimeManager.getDateTimeEpoch(
                                     selectedDate.value?:0L, selectedHour.value?:0, selectedMinute.value?:0
                                 ),
-                                location = LocationManager.latLngToPair(selectedLocation.value),
+                                location = if (selectedLocation.value != null) LocationManager.latLngToPair(selectedLocation.value!!) else null,
                                 description = additionalDescription.value,
                                 timePosted = currentTime,
                                 image = itemImage.value.toString(), // convert uri to string
@@ -250,7 +255,7 @@ class NewLostViewModel: ViewModel() {
                         dateTime = DateTimeManager.getDateTimeEpoch(
                             selectedDate.value?:0L, selectedHour.value?:0, selectedMinute.value?:0
                         ),
-                        location = LocationManager.latLngToPair(selectedLocation.value),
+                        location = if (selectedLocation.value != null) LocationManager.latLngToPair(selectedLocation.value!!) else null,
                         description = additionalDescription.value,
                         timePosted = currentTime,
                         image = "android.resource://com.example.lostandfound/" + R.drawable.placeholder_image,
