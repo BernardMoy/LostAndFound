@@ -11,6 +11,7 @@ class ProfileViewModel : ViewModel(){
     val firstName: MutableState<String> = mutableStateOf("")
     val lastName: MutableState<String> = mutableStateOf("")
 
+    val isChangePasswordDialogShown: MutableState<Boolean> = mutableStateOf(false)
     val isLogoutDialogShown: MutableState<Boolean> = mutableStateOf(false)
 
     fun onImageChanged(uri: Uri?){

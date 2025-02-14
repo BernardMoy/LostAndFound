@@ -1,5 +1,6 @@
 package com.example.lostandfound.ui.Profile
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.graphics.Paint.Align
@@ -65,11 +66,14 @@ import com.example.lostandfound.CustomElements.CustomGrayTitle
 import com.example.lostandfound.CustomElements.CustomTextDialog
 import com.example.lostandfound.Data.SharedPreferencesNames
 import com.example.lostandfound.FirebaseManagers.FirebaseAuthManager
+import com.example.lostandfound.FirebaseManagers.FirebaseUtility
 import com.example.lostandfound.R
+import com.example.lostandfound.Utility.ErrorCallback
 import com.example.lostandfound.Utility.ImageManager
 import com.example.lostandfound.ui.EditProfile.EditProfileActivity
 import com.example.lostandfound.ui.theme.ComposeTheme
 import com.example.lostandfound.ui.theme.Typography
+import com.google.firebase.auth.FirebaseAuth
 
 
 class ProfileActivity : ComponentActivity() {
@@ -177,6 +181,53 @@ fun MainContent(viewModel: ProfileViewModel) {
         },
         isDialogShown = viewModel.isLogoutDialogShown
     )
+
+    // the dialog when attempting to reset password
+    if (viewModel.isChangePasswordDialogShown.value){
+        CustomTextDialog(
+            icon = Icons.Outlined.Cancel,
+            title = "Change password?",
+            content = "We will send a password reset email.",
+            confirmButton = {
+                CustomButton(
+                    text = "Proceed",
+                    type = ButtonType.FILLED,
+                    onClick = {
+                        // send password reset email
+                        val firebaseAuthManager: FirebaseAuthManager = FirebaseAuthManager(context)
+                        firebaseAuthManager.sendPasswordResetEmail(
+                            viewModel.email.value,        // currently the email is get from the view model
+                            object: ErrorCallback {
+                                override fun onComplete(error: String) {
+                                    if (error.isNotEmpty()){
+                                        Toast.makeText(context, "Error sending password reset email", Toast.LENGTH_SHORT).show()
+
+                                        // dismiss the dialog
+                                        viewModel.isChangePasswordDialogShown.value = false
+                                        return
+                                    }
+
+                                    // sent email successful
+                                    Toast.makeText(context, "A password reset email has been sent.", Toast.LENGTH_SHORT).show()
+
+                                    // dismiss the dialog
+                                    viewModel.isChangePasswordDialogShown.value = false
+                                }
+                            }
+                        )
+                    })
+            },
+            dismissButton = {
+                CustomButton(text = "Cancel",
+                    type = ButtonType.OUTLINED,
+                    onClick = {
+                        // dismiss the dialog
+                        viewModel.isChangePasswordDialogShown.value = false
+                    })
+            },
+            isDialogShown = viewModel.isChangePasswordDialogShown   // dialog is shown only when the value of isDialogShown is true
+        )
+    }
 }
 
 @Composable
@@ -310,20 +361,26 @@ fun Actions(
         // change password
         CustomActionRow(
             text = "Change password",
-            onClick = { /*TODO*/ },
+            onClick = {
+                // make the change password dialog visible
+                viewModel.isChangePasswordDialogShown.value = true
+            },
             leftIcon = Icons.Outlined.Lock
         )
 
         HorizontalDivider(thickness = 1.dp, color = Color.Gray)
 
         // disable account
+        /*
         CustomActionRow(
             text = "Disable account",
-            onClick = { /*TODO*/ },
+            onClick = { TODO },
             leftIcon = Icons.Outlined.ErrorOutline,
             tint = Color.Red
         )
         HorizontalDivider(thickness = 1.dp, color = Color.Gray)
+
+         */
     }
 }
 
