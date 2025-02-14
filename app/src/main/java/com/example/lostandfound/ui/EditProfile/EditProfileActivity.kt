@@ -182,6 +182,7 @@ fun MainContent(viewModel: EditProfileViewModel = viewModel()) {
 
     val email = sp.getString(SharedPreferencesNames.USER_EMAIL, "") ?: ""
 
+
     // set the uri from the view model
     viewModel.onAvatarChanged(
         // convert the stored string to uri
@@ -206,7 +207,6 @@ fun MainContent(viewModel: EditProfileViewModel = viewModel()) {
         context = context,
         email = email
     )
-
 }
 
 @Composable
