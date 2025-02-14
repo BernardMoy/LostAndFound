@@ -2,13 +2,13 @@ package com.example.lostandfound.ui.Home
 
 import android.content.Context
 import android.content.Intent
-import android.graphics.Paint.Align
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
@@ -44,10 +44,13 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
@@ -74,8 +77,6 @@ import com.example.lostandfound.Data.IntentExtraNames
 import com.example.lostandfound.Data.LostItem
 import com.example.lostandfound.FirebaseManagers.FirebaseUtility
 import com.example.lostandfound.R
-import com.example.lostandfound.ui.Found.FoundFragmentViewModel
-import com.example.lostandfound.ui.Found.refreshData
 import com.example.lostandfound.ui.HowItWorks.HowItWorksActivity
 import com.example.lostandfound.ui.Login.LoginActivity
 import com.example.lostandfound.ui.NewFound.NewFoundActivity
@@ -83,6 +84,7 @@ import com.example.lostandfound.ui.NewLost.NewLostActivity
 import com.example.lostandfound.ui.ViewLost.ViewLostActivity
 import com.example.lostandfound.ui.theme.ComposeTheme
 import com.example.lostandfound.ui.theme.Typography
+import kotlinx.coroutines.delay
 
 
 class HomeFragment : Fragment() {
@@ -145,12 +147,12 @@ fun MainContent(
 ) {
     val context = LocalContext.current
 
-    Column (
+    Column(
         modifier = Modifier.verticalScroll(state = ScrollState(0))
-    ){
+    ) {
         ImageAndButton(context = context, viewModel = viewModel)
         HowItWorksPager(context = context, viewModel = viewModel)
-        if (viewModel.isLoggedIn.value){
+        if (viewModel.isLoggedIn.value) {
             RecentlyLostItem(context = context, viewModel = viewModel)
             FoundItemData(context = context, viewModel = viewModel)
         } else {
@@ -164,6 +166,40 @@ fun ImageAndButton(
     context: Context,
     viewModel: HomeFragmentViewModel
 ) {
+    var titleVisible by remember {
+        mutableStateOf(false)
+    }
+    var lostButtonVisible by remember {
+        mutableStateOf(false)
+    }
+    var foundButtonVisible by remember {
+        mutableStateOf(false)
+    }
+    val titleAlpha by animateFloatAsState(
+        targetValue = if (titleVisible) 1f else 0f,
+        animationSpec = tween(durationMillis = 1000) // fade in duration
+    )
+    val lostButtonAlpha by animateFloatAsState(
+        targetValue = if (lostButtonVisible) 1f else 0f,
+        animationSpec = tween(durationMillis = 1000)
+    )
+    val foundButtonAlpha by animateFloatAsState(
+        targetValue = if (foundButtonVisible) 1f else 0f,
+        animationSpec = tween(durationMillis = 1000)
+    )
+
+    // when launched, make different elements visible with different delays
+    LaunchedEffect(Unit) {
+        delay(300)
+        titleVisible = true
+
+        delay(500)
+        lostButtonVisible = true
+
+        delay(530)
+        foundButtonVisible = true
+    }
+
     Box(
         modifier = Modifier.fillMaxWidth(),
     ) {
@@ -183,7 +219,7 @@ fun ImageAndButton(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.SpaceEvenly
 
-        ){
+        ) {
             // main title text
             Text(
                 text = "Find your item using our intelligence",
@@ -192,10 +228,13 @@ fun ImageAndButton(
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.onPrimary,
                 textAlign = TextAlign.Center,
-                modifier = Modifier.padding(
-                    top = dimensionResource(id = R.dimen.title_margin)
-                )
+                modifier = Modifier
+                    .padding(
+                        top = dimensionResource(id = R.dimen.title_margin)
+                    )
+                    .alpha(alpha = titleAlpha)
             )
+
 
             // the row displaying the new lost and new found buttons
             Row(
@@ -207,23 +246,31 @@ fun ImageAndButton(
                 horizontalArrangement = Arrangement.SpaceEvenly,
                 verticalAlignment = Alignment.CenterVertically,
             ) {
-                CustomButton(
-                    text = "I have lost",
-                    type = ButtonType.FILLED,
-                    onClick = {
-                        val intent = Intent(context, NewLostActivity::class.java)
-                        context.startActivity(intent)
-                    },
-                )
+                Box(
+                    modifier = Modifier.alpha(alpha = lostButtonAlpha)
+                ) {
+                    CustomButton(
+                        text = "I have lost",
+                        type = ButtonType.FILLED,
+                        onClick = {
+                            val intent = Intent(context, NewLostActivity::class.java)
+                            context.startActivity(intent)
+                        },
+                    )
+                }
 
-                CustomButton(
-                    text = "I have found",
-                    type = ButtonType.TONAL,
-                    onClick = {
-                        val intent = Intent(context, NewFoundActivity::class.java)
-                        context.startActivity(intent)
-                    },
-                )
+                Box(
+                    modifier = Modifier.alpha(alpha = foundButtonAlpha)
+                ) {
+                    CustomButton(
+                        text = "I have found",
+                        type = ButtonType.TONAL,
+                        onClick = {
+                            val intent = Intent(context, NewFoundActivity::class.java)
+                            context.startActivity(intent)
+                        },
+                    )
+                }
             }
         }
     }
@@ -361,13 +408,13 @@ fun HowItWorksPager(
 fun RecentlyLostItem(
     context: Context,
     viewModel: HomeFragmentViewModel
-){
+) {
     Column(
         modifier = Modifier.padding(
             dimensionResource(id = R.dimen.title_margin)
         ),
         verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.title_margin))
-    ){
+    ) {
         Text(
             text = "Your recently lost item",
             style = Typography.titleMedium,
@@ -377,7 +424,7 @@ fun RecentlyLostItem(
         )
 
         // display the lost item in simple format
-        if (viewModel.isLoadingLostItem.value){
+        if (viewModel.isLoadingLostItem.value) {
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -386,12 +433,12 @@ fun RecentlyLostItem(
                         bottom = dimensionResource(id = R.dimen.content_margin)
                     ),
                 horizontalArrangement = Arrangement.Center
-            ){
+            ) {
                 CustomProgressBar()
             }
 
-        } else if (viewModel.latestLostItem.value == null){
-            Row (
+        } else if (viewModel.latestLostItem.value == null) {
+            Row(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(
@@ -399,14 +446,14 @@ fun RecentlyLostItem(
                         bottom = dimensionResource(id = R.dimen.content_margin)
                     ),
                 horizontalArrangement = Arrangement.Center
-            ){
+            ) {
                 Text(
                     text = "You have no recently lost items.",
                     style = Typography.bodyMedium,
                     color = Color.Gray
                 )
             }
-            
+
         } else {
             CustomLostItemPreviewSmall(
                 data = viewModel.latestLostItem.value ?: LostItem(),
@@ -429,7 +476,7 @@ fun RecentlyLostItem(
 fun FoundItemData(
     context: Context,
     viewModel: HomeFragmentViewModel
-){
+) {
     Column(
         modifier = Modifier.padding(
             dimensionResource(id = R.dimen.title_margin)
@@ -443,7 +490,7 @@ fun FoundItemData(
             color = MaterialTheme.colorScheme.onBackground,
             textAlign = TextAlign.Center
         )
-        if (viewModel.isLoadingFoundItem.value){
+        if (viewModel.isLoadingFoundItem.value) {
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -452,7 +499,7 @@ fun FoundItemData(
                         bottom = dimensionResource(id = R.dimen.content_margin)
                     ),
                 horizontalArrangement = Arrangement.Center
-            ){
+            ) {
                 CustomProgressBar()
             }
         } else {
@@ -493,12 +540,12 @@ fun FoundItemData(
                         horizontalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin)),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Column (
+                        Column(
                             verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin)),
                             horizontalAlignment = Alignment.CenterHorizontally,
                             modifier = Modifier.weight(1f)
 
-                        ){
+                        ) {
                             Text(
                                 text = "No. of items found",
                                 style = Typography.bodyMedium,
@@ -514,12 +561,12 @@ fun FoundItemData(
                             )
                         }
 
-                        Column (
+                        Column(
                             verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin)),
                             horizontalAlignment = Alignment.CenterHorizontally,
                             modifier = Modifier
                                 .weight(1f)
-                        ){
+                        ) {
                             Text(
                                 text = "No. of claims approved",
                                 style = Typography.bodyMedium,
@@ -547,7 +594,7 @@ fun FoundItemData(
 fun LargeLoginButton(
     context: Context,
     viewModel: HomeFragmentViewModel
-){
+) {
     Card(
         colors = CardDefaults.cardColors(
             containerColor = Color.Transparent
@@ -572,10 +619,10 @@ fun LargeLoginButton(
             }
             .padding(dimensionResource(R.dimen.content_margin))
 
-    ){
-        Row (
+    ) {
+        Row(
             verticalAlignment = Alignment.CenterVertically
-        ){
+        ) {
             // large icon
             Icon(
                 imageVector = Icons.AutoMirrored.Outlined.Login,
@@ -586,11 +633,11 @@ fun LargeLoginButton(
                     .size(dimensionResource(id = R.dimen.image_button_size))
             )
 
-            Column (
+            Column(
                 modifier = Modifier.weight(4f),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin))
-            ){
+            ) {
                 // title text
                 Text(
                     text = "Log in to get started",
@@ -618,13 +665,13 @@ fun LargeLoginButton(
 fun loadData(
     context: Context,
     viewModel: HomeFragmentViewModel,
-){
+) {
     viewModel.isLoadingLostItem.value = true
-    viewModel.loadLatestLostItem(object: Callback<Boolean>{
+    viewModel.loadLatestLostItem(object : Callback<Boolean> {
         override fun onComplete(result: Boolean) {
             viewModel.isLoadingLostItem.value = false
 
-            if (!result){
+            if (!result) {
                 Toast.makeText(context, "Fetching item data failed", Toast.LENGTH_SHORT).show()
                 return
             }
@@ -632,21 +679,22 @@ fun loadData(
     })
 
     viewModel.isLoadingFoundItem.value = true
-    viewModel.loadFoundItemCount(object: Callback<Boolean>{
+    viewModel.loadFoundItemCount(object : Callback<Boolean> {
         override fun onComplete(result: Boolean) {
             viewModel.isLoadingFoundItem.value = false
 
-            if (!result){
+            if (!result) {
                 Toast.makeText(context, "Fetching item data failed", Toast.LENGTH_SHORT).show()
                 return
             }
 
-            viewModel.loadApprovedClaimsCount(object: Callback<Boolean>{
+            viewModel.loadApprovedClaimsCount(object : Callback<Boolean> {
                 override fun onComplete(result: Boolean) {
                     viewModel.isLoadingFoundItem.value = false
 
-                    if (!result){
-                        Toast.makeText(context, "Fetching item data failed", Toast.LENGTH_SHORT).show()
+                    if (!result) {
+                        Toast.makeText(context, "Fetching item data failed", Toast.LENGTH_SHORT)
+                            .show()
                         return
                     }
                 }
