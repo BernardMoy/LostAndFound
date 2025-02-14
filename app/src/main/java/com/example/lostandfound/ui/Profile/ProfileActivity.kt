@@ -1,13 +1,10 @@
 package com.example.lostandfound.ui.Profile
 
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import android.graphics.Paint.Align
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
-import androidx.activity.compose.BackHandler
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.foundation.Image
@@ -22,24 +19,18 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.Logout
 import androidx.compose.material.icons.outlined.AccountCircle
 import androidx.compose.material.icons.outlined.Cancel
-import androidx.compose.material.icons.outlined.ErrorOutline
 import androidx.compose.material.icons.outlined.Lock
-import androidx.compose.material.icons.outlined.Logout
-import androidx.compose.material.icons.outlined.WarningAmber
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -53,10 +44,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.content.ContextCompat.startActivity
-import androidx.lifecycle.viewmodel.compose.viewModel
 import coil3.compose.rememberAsyncImagePainter
-import com.example.lostandfound.CustomElements.BackToolbar
 import com.example.lostandfound.CustomElements.BackToolbarColored
 import com.example.lostandfound.CustomElements.ButtonType
 import com.example.lostandfound.CustomElements.CustomActionRow
@@ -66,19 +54,17 @@ import com.example.lostandfound.CustomElements.CustomGrayTitle
 import com.example.lostandfound.CustomElements.CustomTextDialog
 import com.example.lostandfound.Data.SharedPreferencesNames
 import com.example.lostandfound.FirebaseManagers.FirebaseAuthManager
-import com.example.lostandfound.FirebaseManagers.FirebaseUtility
 import com.example.lostandfound.R
 import com.example.lostandfound.Utility.ErrorCallback
 import com.example.lostandfound.Utility.ImageManager
 import com.example.lostandfound.ui.EditProfile.EditProfileActivity
 import com.example.lostandfound.ui.theme.ComposeTheme
 import com.example.lostandfound.ui.theme.Typography
-import com.google.firebase.auth.FirebaseAuth
 
 
 class ProfileActivity : ComponentActivity() {
 
-    val viewModel:ProfileViewModel by viewModels()
+    val viewModel: ProfileViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -146,8 +132,9 @@ fun MainContent(viewModel: ProfileViewModel) {
 
     TopProfileBox(context = context, viewModel = viewModel)
     Column(
-        modifier = Modifier.padding(dimensionResource(id = R.dimen.title_margin))
-    ){
+        modifier = Modifier.padding(vertical = dimensionResource(id = R.dimen.title_margin)),
+        verticalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.content_margin))
+    ) {
         AccountDetails(viewModel = viewModel)
         Actions(viewModel = viewModel)
     }
@@ -183,7 +170,7 @@ fun MainContent(viewModel: ProfileViewModel) {
     )
 
     // the dialog when attempting to reset password
-    if (viewModel.isChangePasswordDialogShown.value){
+    if (viewModel.isChangePasswordDialogShown.value) {
         CustomTextDialog(
             icon = Icons.Outlined.Cancel,
             title = "Change password?",
@@ -197,10 +184,14 @@ fun MainContent(viewModel: ProfileViewModel) {
                         val firebaseAuthManager: FirebaseAuthManager = FirebaseAuthManager(context)
                         firebaseAuthManager.sendPasswordResetEmail(
                             viewModel.email.value,        // currently the email is get from the view model
-                            object: ErrorCallback {
+                            object : ErrorCallback {
                                 override fun onComplete(error: String) {
-                                    if (error.isNotEmpty()){
-                                        Toast.makeText(context, "Error sending password reset email", Toast.LENGTH_SHORT).show()
+                                    if (error.isNotEmpty()) {
+                                        Toast.makeText(
+                                            context,
+                                            "Error sending password reset email",
+                                            Toast.LENGTH_SHORT
+                                        ).show()
 
                                         // dismiss the dialog
                                         viewModel.isChangePasswordDialogShown.value = false
@@ -208,7 +199,11 @@ fun MainContent(viewModel: ProfileViewModel) {
                                     }
 
                                     // sent email successful
-                                    Toast.makeText(context, "A password reset email has been sent.", Toast.LENGTH_SHORT).show()
+                                    Toast.makeText(
+                                        context,
+                                        "A password reset email has been sent.",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
 
                                     // dismiss the dialog
                                     viewModel.isChangePasswordDialogShown.value = false
@@ -234,7 +229,7 @@ fun MainContent(viewModel: ProfileViewModel) {
 fun TopProfileBox(
     context: Context,
     viewModel: ProfileViewModel
-){
+) {
     Box(
         contentAlignment = Alignment.Center,
         modifier = Modifier
@@ -248,13 +243,13 @@ fun TopProfileBox(
                     )
                 ),
             )
-    ){
+    ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
                 .padding(dimensionResource(id = R.dimen.title_margin)),
             verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin))
-        ){
+        ) {
             // profile icon
             Image(
                 painter = if (viewModel.imageUri.value != null) {
@@ -309,17 +304,25 @@ fun TopProfileBox(
 @Composable
 fun AccountDetails(
     viewModel: ProfileViewModel
-){
+) {
     Column(
-    ){
-        CustomGrayTitle(text = "Account details")
+    ) {
+        Box(
+            modifier = Modifier.padding(
+                horizontal = dimensionResource(id = R.dimen.content_margin)
+            )
+        ) {
+            CustomGrayTitle(text = "Account details")
+        }
+
 
         // first name field
-        CustomEditText(fieldLabel = "First name",
+        CustomEditText(
+            fieldLabel = "First name",
             fieldContent = viewModel.firstName.value,
             leftIcon = Icons.Outlined.AccountCircle,
             isEditable = false,
-            onTextChanged = {viewModel.onFirstNameChanged(it)},
+            onTextChanged = { viewModel.onFirstNameChanged(it) },
         )
 
         HorizontalDivider(thickness = 1.dp, color = Color.Gray)
@@ -329,7 +332,7 @@ fun AccountDetails(
             fieldContent = viewModel.lastName.value,
             leftIcon = Icons.Outlined.AccountCircle,
             isEditable = false,
-            onTextChanged = {viewModel.onLastNameChanged(it)}
+            onTextChanged = { viewModel.onLastNameChanged(it) }
         )
 
         HorizontalDivider(thickness = 1.dp, color = Color.Gray)
@@ -340,11 +343,18 @@ fun AccountDetails(
 @Composable
 fun Actions(
     viewModel: ProfileViewModel
-){
+) {
     Column(
 
-    ){
-        CustomGrayTitle(text = "Actions")
+    ) {
+        Box(
+            modifier = Modifier.padding(
+                horizontal = dimensionResource(R.dimen.content_margin)
+            )
+        ) {
+            CustomGrayTitle(text = "Actions")
+        }
+
 
         // log out button
         CustomActionRow(
@@ -353,8 +363,10 @@ fun Actions(
                 // show dialog
                 viewModel.isLogoutDialogShown.value = true
             },
-            leftIcon = Icons.AutoMirrored.Outlined.Logout
+            leftIcon = Icons.AutoMirrored.Outlined.Logout,
         )
+
+
 
         HorizontalDivider(thickness = 1.dp, color = Color.Gray)
 
@@ -388,7 +400,7 @@ fun Actions(
 fun updateData(
     context: Context,  // used to accessing shared pref
     viewModel: ProfileViewModel
-){
+) {
     val sp = context.getSharedPreferences(SharedPreferencesNames.NAME_USERS, Context.MODE_PRIVATE)
 
     // set the data from shared pref

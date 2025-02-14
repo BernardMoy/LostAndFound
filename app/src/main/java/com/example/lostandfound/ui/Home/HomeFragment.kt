@@ -184,9 +184,11 @@ fun ImageAndButton(
             verticalArrangement = Arrangement.SpaceEvenly
 
         ){
+            // main title text
             Text(
-                text = "Fancy Title",
+                text = "Find your item using our intelligence",
                 fontSize = 26.sp,
+                lineHeight = 32.sp,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.onPrimary,
                 textAlign = TextAlign.Center,
@@ -195,6 +197,7 @@ fun ImageAndButton(
                 )
             )
 
+            // the row displaying the new lost and new found buttons
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
