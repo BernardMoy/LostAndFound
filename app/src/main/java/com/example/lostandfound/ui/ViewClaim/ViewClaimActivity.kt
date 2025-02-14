@@ -534,8 +534,8 @@ fun LocationData(
     CustomViewTwoLocationsDialog(
         context = context,
         isDialogShown = viewModel.isLocationDialogShown,
-        selectedLocation1 = LocationManager.pairToLatlng(viewModel.lostItemData.location),
-        selectedLocation2 = LocationManager.pairToLatlng(viewModel.foundItemData.location)
+        selectedLocation1 = if (viewModel.lostItemData.location != null) LocationManager.pairToLatlng(viewModel.lostItemData.location!!) else null,
+        selectedLocation2 = if (viewModel.foundItemData.location != null) LocationManager.pairToLatlng(viewModel.foundItemData.location!!) else null
     )
 }
 

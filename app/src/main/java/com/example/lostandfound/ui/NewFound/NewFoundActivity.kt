@@ -492,7 +492,7 @@ fun Location(
         text = "Add location",
         onClick = {
             // is dialog shown become true
-            viewModel.isLocationDialogShown.value = true
+            viewModel.onAddLocationClicked()
         },
     )
 
@@ -502,6 +502,7 @@ fun Location(
         selectedLocation = viewModel.selectedLocation,
         context = context
     )
+
 }
 
 @Composable

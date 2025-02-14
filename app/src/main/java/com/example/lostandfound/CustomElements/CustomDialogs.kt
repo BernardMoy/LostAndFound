@@ -67,6 +67,7 @@ import com.example.lostandfound.Data.User
 import com.example.lostandfound.Utility.DateTimeManager
 import com.example.lostandfound.R
 import com.example.lostandfound.Utility.ImageManager
+import com.example.lostandfound.Utility.LocationManager
 import com.example.lostandfound.ui.ChatInbox.ChatInboxActivity
 import com.example.lostandfound.ui.theme.ComposeTheme
 import com.example.lostandfound.ui.theme.Typography
@@ -482,8 +483,10 @@ fun CustomLoginDialog(
 fun CustomPickLocationDialog(
     context: Context,
     isDialogShown: MutableState<Boolean>,
-    selectedLocation: MutableState<LatLng>,   // this is the state that will ONLY BE UPDATED WHEN THE DONE BUTTON IS CLICKED
+    selectedLocation: MutableState<LatLng?>,   // this is the state that will ONLY BE UPDATED WHEN THE DONE BUTTON IS CLICKED
 ){
+    // shows the default location when the selected location is null
+    // although users should not have access to this dialog when the location is null in the first place
     var currentLocation by remember {
         mutableStateOf(selectedLocation.value)
     }
@@ -565,10 +568,10 @@ fun CustomPickLocationDialog(
 
                         // Google maps composable
                         val markerState = remember {
-                            MarkerState(position = currentLocation)
+                            MarkerState(position = currentLocation ?: LocationManager.DEFAULT_LOCATION)
                         }
                         val cameraPositionState = rememberCameraPositionState {
-                            position = CameraPosition.fromLatLngZoom(currentLocation, 15f)
+                            position = CameraPosition.fromLatLngZoom(currentLocation ?: LocationManager.DEFAULT_LOCATION, 15f)
                         }
                         val uiSettings by remember {
                             mutableStateOf(MapUiSettings(zoomControlsEnabled = true))
@@ -580,11 +583,11 @@ fun CustomPickLocationDialog(
                         // when a new location is selected
                         LaunchedEffect(currentLocation) {
                             // change the marker location
-                            markerState.position = currentLocation
+                            markerState.position = currentLocation ?: LocationManager.DEFAULT_LOCATION
 
                             // change the camera location when a new location value is selected
                             cameraPositionState.animate(
-                                update = CameraUpdateFactory.newLatLng(currentLocation),
+                                update = CameraUpdateFactory.newLatLng(currentLocation ?: LocationManager.DEFAULT_LOCATION),
                                 durationMs = 1500
                             )
                         }
@@ -604,10 +607,13 @@ fun CustomPickLocationDialog(
                         ) {
                             // markers goes here
                             // It will be updated when location is updated through tapping on the map
-                            Marker(
-                                state = markerState,
-                                title = "Item location"
-                            )
+                            // Marker state is only shown when the location is not null
+                            if (currentLocation != null){
+                                Marker(
+                                    state = markerState,
+                                    title = "Item location"
+                                )
+                            }
                         }
 
                         // buttons
@@ -646,6 +652,7 @@ fun CustomPickLocationDialog(
                             CustomButton(
                                 text = "Done",
                                 type = ButtonType.FILLED,
+                                enabled = currentLocation != null,  // if current loc is null, cant change the loc to null
                                 onClick = {
                                     // change selected location
                                     selectedLocation.value = currentLocation
@@ -709,7 +716,7 @@ private fun getCurrentLocation(
 @Composable
 fun CustomViewLocationDialog(
     isDialogShown: MutableState<Boolean>,
-    selectedLocation: LatLng,   // no need to be mutable here
+    selectedLocation: LatLng?,   // no need to be mutable here
 ){
     if (isDialogShown.value){
         Dialog(
@@ -746,10 +753,10 @@ fun CustomViewLocationDialog(
 
                         // Google maps composable
                         val markerState = remember {
-                            MarkerState(position = selectedLocation)
+                            MarkerState(position = selectedLocation ?: LocationManager.DEFAULT_LOCATION)
                         }
                         val cameraPositionState = rememberCameraPositionState {
-                            position = CameraPosition.fromLatLngZoom(selectedLocation, 15f)
+                            position = CameraPosition.fromLatLngZoom(selectedLocation ?: LocationManager.DEFAULT_LOCATION, 15f)
                         }
                         val uiSettings by remember {
                             mutableStateOf(MapUiSettings(zoomControlsEnabled = true))
@@ -772,10 +779,13 @@ fun CustomViewLocationDialog(
                         ) {
                             // markers goes here
                             // It will be updated when location is updated through tapping on the map
-                            Marker(
-                                state = markerState,
-                                title = "Item location"
-                            )
+                            // Only shown when the location is not null
+                            if (selectedLocation != null){
+                                Marker(
+                                    state = markerState,
+                                    title = "Item location"
+                                )
+                            }
                         }
                     }
 
@@ -810,8 +820,8 @@ fun CustomViewLocationDialog(
 fun CustomViewTwoLocationsDialog(
     context: Context,
     isDialogShown: MutableState<Boolean>,
-    selectedLocation1: LatLng,   // no need to be mutable here
-    selectedLocation2: LatLng
+    selectedLocation1: LatLng?,   // no need to be mutable here
+    selectedLocation2: LatLng?
 ){
     if (isDialogShown.value){
         Dialog(
@@ -848,16 +858,16 @@ fun CustomViewTwoLocationsDialog(
 
                         // Google maps composable
                         val markerState1 = remember {
-                            MarkerState(position = selectedLocation1)
+                            MarkerState(position = selectedLocation1 ?: LocationManager.DEFAULT_LOCATION)
                         }
                         val markerState2 = remember {
-                            MarkerState(position = selectedLocation2)
+                            MarkerState(position = selectedLocation2 ?: LocationManager.DEFAULT_LOCATION)
                         }
                         val cameraPositionState1 = rememberCameraPositionState {
-                            position = CameraPosition.fromLatLngZoom(selectedLocation1, 15f)
+                            position = CameraPosition.fromLatLngZoom(selectedLocation1 ?: LocationManager.DEFAULT_LOCATION, 15f)
                         }
                         val cameraPositionState2 = rememberCameraPositionState {
-                            position = CameraPosition.fromLatLngZoom(selectedLocation1, 15f)
+                            position = CameraPosition.fromLatLngZoom(selectedLocation2 ?: LocationManager.DEFAULT_LOCATION, 15f)
                         }
 
                         val uiSettings by remember {
@@ -872,7 +882,7 @@ fun CustomViewTwoLocationsDialog(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .weight(1f),
-                            cameraPositionState = cameraPositionState2, // set focus to found item location
+                            cameraPositionState = if (selectedLocation2 != null) cameraPositionState2 else cameraPositionState1, // set focus to found item location
                             uiSettings = uiSettings,
                             properties = properties,
                             onMapClick = { latlng ->
@@ -881,18 +891,23 @@ fun CustomViewTwoLocationsDialog(
                         ) {
                             // markers goes here
                             // It will be updated when location is updated through tapping on the map
-                            MapMarker(
-                                context = context,
-                                state = markerState1,
-                                title = "Lost item location",
-                                iconResourceId = R.drawable.pin_lost
-                            )
-                            MapMarker(
-                                context = context,
-                                state = markerState2,
-                                title = "Found item location",
-                                iconResourceId = R.drawable.pin_found
-                            )
+                            if (selectedLocation1 != null){
+                                MapMarker(
+                                    context = context,
+                                    state = markerState1,
+                                    title = "Lost item location",
+                                    iconResourceId = R.drawable.pin_lost
+                                )
+                            }
+
+                            if (selectedLocation2 != null){
+                                MapMarker(
+                                    context = context,
+                                    state = markerState2,
+                                    title = "Found item location",
+                                    iconResourceId = R.drawable.pin_found
+                                )
+                            }
                         }
                     }
 
