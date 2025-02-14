@@ -31,7 +31,6 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -45,14 +44,11 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.lostandfound.CustomElements.CustomCenterText
 import com.example.lostandfound.CustomElements.CustomCenteredProgressbar
-import com.example.lostandfound.CustomElements.CustomFoundItemPreview
 import com.example.lostandfound.CustomElements.CustomLostItemPreview
 import com.example.lostandfound.CustomElements.CustomSearchField
 import com.example.lostandfound.Data.IntentExtraNames
 import com.example.lostandfound.FirebaseManagers.FirebaseUtility
 import com.example.lostandfound.R
-import com.example.lostandfound.ui.Found.FoundFragmentViewModel
-import com.example.lostandfound.ui.ViewFound.ViewFoundActivity
 import com.example.lostandfound.ui.ViewLost.ViewLostActivity
 import com.example.lostandfound.ui.theme.ComposeTheme
 import com.example.lostandfound.ui.theme.Typography

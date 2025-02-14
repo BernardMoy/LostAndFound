@@ -9,12 +9,10 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.MutableTransitionState
-import androidx.compose.animation.expandVertically
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
-import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -46,7 +44,6 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.lostandfound.CustomElements.CustomCenterText
 import com.example.lostandfound.CustomElements.CustomCenteredProgressbar
-import com.example.lostandfound.CustomElements.CustomChatInboxPreview
 import com.example.lostandfound.CustomElements.CustomFoundItemPreview
 import com.example.lostandfound.CustomElements.CustomSearchField
 import com.example.lostandfound.Data.IntentExtraNames

@@ -713,6 +713,8 @@ private fun getCurrentLocation(
 
 
 
+// if the location is null, redirect the camera to the default location but dont show the marker
+// the user should not be able to access this if the location is null in the first place
 @Composable
 fun CustomViewLocationDialog(
     isDialogShown: MutableState<Boolean>,
@@ -816,6 +818,7 @@ fun CustomViewLocationDialog(
     }
 }
 
+// Only show the marker if the location is not null
 @Composable
 fun CustomViewTwoLocationsDialog(
     context: Context,
