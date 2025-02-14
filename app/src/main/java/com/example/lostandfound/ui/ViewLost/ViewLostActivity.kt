@@ -416,12 +416,22 @@ fun LocationData(
     Column {
         CustomGrayTitle(text = "Location")
 
-        CustomActionText(
-            text = "View location",
-            onClick = {
-                viewModel.isLocationDialogShown.value = true
-            },
-        )
+        // if the location is not null, users can view it
+        if (viewModel.itemData.location != null){
+            CustomActionText(
+                text = "View location",
+                onClick = {
+                    viewModel.isLocationDialogShown.value = true
+                },
+            )
+        } else {
+            Text(
+                text = "(Location is not provided)",
+                color = Color.Gray,
+                style = Typography.bodyMedium
+            )
+        }
+
     }
 
     CustomViewLocationDialog(

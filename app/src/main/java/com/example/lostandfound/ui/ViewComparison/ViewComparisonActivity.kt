@@ -488,12 +488,21 @@ fun LocationData(
     Column {
         CustomGrayTitle(text = "Location")
 
-        CustomActionText(
-            text = "View location",
-            onClick = {
-                viewModel.isLocationDialogShown.value = true
-            },
-        )
+        // if both lost and found users did not provide a location, then display none
+        if (viewModel.lostItemData.location != null || viewModel.foundItemData.location != null){
+            CustomActionText(
+                text = "View location",
+                onClick = {
+                    viewModel.isLocationDialogShown.value = true
+                },
+            )
+        } else {
+            Text(
+                text = "(Locations are not provided)",
+                color = Color.Gray,
+                style = Typography.bodyMedium
+            )
+        }
     }
 
     CustomViewTwoLocationsDialog(
