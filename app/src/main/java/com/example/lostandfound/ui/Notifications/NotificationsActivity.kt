@@ -316,7 +316,7 @@ fun Items(
                                         if (lostItem == null) {
                                             Toast.makeText(
                                                 context,
-                                                "Failed to get lost item data",
+                                                "The lost item no longer exists",
                                                 Toast.LENGTH_SHORT
                                             ).show()
                                             return
@@ -329,7 +329,7 @@ fun Items(
                                                     if (foundItem == null) {
                                                         Toast.makeText(
                                                             context,
-                                                            "Failed to get found item data",
+                                                            "The found item no longer exists",
                                                             Toast.LENGTH_SHORT
                                                         ).show()
                                                         return
@@ -415,7 +415,7 @@ fun Items(
                                         if (claim == null) {
                                             Toast.makeText(
                                                 context,
-                                                "Failed to view claim",
+                                                "Failed to view claim",     // claims cannot be deleted, so they should not doesnt exist
                                                 Toast.LENGTH_SHORT
                                             ).show()
                                             return

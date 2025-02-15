@@ -85,14 +85,10 @@ class ChatFragmentViewModel : ViewModel() {
                                 inboxRecipientUserID,
                                 object : UserManager.UserCallback {
                                     override fun onComplete(user: User?) {
-                                        if (user == null) {
-                                            callback.onComplete(false)
-                                            return
-                                        }
 
                                         // get the chatMessage object from id
-                                        val lastMessageID =
-                                            documentChange.document[FirebaseNames.CHAT_INBOX_LAST_MESSAGE_ID].toString()
+                                        val lastMessageID = documentChange.document[FirebaseNames.CHAT_INBOX_LAST_MESSAGE_ID]?.toString() ?: "Unknown"
+
                                         ChatMessageManager.getChatMessageFromMessageId(
                                             lastMessageID,
                                             object : ChatMessageCallback {
@@ -104,7 +100,7 @@ class ChatFragmentViewModel : ViewModel() {
 
                                                     // create new chat message preview object
                                                     val newChatInboxPreview = ChatInboxPreview(
-                                                        recipientUser = user,
+                                                        recipientUser = user ?: User(inboxRecipientUserID, "", "Deleted user", "", ""),
                                                         lastMessage = result
                                                     )
 
