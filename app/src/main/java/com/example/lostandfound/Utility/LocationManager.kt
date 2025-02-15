@@ -4,6 +4,7 @@ import android.content.Context
 import android.location.Geocoder
 import com.google.android.gms.maps.model.LatLng
 import java.util.Locale
+import kotlin.math.sqrt
 
 object LocationManager {
     // stores the default location to be used when location is null
@@ -42,5 +43,18 @@ object LocationManager {
             location.latitude,
             location.longitude
         )
+    }
+
+    // given two latlng pairs, return their distances
+    // used to compare how close two locations are
+    fun getDistanceBetweenLocations(location1: LatLng, location2: LatLng): Double{
+        val lat1Rad = Math.toRadians(location1.latitude)
+        val lat2Rad = Math.toRadians(location2.latitude)
+        val lon1Rad = Math.toRadians(location1.longitude)
+        val lon2Rad = Math.toRadians(location2.longitude)
+
+        val x = (lon2Rad-lon1Rad)*Math.cos((lat1Rad+lat2Rad)/2)
+        val y = (lat2Rad-lat1Rad)
+        return sqrt(x*x+y*y) *6371 // Earth radius in km
     }
 }
