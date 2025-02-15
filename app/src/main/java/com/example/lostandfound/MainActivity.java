@@ -126,9 +126,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         FontSizeManager.INSTANCE.setFontSizeXML(parentView, MainActivity.this);
 
         // set font size for the XML of the nav drawer layout
+        /*
         ViewGroup parentViewNavDrawer = (ViewGroup) binding.navDrawerView.getHeaderView(0);
         FontSizeManager.INSTANCE.setFontSizeXML(parentViewNavDrawer, MainActivity.this);
-
+         */
 
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
