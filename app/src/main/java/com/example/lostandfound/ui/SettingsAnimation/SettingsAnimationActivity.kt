@@ -55,7 +55,7 @@ fun SettingsAnimationScreen(activity: ComponentActivity) {
             Scaffold(
                 // top toolbar
                 topBar = {
-                    BackToolbar(title = "Select Theme", activity = activity)
+                    BackToolbar(title = "Animation Settings", activity = activity)
                 }
             ) { innerPadding ->
                 Column(

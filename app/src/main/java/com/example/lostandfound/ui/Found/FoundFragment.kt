@@ -49,6 +49,7 @@ import com.example.lostandfound.CustomElements.CustomSearchField
 import com.example.lostandfound.Data.IntentExtraNames
 import com.example.lostandfound.FirebaseManagers.FirebaseUtility
 import com.example.lostandfound.R
+import com.example.lostandfound.Utility.AnimationManager
 import com.example.lostandfound.ui.ViewFound.ViewFoundActivity
 import com.example.lostandfound.ui.theme.ComposeTheme
 import com.example.lostandfound.ui.theme.Typography
@@ -218,11 +219,30 @@ fun FoundItemsColumn(
                 }
 
                 // display each preview with animation, also display the same animation when reloaded
-                AnimatedVisibility(
-                    visibleState = visibleState,
-                    enter = fadeIn() + scaleIn(),
-                    exit = fadeOut() + scaleOut()
-                ) {
+                if (AnimationManager.animationEnabled.value){
+                    AnimatedVisibility(
+                        visibleState = visibleState,
+                        enter = fadeIn() + scaleIn(),
+                        exit = fadeOut() + scaleOut()
+                    ) {
+                        CustomFoundItemPreview(
+                            data = itemData,
+                            onViewButtonClicked = {
+                                // start view item activity
+                                val intent = Intent(context, ViewFoundActivity::class.java)
+
+                                // pass only the item id as the extra value
+                                intent.putExtra(
+                                    IntentExtraNames.INTENT_FOUND_ID,
+                                    itemData
+                                )
+                                context.startActivity(intent)
+                            },
+                            viewButtonText = "View"
+                        )
+                    }
+
+                } else {
                     CustomFoundItemPreview(
                         data = itemData,
                         onViewButtonClicked = {

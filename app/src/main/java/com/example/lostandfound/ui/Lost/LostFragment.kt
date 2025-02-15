@@ -49,6 +49,7 @@ import com.example.lostandfound.CustomElements.CustomSearchField
 import com.example.lostandfound.Data.IntentExtraNames
 import com.example.lostandfound.FirebaseManagers.FirebaseUtility
 import com.example.lostandfound.R
+import com.example.lostandfound.Utility.AnimationManager
 import com.example.lostandfound.ui.ViewLost.ViewLostActivity
 import com.example.lostandfound.ui.theme.ComposeTheme
 import com.example.lostandfound.ui.theme.Typography
@@ -215,11 +216,29 @@ fun LostItemsColumn(
                 }
 
                 // display each preview with animation, also display the same animation when reloaded
-                AnimatedVisibility(
-                    visibleState = visibleState,
-                    enter = fadeIn() + scaleIn(),
-                    exit = fadeOut() + scaleOut()
-                ) {
+                if (AnimationManager.animationEnabled.value){
+                    AnimatedVisibility(
+                        visibleState = visibleState,
+                        enter = fadeIn() + scaleIn(),
+                        exit = fadeOut() + scaleOut()
+                    ) {
+                        CustomLostItemPreview(
+                            data = lostItem,
+                            onViewButtonClicked = {
+                                // start view item activity
+                                val intent = Intent(context, ViewLostActivity::class.java)
+
+                                // pass the lost item object to another activity
+                                intent.putExtra(
+                                    IntentExtraNames.INTENT_LOST_ID,
+                                    lostItem
+                                )
+                                context.startActivity(intent)
+                            }
+                        )
+                    }
+
+                } else {
                     CustomLostItemPreview(
                         data = lostItem,
                         onViewButtonClicked = {
