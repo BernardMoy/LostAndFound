@@ -64,7 +64,7 @@ object ItemManager {
             lostItemID,
             object : Callback<Map<String, Any>> {
                 override fun onComplete(itemResult: Map<String, Any>?) {
-                    // if itemResult is null, fetching data failed
+                    // if itemResult is null, the item does not exist
                     if (itemResult == null) {
                         callback.onComplete(null)
                         return
@@ -91,21 +91,21 @@ object ItemManager {
                                         // create lost item class object
                                         val thisLostItem = LostItem(
                                             itemID = lostItemID,
-                                            userID = itemResult[FirebaseNames.LOSTFOUND_USER] as String,
-                                            itemName = itemResult[FirebaseNames.LOSTFOUND_ITEMNAME] as String,
-                                            category = itemResult[FirebaseNames.LOSTFOUND_CATEGORY] as String,
-                                            subCategory = itemResult[FirebaseNames.LOSTFOUND_SUBCATEGORY] as String,
-                                            color = itemResult[FirebaseNames.LOSTFOUND_COLOR] as List<String>,
-                                            brand = itemResult[FirebaseNames.LOSTFOUND_BRAND] as String,
-                                            dateTime = itemResult[FirebaseNames.LOSTFOUND_EPOCHDATETIME] as Long,
+                                            userID = itemResult[FirebaseNames.LOSTFOUND_USER] as? String ?: "Unknown",
+                                            itemName = itemResult[FirebaseNames.LOSTFOUND_ITEMNAME] as? String ?: "Unknown",
+                                            category = itemResult[FirebaseNames.LOSTFOUND_CATEGORY] as? String ?: "Unknown",
+                                            subCategory = itemResult[FirebaseNames.LOSTFOUND_SUBCATEGORY] as? String ?: "Unknown",
+                                            color = itemResult[FirebaseNames.LOSTFOUND_COLOR] as? List<String> ?: listOf(),
+                                            brand = itemResult[FirebaseNames.LOSTFOUND_BRAND] as? String ?: "Unknown",
+                                            dateTime = itemResult[FirebaseNames.LOSTFOUND_EPOCHDATETIME] as? Long ?: 0L,
                                             location = if (itemResult[FirebaseNames.LOSTFOUND_LOCATION] != null) LocationManager.LocationToPair(
                                                 itemResult[FirebaseNames.LOSTFOUND_LOCATION] as HashMap<*, *>
                                             ) else null,
-                                            description = itemResult[FirebaseNames.LOSTFOUND_DESCRIPTION] as String,
-                                            timePosted = itemResult[FirebaseNames.LOSTFOUND_TIMEPOSTED] as Long,
+                                            description = itemResult[FirebaseNames.LOSTFOUND_DESCRIPTION] as? String ?: "Unknown",
+                                            timePosted = itemResult[FirebaseNames.LOSTFOUND_TIMEPOSTED] as? Long ?: 0L,
                                             status = status,
                                             image = itemImage.toString(),  // uri to string
-                                            isTracking = itemResult[FirebaseNames.LOST_IS_TRACKING] as Boolean
+                                            isTracking = itemResult[FirebaseNames.LOST_IS_TRACKING] as? Boolean ?: false
                                         )
 
                                         // return the generated lost item
@@ -159,7 +159,7 @@ object ItemManager {
             foundItemID,
             object : Callback<Map<String, Any>> {
                 override fun onComplete(itemResult: Map<String, Any>?) {
-                    // if itemResult is null, fetching data failed
+                    // if itemResult is null, the item does not exist
                     if (itemResult == null) {
                         callback.onComplete(null)
                         return
@@ -188,22 +188,22 @@ object ItemManager {
                                             // create found item class object
                                             val thisFoundItem = FoundItem(
                                                 itemID = foundItemID,
-                                                userID = itemResult[FirebaseNames.LOSTFOUND_USER] as String,
-                                                itemName = itemResult[FirebaseNames.LOSTFOUND_ITEMNAME] as String,
-                                                category = itemResult[FirebaseNames.LOSTFOUND_CATEGORY] as String,
-                                                subCategory = itemResult[FirebaseNames.LOSTFOUND_SUBCATEGORY] as String,
-                                                color = itemResult[FirebaseNames.LOSTFOUND_COLOR] as List<String>,
-                                                brand = itemResult[FirebaseNames.LOSTFOUND_BRAND] as String,
-                                                dateTime = itemResult[FirebaseNames.LOSTFOUND_EPOCHDATETIME] as Long,
+                                                userID = itemResult[FirebaseNames.LOSTFOUND_USER] as? String ?: "Unknown",
+                                                itemName = itemResult[FirebaseNames.LOSTFOUND_ITEMNAME] as? String ?: "Unknown",
+                                                category = itemResult[FirebaseNames.LOSTFOUND_CATEGORY] as? String ?: "Unknown",
+                                                subCategory = itemResult[FirebaseNames.LOSTFOUND_SUBCATEGORY] as? String ?: "Unknown",
+                                                color = itemResult[FirebaseNames.LOSTFOUND_COLOR] as? List<String> ?: listOf(),
+                                                brand = itemResult[FirebaseNames.LOSTFOUND_BRAND] as? String ?: "Unknown",
+                                                dateTime = itemResult[FirebaseNames.LOSTFOUND_EPOCHDATETIME] as? Long ?: 0L,
                                                 location = if (itemResult[FirebaseNames.LOSTFOUND_LOCATION] != null) LocationManager.LocationToPair(
                                                     itemResult[FirebaseNames.LOSTFOUND_LOCATION] as HashMap<*, *>
                                                 ) else null,
-                                                description = itemResult[FirebaseNames.LOSTFOUND_DESCRIPTION] as String,
-                                                timePosted = itemResult[FirebaseNames.LOSTFOUND_TIMEPOSTED] as Long,
+                                                description = itemResult[FirebaseNames.LOSTFOUND_DESCRIPTION] as? String ?: "Unknown",
+                                                timePosted = itemResult[FirebaseNames.LOSTFOUND_TIMEPOSTED] as? Long ?: 0L,
                                                 status = status,
                                                 image = itemImage.toString(),  // uri to string
-                                                securityQuestion = itemResult[FirebaseNames.FOUND_SECURITY_Q] as String,
-                                                securityQuestionAns = itemResult[FirebaseNames.FOUND_SECURITY_Q_ANS] as String
+                                                securityQuestion = itemResult[FirebaseNames.FOUND_SECURITY_Q] as? String ?: "Unknown",
+                                                securityQuestionAns = itemResult[FirebaseNames.FOUND_SECURITY_Q_ANS] as? String ?: "Unknown"
                                             )
 
                                             // return the generated found item
@@ -250,11 +250,11 @@ object ItemManager {
                                 // construct the claim item
                                 val thisClaim: Claim = Claim(
                                     claimID = claimID,
-                                    lostItemID = result[FirebaseNames.CLAIM_LOST_ITEM_ID].toString(),
-                                    foundItemID = result[FirebaseNames.CLAIM_FOUND_ITEM_ID].toString(),
-                                    isApproved = result[FirebaseNames.CLAIM_IS_APPROVED] as Boolean,
-                                    timestamp = result[FirebaseNames.CLAIM_TIMESTAMP] as Long,
-                                    securityQuestionAns = result[FirebaseNames.CLAIM_SECURITY_QUESTION_ANS].toString()
+                                    lostItemID = result[FirebaseNames.CLAIM_LOST_ITEM_ID]?.toString() ?: "Unknown",
+                                    foundItemID = result[FirebaseNames.CLAIM_FOUND_ITEM_ID]?.toString() ?: "Unknown",
+                                    isApproved = result[FirebaseNames.CLAIM_IS_APPROVED] as? Boolean ?: false,
+                                    timestamp = result[FirebaseNames.CLAIM_TIMESTAMP] as? Long ?: 0L,
+                                    securityQuestionAns = result[FirebaseNames.CLAIM_SECURITY_QUESTION_ANS]?.toString() ?: "Unknown"
                                 )
 
                                 // return the claim item
@@ -280,7 +280,7 @@ object ItemManager {
             object : Callback<List<String>> {
                 override fun onComplete(result: List<String>?) {
                     if (result.isNullOrEmpty()) {
-                        callback.onComplete(mutableListOf())
+                        callback.onComplete(mutableListOf()) // return empty list if that found item has no claims
                         return
 
                     }
@@ -305,11 +305,11 @@ object ItemManager {
                                     // construct the claim item
                                     val thisClaim: Claim = Claim(
                                         claimID = claimID,
-                                        lostItemID = result[FirebaseNames.CLAIM_LOST_ITEM_ID].toString(),
-                                        foundItemID = result[FirebaseNames.CLAIM_FOUND_ITEM_ID].toString(),
-                                        isApproved = result[FirebaseNames.CLAIM_IS_APPROVED] as Boolean,
-                                        timestamp = result[FirebaseNames.CLAIM_TIMESTAMP] as Long,
-                                        securityQuestionAns = result[FirebaseNames.CLAIM_SECURITY_QUESTION_ANS].toString()
+                                        lostItemID = result[FirebaseNames.CLAIM_LOST_ITEM_ID]?.toString() ?: "Unknown",
+                                        foundItemID = result[FirebaseNames.CLAIM_FOUND_ITEM_ID]?.toString() ?: "Unknown",
+                                        isApproved = result[FirebaseNames.CLAIM_IS_APPROVED] as? Boolean ?: false,
+                                        timestamp = result[FirebaseNames.CLAIM_TIMESTAMP] as? Long ?: 0L,
+                                        securityQuestionAns = result[FirebaseNames.CLAIM_SECURITY_QUESTION_ANS]?.toString() ?: "Unknown"
                                     )
 
                                     //add the item to the list
@@ -346,11 +346,11 @@ object ItemManager {
                     // construct the claim item
                     val thisClaim: Claim = Claim(
                         claimID = claimID,
-                        lostItemID = result[FirebaseNames.CLAIM_LOST_ITEM_ID].toString(),
-                        foundItemID = result[FirebaseNames.CLAIM_FOUND_ITEM_ID].toString(),
-                        isApproved = result[FirebaseNames.CLAIM_IS_APPROVED] as Boolean,
-                        timestamp = result[FirebaseNames.CLAIM_TIMESTAMP] as Long,
-                        securityQuestionAns = result[FirebaseNames.CLAIM_SECURITY_QUESTION_ANS].toString()
+                        lostItemID = result[FirebaseNames.CLAIM_LOST_ITEM_ID]?.toString() ?: "Unknown",
+                        foundItemID = result[FirebaseNames.CLAIM_FOUND_ITEM_ID]?.toString() ?: "Unknown",
+                        isApproved = result[FirebaseNames.CLAIM_IS_APPROVED] as? Boolean ?: false,
+                        timestamp = result[FirebaseNames.CLAIM_TIMESTAMP] as? Long ?: 0L,
+                        securityQuestionAns = result[FirebaseNames.CLAIM_SECURITY_QUESTION_ANS]?.toString() ?: "Unknown"
                     )
 
                     // return the claim item
@@ -393,6 +393,7 @@ object ItemManager {
     }
 
     // method to get the status given a lost item id, by querying the claim collection
+    // defaults to return status 0 if the item does not exist
     fun getLostItemStatus(lostItemID: String, callback: StatusCallback) {
         val db = FirebaseFirestore.getInstance()
 
@@ -429,6 +430,7 @@ object ItemManager {
     }
 
     // method to get the status given a found item id, by querying the claim collection
+    // default to status 0 if not exist
     fun getFoundItemStatus(foundItemID: String, callback: StatusCallback) {
         val db = FirebaseFirestore.getInstance()
 
