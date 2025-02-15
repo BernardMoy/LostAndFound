@@ -1,9 +1,7 @@
 package com.example.lostandfound.ui.ChatInbox
 
-import android.app.Activity
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -27,9 +25,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.outlined.Send
-import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -41,9 +37,6 @@ import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -59,7 +52,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil3.compose.rememberAsyncImagePainter
-import com.example.lostandfound.CustomElements.BackToolbar
 import com.example.lostandfound.CustomElements.ButtonType
 import com.example.lostandfound.CustomElements.CustomButton
 import com.example.lostandfound.CustomElements.CustomCenteredProgressbar
@@ -159,7 +151,7 @@ fun MainContent(viewModel: ChatInboxViewModel) {
         Box(
             modifier = Modifier.weight(1f)
         ) {
-            if (viewModel.isLoading.value){
+            if (viewModel.isLoading.value) {
                 CustomCenteredProgressbar()
 
             } else {
@@ -235,7 +227,7 @@ fun Messages(
 
     // function to scroll to bottom immediately, for initial load
     LaunchedEffect(viewModel.triggerScrollToBottomInstantly.value) {
-        if (viewModel.triggerScrollToBottomInstantly.value && viewModel.chatMessageList.size>0) {
+        if (viewModel.triggerScrollToBottomInstantly.value && viewModel.chatMessageList.size > 0) {
             listState.scrollToItem(viewModel.chatMessageList.size - 1)
             viewModel.triggerScrollToBottomInstantly.value = false
         }
@@ -248,7 +240,7 @@ fun Messages(
 
         // if the latest visible index is the new message index -2, then force scroll to bottom
         // because we can assume the user is not viewing past messages
-        if (latestVisibleIndex == viewModel.chatMessageList.size -2){
+        if (latestVisibleIndex == viewModel.chatMessageList.size - 2) {
             // force scroll
             viewModel.triggerScrollToBottom.value = true
 
@@ -302,7 +294,6 @@ fun Messages(
         }
     }
 }
-
 
 
 // display send message bar
@@ -397,19 +388,19 @@ fun SendBar(
 fun loadMessages(
     context: Context,
     viewModel: ChatInboxViewModel
-){
+) {
     viewModel.isLoading.value = true
-    viewModel.fetchMessagePreviews(object: FetchMessageCallback{
+    viewModel.fetchMessagePreviews(object : FetchMessageCallback {
         override fun onComplete(result: Boolean) {
             viewModel.isLoading.value = false
 
-            if (!result){
+            if (!result) {
                 Toast.makeText(context, "Fetching messages failed", Toast.LENGTH_SHORT).show()
                 return
             }
 
             // initially, scroll to bottom. This will only be triggered once
-            if (viewModel.isInitialLoad.value){
+            if (viewModel.isInitialLoad.value) {
                 viewModel.triggerScrollToBottomInstantly.value = true
 
                 // turn off is initial load here

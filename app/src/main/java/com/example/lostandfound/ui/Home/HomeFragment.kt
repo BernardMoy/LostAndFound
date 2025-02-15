@@ -77,6 +77,7 @@ import com.example.lostandfound.Data.IntentExtraNames
 import com.example.lostandfound.Data.LostItem
 import com.example.lostandfound.FirebaseManagers.FirebaseUtility
 import com.example.lostandfound.R
+import com.example.lostandfound.Utility.AnimationManager
 import com.example.lostandfound.ui.HowItWorks.HowItWorksActivity
 import com.example.lostandfound.ui.Login.LoginActivity
 import com.example.lostandfound.ui.NewFound.NewFoundActivity
@@ -228,11 +229,9 @@ fun ImageAndButton(
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.onPrimary,
                 textAlign = TextAlign.Center,
-                modifier = Modifier
-                    .padding(
-                        top = dimensionResource(id = R.dimen.title_margin)
-                    )
-                    .alpha(alpha = titleAlpha)
+                modifier = if (AnimationManager.animationEnabled.value)
+                    Modifier.padding(top = dimensionResource(id = R.dimen.title_margin)).alpha(alpha = titleAlpha)
+                    else Modifier.padding(top = dimensionResource(id = R.dimen.title_margin))
             )
 
 
@@ -247,7 +246,9 @@ fun ImageAndButton(
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 Box(
-                    modifier = Modifier.alpha(alpha = lostButtonAlpha)
+                    modifier = if (AnimationManager.animationEnabled.value)
+                        Modifier.padding(top = dimensionResource(id = R.dimen.title_margin)).alpha(alpha = lostButtonAlpha)
+                        else Modifier.padding(top = dimensionResource(id = R.dimen.title_margin))
                 ) {
                     CustomButton(
                         text = "I have lost",
@@ -260,7 +261,9 @@ fun ImageAndButton(
                 }
 
                 Box(
-                    modifier = Modifier.alpha(alpha = foundButtonAlpha)
+                    modifier = if (AnimationManager.animationEnabled.value)
+                        Modifier.padding(top = dimensionResource(id = R.dimen.title_margin)).alpha(alpha = foundButtonAlpha)
+                        else Modifier.padding(top = dimensionResource(id = R.dimen.title_margin))
                 ) {
                     CustomButton(
                         text = "I have found",
