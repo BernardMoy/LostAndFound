@@ -8,6 +8,7 @@ public final class SharedPreferencesNames {
     public static final String NAME_THEME = "device_theme";
     public static final String NAME_ISLARGEFONT = "is_large_font";
     public static final String NAME_ANIMATION = "animation_enabled";
+    public static final String NAME_AUTO_LOADING = "auto_loading_enabled";
 
     // strings that represent all key names
     public static final String USER_FIRSTNAME = "firstName";
@@ -18,4 +19,5 @@ public final class SharedPreferencesNames {
     public static final String THEME_VALUE = "value";  // 0 for light (Default value if not found), 1 for dark, none for use device theme
     public static final String ISLARGEFONT_VALUE = "value";
     public static final String ANIMATION_VALUE = "value";   // false or true whether animations are enabled
+    public static final String AUTO_LOADING_VALUE = "value";
 }
