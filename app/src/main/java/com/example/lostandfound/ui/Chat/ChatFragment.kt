@@ -14,6 +14,7 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -97,7 +98,7 @@ fun ChatFragmentScreen(viewModel: ChatFragmentViewModel) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(dimensionResource(id = R.dimen.title_margin))
+            .padding(vertical = dimensionResource(id = R.dimen.title_margin))
     ) {
         MainContent(viewModel = viewModel)
     }
@@ -149,8 +150,8 @@ fun ChatInboxes(
              */
 
             CustomChatInboxPreview(
-                context = context,
-                chatInboxPreview = chatInboxPreview
+                    context = context,
+                    chatInboxPreview = chatInboxPreview
             )
 
             HorizontalDivider(thickness = 1.dp, color = Color.Gray)

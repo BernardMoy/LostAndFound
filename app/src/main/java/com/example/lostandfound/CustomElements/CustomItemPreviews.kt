@@ -649,6 +649,7 @@ fun CustomChatInboxPreview(
             }
             .padding(
                 vertical = dimensionResource(id = R.dimen.content_margin),
+                horizontal = dimensionResource(R.dimen.title_margin)
             ),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin))
