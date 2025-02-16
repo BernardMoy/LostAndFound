@@ -84,6 +84,7 @@ import com.example.lostandfound.FirebaseManagers.FirebaseUtility
 import com.example.lostandfound.R
 import com.example.lostandfound.Utility.DateTimeManager
 import com.example.lostandfound.Utility.ErrorCallback
+import com.example.lostandfound.Utility.ImageManager
 import com.example.lostandfound.Utility.LocationManager
 import com.example.lostandfound.ui.ChatInbox.ChatInboxActivity
 import com.example.lostandfound.ui.Done.DoneActivity
@@ -307,9 +308,10 @@ fun ItemImage(viewModel: ViewComparisonViewModel){
     ){
         CustomComparisonField(
             contentLeft = {
+                val displayedLostImage = if(viewModel.lostItemData.image.isEmpty()) ImageManager.PLACEHOLDER_IMAGE_STRING else viewModel.lostItemData.image
                 // image of the item
                 GlideImage(
-                    model = Uri.parse(viewModel.lostItemData.image),
+                    model = Uri.parse(displayedLostImage),
                     contentDescription = "Lost item image",
                     modifier = Modifier
                         .weight(3f)
@@ -318,8 +320,9 @@ fun ItemImage(viewModel: ViewComparisonViewModel){
                 )
             },
             contentRight = {
+                val displayedFoundImage = if (viewModel.foundItemData.image.isEmpty()) ImageManager.PLACEHOLDER_IMAGE_STRING else viewModel.foundItemData.image
                 GlideImage(
-                    model = Uri.parse(viewModel.foundItemData.image),
+                    model = Uri.parse(displayedFoundImage),
                     contentDescription = "Found item image",
                     modifier = Modifier
                         .weight(3f)

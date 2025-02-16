@@ -174,13 +174,13 @@ fun ImageAndButton(
     viewModel: HomeFragmentViewModel
 ) {
     var titleVisible by remember {
-        mutableStateOf(false)
+        mutableStateOf(!viewModel.isInitialStartUp)  // if not initial start up, this is false, otherwise true
     }
     var lostButtonVisible by remember {
-        mutableStateOf(false)
+        mutableStateOf(!viewModel.isInitialStartUp)
     }
     var foundButtonVisible by remember {
-        mutableStateOf(false)
+        mutableStateOf(!viewModel.isInitialStartUp)
     }
     val titleAlpha by animateFloatAsState(
         targetValue = if (titleVisible) 1f else 0f,
@@ -195,16 +195,22 @@ fun ImageAndButton(
         animationSpec = tween(durationMillis = 1000)
     )
 
-    // when launched, make different elements visible with different delays
+    // when launched during initial start up, make different elements visible with different delays
     LaunchedEffect(Unit) {
-        delay(300)
-        titleVisible = true
+        if (viewModel.isInitialStartUp){
+            // mark as false
+            viewModel.isInitialStartUp = false
 
-        delay(500)
-        lostButtonVisible = true
+            // make the title and buttons visible through alpha effect
+            delay(300)
+            titleVisible = true
 
-        delay(530)
-        foundButtonVisible = true
+            delay(500)
+            lostButtonVisible = true
+
+            delay(530)
+            foundButtonVisible = true
+        }
     }
 
     Box(

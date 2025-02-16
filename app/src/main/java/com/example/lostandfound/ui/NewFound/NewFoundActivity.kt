@@ -239,7 +239,7 @@ fun MainContent(viewModel: NewFoundViewModel) {
         ItemImage(viewModel = viewModel)
         Category(viewModel = viewModel)
         Subcategory(viewModel = viewModel)
-        ItemColor(viewModel = viewModel)
+        ItemColor(context= context, viewModel = viewModel)
         ItemBrand(viewModel = viewModel)
         DateAndTime(viewModel = viewModel)
         Location(context = context, viewModel = viewModel)
@@ -415,6 +415,7 @@ fun Subcategory(
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun ItemColor(
+    context: Context,
     viewModel: NewFoundViewModel
 ) {
     CustomGrayTitle(text = "Color")
@@ -431,7 +432,10 @@ fun ItemColor(
                 // change the selected category var
                 // to ensure only one can be selected at a time
                 onClick = {
-                    viewModel.onColorSelected(name)
+                    // can only select 3 colors max
+                    if (!viewModel.onColorSelected(name)){
+                        Toast.makeText(context, "You can only select at most 3 colors", Toast.LENGTH_SHORT).show()
+                    }
                 },
                 isSelected = viewModel.isColorSelected(name),
                 isError = viewModel.colorError.value.isNotEmpty()
