@@ -160,6 +160,8 @@ fun RefreshButton(
             modifier = Modifier.weight(1f) // make the refresh button go to the end by taking up all available space
 
         )
+
+        // the refresh button
         IconButton(
            onClick = {
                // refresh the list - manually (by now)
