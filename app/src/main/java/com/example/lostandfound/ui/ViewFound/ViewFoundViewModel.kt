@@ -3,8 +3,10 @@ package com.example.lostandfound.ui.ViewFound
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
+import com.example.lostandfound.Data.FirebaseNames
 import com.example.lostandfound.Data.FoundItem
 import com.example.lostandfound.Data.User
+import com.example.lostandfound.FirebaseManagers.FirestoreManager
 import com.example.lostandfound.FirebaseManagers.UserManager
 
 interface Callback<T> {
@@ -15,6 +17,8 @@ class ViewFoundViewModel : ViewModel(){
     val isLoading: MutableState<Boolean> = mutableStateOf(true)
     val isLocationDialogShown: MutableState<Boolean> = mutableStateOf(false)
     val isContactUserDialogShown: MutableState<Boolean> = mutableStateOf(false)
+    val isDeleteDialogShown: MutableState<Boolean> = mutableStateOf(false)
+
 
     // item data are stored here
     var itemData = FoundItem()
@@ -35,5 +39,25 @@ class ViewFoundViewModel : ViewModel(){
                 }
             }
         })
+    }
+
+    // function to delete item
+    // return true if successful, false if failed
+    fun deleteItem(callback: Callback<Boolean>){
+        val firestoreManager = FirestoreManager()
+        firestoreManager.delete(
+            FirebaseNames.COLLECTION_FOUND_ITEMS,
+            itemData.itemID,
+            object: FirestoreManager.Callback<Boolean>{
+                override fun onComplete(result: Boolean?) {
+                    if (result == null || !result){
+                        callback.onComplete(false)
+                        return
+                    }
+
+                    callback.onComplete(true)
+                }
+            }
+        )
     }
 }

@@ -1,5 +1,6 @@
 package com.example.lostandfound.ui.ViewFound
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
@@ -25,6 +26,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Circle
 import androidx.compose.material.icons.outlined.AccountCircle
 import androidx.compose.material.icons.outlined.CalendarMonth
+import androidx.compose.material.icons.outlined.DeleteOutline
 import androidx.compose.material.icons.outlined.Description
 import androidx.compose.material.icons.outlined.Edit
 import androidx.compose.material.icons.outlined.Folder
@@ -59,6 +61,7 @@ import com.example.lostandfound.CustomElements.CustomButton
 import com.example.lostandfound.CustomElements.CustomCenteredProgressbar
 import com.example.lostandfound.CustomElements.CustomEditText
 import com.example.lostandfound.CustomElements.CustomGrayTitle
+import com.example.lostandfound.CustomElements.CustomTextDialog
 import com.example.lostandfound.CustomElements.CustomUserDialog
 import com.example.lostandfound.CustomElements.CustomViewLocationDialog
 import com.example.lostandfound.Data.FoundItem
@@ -67,6 +70,7 @@ import com.example.lostandfound.Data.foundStatusText
 import com.example.lostandfound.Data.statusColor
 import com.example.lostandfound.Data.stringToColor
 import com.example.lostandfound.FirebaseManagers.FirebaseUtility
+import com.example.lostandfound.MainActivity
 import com.example.lostandfound.R
 import com.example.lostandfound.Utility.DateTimeManager
 import com.example.lostandfound.Utility.LocationManager
@@ -439,6 +443,70 @@ fun ActionButtons(
 
                             context.startActivity(intent)
                         }
+                    )
+                }
+
+                // if the status is 0, display the deletable option
+                if (inPreview || viewModel.itemData.status == 0){
+                    CustomButton(
+                        text = "Delete item",
+                        type = ButtonType.WARNING,
+                        onClick = {
+                            // open delete dialog
+                            viewModel.isDeleteDialogShown.value = true
+                        }
+                    )
+
+                    // the dialog for logging out
+                    CustomTextDialog(
+                        icon = Icons.Outlined.DeleteOutline,
+                        title = "Delete item",
+                        content = "Are you sure to delete this item? This action cannot be undone.",
+                        confirmButton = {
+                            CustomButton(
+                                text = "Delete",
+                                type = ButtonType.WARNING,
+                                onClick = {
+                                    // delete item
+                                    viewModel.deleteItem(object : Callback<Boolean> {
+                                        override fun onComplete(result: Boolean) {
+                                            if (!result){
+                                                Toast.makeText(context, "Failed to delete item", Toast.LENGTH_SHORT).show()
+                                                return
+                                            }
+
+                                            // show successfully deleted message
+                                            Toast.makeText(context, "Item deleted!", Toast.LENGTH_SHORT).show()
+
+                                            // delete item successful, close dialog
+                                            viewModel.isDeleteDialogShown.value = false
+
+                                            // redirect the activity to home
+                                            val intent = Intent(context, MainActivity::class.java).apply {
+                                                flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
+                                            }
+
+                                            // start main activity
+                                            context.startActivity(intent)
+
+                                            // finish current activity
+                                            (context as Activity).finish()
+
+                                        }
+                                    })
+                                }
+                            )
+                        },
+                        dismissButton = {
+                            CustomButton(text = "Cancel",
+                                type = ButtonType.OUTLINED,
+                                onClick = {
+                                    // dismiss the dialog
+                                    viewModel.isDeleteDialogShown.value = false
+                                }
+                            )
+                        },
+                        isDialogShown = viewModel.isDeleteDialogShown
                     )
                 }
             }
