@@ -317,7 +317,7 @@ fun CustomDatePickerDialog(
                     type = ButtonType.FILLED,
                     onClick = {
                         // get the current epoch time
-                        val currentEpoch = DateTimeManager.getCurrentEpochTime()*1000
+                        val currentEpoch = DateTimeManager.getCurrentEpochDate()*1000
 
                         // get the epoch time
                         val epoch = ((datePickerState.selectedDateMillis ?: currentEpoch)/ 1000L)

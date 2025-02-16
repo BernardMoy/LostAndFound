@@ -605,24 +605,37 @@ fun ClaimButton(
             // else, display they already claimed another item
 
             if (viewModel.lostItemData.status == 0){
-                CustomButton(
-                    text = "Claim this Item",
-                    type = ButtonType.FILLED,
-                    enabled = !isLoading,  // if loading, disable the button
-                    onClick = {
-                        isLoading = true
+                Column (
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ){
+                    CustomButton(
+                        text = "Claim this Item",
+                        type = ButtonType.FILLED,
+                        enabled = !isLoading,  // if loading, disable the button
+                        onClick = {
+                            isLoading = true
 
-                        // if there is a security question for the found item, prompt the user to enter it
-                        if (viewModel.foundItemData.securityQuestion.isNotEmpty()){
-                            viewModel.isSecurityQuestionDialogShown.value = true
-                            viewModel.securityQuestionInputError.value = ""
+                            // if there is a security question for the found item, prompt the user to enter it
+                            if (viewModel.foundItemData.securityQuestion.isNotEmpty()){
+                                viewModel.isSecurityQuestionDialogShown.value = true
+                                viewModel.securityQuestionInputError.value = ""
 
-                        } else {
-                            // create claim and close activity
-                            claimItem(context = context, viewModel = viewModel)
-                        }
-                    }
-                )
+                            } else {
+                                // create claim and close activity
+                                claimItem(context = context, viewModel = viewModel)
+                            }
+                        },
+                    )
+
+                    Text(
+                        text = "Once you have claimed an item, it cannot be deleted",
+                        color = Color.Gray,
+                        modifier = Modifier.padding(dimensionResource(R.dimen.title_margin)),
+                        style = Typography.bodyMedium,
+                        textAlign = TextAlign.Center
+                    )
+                }
+
 
                 // the dialog to prompt user to enter security question
                 CustomInputDialog(
