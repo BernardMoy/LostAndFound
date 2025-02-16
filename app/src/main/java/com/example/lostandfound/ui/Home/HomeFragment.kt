@@ -33,6 +33,7 @@ import androidx.compose.material.icons.automirrored.outlined.Login
 import androidx.compose.material.icons.filled.Circle
 import androidx.compose.material.icons.outlined.AddCircle
 import androidx.compose.material.icons.outlined.CheckCircle
+import androidx.compose.material.icons.outlined.Refresh
 import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material.icons.outlined.TrackChanges
 import androidx.compose.material3.Card
@@ -80,6 +81,7 @@ import com.example.lostandfound.R
 import com.example.lostandfound.Utility.AnimationManager
 import com.example.lostandfound.ui.HowItWorks.HowItWorksActivity
 import com.example.lostandfound.ui.Login.LoginActivity
+import com.example.lostandfound.ui.Lost.refreshData
 import com.example.lostandfound.ui.NewFound.NewFoundActivity
 import com.example.lostandfound.ui.NewLost.NewLostActivity
 import com.example.lostandfound.ui.ViewLost.ViewLostActivity
@@ -418,13 +420,34 @@ fun RecentlyLostItem(
         ),
         verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.title_margin))
     ) {
-        Text(
-            text = "Your recently lost item",
-            style = Typography.titleMedium,
-            fontWeight = FontWeight.Bold,
-            color = MaterialTheme.colorScheme.onBackground,
-            textAlign = TextAlign.Center
-        )
+        Row (
+            verticalAlignment = Alignment.CenterVertically
+        ){
+            Text(
+                text = "Your recently lost item",
+                style = Typography.titleMedium,
+                fontWeight = FontWeight.Bold,
+                color = MaterialTheme.colorScheme.onBackground,
+                textAlign = TextAlign.Start,
+                modifier = Modifier.weight(1f)
+            )
+
+            // the refresh button
+            IconButton(
+                modifier = Modifier.size(dimensionResource(R.dimen.image_button_size_small)),
+                onClick = {
+
+                }
+            ) {
+                Icon(
+                    imageVector = Icons.Outlined.Refresh,
+                    contentDescription = "Reload",
+                    modifier = Modifier.size(dimensionResource(R.dimen.image_button_size_small)),
+                    tint = MaterialTheme.colorScheme.secondary
+                )
+            }
+        }
+
 
         // display the lost item in simple format
         if (viewModel.isLoadingLostItem.value) {
@@ -486,13 +509,34 @@ fun FoundItemData(
         ),
         verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.title_margin))
     ) {
-        Text(
-            text = "Your found items",
-            style = Typography.titleMedium,
-            fontWeight = FontWeight.Bold,
-            color = MaterialTheme.colorScheme.onBackground,
-            textAlign = TextAlign.Center
-        )
+        Row (
+            verticalAlignment = Alignment.CenterVertically
+        ){
+            Text(
+                text = "Your found items",
+                style = Typography.titleMedium,
+                fontWeight = FontWeight.Bold,
+                color = MaterialTheme.colorScheme.onBackground,
+                textAlign = TextAlign.Start,
+                modifier = Modifier.weight(1f)
+            )
+
+            // the refresh button
+            IconButton(
+                modifier = Modifier.size(dimensionResource(R.dimen.image_button_size_small)),
+                onClick = {
+
+                }
+            ) {
+                Icon(
+                    imageVector = Icons.Outlined.Refresh,
+                    contentDescription = "Reload",
+                    modifier = Modifier.size(dimensionResource(R.dimen.image_button_size_small)),
+                    tint = MaterialTheme.colorScheme.secondary
+                )
+            }
+        }
+
         if (viewModel.isLoadingFoundItem.value) {
             Row(
                 modifier = Modifier
