@@ -27,6 +27,7 @@ import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.LocationOn
 import androidx.compose.material.icons.outlined.Notifications
 import androidx.compose.material.icons.outlined.Palette
+import androidx.compose.material.icons.outlined.Refresh
 import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material.icons.outlined.TextFields
 import androidx.compose.material3.HorizontalDivider
@@ -55,6 +56,7 @@ import com.example.lostandfound.ui.ImageComparison.ImageComparisonActivity
 import com.example.lostandfound.ui.PermissionsTest.PermissionsTestActivity
 import com.example.lostandfound.ui.Search.SearchActivity
 import com.example.lostandfound.ui.SettingsAnimation.SettingsAnimationActivity
+import com.example.lostandfound.ui.SettingsAutoLoading.SettingsAutoLoadingActivity
 import com.example.lostandfound.ui.SettingsFontSize.SettingsFontSizeActivity
 import com.example.lostandfound.ui.SettingsTheme.SettingsThemeActivity
 import com.example.lostandfound.ui.ViewComparison.ViewComparisonActivity
@@ -175,6 +177,15 @@ fun Appearance(
             leftIcon = Icons.Outlined.Animation,
             onClick = {
                 val intent = Intent(context, SettingsAnimationActivity::class.java)
+                context.startActivity(intent)
+            }
+        )
+
+        // able to toggle on or off auto loading
+        CustomActionRow(text = "Auto loading",
+            leftIcon = Icons.Outlined.Refresh,
+            onClick = {
+                val intent = Intent(context, SettingsAutoLoadingActivity::class.java)
                 context.startActivity(intent)
             }
         )
