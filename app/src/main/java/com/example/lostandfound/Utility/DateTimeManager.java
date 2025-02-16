@@ -8,6 +8,7 @@ import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.Locale;
 
 public class DateTimeManager {
@@ -26,6 +27,13 @@ public class DateTimeManager {
     // for storing the current epoch time into the database to retrieve them in order
     public static long getCurrentEpochTime(){
         LocalDateTime currentDateTime = LocalDateTime.now();
+        ZonedDateTime zonedCurrentDateTime = currentDateTime.atZone(ZoneId.of("UTC"));
+        return zonedCurrentDateTime.toEpochSecond();
+    }
+
+    // for getting the current epoch time but at midnight (00:00)
+    public static long getCurrentEpochDate(){
+        LocalDateTime currentDateTime = LocalDateTime.now().truncatedTo(ChronoUnit.DAYS);
         ZonedDateTime zonedCurrentDateTime = currentDateTime.atZone(ZoneId.of("UTC"));
         return zonedCurrentDateTime.toEpochSecond();
     }
