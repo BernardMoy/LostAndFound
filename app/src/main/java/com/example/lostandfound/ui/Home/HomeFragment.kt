@@ -79,6 +79,7 @@ import com.example.lostandfound.Data.LostItem
 import com.example.lostandfound.FirebaseManagers.FirebaseUtility
 import com.example.lostandfound.R
 import com.example.lostandfound.Utility.AnimationManager
+import com.example.lostandfound.Utility.AutoLoadingManager
 import com.example.lostandfound.ui.HowItWorks.HowItWorksActivity
 import com.example.lostandfound.ui.Login.LoginActivity
 import com.example.lostandfound.ui.Lost.refreshData
@@ -120,7 +121,10 @@ class HomeFragment : Fragment() {
         viewModel.isLoggedIn.value = FirebaseUtility.isUserLoggedIn()
 
         // refresh the data everytime the screen is reloaded
-        loadData(requireContext(), viewModel)
+        if (AutoLoadingManager.autoLoadingEnabled.value){
+            loadRecentlyLostItem(requireContext(), viewModel)
+            loadFoundItems(requireContext(), viewModel)
+        }
     }
 }
 
@@ -436,7 +440,7 @@ fun RecentlyLostItem(
             IconButton(
                 modifier = Modifier.size(dimensionResource(R.dimen.image_button_size_small)),
                 onClick = {
-
+                    loadRecentlyLostItem(context, viewModel)
                 }
             ) {
                 Icon(
@@ -525,7 +529,7 @@ fun FoundItemData(
             IconButton(
                 modifier = Modifier.size(dimensionResource(R.dimen.image_button_size_small)),
                 onClick = {
-
+                    loadFoundItems(context, viewModel)
                 }
             ) {
                 Icon(
@@ -708,11 +712,10 @@ fun LargeLoginButton(
     HorizontalDivider(thickness = 1.dp, color = Color.Gray)
 }
 
-
-fun loadData(
+fun loadRecentlyLostItem(
     context: Context,
-    viewModel: HomeFragmentViewModel,
-) {
+    viewModel: HomeFragmentViewModel
+){
     viewModel.isLoadingLostItem.value = true
     viewModel.loadLatestLostItem(object : Callback<Boolean> {
         override fun onComplete(result: Boolean) {
@@ -724,7 +727,12 @@ fun loadData(
             }
         }
     })
+}
 
+fun loadFoundItems(
+    context: Context,
+    viewModel: HomeFragmentViewModel
+){
     viewModel.isLoadingFoundItem.value = true
     viewModel.loadFoundItemCount(object : Callback<Boolean> {
         override fun onComplete(result: Boolean) {
