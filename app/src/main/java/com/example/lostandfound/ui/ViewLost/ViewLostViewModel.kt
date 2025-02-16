@@ -25,6 +25,7 @@ class ViewLostViewModel : ViewModel(){
     val isTrackUpdateLoading: MutableState<Boolean> = mutableStateOf(false)
     val isLocationDialogShown: MutableState<Boolean> = mutableStateOf(false)
     val isContactUserDialogShown: MutableState<Boolean> = mutableStateOf(false)
+    val isDeleteDialogShown: MutableState<Boolean> = mutableStateOf(false)
 
     // default lost item placeholder data
     // will be replaced by method below
@@ -89,6 +90,26 @@ class ViewLostViewModel : ViewModel(){
                             }
                         }
                     )
+                }
+            }
+        )
+    }
+
+    // function to delete item
+    // return true if successful, false if failed
+    fun deleteItem(callback: Callback<Boolean>){
+        val firestoreManager = FirestoreManager()
+        firestoreManager.delete(
+            FirebaseNames.COLLECTION_LOST_ITEMS,
+            itemData.itemID,
+            object: FirestoreManager.Callback<Boolean>{
+                override fun onComplete(result: Boolean?) {
+                    if (result == null || !result){
+                        callback.onComplete(false)
+                        return
+                    }
+
+                    callback.onComplete(true)
                 }
             }
         )
