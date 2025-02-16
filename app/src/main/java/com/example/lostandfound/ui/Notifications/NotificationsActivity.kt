@@ -50,12 +50,16 @@ class NotificationsActivity : ComponentActivity() { // Use ComponentActivity her
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // load messages on create
-        loadNotifications(context = this, viewModel = viewModel)
-
         setContent {
             NotificationsScreen(activity = this, viewModel = viewModel)
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        // load notifications on resume
+        loadNotifications(context = this, viewModel = viewModel)
     }
 }
 

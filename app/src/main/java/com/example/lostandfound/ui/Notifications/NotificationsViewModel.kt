@@ -30,6 +30,7 @@ class NotificationsViewModel : ViewModel(){
     var itemsNotificationList: MutableList<Map<String, Any>> = mutableStateListOf()  // make this listenable
 
 
+    /*
     fun loadItemsNotifications(callback: LoadNotificationsCallback){
         val db = FirebaseFirestore.getInstance()
 
@@ -41,7 +42,7 @@ class NotificationsViewModel : ViewModel(){
             .whereEqualTo(FirebaseNames.NOTIFICATION_USER_ID, FirebaseUtility.getUserID())
             .orderBy(FirebaseNames.NOTIFICATION_TIMESTAMP, Query.Direction.DESCENDING)
             .addSnapshotListener { snapshot, error ->       // listen for real time updates
-                // clear chat message preview
+                // clear notifications preview
                 itemsNotificationList.clear()
 
                 if (error != null) {
@@ -68,6 +69,42 @@ class NotificationsViewModel : ViewModel(){
 
                 // return true
                 callback.onComplete(true)
+            }
+    }
+
+     */
+
+    // a regular load method
+    fun loadItemsNotifications(callback: LoadNotificationsCallback){
+        val db = FirebaseFirestore.getInstance()
+        itemsNotificationList.clear()
+
+        // get all notifications of the current user from the db
+        db.collection(FirebaseNames.COLLECTION_NOTIFICATIONS)
+            .whereEqualTo(FirebaseNames.NOTIFICATION_USER_ID, FirebaseUtility.getUserID())
+            .orderBy(FirebaseNames.NOTIFICATION_TIMESTAMP, Query.Direction.DESCENDING)
+            .get()
+            .addOnSuccessListener { snapshot ->
+                if (snapshot.isEmpty){
+                    // the user does not have any notifications
+                    callback.onComplete(true)
+                    return@addOnSuccessListener
+                }
+
+                for (document in snapshot.documents){
+                    val thisNotification = document.data?.toMutableMap() ?: mutableMapOf()
+                    // add the notification id to the map
+                    thisNotification[FirebaseNames.NOTIFICATION_ID] = document.id
+                    itemsNotificationList.add(thisNotification)
+                }
+
+                // return true after all elements are added
+                callback.onComplete(true)
+
+            }.addOnFailureListener{ error ->
+                Log.d("Notifications fetching error", error.message.toString())
+                callback.onComplete(false)
+
             }
     }
 

@@ -173,37 +173,40 @@ fun TopDescription(
 
         Spacer(modifier = Modifier.padding(dimensionResource(id = R.dimen.content_margin_half)))
 
-        Text(
-            text = "Don't see your item? ",
-            style = Typography.bodyMedium,
-            color = Color.Gray,
-            textAlign = TextAlign.Center
-        )
+        // display the "We will track it for you" text if the item is currently not tracking
+        if (!viewModel.lostItem.isTracking){
+            Text(
+                text = "Don't see your item? ",
+                style = Typography.bodyMedium,
+                color = Color.Gray,
+                textAlign = TextAlign.Center
+            )
 
-        Text(
-            text = "Click here and we will track it for you. ",
-            style = Typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onPrimaryContainer,
-            textAlign = TextAlign.Center,
-            fontWeight = FontWeight.Bold,
-            textDecoration = TextDecoration.Underline,
-            modifier = Modifier.clickable { 
-                viewModel.onWeWillTrackClicked(
-                    object: Callback<Boolean>{
-                        override fun onComplete(result: Boolean) {
-                            if (!result){
-                                Toast.makeText(context, "Failed to update track status", Toast.LENGTH_SHORT).show()
-                                return
+            Text(
+                text = "Click here and we will track it for you. ",
+                style = Typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onPrimaryContainer,
+                textAlign = TextAlign.Center,
+                fontWeight = FontWeight.Bold,
+                textDecoration = TextDecoration.Underline,
+                modifier = Modifier.clickable {
+                    viewModel.onWeWillTrackClicked(
+                        object: Callback<Boolean>{
+                            override fun onComplete(result: Boolean) {
+                                if (!result){
+                                    Toast.makeText(context, "Failed to update track status", Toast.LENGTH_SHORT).show()
+                                    return
+                                }
+
+                                // exit activity after doing this
+                                Toast.makeText(context, "Your lost item is now being tracked!", Toast.LENGTH_SHORT).show()
+                                (context as Activity).finish()
                             }
-
-                            // exit activity after doing this
-                            Toast.makeText(context, "Your lost item is now being tracked!", Toast.LENGTH_SHORT).show()
-                            (context as Activity).finish()
                         }
-                    }
-                )
-            }
-        )
+                    )
+                }
+            )
+        }
     }
 }
 

@@ -28,6 +28,8 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -742,6 +744,11 @@ fun CustomNotificationItemPreview(
     isRead: Boolean,
     onClick: () -> Unit = {}  // to be implemented in notifications activity (To use that context)
 ) {
+    // a isRead variable that would react to state changes
+    val isReadState = remember{
+        mutableStateOf(isRead)
+    }
+
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -757,6 +764,9 @@ fun CustomNotificationItemPreview(
                     object : Callback<Boolean> {
                         override fun onComplete(result: Boolean) {
                             if (result) {
+                                // mark it as read and reflect its changes
+                                isReadState.value = true
+
                                 // perform on click after modifying the db
                                 onClick()
                             }
@@ -799,7 +809,7 @@ fun CustomNotificationItemPreview(
                     )
 
                     // the red dot
-                    if (!isRead){
+                    if (!isReadState.value){
                         Icon(
                             imageVector = Icons.Filled.Circle,
                             tint = MaterialTheme.colorScheme.error,
