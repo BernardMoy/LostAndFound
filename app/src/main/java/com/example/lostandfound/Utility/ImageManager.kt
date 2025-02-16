@@ -2,12 +2,16 @@ package com.example.lostandfound.Utility
 
 import android.content.Context
 import android.net.Uri
+import com.example.lostandfound.R
 import java.io.File
 import java.io.FileOutputStream
 import kotlin.io.encoding.Base64
 import kotlin.io.encoding.ExperimentalEncodingApi
 
 object ImageManager {
+    // stores the url to the default image
+    val PLACEHOLDER_IMAGE_STRING = "android.resource://com.example.lostandfound/" + R.drawable.placeholder_image
+
     @OptIn(ExperimentalEncodingApi::class)
     fun uriToString(context: Context, imageUri: Uri?): String{
         if (imageUri == null){

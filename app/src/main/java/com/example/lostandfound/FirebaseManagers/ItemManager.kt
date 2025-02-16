@@ -78,7 +78,7 @@ object ItemManager {
                             override fun onComplete(result: Uri?) {
                                 // initialise the item image to the default image
                                 var itemImage: Uri =
-                                    Uri.parse("android.resource://com.example.lostandfound/" + R.drawable.placeholder_image)
+                                    Uri.parse("")
 
                                 // if the result is not null, replace it by actual item image
                                 if (result != null) {
@@ -173,7 +173,7 @@ object ItemManager {
                             override fun onComplete(result: Uri?) {
                                 // initialise the item image to the default image
                                 var itemImage: Uri =
-                                    Uri.parse("android.resource://com.example.lostandfound/" + R.drawable.placeholder_image)
+                                    Uri.parse("")
 
                                 // if the result is not null, replace it by actual item image
                                 if (result != null) {

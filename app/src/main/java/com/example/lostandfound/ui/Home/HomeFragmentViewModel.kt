@@ -39,6 +39,8 @@ class HomeFragmentViewModel : ViewModel(){
     var numberFound: MutableState<Int> = mutableIntStateOf(0)
     var numberClaimApproved: MutableState<Int> = mutableIntStateOf(0)
 
+    var isInitialStartUp = true
+
 
     // load data into latestLostItem and latestLostItemMatches
     fun loadLatestLostItem(

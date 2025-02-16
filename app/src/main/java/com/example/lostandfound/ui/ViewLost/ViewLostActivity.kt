@@ -81,6 +81,7 @@ import com.example.lostandfound.FirebaseManagers.ItemManager
 import com.example.lostandfound.MainActivity
 import com.example.lostandfound.R
 import com.example.lostandfound.Utility.DateTimeManager
+import com.example.lostandfound.Utility.ImageManager
 import com.example.lostandfound.Utility.LocationManager
 import com.example.lostandfound.ui.Profile.ProfileActivity
 import com.example.lostandfound.ui.Search.SearchActivity
@@ -226,9 +227,10 @@ fun ItemImage(viewModel: ViewLostViewModel) {
     Row(
         modifier = Modifier.fillMaxWidth()
     ) {
+        val displayedImage = if(viewModel.itemData.image.isEmpty()) ImageManager.PLACEHOLDER_IMAGE_STRING else viewModel.itemData.image
         // image of the item
         GlideImage(
-            model = Uri.parse(viewModel.itemData.image),
+            model = Uri.parse(displayedImage),
             contentDescription = "Item image",
             modifier = Modifier.fillMaxWidth(),
             alignment = Alignment.Center

@@ -82,13 +82,21 @@ class NewLostViewModel: ViewModel() {
     fun onCategorySelected(c: Category?){
         selectedCategory = c
     }
-    fun onColorSelected(c: String){
+
+    // return true if successful, return false otherwise (When attempting to select more than 3 colors)
+    fun onColorSelected(c: String): Boolean{
         if (selectedColor.contains(c)){
             selectedColor.remove(c)
         } else {
+            if (selectedColor.size == 3){
+                return false
+            }
             selectedColor.add(c)
         }
+
+        return true
     }
+
     fun isCategorySelected(c: Category): Boolean{
         return selectedCategory == c
     }

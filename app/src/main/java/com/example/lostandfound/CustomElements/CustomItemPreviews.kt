@@ -207,9 +207,12 @@ fun CustomLostItemPreview(
             Row(
                 horizontalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin))
             ) {
+                // if image string is empty, replace it with the default image
+                val displayedImage = if (data.image.isEmpty()) ImageManager.PLACEHOLDER_IMAGE_STRING else data.image
+
                 // image of the item is loaded using GlideImage
                 GlideImage(
-                    model = Uri.parse(data.image),  // parse the string stored back to uri
+                    model = Uri.parse(displayedImage),  // parse the string stored back to uri
                     contentDescription = "Item image",
                     modifier = Modifier.weight(1F)
                 )
@@ -320,9 +323,12 @@ fun CustomLostItemPreviewSmall(
             Row(
                 horizontalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin))
             ) {
+                // if image string is empty, replace it with the default image
+                val displayedImage = if (data.image.isEmpty()) ImageManager.PLACEHOLDER_IMAGE_STRING else data.image
+
                 // image of the item is loaded using GlideImage
                 GlideImage(
-                    model = Uri.parse(data.image),  // parse the string stored back to uri
+                    model = Uri.parse(displayedImage),  // parse the string stored back to uri
                     contentDescription = "Item image",
                     modifier = Modifier.weight(1F)
                 )
@@ -447,9 +453,12 @@ fun CustomFoundItemPreview(
             Row(
                 horizontalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin))
             ) {
+                // if image string is empty, replace it with the default image
+                val displayedImage = if (data.image.isEmpty()) ImageManager.PLACEHOLDER_IMAGE_STRING else data.image
+
                 // image of the item is loaded using GlideImage
                 GlideImage(
-                    model = Uri.parse(data.image),
+                    model = Uri.parse(displayedImage),
                     contentDescription = "Item image",
                     modifier = Modifier.weight(1F)
                 )
@@ -554,9 +563,12 @@ fun CustomClaimPreview(
             Row(
                 horizontalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin))
             ) {
+                // if image string is empty, replace it with the default image
+                val displayedImage = if (claimPreview.lostItemImage.isEmpty()) ImageManager.PLACEHOLDER_IMAGE_STRING else claimPreview.lostItemImage
+
                 // image of the item is loaded using GlideImage
                 GlideImage(
-                    model = Uri.parse(claimPreview.lostItemImage),
+                    model = Uri.parse(displayedImage),
                     contentDescription = "Item image",
                     modifier = Modifier.weight(1F)
                 )
