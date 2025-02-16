@@ -32,6 +32,7 @@ import com.example.lostandfound.Data.SharedPreferencesNames;
 import com.example.lostandfound.FirebaseManagers.FirebaseAuthManager;
 import com.example.lostandfound.FirebaseManagers.FirebaseUtility;
 import com.example.lostandfound.Utility.AnimationManager;
+import com.example.lostandfound.Utility.AutoLoadingManager;
 import com.example.lostandfound.Utility.DeviceThemeManager;
 import com.example.lostandfound.Utility.FontSizeManager;
 import com.example.lostandfound.Utility.ImageManager;
@@ -118,6 +119,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         // load whether animations are enabled from the manager
         AnimationManager.INSTANCE.loadAnimationEnabled(
+                MainActivity.this
+        );
+
+        // load whether auto loading is enabled
+        AutoLoadingManager.INSTANCE.loadAutoLoadingEnabled(
                 MainActivity.this
         );
 

@@ -50,6 +50,7 @@ import com.example.lostandfound.Data.IntentExtraNames
 import com.example.lostandfound.FirebaseManagers.FirebaseUtility
 import com.example.lostandfound.R
 import com.example.lostandfound.Utility.AnimationManager
+import com.example.lostandfound.Utility.AutoLoadingManager
 import com.example.lostandfound.ui.ViewLost.ViewLostActivity
 import com.example.lostandfound.ui.theme.ComposeTheme
 import com.example.lostandfound.ui.theme.Typography
@@ -92,10 +93,12 @@ class LostFragment : Fragment() {
         isLoggedIn.value = FirebaseUtility.isUserLoggedIn()
 
         // refresh the data everytime the screen is reloaded
-        refreshData(
-            context = requireContext(),
-            viewModel = viewModel
-        )
+        if (AutoLoadingManager.autoLoadingEnabled.value){
+            refreshData(
+                context = requireContext(),
+                viewModel = viewModel
+            )
+        }
     }
 }
 
