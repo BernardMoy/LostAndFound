@@ -425,7 +425,8 @@ fun ActionButtons(
                         text = "There are currently no users who has claimed this item.",
                         style = Typography.bodyMedium,
                         color = Color.Gray,
-                        textAlign = TextAlign.Center
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier.padding(dimensionResource(R.dimen.title_margin))
                     )
                 }
 
