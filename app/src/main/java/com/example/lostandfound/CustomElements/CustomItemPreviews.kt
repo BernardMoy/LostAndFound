@@ -111,7 +111,6 @@ fun Preview() {
 @Composable
 fun CustomLostItemPreview(
     data: LostItem,
-    onDeleteButtonClicked: () -> Unit = {},
     onViewButtonClicked: () -> Unit = {},
 ) {
     val isOwner: Boolean = FirebaseUtility.getUserID() == data.userID
@@ -256,7 +255,8 @@ fun CustomLostItemPreview(
                 horizontalArrangement = Arrangement.End
 
             ) {
-                if (isOwner) {
+                /*
+                if (isOwner && data.status == 0) {
                     CustomButton(
                         text = "Delete",
                         type = ButtonType.WARNING,
@@ -265,8 +265,9 @@ fun CustomLostItemPreview(
                         },
                         small = true
                     )
-
                 }
+
+                 */
 
                 Spacer(modifier = Modifier.width(dimensionResource(id = R.dimen.content_margin)))
 
@@ -375,7 +376,6 @@ fun CustomLostItemPreviewSmall(
 fun CustomFoundItemPreview(
     data: FoundItem,
     viewButtonText: String,
-    onDeleteButtonClicked: () -> Unit = {},
     onViewButtonClicked: () -> Unit = {},
 ) {
     val isOwner: Boolean = FirebaseUtility.getUserID() == data.userID
@@ -498,7 +498,8 @@ fun CustomFoundItemPreview(
                 horizontalArrangement = Arrangement.End
 
             ) {
-                if (isOwner) {
+                /*
+                if (isOwner && data.status == 0) {
                     CustomButton(
                         text = "Delete",
                         type = ButtonType.WARNING,
@@ -508,6 +509,8 @@ fun CustomFoundItemPreview(
                         small = true
                     )
                 }
+
+                 */
 
                 Spacer(modifier = Modifier.width(dimensionResource(id = R.dimen.content_margin)))
 

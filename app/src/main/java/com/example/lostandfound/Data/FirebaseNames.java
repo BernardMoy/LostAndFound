@@ -4,6 +4,9 @@ public final class FirebaseNames {
     private FirebaseNames(){}
 
     // strings that represent all collection names
+    /*
+    Whenever these names are changed, reflect the changes in the firebase cloud functions as well
+     */
     public static final String COLLECTION_USERS = "users";
     public static final String COLLECTION_USER_VERIFICATIONS = "user_verifications";
     public static final String COLLECTION_LOST_ITEMS = "lost_items";
