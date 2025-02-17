@@ -8,9 +8,8 @@ import com.example.lostandfound.Data.FirebaseNames
 import com.example.lostandfound.Data.FoundItem
 import com.example.lostandfound.Data.LostItem
 import com.example.lostandfound.FirebaseManagers.FirestoreManager.Callback
-import com.example.lostandfound.R
 import com.example.lostandfound.Utility.LocationManager
-import com.example.lostandfound.Utility.isMatch
+import com.example.lostandfound.MatchingFunctions.isMatch
 import com.google.firebase.firestore.FirebaseFirestore
 
 object ItemManager {
