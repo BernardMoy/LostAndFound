@@ -10,10 +10,7 @@ fun getCategoryScore(lostCategory: String, lostSubCategory: String, foundCategor
     0 if both dont match
     1.5 if one of the category is "Others".
      */
-    if (lostCategory == "Others" || foundCategory == "Others"){
-        return 1.5
-
-    } else if (lostCategory == foundCategory){
+    if (lostCategory == foundCategory){
         if (lostSubCategory == foundSubcategory){
             return 3.0
         } else{
