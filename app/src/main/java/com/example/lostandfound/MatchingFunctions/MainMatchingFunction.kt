@@ -8,7 +8,7 @@ import com.example.lostandfound.Data.LostItem
 /*
     Preconditions are performed in the initial db query:
     1. Lost item user ID != Found item user ID
-    2. Lost date - found date < 7 days (Within a week)
+    2. Lost date - found date <= 7 days (Within a week)
  */
 fun isMatch(
     lostItem: LostItem,
@@ -28,7 +28,6 @@ Image (If both are not empty string)
 Category and subcategory (Give a 1.5 score if any one of them is Others)
 Color (NOT NULLABLE)
 Brand (If both are not empty string)
-Date and time (NOT NULLABLE)
 Location (If both are not NULL)
 
 In the worst case only the category, color and datetime will contribute to the final score.

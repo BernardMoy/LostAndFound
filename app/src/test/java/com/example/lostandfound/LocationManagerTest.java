@@ -8,6 +8,8 @@ import com.google.android.gms.maps.model.LatLng;
 
 import org.junit.Test;
 
+import kotlin.Pair;
+
 public class LocationManagerTest {
     private static final LatLng location1 = new LatLng(
             52.40187250782763,
@@ -18,12 +20,18 @@ public class LocationManagerTest {
             -1.561483721025337
     );
 
-    private static final double ACTUAL_DISTANCE = 2.5603;
+
+    // test the distance between WESTWOOD and MEDICAL SCHOOL
+    // obtained from https://www.distance.to/52.374552794297,%20-1.5505370226481643/52.38871254041315,%20-1.5598439802945556
+    private static final double ACTUAL_DISTANCE = 1.70;
 
     @Test
     public void testGetDistanceBetweenLocations(){
-        double calculatedDistance = LocationManager.INSTANCE.getDistanceBetweenLocations(location1, location2);
-        assert abs(calculatedDistance - ACTUAL_DISTANCE) <= 1e-3;
+        double calculatedDistance = LocationManager.INSTANCE.getDistanceBetweenLocations(
+                new Pair<>(52.374552794297, -1.5505370226481643),
+                new Pair<>(52.38871254041315, -1.5598439802945556)
+        );
+        assert abs(calculatedDistance - ACTUAL_DISTANCE) <= 1e-1;
     }
 
 }
