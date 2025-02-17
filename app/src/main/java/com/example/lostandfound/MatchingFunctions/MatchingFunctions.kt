@@ -1,18 +1,14 @@
-package com.example.lostandfound.Utility
+package com.example.lostandfound.MatchingFunctions
 
-import android.net.Uri
-import com.example.lostandfound.Data.FirebaseNames
+import android.content.Context
 import com.example.lostandfound.Data.FoundItem
 import com.example.lostandfound.Data.LostItem
-import com.example.lostandfound.FirebaseManagers.FirebaseStorageManager
-import com.example.lostandfound.FirebaseManagers.FirestoreManager
-import com.example.lostandfound.FirebaseManagers.ItemManager
-import com.example.lostandfound.R
 
 // given a lost item and a found item, determine whether they are matched
 /*
     Preconditions are performed in the initial db query:
     1. Lost item user ID != Found item user ID
+    2. Lost date - found date < 7 days (Within a week)
  */
 fun isMatch(
     lostItem: LostItem,
@@ -24,6 +20,15 @@ fun isMatch(
     // currently, return true if their users are different
     return true
 }
+
+fun getMatchingScore(
+    context: Context,     // used for tflite model classification
+    lostItem: LostItem,
+    foundItem: FoundItem
+){
+
+}
+
 
 
 // only consider the image when it is not the placeholder image.
