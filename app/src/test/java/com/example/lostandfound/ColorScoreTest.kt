@@ -1,0 +1,35 @@
+package com.example.lostandfound
+
+import com.example.lostandfound.MatchingFunctions.getColorScore
+import com.example.lostandfound.MatchingFunctions.getScoreFromDistance
+import org.junit.Test
+import kotlin.math.abs
+
+class ColorScoreTest {
+    @Test
+    fun testGetColorScoreSame(){
+        assert(
+            getColorScore(listOf("Red", "Green", "Blue"), listOf("Green", "Blue", "Red")) == 3
+        )
+    }
+
+    @Test
+    fun testGetColorScoreOneIsTheSubsetOfTheOther(){
+        assert(
+            getColorScore(listOf("Red", "Green", "Blue"), listOf("Red")) == 3
+        )
+    }
+
+    @Test
+    fun testGetColorScoreHavePenalty(){
+        assert(
+            getColorScore(listOf("Red", "Green", "Blue"), listOf("Yellow")) == 0
+        )
+        assert(
+            getColorScore(listOf("Red", "Green", "Blue"), listOf("Red", "Green", "Yellow")) == 2
+        )
+        assert(
+            getColorScore(listOf("Red", "Green", "Blue"), listOf("Red", "Purple", "Yellow")) == 1
+        )
+    }
+}
