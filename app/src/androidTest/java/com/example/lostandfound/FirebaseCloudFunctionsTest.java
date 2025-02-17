@@ -16,13 +16,18 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreSettings;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.w3c.dom.Document;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
@@ -85,7 +90,26 @@ public class FirebaseCloudFunctionsTest {
     }
 
     @After
-    public void tearDown(){
-        // TODO
+    public void tearDown() throws ExecutionException, InterruptedException, TimeoutException {
+        // clear all data
+        deleteCollection(FirebaseNames.COLLECTION_LOST_ITEMS);
+        deleteCollection(FirebaseNames.COLLECTION_CLAIMED_ITEMS);
+    }
+
+    // private method to delete all elements inside a collection
+    private void deleteCollection(String name) throws ExecutionException, InterruptedException, TimeoutException {
+        Task<QuerySnapshot> taskGet = firestore.collection(name).get();
+        QuerySnapshot docs = Tasks.await(taskGet, 60, TimeUnit.SECONDS);
+
+        // create a list of delete tasks for each doc
+        List<Task<Void>> deleteTasks = new ArrayList<>();
+        for (DocumentSnapshot doc : docs){
+            Task<Void> deleteTask = firestore.collection(name)
+                    .document(doc.getId())
+                    .delete();
+            deleteTasks.add(deleteTask);
+        }
+        // execute all tasks
+        Tasks.await(Tasks.whenAll(deleteTasks), 60, TimeUnit.SECONDS);
     }
 }
