@@ -1,5 +1,6 @@
 package com.example.lostandfound.ui.Search
 
+import android.content.Context
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
@@ -25,8 +26,8 @@ class SearchViewModel : ViewModel() {
 
     // initialise the list of matching found items to be displayed as empty list
     // return true if successful, false otherwise
-    fun loadItems(callback: Callback<Boolean>) {
-        getMatchItemsFromLostItem(lostItem = lostItem, object : ItemManager.MatchFoundCallback {
+    fun loadItems(context: Context, callback: Callback<Boolean>) {
+        getMatchItemsFromLostItem(context = context, lostItem = lostItem, object : ItemManager.MatchFoundCallback {
             override fun onComplete(result: MutableList<FoundItem>?) {
                 // result == null indicates error
                 if (result == null) {

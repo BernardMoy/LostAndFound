@@ -672,8 +672,9 @@ fun DoneButton(
                 isLoading = true
 
                 // add to firebase database
-                viewModel.onDoneButtonClicked(object :
-                    ErrorCallback {
+                viewModel.onDoneButtonClicked(
+                    context = context,
+                    object : ErrorCallback {
                     override fun onComplete(error: String) {
 
                         // stop loading

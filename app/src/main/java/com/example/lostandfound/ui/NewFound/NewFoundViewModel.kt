@@ -193,7 +193,10 @@ class NewFoundViewModel : ViewModel() {
     }
 
     // when the done button is clicked, add data to db
-    fun onDoneButtonClicked(callback: ErrorCallback) {
+    fun onDoneButtonClicked(
+        context: Context,
+        callback: ErrorCallback
+    ) {
         val currentTime = DateTimeManager.getCurrentEpochTime()
 
         val data = mapOf(
@@ -270,7 +273,7 @@ class NewFoundViewModel : ViewModel() {
                                     )
 
                                     // send notifications
-                                    notifyTrackingLostUsers(generatedFoundItem, object: NotifyLostUsersCallback{
+                                    notifyTrackingLostUsers(context, generatedFoundItem, object: NotifyLostUsersCallback{
                                         override fun onComplete(result: Boolean) {
                                                 // still proceed, since this is not important to the current user
                                                 // if decide not to proceed here, the uploaded image will also have to be deleted
@@ -317,7 +320,7 @@ class NewFoundViewModel : ViewModel() {
                         )
 
                         // send notifications
-                        notifyTrackingLostUsers(generatedFoundItem, object: NotifyLostUsersCallback{
+                        notifyTrackingLostUsers(context, generatedFoundItem, object: NotifyLostUsersCallback{
                             override fun onComplete(result: Boolean) {
                                 // still proceed, since this is not important to the current user
                                 // if decide not to proceed here, the uploaded image will also have to be deleted
@@ -346,6 +349,7 @@ class NewFoundViewModel : ViewModel() {
     // method to notify all lost users that are tracking and matches this newly found item
     fun notifyTrackingLostUsers(context: Context, foundItem: FoundItem, callback: NotifyLostUsersCallback){
         ItemManager.getTrackingMatchItemsFromFoundItem(
+            context,
             foundItem,
             object: ItemManager.MatchLostCallback{
             override fun onComplete(result: MutableList<LostItem>?) {
