@@ -4,7 +4,6 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -13,14 +12,11 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Close
 import androidx.compose.material3.MaterialTheme
@@ -50,7 +46,6 @@ import com.example.lostandfound.FirebaseManagers.FirebaseUtility
 import com.example.lostandfound.R
 import com.example.lostandfound.ui.ViewClaim.ViewClaimActivity
 import com.example.lostandfound.ui.ViewComparison.ViewComparisonActivity
-import com.example.lostandfound.ui.ViewFound.ViewFoundActivity
 import com.example.lostandfound.ui.theme.ComposeTheme
 import com.example.lostandfound.ui.theme.Typography
 
@@ -64,7 +59,7 @@ class SearchActivity : ComponentActivity() {
 
         // load the passed lost item
         val passedItem = intent.getParcelableExtra<LostItem>(IntentExtraNames.INTENT_LOST_ID)
-        if (passedItem != null){
+        if (passedItem != null) {
             viewModel.lostItem = passedItem
         }
 
@@ -90,7 +85,11 @@ fun SearchScreen(activity: ComponentActivity, viewModel: SearchViewModel) {
             Scaffold(
                 // top toolbar
                 topBar = {
-                    BackToolbar(title = "Search Items", activity = activity, icon = Icons.Outlined.Close)
+                    BackToolbar(
+                        title = "Search Items",
+                        activity = activity,
+                        icon = Icons.Outlined.Close
+                    )
                 }
             ) { innerPadding ->
                 Column(
@@ -123,29 +122,31 @@ fun MainContent(viewModel: SearchViewModel) {
         viewModel.isLoading.value = true
 
         // load lost item data of the current user from the view model
-        viewModel.loadItems(object: Callback<Boolean> {
-            override fun onComplete(result: Boolean) {
-                viewModel.isLoading.value = false
+        viewModel.loadItems(
+            context,
+            object : Callback<Boolean> {
+                override fun onComplete(result: Boolean) {
+                    viewModel.isLoading.value = false
 
-                if (!result){
-                    // display toast message for failed data retrieval
-                    Toast.makeText(context, "Fetching data failed", Toast.LENGTH_SHORT).show()
+                    if (!result) {
+                        // display toast message for failed data retrieval
+                        Toast.makeText(context, "Fetching data failed", Toast.LENGTH_SHORT).show()
+                    }
                 }
-            }
-        })
+            })
     }
 
     // display content
-    if (!inPreview && viewModel.isLoading.value){
+    if (!inPreview && viewModel.isLoading.value) {
         CustomCenteredProgressbar()
 
     } else {
-        Column (
+        Column(
             modifier = Modifier.fillMaxWidth(),
             verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin))
-        ){
-            if (viewModel.lostItem.userID == FirebaseUtility.getUserID()){
-                TopDescription(context= context, viewModel = viewModel)
+        ) {
+            if (viewModel.lostItem.userID == FirebaseUtility.getUserID()) {
+                TopDescription(context = context, viewModel = viewModel)
             }
             MatchingItemsColumn(context = context, viewModel = viewModel)
         }
@@ -156,13 +157,13 @@ fun MainContent(viewModel: SearchViewModel) {
 fun TopDescription(
     context: Context,
     viewModel: SearchViewModel
-){
+) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
             .padding(bottom = dimensionResource(id = R.dimen.title_margin)),
         horizontalAlignment = Alignment.CenterHorizontally,
-    ){
+    ) {
         Text(
             text = "We have found "
                     + viewModel.matchedFoundItems.size.toString() + " items that matches your lost item.",
@@ -174,7 +175,7 @@ fun TopDescription(
         Spacer(modifier = Modifier.padding(dimensionResource(id = R.dimen.content_margin_half)))
 
         // display the "We will track it for you" text if the item is currently not tracking
-        if (!viewModel.lostItem.isTracking){
+        if (!viewModel.lostItem.isTracking) {
             Text(
                 text = "Don't see your item? ",
                 style = Typography.bodyMedium,
@@ -191,15 +192,23 @@ fun TopDescription(
                 textDecoration = TextDecoration.Underline,
                 modifier = Modifier.clickable {
                     viewModel.onWeWillTrackClicked(
-                        object: Callback<Boolean>{
+                        object : Callback<Boolean> {
                             override fun onComplete(result: Boolean) {
-                                if (!result){
-                                    Toast.makeText(context, "Failed to update track status", Toast.LENGTH_SHORT).show()
+                                if (!result) {
+                                    Toast.makeText(
+                                        context,
+                                        "Failed to update track status",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
                                     return
                                 }
 
                                 // exit activity after doing this
-                                Toast.makeText(context, "Your lost item is now being tracked!", Toast.LENGTH_SHORT).show()
+                                Toast.makeText(
+                                    context,
+                                    "Your lost item is now being tracked!",
+                                    Toast.LENGTH_SHORT
+                                ).show()
                                 (context as Activity).finish()
                             }
                         }
@@ -214,20 +223,20 @@ fun TopDescription(
 fun MatchingItemsColumn(
     context: Context,
     viewModel: SearchViewModel
-){
+) {
     // if there are no data, display message
-    if (viewModel.matchedFoundItems.size == 0){
+    if (viewModel.matchedFoundItems.size == 0) {
         Box(
             modifier = Modifier.padding(horizontal = dimensionResource(id = R.dimen.title_margin))
-        ){
+        ) {
             CustomCenterText(text = "Unfortunately we did not find any matches for your item. Perhaps it has not been found yet?")
         }
 
     } else {
         // for each data, display it as a preview
-        LazyColumn (
+        LazyColumn(
             verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.title_margin))
-        ){
+        ) {
             items(
                 viewModel.matchedFoundItems
 
@@ -237,11 +246,11 @@ fun MatchingItemsColumn(
                 // else if lost item status = 1 and the found item is claimed, then the user can view claim
                 // else, the user can only view the item
                 var displayedButtonText = "View"
-                if (viewModel.lostItem.userID == FirebaseUtility.getUserID()){
-                    if (viewModel.lostItem.status == 0){
+                if (viewModel.lostItem.userID == FirebaseUtility.getUserID()) {
+                    if (viewModel.lostItem.status == 0) {
                         displayedButtonText = "Claim"
 
-                    } else if (viewModel.claimedItem.foundItemID == foundItemData.itemID){
+                    } else if (viewModel.claimedItem.foundItemID == foundItemData.itemID) {
                         displayedButtonText = "View claim"
 
                     }
@@ -251,7 +260,7 @@ fun MatchingItemsColumn(
                     data = foundItemData,
                     onViewButtonClicked = {
                         // if the displayed button is view claim, redirect to view claim activity
-                        if (displayedButtonText == "View claim"){
+                        if (displayedButtonText == "View claim") {
                             // redirect to view comparison activity otherwise
                             val intent = Intent(context, ViewClaimActivity::class.java)
 
