@@ -29,7 +29,7 @@ interface PredictCallback{
 
 class ImageClassifier (private val context: Context){
     val model = Siamesemodel224.newInstance(context)
-    val imageSize = 224
+    private val imageSize = 224
 
     private fun predictBitmap(image1: Bitmap, image2: Bitmap): Float{
 

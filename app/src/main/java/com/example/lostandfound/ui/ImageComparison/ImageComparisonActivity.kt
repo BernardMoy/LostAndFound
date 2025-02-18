@@ -232,8 +232,12 @@ fun CompareButton(context: Context, viewModel: ImageComparisonViewModel){
                 override fun onComplete(distance: Float) {
                     viewModel.isLoading.value = false
                     viewModel.distance.value = distance
+
+                    // after the prediction is complete, close the model
+                    imageClassifier.close()
                 }
             })
+
         }
     )
 

@@ -401,7 +401,7 @@ fun ItemDetails(viewModel: ViewLostViewModel) {
         // brand (Optional)
         CustomEditText(
             fieldLabel = "Brand",
-            fieldContent = if (viewModel.itemData.brand.isNotEmpty()) viewModel.itemData.brand else "Not provided",
+            fieldContent = if (viewModel.itemData.brand.isNotEmpty()) viewModel.itemData.brand else "(Not provided)",
             leftIcon = Icons.Outlined.Title,
             isEditable = false
         )
@@ -410,7 +410,7 @@ fun ItemDetails(viewModel: ViewLostViewModel) {
         // description (Optional)
         CustomEditText(
             fieldLabel = "Description",
-            fieldContent = if (viewModel.itemData.description.isNotEmpty()) viewModel.itemData.description else "Not provided",
+            fieldContent = if (viewModel.itemData.description.isNotEmpty()) viewModel.itemData.description else "(Not provided)",
             leftIcon = Icons.Outlined.Description,
             isEditable = false
         )
