@@ -282,7 +282,7 @@ fun Reference(
                 )
             }
         )
-
+        /*
         CustomComparisonField(
             centerLabel = {
 
@@ -302,6 +302,8 @@ fun Reference(
                 )
             }
         )
+
+         */
     }
 }
 
@@ -396,8 +398,8 @@ fun ItemDetails(viewModel: ViewClaimViewModel) {
         // category and subcategory
         CustomComparisonTextField(
             centerLabel = "Category",
-            contentLeft = viewModel.lostItemData.category + ", " + viewModel.lostItemData.subCategory,
-            contentRight = viewModel.foundItemData.category + ", " + viewModel.foundItemData.subCategory,
+            contentLeft = viewModel.lostItemData.subCategory,
+            contentRight = viewModel.foundItemData.subCategory,
             icon = Icons.Outlined.Folder
         )
         HorizontalDivider(thickness = 1.dp)
@@ -412,7 +414,6 @@ fun ItemDetails(viewModel: ViewClaimViewModel) {
         HorizontalDivider(thickness = 1.dp)
 
         // color
-
         CustomComparisonField(
             centerLabel = {
                 Row (
@@ -501,20 +502,23 @@ fun ItemDetails(viewModel: ViewClaimViewModel) {
         // brand (Optional)
         CustomComparisonTextField(
             centerLabel = "Brand",
-            contentLeft = viewModel.lostItemData.brand.ifEmpty { "Unknown" },
-            contentRight = viewModel.foundItemData.brand.ifEmpty { "Unknown" },
+            contentLeft = viewModel.lostItemData.brand.ifEmpty { "(Unknown)" },
+            contentRight = viewModel.foundItemData.brand.ifEmpty { "(Unknown)" },
             icon = Icons.Outlined.Title
         )
         HorizontalDivider(thickness = 1.dp)
 
         // description (Optional)
+        /*
         CustomComparisonTextField(
             centerLabel = "Description",
-            contentLeft = viewModel.lostItemData.description.ifEmpty { "Unknown" },
-            contentRight = viewModel.foundItemData.description.ifEmpty { "Unknown" },
+            contentLeft = viewModel.lostItemData.description.ifEmpty { "(Unknown)" },
+            contentRight = viewModel.foundItemData.description.ifEmpty { "(Unknown)" },
             icon = Icons.Outlined.Description
         )
         HorizontalDivider(thickness = 1.dp)
+
+         */
     }
 }
 
