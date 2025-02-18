@@ -22,7 +22,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.ArrowForward
 import androidx.compose.material.icons.filled.Circle
 import androidx.compose.material.icons.outlined.QuestionMark
-import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material.icons.outlined.TrackChanges
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -34,14 +33,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import coil3.compose.rememberAsyncImagePainter
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
@@ -142,42 +139,17 @@ fun CustomLostItemPreview(
                     style = Typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onPrimaryContainer,
                     fontWeight = FontWeight.Bold,
+                    modifier = Modifier.weight(1f)
                 )
 
+                /*
                 Text(
                     text = "#" + data.itemID,
                     style = Typography.bodyMedium,
                     color = Color.Gray
                 )
-            }
 
-
-
-            Row(
-            ) {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin_half)),
-                    modifier = Modifier.weight(1f)
-                ){
-                    Icon(
-                        imageVector = Icons.Filled.Circle,
-                        tint = colorResource(
-                            id = statusColor[data.status] ?: R.color.status0
-                        ),
-                        contentDescription = "Status of item",
-                        modifier = Modifier.width(dimensionResource(id = R.dimen.content_margin))
-                    )
-
-                    Text(
-                        text = "Status: " + lostStatusText[data.status],
-                        style = Typography.bodyMedium,
-                        color = colorResource(
-                            id = statusColor[data.status] ?: R.color.status0
-                        ),
-                        fontWeight = FontWeight.Bold,
-                    )
-                }
+                 */
 
                 // tracking data is only shown for lost items with status = 0 or 1
                 if (data.status == 0 || data.status == 1){
@@ -199,6 +171,35 @@ fun CustomLostItemPreview(
                             fontWeight = FontWeight.Bold,
                         )
                     }
+                }
+            }
+
+
+
+            Row(
+            ) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin_half)),
+                    modifier = Modifier.weight(1f)
+                ){
+                    Icon(
+                        imageVector = Icons.Filled.Circle,
+                        tint = colorResource(
+                            id = statusColor[data.status] ?: R.color.status0
+                        ),
+                        contentDescription = "Status of item",
+                        modifier = Modifier.width(dimensionResource(id = R.dimen.content_margin))
+                    )
+
+                    Text(
+                        text = lostStatusText[data.status] ?: "Unknown status",
+                        style = Typography.bodyMedium,
+                        color = colorResource(
+                            id = statusColor[data.status] ?: R.color.status0
+                        ),
+                        fontWeight = FontWeight.Bold,
+                    )
                 }
             }
 
@@ -240,7 +241,7 @@ fun CustomLostItemPreview(
 
                     // category
                     Text(
-                        text = "Category: " + data.category + ", " + data.subCategory,
+                        text = "Category: " + data.subCategory,
                         style = Typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onBackground
                     )
@@ -414,12 +415,14 @@ fun CustomFoundItemPreview(
                     color = MaterialTheme.colorScheme.onPrimaryContainer,
                     fontWeight = FontWeight.Bold,
                 )
-
+                /*
                 Text(
                     text = "#" + data.itemID,
                     style = Typography.bodyMedium,
                     color = Color.Gray
                 )
+
+                 */
             }
 
 
@@ -438,7 +441,7 @@ fun CustomFoundItemPreview(
                 )
 
                 Text(
-                    text = "Status: " + foundStatusText[data.status],
+                    text = foundStatusText[data.status] ?: "Unknown status",
                     style = Typography.bodyMedium,
                     color = colorResource(
                         id = statusColor[data.status] ?: R.color.status0
@@ -488,8 +491,7 @@ fun CustomFoundItemPreview(
 
                     // category
                     Text(
-                        text = "Category: " + data.category
-                                + ", " + data.subCategory,
+                        text = "Category: " + data.subCategory,
                         style = Typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onBackground
                     )
