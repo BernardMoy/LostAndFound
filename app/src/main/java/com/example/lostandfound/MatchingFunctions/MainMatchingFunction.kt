@@ -7,8 +7,8 @@ import com.example.lostandfound.Data.LostItem
 // given a lost item and a found item, determine whether they are matched
 /*
     Preconditions are performed in the initial db query:
-    1. Lost item user ID != Found item user ID
-    2. Lost date - found date <= 7 days (Within a week)
+    1. Lost item user ID != Found item user ID                <-- Implemented in the firebase query
+    2. Lost date - found date <= 7 days (Within a week)       <-- Implemented here as firebase don't support this
  */
 fun isMatch(
     context: Context,
@@ -16,6 +16,10 @@ fun isMatch(
     foundItem: FoundItem
 
 ): Boolean{
+    // only retrieve items with lost time - found time <= 7 days (604800s)
+    if (lostItem.dateTime - foundItem.dateTime > 604800){
+        return false
+    }
     // return true if the weighted sum >= 1.5 (Each weight is from 0 to 3)
     return getMatchingScore(context = context, lostItem = lostItem, foundItem = foundItem) >= 1.5
 }

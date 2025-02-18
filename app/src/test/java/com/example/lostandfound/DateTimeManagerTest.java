@@ -62,6 +62,6 @@ public class DateTimeManagerTest {
     @Test
     public void testGetChatTimeDescription(){
         long currentEpoch = getCurrentEpochTime();
-        assertEquals("A day ago", DateTimeManager.getChatTimeDescription(currentEpoch - 86400*1-300));
+        assertEquals("a day ago", DateTimeManager.getChatTimeDescription(currentEpoch - 86400*1-300));
     }
 }
