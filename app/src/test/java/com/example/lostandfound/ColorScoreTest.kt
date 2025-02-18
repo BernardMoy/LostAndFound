@@ -9,27 +9,27 @@ class ColorScoreTest {
     @Test
     fun testGetColorScoreSame(){
         assert(
-            getColorScore(listOf("Red", "Green", "Blue"), listOf("Green", "Blue", "Red")) == 3
+            getColorScore(listOf("Red", "Green", "Blue"), listOf("Green", "Blue", "Red")) == 3.0
         )
     }
 
     @Test
     fun testGetColorScoreOneIsTheSubsetOfTheOther(){
         assert(
-            getColorScore(listOf("Red", "Green", "Blue"), listOf("Red")) == 3
+            getColorScore(listOf("Red", "Green", "Blue"), listOf("Red")) == 3.0
         )
     }
 
     @Test
     fun testGetColorScoreHavePenalty(){
         assert(
-            getColorScore(listOf("Red", "Green", "Blue"), listOf("Yellow")) == 0
+            getColorScore(listOf("Red", "Green", "Blue"), listOf("Yellow")) == 0.0
         )
         assert(
-            getColorScore(listOf("Red", "Green", "Blue"), listOf("Red", "Green", "Yellow")) == 2
+            getColorScore(listOf("Red", "Green", "Blue"), listOf("Red", "Green", "Yellow")) == 2.0
         )
         assert(
-            getColorScore(listOf("Red", "Green", "Blue"), listOf("Red", "Purple", "Yellow")) == 1
+            getColorScore(listOf("Red", "Green", "Blue"), listOf("Red", "Purple", "Yellow")) == 1.0
         )
     }
 }

@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -265,7 +266,6 @@ fun MatchingItemsColumn(
                     onViewButtonClicked = {
                         // if the displayed button is view claim, redirect to view claim activity
                         if (displayedButtonText == "View claim") {
-                            // redirect to view comparison activity otherwise
                             val intent = Intent(context, ViewClaimActivity::class.java)
 
                             // pass the claim of lost item
@@ -294,6 +294,8 @@ fun MatchingItemsColumn(
                                 IntentExtraNames.INTENT_CLAIM_ITEM,
                                 viewModel.claimedItem
                             )
+
+                            Log.d("ITEM INFO", scoreData.toString())
                             context.startActivity(intent)
                         }
                     },
