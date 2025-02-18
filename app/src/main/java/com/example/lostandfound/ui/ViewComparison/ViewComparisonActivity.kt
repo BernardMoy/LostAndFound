@@ -181,6 +181,7 @@ fun MainContent(viewModel: ViewComparisonViewModel) {
             Status(viewModel = viewModel)
             ItemImage(viewModel = viewModel)
             ItemDetails(viewModel = viewModel)
+            DescriptionData(context = context, viewModel = viewModel)
             LocationData(context = context, viewModel = viewModel)
             SecurityQuestion(viewModel = viewModel)
             UserData(context = context, viewModel = viewModel)
@@ -239,6 +240,7 @@ fun Reference(
                 )
             }
         )
+        /*
         CustomComparisonField(
             centerLabel = {
 
@@ -260,6 +262,8 @@ fun Reference(
                 )
             }
         )
+
+         */
     }
 }
 
@@ -360,10 +364,11 @@ fun ItemDetails(viewModel: ViewComparisonViewModel){
         HorizontalDivider(thickness = 1.dp)
 
         // category and subcategory
+        // Currently, display subcategory only
         CustomComparisonTextField(
             centerLabel = "Category",
-            contentLeft = viewModel.lostItemData.category + ", " + viewModel.lostItemData.subCategory,
-            contentRight = viewModel.foundItemData.category + ", " + viewModel.foundItemData.subCategory,
+            contentLeft = viewModel.lostItemData.subCategory,
+            contentRight = viewModel.foundItemData.subCategory,
             icon = Icons.Outlined.Folder
         )
         HorizontalDivider(thickness = 1.dp)
@@ -466,22 +471,50 @@ fun ItemDetails(viewModel: ViewComparisonViewModel){
         // brand (Optional)
         CustomComparisonTextField(
             centerLabel = "Brand",
-            contentLeft = viewModel.lostItemData.brand.ifEmpty { "Unknown" },
-            contentRight = viewModel.foundItemData.brand.ifEmpty { "Unknown" },
+            contentLeft = viewModel.lostItemData.brand.ifEmpty { "(Unknown)" },
+            contentRight = viewModel.foundItemData.brand.ifEmpty { "(Unknown)" },
             icon = Icons.Outlined.Title
         )
         HorizontalDivider(thickness = 1.dp)
 
         // description (Optional)
+        /*
         CustomComparisonTextField(
             centerLabel = "Description",
-            contentLeft = viewModel.lostItemData.description.ifEmpty { "Unknown" },
-            contentRight = viewModel.foundItemData.description.ifEmpty { "Unknown" },
+            contentLeft = viewModel.lostItemData.description.ifEmpty { "(Unknown)" },
+            contentRight = viewModel.foundItemData.description.ifEmpty { "(Unknown)" },
             icon = Icons.Outlined.Description
         )
         HorizontalDivider(thickness = 1.dp)
+
+         */
     }
 }
+
+@Composable
+fun DescriptionData(
+    context: Context,
+    viewModel: ViewComparisonViewModel
+){
+    Column{
+        CustomGrayTitle(text = "Description of the Found Item")
+        if (viewModel.foundItemData.description.isEmpty()){
+            CustomEditText(
+                fieldLabel = "Description",
+                fieldContent = viewModel.foundItemData.description,
+                isEditable = false,
+                leftIcon = Icons.Outlined.Description
+            )
+        } else {
+            Text(
+                text = "(Description is not provided)",
+                color = Color.Gray,
+                style = Typography.bodyMedium
+            )
+        }
+    }
+}
+
 
 @Composable
 fun LocationData(
