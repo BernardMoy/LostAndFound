@@ -44,9 +44,6 @@ import com.example.lostandfound.CustomElements.CustomFoundItemPreview
 import com.example.lostandfound.Data.IntentExtraNames
 import com.example.lostandfound.Data.LostItem
 import com.example.lostandfound.FirebaseManagers.FirebaseUtility
-import com.example.lostandfound.MatchingFunctions.isDetailsCloseMatch
-import com.example.lostandfound.MatchingFunctions.isImageCloseMatch
-import com.example.lostandfound.MatchingFunctions.isLocationCloseMatch
 import com.example.lostandfound.R
 import com.example.lostandfound.ui.ViewClaim.ViewClaimActivity
 import com.example.lostandfound.ui.ViewComparison.ViewComparisonActivity
@@ -251,9 +248,9 @@ fun MatchingItemsColumn(
                 val scoreData = foundItemAndScore.second
 
                 // determine if the image, details and location are considered "Close match"
-                val imageCloseMatch = isImageCloseMatch(scoreData)
-                val detailsCloseMatch = isDetailsCloseMatch(scoreData)
-                val locationCloseMatch = isLocationCloseMatch(scoreData)
+                val imageCloseMatch = scoreData.isImageCloseMatch()
+                val detailsCloseMatch = scoreData.isDetailsCloseMatch()
+                val locationCloseMatch = scoreData.isLocationCloseMatch()
 
                 // if lost item status = 0, then the user can claim item
                 // else if lost item status = 1 and the found item is claimed, then the user can view claim

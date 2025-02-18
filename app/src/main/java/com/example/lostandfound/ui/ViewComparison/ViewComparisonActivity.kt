@@ -10,14 +10,17 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
@@ -47,6 +50,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalInspectionMode
@@ -86,7 +90,6 @@ import com.example.lostandfound.Utility.DateTimeManager
 import com.example.lostandfound.Utility.ErrorCallback
 import com.example.lostandfound.Utility.ImageManager
 import com.example.lostandfound.Utility.LocationManager
-import com.example.lostandfound.ui.ChatInbox.ChatInboxActivity
 import com.example.lostandfound.ui.Done.DoneActivity
 import com.example.lostandfound.ui.ViewFound.ViewFoundActivity
 import com.example.lostandfound.ui.ViewLost.ViewLostActivity
@@ -105,13 +108,13 @@ class ViewComparisonActivity : ComponentActivity() {
         val passedLostItem = intent.getParcelableExtra<LostItem>(IntentExtraNames.INTENT_LOST_ID)
         val passedFoundItem = intent.getParcelableExtra<FoundItem>(IntentExtraNames.INTENT_FOUND_ID)
         val passedClaimItem = intent.getParcelableExtra<Claim>(IntentExtraNames.INTENT_CLAIM_ITEM)
-        if (passedLostItem != null){
+        if (passedLostItem != null) {
             viewModel.lostItemData = passedLostItem
         }
-        if (passedFoundItem != null){
+        if (passedFoundItem != null) {
             viewModel.foundItemData = passedFoundItem
         }
-        if (passedClaimItem != null){
+        if (passedClaimItem != null) {
             viewModel.claim = passedClaimItem
         }
 
@@ -146,7 +149,7 @@ fun ViewComparisonScreen(activity: ComponentActivity, viewModel: ViewComparisonV
                         .padding(paddingValues = innerPadding)
                         .padding(dimensionResource(id = R.dimen.title_margin))
                         .verticalScroll(rememberScrollState()),   // make screen scrollable
-                    ) {
+                ) {
                     // content goes here
                     MainContent(viewModel = viewModel)
                 }
@@ -176,7 +179,7 @@ fun MainContent(viewModel: ViewComparisonViewModel) {
     } else {
         Column(
             verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin))
-        ){
+        ) {
             Reference(context = context, viewModel = viewModel)
             Status(viewModel = viewModel)
             ItemImage(viewModel = viewModel)
@@ -195,11 +198,11 @@ fun MainContent(viewModel: ViewComparisonViewModel) {
 fun Reference(
     context: Context,
     viewModel: ViewComparisonViewModel
-){
+) {
     Column(
         modifier = Modifier.fillMaxWidth(),
         verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin))
-    ){
+    ) {
         CustomComparisonField(
             centerLabel = {},
 
@@ -304,54 +307,56 @@ fun Status(viewModel: ViewComparisonViewModel) {
 
 @OptIn(ExperimentalGlideComposeApi::class)
 @Composable
-fun ItemImage(viewModel: ViewComparisonViewModel){
-    Row(
-        modifier = Modifier
-            .fillMaxWidth(),
-        verticalAlignment = Alignment.CenterVertically,
-    ){
-        CustomComparisonField(
-            contentLeft = {
-                val displayedLostImage = if(viewModel.lostItemData.image.isEmpty()) ImageManager.PLACEHOLDER_IMAGE_STRING else viewModel.lostItemData.image
-                // image of the item
-                GlideImage(
-                    model = Uri.parse(displayedLostImage),
-                    contentDescription = "Lost item image",
-                    modifier = Modifier
-                        .weight(3f)
-                        .padding(horizontal = dimensionResource(id = R.dimen.content_margin_half)),
-                    alignment = Alignment.Center
-                )
-            },
-            contentRight = {
-                val displayedFoundImage = if (viewModel.foundItemData.image.isEmpty()) ImageManager.PLACEHOLDER_IMAGE_STRING else viewModel.foundItemData.image
-                GlideImage(
-                    model = Uri.parse(displayedFoundImage),
-                    contentDescription = "Found item image",
-                    modifier = Modifier
-                        .weight(3f)
-                        .padding(horizontal = dimensionResource(id = R.dimen.content_margin_half)),
-                    alignment = Alignment.Center
-                )
-            },
-            centerLabel = {
-                Text(
-                    text = "Similarity\n" + "20%",
-                    style = Typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.primary,
-                    fontWeight = FontWeight.Bold,
-                    textAlign = TextAlign.Center
-                )
-            }
-        )
-    }
+fun ItemImage(viewModel: ViewComparisonViewModel) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            CustomComparisonField(
+                contentLeft = {
+                    val displayedLostImage =
+                        if (viewModel.lostItemData.image.isEmpty()) ImageManager.PLACEHOLDER_IMAGE_STRING else viewModel.lostItemData.image
+                    // image of the item
+                    GlideImage(
+                        model = Uri.parse(displayedLostImage),
+                        contentDescription = "Lost item image",
+                        modifier = Modifier
+                            .weight(3f)
+                            .padding(horizontal = dimensionResource(id = R.dimen.content_margin_half)),
+                        alignment = Alignment.Center
+                    )
+                },
+                contentRight = {
+                    val displayedFoundImage =
+                        if (viewModel.foundItemData.image.isEmpty()) ImageManager.PLACEHOLDER_IMAGE_STRING else viewModel.foundItemData.image
+                    GlideImage(
+                        model = Uri.parse(displayedFoundImage),
+                        contentDescription = "Found item image",
+                        modifier = Modifier
+                            .weight(3f)
+                            .padding(horizontal = dimensionResource(id = R.dimen.content_margin_half)),
+                        alignment = Alignment.Center
+                    )
+                },
+                centerLabel = {
+                    Text(
+                        text = "Overall Similarity\n" + "20%",
+                        style = Typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onPrimary,
+                        fontWeight = FontWeight.Bold,
+                        textAlign = TextAlign.Center
+                    )
+                }
+            )
+        }
 }
 
 @Composable
-fun ItemDetails(viewModel: ViewComparisonViewModel){
+fun ItemDetails(viewModel: ViewComparisonViewModel) {
     Column(
         verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin))
-    ){
+    ) {
         CustomGrayTitle(text = "Item details")
 
         // Name of item
@@ -373,22 +378,13 @@ fun ItemDetails(viewModel: ViewComparisonViewModel){
         )
         HorizontalDivider(thickness = 1.dp)
 
-        // date and time
-        CustomComparisonTextField(
-            centerLabel = "Time",
-            contentLeft = DateTimeManager.dateTimeToString(viewModel.lostItemData.dateTime),
-            contentRight = DateTimeManager.dateTimeToString(viewModel.foundItemData.dateTime),
-            icon = Icons.Outlined.CalendarMonth
-        )
-        HorizontalDivider(thickness = 1.dp)
-
         // color
         CustomComparisonField(
             centerLabel = {
-                Row (
+                Row(
                     horizontalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin)),
                     verticalAlignment = Alignment.CenterVertically
-                ){
+                ) {
                     Icon(
                         imageVector = Icons.Outlined.Palette,
                         contentDescription = "color",
@@ -404,27 +400,31 @@ fun ItemDetails(viewModel: ViewComparisonViewModel){
             },
             contentLeft = {
                 val colorText = viewModel.lostItemData.color.joinToString(", ")
-                Column (
+                Column(
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin_half))
-                ){
+                ) {
                     Text(
                         text = colorText,
                         style = Typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onBackground,
                         textAlign = TextAlign.Center
-                        )
+                    )
                     Row(
                         horizontalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin_half))
-                    ){
+                    ) {
                         // display colors in circles
-                        for (colorString in viewModel.lostItemData.color){
+                        for (colorString in viewModel.lostItemData.color) {
                             Icon(
                                 imageVector = Icons.Filled.Circle,
                                 contentDescription = "Color",
-                                modifier = Modifier.size(dimensionResource(id = R.dimen.content_margin))
+                                modifier = Modifier
+                                    .size(dimensionResource(id = R.dimen.content_margin))
                                     .border(
-                                        border = BorderStroke(1.dp, MaterialTheme.colorScheme.onBackground),
+                                        border = BorderStroke(
+                                            1.dp,
+                                            MaterialTheme.colorScheme.onBackground
+                                        ),
                                         shape = CircleShape
                                     ),
                                 tint = stringToColor[colorString] ?: Color.Gray
@@ -435,10 +435,10 @@ fun ItemDetails(viewModel: ViewComparisonViewModel){
             },
             contentRight = {
                 val colorText = viewModel.foundItemData.color.joinToString(", ")
-                Column (
+                Column(
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin_half))
-                ){
+                ) {
                     Text(
                         text = colorText,
                         style = Typography.bodyMedium,
@@ -447,15 +447,19 @@ fun ItemDetails(viewModel: ViewComparisonViewModel){
                     )
                     Row(
                         horizontalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin_half))
-                    ){
+                    ) {
                         // display colors in circles
-                        for (colorString in viewModel.foundItemData.color){
+                        for (colorString in viewModel.foundItemData.color) {
                             Icon(
                                 imageVector = Icons.Filled.Circle,
                                 contentDescription = "Color",
-                                modifier = Modifier.size(dimensionResource(id = R.dimen.content_margin))
+                                modifier = Modifier
+                                    .size(dimensionResource(id = R.dimen.content_margin))
                                     .border(
-                                        border = BorderStroke(1.dp, MaterialTheme.colorScheme.onBackground),
+                                        border = BorderStroke(
+                                            1.dp,
+                                            MaterialTheme.colorScheme.onBackground
+                                        ),
                                         shape = CircleShape
                                     ),
                                 tint = stringToColor[colorString] ?: Color.Gray
@@ -477,6 +481,15 @@ fun ItemDetails(viewModel: ViewComparisonViewModel){
         )
         HorizontalDivider(thickness = 1.dp)
 
+        // date and time
+        CustomComparisonTextField(
+            centerLabel = "Time",
+            contentLeft = DateTimeManager.dateTimeToString(viewModel.lostItemData.dateTime),
+            contentRight = DateTimeManager.dateTimeToString(viewModel.foundItemData.dateTime),
+            icon = Icons.Outlined.CalendarMonth
+        )
+        HorizontalDivider(thickness = 1.dp)
+
         // description (Optional)
         /*
         CustomComparisonTextField(
@@ -495,10 +508,10 @@ fun ItemDetails(viewModel: ViewComparisonViewModel){
 fun DescriptionData(
     context: Context,
     viewModel: ViewComparisonViewModel
-){
-    Column{
+) {
+    Column {
         CustomGrayTitle(text = "Description of the Found Item")
-        if (viewModel.foundItemData.description.isEmpty()){
+        if (viewModel.foundItemData.description.isNotEmpty()) {
             CustomEditText(
                 fieldLabel = "Description",
                 fieldContent = viewModel.foundItemData.description,
@@ -520,12 +533,12 @@ fun DescriptionData(
 fun LocationData(
     context: Context,
     viewModel: ViewComparisonViewModel
-){
+) {
     Column {
         CustomGrayTitle(text = "Location")
 
         // if both lost and found users did not provide a location, then display none
-        if (viewModel.lostItemData.location != null || viewModel.foundItemData.location != null){
+        if (viewModel.lostItemData.location != null || viewModel.foundItemData.location != null) {
             CustomActionText(
                 text = "View location",
                 onClick = {
@@ -544,17 +557,21 @@ fun LocationData(
     CustomViewTwoLocationsDialog(
         context = context,
         isDialogShown = viewModel.isLocationDialogShown,
-        selectedLocation1 = if (viewModel.lostItemData.location != null) LocationManager.pairToLatlng(viewModel.lostItemData.location!!) else null,
-        selectedLocation2 = if (viewModel.foundItemData.location != null) LocationManager.pairToLatlng(viewModel.foundItemData.location!!) else null
+        selectedLocation1 = if (viewModel.lostItemData.location != null) LocationManager.pairToLatlng(
+            viewModel.lostItemData.location!!
+        ) else null,
+        selectedLocation2 = if (viewModel.foundItemData.location != null) LocationManager.pairToLatlng(
+            viewModel.foundItemData.location!!
+        ) else null
     )
 }
 
 @Composable
 fun SecurityQuestion(
     viewModel: ViewComparisonViewModel
-){
+) {
     // security question - whether it exists
-    Column{
+    Column {
         CustomGrayTitle(text = "Security question")
         CustomEditText(
             fieldLabel = "Security question",
@@ -569,9 +586,8 @@ fun SecurityQuestion(
 fun UserData(
     context: Context,
     viewModel: ViewComparisonViewModel
-){
-    Column(
-    ) {
+) {
+    Column {
         CustomGrayTitle(text = "Contact user who found this item")
 
         // Name of the FOUND user as only lost users would see this screen
@@ -615,7 +631,7 @@ fun UserData(
 fun ClaimButton(
     context: Context,
     viewModel: ViewComparisonViewModel
-){
+) {
     // isloading state to display the loading animation
     var isLoading by remember { mutableStateOf(false) }
 
@@ -629,21 +645,21 @@ fun ClaimButton(
             .fillMaxWidth()
             .padding(vertical = dimensionResource(id = R.dimen.content_margin)),
         horizontalArrangement = Arrangement.Center
-    ){
+    ) {
         // if the user is the owner of lost item and also the lost item has status = 0,
         // they have the power to claim the item
 
         // display messages if the user owns the lost item
-        if (viewModel.lostItemData.userID == FirebaseUtility.getUserID()){
+        if (viewModel.lostItemData.userID == FirebaseUtility.getUserID()) {
 
             // if lost item status = 0 and the user is the owner of the lost item, they can claim
             // else if lost item status = 1 and the found item is the lost item's claimed item, display already claimed message
             // else, display they already claimed another item
 
-            if (viewModel.lostItemData.status == 0){
-                Column (
+            if (viewModel.lostItemData.status == 0) {
+                Column(
                     horizontalAlignment = Alignment.CenterHorizontally
-                ){
+                ) {
                     CustomButton(
                         text = "Claim this Item",
                         type = ButtonType.FILLED,
@@ -652,7 +668,7 @@ fun ClaimButton(
                             isLoading = true
 
                             // if there is a security question for the found item, prompt the user to enter it
-                            if (viewModel.foundItemData.securityQuestion.isNotEmpty()){
+                            if (viewModel.foundItemData.securityQuestion.isNotEmpty()) {
                                 viewModel.isSecurityQuestionDialogShown.value = true
                                 viewModel.securityQuestionInputError.value = ""
 
@@ -687,7 +703,7 @@ fun ClaimButton(
                             type = ButtonType.FILLED,
                             onClick = {
                                 // validate input
-                                if (!viewModel.validateSecurityQuestionInput()){
+                                if (!viewModel.validateSecurityQuestionInput()) {
                                     return@CustomButton
                                 }
 
@@ -710,7 +726,7 @@ fun ClaimButton(
                     errorMessage = viewModel.securityQuestionInputError
 
                 )
-            } else if (viewModel.claim.foundItemID == viewModel.foundItemData.itemID){
+            } else if (viewModel.claim.foundItemID == viewModel.foundItemData.itemID) {
                 Text(
                     text = "You have already claimed this item.",
                     style = Typography.bodyMedium,
@@ -737,11 +753,11 @@ fun ClaimButton(
 fun claimItem(
     context: Context,
     viewModel: ViewComparisonViewModel
-){
+) {
     // update statuses of the item
-    viewModel.putClaimedItems(object : ErrorCallback{
+    viewModel.putClaimedItems(object : ErrorCallback {
         override fun onComplete(error: String) {
-            if (error.isNotEmpty()){
+            if (error.isNotEmpty()) {
                 Toast.makeText(context, error, Toast.LENGTH_SHORT).show()
                 return
             }
@@ -761,16 +777,16 @@ fun claimItem(
 fun loadData(
     context: Context,
     viewModel: ViewComparisonViewModel
-){
+) {
     // is loading initially
     viewModel.isLoading.value = true
 
     // load lost item data of the current user from the view model
-    viewModel.getFoundUser(object : com.example.lostandfound.ui.ViewComparison.Callback<Boolean>{
+    viewModel.getFoundUser(object : Callback<Boolean> {
         override fun onComplete(result: Boolean) {
             viewModel.isLoading.value = false
 
-            if (!result){
+            if (!result) {
                 // display toast message for failed data retrieval
                 Toast.makeText(context, "Fetching data failed", Toast.LENGTH_SHORT).show()
             }

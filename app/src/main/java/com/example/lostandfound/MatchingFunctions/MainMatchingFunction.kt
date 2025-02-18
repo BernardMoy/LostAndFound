@@ -112,31 +112,3 @@ fun getMatchingScores(
         scoreDataCallback.onScoreCalculated(result)
     }
 }
-
-// used to determine if their images are considered close match from the scores
-// if yes it is shown as close match in the found item previews in search activity
-fun isImageCloseMatch(scoreData: ScoreData): Boolean{
-    if (scoreData.imageScore == null){
-        return false
-    }
-    else return scoreData.imageScore!! >= 1.5
-}
-
-fun isDetailsCloseMatch(scoreData: ScoreData): Boolean{
-    // only brand is nullable
-    if (scoreData.brandScore == null){
-        return scoreData.categoryScore == 3.0 && scoreData.colorScore == 3.0
-
-    } else {
-        return scoreData.categoryScore == 3.0 && scoreData.colorScore == 3.0 && scoreData.brandScore == 3.0
-    }
-}
-
-fun isLocationCloseMatch(scoreData: ScoreData): Boolean{
-    // locations are considered close if they are around <83m apart
-    // i.e. score larger than 2.5
-    if (scoreData.locationScore == null){
-        return false
-    }
-    return scoreData.locationScore!! >= 2.5
-}

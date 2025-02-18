@@ -404,15 +404,6 @@ fun ItemDetails(viewModel: ViewClaimViewModel) {
         )
         HorizontalDivider(thickness = 1.dp)
 
-        // date and time
-        CustomComparisonTextField(
-            centerLabel = "Time",
-            contentLeft = DateTimeManager.dateTimeToString(viewModel.lostItemData.dateTime),
-            contentRight = DateTimeManager.dateTimeToString(viewModel.foundItemData.dateTime),
-            icon = Icons.Outlined.CalendarMonth
-        )
-        HorizontalDivider(thickness = 1.dp)
-
         // color
         CustomComparisonField(
             centerLabel = {
@@ -505,6 +496,15 @@ fun ItemDetails(viewModel: ViewClaimViewModel) {
             contentLeft = viewModel.lostItemData.brand.ifEmpty { "(Unknown)" },
             contentRight = viewModel.foundItemData.brand.ifEmpty { "(Unknown)" },
             icon = Icons.Outlined.Title
+        )
+        HorizontalDivider(thickness = 1.dp)
+
+        // date and time
+        CustomComparisonTextField(
+            centerLabel = "Time",
+            contentLeft = DateTimeManager.dateTimeToString(viewModel.lostItemData.dateTime),
+            contentRight = DateTimeManager.dateTimeToString(viewModel.foundItemData.dateTime),
+            icon = Icons.Outlined.CalendarMonth
         )
         HorizontalDivider(thickness = 1.dp)
 
