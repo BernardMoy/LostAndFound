@@ -18,16 +18,20 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Circle
+import androidx.compose.material.icons.filled.RadioButtonChecked
 import androidx.compose.material.icons.outlined.AccountCircle
 import androidx.compose.material.icons.outlined.CalendarMonth
 import androidx.compose.material.icons.outlined.Description
@@ -80,6 +84,7 @@ import com.example.lostandfound.Data.Claim
 import com.example.lostandfound.Data.FoundItem
 import com.example.lostandfound.Data.IntentExtraNames
 import com.example.lostandfound.Data.LostItem
+import com.example.lostandfound.Data.ScoreData
 import com.example.lostandfound.Data.foundStatusText
 import com.example.lostandfound.Data.lostStatusText
 import com.example.lostandfound.Data.statusColor
@@ -108,6 +113,7 @@ class ViewComparisonActivity : ComponentActivity() {
         val passedLostItem = intent.getParcelableExtra<LostItem>(IntentExtraNames.INTENT_LOST_ID)
         val passedFoundItem = intent.getParcelableExtra<FoundItem>(IntentExtraNames.INTENT_FOUND_ID)
         val passedClaimItem = intent.getParcelableExtra<Claim>(IntentExtraNames.INTENT_CLAIM_ITEM)
+        val passedScoreData = intent.getParcelableExtra<ScoreData>(IntentExtraNames.INTENT_SCORE_DATA)
         if (passedLostItem != null) {
             viewModel.lostItemData = passedLostItem
         }
@@ -116,6 +122,9 @@ class ViewComparisonActivity : ComponentActivity() {
         }
         if (passedClaimItem != null) {
             viewModel.claim = passedClaimItem
+        }
+        if (passedScoreData != null){
+            viewModel.scoreData = passedScoreData
         }
 
         setContent {
@@ -341,9 +350,9 @@ fun ItemImage(viewModel: ViewComparisonViewModel) {
                 },
                 centerLabel = {
                     Text(
-                        text = "Overall Similarity\n" + "20%",
+                        text = "Overall Similarity\n" + (viewModel.scoreData.getOverallSimilarity()*100).toString() + "%",
                         style = Typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onPrimary,
+                        color = MaterialTheme.colorScheme.onPrimaryContainer,
                         fontWeight = FontWeight.Bold,
                         textAlign = TextAlign.Center
                     )
@@ -374,7 +383,8 @@ fun ItemDetails(viewModel: ViewComparisonViewModel) {
             centerLabel = "Category",
             contentLeft = viewModel.lostItemData.subCategory,
             contentRight = viewModel.foundItemData.subCategory,
-            icon = Icons.Outlined.Folder
+            icon = Icons.Outlined.Folder,
+            isMatch = viewModel.scoreData.isCategoryCloseMatch()
         )
         HorizontalDivider(thickness = 1.dp)
 
@@ -467,7 +477,8 @@ fun ItemDetails(viewModel: ViewComparisonViewModel) {
                         }
                     }
                 }
-            }
+            },
+            isMatch = viewModel.scoreData.isColorCloseMatch()
         )
 
         HorizontalDivider(thickness = 1.dp)
@@ -477,7 +488,8 @@ fun ItemDetails(viewModel: ViewComparisonViewModel) {
             centerLabel = "Brand",
             contentLeft = viewModel.lostItemData.brand.ifEmpty { "(Unknown)" },
             contentRight = viewModel.foundItemData.brand.ifEmpty { "(Unknown)" },
-            icon = Icons.Outlined.Title
+            icon = Icons.Outlined.Title,
+            isMatch = viewModel.scoreData.isBrandCloseMatch()   // will be false if one is null
         )
         HorizontalDivider(thickness = 1.dp)
 
@@ -551,6 +563,28 @@ fun LocationData(
                 color = Color.Gray,
                 style = Typography.bodyMedium
             )
+        }
+
+        // display the Matches logo
+        if (viewModel.scoreData.isLocationCloseMatch()){
+            Spacer(modifier = Modifier.padding(dimensionResource(R.dimen.content_margin_half)))
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin_half))
+            ) {
+                Icon(
+                    imageVector = Icons.Filled.CheckCircle,
+                    tint = colorResource(id = R.color.status2),
+                    contentDescription = "Close match",
+                    modifier = Modifier.width(dimensionResource(id = R.dimen.content_margin))
+                )
+                Text(
+                    text = "Close match",
+                    style = Typography.bodyMedium,
+                    color = colorResource(id = R.color.status2),
+                    fontWeight = FontWeight.Bold,
+                )
+            }
         }
     }
 

@@ -7,6 +7,7 @@ import com.example.lostandfound.Data.Claim
 import com.example.lostandfound.Data.FirebaseNames
 import com.example.lostandfound.Data.FoundItem
 import com.example.lostandfound.Data.LostItem
+import com.example.lostandfound.Data.ScoreData
 import com.example.lostandfound.Data.User
 import com.example.lostandfound.FirebaseManagers.FirebaseUtility
 import com.example.lostandfound.FirebaseManagers.FirestoreManager
@@ -42,6 +43,9 @@ class ViewComparisonViewModel : ViewModel() {
 
     // username used to display the found user, only that is needed
     var foundUser = User()
+
+    // score data when navigated from search activity
+    var scoreData = ScoreData()
 
     // function to get user name of found item
     fun getFoundUser(callback: Callback<Boolean>) {
