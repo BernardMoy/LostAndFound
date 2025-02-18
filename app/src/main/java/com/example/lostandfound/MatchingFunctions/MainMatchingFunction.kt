@@ -6,6 +6,11 @@ import com.example.lostandfound.Data.LostItem
 import com.example.lostandfound.Data.ScoreData
 import com.google.android.material.color.utilities.Score
 
+
+interface ScoreDataCallback{
+    fun onScoreCalculated(scoreData: ScoreData)
+}
+
 /*
 The following attributes will be considered (From top to bottom of the app UI)
 
@@ -41,12 +46,16 @@ Preconditions are performed in the initial db query:
 fun getMatchingScores(
     context: Context,     // used for tflite model classification
     lostItem: LostItem,
-    foundItem: FoundItem
-): ScoreData {
+    foundItem: FoundItem,
+    scoreDataCallback: ScoreDataCallback
+){
     // only retrieve items with lost time - found time <= 7 days (604800s)
     // if they fail this condition, return score of all 0.0 (Will definitely not be greater than threshold and not considered)
     if (lostItem.dateTime - foundItem.dateTime > 604800){
-        return ScoreData(overallScore = 0.0)
+        scoreDataCallback.onScoreCalculated(
+            ScoreData(overallScore = 0.0)
+        )
+        return
     }
 
     // instantiate result
@@ -67,14 +76,6 @@ fun getMatchingScores(
     weights += WEIGHT_COLOR
     result.colorScore = scoreColor
 
-    // check if calculate image
-    if (lostItem.image.isNotEmpty() && foundItem.image.isNotEmpty()){
-        val scoreImage = getImageScore(context, lostItem.image, foundItem.image)
-        sum += scoreImage* WEIGHT_IMAGE
-        weights += WEIGHT_IMAGE
-        result.imageScore = scoreImage
-    }
-
     // check if calculate brand
     if (lostItem.brand.isNotEmpty() && foundItem.brand.isNotEmpty()){
         val scoreBrand = getBrandScore(lostItem.brand, foundItem.brand)
@@ -91,9 +92,51 @@ fun getMatchingScores(
         result.locationScore = scoreLocation
     }
 
-    // also add the OVERALL SCORE AT THE END
-    result.overallScore = sum / weights
+    // check if calculate image
+    if (lostItem.image.isNotEmpty() && foundItem.image.isNotEmpty()){
+        getImageScore(context, lostItem.image, foundItem.image, object: ImageScoreCallback{
+            override fun onScoreCalculated(score: Double) {
+                sum += score* WEIGHT_IMAGE
+                weights += WEIGHT_IMAGE
+                result.imageScore = score
 
-    // return the final map
-    return result
+                // also add the OVERALL SCORE AT THE END
+                result.overallScore = sum / weights
+                scoreDataCallback.onScoreCalculated(result)
+            }
+        })
+
+    } else {
+        // also add the OVERALL SCORE AT THE END
+        result.overallScore = sum / weights
+        scoreDataCallback.onScoreCalculated(result)
+    }
+}
+
+// used to determine if their images are considered close match from the scores
+// if yes it is shown as close match in the found item previews in search activity
+fun isImageCloseMatch(scoreData: ScoreData): Boolean{
+    if (scoreData.imageScore == null){
+        return false
+    }
+    else return scoreData.imageScore!! >= 1.5
+}
+
+fun isDetailsCloseMatch(scoreData: ScoreData): Boolean{
+    // only brand is nullable
+    if (scoreData.brandScore == null){
+        return scoreData.categoryScore == 3.0 && scoreData.colorScore == 3.0
+
+    } else {
+        return scoreData.categoryScore == 3.0 && scoreData.colorScore == 3.0 && scoreData.brandScore == 3.0
+    }
+}
+
+fun isLocationCloseMatch(scoreData: ScoreData): Boolean{
+    // locations are considered close if they are around <83m apart
+    // i.e. score larger than 2.5
+    if (scoreData.locationScore == null){
+        return false
+    }
+    return scoreData.locationScore!! >= 2.5
 }

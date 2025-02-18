@@ -44,8 +44,10 @@ import com.example.lostandfound.CustomElements.BackToolbar
 import com.example.lostandfound.CustomElements.ButtonType
 import com.example.lostandfound.CustomElements.CustomActionText
 import com.example.lostandfound.CustomElements.CustomButton
+import com.example.lostandfound.CustomElements.CustomProgressBar
 import com.example.lostandfound.R
 import com.example.lostandfound.TFLiteManager.ImageClassifier
+import com.example.lostandfound.TFLiteManager.PredictCallback
 import com.example.lostandfound.ui.theme.ComposeTheme
 import com.example.lostandfound.ui.theme.Typography
 
@@ -214,17 +216,30 @@ fun CompareButton(context: Context, viewModel: ImageComparisonViewModel){
     CustomButton(
         text = "Compare",
         type = ButtonType.FILLED,
+        enabled = !viewModel.isLoading.value,
         onClick = {
             // create image classifier instance
             if (viewModel.image1.value == null || viewModel.image2.value == null){
                 Toast.makeText(context, "One of the images are null", Toast.LENGTH_SHORT).show()
                 return@CustomButton
             }
+
+            viewModel.isLoading.value = true
             val imageClassifier = ImageClassifier(context)
-            val predicted_distance: Float = imageClassifier.predict(viewModel.image1.value!!, viewModel.image2.value!!)
-            viewModel.distance.value = predicted_distance
+
+            // predict the distance
+            imageClassifier.predict(viewModel.image1.value!!, viewModel.image2.value!!, object: PredictCallback{
+                override fun onComplete(distance: Float) {
+                    viewModel.isLoading.value = false
+                    viewModel.distance.value = distance
+                }
+            })
         }
     )
+
+    if (viewModel.isLoading.value){
+        CustomProgressBar()
+    }
 }
 
 @Composable

@@ -3,16 +3,35 @@ package com.example.lostandfound.MatchingFunctions
 import android.content.Context
 import android.net.Uri
 import com.example.lostandfound.TFLiteManager.ImageClassifier
+import com.example.lostandfound.TFLiteManager.PredictCallback
 import kotlin.math.pow
 
-fun getImageScore(context: Context, lostImage: String, foundImage: String): Double {
+interface ImageScoreCallback {
+    fun onScoreCalculated(score: Double)
+}
+
+fun getImageScore(
+    context: Context,
+    lostImage: String,
+    foundImage: String,
+    callback: ImageScoreCallback
+) {
     // get the contrastive loss distance
-    val classifier: ImageClassifier = ImageClassifier(context)
-    val distance = classifier.predict(
+    val classifier = ImageClassifier(context)
+    classifier.predict(
         Uri.parse(lostImage),
-        Uri.parse(foundImage)
+        Uri.parse(foundImage),
+        object : PredictCallback {
+            override fun onComplete(distance: Float) {
+                // turn the distance into score
+                val score = getScoreFromDistance(distance.toDouble())
+
+                // return as callback
+                callback.onScoreCalculated(score)
+            }
+        }
     )
-    return getScoreFromDistance(distance.toDouble())
+
 }
 
 fun getScoreFromDistance(d: Double, N: Double = 2.2): Double {

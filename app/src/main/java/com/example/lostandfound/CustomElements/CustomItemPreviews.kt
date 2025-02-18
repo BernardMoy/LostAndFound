@@ -3,6 +3,7 @@ package com.example.lostandfound.CustomElements
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -21,6 +22,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.ArrowForward
 import androidx.compose.material.icons.filled.Circle
+import androidx.compose.material.icons.filled.RadioButtonChecked
 import androidx.compose.material.icons.outlined.QuestionMark
 import androidx.compose.material.icons.outlined.TrackChanges
 import androidx.compose.material3.Icon
@@ -386,6 +388,9 @@ fun CustomFoundItemPreview(
     data: FoundItem,
     viewButtonText: String,
     onViewButtonClicked: () -> Unit = {},
+    isImageCloseMatch: Boolean = false,    // may be true when viewing the found items from SEARCHING them.
+    isDetailsCloseMatch: Boolean = false,
+    isLocationCloseMatch: Boolean = false
 ) {
     val isOwner: Boolean = FirebaseUtility.getUserID() == data.userID
 
@@ -502,6 +507,69 @@ fun CustomFoundItemPreview(
                         style = Typography.bodyMedium,
                         color = Color.Gray
                     )
+
+                    // if image is close match, display this
+                    if (isImageCloseMatch){
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin_half))
+                        ) {
+                            Icon(
+                                imageVector = Icons.Filled.RadioButtonChecked,
+                                tint = colorResource(id = R.color.status2),
+                                contentDescription = "Close match",
+                                modifier = Modifier.width(dimensionResource(id = R.dimen.content_margin))
+                            )
+                            Text(
+                                text = "Close image match",
+                                style = Typography.bodyMedium,
+                                color = colorResource(id = R.color.status2),
+                                fontWeight = FontWeight.Bold,
+                            )
+                        }
+                    }
+
+                    // if details are close match, display this
+                    if (isDetailsCloseMatch){
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin_half))
+                        ) {
+                            Icon(
+                                imageVector = Icons.Filled.RadioButtonChecked,
+                                tint = colorResource(id = R.color.status2),
+                                contentDescription = "Close match",
+                                modifier = Modifier.width(dimensionResource(id = R.dimen.content_margin))
+                            )
+                            Text(
+                                text = "Close details match",
+                                style = Typography.bodyMedium,
+                                color = colorResource(id = R.color.status2),
+                                fontWeight = FontWeight.Bold,
+                            )
+                        }
+                    }
+
+                    // if location is close match, display this
+                    if (isLocationCloseMatch){
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin_half))
+                        ) {
+                            Icon(
+                                imageVector = Icons.Filled.RadioButtonChecked,
+                                tint = colorResource(id = R.color.status2),
+                                contentDescription = "Close match",
+                                modifier = Modifier.width(dimensionResource(id = R.dimen.content_margin))
+                            )
+                            Text(
+                                text = "Close location",
+                                style = Typography.bodyMedium,
+                                color = colorResource(id = R.color.status2),
+                                fontWeight = FontWeight.Bold,
+                            )
+                        }
+                    }
                 }
             }
 
