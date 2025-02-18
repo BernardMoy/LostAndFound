@@ -485,10 +485,10 @@ object ItemManager {
         // extract all found items from the database
         val db = FirebaseFirestore.getInstance()
         db.collection(FirebaseNames.COLLECTION_FOUND_ITEMS)
-            .whereNotEqualTo(
+            .whereNotEqualTo(  // the found item user id cannot be equal to the lost item uid
                 FirebaseNames.LOSTFOUND_USER,
                 lostItem.userID
-            )  // the found item user id cannot be equal to the lost item uid
+            )
             .get()   // currently there are no orderby, they are done later
             .addOnSuccessListener { result ->
 

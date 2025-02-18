@@ -248,7 +248,7 @@ fun MatchingItemsColumn(
                 var displayedButtonText = "View"
                 if (viewModel.lostItem.userID == FirebaseUtility.getUserID()) {
                     if (viewModel.lostItem.status == 0) {
-                        displayedButtonText = "Claim"
+                        displayedButtonText = "View"
 
                     } else if (viewModel.claimedItem.foundItemID == foundItemData.itemID) {
                         displayedButtonText = "View claim"
