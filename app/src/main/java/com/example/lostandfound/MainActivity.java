@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -47,6 +48,8 @@ import com.example.lostandfound.ui.Notifications.NotificationsActivity;
 import com.example.lostandfound.ui.Profile.ProfileActivity;
 import com.example.lostandfound.ui.ReportIssue.ReportIssueActivity;
 import com.example.lostandfound.ui.Settings.SettingsActivity;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.badge.BadgeDrawable;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.imageview.ShapeableImageView;
@@ -328,6 +331,27 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         } else {
                             binding.notificationsDot.setVisibility(View.GONE);
                         }
+                    }
+                });
+
+        // initially when the app is first started, check if there are any unread notifications
+        // if yes, display the red dot
+        db.collection(FirebaseNames.COLLECTION_NOTIFICATIONS)
+                .whereEqualTo(FirebaseNames.NOTIFICATION_USER_ID, FirebaseUtility.getUserID())
+                .whereEqualTo(FirebaseNames.NOTIFICATION_IS_READ, false)
+                .get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        if (!queryDocumentSnapshots.isEmpty()){
+                            binding.notificationsDot.setVisibility(View.VISIBLE);
+                        } else {
+                            binding.notificationsDot.setVisibility(View.GONE);
+                        }
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d("Notification fetch error", e.getMessage());
                     }
                 });
 
