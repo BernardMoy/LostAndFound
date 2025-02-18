@@ -6,8 +6,10 @@ import androidx.lifecycle.ViewModel
 import com.example.lostandfound.Data.FirebaseNames
 import com.example.lostandfound.Data.FoundItem
 import com.example.lostandfound.Data.User
+import com.example.lostandfound.FirebaseManagers.FirebaseUtility
 import com.example.lostandfound.FirebaseManagers.FirestoreManager
 import com.example.lostandfound.FirebaseManagers.UserManager
+import com.example.lostandfound.Utility.DateTimeManager
 
 interface Callback<T> {
     fun onComplete(result: T)
@@ -55,7 +57,22 @@ class ViewFoundViewModel : ViewModel(){
                         return
                     }
 
-                    callback.onComplete(true)
+                    // add activity log item
+                    firestoreManager.putWithUniqueId(
+                        FirebaseNames.COLLECTION_ACTIVITY_LOG_ITEMS,
+                        mapOf(
+                            FirebaseNames.ACTIVITY_LOG_ITEM_TYPE to 7,
+                            FirebaseNames.ACTIVITY_LOG_ITEM_CONTENT to itemData.itemName + " (#" + itemData.itemID + ")",
+                            FirebaseNames.ACTIVITY_LOG_ITEM_USER_ID to FirebaseUtility.getUserID(),
+                            FirebaseNames.ACTIVITY_LOG_ITEM_TIMESTAMP to DateTimeManager.getCurrentEpochTime()
+                        ),
+                        object: FirestoreManager.Callback<String>{
+                            override fun onComplete(result: String?) {
+                                // not necessary to throw an error if failed here
+                                callback.onComplete(true)  //return true
+                            }
+                        }
+                    )
                 }
             }
         )

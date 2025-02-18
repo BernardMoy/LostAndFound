@@ -1,9 +1,7 @@
 package com.example.lostandfound.ui.ActivityLog
 
-import android.app.Activity
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -13,8 +11,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
@@ -87,13 +83,13 @@ fun MainContent(viewModel: ActivityLogViewModel = viewModel()) {
     val inPreview = LocalInspectionMode.current
 
     // fetch data
-    LaunchedEffect (Unit){
+    LaunchedEffect(Unit) {
         loadData(context = context, viewModel = viewModel)
     }
 
-    if (!inPreview && viewModel.isLoading.value){
+    if (!inPreview && viewModel.isLoading.value) {
         CustomCenteredProgressbar()
-    } else if (viewModel.itemData.size == 0){
+    } else if (viewModel.itemData.size == 0) {
         CustomCenterText(text = "Your activity log is empty.")
     } else {
         ActivityLogItems(context = context, viewModel = viewModel)
@@ -105,11 +101,11 @@ fun MainContent(viewModel: ActivityLogViewModel = viewModel()) {
 fun ActivityLogItems(
     context: Context,
     viewModel: ActivityLogViewModel
-){
-    LazyColumn (
+) {
+    LazyColumn(
         verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin))
-    ){
-        items(viewModel.itemData){ activityLogItem ->
+    ) {
+        items(viewModel.itemData) { activityLogItem ->
             CustomActivityLogItemPreview(activityLogItem = activityLogItem)
         }
     }
@@ -120,14 +116,14 @@ fun ActivityLogItems(
 fun loadData(
     context: Context,
     viewModel: ActivityLogViewModel
-){
+) {
     viewModel.isLoading.value = true
 
     viewModel.fetchActivityLogItems(
-        object: FetchActivityLogCallback{
+        object : FetchActivityLogCallback {
             override fun onComplete(result: Boolean) {
                 viewModel.isLoading.value = false
-                if (!result){
+                if (!result) {
                     Toast.makeText(context, "Fetching data failed", Toast.LENGTH_SHORT).show()
                     return
                 }
