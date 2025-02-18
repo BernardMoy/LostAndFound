@@ -23,4 +23,6 @@ public final class IntentExtraNames {
     // chat user
     public static final String INTENT_CHAT_USER = "chat_user";
 
+    public static final String INTENT_SCORE_DATA = "score_data";
+
 }

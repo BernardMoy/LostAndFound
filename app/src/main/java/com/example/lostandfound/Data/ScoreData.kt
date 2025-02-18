@@ -12,6 +12,7 @@ import androidx.compose.material.icons.outlined.ShoppingBag
 import androidx.compose.material.icons.outlined.SportsBasketball
 import androidx.compose.ui.graphics.vector.ImageVector
 import kotlinx.parcelize.Parcelize
+import java.util.Locale
 
 /*
 A data class storing
@@ -80,6 +81,13 @@ data class ScoreData(
             return false
         }
         return brandScore!! == 3.0
+    }
+
+    // return the overall similarity in a percentage.
+    fun getOverallSimilarity(): Double{
+        val similarity = overallScore/3.0
+        val similarityRounded = String.format(Locale.UK, "%.3f", similarity).toDouble()   // get the last 3 decimal digits
+        return similarityRounded
     }
 
 }

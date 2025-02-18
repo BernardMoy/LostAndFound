@@ -300,6 +300,12 @@ fun MatchingItemsColumn(
                                 viewModel.claimedItem
                             )
 
+                            // pass the score data as well
+                            intent.putExtra(
+                                IntentExtraNames.INTENT_SCORE_DATA,
+                                scoreData
+                            )
+
                             Log.d("ITEM INFO", scoreData.toString())
                             context.startActivity(intent)
                         }
