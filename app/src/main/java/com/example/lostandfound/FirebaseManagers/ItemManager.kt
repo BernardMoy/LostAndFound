@@ -11,9 +11,9 @@ import com.example.lostandfound.Data.LostItem
 import com.example.lostandfound.Data.ScoreData
 import com.example.lostandfound.FirebaseManagers.FirestoreManager.Callback
 import com.example.lostandfound.MatchingFunctions.SCORE_THRESHOLD
+import com.example.lostandfound.MatchingFunctions.ScoreDataCallback
 import com.example.lostandfound.MatchingFunctions.getMatchingScores
 import com.example.lostandfound.Utility.LocationManager
-import com.google.android.material.color.utilities.Score
 import com.google.firebase.firestore.FirebaseFirestore
 
 object ItemManager {
@@ -95,21 +95,31 @@ object ItemManager {
                                         // create lost item class object
                                         val thisLostItem = LostItem(
                                             itemID = lostItemID,
-                                            userID = itemResult[FirebaseNames.LOSTFOUND_USER] as? String ?: "Unknown",
-                                            itemName = itemResult[FirebaseNames.LOSTFOUND_ITEMNAME] as? String ?: "Unknown",
-                                            category = itemResult[FirebaseNames.LOSTFOUND_CATEGORY] as? String ?: "Unknown",
-                                            subCategory = itemResult[FirebaseNames.LOSTFOUND_SUBCATEGORY] as? String ?: "Unknown",
-                                            color = itemResult[FirebaseNames.LOSTFOUND_COLOR] as? List<String> ?: listOf(),
-                                            brand = itemResult[FirebaseNames.LOSTFOUND_BRAND] as? String ?: "Unknown",
-                                            dateTime = itemResult[FirebaseNames.LOSTFOUND_EPOCHDATETIME] as? Long ?: 0L,
+                                            userID = itemResult[FirebaseNames.LOSTFOUND_USER] as? String
+                                                ?: "Unknown",
+                                            itemName = itemResult[FirebaseNames.LOSTFOUND_ITEMNAME] as? String
+                                                ?: "Unknown",
+                                            category = itemResult[FirebaseNames.LOSTFOUND_CATEGORY] as? String
+                                                ?: "Unknown",
+                                            subCategory = itemResult[FirebaseNames.LOSTFOUND_SUBCATEGORY] as? String
+                                                ?: "Unknown",
+                                            color = itemResult[FirebaseNames.LOSTFOUND_COLOR] as? List<String>
+                                                ?: listOf(),
+                                            brand = itemResult[FirebaseNames.LOSTFOUND_BRAND] as? String
+                                                ?: "Unknown",
+                                            dateTime = itemResult[FirebaseNames.LOSTFOUND_EPOCHDATETIME] as? Long
+                                                ?: 0L,
                                             location = if (itemResult[FirebaseNames.LOSTFOUND_LOCATION] != null) LocationManager.LocationToPair(
                                                 itemResult[FirebaseNames.LOSTFOUND_LOCATION] as HashMap<*, *>
                                             ) else null,
-                                            description = itemResult[FirebaseNames.LOSTFOUND_DESCRIPTION] as? String ?: "Unknown",
-                                            timePosted = itemResult[FirebaseNames.LOSTFOUND_TIMEPOSTED] as? Long ?: 0L,
+                                            description = itemResult[FirebaseNames.LOSTFOUND_DESCRIPTION] as? String
+                                                ?: "Unknown",
+                                            timePosted = itemResult[FirebaseNames.LOSTFOUND_TIMEPOSTED] as? Long
+                                                ?: 0L,
                                             status = status,
                                             image = itemImage.toString(),  // uri to string
-                                            isTracking = itemResult[FirebaseNames.LOST_IS_TRACKING] as? Boolean ?: false
+                                            isTracking = itemResult[FirebaseNames.LOST_IS_TRACKING] as? Boolean
+                                                ?: false
                                         )
 
                                         // return the generated lost item
@@ -131,16 +141,16 @@ object ItemManager {
         lostItemID: String,
         isTracking: Boolean,
         callback: UpdateLostCallback
-    ){
+    ) {
         val firestoreManager: FirestoreManager = FirestoreManager()
         firestoreManager.update(
             FirebaseNames.COLLECTION_LOST_ITEMS,
             lostItemID,
             FirebaseNames.LOST_IS_TRACKING,
             isTracking,
-            object: FirestoreManager.Callback<Boolean>{
+            object : Callback<Boolean> {
                 override fun onComplete(result: Boolean) {
-                    if (!result){
+                    if (!result) {
                         callback.onComplete(false)
                         return
                     }
@@ -192,22 +202,33 @@ object ItemManager {
                                             // create found item class object
                                             val thisFoundItem = FoundItem(
                                                 itemID = foundItemID,
-                                                userID = itemResult[FirebaseNames.LOSTFOUND_USER] as? String ?: "Unknown",
-                                                itemName = itemResult[FirebaseNames.LOSTFOUND_ITEMNAME] as? String ?: "Unknown",
-                                                category = itemResult[FirebaseNames.LOSTFOUND_CATEGORY] as? String ?: "Unknown",
-                                                subCategory = itemResult[FirebaseNames.LOSTFOUND_SUBCATEGORY] as? String ?: "Unknown",
-                                                color = itemResult[FirebaseNames.LOSTFOUND_COLOR] as? List<String> ?: listOf(),
-                                                brand = itemResult[FirebaseNames.LOSTFOUND_BRAND] as? String ?: "Unknown",
-                                                dateTime = itemResult[FirebaseNames.LOSTFOUND_EPOCHDATETIME] as? Long ?: 0L,
+                                                userID = itemResult[FirebaseNames.LOSTFOUND_USER] as? String
+                                                    ?: "Unknown",
+                                                itemName = itemResult[FirebaseNames.LOSTFOUND_ITEMNAME] as? String
+                                                    ?: "Unknown",
+                                                category = itemResult[FirebaseNames.LOSTFOUND_CATEGORY] as? String
+                                                    ?: "Unknown",
+                                                subCategory = itemResult[FirebaseNames.LOSTFOUND_SUBCATEGORY] as? String
+                                                    ?: "Unknown",
+                                                color = itemResult[FirebaseNames.LOSTFOUND_COLOR] as? List<String>
+                                                    ?: listOf(),
+                                                brand = itemResult[FirebaseNames.LOSTFOUND_BRAND] as? String
+                                                    ?: "Unknown",
+                                                dateTime = itemResult[FirebaseNames.LOSTFOUND_EPOCHDATETIME] as? Long
+                                                    ?: 0L,
                                                 location = if (itemResult[FirebaseNames.LOSTFOUND_LOCATION] != null) LocationManager.LocationToPair(
                                                     itemResult[FirebaseNames.LOSTFOUND_LOCATION] as HashMap<*, *>
                                                 ) else null,
-                                                description = itemResult[FirebaseNames.LOSTFOUND_DESCRIPTION] as? String ?: "Unknown",
-                                                timePosted = itemResult[FirebaseNames.LOSTFOUND_TIMEPOSTED] as? Long ?: 0L,
+                                                description = itemResult[FirebaseNames.LOSTFOUND_DESCRIPTION] as? String
+                                                    ?: "Unknown",
+                                                timePosted = itemResult[FirebaseNames.LOSTFOUND_TIMEPOSTED] as? Long
+                                                    ?: 0L,
                                                 status = status,
                                                 image = itemImage.toString(),  // uri to string
-                                                securityQuestion = itemResult[FirebaseNames.FOUND_SECURITY_Q] as? String ?: "Unknown",
-                                                securityQuestionAns = itemResult[FirebaseNames.FOUND_SECURITY_Q_ANS] as? String ?: "Unknown"
+                                                securityQuestion = itemResult[FirebaseNames.FOUND_SECURITY_Q] as? String
+                                                    ?: "Unknown",
+                                                securityQuestionAns = itemResult[FirebaseNames.FOUND_SECURITY_Q_ANS] as? String
+                                                    ?: "Unknown"
                                             )
 
                                             // return the generated found item
@@ -254,11 +275,16 @@ object ItemManager {
                                 // construct the claim item
                                 val thisClaim: Claim = Claim(
                                     claimID = claimID,
-                                    lostItemID = result[FirebaseNames.CLAIM_LOST_ITEM_ID]?.toString() ?: "Unknown",
-                                    foundItemID = result[FirebaseNames.CLAIM_FOUND_ITEM_ID]?.toString() ?: "Unknown",
-                                    isApproved = result[FirebaseNames.CLAIM_IS_APPROVED] as? Boolean ?: false,
-                                    timestamp = result[FirebaseNames.CLAIM_TIMESTAMP] as? Long ?: 0L,
-                                    securityQuestionAns = result[FirebaseNames.CLAIM_SECURITY_QUESTION_ANS]?.toString() ?: "Unknown"
+                                    lostItemID = result[FirebaseNames.CLAIM_LOST_ITEM_ID]?.toString()
+                                        ?: "Unknown",
+                                    foundItemID = result[FirebaseNames.CLAIM_FOUND_ITEM_ID]?.toString()
+                                        ?: "Unknown",
+                                    isApproved = result[FirebaseNames.CLAIM_IS_APPROVED] as? Boolean
+                                        ?: false,
+                                    timestamp = result[FirebaseNames.CLAIM_TIMESTAMP] as? Long
+                                        ?: 0L,
+                                    securityQuestionAns = result[FirebaseNames.CLAIM_SECURITY_QUESTION_ANS]?.toString()
+                                        ?: "Unknown"
                                 )
 
                                 // return the claim item
@@ -309,11 +335,16 @@ object ItemManager {
                                     // construct the claim item
                                     val thisClaim: Claim = Claim(
                                         claimID = claimID,
-                                        lostItemID = result[FirebaseNames.CLAIM_LOST_ITEM_ID]?.toString() ?: "Unknown",
-                                        foundItemID = result[FirebaseNames.CLAIM_FOUND_ITEM_ID]?.toString() ?: "Unknown",
-                                        isApproved = result[FirebaseNames.CLAIM_IS_APPROVED] as? Boolean ?: false,
-                                        timestamp = result[FirebaseNames.CLAIM_TIMESTAMP] as? Long ?: 0L,
-                                        securityQuestionAns = result[FirebaseNames.CLAIM_SECURITY_QUESTION_ANS]?.toString() ?: "Unknown"
+                                        lostItemID = result[FirebaseNames.CLAIM_LOST_ITEM_ID]?.toString()
+                                            ?: "Unknown",
+                                        foundItemID = result[FirebaseNames.CLAIM_FOUND_ITEM_ID]?.toString()
+                                            ?: "Unknown",
+                                        isApproved = result[FirebaseNames.CLAIM_IS_APPROVED] as? Boolean
+                                            ?: false,
+                                        timestamp = result[FirebaseNames.CLAIM_TIMESTAMP] as? Long
+                                            ?: 0L,
+                                        securityQuestionAns = result[FirebaseNames.CLAIM_SECURITY_QUESTION_ANS]?.toString()
+                                            ?: "Unknown"
                                     )
 
                                     //add the item to the list
@@ -350,11 +381,14 @@ object ItemManager {
                     // construct the claim item
                     val thisClaim: Claim = Claim(
                         claimID = claimID,
-                        lostItemID = result[FirebaseNames.CLAIM_LOST_ITEM_ID]?.toString() ?: "Unknown",
-                        foundItemID = result[FirebaseNames.CLAIM_FOUND_ITEM_ID]?.toString() ?: "Unknown",
+                        lostItemID = result[FirebaseNames.CLAIM_LOST_ITEM_ID]?.toString()
+                            ?: "Unknown",
+                        foundItemID = result[FirebaseNames.CLAIM_FOUND_ITEM_ID]?.toString()
+                            ?: "Unknown",
                         isApproved = result[FirebaseNames.CLAIM_IS_APPROVED] as? Boolean ?: false,
                         timestamp = result[FirebaseNames.CLAIM_TIMESTAMP] as? Long ?: 0L,
-                        securityQuestionAns = result[FirebaseNames.CLAIM_SECURITY_QUESTION_ANS]?.toString() ?: "Unknown"
+                        securityQuestionAns = result[FirebaseNames.CLAIM_SECURITY_QUESTION_ANS]?.toString()
+                            ?: "Unknown"
                     )
 
                     // return the claim item
@@ -523,25 +557,35 @@ object ItemManager {
 
                             // add the data to the list only if the found item matches the lost item
                             // i.e. the overall score greater than the threshold
-                            val thisScoreData: ScoreData = getMatchingScores(context = context, lostItem = lostItem, foundItem = foundItem)
-                            if (thisScoreData.overallScore >= SCORE_THRESHOLD) {
-                                matchingItemList.add(
-                                    Pair(foundItem, thisScoreData)     // add both the found item and score data
-                                )
-                            }
+                            getMatchingScores(
+                                context = context,
+                                lostItem = lostItem,
+                                foundItem = foundItem,
+                                object : ScoreDataCallback {
+                                    override fun onScoreCalculated(scoreData: ScoreData) {
+                                        if (scoreData.overallScore >= SCORE_THRESHOLD) {
+                                            matchingItemList.add(
+                                                Pair(
+                                                    foundItem,
+                                                    scoreData
+                                                )     // add both the found item and score data
+                                            )
+                                        }
 
-                            fetchedItems++
+                                        // add as fetched item regardless
+                                        fetchedItems++
+                                        // return true when all items have been fetched
+                                        if (fetchedItems == resultSize) {
+                                            // sort the data here
+                                            matchingItemList.sortByDescending { key ->
+                                                key.first.timePosted
+                                            }
 
-                            // return true when all items have been fetched
-                            if (fetchedItems == resultSize) {
-                                // sort the data here
-                                matchingItemList.sortByDescending { key ->
-                                    key.first.timePosted
-                                }
-
-                                // return the matching item list
-                                callback.onComplete(matchingItemList)
-                            }
+                                            // return the matching item list
+                                            callback.onComplete(matchingItemList)
+                                        }
+                                    }
+                                })
                         }
                     })
                 }
@@ -600,23 +644,31 @@ object ItemManager {
                             }
 
                             // add the data to the list only if the found item matches the lost item
-                            val thisScoreData: ScoreData = getMatchingScores(context = context, lostItem = lostItem, foundItem = foundItem)
-                            if (thisScoreData.overallScore >= SCORE_THRESHOLD) {
-                                matchingItemList.add(lostItem)
-                            }
+                            getMatchingScores(
+                                context = context,
+                                lostItem = lostItem,
+                                foundItem = foundItem,
+                                object : ScoreDataCallback {
+                                    override fun onScoreCalculated(scoreData: ScoreData) {
+                                        if (scoreData.overallScore >= SCORE_THRESHOLD) {
+                                            matchingItemList.add(lostItem)
+                                        }
 
-                            fetchedItems++
+                                        // add as fetched item regardless
+                                        fetchedItems++
 
-                            // return true when all items have been fetched
-                            if (fetchedItems == resultSize) {
-                                // sort the data here
-                                matchingItemList.sortByDescending { key ->
-                                    key.timePosted
-                                }
+                                        // return true when all items have been fetched
+                                        if (fetchedItems == resultSize) {
+                                            // sort the data here
+                                            matchingItemList.sortByDescending { key ->
+                                                key.timePosted
+                                            }
 
-                                // return the matching item list
-                                callback.onComplete(matchingItemList)
-                            }
+                                            // return the matching item list
+                                            callback.onComplete(matchingItemList)
+                                        }
+                                    }
+                                })
                         }
                     })
                 }

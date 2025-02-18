@@ -5,7 +5,12 @@ import android.graphics.Bitmap
 import android.graphics.ImageDecoder
 import android.net.Uri
 import android.provider.MediaStore
+import com.bumptech.glide.Glide
 import com.example.lostandfound.ml.Siamesemodel224
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.tensorflow.lite.DataType
 import org.tensorflow.lite.TensorFlowLite
 import org.tensorflow.lite.support.tensorbuffer.TensorBuffer
@@ -17,12 +22,16 @@ val modelFile = context.assets.open(modelFileName).use { it.readBytes() }
         interpreter = Interpreter(modelFile)
  */
 
+interface PredictCallback{
+    fun onComplete(distance: Float)
+}
+
 
 class ImageClassifier (private val context: Context){
     val model = Siamesemodel224.newInstance(context)
     val imageSize = 224
 
-    fun predictBitmap(image1: Bitmap, image2: Bitmap): Float{
+    private fun predictBitmap(image1: Bitmap, image2: Bitmap): Float{
 
         // Creates inputs for reference.
         val inputFeature0 = TensorBuffer.createFixedSize(intArrayOf(1, imageSize, imageSize, 3), DataType.FLOAT32)
@@ -42,22 +51,30 @@ class ImageClassifier (private val context: Context){
         return result
     }
 
-    fun predict(image1: Uri, image2: Uri): Float{
-        // convert the uris to bitmaps
-        val image1src = ImageDecoder.createSource(context.contentResolver, image1)
-        val image2src = ImageDecoder.createSource(context.contentResolver, image2)
-        val image1bm = ImageDecoder.decodeBitmap(image1src){decoder, _, _ ->
-            decoder.isMutableRequired = true
-        }
-        val image2bm = ImageDecoder.decodeBitmap(image2src){decoder, _, _ ->
-            decoder.isMutableRequired = true
-        }
+    /*
+    Glide must be used here to load images, otherwise images on firebase storage and not on your device will not be loaded properly
+    Glide.with(context)... requires execution on a background thread as it blocks main thread
+    Hence this function must be asynchronous and returned with a callback instead
+     */
+    fun predict(image1: Uri, image2: Uri, callback: PredictCallback) {
+        CoroutineScope(Dispatchers.IO).launch {
+            // convert uri to bitmap
+            // this blocks main thread so a callback function is needed
+            val image1bm = Glide.with(context).asBitmap().load(image1).submit().get()
+            val image2bm = Glide.with(context).asBitmap().load(image2).submit().get()
 
-        // resize the bitmaps to the size required by the model
-        val image1bmResized = Bitmap.createScaledBitmap(image1bm, imageSize, imageSize, false)
-        val image2bmResized = Bitmap.createScaledBitmap(image2bm, imageSize, imageSize, false)
+            // resize the bitmap to the size (224 224) accepted by the model
+            val image1bmResized = Bitmap.createScaledBitmap(image1bm, imageSize, imageSize, false)
+            val image2bmResized = Bitmap.createScaledBitmap(image2bm, imageSize, imageSize, false)
 
-        return predictBitmap(image1bmResized, image2bmResized)
+            // make prediction
+            val distance = predictBitmap(image1bmResized, image2bmResized)
+
+            // return the result in main thread
+            withContext(Dispatchers.Main) {
+                callback.onComplete(distance)
+            }
+        }
     }
 
     // method to close the model after finish using it
@@ -67,7 +84,7 @@ class ImageClassifier (private val context: Context){
 
 
     // utility method to convert bitmap to bytebuffer
-    fun bitmapToByteBuffer(img: Bitmap): ByteBuffer{
+    private fun bitmapToByteBuffer(img: Bitmap): ByteBuffer{
         val byteBuffer: ByteBuffer = ByteBuffer.allocateDirect(4*imageSize*imageSize*3)  // 4 for float, 3 for rgb channels
         byteBuffer.order(ByteOrder.nativeOrder())
         val intValues = IntArray(imageSize * imageSize)

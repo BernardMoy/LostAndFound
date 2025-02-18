@@ -12,6 +12,7 @@ class ImageComparisonViewModel: ViewModel() {
     val image1: MutableState<Uri?> = mutableStateOf(null)
     val image2: MutableState<Uri?> = mutableStateOf(null)
     val distance: MutableState<Float> = mutableFloatStateOf(0.0f)
+    val isLoading: MutableState<Boolean> = mutableStateOf(false)
 
     fun onImage1Picked(uri: Uri?){
         image1.value = uri
