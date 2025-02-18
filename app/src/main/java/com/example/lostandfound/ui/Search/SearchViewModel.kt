@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import com.example.lostandfound.Data.Claim
 import com.example.lostandfound.Data.FoundItem
 import com.example.lostandfound.Data.LostItem
+import com.example.lostandfound.Data.ScoreData
 import com.example.lostandfound.FirebaseManagers.ItemManager
 import com.example.lostandfound.FirebaseManagers.ItemManager.getMatchItemsFromLostItem
 
@@ -22,13 +23,13 @@ class SearchViewModel : ViewModel() {
     var lostItem: LostItem = LostItem()
     var claimedItem: Claim = Claim()
 
-    var matchedFoundItems: MutableList<FoundItem> = mutableListOf()
+    var matchedFoundItems: MutableList<Pair<FoundItem, ScoreData>> = mutableListOf()
 
     // initialise the list of matching found items to be displayed as empty list
     // return true if successful, false otherwise
     fun loadItems(context: Context, callback: Callback<Boolean>) {
         getMatchItemsFromLostItem(context = context, lostItem = lostItem, object : ItemManager.MatchFoundCallback {
-            override fun onComplete(result: MutableList<FoundItem>?) {
+            override fun onComplete(result: MutableList<Pair<FoundItem, ScoreData>>?) {
                 // result == null indicates error
                 if (result == null) {
                     callback.onComplete(false)

@@ -8,9 +8,12 @@ import com.example.lostandfound.Data.ClaimPreview
 import com.example.lostandfound.Data.FirebaseNames
 import com.example.lostandfound.Data.FoundItem
 import com.example.lostandfound.Data.LostItem
+import com.example.lostandfound.Data.ScoreData
 import com.example.lostandfound.FirebaseManagers.FirestoreManager.Callback
+import com.example.lostandfound.MatchingFunctions.SCORE_THRESHOLD
+import com.example.lostandfound.MatchingFunctions.getMatchingScores
 import com.example.lostandfound.Utility.LocationManager
-import com.example.lostandfound.MatchingFunctions.isMatch
+import com.google.android.material.color.utilities.Score
 import com.google.firebase.firestore.FirebaseFirestore
 
 object ItemManager {
@@ -42,8 +45,9 @@ object ItemManager {
         fun onComplete(claimPreview: ClaimPreview?)  // return the claim preview or null if failed
     }
 
+    // the special callback when attempting to search for found items from a lost item
     interface MatchFoundCallback {
-        fun onComplete(result: MutableList<FoundItem>?)
+        fun onComplete(result: MutableList<Pair<FoundItem, ScoreData>>?)    // return a nullable pair with found item list and the scores
     }
 
     interface MatchLostCallback {
@@ -473,14 +477,15 @@ object ItemManager {
     }
 
     // given a lost item, return from db all the matching found items
-    // return null only when an error occurred, if there are no items return empty list
+    // return null only when an error occurred
+    // if there are no items return empty list
     fun getMatchItemsFromLostItem(
         context: Context,
         lostItem: LostItem,
         callback: MatchFoundCallback
 
     ) {
-        val matchingItemList: MutableList<FoundItem> = mutableListOf()
+        val matchingItemList: MutableList<Pair<FoundItem, ScoreData>> = mutableListOf()
 
         // extract all found items from the database
         val db = FirebaseFirestore.getInstance()
@@ -517,8 +522,12 @@ object ItemManager {
                             }
 
                             // add the data to the list only if the found item matches the lost item
-                            if (isMatch(context = context, lostItem = lostItem, foundItem = foundItem)) {
-                                matchingItemList.add(foundItem)
+                            // i.e. the overall score greater than the threshold
+                            val thisScoreData: ScoreData = getMatchingScores(context = context, lostItem = lostItem, foundItem = foundItem)
+                            if (thisScoreData.overallScore >= SCORE_THRESHOLD) {
+                                matchingItemList.add(
+                                    Pair(foundItem, thisScoreData)     // add both the found item and score data
+                                )
                             }
 
                             fetchedItems++
@@ -527,7 +536,7 @@ object ItemManager {
                             if (fetchedItems == resultSize) {
                                 // sort the data here
                                 matchingItemList.sortByDescending { key ->
-                                    key.timePosted
+                                    key.first.timePosted
                                 }
 
                                 // return the matching item list
@@ -591,7 +600,8 @@ object ItemManager {
                             }
 
                             // add the data to the list only if the found item matches the lost item
-                            if (isMatch(context = context, lostItem = lostItem, foundItem = foundItem)) {
+                            val thisScoreData: ScoreData = getMatchingScores(context = context, lostItem = lostItem, foundItem = foundItem)
+                            if (thisScoreData.overallScore >= SCORE_THRESHOLD) {
                                 matchingItemList.add(lostItem)
                             }
 
