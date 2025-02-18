@@ -1,5 +1,6 @@
 package com.example.lostandfound.FirebaseManagers
 
+import android.content.Context
 import android.net.Uri
 import android.util.Log
 import com.example.lostandfound.Data.Claim
@@ -474,6 +475,7 @@ object ItemManager {
     // given a lost item, return from db all the matching found items
     // return null only when an error occurred, if there are no items return empty list
     fun getMatchItemsFromLostItem(
+        context: Context,
         lostItem: LostItem,
         callback: MatchFoundCallback
 
@@ -515,7 +517,7 @@ object ItemManager {
                             }
 
                             // add the data to the list only if the found item matches the lost item
-                            if (isMatch(lostItem = lostItem, foundItem = foundItem)) {
+                            if (isMatch(context = context, lostItem = lostItem, foundItem = foundItem)) {
                                 matchingItemList.add(foundItem)
                             }
 
@@ -544,6 +546,7 @@ object ItemManager {
     // given a found item, return all lost items that matches it which are also being tracked.
     // return a list (Can be empty) if successful, null otherwise
     fun getTrackingMatchItemsFromFoundItem(
+        context: Context,
         foundItem: FoundItem,
         callback: MatchLostCallback
     ) {
@@ -588,7 +591,7 @@ object ItemManager {
                             }
 
                             // add the data to the list only if the found item matches the lost item
-                            if (isMatch(lostItem = lostItem, foundItem = foundItem)) {
+                            if (isMatch(context = context, lostItem = lostItem, foundItem = foundItem)) {
                                 matchingItemList.add(lostItem)
                             }
 

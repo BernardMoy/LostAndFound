@@ -14,7 +14,7 @@ fun getCategoryScore(lostCategory: String, lostSubCategory: String, foundCategor
         if (lostSubCategory == foundSubcategory){
             return 3.0
         } else{
-            return 2.0
+            return 1.5
         }
         
     } else{
