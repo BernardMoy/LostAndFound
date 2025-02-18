@@ -3,26 +3,8 @@ package com.example.lostandfound.MatchingFunctions
 import android.content.Context
 import com.example.lostandfound.Data.FoundItem
 import com.example.lostandfound.Data.LostItem
-
-// given a lost item and a found item, determine whether they are matched
-/*
-    Preconditions are performed in the initial db query:
-    1. Lost item user ID != Found item user ID                <-- Implemented in the firebase query
-    2. Lost date - found date <= 7 days (Within a week)       <-- Implemented here as firebase don't support this
- */
-fun isMatch(
-    context: Context,
-    lostItem: LostItem,
-    foundItem: FoundItem
-
-): Boolean{
-    // only retrieve items with lost time - found time <= 7 days (604800s)
-    if (lostItem.dateTime - foundItem.dateTime > 604800){
-        return false
-    }
-    // return true if the weighted sum >= 1.5 (Each weight is from 0 to 3)
-    return getMatchingScore(context = context, lostItem = lostItem, foundItem = foundItem) >= 1.5
-}
+import com.example.lostandfound.Data.ScoreData
+import com.google.android.material.color.utilities.Score
 
 /*
 The following attributes will be considered (From top to bottom of the app UI)
@@ -42,43 +24,76 @@ val WEIGHT_IMAGE = 1              // Low: 1 is the default here
 val WEIGHT_CATEGORY = 2.5           // Higher: Less likely to make mistakes
 val WEIGHT_COLOR = 2            // Higher: Less likely to make mistakes with the intelligent algorithm
 val WEIGHT_BRAND = 1.5            // Medium: The same brand may have different representations (Future work)
-val WEIGHT_LOCATION = 1.5         // Medium:
+val WEIGHT_LOCATION = 1.5         // Medium: The item might be broguht elsewhere
 
-fun getMatchingScore(
+val SCORE_THRESHOLD = 1.5        // items will be considered matching if their score is larger than this threshold
+
+/*
+Given a lost item and found item, return the map containing an overall score
+and also scores that are being considered.
+
+SCORES THAT ARE NOT BEING CONSIDERED WILL NOT APPEAR IN THE MAP (IMAGE, BRAND, LOCATION)
+
+Preconditions are performed in the initial db query:
+    1. Lost item user ID != Found item user ID                <-- Implemented in the firebase query
+    2. Lost date - found date <= 7 days (Within a week)       <-- Implemented here as firebase don't support this
+ */
+fun getMatchingScores(
     context: Context,     // used for tflite model classification
     lostItem: LostItem,
     foundItem: FoundItem
-): Double {
+): ScoreData {
+    // only retrieve items with lost time - found time <= 7 days (604800s)
+    // if they fail this condition, return score of all 0.0 (Will definitely not be greater than threshold and not considered)
+    if (lostItem.dateTime - foundItem.dateTime > 604800){
+        return ScoreData(overallScore = 0.0)
+    }
+
+    // instantiate result
+    val result = ScoreData()
+
     var sum = 0.0
     var weights = 0.0
 
-    // check if calculate image
-    if (lostItem.image.isNotEmpty() && foundItem.image.isNotEmpty()){
-        sum += getImageScore(context, lostItem.image, foundItem.image)* WEIGHT_IMAGE
-        weights += WEIGHT_IMAGE
-    }
-
     // calculate category
-    sum += getCategoryScore(lostItem.category, lostItem.subCategory, foundItem.category, foundItem.subCategory)* WEIGHT_CATEGORY
+    val scoreCategory = getCategoryScore(lostItem.category, lostItem.subCategory, foundItem.category, foundItem.subCategory)
+    sum += scoreCategory* WEIGHT_CATEGORY
     weights += WEIGHT_CATEGORY
+    result.categoryScore = scoreCategory
 
     // calculate color
-    sum += getColorScore(lostItem.color, foundItem.color)* WEIGHT_COLOR
+    val scoreColor = getColorScore(lostItem.color, foundItem.color)
+    sum += scoreColor* WEIGHT_COLOR
     weights += WEIGHT_COLOR
+    result.colorScore = scoreColor
+
+    // check if calculate image
+    if (lostItem.image.isNotEmpty() && foundItem.image.isNotEmpty()){
+        val scoreImage = getImageScore(context, lostItem.image, foundItem.image)
+        sum += scoreImage* WEIGHT_IMAGE
+        weights += WEIGHT_IMAGE
+        result.imageScore = scoreImage
+    }
 
     // check if calculate brand
     if (lostItem.brand.isNotEmpty() && foundItem.brand.isNotEmpty()){
-        sum += getBrandScore(lostItem.brand, foundItem.brand)* WEIGHT_BRAND
+        val scoreBrand = getBrandScore(lostItem.brand, foundItem.brand)
+        sum += scoreBrand* WEIGHT_BRAND
         weights += WEIGHT_BRAND
+        result.brandScore = scoreBrand
     }
 
     // check if calculate location
     if (lostItem.location != null && foundItem.location != null){
-        sum += getLocationScore(lostItem.location, foundItem.location)* WEIGHT_LOCATION
+        val scoreLocation =  getLocationScore(lostItem.location, foundItem.location)
+        sum += scoreLocation* WEIGHT_LOCATION
         weights += WEIGHT_LOCATION
+        result.locationScore = scoreLocation
     }
 
-    // return the final weighted sum
-    return sum / weights
-}
+    // also add the OVERALL SCORE AT THE END
+    result.overallScore = sum / weights
 
+    // return the final map
+    return result
+}

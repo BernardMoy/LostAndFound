@@ -240,7 +240,11 @@ fun MatchingItemsColumn(
             items(
                 viewModel.matchedFoundItems
 
-            ) { foundItemData ->
+            ) { foundItemAndScore ->
+
+                // get the found item data and score data
+                val foundItemData = foundItemAndScore.first
+                val scoreData = foundItemAndScore.second
 
                 // if lost item status = 0, then the user can claim item
                 // else if lost item status = 1 and the found item is claimed, then the user can view claim
