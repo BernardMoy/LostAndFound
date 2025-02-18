@@ -109,7 +109,22 @@ class ViewLostViewModel : ViewModel(){
                         return
                     }
 
-                    callback.onComplete(true)
+                    // add activity log item
+                    firestoreManager.putWithUniqueId(
+                        FirebaseNames.COLLECTION_ACTIVITY_LOG_ITEMS,
+                        mapOf(
+                            FirebaseNames.ACTIVITY_LOG_ITEM_TYPE to 6,
+                            FirebaseNames.ACTIVITY_LOG_ITEM_CONTENT to itemData.itemName + " (#" + itemData.itemID + ")",
+                            FirebaseNames.ACTIVITY_LOG_ITEM_USER_ID to FirebaseUtility.getUserID(),
+                            FirebaseNames.ACTIVITY_LOG_ITEM_TIMESTAMP to DateTimeManager.getCurrentEpochTime()
+                        ),
+                        object: FirestoreManager.Callback<String>{
+                            override fun onComplete(result: String?) {
+                                // not necessary to throw an error if failed here
+                                callback.onComplete(true)  //return true
+                            }
+                        }
+                    )
                 }
             }
         )
