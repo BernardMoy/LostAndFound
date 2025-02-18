@@ -1,5 +1,6 @@
 package com.example.lostandfound.ui.NewFound
 
+import android.content.Context
 import android.net.Uri
 import android.util.Log
 import android.widget.Toast
@@ -343,8 +344,10 @@ class NewFoundViewModel : ViewModel() {
     }
 
     // method to notify all lost users that are tracking and matches this newly found item
-    fun notifyTrackingLostUsers(foundItem: FoundItem, callback: NotifyLostUsersCallback){
-        ItemManager.getTrackingMatchItemsFromFoundItem(foundItem, object: ItemManager.MatchLostCallback{
+    fun notifyTrackingLostUsers(context: Context, foundItem: FoundItem, callback: NotifyLostUsersCallback){
+        ItemManager.getTrackingMatchItemsFromFoundItem(
+            foundItem,
+            object: ItemManager.MatchLostCallback{
             override fun onComplete(result: MutableList<LostItem>?) {
                 if (result == null){
                     callback.onComplete(false)

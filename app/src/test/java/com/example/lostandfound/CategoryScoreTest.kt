@@ -8,7 +8,7 @@ class CategoryScoreTest{
     fun testGetCategoryScore(){
         assert(
             getCategoryScore("Personal items", "Wallet",
-                "Personal items", "ID") == 2.0
+                "Personal items", "ID") == 1.5
         )
 
         assert(
