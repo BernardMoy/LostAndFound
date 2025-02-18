@@ -9,9 +9,12 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Circle
+import androidx.compose.material.icons.filled.RadioButtonChecked
 import androidx.compose.material.icons.outlined.AccessTime
 import androidx.compose.material.icons.outlined.CalendarMonth
 import androidx.compose.material.icons.outlined.Circle
@@ -39,6 +42,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -349,7 +353,8 @@ fun CustomComparisonTextField(
     centerLabel: String,
     contentLeft: String,    // val is passed if not editable, var if editable
     contentRight: String,
-    icon: ImageVector?
+    icon: ImageVector?,
+    isMatch: Boolean = false   // if true, then the text will appear green and also a matching text will be shown
 ) {
     // partition the row into 3 parts (1:1:1)
     Row(
@@ -367,27 +372,53 @@ fun CustomComparisonTextField(
             textAlign = TextAlign.Center,
         )
 
-        Row(
+        Column (
             modifier = Modifier.weight(3f),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.Center
-        ) {
-            if (icon != null) {
-                Icon(
-                    imageVector = icon,
-                    contentDescription = "Attribute icon",
-                    tint = Color.Gray
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ){
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Center
+            ) {
+                if (icon != null) {
+                    Icon(
+                        imageVector = icon,
+                        contentDescription = "Attribute icon",
+                        tint = Color.Gray
+                    )
+                }
+
+                Spacer(modifier = Modifier.padding(dimensionResource(id = R.dimen.content_margin_half)))
+
+                Text(
+                    text = centerLabel,
+                    style = Typography.bodyMedium,
+                    color = Color.Gray
                 )
             }
-
-            Spacer(modifier = Modifier.padding(dimensionResource(id = R.dimen.content_margin_half)))
-
-            Text(
-                text = centerLabel,
-                style = Typography.bodyMedium,
-                color = Color.Gray
-            )
+            // show the matching icon
+            if (isMatch){
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin_half))
+                ) {
+                    Icon(
+                        imageVector = Icons.Filled.CheckCircle,
+                        tint = colorResource(id = R.color.status2),
+                        contentDescription = "Match",
+                        modifier = Modifier.width(dimensionResource(id = R.dimen.content_margin))
+                    )
+                    Text(
+                        text = "Matches",
+                        style = Typography.bodyMedium,
+                        color = colorResource(id = R.color.status2),
+                        fontWeight = FontWeight.Bold
+                    )
+                }
+            }
         }
+
 
         Text(
             text = contentRight,
@@ -407,7 +438,8 @@ fun CustomComparisonTextField(
 fun CustomComparisonField(
     centerLabel: @Composable () -> Unit,
     contentLeft: @Composable () -> Unit,
-    contentRight: @Composable () -> Unit
+    contentRight: @Composable () -> Unit,
+    isMatch: Boolean = false   // if match, a matches text will appear below center label
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
@@ -424,7 +456,33 @@ fun CustomComparisonField(
             modifier = Modifier.weight(3f),
             contentAlignment = Alignment.Center
         ) {
-            centerLabel()
+            Column (
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ){
+                centerLabel()
+
+                // show the matching icon
+                if (isMatch){
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin_half))
+                    ) {
+                        Icon(
+                            imageVector = Icons.Filled.CheckCircle,
+                            tint = colorResource(id = R.color.status2),
+                            contentDescription = "Match",
+                            modifier = Modifier.width(dimensionResource(id = R.dimen.content_margin))
+                        )
+                        Text(
+                            text = "Matches",
+                            style = Typography.bodyMedium,
+                            color = colorResource(id = R.color.status2),
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
+                }
+            }
         }
 
         Box(
