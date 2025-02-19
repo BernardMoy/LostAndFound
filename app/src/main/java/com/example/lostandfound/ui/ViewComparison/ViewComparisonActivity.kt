@@ -100,6 +100,7 @@ import com.example.lostandfound.ui.ViewFound.ViewFoundActivity
 import com.example.lostandfound.ui.ViewLost.ViewLostActivity
 import com.example.lostandfound.ui.theme.ComposeTheme
 import com.example.lostandfound.ui.theme.Typography
+import kotlin.math.round
 
 
 class ViewComparisonActivity : ComponentActivity() {
@@ -350,7 +351,7 @@ fun ItemImage(viewModel: ViewComparisonViewModel) {
                 },
                 centerLabel = {
                     Text(
-                        text = "Overall Similarity\n" + (viewModel.scoreData.getOverallSimilarity()*100).toString() + "%",
+                        text = "Overall Similarity\n" + (round(viewModel.scoreData.getOverallSimilarity()*1000)/10).toString() + "%",
                         style = Typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onPrimaryContainer,
                         fontWeight = FontWeight.Bold,

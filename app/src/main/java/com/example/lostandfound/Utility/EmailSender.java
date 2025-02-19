@@ -2,6 +2,7 @@ package com.example.lostandfound.Utility;
 
 import android.app.Activity;
 import android.content.Context;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.example.lostandfound.R;
@@ -69,6 +70,7 @@ public class EmailSender {
 
             } catch (MessagingException e) {
                 // display failed sending email message
+                Log.d("EMAIL ERROR", e.getMessage());
                 ((Activity) ctx).runOnUiThread(() ->
                         Toast.makeText(ctx, "Email sending failed", Toast.LENGTH_SHORT).show()
                 );
