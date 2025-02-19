@@ -1,5 +1,8 @@
 package com.example.lostandfound;
 
+import static android.view.View.GONE;
+import static android.view.View.VISIBLE;
+
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -186,6 +189,29 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         });
 
+        // set up the sequential buttons for the 3 tutorial stages
+        binding.tutorial1Button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                binding.tutorial1.setVisibility(GONE);
+                binding.tutorial2.setVisibility(VISIBLE);
+            }
+        });
+        binding.tutorial2Button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                binding.tutorial2.setVisibility(GONE);
+                binding.tutorial3.setVisibility(VISIBLE);
+            }
+        });
+        binding.tutorial3Button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                binding.tutorial3.setVisibility(GONE);
+            }
+        });
+
+
         // set on click listeners for the items in the nav view
         navigationDrawer.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -226,7 +252,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     startActivity(i);
 
                 } else if (clickedId == R.id.nav_drawer_take_a_tour){
-                    
+                    // make the first step of the tutorial show
+                    binding.tutorial1.setVisibility(VISIBLE);
 
                 } else if (clickedId == R.id.nav_drawer_how_it_works){
                     Intent i = new Intent(MainActivity.this, HowItWorksActivity.class);
@@ -327,9 +354,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                         // check if the query is not empty
                         if (value != null && !value.isEmpty()){
-                            binding.notificationsDot.setVisibility(View.VISIBLE);
+                            binding.notificationsDot.setVisibility(VISIBLE);
                         } else {
-                            binding.notificationsDot.setVisibility(View.GONE);
+                            binding.notificationsDot.setVisibility(GONE);
                         }
                     }
                 });
@@ -343,9 +370,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                         if (!queryDocumentSnapshots.isEmpty()){
-                            binding.notificationsDot.setVisibility(View.VISIBLE);
+                            binding.notificationsDot.setVisibility(VISIBLE);
                         } else {
-                            binding.notificationsDot.setVisibility(View.GONE);
+                            binding.notificationsDot.setVisibility(GONE);
                         }
                     }
                 }).addOnFailureListener(new OnFailureListener() {
@@ -453,9 +480,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if (FirebaseUtility.isUserLoggedIn()){ // user is signed in
             // hide the log in button
             binding.loginButton.setEnabled(false);
-            binding.loginButton.setVisibility(View.GONE);
+            binding.loginButton.setVisibility(GONE);
             binding.profileAndNotificationsIcons.setEnabled(true);
-            binding.profileAndNotificationsIcons.setVisibility(View.VISIBLE);
+            binding.profileAndNotificationsIcons.setVisibility(VISIBLE);
 
             // get data from sharedpreferences
             SharedPreferences sharedPreferences = getSharedPreferences(SharedPreferencesNames.NAME_USERS, MODE_PRIVATE);
@@ -468,8 +495,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
             // display the data in different parts of the application
             // make the linear layout visible
-            navHeader.findViewById(R.id.user_info_linear_layout).setVisibility(View.VISIBLE);
-            navHeader.findViewById(R.id.not_logged_in_textview).setVisibility(View.GONE);
+            navHeader.findViewById(R.id.user_info_linear_layout).setVisibility(VISIBLE);
+            navHeader.findViewById(R.id.not_logged_in_textview).setVisibility(GONE);
 
             // nav drawer on the left
             ((TextView) navHeader.findViewById(R.id.nav_drawer_name)).setText(displayedName);
@@ -506,14 +533,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             // user is not signed in
 
             // make the linear layout not visible
-            navHeader.findViewById(R.id.user_info_linear_layout).setVisibility(View.GONE);
-            navHeader.findViewById(R.id.not_logged_in_textview).setVisibility(View.VISIBLE);
+            navHeader.findViewById(R.id.user_info_linear_layout).setVisibility(GONE);
+            navHeader.findViewById(R.id.not_logged_in_textview).setVisibility(VISIBLE);
 
             // show the Login button
             binding.profileAndNotificationsIcons.setEnabled(false);
-            binding.profileAndNotificationsIcons.setVisibility(View.GONE);
+            binding.profileAndNotificationsIcons.setVisibility(GONE);
             binding.loginButton.setEnabled(true);
-            binding.loginButton.setVisibility(View.VISIBLE);
+            binding.loginButton.setVisibility(VISIBLE);
 
 
             // hide some elements of the navigation drawer
