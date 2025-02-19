@@ -16,7 +16,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.lostandfound.R
 import com.example.lostandfound.ui.theme.ComposeTheme
@@ -28,7 +31,9 @@ fun Previews() {
     ComposeTheme {
         CustomPopupText(
             title = "Question",
-            content = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in r"
+            content = buildAnnotatedString {
+                append("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in r")
+            }
         )
     }
 }
@@ -36,7 +41,7 @@ fun Previews() {
 @Composable
 fun CustomPopupText(
     title: String,
-    content: String
+    content: AnnotatedString
 ){
     // is pop up is default to false
     val isPopUp = remember{
@@ -61,7 +66,7 @@ fun CustomPopupText(
             Text(
                 text = title,
                 style = Typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onBackground,
+                color = if (isPopUp.value) Color.Gray else MaterialTheme.colorScheme.onBackground,
                 modifier = Modifier.weight(1f)
             )
 
@@ -69,7 +74,7 @@ fun CustomPopupText(
                 Icon(
                     imageVector = Icons.Outlined.ArrowDropUp,
                     contentDescription = "Open",
-                    tint = MaterialTheme.colorScheme.onBackground
+                    tint = if (isPopUp.value) Color.Gray else MaterialTheme.colorScheme.onBackground
                 )
             } else {
                 Icon(

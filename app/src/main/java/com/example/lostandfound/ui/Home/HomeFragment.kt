@@ -82,7 +82,6 @@ import com.example.lostandfound.Utility.AnimationManager
 import com.example.lostandfound.Utility.AutoLoadingManager
 import com.example.lostandfound.ui.HowItWorks.HowItWorksActivity
 import com.example.lostandfound.ui.Login.LoginActivity
-import com.example.lostandfound.ui.Lost.refreshData
 import com.example.lostandfound.ui.NewFound.NewFoundActivity
 import com.example.lostandfound.ui.NewLost.NewLostActivity
 import com.example.lostandfound.ui.ViewLost.ViewLostActivity
@@ -121,7 +120,7 @@ class HomeFragment : Fragment() {
         viewModel.isLoggedIn.value = FirebaseUtility.isUserLoggedIn()
 
         // refresh the data everytime the screen is reloaded
-        if (AutoLoadingManager.autoLoadingEnabled.value){
+        if (AutoLoadingManager.autoLoadingEnabled.value) {
             loadRecentlyLostItem(requireContext(), viewModel)
             loadFoundItems(requireContext(), viewModel)
         }
@@ -197,7 +196,7 @@ fun ImageAndButton(
 
     // when launched during initial start up, make different elements visible with different delays
     LaunchedEffect(Unit) {
-        if (viewModel.isInitialStartUp){
+        if (viewModel.isInitialStartUp) {
             // mark as false
             viewModel.isInitialStartUp = false
 
@@ -242,8 +241,10 @@ fun ImageAndButton(
                 color = MaterialTheme.colorScheme.onPrimary,
                 textAlign = TextAlign.Center,
                 modifier = if (AnimationManager.animationEnabled.value)
-                    Modifier.padding(top = dimensionResource(id = R.dimen.title_margin)).alpha(alpha = titleAlpha)
-                    else Modifier.padding(top = dimensionResource(id = R.dimen.title_margin))
+                    Modifier
+                        .padding(top = dimensionResource(id = R.dimen.title_margin))
+                        .alpha(alpha = titleAlpha)
+                else Modifier.padding(top = dimensionResource(id = R.dimen.title_margin))
             )
 
 
@@ -259,8 +260,10 @@ fun ImageAndButton(
             ) {
                 Box(
                     modifier = if (AnimationManager.animationEnabled.value)
-                        Modifier.padding(top = dimensionResource(id = R.dimen.title_margin)).alpha(alpha = lostButtonAlpha)
-                        else Modifier.padding(top = dimensionResource(id = R.dimen.title_margin))
+                        Modifier
+                            .padding(top = dimensionResource(id = R.dimen.title_margin))
+                            .alpha(alpha = lostButtonAlpha)
+                    else Modifier.padding(top = dimensionResource(id = R.dimen.title_margin))
                 ) {
                     CustomButton(
                         text = "I have lost",
@@ -274,8 +277,10 @@ fun ImageAndButton(
 
                 Box(
                     modifier = if (AnimationManager.animationEnabled.value)
-                        Modifier.padding(top = dimensionResource(id = R.dimen.title_margin)).alpha(alpha = foundButtonAlpha)
-                        else Modifier.padding(top = dimensionResource(id = R.dimen.title_margin))
+                        Modifier
+                            .padding(top = dimensionResource(id = R.dimen.title_margin))
+                            .alpha(alpha = foundButtonAlpha)
+                    else Modifier.padding(top = dimensionResource(id = R.dimen.title_margin))
                 ) {
                     CustomButton(
                         text = "I have found",
@@ -430,9 +435,9 @@ fun RecentlyLostItem(
         ),
         verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.title_margin))
     ) {
-        Row (
+        Row(
             verticalAlignment = Alignment.CenterVertically
-        ){
+        ) {
             Text(
                 text = "Your recently lost item",
                 style = Typography.titleMedium,
@@ -519,9 +524,9 @@ fun FoundItemData(
         ),
         verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.title_margin))
     ) {
-        Row (
+        Row(
             verticalAlignment = Alignment.CenterVertically
-        ){
+        ) {
             Text(
                 text = "Your found items",
                 style = Typography.titleMedium,
@@ -721,7 +726,7 @@ fun LargeLoginButton(
 fun loadRecentlyLostItem(
     context: Context,
     viewModel: HomeFragmentViewModel
-){
+) {
     viewModel.isLoadingLostItem.value = true
     viewModel.loadLatestLostItem(object : Callback<Boolean> {
         override fun onComplete(result: Boolean) {
@@ -738,7 +743,7 @@ fun loadRecentlyLostItem(
 fun loadFoundItems(
     context: Context,
     viewModel: HomeFragmentViewModel
-){
+) {
     viewModel.isLoadingFoundItem.value = true
     viewModel.loadFoundItemCount(object : Callback<Boolean> {
         override fun onComplete(result: Boolean) {
