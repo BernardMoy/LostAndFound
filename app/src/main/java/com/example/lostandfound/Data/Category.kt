@@ -25,7 +25,7 @@ val categories: List<Category> = listOf(
         leadingIcon = Icons.Outlined.AccountBox
     ),
     Category(name = "Electronics",
-        subCategories = listOf("Earphone", "Headphone", "Laptop", "Phone", "Tablet", "Camera", "Charger", "USB", "Mouse", "Digital Pen", "EReader"),
+        subCategories = listOf("Earphone", "Headphone", "Laptop", "Phone", "Tablet", "Calculator", "Camera", "Charger", "USB", "Mouse", "Digital Pen", "EReader"),
         leadingIcon = Icons.Outlined.Headset
     ),
     Category(name = "Bags and Suitcases",

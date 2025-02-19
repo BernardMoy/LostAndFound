@@ -11,7 +11,7 @@ val stringToColor = mapOf(
     "Cyan" to Color.Cyan,
     "Blue" to Color.Blue,
     "Pink" to Color(0xFFFFA3CE),
-    "Magenta" to Color.Magenta,
+    "Purple" to Color(0xFF9F83F1),
     "Brown" to Color(0xFF775944),
     "Gray" to Color.Gray,
     "Black" to Color.Black,
