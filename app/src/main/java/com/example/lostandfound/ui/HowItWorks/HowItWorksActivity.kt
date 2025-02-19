@@ -5,6 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -86,7 +87,7 @@ fun HowItWorksScreen(activity: ComponentActivity) {
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(paddingValues = innerPadding)
-                        .padding(dimensionResource(R.dimen.title_margin))
+                        .padding(vertical = dimensionResource(R.dimen.title_margin))
                         .verticalScroll(rememberScrollState())
                 ) {
                     // includes the top tab bar and the main content
@@ -119,13 +120,13 @@ fun MainContent(viewModel: HowItWorksViewModel = viewModel()) {
         HorizontalDivider(thickness = 1.dp, color = Color.Gray)
         FAQs(viewModel = viewModel)
     }
-
 }
 
 @Composable
 fun addItem(viewModel: HowItWorksViewModel){
     Row(
-        horizontalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.content_margin))
+        horizontalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.content_margin)),
+        modifier = Modifier.padding(horizontal = dimensionResource(R.dimen.title_margin))
     ){
         Icon(
             imageVector = Icons.Outlined.AddCircle,
@@ -170,7 +171,8 @@ fun addItem(viewModel: HowItWorksViewModel){
 @Composable
 fun searchItem(viewModel: HowItWorksViewModel){
     Row(
-        horizontalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.content_margin))
+        horizontalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.content_margin)),
+        modifier = Modifier.padding(horizontal = dimensionResource(R.dimen.title_margin))
     ){
         Column (
             verticalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.content_margin)),
@@ -215,7 +217,8 @@ fun searchItem(viewModel: HowItWorksViewModel){
 @Composable
 fun trackItem(viewModel: HowItWorksViewModel){
     Row(
-        horizontalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.content_margin))
+        horizontalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.content_margin)),
+        modifier = Modifier.padding(horizontal = dimensionResource(R.dimen.title_margin))
     ){
         Icon(
             imageVector = Icons.Outlined.TrackChanges,
@@ -277,7 +280,8 @@ fun trackItem(viewModel: HowItWorksViewModel){
 @Composable
 fun approveItem(viewModel: HowItWorksViewModel){
     Row(
-        horizontalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.content_margin))
+        horizontalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.content_margin)),
+        modifier = Modifier.padding(horizontal = dimensionResource(R.dimen.title_margin))
     ){
         Column (
             verticalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.content_margin)),
@@ -317,7 +321,11 @@ fun FAQs(viewModel: HowItWorksViewModel){
     Column (
         verticalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.content_margin))
     ){
-        CustomGrayTitle(text = "Frequently Asked Questions")
+        Box(
+            modifier = Modifier.padding(horizontal = dimensionResource(R.dimen.content_margin))
+        ){
+            CustomGrayTitle(text = "Frequently Asked Questions")
+        }
 
         CustomPopupText(
             title = "Can I delete my posted items?",

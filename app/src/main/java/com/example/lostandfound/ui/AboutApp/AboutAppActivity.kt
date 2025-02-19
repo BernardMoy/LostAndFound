@@ -7,6 +7,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -76,7 +77,7 @@ fun AboutAppScreen(activity: ComponentActivity) {
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(paddingValues = innerPadding)
-                        .padding(dimensionResource(R.dimen.title_margin))
+                        .padding(vertical = dimensionResource(R.dimen.title_margin))
                         .verticalScroll(rememberScrollState())
                 ) {
                     // includes the top tab bar and the main content
@@ -99,11 +100,11 @@ fun MainContent(viewModel: AboutAppViewModel = viewModel()) {
 
     // contents
     Column (
+
     ){
         AppInfo(viewModel = viewModel)
         AppVersion(viewModel = viewModel)
         PrivacyPolicy(context = context, viewModel = viewModel)
-        EasterEgg(viewModel = viewModel)
     }
 
 }
@@ -111,38 +112,48 @@ fun MainContent(viewModel: AboutAppViewModel = viewModel()) {
 // display the app icon and also app name
 @Composable
 fun AppInfo(viewModel: AboutAppViewModel){
-    Row (
-        modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.Center
+    Column(
+        verticalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.content_margin))
     ){
-        /*
-        When changing the app icon, aside from changing that in mimmap,
-        also change the app_icon.png (Used to display here) in the drawables folder
-         */
-        Image(
-            painter = painterResource(id = R.drawable.app_icon),
-            contentDescription = "App icon",
-            modifier = Modifier.size(dimensionResource(R.dimen.profile_image_size_large))
-        )
+        Row (
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.Center
+        ){
+            /*
+            When changing the app icon, aside from changing that in mimmap,
+            also change the app_icon.png (Used to display here) in the drawables folder
+             */
+            Image(
+                painter = painterResource(id = R.drawable.app_icon),
+                contentDescription = "App icon",
+                modifier = Modifier.size(dimensionResource(R.dimen.profile_image_size_large))
+            )
+        }
+
+        Row (
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.Center
+        ){
+            Text(
+                text = "LOST AND FOUND",
+                color = MaterialTheme.colorScheme.onPrimaryContainer,
+                fontWeight = FontWeight.Bold,
+                style = Typography.titleMedium,
+                textAlign = TextAlign.Center
+            )
+        }
     }
 
-    Row (
-        modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.Center
-    ){
-        Text(
-            text = "LOST AND FOUND",
-            color = MaterialTheme.colorScheme.onPrimaryContainer,
-            fontWeight = FontWeight.Bold,
-            style = Typography.titleMedium,
-            textAlign = TextAlign.Center
-        )
-    }
 }
 
 @Composable
 fun AppVersion(viewModel: AboutAppViewModel){
-    CustomGrayTitle("App version")
+    Box(
+        modifier = Modifier.padding(horizontal = dimensionResource(R.dimen.content_margin))
+    ){
+        CustomGrayTitle("App version")
+    }
+
     CustomEditText(
         fieldLabel = "App version",
         fieldContent = "1.0",
@@ -162,21 +173,4 @@ fun PrivacyPolicy(context: Context, viewModel: AboutAppViewModel){
         leftIcon = Icons.Outlined.PrivacyTip,
     )
 }
-
-@Composable
-fun EasterEgg(viewModel: AboutAppViewModel){
-    Row (
-        modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.Center
-    ){
-        Text(
-            text = "Wait why are you here",
-            color = Color.Gray,
-            style = Typography.bodyMedium,
-            textAlign = TextAlign.Center
-        )
-    }
-}
-
-
 
