@@ -79,7 +79,7 @@ fun HowItWorksScreen(activity: ComponentActivity) {
             Scaffold(
                 // top toolbar
                 topBar = {
-                    BackToolbar(title = "How it works", activity = activity)
+                    BackToolbar(title = "How it works and FAQs", activity = activity)
                 }
             ) { innerPadding ->
                 Column(
@@ -297,7 +297,7 @@ fun approveItem(viewModel: HowItWorksViewModel){
             )
 
             Text(
-                text = "You can make a claim by clicking on an item in the search screen.",
+                text = "You can make a claim by viewing an item in the search screen.",
                 style = Typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onBackground
             )
