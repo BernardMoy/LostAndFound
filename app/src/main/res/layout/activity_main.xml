@@ -253,10 +253,10 @@
         <!-- Elements used for displaying the initial tutorial -->
         <LinearLayout
             android:id="@+id/tutorial_1"
-            android:visibility="gone"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
+            android:visibility="gone"
             android:background="@drawable/background"
             android:padding="@dimen/content_margin"
             android:layout_margin="@dimen/content_margin_half"
@@ -266,7 +266,8 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="The drawer"
+                android:maxWidth="200dp"
+                android:text="You can use this '+' button to create a new lost or found item.\n\nYou can find all your past items and chats from the toolbar below. "
                 android:padding="@dimen/content_margin"
                 style="@style/blackContent"/>
 
@@ -303,7 +304,8 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="The drawer"
+                android:maxWidth="200dp"
+                android:text="You can find all functions you need in the drawer by clicking the icon here."
                 android:padding="@dimen/content_margin"
                 style="@style/blackContent"/>
 
@@ -327,9 +329,9 @@
 
         <LinearLayout
             android:id="@+id/tutorial_3"
-            android:visibility="gone"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:visibility="gone"
             android:orientation="vertical"
             android:background="@drawable/background"
             android:padding="@dimen/content_margin"
@@ -340,7 +342,8 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="The drawer"
+                android:maxWidth="200dp"
+                android:text="You can view your notifications and profile by clicking the two icons here."
                 android:padding="@dimen/content_margin"
                 style="@style/blackContent"/>
 

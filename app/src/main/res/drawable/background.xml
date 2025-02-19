@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <shape xmlns:android="http://schemas.android.com/apk/res/android">
-    <solid android:color="@color/backgroundColor" />
+    <solid android:color="?attr/colorBackgroundFloating" />   <!-- Adapt to the background day or night theme set -->
     <corners android:radius="@dimen/corner_radius_small" />
     <stroke android:color="@color/primaryColor" android:width="@dimen/stroke_width" />
 </shape>
