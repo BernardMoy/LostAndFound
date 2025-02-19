@@ -272,6 +272,7 @@ fun Developer(
     Column(
         verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin_half))
     ) {
+        /*
         CustomActionRow(text = "Delete shared preferences data",
             leftIcon = Icons.Outlined.Delete,
             onClick = {
@@ -501,6 +502,8 @@ fun Developer(
                     }
             }
         )
+
+         */
 
         CustomActionRow(text = "Open comparison activity",
             leftIcon = Icons.Outlined.Android,

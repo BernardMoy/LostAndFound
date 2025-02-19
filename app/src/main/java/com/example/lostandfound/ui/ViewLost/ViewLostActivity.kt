@@ -602,6 +602,8 @@ fun ActionButtons(
                                 type = ButtonType.WARNING,
                                 onClick = {
                                     // delete item
+                                    Toast.makeText(context, "You cant delete in demo mode!:P", Toast.LENGTH_SHORT).show()
+                                    /*
                                     viewModel.deleteItem(object : Callback<Boolean>{
                                         override fun onComplete(result: Boolean) {
                                             if (!result){
@@ -628,6 +630,8 @@ fun ActionButtons(
 
                                         }
                                     })
+
+                                     */
                                 }
                             )
                         },
