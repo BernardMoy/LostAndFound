@@ -108,20 +108,20 @@ fun MainContent(viewModel: HowItWorksViewModel = viewModel()) {
     Column(
         verticalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.title_margin))
     ) {
-        addItem(viewModel = viewModel)
+        AddItem(viewModel = viewModel)
         HorizontalDivider(thickness = 1.dp, color = Color.Gray)
         searchItem(viewModel = viewModel)
         HorizontalDivider(thickness = 1.dp, color = Color.Gray)
         trackItem(viewModel = viewModel)
         HorizontalDivider(thickness = 1.dp, color = Color.Gray)
-        approveItem(viewModel = viewModel)
+        ApproveItem(viewModel = viewModel)
         HorizontalDivider(thickness = 1.dp, color = Color.Gray)
         FAQs(viewModel = viewModel)
     }
 }
 
 @Composable
-fun addItem(viewModel: HowItWorksViewModel) {
+fun AddItem(viewModel: HowItWorksViewModel) {
     Row(
         horizontalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.content_margin)),
         modifier = Modifier.padding(horizontal = dimensionResource(R.dimen.title_margin))
@@ -276,7 +276,7 @@ fun trackItem(viewModel: HowItWorksViewModel) {
 }
 
 @Composable
-fun approveItem(viewModel: HowItWorksViewModel) {
+fun ApproveItem(viewModel: HowItWorksViewModel) {
     Row(
         horizontalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.content_margin)),
         modifier = Modifier.padding(horizontal = dimensionResource(R.dimen.title_margin))

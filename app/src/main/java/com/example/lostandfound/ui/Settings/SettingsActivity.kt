@@ -19,12 +19,15 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Android
 import androidx.compose.material.icons.outlined.Animation
+import androidx.compose.material.icons.outlined.CheckCircle
+import androidx.compose.material.icons.outlined.Compare
 import androidx.compose.material.icons.outlined.DarkMode
 import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material.icons.outlined.Image
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.LocationOn
 import androidx.compose.material.icons.outlined.Refresh
+import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material.icons.outlined.TextFields
 import androidx.compose.material3.HorizontalDivider
@@ -49,6 +52,7 @@ import com.example.lostandfound.Data.SharedPreferencesNames
 import com.example.lostandfound.FirebaseManagers.FirebaseUtility
 import com.example.lostandfound.R
 import com.example.lostandfound.ui.AboutApp.AboutAppActivity
+import com.example.lostandfound.ui.Done.DoneActivity
 import com.example.lostandfound.ui.ImageComparison.ImageComparisonActivity
 import com.example.lostandfound.ui.PermissionsTest.PermissionsTestActivity
 import com.example.lostandfound.ui.Search.SearchActivity
@@ -518,7 +522,7 @@ fun Developer(
         )
 
         CustomActionRow(text = "Open comparison activity",
-            leftIcon = Icons.Outlined.Android,
+            leftIcon = Icons.Outlined.Compare,
             onClick = {
                 val i: Intent = Intent(context, ViewComparisonActivity::class.java)
                 i.putExtra(
@@ -534,7 +538,7 @@ fun Developer(
         )
 
         CustomActionRow(text = "Open search activity",
-            leftIcon = Icons.Outlined.Android,
+            leftIcon = Icons.Outlined.Search,
             onClick = {
                 val i: Intent = Intent(context, SearchActivity::class.java)
                 i.putExtra(
@@ -544,6 +548,19 @@ fun Developer(
                 context.startActivity(i)
             }
         )
+
+        CustomActionRow(text = "Open done activity",
+            leftIcon = Icons.Outlined.CheckCircle,
+            onClick = {
+                val i: Intent = Intent(context, DoneActivity::class.java)
+                i.putExtra(
+                    IntentExtraNames.INTENT_DONE_ACTIVITY_TITLE,
+                    "Item posted!"
+                )
+                context.startActivity(i)
+            }
+        )
+
 
         CustomActionRow(text = "Open image comparison activity",
             leftIcon = Icons.Outlined.Image,
