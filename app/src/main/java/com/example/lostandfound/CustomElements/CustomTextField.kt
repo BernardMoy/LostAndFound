@@ -436,8 +436,7 @@ fun CustomComparisonTextField(
 fun CustomComparisonField(
     centerLabel: @Composable () -> Unit,
     contentLeft: @Composable () -> Unit,
-    contentRight: @Composable () -> Unit,
-    isMatch: Boolean = false   // if match, a matches text will appear below center label
+    contentRight: @Composable () -> Unit
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
@@ -459,27 +458,6 @@ fun CustomComparisonField(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 centerLabel()
-
-                // show the matching icon
-                if (isMatch) {
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin_half))
-                    ) {
-                        Icon(
-                            imageVector = Icons.Filled.CheckCircle,
-                            tint = colorResource(id = R.color.status2),
-                            contentDescription = "Match",
-                            modifier = Modifier.width(dimensionResource(id = R.dimen.content_margin))
-                        )
-                        Text(
-                            text = "Matches",
-                            style = Typography.bodyMedium,
-                            color = colorResource(id = R.color.status2),
-                            fontWeight = FontWeight.Bold
-                        )
-                    }
-                }
             }
         }
 

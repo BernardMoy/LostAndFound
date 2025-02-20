@@ -404,6 +404,27 @@ fun ItemDetails(viewModel: ViewComparisonViewModel) {
                         color = Color.Gray
                     )
                 }
+
+                // show the matching icon
+                if (viewModel.scoreData.isColorCloseMatch()) {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin_half))
+                    ) {
+                        Icon(
+                            imageVector = Icons.Filled.CheckCircle,
+                            tint = colorResource(id = R.color.status2),
+                            contentDescription = "Match",
+                            modifier = Modifier.width(dimensionResource(id = R.dimen.content_margin))
+                        )
+                        Text(
+                            text = "Matches",
+                            style = Typography.bodyMedium,
+                            color = colorResource(id = R.color.status2),
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
+                }
             },
             contentLeft = {
                 val colorText = viewModel.lostItemData.color.joinToString(", ")
@@ -474,8 +495,7 @@ fun ItemDetails(viewModel: ViewComparisonViewModel) {
                         }
                     }
                 }
-            },
-            isMatch = viewModel.scoreData.isColorCloseMatch()
+            }
         )
 
         HorizontalDivider(thickness = 1.dp)
