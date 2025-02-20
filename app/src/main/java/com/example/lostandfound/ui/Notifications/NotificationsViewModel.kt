@@ -7,6 +7,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import com.example.lostandfound.Data.FirebaseNames
 import com.example.lostandfound.FirebaseManagers.FirebaseUtility
+import com.example.lostandfound.FirebaseManagers.NotificationManager
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ListenerRegistration
 import com.google.firebase.firestore.Query
@@ -105,6 +106,24 @@ class NotificationsViewModel : ViewModel() {
                 callback.onComplete(false)
 
             }
+    }
+
+    // method to mark all notifications as read
+    // return true if successful false otherwise
+    fun markAllAsRead(callback: LoadNotificationsCallback) {
+        NotificationManager.markAllNotificationsAsRead(
+            FirebaseUtility.getUserID(),
+            object : NotificationManager.NotificationUpdateCallback {
+                override fun onComplete(result: Boolean) {
+                    if (!result) {
+                        callback.onComplete(false)
+                        return
+                    }
+
+                    callback.onComplete(true)
+                }
+            }
+        )
     }
 
     // clear the previous listener when the view model is destroyed
