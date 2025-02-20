@@ -4,9 +4,9 @@ import com.example.lostandfound.MatchingFunctions.getLocationScore
 import org.junit.Test
 import kotlin.math.abs
 
-class LocationScoreTest{
+class LocationScoreTest {
     @Test
-    fun testGetLocationScore(){
+    fun testGetLocationScore() {
         val score = getLocationScore(
             Pair(52.38040320697202, -1.5605640104046208),
             Pair(52.383647967653, -1.5599945903312389)

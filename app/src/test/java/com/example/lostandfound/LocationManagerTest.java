@@ -26,7 +26,7 @@ public class LocationManagerTest {
     private static final double ACTUAL_DISTANCE = 1.70;
 
     @Test
-    public void testGetDistanceBetweenLocations(){
+    public void testGetDistanceBetweenLocations() {
         double calculatedDistance = LocationManager.INSTANCE.getDistanceBetweenLocations(
                 new Pair<>(52.374552794297, -1.5505370226481643),
                 new Pair<>(52.38871254041315, -1.5598439802945556)

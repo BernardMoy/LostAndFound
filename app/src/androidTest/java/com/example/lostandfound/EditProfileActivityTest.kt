@@ -3,7 +3,6 @@ package com.example.lostandfound
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithText
-import androidx.compose.ui.test.performClick
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.example.lostandfound.ui.EditProfile.MainContent
 import org.junit.Rule
@@ -17,7 +16,7 @@ class EditProfileActivityTest {
     val composeTestRule = createComposeRule()
 
     @Test
-    fun testEmptyFirstName(){
+    fun testEmptyFirstName() {
         composeTestRule.setContent {
             MainContent()
         }
@@ -25,9 +24,9 @@ class EditProfileActivityTest {
         // add other UI tests here
 
         // assert that the error message is displayed
-        composeTestRule.onNodeWithText("Only your name and avatar would be visible to others.").assertIsDisplayed()
+        composeTestRule.onNodeWithText("Only your name and avatar would be visible to others.")
+            .assertIsDisplayed()
     }
-
 
 
 }

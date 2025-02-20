@@ -31,12 +31,12 @@ public class RegisterViewModelTest {
     Handler handler = Mockito.mock(Handler.class);
 
     @Before
-    public void setUp(){
+    public void setUp() {
         viewModel = new RegisterViewModel();
     }
 
     @Test
-    public void testValidateFirstName(){
+    public void testValidateFirstName() {
         // test for invalid inputs
         boolean invalid = viewModel.validateFirstName("");
         assertFalse(invalid);
@@ -47,7 +47,7 @@ public class RegisterViewModelTest {
     }
 
     @Test
-    public void testValidateLastName(){
+    public void testValidateLastName() {
         // test for invalid inputs
         assertFalse(viewModel.validateLastName(""));
         assertEquals("Last name cannot be empty", viewModel.getRegisterError().getValue());
@@ -57,7 +57,7 @@ public class RegisterViewModelTest {
     }
 
     @Test
-    public void testValidateEmail(){
+    public void testValidateEmail() {
         // test for invalid inputs
         assertFalse(viewModel.validateEmail(""));
         assertEquals("Email cannot be empty", viewModel.getRegisterError().getValue());
@@ -76,7 +76,7 @@ public class RegisterViewModelTest {
     }
 
     @Test
-    public void testValidatePassword(){
+    public void testValidatePassword() {
         // test for invalid inputs
         assertFalse(viewModel.validatePassword("", ""));
         assertEquals("Password cannot be empty", viewModel.getRegisterError().getValue());

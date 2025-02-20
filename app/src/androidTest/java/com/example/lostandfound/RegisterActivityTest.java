@@ -1,10 +1,5 @@
 package com.example.lostandfound;
 
-import static androidx.test.espresso.action.ViewActions.click;
-import static androidx.test.espresso.matcher.ViewMatchers.withId;
-import static androidx.test.espresso.matcher.ViewMatchers.withText;
-import static org.junit.Assert.assertEquals;
-
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
@@ -19,10 +14,10 @@ public class RegisterActivityTest {
     @Rule
     public ActivityScenarioRule<RegisterActivity> activityScenarioRule = new ActivityScenarioRule<>(RegisterActivity.class);
 
-    private String validFirstName = "FirstName";
-    private String validLastName = "LastName";
-    private String validEmail = "u0000000@warwick.ac.uk";
-    private String validPassword = "yqwe902G*";
+    private final String validFirstName = "FirstName";
+    private final String validLastName = "LastName";
+    private final String validEmail = "u0000000@warwick.ac.uk";
+    private final String validPassword = "yqwe902G*";
 
     /*
     @Test
