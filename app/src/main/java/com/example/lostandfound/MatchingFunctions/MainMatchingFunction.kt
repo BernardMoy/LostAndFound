@@ -4,10 +4,9 @@ import android.content.Context
 import com.example.lostandfound.Data.FoundItem
 import com.example.lostandfound.Data.LostItem
 import com.example.lostandfound.Data.ScoreData
-import com.google.android.material.color.utilities.Score
 
 
-interface ScoreDataCallback{
+interface ScoreDataCallback {
     fun onScoreCalculated(scoreData: ScoreData)
 }
 
@@ -27,11 +26,14 @@ In the worst case only the category and color will contribute to the final score
 // the overall score is the weighted mean of score of each attribute
 val WEIGHT_IMAGE = 1              // Low: 1 is the default here
 val WEIGHT_CATEGORY = 2.5           // Higher: Less likely to make mistakes
-val WEIGHT_COLOR = 2            // Higher: Less likely to make mistakes with the intelligent algorithm
-val WEIGHT_BRAND = 1.5            // Medium: The same brand may have different representations (Future work)
+val WEIGHT_COLOR =
+    2            // Higher: Less likely to make mistakes with the intelligent algorithm
+val WEIGHT_BRAND =
+    1.5            // Medium: The same brand may have different representations (Future work)
 val WEIGHT_LOCATION = 1.5         // Medium: The item might be broguht elsewhere
 
-val SCORE_THRESHOLD = 1.5        // items will be considered matching if their score is larger than this threshold
+val SCORE_THRESHOLD =
+    1.5        // items will be considered matching if their score is larger than this threshold
 
 /*
 Given a lost item and found item, return the map containing an overall score
@@ -48,10 +50,10 @@ fun getMatchingScores(
     lostItem: LostItem,
     foundItem: FoundItem,
     scoreDataCallback: ScoreDataCallback
-){
+) {
     // only retrieve items with lost time - found time <= 7 days (604800s)
     // if they fail this condition, return score of all 0.0 (Will definitely not be greater than threshold and not considered)
-    if (lostItem.dateTime - foundItem.dateTime > 604800){
+    if (lostItem.dateTime - foundItem.dateTime > 604800) {
         scoreDataCallback.onScoreCalculated(
             ScoreData(overallScore = 0.0)
         )
@@ -65,38 +67,43 @@ fun getMatchingScores(
     var weights = 0.0
 
     // calculate category
-    val scoreCategory = getCategoryScore(lostItem.category, lostItem.subCategory, foundItem.category, foundItem.subCategory)
-    sum += scoreCategory* WEIGHT_CATEGORY
+    val scoreCategory = getCategoryScore(
+        lostItem.category,
+        lostItem.subCategory,
+        foundItem.category,
+        foundItem.subCategory
+    )
+    sum += scoreCategory * WEIGHT_CATEGORY
     weights += WEIGHT_CATEGORY
     result.categoryScore = scoreCategory
 
     // calculate color
     val scoreColor = getColorScore(lostItem.color, foundItem.color)
-    sum += scoreColor* WEIGHT_COLOR
+    sum += scoreColor * WEIGHT_COLOR
     weights += WEIGHT_COLOR
     result.colorScore = scoreColor
 
     // check if calculate brand
-    if (lostItem.brand.isNotEmpty() && foundItem.brand.isNotEmpty()){
+    if (lostItem.brand.isNotEmpty() && foundItem.brand.isNotEmpty()) {
         val scoreBrand = getBrandScore(lostItem.brand, foundItem.brand)
-        sum += scoreBrand* WEIGHT_BRAND
+        sum += scoreBrand * WEIGHT_BRAND
         weights += WEIGHT_BRAND
         result.brandScore = scoreBrand
     }
 
     // check if calculate location
-    if (lostItem.location != null && foundItem.location != null){
-        val scoreLocation =  getLocationScore(lostItem.location, foundItem.location)
-        sum += scoreLocation* WEIGHT_LOCATION
+    if (lostItem.location != null && foundItem.location != null) {
+        val scoreLocation = getLocationScore(lostItem.location, foundItem.location)
+        sum += scoreLocation * WEIGHT_LOCATION
         weights += WEIGHT_LOCATION
         result.locationScore = scoreLocation
     }
 
     // check if calculate image
-    if (lostItem.image.isNotEmpty() && foundItem.image.isNotEmpty()){
-        getImageScore(context, lostItem.image, foundItem.image, object: ImageScoreCallback{
+    if (lostItem.image.isNotEmpty() && foundItem.image.isNotEmpty()) {
+        getImageScore(context, lostItem.image, foundItem.image, object : ImageScoreCallback {
             override fun onScoreCalculated(score: Double) {
-                sum += score* WEIGHT_IMAGE
+                sum += score * WEIGHT_IMAGE
                 weights += WEIGHT_IMAGE
                 result.imageScore = score
 

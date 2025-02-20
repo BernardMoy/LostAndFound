@@ -19,14 +19,11 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Android
 import androidx.compose.material.icons.outlined.Animation
-import androidx.compose.material.icons.outlined.CameraAlt
 import androidx.compose.material.icons.outlined.DarkMode
 import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material.icons.outlined.Image
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.LocationOn
-import androidx.compose.material.icons.outlined.Notifications
-import androidx.compose.material.icons.outlined.Palette
 import androidx.compose.material.icons.outlined.Refresh
 import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material.icons.outlined.TextFields
@@ -124,7 +121,7 @@ fun MainContent(viewModel: SettingsViewModel = viewModel()) {
     AboutTheApp(context = context)
 
     // if the user is developer and dev settings are enabled, enable these
-    if (FirebaseUtility.isUserDev() && DevData.IS_DEV_SETTINGS_SHOWN){
+    if (FirebaseUtility.isUserDev() && DevData.IS_DEV_SETTINGS_SHOWN) {
         HorizontalDivider(thickness = 1.dp, color = Color.Gray)
         Developer(context = context, viewModel = viewModel)
     }
@@ -136,15 +133,15 @@ fun MainContent(viewModel: SettingsViewModel = viewModel()) {
 fun Appearance(
     context: Context
 ) {
-    Box(modifier = Modifier.padding(
-        horizontal = dimensionResource(id = R.dimen.content_margin))
-    ){
+    Box(
+        modifier = Modifier.padding(
+            horizontal = dimensionResource(id = R.dimen.content_margin)
+        )
+    ) {
         CustomGrayTitle(text = "Appearance")
     }
 
-    Column(
-        //verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin_half))
-    ) {
+    Column {
         /*
         CustomActionRow(text = "Color theme",
             leftIcon = Icons.Outlined.Palette,
@@ -196,8 +193,10 @@ fun Appearance(
 fun Permissions(
     context: Context
 ) {
-    Box(modifier = Modifier.padding(
-        horizontal = dimensionResource(id = R.dimen.content_margin))
+    Box(
+        modifier = Modifier.padding(
+            horizontal = dimensionResource(id = R.dimen.content_margin)
+        )
     ) {
         CustomGrayTitle(text = "Permissions")
     }
@@ -209,7 +208,8 @@ fun Permissions(
             leftIcon = Icons.Outlined.Settings,
             onClick = {
                 // redirect to the settings page of the os
-                val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+                val intent = Intent(
+                    Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
                     Uri.fromParts("package", context.packageName, null)
                 )
                 context.startActivity(intent)
@@ -222,9 +222,11 @@ fun Permissions(
 fun AboutTheApp(
     context: Context
 ) {
-    Box(modifier = Modifier.padding(
-        horizontal = dimensionResource(id = R.dimen.content_margin))
-    ){
+    Box(
+        modifier = Modifier.padding(
+            horizontal = dimensionResource(id = R.dimen.content_margin)
+        )
+    ) {
         CustomGrayTitle(text = "About the app")
     }
     Column(
@@ -264,8 +266,10 @@ fun Developer(
     context: Context,
     viewModel: SettingsViewModel
 ) {
-    Box(modifier = Modifier.padding(
-        horizontal = dimensionResource(id = R.dimen.content_margin))
+    Box(
+        modifier = Modifier.padding(
+            horizontal = dimensionResource(id = R.dimen.content_margin)
+        )
     ) {
         CustomGrayTitle(text = "Developer settings")
     }
@@ -332,7 +336,11 @@ fun Developer(
                                                     }
                                                 }
                                             } else {
-                                                Toast.makeText(context, "Delete chat failed", Toast.LENGTH_SHORT).show()
+                                                Toast.makeText(
+                                                    context,
+                                                    "Delete chat failed",
+                                                    Toast.LENGTH_SHORT
+                                                ).show()
                                             }
                                         }
                                 } else {
@@ -382,7 +390,8 @@ fun Developer(
                                 }
                             }
                         } else {
-                            Toast.makeText(context, "Delete lost items failed", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(context, "Delete lost items failed", Toast.LENGTH_SHORT)
+                                .show()
                         }
                     }
             }
@@ -420,7 +429,8 @@ fun Developer(
                                 }
                             }
                         } else {
-                            Toast.makeText(context, "Delete found items failed", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(context, "Delete found items failed", Toast.LENGTH_SHORT)
+                                .show()
                         }
                     }
             }
@@ -458,7 +468,8 @@ fun Developer(
                                 }
                             }
                         } else {
-                            Toast.makeText(context, "Delete claims failed", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(context, "Delete claims failed", Toast.LENGTH_SHORT)
+                                .show()
                         }
                     }
             }
@@ -496,7 +507,11 @@ fun Developer(
                                 }
                             }
                         } else {
-                            Toast.makeText(context, "Delete notifications failed", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(
+                                context,
+                                "Delete notifications failed",
+                                Toast.LENGTH_SHORT
+                            ).show()
                         }
                     }
             }

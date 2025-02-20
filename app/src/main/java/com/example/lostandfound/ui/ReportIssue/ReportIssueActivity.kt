@@ -21,10 +21,8 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -190,7 +188,7 @@ fun DoneButton(
     context: Context,
     viewModel: ReportIssueViewModel
 ) {
-    if (viewModel.isLoading.value){
+    if (viewModel.isLoading.value) {
         CustomProgressBar()
     }
 
@@ -210,9 +208,9 @@ fun DoneButton(
                     return@CustomButton
                 }
 
-                
+
                 viewModel.isLoading.value = true
-                viewModel.onDoneButtonClicked(object: ErrorCallback{
+                viewModel.onDoneButtonClicked(object : ErrorCallback {
                     override fun onComplete(error: String) {
                         // stop loading
                         viewModel.isLoading.value = false

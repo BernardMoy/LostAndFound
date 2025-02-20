@@ -5,19 +5,17 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
-import com.example.lostandfound.Data.ChatMessage
 import com.example.lostandfound.Data.FirebaseNames
 import com.example.lostandfound.FirebaseManagers.FirebaseUtility
-import com.google.firebase.firestore.DocumentChange
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ListenerRegistration
 import com.google.firebase.firestore.Query
 
-interface LoadNotificationsCallback{
+interface LoadNotificationsCallback {
     fun onComplete(result: Boolean)
 }
 
-class NotificationsViewModel : ViewModel(){
+class NotificationsViewModel : ViewModel() {
     val isItemsUnread: MutableState<Boolean> = mutableStateOf(false)
     val isMessagesUnread: MutableState<Boolean> = mutableStateOf(true)
 
@@ -27,7 +25,8 @@ class NotificationsViewModel : ViewModel(){
     private var listenerRegistration: ListenerRegistration? = null
 
     // store a list of notifications in maps (Instead of classes), since notifs can have different formats
-    var itemsNotificationList: MutableList<Map<String, Any>> = mutableStateListOf()  // make this listenable
+    var itemsNotificationList: MutableList<Map<String, Any>> =
+        mutableStateListOf()  // make this listenable
 
 
     /*
@@ -75,7 +74,7 @@ class NotificationsViewModel : ViewModel(){
      */
 
     // a regular load method
-    fun loadItemsNotifications(callback: LoadNotificationsCallback){
+    fun loadItemsNotifications(callback: LoadNotificationsCallback) {
         val db = FirebaseFirestore.getInstance()
         itemsNotificationList.clear()
 
@@ -85,13 +84,13 @@ class NotificationsViewModel : ViewModel(){
             .orderBy(FirebaseNames.NOTIFICATION_TIMESTAMP, Query.Direction.DESCENDING)
             .get()
             .addOnSuccessListener { snapshot ->
-                if (snapshot.isEmpty){
+                if (snapshot.isEmpty) {
                     // the user does not have any notifications
                     callback.onComplete(true)
                     return@addOnSuccessListener
                 }
 
-                for (document in snapshot.documents){
+                for (document in snapshot.documents) {
                     val thisNotification = document.data?.toMutableMap() ?: mutableMapOf()
                     // add the notification id to the map
                     thisNotification[FirebaseNames.NOTIFICATION_ID] = document.id
@@ -101,7 +100,7 @@ class NotificationsViewModel : ViewModel(){
                 // return true after all elements are added
                 callback.onComplete(true)
 
-            }.addOnFailureListener{ error ->
+            }.addOnFailureListener { error ->
                 Log.d("Notifications fetching error", error.message.toString())
                 callback.onComplete(false)
 

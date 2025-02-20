@@ -1,7 +1,8 @@
 package com.example.lostandfound.Data;
 
 public final class SharedPreferencesNames {
-    private SharedPreferencesNames(){}
+    private SharedPreferencesNames() {
+    }
 
     // strings that represent all names of shared prefs
     public static final String NAME_USERS = "user";

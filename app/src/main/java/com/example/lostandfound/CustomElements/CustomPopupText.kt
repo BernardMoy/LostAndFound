@@ -42,18 +42,17 @@ fun Previews() {
 fun CustomPopupText(
     title: String,
     content: AnnotatedString
-){
+) {
     // is pop up is default to false
-    val isPopUp = remember{
+    val isPopUp = remember {
         mutableStateOf(false)
     }
 
-    Column(
-
-    ){
+    Column {
         // show the question
-        Row (
-            modifier = Modifier.fillMaxWidth()
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
                 .clickable {
                     // set is pop up to true
                     isPopUp.value = !isPopUp.value
@@ -62,7 +61,7 @@ fun CustomPopupText(
                     dimensionResource(R.dimen.content_margin)
                 ),
             verticalAlignment = Alignment.CenterVertically
-        ){
+        ) {
             Text(
                 text = title,
                 style = Typography.bodyMedium,
@@ -70,7 +69,7 @@ fun CustomPopupText(
                 modifier = Modifier.weight(1f)
             )
 
-            if (isPopUp.value){
+            if (isPopUp.value) {
                 Icon(
                     imageVector = Icons.Outlined.ArrowDropUp,
                     contentDescription = "Open",
@@ -86,8 +85,8 @@ fun CustomPopupText(
         }
 
         // show the answer if is pop up is true
-        if (isPopUp.value){
-            Row (
+        if (isPopUp.value) {
+            Row(
                 modifier = Modifier
                     .padding(
                         dimensionResource(R.dimen.content_margin)

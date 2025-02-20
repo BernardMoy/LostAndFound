@@ -8,7 +8,6 @@ import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
-import com.example.lostandfound.R
 import androidx.activity.compose.setContent
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
@@ -38,9 +37,9 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.material3.Surface
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
@@ -69,9 +68,10 @@ import com.example.lostandfound.CustomElements.CustomEditText
 import com.example.lostandfound.CustomElements.CustomErrorText
 import com.example.lostandfound.CustomElements.CustomProgressBar
 import com.example.lostandfound.CustomElements.CustomTextDialog
-import com.example.lostandfound.FirebaseManagers.FirebaseAuthManager
-import com.example.lostandfound.Utility.ImageManager
 import com.example.lostandfound.Data.SharedPreferencesNames
+import com.example.lostandfound.FirebaseManagers.FirebaseAuthManager
+import com.example.lostandfound.R
+import com.example.lostandfound.Utility.ImageManager
 import com.example.lostandfound.ui.theme.ComposeTheme
 
 
@@ -213,19 +213,19 @@ fun MainContent(viewModel: EditProfileViewModel = viewModel()) {
 fun Avatar(
     imageUri: MutableState<Uri?>,
     isSheetOpen: MutableState<Boolean>,
-){
+) {
 // box for avatar
     Box(
         modifier = Modifier
             .fillMaxWidth()
             .padding(0.dp, 0.dp, 0.dp, dimensionResource(id = R.dimen.title_margin)),
         contentAlignment = Alignment.Center     // align the avatar to center
-    ){
+    ) {
         // box for storing the image and the add button
         Box(
             modifier = Modifier
                 .size(dimensionResource(id = R.dimen.profile_image_size_large))
-        ){
+        ) {
             // display the profile icon
             Image(
                 painter = if (imageUri.value != null) {
@@ -249,19 +249,22 @@ fun Avatar(
             )
 
 
-            IconButton(onClick = {
-                // show the bottom sheet when the + button is pressed
-                isSheetOpen.value = true
-            },
+            IconButton(
+                onClick = {
+                    // show the bottom sheet when the + button is pressed
+                    isSheetOpen.value = true
+                },
                 modifier = Modifier
                     .size(dimensionResource(id = R.dimen.image_button_size))
                     .clip(CircleShape)
                     .background(MaterialTheme.colorScheme.primary)
                     .align(Alignment.BottomEnd)
             ) {
-                Icon(imageVector = Icons.Default.Add,
+                Icon(
+                    imageVector = Icons.Default.Add,
                     contentDescription = "Change avatar",
-                    tint = Color.White)
+                    tint = Color.White
+                )
             }
         }
     }
@@ -270,14 +273,15 @@ fun Avatar(
 @Composable
 fun FirstAndLastNameFields(
     viewModel: EditProfileViewModel,
-){
+) {
     Column {
         // first name field
-        CustomEditText(fieldLabel = "First name",
+        CustomEditText(
+            fieldLabel = "First name",
             fieldContent = viewModel.firstName.value,
             leftIcon = Icons.Outlined.AccountCircle,
             isEditable = true,
-            onTextChanged = {viewModel.onFirstNameChanged(it)},
+            onTextChanged = { viewModel.onFirstNameChanged(it) },
         )
 
         HorizontalDivider(thickness = 1.dp, color = Color.Gray)
@@ -287,7 +291,7 @@ fun FirstAndLastNameFields(
             fieldContent = viewModel.lastName.value,
             leftIcon = Icons.Outlined.AccountCircle,
             isEditable = true,
-            onTextChanged = {viewModel.onLastNameChanged(it)}
+            onTextChanged = { viewModel.onLastNameChanged(it) }
         )
 
         HorizontalDivider(thickness = 1.dp, color = Color.Gray)
@@ -332,17 +336,17 @@ fun SaveButton(
 ) {
     // box for save button
     // isloading state to display the loading animation
-    var isLoading by remember{mutableStateOf(false)}
+    var isLoading by remember { mutableStateOf(false) }
 
     // when isLoading changes, functions that uses the variable are re-composed
-    if (isLoading){
+    if (isLoading) {
         CustomProgressBar()
     }
 
     Box(
         modifier = Modifier.fillMaxWidth(),
         contentAlignment = Alignment.Center
-    ){
+    ) {
         CustomButton(
             text = "Save Profile",
             type = ButtonType.FILLED,
@@ -354,7 +358,7 @@ fun SaveButton(
                 if (inPreview) return@CustomButton
 
                 // verify the input fields
-                if (!viewModel.validateNames()){
+                if (!viewModel.validateNames()) {
                     return@CustomButton
                 }
 
@@ -402,8 +406,8 @@ fun SaveButton(
 fun AvatarBottomSheet(
     viewModel: EditProfileViewModel,
     isSheetOpen: MutableState<Boolean>
-){
-    if (isSheetOpen.value){
+) {
+    if (isSheetOpen.value) {
         ModalBottomSheet(
             onDismissRequest = { isSheetOpen.value = false },
             containerColor = MaterialTheme.colorScheme.background,
@@ -423,7 +427,7 @@ fun AvatarBottomSheet(
             Column(
                 modifier = Modifier.padding(horizontal = dimensionResource(id = R.dimen.content_margin)),
                 verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin_half))
-            ){
+            ) {
                 CustomActionRow(
                     text = "New avatar",
                     leftIcon = Icons.Outlined.Add,

@@ -10,18 +10,15 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -31,7 +28,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Circle
-import androidx.compose.material.icons.filled.RadioButtonChecked
 import androidx.compose.material.icons.outlined.AccountCircle
 import androidx.compose.material.icons.outlined.CalendarMonth
 import androidx.compose.material.icons.outlined.Description
@@ -54,7 +50,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalInspectionMode
@@ -114,7 +109,8 @@ class ViewComparisonActivity : ComponentActivity() {
         val passedLostItem = intent.getParcelableExtra<LostItem>(IntentExtraNames.INTENT_LOST_ID)
         val passedFoundItem = intent.getParcelableExtra<FoundItem>(IntentExtraNames.INTENT_FOUND_ID)
         val passedClaimItem = intent.getParcelableExtra<Claim>(IntentExtraNames.INTENT_CLAIM_ITEM)
-        val passedScoreData = intent.getParcelableExtra<ScoreData>(IntentExtraNames.INTENT_SCORE_DATA)
+        val passedScoreData =
+            intent.getParcelableExtra<ScoreData>(IntentExtraNames.INTENT_SCORE_DATA)
         if (passedLostItem != null) {
             viewModel.lostItemData = passedLostItem
         }
@@ -124,7 +120,7 @@ class ViewComparisonActivity : ComponentActivity() {
         if (passedClaimItem != null) {
             viewModel.claim = passedClaimItem
         }
-        if (passedScoreData != null){
+        if (passedScoreData != null) {
             viewModel.scoreData = passedScoreData
         }
 
@@ -318,48 +314,48 @@ fun Status(viewModel: ViewComparisonViewModel) {
 @OptIn(ExperimentalGlideComposeApi::class)
 @Composable
 fun ItemImage(viewModel: ViewComparisonViewModel) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            CustomComparisonField(
-                contentLeft = {
-                    val displayedLostImage =
-                        if (viewModel.lostItemData.image.isEmpty()) ImageManager.PLACEHOLDER_IMAGE_STRING else viewModel.lostItemData.image
-                    // image of the item
-                    GlideImage(
-                        model = Uri.parse(displayedLostImage),
-                        contentDescription = "Lost item image",
-                        modifier = Modifier
-                            .weight(3f)
-                            .padding(horizontal = dimensionResource(id = R.dimen.content_margin_half)),
-                        alignment = Alignment.Center
-                    )
-                },
-                contentRight = {
-                    val displayedFoundImage =
-                        if (viewModel.foundItemData.image.isEmpty()) ImageManager.PLACEHOLDER_IMAGE_STRING else viewModel.foundItemData.image
-                    GlideImage(
-                        model = Uri.parse(displayedFoundImage),
-                        contentDescription = "Found item image",
-                        modifier = Modifier
-                            .weight(3f)
-                            .padding(horizontal = dimensionResource(id = R.dimen.content_margin_half)),
-                        alignment = Alignment.Center
-                    )
-                },
-                centerLabel = {
-                    Text(
-                        text = "Overall Similarity\n" + (round(viewModel.scoreData.getOverallSimilarity()*1000)/10).toString() + "%",
-                        style = Typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onPrimaryContainer,
-                        fontWeight = FontWeight.Bold,
-                        textAlign = TextAlign.Center
-                    )
-                }
-            )
-        }
+    Row(
+        modifier = Modifier
+            .fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        CustomComparisonField(
+            contentLeft = {
+                val displayedLostImage =
+                    if (viewModel.lostItemData.image.isEmpty()) ImageManager.PLACEHOLDER_IMAGE_STRING else viewModel.lostItemData.image
+                // image of the item
+                GlideImage(
+                    model = Uri.parse(displayedLostImage),
+                    contentDescription = "Lost item image",
+                    modifier = Modifier
+                        .weight(3f)
+                        .padding(horizontal = dimensionResource(id = R.dimen.content_margin_half)),
+                    alignment = Alignment.Center
+                )
+            },
+            contentRight = {
+                val displayedFoundImage =
+                    if (viewModel.foundItemData.image.isEmpty()) ImageManager.PLACEHOLDER_IMAGE_STRING else viewModel.foundItemData.image
+                GlideImage(
+                    model = Uri.parse(displayedFoundImage),
+                    contentDescription = "Found item image",
+                    modifier = Modifier
+                        .weight(3f)
+                        .padding(horizontal = dimensionResource(id = R.dimen.content_margin_half)),
+                    alignment = Alignment.Center
+                )
+            },
+            centerLabel = {
+                Text(
+                    text = "Overall Similarity\n" + (round(viewModel.scoreData.getOverallSimilarity() * 1000) / 10).toString() + "%",
+                    style = Typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onPrimaryContainer,
+                    fontWeight = FontWeight.Bold,
+                    textAlign = TextAlign.Center
+                )
+            }
+        )
+    }
 }
 
 @Composable
@@ -567,7 +563,7 @@ fun LocationData(
         }
 
         // display the Matches logo
-        if (viewModel.scoreData.isLocationCloseMatch()){
+        if (viewModel.scoreData.isLocationCloseMatch()) {
             Spacer(modifier = Modifier.padding(dimensionResource(R.dimen.content_margin_half)))
             Row(
                 verticalAlignment = Alignment.CenterVertically,

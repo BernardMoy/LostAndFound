@@ -21,8 +21,9 @@ import com.example.lostandfound.ui.theme.Typography
 @Composable
 fun CustomGrayTitle(
     text: String
-){
-    Text(text = text,
+) {
+    Text(
+        text = text,
         style = Typography.bodyMedium,
         color = Color.Gray,
         fontWeight = FontWeight.Bold,
@@ -40,7 +41,7 @@ fun CustomActionText(
     text: String,
     onClick: () -> Unit,
     color: Color = MaterialTheme.colorScheme.onPrimaryContainer
-){
+) {
     Text(
         // make the text clickable
         text = text,
@@ -58,7 +59,7 @@ fun CustomActionText(
 @Composable
 fun CustomCenterText(
     text: String
-){
+) {
     Box(
         modifier = Modifier
             .fillMaxWidth()

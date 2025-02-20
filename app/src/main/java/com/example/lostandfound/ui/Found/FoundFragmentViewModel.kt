@@ -13,7 +13,7 @@ interface Callback<T> {
     fun onComplete(result: T)
 }
 
-class FoundFragmentViewModel : ViewModel(){
+class FoundFragmentViewModel : ViewModel() {
     // whether the screen is loading
     val isLoading: MutableState<Boolean> = mutableStateOf(false)
 
@@ -32,7 +32,7 @@ class FoundFragmentViewModel : ViewModel(){
     called everytime the screen is reloaded
     return true if data are successfully retrieved (or no data), false otherwise
      */
-    fun getAllData(callback: Callback<Boolean>){
+    fun getAllData(callback: Callback<Boolean>) {
         // first clear the item data array
         itemData.clear()
 
@@ -48,7 +48,7 @@ class FoundFragmentViewModel : ViewModel(){
             object : FirestoreManager.Callback<List<String>> {
                 override fun onComplete(result: List<String>?) {
                     // if result is null, fetching data failed
-                    if (result == null){
+                    if (result == null) {
                         callback.onComplete(false)
                         return
                     }
@@ -62,30 +62,32 @@ class FoundFragmentViewModel : ViewModel(){
 
                     // if no result, return
                     // as the code below would not be executed
-                    if (resultSize == 0){
+                    if (resultSize == 0) {
                         callback.onComplete(true)
                         return
                     }
 
                     // for each retrieved item id, get their data and store that data into the itemData list
                     result.forEachIndexed { index, itemID ->
-                        ItemManager.getFoundItemFromId(itemID, object: ItemManager.FoundItemCallback{
-                            override fun onComplete(foundItem: FoundItem?) {
-                                if (foundItem == null){
-                                    callback.onComplete(false)  // fetching data failed
-                                    return
-                                }
+                        ItemManager.getFoundItemFromId(
+                            itemID,
+                            object : ItemManager.FoundItemCallback {
+                                override fun onComplete(foundItem: FoundItem?) {
+                                    if (foundItem == null) {
+                                        callback.onComplete(false)  // fetching data failed
+                                        return
+                                    }
 
-                                // add the data to the list at the specified position
-                                itemData[index] = foundItem
-                                fetchedItems ++
+                                    // add the data to the list at the specified position
+                                    itemData[index] = foundItem
+                                    fetchedItems++
 
-                                // return true when all items have been fetched
-                                if (fetchedItems == resultSize){
-                                    callback.onComplete(true)
+                                    // return true when all items have been fetched
+                                    if (fetchedItems == resultSize) {
+                                        callback.onComplete(true)
+                                    }
                                 }
-                            }
-                        })
+                            })
                     }
                 }
             }

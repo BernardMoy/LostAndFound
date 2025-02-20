@@ -39,13 +39,15 @@ fun BackToolbar(
         },
 
         navigationIcon = {
-            if (backButtonOnClick != null){
+            if (backButtonOnClick != null) {
                 IconButton(onClick = {
                     // call the on click button that takes in the current activity
                     backButtonOnClick()
                 }) {
-                    Icon(imageVector = icon,
-                        contentDescription = "Back")
+                    Icon(
+                        imageVector = icon,
+                        contentDescription = "Back"
+                    )
                 }
 
             } else {
@@ -53,8 +55,10 @@ fun BackToolbar(
                     // default behaviour is to exit the activity
                     activity.finish()
                 }) {
-                    Icon(imageVector = icon,
-                        contentDescription = "Back")
+                    Icon(
+                        imageVector = icon,
+                        contentDescription = "Back"
+                    )
                 }
             }
         },
@@ -89,13 +93,15 @@ fun BackToolbarColored(
         },
 
         navigationIcon = {
-            if (backButtonOnClick != null){
+            if (backButtonOnClick != null) {
                 IconButton(onClick = {
                     // call the on click button that takes in the current activity
                     backButtonOnClick()
                 }) {
-                    Icon(imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                        contentDescription = "Back")
+                    Icon(
+                        imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                        contentDescription = "Back"
+                    )
                 }
 
             } else {
@@ -103,8 +109,10 @@ fun BackToolbarColored(
                     // default behaviour is to exit the activity
                     activity.finish()
                 }) {
-                    Icon(imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                        contentDescription = "Back")
+                    Icon(
+                        imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                        contentDescription = "Back"
+                    )
                 }
             }
         },

@@ -6,15 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.core.MutableTransitionState
-import androidx.compose.animation.expandHorizontally
-import androidx.compose.animation.expandVertically
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -22,11 +14,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.ComposeView
@@ -110,7 +98,7 @@ fun MainContent(viewModel: ChatFragmentViewModel) {
 
     if (viewModel.isLoading.value) {
         CustomCenteredProgressbar()
-    } else if (viewModel.chatInboxPreviewList.size == 0){
+    } else if (viewModel.chatInboxPreviewList.size == 0) {
         CustomCenterText(text = "You have no chats.")
     } else {
         ChatInboxes(context = context, viewModel = viewModel)
@@ -150,8 +138,8 @@ fun ChatInboxes(
              */
 
             CustomChatInboxPreview(
-                    context = context,
-                    chatInboxPreview = chatInboxPreview
+                context = context,
+                chatInboxPreview = chatInboxPreview
             )
 
             HorizontalDivider(thickness = 1.dp, color = Color.Gray)

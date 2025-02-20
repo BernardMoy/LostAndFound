@@ -49,9 +49,9 @@ fun CustomCardPreview() {
      */
 
     ComposeTheme {
-        Column (
+        Column(
             verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin))
-        ){
+        ) {
             /*
             CustomChatCard(
                 text = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
@@ -77,7 +77,7 @@ fun CustomCard(
     title: String,
     content: String,
     icon: ImageVector
-){
+) {
     Card(
         colors = CardDefaults.cardColors(
             containerColor = Color.Transparent
@@ -97,10 +97,10 @@ fun CustomCard(
             )
             .padding(dimensionResource(R.dimen.content_margin))
 
-    ){
-        Row (
+    ) {
+        Row(
             verticalAlignment = Alignment.CenterVertically
-        ){
+        ) {
             // large icon
             Icon(
                 imageVector = icon,
@@ -111,11 +111,11 @@ fun CustomCard(
                     .size(dimensionResource(id = R.dimen.image_button_size))
             )
 
-            Column (
+            Column(
                 modifier = Modifier.weight(4f),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin))
-            ){
+            ) {
                 // title text
                 Text(
                     text = title,
@@ -140,15 +140,15 @@ fun CustomCard(
 @Composable
 fun CustomChatCard(
     chatMessage: ChatMessage
-){
+) {
     // if the sender user id is the current user id, it is sent by current user
     val isSentByCurrentUser = chatMessage.senderUserID == FirebaseUtility.getUserID()
 
-    Column (
+    Column(
         modifier = Modifier.fillMaxWidth(),
         horizontalAlignment = if (isSentByCurrentUser) Alignment.End else Alignment.Start,
         verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin_half))
-    ){
+    ) {
         // show the sender name
         /*
         Text(
@@ -162,9 +162,9 @@ fun CustomChatCard(
         Row(
             verticalAlignment = Alignment.Bottom,
             horizontalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin_half)),
-        ){
+        ) {
             // show the time posted
-            if (isSentByCurrentUser){
+            if (isSentByCurrentUser) {
                 Text(
                     text = DateTimeManager.getChatTimeDescription(chatMessage.timestamp),
                     style = Typography.bodyMedium,
@@ -194,10 +194,10 @@ fun CustomChatCard(
                     )
                     .widthIn(max = LocalConfiguration.current.screenWidthDp.dp * 2 / 3)
             ) {
-                Column (
+                Column(
                     modifier = Modifier.padding(dimensionResource(id = R.dimen.title_margin)),
                     verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.title_margin))
-                ){
+                ) {
                     // message text
                     Text(
                         text = chatMessage.text,
@@ -209,7 +209,7 @@ fun CustomChatCard(
             }
 
             // show the time posted
-            if (!isSentByCurrentUser){
+            if (!isSentByCurrentUser) {
                 Text(
                     text = DateTimeManager.getChatTimeDescription(chatMessage.timestamp),
                     style = Typography.bodyMedium,

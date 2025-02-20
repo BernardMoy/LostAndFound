@@ -1,16 +1,6 @@
 package com.example.lostandfound.Data
 
 import android.os.Parcelable
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.AccountBox
-import androidx.compose.material.icons.outlined.Checkroom
-import androidx.compose.material.icons.outlined.Edit
-import androidx.compose.material.icons.outlined.Headset
-import androidx.compose.material.icons.outlined.QuestionMark
-import androidx.compose.material.icons.outlined.Restaurant
-import androidx.compose.material.icons.outlined.ShoppingBag
-import androidx.compose.material.icons.outlined.SportsBasketball
-import androidx.compose.ui.graphics.vector.ImageVector
 import kotlinx.parcelize.Parcelize
 import java.util.Locale
 
@@ -37,20 +27,19 @@ data class ScoreData(
     var locationScore: Double? = null,
     var overallScore: Double = 0.0
 
-): Parcelable {
+) : Parcelable {
     // used to determine if their images are considered close match from the scores
     // if yes it is shown as close match in the found item previews
     // used to display in search activity
-    fun isImageCloseMatch(): Boolean{
-        if (imageScore == null){
+    fun isImageCloseMatch(): Boolean {
+        if (imageScore == null) {
             return false
-        }
-        else return imageScore!! >= 1.5
+        } else return imageScore!! >= 1.5
     }
 
-    fun isDetailsCloseMatch(): Boolean{
+    fun isDetailsCloseMatch(): Boolean {
         // only brand is nullable
-        if (brandScore == null){
+        if (brandScore == null) {
             return isCategoryCloseMatch() && isColorCloseMatch()
 
         } else {
@@ -58,35 +47,36 @@ data class ScoreData(
         }
     }
 
-    fun isLocationCloseMatch(): Boolean{
+    fun isLocationCloseMatch(): Boolean {
         // locations are considered close if they are around <83m apart
         // i.e. score larger than 2.5
-        if (locationScore == null){
+        if (locationScore == null) {
             return false
         }
         return locationScore!! >= 2.5
     }
 
     // is category / color / brand match: Used to display in the view comparison activity
-    fun isCategoryCloseMatch(): Boolean{
+    fun isCategoryCloseMatch(): Boolean {
         return categoryScore == 3.0
     }
 
-    fun isColorCloseMatch(): Boolean{
+    fun isColorCloseMatch(): Boolean {
         return colorScore == 3.0
     }
 
-    fun isBrandCloseMatch(): Boolean{
-        if (brandScore == null){
+    fun isBrandCloseMatch(): Boolean {
+        if (brandScore == null) {
             return false
         }
         return brandScore!! == 3.0
     }
 
     // return the overall similarity in a percentage.
-    fun getOverallSimilarity(): Double{
-        val similarity = overallScore/3.0
-        val similarityRounded = String.format(Locale.UK, "%.3f", similarity).toDouble()   // get the last 3 decimal digits
+    fun getOverallSimilarity(): Double {
+        val similarity = overallScore / 3.0
+        val similarityRounded = String.format(Locale.UK, "%.3f", similarity)
+            .toDouble()   // get the last 3 decimal digits
         return similarityRounded
     }
 

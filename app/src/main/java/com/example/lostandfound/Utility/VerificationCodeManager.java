@@ -10,8 +10,8 @@ import java.util.Map;
 
 public class VerificationCodeManager {
 
-    private String emailAddress;
-    private FirestoreManager db;
+    private final String emailAddress;
+    private final FirestoreManager db;
 
     private static final int EMAIL_COOLDOWN = 60000;    // 1 minute
     private static final int VALID_TIME = 600000;    // 10 minutes
@@ -23,12 +23,12 @@ public class VerificationCodeManager {
     }
 
 
-    public VerificationCodeManager(String emailAddress){
+    public VerificationCodeManager(String emailAddress) {
         this.emailAddress = emailAddress;
         this.db = new FirestoreManager();
     }
 
-    public VerificationCodeManager(String emailAddress, FirestoreManager db){
+    public VerificationCodeManager(String emailAddress, FirestoreManager db) {
         this.emailAddress = emailAddress;
         this.db = db;
     }
@@ -43,16 +43,16 @@ public class VerificationCodeManager {
 
     // method to generate a new verification code for the user, and return the code
     // only generates code if the last one is generated within 1 minute
-    public void generateNewVerificationCode(CodeGenerationCallback codeGenerationCallback){
+    public void generateNewVerificationCode(CodeGenerationCallback codeGenerationCallback) {
         db.get(FirebaseNames.COLLECTION_USER_VERIFICATIONS, emailAddress, new FirestoreManager.Callback<Map<String, Object>>() {
             @Override
             public void onComplete(Map<String, Object> result) {
                 // if user has generated a code before, check it
-                if (result != null){
+                if (result != null) {
                     // check if the last code generated is within 1 minute from database given the current email
                     long storedTimeStamp = (long) result.get(FirebaseNames.USER_VERIFICATIONS_TIMESTAMP);
                     long currentTimeStamp = Calendar.getInstance().getTimeInMillis();
-                    if (currentTimeStamp - storedTimeStamp <= EMAIL_COOLDOWN){
+                    if (currentTimeStamp - storedTimeStamp <= EMAIL_COOLDOWN) {
                         // the last code is generated within the last minute
                         codeGenerationCallback.onCodeGenerated("Please wait for 1 minute before generating another code", "");
                         return;
@@ -72,7 +72,7 @@ public class VerificationCodeManager {
                 db.put(FirebaseNames.COLLECTION_USER_VERIFICATIONS, emailAddress, data, new FirestoreManager.Callback<Boolean>() {
                     @Override
                     public void onComplete(Boolean result) {
-                        if (!result){
+                        if (!result) {
                             codeGenerationCallback.onCodeGenerated("Error adding verification code to database", "");
                             return;
                         }
@@ -86,7 +86,7 @@ public class VerificationCodeManager {
     }
 
     // method to validate user's verification code
-    public void validateVerificationCode(String givenCode, ErrorCallback codeVerificationCallback){
+    public void validateVerificationCode(String givenCode, ErrorCallback codeVerificationCallback) {
         // get the code from user database
         db.get(FirebaseNames.COLLECTION_USER_VERIFICATIONS, emailAddress, new FirestoreManager.Callback<Map<String, Object>>() {
             @Override
@@ -107,7 +107,7 @@ public class VerificationCodeManager {
 
                 // check if user's code is valid
                 String storedHashedCode = (String) result.get(FirebaseNames.USER_VERIFICATIONS_HASHEDCODE);
-                if (!Hasher.compareHash(givenCode, storedHashedCode)){
+                if (!Hasher.compareHash(givenCode, storedHashedCode)) {
                     codeVerificationCallback.onComplete("Invalid verification code");
                     return;
                 }

@@ -1,15 +1,11 @@
 package com.example.lostandfound.ui.ViewClaim
 
-import android.content.Intent
-import android.telecom.Call
-import android.util.Log
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import com.example.lostandfound.Data.Claim
 import com.example.lostandfound.Data.FirebaseNames
 import com.example.lostandfound.Data.FoundItem
-import com.example.lostandfound.Data.IntentExtraNames
 import com.example.lostandfound.Data.LostItem
 import com.example.lostandfound.Data.User
 import com.example.lostandfound.FirebaseManagers.FirebaseUtility
@@ -19,7 +15,6 @@ import com.example.lostandfound.FirebaseManagers.NotificationManager
 import com.example.lostandfound.FirebaseManagers.UserManager
 import com.example.lostandfound.Utility.DateTimeManager
 import com.example.lostandfound.Utility.ErrorCallback
-import com.example.lostandfound.ui.Done.DoneActivity
 
 interface Callback<T> {
     fun onComplete(result: T)
@@ -82,7 +77,7 @@ class ViewClaimViewModel : ViewModel() {
                                     lostItemData.userID,
                                     object : UserManager.UserCallback {
                                         override fun onComplete(user: User?) {
-                                            if (user == null){
+                                            if (user == null) {
                                                 callback.onComplete("Error fetching user data")
                                                 return
                                             }
@@ -129,25 +124,25 @@ class ViewClaimViewModel : ViewModel() {
 
     // function to mark the claim as accepted
     // once a claim is approved, it cannot be un-approved
-    fun approveClaim(callback: ErrorCallback){
+    fun approveClaim(callback: ErrorCallback) {
         val firestoreManager = FirestoreManager()
         firestoreManager.update(FirebaseNames.COLLECTION_CLAIMED_ITEMS,
             claimData.claimID,
             FirebaseNames.CLAIM_IS_APPROVED,
             true,  // set is approved to true
-            object: FirestoreManager.Callback<Boolean>{
+            object : FirestoreManager.Callback<Boolean> {
                 override fun onComplete(result: Boolean) {
-                    if (!result){
+                    if (!result) {
                         callback.onComplete("Failed approving claim")
                         return
                     }
 
                     // send notification type 1 (To the target lost user) and 2 (To other lost users)
-                    sendApprovalNotification(object: Callback<Boolean>{
+                    sendApprovalNotification(object : Callback<Boolean> {
                         override fun onComplete(result: Boolean) {
                             // continue regardless of result
 
-                            sendRejectionNotifications(object: Callback<Boolean>{
+                            sendRejectionNotifications(object : Callback<Boolean> {
                                 override fun onComplete(result: Boolean) {
                                     // continue regardless of result
 
@@ -162,7 +157,7 @@ class ViewClaimViewModel : ViewModel() {
                                             FirebaseNames.ACTIVITY_LOG_ITEM_USER_ID to FirebaseUtility.getUserID(),
                                             FirebaseNames.ACTIVITY_LOG_ITEM_TIMESTAMP to DateTimeManager.getCurrentEpochTime()
                                         ),
-                                        object: FirestoreManager.Callback<String>{
+                                        object : FirestoreManager.Callback<String> {
                                             override fun onComplete(result: String?) {
                                                 // not necessary to throw an error if failed here
                                                 // open done activity
@@ -182,11 +177,11 @@ class ViewClaimViewModel : ViewModel() {
     // function to send notification type 1 to the approved user
     fun sendApprovalNotification(
         callback: Callback<Boolean>
-    ){
+    ) {
         NotificationManager.sendClaimApprovedNotification(
             lostUser.userID,
             claimData.claimID,  // current claim id
-            object: NotificationManager.NotificationSendCallback {
+            object : NotificationManager.NotificationSendCallback {
                 override fun onComplete(result: Boolean) {
                     if (!result) {
                         callback.onComplete(false)
@@ -202,55 +197,59 @@ class ViewClaimViewModel : ViewModel() {
     // function to send notification type 2 to the rejected users
     fun sendRejectionNotifications(
         callback: Callback<Boolean>
-    ){
+    ) {
         // get all claims from the found item
-        ItemManager.getClaimsFromFoundId(foundItemData.itemID, object: ItemManager.FoundClaimCallback{
-            override fun onComplete(claimList: MutableList<Claim>) {
-                // For every claim, get the user id of the lost item
-                val claimListSize = claimList.size
-                var sentItems = 0
-                if (claimListSize == 0){
-                    callback.onComplete(true)
-                    return
-                }
+        ItemManager.getClaimsFromFoundId(
+            foundItemData.itemID,
+            object : ItemManager.FoundClaimCallback {
+                override fun onComplete(claimList: MutableList<Claim>) {
+                    // For every claim, get the user id of the lost item
+                    val claimListSize = claimList.size
+                    var sentItems = 0
+                    if (claimListSize == 0) {
+                        callback.onComplete(true)
+                        return
+                    }
 
-                for (claim in claimList){
-                    ItemManager.getLostItemFromId(claim.lostItemID, object : ItemManager.LostItemCallback{
-                        override fun onComplete(lostItem: LostItem?) {
-                            if (lostItem == null){
-                                callback.onComplete(false)
-                                return
-                            }
+                    for (claim in claimList) {
+                        ItemManager.getLostItemFromId(
+                            claim.lostItemID,
+                            object : ItemManager.LostItemCallback {
+                                override fun onComplete(lostItem: LostItem?) {
+                                    if (lostItem == null) {
+                                        callback.onComplete(false)
+                                        return
+                                    }
 
-                            // send notif type 2 to every user that isnt the user of the current claim
-                            if (lostItem.userID != lostUser.userID){
-                                NotificationManager.sendClaimRejectedNotification(
-                                    lostItem.userID,
-                                    claim.claimID,  // pass the current claim data
-                                    object: NotificationManager.NotificationSendCallback{
-                                        override fun onComplete(result: Boolean) {
-                                            // continue regardless of result
-                                            // return true after all has been sent
-                                            sentItems++
-                                            if (sentItems == claimListSize){
-                                                callback.onComplete(true)
-                                                return
+                                    // send notif type 2 to every user that isnt the user of the current claim
+                                    if (lostItem.userID != lostUser.userID) {
+                                        NotificationManager.sendClaimRejectedNotification(
+                                            lostItem.userID,
+                                            claim.claimID,  // pass the current claim data
+                                            object : NotificationManager.NotificationSendCallback {
+                                                override fun onComplete(result: Boolean) {
+                                                    // continue regardless of result
+                                                    // return true after all has been sent
+                                                    sentItems++
+                                                    if (sentItems == claimListSize) {
+                                                        callback.onComplete(true)
+                                                        return
+                                                    }
+                                                }
                                             }
+                                        )
+                                    } else {
+                                        // return true after all has been sent
+                                        sentItems++
+                                        if (sentItems == claimListSize) {
+                                            callback.onComplete(true)
+                                            return
                                         }
                                     }
-                                )
-                            } else {
-                                // return true after all has been sent
-                                sentItems++
-                                if (sentItems == claimListSize){
-                                    callback.onComplete(true)
-                                    return
                                 }
-                            }
-                        }
-                    })
+                            })
+                    }
                 }
-            }
-        })
+            })
     }
 }

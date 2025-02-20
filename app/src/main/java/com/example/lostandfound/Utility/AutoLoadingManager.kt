@@ -29,7 +29,8 @@ object AutoLoadingManager {
             SharedPreferencesNames.NAME_AUTO_LOADING,
             Context.MODE_PRIVATE
         )
-        val currentAutoLoadingEnabled = sp.getBoolean(SharedPreferencesNames.AUTO_LOADING_VALUE, true)
+        val currentAutoLoadingEnabled =
+            sp.getBoolean(SharedPreferencesNames.AUTO_LOADING_VALUE, true)
 
         // modify the animation value
         autoLoadingEnabled.value = currentAutoLoadingEnabled

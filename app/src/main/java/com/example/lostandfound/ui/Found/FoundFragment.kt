@@ -93,7 +93,7 @@ class FoundFragment : Fragment() {
         isLoggedIn.value = FirebaseUtility.isUserLoggedIn()
 
         // refresh the data everytime the screen is reloaded
-        if (AutoLoadingManager.autoLoadingEnabled.value){
+        if (AutoLoadingManager.autoLoadingEnabled.value) {
             refreshData(context = requireContext(), viewModel = viewModel)
         }
     }
@@ -221,7 +221,7 @@ fun FoundItemsColumn(
                 }
 
                 // display each preview with animation, also display the same animation when reloaded
-                if (AnimationManager.animationEnabled.value){
+                if (AnimationManager.animationEnabled.value) {
                     AnimatedVisibility(
                         visibleState = visibleState,
                         enter = fadeIn() + scaleIn(),

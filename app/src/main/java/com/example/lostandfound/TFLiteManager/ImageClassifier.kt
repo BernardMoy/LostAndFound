@@ -2,9 +2,7 @@ package com.example.lostandfound.TFLiteManager
 
 import android.content.Context
 import android.graphics.Bitmap
-import android.graphics.ImageDecoder
 import android.net.Uri
-import android.provider.MediaStore
 import com.bumptech.glide.Glide
 import com.example.lostandfound.ml.Siamesemodel224
 import kotlinx.coroutines.CoroutineScope
@@ -12,7 +10,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.tensorflow.lite.DataType
-import org.tensorflow.lite.TensorFlowLite
 import org.tensorflow.lite.support.tensorbuffer.TensorBuffer
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
@@ -22,20 +19,22 @@ val modelFile = context.assets.open(modelFileName).use { it.readBytes() }
         interpreter = Interpreter(modelFile)
  */
 
-interface PredictCallback{
+interface PredictCallback {
     fun onComplete(distance: Float)
 }
 
 
-class ImageClassifier (private val context: Context){
+class ImageClassifier(private val context: Context) {
     val model = Siamesemodel224.newInstance(context)
     private val imageSize = 224
 
-    private fun predictBitmap(image1: Bitmap, image2: Bitmap): Float{
+    private fun predictBitmap(image1: Bitmap, image2: Bitmap): Float {
 
         // Creates inputs for reference.
-        val inputFeature0 = TensorBuffer.createFixedSize(intArrayOf(1, imageSize, imageSize, 3), DataType.FLOAT32)
-        val inputFeature1 = TensorBuffer.createFixedSize(intArrayOf(1, imageSize, imageSize, 3), DataType.FLOAT32)
+        val inputFeature0 =
+            TensorBuffer.createFixedSize(intArrayOf(1, imageSize, imageSize, 3), DataType.FLOAT32)
+        val inputFeature1 =
+            TensorBuffer.createFixedSize(intArrayOf(1, imageSize, imageSize, 3), DataType.FLOAT32)
 
         // Create byte buffer from bitmap, then load the byte buffers into the input features
         val byteBuffer1: ByteBuffer = bitmapToByteBuffer(image1)
@@ -78,29 +77,30 @@ class ImageClassifier (private val context: Context){
     }
 
     // method to close the model after finish using it
-    fun close(){
+    fun close() {
         model.close()
     }
 
 
     // utility method to convert bitmap to bytebuffer
-    private fun bitmapToByteBuffer(img: Bitmap): ByteBuffer{
-        val byteBuffer: ByteBuffer = ByteBuffer.allocateDirect(4*imageSize*imageSize*3)  // 4 for float, 3 for rgb channels
+    private fun bitmapToByteBuffer(img: Bitmap): ByteBuffer {
+        val byteBuffer: ByteBuffer =
+            ByteBuffer.allocateDirect(4 * imageSize * imageSize * 3)  // 4 for float, 3 for rgb channels
         byteBuffer.order(ByteOrder.nativeOrder())
         val intValues = IntArray(imageSize * imageSize)
         img.getPixels(intValues, 0, img.width, 0, 0, img.width, img.height)
 
         var pixel: Int = 0
-        for (i in 0 until imageSize){
-            for (j in 0 until imageSize){
+        for (i in 0 until imageSize) {
+            for (j in 0 until imageSize) {
                 val value: Int = intValues[pixel++]
                 // get the rgb values and then normalise them to between 0 and 1
                 val red = (value shr 16) and 0xFF
                 val green = (value shr 8) and 0xFF
                 val blue = value and 0xFF
-                byteBuffer.putFloat(red/255f)
-                byteBuffer.putFloat(green/255f)
-                byteBuffer.putFloat(blue/255f)
+                byteBuffer.putFloat(red / 255f)
+                byteBuffer.putFloat(green / 255f)
+                byteBuffer.putFloat(blue / 255f)
             }
         }
 

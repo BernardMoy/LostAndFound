@@ -80,9 +80,7 @@ fun Preview() {
 fun DoneScreen(activity: ComponentActivity, viewModel: DoneViewModel) {
     ComposeTheme {
         Surface {
-            Scaffold(
-
-            ) { innerPadding ->
+            Scaffold { innerPadding ->
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -110,7 +108,7 @@ fun MainContent(viewModel: DoneViewModel = viewModel()) {
     var originalScale by remember {
         mutableFloatStateOf(0.5f)
     }
-    LaunchedEffect (Unit){
+    LaunchedEffect(Unit) {
         // when the activity is first launched, scale up the icon
         originalScale = 1.0f
     }
@@ -132,19 +130,19 @@ fun MainContent(viewModel: DoneViewModel = viewModel()) {
                     )
                 ),
             )
-    ){
-        val iconWidth = maxWidth/2
-        Column (
+    ) {
+        val iconWidth = maxWidth / 2
+        Column(
             verticalArrangement = Arrangement.Center,
             modifier = Modifier
                 .fillMaxSize()
-        ){
-            Row (
+        ) {
+            Row(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(vertical = dimensionResource(id = R.dimen.content_margin)),
                 horizontalArrangement = Arrangement.Center
-            ){
+            ) {
                 Icon(
                     imageVector = Icons.Outlined.CheckCircle,
                     tint = MaterialTheme.colorScheme.onPrimary,
@@ -155,12 +153,12 @@ fun MainContent(viewModel: DoneViewModel = viewModel()) {
                 )
             }
 
-            Row (
+            Row(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(vertical = dimensionResource(id = R.dimen.title_margin)),
                 horizontalArrangement = Arrangement.Center
-            ){
+            ) {
                 Text(
                     text = viewModel.titleText,
                     style = Typography.headlineMedium,
@@ -174,7 +172,7 @@ fun MainContent(viewModel: DoneViewModel = viewModel()) {
                     .fillMaxWidth()
                     .padding(vertical = dimensionResource(id = R.dimen.header_margin)),
                 horizontalArrangement = Arrangement.Center
-            ){
+            ) {
                 // after clicking the done button, the user is always redirected to the main activity
                 CustomButton(
                     text = "Done",
@@ -185,7 +183,8 @@ fun MainContent(viewModel: DoneViewModel = viewModel()) {
                         Start the intent to home activity, then pop all previous activities from the stack
                         */
                         val intent = Intent(context, MainActivity::class.java).apply {
-                            flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
+                            flags =
+                                Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
                         }
 
                         // start main activity

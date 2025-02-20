@@ -20,35 +20,63 @@ data class Category(
 // data are stored here as a list of categories
 // subcategories should be in the plural format
 val categories: List<Category> = listOf(
-    Category(name = "Personal items",
-        subCategories = listOf("Wallet", "Key", "Watch", "Umbrella", "Eyeglasses", "ID/Personal document"),
+    Category(
+        name = "Personal items",
+        subCategories = listOf(
+            "Wallet",
+            "Key",
+            "Watch",
+            "Umbrella",
+            "Eyeglasses",
+            "ID/Personal document"
+        ),
         leadingIcon = Icons.Outlined.AccountBox
     ),
-    Category(name = "Electronics",
-        subCategories = listOf("Earphone", "Headphone", "Laptop", "Phone", "Tablet", "Calculator", "Camera", "Charger", "USB", "Mouse", "Digital Pen", "EReader"),
+    Category(
+        name = "Electronics",
+        subCategories = listOf(
+            "Earphone",
+            "Headphone",
+            "Laptop",
+            "Phone",
+            "Tablet",
+            "Calculator",
+            "Camera",
+            "Charger",
+            "USB",
+            "Mouse",
+            "Digital Pen",
+            "EReader"
+        ),
         leadingIcon = Icons.Outlined.Headset
     ),
-    Category(name = "Bags and Suitcases",
+    Category(
+        name = "Bags and Suitcases",
         subCategories = listOf("Backpack", "Handbag", "Shopping Bag", "Suitcase"),
         leadingIcon = Icons.Outlined.ShoppingBag
     ),
-    Category(name = "Books and Stationery",
+    Category(
+        name = "Books and Stationery",
         subCategories = listOf("Stationery", "Pencil Cases", "Books"),
         leadingIcon = Icons.Outlined.Edit
     ),
-    Category(name = "Clothing",
+    Category(
+        name = "Clothing",
         subCategories = listOf("Hat", "Gloves", "Scarf", "Jacket"),
         leadingIcon = Icons.Outlined.Checkroom
     ),
-    Category(name = "Sports",
+    Category(
+        name = "Sports",
         subCategories = listOf("Ball", "Helmet", "Racket", "Boxing Gloves"),
         leadingIcon = Icons.Outlined.SportsBasketball
     ),
-    Category(name = "Food and Drink",
+    Category(
+        name = "Food and Drink",
         subCategories = listOf("Lunchbox", "Utensils", "Water bottle", "Cup"),
         leadingIcon = Icons.Outlined.Restaurant
     ),
-    Category(name = "Others",
+    Category(
+        name = "Others",
         subCategories = listOf(),
         leadingIcon = Icons.Outlined.QuestionMark
     )

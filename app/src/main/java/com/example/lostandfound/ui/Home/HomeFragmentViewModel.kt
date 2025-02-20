@@ -1,33 +1,23 @@
 package com.example.lostandfound.ui.Home
 
-import android.net.Uri
 import android.util.Log
-import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.lostandfound.Data.FirebaseNames
 import com.example.lostandfound.Data.LostItem
-import com.example.lostandfound.FirebaseManagers.FirebaseStorageManager
 import com.example.lostandfound.FirebaseManagers.FirebaseUtility
 import com.example.lostandfound.FirebaseManagers.FirestoreManager
 import com.example.lostandfound.FirebaseManagers.ItemManager
-import com.example.lostandfound.FirebaseManagers.ItemManager.StatusCallback
-import com.example.lostandfound.FirebaseManagers.ItemManager.getLostItemStatus
-import com.example.lostandfound.R
-import com.example.lostandfound.Utility.LocationManager
-import com.google.android.gms.common.internal.Objects
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 
-interface Callback<T>{
+interface Callback<T> {
     fun onComplete(result: T)
 }
 
-class HomeFragmentViewModel : ViewModel(){
+class HomeFragmentViewModel : ViewModel() {
 
     val isLoadingLostItem: MutableState<Boolean> = mutableStateOf(false)
     val isLoadingFoundItem: MutableState<Boolean> = mutableStateOf(false)
@@ -35,7 +25,8 @@ class HomeFragmentViewModel : ViewModel(){
     val isLoggedIn: MutableState<Boolean> = mutableStateOf(FirebaseUtility.isUserLoggedIn())
 
     // for displaying the small lost item
-    var latestLostItem: MutableState<LostItem?> = mutableStateOf(null)  // if this is null, then the user has no recently lost items
+    var latestLostItem: MutableState<LostItem?> =
+        mutableStateOf(null)  // if this is null, then the user has no recently lost items
     var numberFound: MutableState<Int> = mutableIntStateOf(0)
     var numberClaimApproved: MutableState<Int> = mutableIntStateOf(0)
 
@@ -45,9 +36,9 @@ class HomeFragmentViewModel : ViewModel(){
     // load data into latestLostItem and latestLostItemMatches
     fun loadLatestLostItem(
         callback: Callback<Boolean>
-    ){
+    ) {
         // if not logged in, reset it
-        if (!FirebaseUtility.isUserLoggedIn()){
+        if (!FirebaseUtility.isUserLoggedIn()) {
             latestLostItem.value = null
             callback.onComplete(true)
             return
@@ -60,7 +51,7 @@ class HomeFragmentViewModel : ViewModel(){
             .limit(1)
             .get()
             .addOnSuccessListener { result ->
-                if (result.isEmpty){
+                if (result.isEmpty) {
                     // set the latest item to null
                     latestLostItem.value = null
                     callback.onComplete(true)
@@ -70,18 +61,20 @@ class HomeFragmentViewModel : ViewModel(){
                     val lostItemID = result.documents[0].id
 
                     // get the lost item
-                    ItemManager.getLostItemFromId(lostItemID, object: ItemManager.LostItemCallback{
-                        override fun onComplete(lostItem: LostItem?) {
-                            if (lostItem == null){
-                                callback.onComplete(false)
-                                return
-                            }
+                    ItemManager.getLostItemFromId(
+                        lostItemID,
+                        object : ItemManager.LostItemCallback {
+                            override fun onComplete(lostItem: LostItem?) {
+                                if (lostItem == null) {
+                                    callback.onComplete(false)
+                                    return
+                                }
 
-                            // set data
-                            latestLostItem.value = lostItem
-                            callback.onComplete(true)
-                        }
-                    })
+                                // set data
+                                latestLostItem.value = lostItem
+                                callback.onComplete(true)
+                            }
+                        })
                 }
             }.addOnFailureListener { error ->
                 Log.d("HOME PAGE LOST ITEM LOAD ERROR", error.message.toString())
@@ -93,7 +86,7 @@ class HomeFragmentViewModel : ViewModel(){
     // method to get number of found items from the current user
     fun loadFoundItemCount(
         callback: Callback<Boolean>
-    ){
+    ) {
         val db = FirebaseFirestore.getInstance()
         db.collection(FirebaseNames.COLLECTION_FOUND_ITEMS)
             .whereEqualTo(FirebaseNames.LOSTFOUND_USER, FirebaseUtility.getUserID())
@@ -112,7 +105,7 @@ class HomeFragmentViewModel : ViewModel(){
     // method to get number of approved claims where the found item id
     fun loadApprovedClaimsCount(
         callback: Callback<Boolean>
-    ){
+    ) {
         val db = FirebaseFirestore.getInstance()
         val firestoreManager = FirestoreManager()
         db.collection(FirebaseNames.COLLECTION_CLAIMED_ITEMS)
@@ -120,7 +113,7 @@ class HomeFragmentViewModel : ViewModel(){
             .get()
             .addOnSuccessListener { querySnapshot ->
                 // for each query, find its found item user
-                if (querySnapshot.isEmpty){
+                if (querySnapshot.isEmpty) {
                     // return 0
                     numberClaimApproved.value = 0
                     callback.onComplete(true)
@@ -132,24 +125,27 @@ class HomeFragmentViewModel : ViewModel(){
 
                     for (document in querySnapshot) {
                         val foundItemID = document[FirebaseNames.CLAIM_FOUND_ITEM_ID].toString()
-                        firestoreManager.get(FirebaseNames.COLLECTION_FOUND_ITEMS, foundItemID, object: FirestoreManager.Callback<Map<String, Any>>{
-                            override fun onComplete(result: Map<String, Any>?) {
-                                if (result == null){
-                                    callback.onComplete(false)
-                                    return
-                                }
+                        firestoreManager.get(
+                            FirebaseNames.COLLECTION_FOUND_ITEMS,
+                            foundItemID,
+                            object : FirestoreManager.Callback<Map<String, Any>> {
+                                override fun onComplete(result: Map<String, Any>?) {
+                                    if (result == null) {
+                                        callback.onComplete(false)
+                                        return
+                                    }
 
-                                if (result[FirebaseNames.LOSTFOUND_USER] == FirebaseUtility.getUserID()){
-                                    count++
-                                }
+                                    if (result[FirebaseNames.LOSTFOUND_USER] == FirebaseUtility.getUserID()) {
+                                        count++
+                                    }
 
-                                fetchedItem++
-                                if (fetchedItem == totalCount){
-                                    numberClaimApproved.value = count
-                                    callback.onComplete(true)
+                                    fetchedItem++
+                                    if (fetchedItem == totalCount) {
+                                        numberClaimApproved.value = count
+                                        callback.onComplete(true)
+                                    }
                                 }
-                            }
-                        })
+                            })
                     }
                 }
 
