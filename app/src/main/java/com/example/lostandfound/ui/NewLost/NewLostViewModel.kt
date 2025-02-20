@@ -1,7 +1,6 @@
 package com.example.lostandfound.ui.NewLost
 
 import android.net.Uri
-import android.util.Log
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
@@ -9,15 +8,14 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.lifecycle.ViewModel
-import com.example.lostandfound.Utility.ErrorCallback
+import com.example.lostandfound.Data.Category
+import com.example.lostandfound.Data.FirebaseNames
+import com.example.lostandfound.Data.LostItem
 import com.example.lostandfound.FirebaseManagers.FirebaseStorageManager
 import com.example.lostandfound.FirebaseManagers.FirebaseUtility
 import com.example.lostandfound.FirebaseManagers.FirestoreManager
-import com.example.lostandfound.Data.Category
-import com.example.lostandfound.Utility.DateTimeManager
-import com.example.lostandfound.Data.FirebaseNames
-import com.example.lostandfound.Data.LostItem
 import com.example.lostandfound.R
+import com.example.lostandfound.Utility.DateTimeManager
 import com.example.lostandfound.Utility.LocationManager
 import com.google.android.gms.maps.model.LatLng
 
@@ -25,11 +23,13 @@ interface Callback<T> {
     fun onComplete(result: T)
 }
 
-class NewLostViewModel: ViewModel() {
+class NewLostViewModel : ViewModel() {
     val itemName: MutableState<String> = mutableStateOf("")
-    val itemImage: MutableState<Uri?> = mutableStateOf(null)   // stores the image to be added to storage
+    val itemImage: MutableState<Uri?> =
+        mutableStateOf(null)   // stores the image to be added to storage
     val itemBrand: MutableState<String> = mutableStateOf("")
-    val selectedDate: MutableState<Long?> = mutableStateOf(null)     // date, time can be null if not selected
+    val selectedDate: MutableState<Long?> =
+        mutableStateOf(null)     // date, time can be null if not selected
     val isDateDialogShown: MutableState<Boolean> = mutableStateOf(false)
     val selectedHour: MutableState<Int?> = mutableStateOf(null)
     val selectedMinute: MutableState<Int?> = mutableStateOf(null)
@@ -59,36 +59,36 @@ class NewLostViewModel: ViewModel() {
     val dateError: MutableState<String> = mutableStateOf("")
     val timeError: MutableState<String> = mutableStateOf("")
 
-    fun onImagePicked(uri: Uri?){
+    fun onImagePicked(uri: Uri?) {
         itemImage.value = uri
     }
 
-    fun onImageCrossClicked(){
+    fun onImageCrossClicked() {
         itemImage.value = null
     }
 
-    fun onItemNameChanged(s: String){
+    fun onItemNameChanged(s: String) {
         itemName.value = s
     }
 
-    fun onItemBrandChanged(s: String){
+    fun onItemBrandChanged(s: String) {
         itemBrand.value = s
     }
 
-    fun onDescriptionChanged(d: String){
+    fun onDescriptionChanged(d: String) {
         additionalDescription.value = d
     }
 
-    fun onCategorySelected(c: Category?){
+    fun onCategorySelected(c: Category?) {
         selectedCategory = c
     }
 
     // return true if successful, return false otherwise (When attempting to select more than 3 colors)
-    fun onColorSelected(c: String): Boolean{
-        if (selectedColor.contains(c)){
+    fun onColorSelected(c: String): Boolean {
+        if (selectedColor.contains(c)) {
             selectedColor.remove(c)
         } else {
-            if (selectedColor.size == 3){
+            if (selectedColor.size == 3) {
                 return false
             }
             selectedColor.add(c)
@@ -97,24 +97,26 @@ class NewLostViewModel: ViewModel() {
         return true
     }
 
-    fun isCategorySelected(c: Category): Boolean{
+    fun isCategorySelected(c: Category): Boolean {
         return selectedCategory == c
     }
+
     fun isColorSelected(c: String): Boolean {
         // return true if the color exist in the set
         return selectedColor.contains(c)
     }
-    fun onSubCategorySelected(s: String){
+
+    fun onSubCategorySelected(s: String) {
         selectedSubCategory.value = s
     }
 
-    fun onAddLocationClicked(){
+    fun onAddLocationClicked() {
         // make the dialog appear
         isLocationDialogShown.value = true
     }
 
     // function to validate the input fields
-    fun validateInput(): Boolean{
+    fun validateInput(): Boolean {
         // initially reset all error fields
         nameError.value = ""
         categoryError.value = ""
@@ -124,11 +126,11 @@ class NewLostViewModel: ViewModel() {
         timeError.value = ""
 
         // check each of them
-        if (itemName.value.trim().isEmpty()){
+        if (itemName.value.trim().isEmpty()) {
             nameError.value = "Item name cannot be empty"
             return false
         }
-        if (selectedCategory == null){
+        if (selectedCategory == null) {
             categoryError.value = "Category cannot be empty"
             return false
         }
@@ -136,15 +138,15 @@ class NewLostViewModel: ViewModel() {
             subCategoryError.value = "Subcategory cannot be empty"
             return false
         }
-        if (selectedColor.isEmpty()){
+        if (selectedColor.isEmpty()) {
             colorError.value = "Color cannot be empty"
             return false
         }
-        if (selectedDate.value == null){
+        if (selectedDate.value == null) {
             dateError.value = "Date cannot be empty"
             return false
         }
-        if (selectedHour.value == null || selectedMinute.value == null){
+        if (selectedHour.value == null || selectedMinute.value == null) {
             timeError.value = "Time cannot be empty"
             return false
         }
@@ -153,7 +155,9 @@ class NewLostViewModel: ViewModel() {
                 DateTimeManager.getDateTimeEpoch(
                     selectedDate.value!!,
                     selectedHour.value!!, selectedMinute.value!!
-                ))){
+                )
+            )
+        ) {
             timeError.value = "The date and time cannot be in future"
             return false
         }
@@ -165,7 +169,7 @@ class NewLostViewModel: ViewModel() {
 
     // when the done button is clicked, add data to db
     // return the LostItem object generated which is added to the db, or null if failed
-    fun onDoneButtonClicked(callback: Callback<LostItem?>){
+    fun onDoneButtonClicked(callback: Callback<LostItem?>) {
         // ensure the current time is consistent
         val currentTime = DateTimeManager.getCurrentEpochTime()
 
@@ -176,7 +180,7 @@ class NewLostViewModel: ViewModel() {
             FirebaseNames.LOSTFOUND_SUBCATEGORY to selectedSubCategory.value,
             FirebaseNames.LOSTFOUND_COLOR to selectedColor.toList().sorted(),
             FirebaseNames.LOSTFOUND_EPOCHDATETIME to DateTimeManager.getDateTimeEpoch(
-                selectedDate.value?:0L, selectedHour.value?:0, selectedMinute.value?:0
+                selectedDate.value ?: 0L, selectedHour.value ?: 0, selectedMinute.value ?: 0
             ),
             FirebaseNames.LOSTFOUND_BRAND to itemBrand.value,
             FirebaseNames.LOSTFOUND_LOCATION to selectedLocation.value,
@@ -189,106 +193,124 @@ class NewLostViewModel: ViewModel() {
         val firestoreManager = FirestoreManager()
         val storageManager = FirebaseStorageManager()
 
-        firestoreManager.putWithUniqueId(FirebaseNames.COLLECTION_LOST_ITEMS, data, object: FirestoreManager.Callback<String>{
-            override fun onComplete(result: String) {     // the unique id generated is returned
-                if (result.trim().isEmpty()){
-                    callback.onComplete(null)
-                    return
-                }
+        firestoreManager.putWithUniqueId(
+            FirebaseNames.COLLECTION_LOST_ITEMS,
+            data,
+            object : FirestoreManager.Callback<String> {
+                override fun onComplete(result: String) {     // the unique id generated is returned
+                    if (result.trim().isEmpty()) {
+                        callback.onComplete(null)
+                        return
+                    }
 
-                // add the image to firebase storage if it is not null
-                if (itemImage.value != null){
-                    storageManager.putImage(FirebaseNames.FOLDER_LOST_IMAGE, result, itemImage.value, object: FirebaseStorageManager.Callback<Boolean>{
-                        override fun onComplete(resultImage: Boolean) {
-                            if (!resultImage){
-                                // delete the previously uploaded firestore object if image uploading fails
-                                firestoreManager.delete(FirebaseNames.COLLECTION_LOST_ITEMS, result, object: FirestoreManager.Callback<Boolean>{
-                                    override fun onComplete(resultError: Boolean?) {
+                    // add the image to firebase storage if it is not null
+                    if (itemImage.value != null) {
+                        storageManager.putImage(
+                            FirebaseNames.FOLDER_LOST_IMAGE,
+                            result,
+                            itemImage.value,
+                            object : FirebaseStorageManager.Callback<Boolean> {
+                                override fun onComplete(resultImage: Boolean) {
+                                    if (!resultImage) {
+                                        // delete the previously uploaded firestore object if image uploading fails
+                                        firestoreManager.delete(
+                                            FirebaseNames.COLLECTION_LOST_ITEMS,
+                                            result,
+                                            object : FirestoreManager.Callback<Boolean> {
+                                                override fun onComplete(resultError: Boolean?) {
+                                                }
+                                            })
+                                        callback.onComplete(null)  // also return null if image adding failed
+                                        return
                                     }
-                                })
-                                callback.onComplete(null)  // also return null if image adding failed
-                                return
-                            }
 
-                            // create lost item here
-                            val generatedLostItem: LostItem = LostItem(
-                                itemID = result,
-                                userID = FirebaseUtility.getUserID(),
-                                itemName = itemName.value,
-                                category = selectedCategory!!.name,
-                                subCategory = selectedSubCategory.value,
-                                color = selectedColor.toList().sorted(),
-                                brand = itemBrand.value,
-                                dateTime = DateTimeManager.getDateTimeEpoch(
-                                    selectedDate.value?:0L, selectedHour.value?:0, selectedMinute.value?:0
-                                ),
-                                location = if (selectedLocation.value != null) LocationManager.latLngToPair(selectedLocation.value!!) else null,
-                                description = additionalDescription.value,
-                                timePosted = currentTime,
-                                image = itemImage.value.toString(), // convert uri to string
-                                status = 0,
-                                isTracking = false
-                            )
+                                    // create lost item here
+                                    val generatedLostItem: LostItem = LostItem(
+                                        itemID = result,
+                                        userID = FirebaseUtility.getUserID(),
+                                        itemName = itemName.value,
+                                        category = selectedCategory!!.name,
+                                        subCategory = selectedSubCategory.value,
+                                        color = selectedColor.toList().sorted(),
+                                        brand = itemBrand.value,
+                                        dateTime = DateTimeManager.getDateTimeEpoch(
+                                            selectedDate.value ?: 0L,
+                                            selectedHour.value ?: 0,
+                                            selectedMinute.value ?: 0
+                                        ),
+                                        location = if (selectedLocation.value != null) LocationManager.latLngToPair(
+                                            selectedLocation.value!!
+                                        ) else null,
+                                        description = additionalDescription.value,
+                                        timePosted = currentTime,
+                                        image = itemImage.value.toString(), // convert uri to string
+                                        status = 0,
+                                        isTracking = false
+                                    )
 
-                            // add activity log item
-                            firestoreManager.putWithUniqueId(
-                                FirebaseNames.COLLECTION_ACTIVITY_LOG_ITEMS,
-                                mapOf(
-                                    FirebaseNames.ACTIVITY_LOG_ITEM_TYPE to 0,
-                                    FirebaseNames.ACTIVITY_LOG_ITEM_CONTENT to itemName.value + " (#" + result + ")",
-                                    FirebaseNames.ACTIVITY_LOG_ITEM_USER_ID to FirebaseUtility.getUserID(),
-                                    FirebaseNames.ACTIVITY_LOG_ITEM_TIMESTAMP to DateTimeManager.getCurrentEpochTime()
-                                ),
-                                object: FirestoreManager.Callback<String>{
-                                    override fun onComplete(result: String?) {
-                                        // not necessary to throw an error if failed here
-                                        callback.onComplete(generatedLostItem)  //return the lost item added
-                                    }
+                                    // add activity log item
+                                    firestoreManager.putWithUniqueId(
+                                        FirebaseNames.COLLECTION_ACTIVITY_LOG_ITEMS,
+                                        mapOf(
+                                            FirebaseNames.ACTIVITY_LOG_ITEM_TYPE to 0,
+                                            FirebaseNames.ACTIVITY_LOG_ITEM_CONTENT to itemName.value + " (#" + result + ")",
+                                            FirebaseNames.ACTIVITY_LOG_ITEM_USER_ID to FirebaseUtility.getUserID(),
+                                            FirebaseNames.ACTIVITY_LOG_ITEM_TIMESTAMP to DateTimeManager.getCurrentEpochTime()
+                                        ),
+                                        object : FirestoreManager.Callback<String> {
+                                            override fun onComplete(result: String?) {
+                                                // not necessary to throw an error if failed here
+                                                callback.onComplete(generatedLostItem)  //return the lost item added
+                                            }
+                                        }
+                                    )
                                 }
-                            )
-                        }
-                    })
+                            })
 
-                } else {
-                    // create lost item here
-                    // only exception is that there are no item images
-                    val generatedLostItem: LostItem = LostItem(
-                        itemID = result,
-                        userID = FirebaseUtility.getUserID(),
-                        itemName = itemName.value,
-                        category = selectedCategory!!.name,
-                        subCategory = selectedSubCategory.value,
-                        color = selectedColor.toList().sorted(),
-                        brand = itemBrand.value,
-                        dateTime = DateTimeManager.getDateTimeEpoch(
-                            selectedDate.value?:0L, selectedHour.value?:0, selectedMinute.value?:0
-                        ),
-                        location = if (selectedLocation.value != null) LocationManager.latLngToPair(selectedLocation.value!!) else null,
-                        description = additionalDescription.value,
-                        timePosted = currentTime,
-                        image = "android.resource://com.example.lostandfound/" + R.drawable.placeholder_image,
-                        status = 0,
-                        isTracking = false
-                    )
+                    } else {
+                        // create lost item here
+                        // only exception is that there are no item images
+                        val generatedLostItem: LostItem = LostItem(
+                            itemID = result,
+                            userID = FirebaseUtility.getUserID(),
+                            itemName = itemName.value,
+                            category = selectedCategory!!.name,
+                            subCategory = selectedSubCategory.value,
+                            color = selectedColor.toList().sorted(),
+                            brand = itemBrand.value,
+                            dateTime = DateTimeManager.getDateTimeEpoch(
+                                selectedDate.value ?: 0L,
+                                selectedHour.value ?: 0,
+                                selectedMinute.value ?: 0
+                            ),
+                            location = if (selectedLocation.value != null) LocationManager.latLngToPair(
+                                selectedLocation.value!!
+                            ) else null,
+                            description = additionalDescription.value,
+                            timePosted = currentTime,
+                            image = "android.resource://com.example.lostandfound/" + R.drawable.placeholder_image,
+                            status = 0,
+                            isTracking = false
+                        )
 
-                    // add activity log item
-                    firestoreManager.putWithUniqueId(
-                        FirebaseNames.COLLECTION_ACTIVITY_LOG_ITEMS,
-                        mapOf(
-                            FirebaseNames.ACTIVITY_LOG_ITEM_TYPE to 0,
-                            FirebaseNames.ACTIVITY_LOG_ITEM_CONTENT to itemName.value + " (#" + result + ")",
-                            FirebaseNames.ACTIVITY_LOG_ITEM_USER_ID to FirebaseUtility.getUserID(),
-                            FirebaseNames.ACTIVITY_LOG_ITEM_TIMESTAMP to DateTimeManager.getCurrentEpochTime()
-                        ),
-                        object: FirestoreManager.Callback<String>{
-                            override fun onComplete(result: String?) {
-                                // not necessary to throw an error if failed here
-                                callback.onComplete(generatedLostItem)  //return the lost item added
+                        // add activity log item
+                        firestoreManager.putWithUniqueId(
+                            FirebaseNames.COLLECTION_ACTIVITY_LOG_ITEMS,
+                            mapOf(
+                                FirebaseNames.ACTIVITY_LOG_ITEM_TYPE to 0,
+                                FirebaseNames.ACTIVITY_LOG_ITEM_CONTENT to itemName.value + " (#" + result + ")",
+                                FirebaseNames.ACTIVITY_LOG_ITEM_USER_ID to FirebaseUtility.getUserID(),
+                                FirebaseNames.ACTIVITY_LOG_ITEM_TIMESTAMP to DateTimeManager.getCurrentEpochTime()
+                            ),
+                            object : FirestoreManager.Callback<String> {
+                                override fun onComplete(result: String?) {
+                                    // not necessary to throw an error if failed here
+                                    callback.onComplete(generatedLostItem)  //return the lost item added
+                                }
                             }
-                        }
-                    )
+                        )
+                    }
                 }
-            }
-        })
+            })
     }
 }

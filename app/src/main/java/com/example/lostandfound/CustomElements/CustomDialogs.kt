@@ -64,8 +64,8 @@ import androidx.core.content.ContextCompat
 import coil3.compose.rememberAsyncImagePainter
 import com.example.lostandfound.Data.IntentExtraNames
 import com.example.lostandfound.Data.User
-import com.example.lostandfound.Utility.DateTimeManager
 import com.example.lostandfound.R
+import com.example.lostandfound.Utility.DateTimeManager
 import com.example.lostandfound.Utility.ImageManager
 import com.example.lostandfound.Utility.LocationManager
 import com.example.lostandfound.ui.ChatInbox.ChatInboxActivity
@@ -101,7 +101,7 @@ fun LoginDialogPreview() {
             confirmButton = {},
             dismissButton = {},
             inputPlaceholder = "Your answer...",
-            isDialogShown = remember{
+            isDialogShown = remember {
                 mutableStateOf(true)
             },
             errorMessage = remember {
@@ -117,24 +117,28 @@ fun CustomTextDialog(
     title: String,
     content: String,
     confirmButton: @Composable (() -> Unit),
-    dismissButton: @Composable (() -> Unit) ? = null,   // optional secondary button
+    dismissButton: @Composable (() -> Unit)? = null,   // optional secondary button
     isDialogShown: MutableState<Boolean>
-){
+) {
     // Shown only when isDialogShown is true
-    if (isDialogShown.value){
+    if (isDialogShown.value) {
         AlertDialog(
             onDismissRequest = { isDialogShown.value = false },
             containerColor = MaterialTheme.colorScheme.background,
             icon = {
-                Icon(imageVector = icon,
+                Icon(
+                    imageVector = icon,
                     contentDescription = "Dialog icon",
                     tint = MaterialTheme.colorScheme.onPrimaryContainer,
-                    modifier = Modifier.size(dimensionResource(R.dimen.image_button_size)))
+                    modifier = Modifier.size(dimensionResource(R.dimen.image_button_size))
+                )
             },
             title = {
-                Text(text = title,
+                Text(
+                    text = title,
                     style = MaterialTheme.typography.titleMedium,
-                    color = MaterialTheme.colorScheme.onBackground)
+                    color = MaterialTheme.colorScheme.onBackground
+                )
             },
             text = {
                 Box(
@@ -161,9 +165,9 @@ fun CustomUserDialog(
     user: User,
     context: Context,  // used to convert string to uri
     isDialogShown: MutableState<Boolean>
-){
+) {
     // Shown only when isDialogShown is true
-    if (isDialogShown.value){
+    if (isDialogShown.value) {
         AlertDialog(
             onDismissRequest = { isDialogShown.value = false },
             containerColor = MaterialTheme.colorScheme.background,
@@ -171,8 +175,13 @@ fun CustomUserDialog(
                 val avatar = ImageManager.stringToUri(context, user.avatar)
 
                 Image(
-                    painter = if (avatar != null) rememberAsyncImagePainter(model = ImageManager.stringToUri(context, user.avatar))
-                            else painterResource(id = R.drawable.profile_icon),
+                    painter = if (avatar != null) rememberAsyncImagePainter(
+                        model = ImageManager.stringToUri(
+                            context,
+                            user.avatar
+                        )
+                    )
+                    else painterResource(id = R.drawable.profile_icon),
                     contentDescription = "User avatar",
                     modifier = Modifier
                         .size(dimensionResource(R.dimen.image_button_size))
@@ -237,24 +246,28 @@ fun CustomInputDialog(
     inputText: MutableState<String>,
     inputPlaceholder: String,
     confirmButton: @Composable (() -> Unit),
-    dismissButton: @Composable (() -> Unit) ? = null,   // optional secondary button
+    dismissButton: @Composable (() -> Unit)? = null,   // optional secondary button
     isDialogShown: MutableState<Boolean>,
     errorMessage: MutableState<String>
-){
-    if (isDialogShown.value){
+) {
+    if (isDialogShown.value) {
         AlertDialog(
             onDismissRequest = { isDialogShown.value = false },
             containerColor = MaterialTheme.colorScheme.background,
             icon = {
-                Icon(imageVector = icon,
+                Icon(
+                    imageVector = icon,
                     contentDescription = "Dialog icon",
                     tint = MaterialTheme.colorScheme.onPrimaryContainer,
-                    modifier = Modifier.size(dimensionResource(R.dimen.image_button_size)))
+                    modifier = Modifier.size(dimensionResource(R.dimen.image_button_size))
+                )
             },
             title = {
-                Text(text = title,
+                Text(
+                    text = title,
                     style = MaterialTheme.typography.titleMedium,
-                    color = MaterialTheme.colorScheme.onBackground)
+                    color = MaterialTheme.colorScheme.onBackground
+                )
             },
             text = {
                 Column(
@@ -279,12 +292,12 @@ fun CustomInputDialog(
                             inputText.value = s
                         }
                     )
-                    
+
                     // error message
-                    Row (
+                    Row(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.Center
-                    ){
+                    ) {
                         CustomErrorTextNoBox(text = errorMessage.value)
                     }
                 }
@@ -301,7 +314,7 @@ fun CustomInputDialog(
 fun CustomDatePickerDialog(
     selectedDate: MutableState<Long?>,
     isDialogShown: MutableState<Boolean>
-){
+) {
     if (isDialogShown.value) {
         val datePickerState = rememberDatePickerState()
 
@@ -317,10 +330,10 @@ fun CustomDatePickerDialog(
                     type = ButtonType.FILLED,
                     onClick = {
                         // get the current epoch time
-                        val currentEpoch = DateTimeManager.getCurrentEpochDate()*1000
+                        val currentEpoch = DateTimeManager.getCurrentEpochDate() * 1000
 
                         // get the epoch time
-                        val epoch = ((datePickerState.selectedDateMillis ?: currentEpoch)/ 1000L)
+                        val epoch = ((datePickerState.selectedDateMillis ?: currentEpoch) / 1000L)
 
                         // update the epoch value
                         selectedDate.value = epoch
@@ -369,7 +382,7 @@ fun CustomTimePickerDialog(
     selectedHour: MutableState<Int?>,
     selectedMinute: MutableState<Int?>,
     isDialogShown: MutableState<Boolean>
-){
+) {
     // set the initial time to the current time
     val timePickerState = rememberTimePickerState(
         initialHour = DateTimeManager.getCurrentHour(),
@@ -378,10 +391,11 @@ fun CustomTimePickerDialog(
     )
 
     // show the dialog only when isDialogShown is true
-    if (isDialogShown.value){
+    if (isDialogShown.value) {
         AlertDialog(
             onDismissRequest = {
-                isDialogShown.value = false },
+                isDialogShown.value = false
+            },
             confirmButton = {
                 // change the selected time
                 CustomButton(
@@ -427,24 +441,28 @@ fun CustomLoginDialog(
     onDismissClicked: () -> Unit,
     onLoginClicked: (() -> Unit),
     isDialogShown: MutableState<Boolean>
-){
+) {
     // Shown only when isDialogShown is true
-    if (isDialogShown.value){
+    if (isDialogShown.value) {
         AlertDialog(
             onDismissRequest = {
-            // non dismissable
+                // non dismissable
             },
             containerColor = MaterialTheme.colorScheme.background,
             icon = {
-                Icon(imageVector = Icons.Outlined.Person,
+                Icon(
+                    imageVector = Icons.Outlined.Person,
                     contentDescription = "Login icon",
                     tint = MaterialTheme.colorScheme.onPrimaryContainer,
-                    modifier = Modifier.size(dimensionResource(R.dimen.image_button_size)))
+                    modifier = Modifier.size(dimensionResource(R.dimen.image_button_size))
+                )
             },
             title = {
-                Text(text = "Login required",
+                Text(
+                    text = "Login required",
                     style = MaterialTheme.typography.titleMedium,
-                    color = MaterialTheme.colorScheme.onBackground)
+                    color = MaterialTheme.colorScheme.onBackground
+                )
             },
             text = {
                 Box(
@@ -487,7 +505,7 @@ fun CustomPickLocationDialog(
     context: Context,
     isDialogShown: MutableState<Boolean>,
     selectedLocation: MutableState<LatLng?>,   // this is the state that will ONLY BE UPDATED WHEN THE DONE BUTTON IS CLICKED
-){
+) {
     // shows the default location when the selected location is null
     // although users should not have access to this dialog when the location is null in the first place
     var currentLocation by remember {
@@ -495,9 +513,8 @@ fun CustomPickLocationDialog(
     }
 
 
-
     // objects for getting device location
-    val fusedLocationClient = remember{
+    val fusedLocationClient = remember {
         LocationServices.getFusedLocationProviderClient(context)
     }
 
@@ -509,18 +526,16 @@ fun CustomPickLocationDialog(
     val launcherMultiplePermissions = rememberLauncherForActivityResult(
         ActivityResultContracts.RequestMultiplePermissions()
     ) { permissionMaps ->
-        val areGranted = permissionMaps.values.reduce{acc, next -> acc && next}
-        if (areGranted){
+        val areGranted = permissionMaps.values.reduce { acc, next -> acc && next }
+        if (areGranted) {
             // if permissions are granted, get current user location
-            getCurrentLocation(fusedLocationClient, context, onSuccess = {latlng ->
+            getCurrentLocation(fusedLocationClient, context, onSuccess = { latlng ->
                 currentLocation = latlng
             })
         } else {
             Toast.makeText(context, "Location permission denied", Toast.LENGTH_SHORT).show()
         }
     }
-
-
 
 
     // Code is executed everytime the dialog becomes shown
@@ -531,7 +546,7 @@ fun CustomPickLocationDialog(
         }
     }
 
-    if (isDialogShown.value){
+    if (isDialogShown.value) {
         Dialog(
             onDismissRequest = {
                 isDialogShown.value = false
@@ -548,7 +563,7 @@ fun CustomPickLocationDialog(
                         .clip(RoundedCornerShape(dimensionResource(id = R.dimen.corner_radius)))
                         .background(color = MaterialTheme.colorScheme.background),
 
-                ){
+                    ) {
                     Column(
                         modifier = Modifier.padding(
                             vertical = dimensionResource(id = R.dimen.title_margin),
@@ -556,7 +571,7 @@ fun CustomPickLocationDialog(
                         ),
                         verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin)),
                         horizontalAlignment = Alignment.CenterHorizontally
-                    ){
+                    ) {
                         Text(
                             text = "Select location",
                             style = Typography.titleMedium,
@@ -571,10 +586,14 @@ fun CustomPickLocationDialog(
 
                         // Google maps composable
                         val markerState = remember {
-                            MarkerState(position = currentLocation ?: LocationManager.DEFAULT_LOCATION)
+                            MarkerState(
+                                position = currentLocation ?: LocationManager.DEFAULT_LOCATION
+                            )
                         }
                         val cameraPositionState = rememberCameraPositionState {
-                            position = CameraPosition.fromLatLngZoom(currentLocation ?: LocationManager.DEFAULT_LOCATION, 15f)
+                            position = CameraPosition.fromLatLngZoom(
+                                currentLocation ?: LocationManager.DEFAULT_LOCATION, 15f
+                            )
                         }
                         val uiSettings by remember {
                             mutableStateOf(MapUiSettings(zoomControlsEnabled = true))
@@ -586,11 +605,14 @@ fun CustomPickLocationDialog(
                         // when a new location is selected
                         LaunchedEffect(currentLocation) {
                             // change the marker location
-                            markerState.position = currentLocation ?: LocationManager.DEFAULT_LOCATION
+                            markerState.position =
+                                currentLocation ?: LocationManager.DEFAULT_LOCATION
 
                             // change the camera location when a new location value is selected
                             cameraPositionState.animate(
-                                update = CameraUpdateFactory.newLatLng(currentLocation ?: LocationManager.DEFAULT_LOCATION),
+                                update = CameraUpdateFactory.newLatLng(
+                                    currentLocation ?: LocationManager.DEFAULT_LOCATION
+                                ),
                                 durationMs = 1500
                             )
                         }
@@ -611,7 +633,7 @@ fun CustomPickLocationDialog(
                             // markers goes here
                             // It will be updated when location is updated through tapping on the map
                             // Marker state is only shown when the location is not null
-                            if (currentLocation != null){
+                            if (currentLocation != null) {
                                 Marker(
                                     state = markerState,
                                     title = "Item location"
@@ -623,7 +645,7 @@ fun CustomPickLocationDialog(
                         Row(
                             modifier = Modifier.fillMaxWidth(),
                             horizontalArrangement = Arrangement.SpaceEvenly
-                        ){
+                        ) {
                             // button to get device location and use it to replace currentLocation
                             CustomButton(
                                 text = "Use device location",
@@ -633,12 +655,18 @@ fun CustomPickLocationDialog(
                                     // check if permissions are granted
                                     if (locationPermissions.all {
                                             // location permissions are granted
-                                            ContextCompat.checkSelfPermission(context, it) == PackageManager.PERMISSION_GRANTED
-                                        }){
+                                            ContextCompat.checkSelfPermission(
+                                                context,
+                                                it
+                                            ) == PackageManager.PERMISSION_GRANTED
+                                        }) {
                                         // get device location
-                                        getCurrentLocation(fusedLocationClient, context, onSuccess = {latlng ->
-                                            currentLocation = latlng
-                                        })
+                                        getCurrentLocation(
+                                            fusedLocationClient,
+                                            context,
+                                            onSuccess = { latlng ->
+                                                currentLocation = latlng
+                                            })
                                     } else {
                                         // location permissions are not yet granted
                                         launcherMultiplePermissions.launch(
@@ -702,7 +730,7 @@ private fun getCurrentLocation(
     fusedLocationClient: FusedLocationProviderClient,
     context: Context,
     onSuccess: (LatLng) -> Unit,
-){
+) {
     fusedLocationClient.lastLocation.addOnSuccessListener { location ->
         location?.let {
             // Return the latlng value
@@ -715,15 +743,14 @@ private fun getCurrentLocation(
 }
 
 
-
 // if the location is null, redirect the camera to the default location but dont show the marker
 // the user should not be able to access this if the location is null in the first place
 @Composable
 fun CustomViewLocationDialog(
     isDialogShown: MutableState<Boolean>,
     selectedLocation: LatLng?,   // no need to be mutable here
-){
-    if (isDialogShown.value){
+) {
+    if (isDialogShown.value) {
         Dialog(
             onDismissRequest = {
                 isDialogShown.value = false
@@ -740,7 +767,7 @@ fun CustomViewLocationDialog(
                         .clip(RoundedCornerShape(dimensionResource(id = R.dimen.corner_radius)))
                         .background(color = MaterialTheme.colorScheme.background),
 
-                    ){
+                    ) {
                     Column(
                         modifier = Modifier.padding(
                             vertical = dimensionResource(id = R.dimen.title_margin),
@@ -748,7 +775,7 @@ fun CustomViewLocationDialog(
                         ),
                         verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin)),
                         horizontalAlignment = Alignment.CenterHorizontally
-                    ){
+                    ) {
                         Text(
                             text = "View location",
                             style = Typography.titleMedium,
@@ -758,10 +785,14 @@ fun CustomViewLocationDialog(
 
                         // Google maps composable
                         val markerState = remember {
-                            MarkerState(position = selectedLocation ?: LocationManager.DEFAULT_LOCATION)
+                            MarkerState(
+                                position = selectedLocation ?: LocationManager.DEFAULT_LOCATION
+                            )
                         }
                         val cameraPositionState = rememberCameraPositionState {
-                            position = CameraPosition.fromLatLngZoom(selectedLocation ?: LocationManager.DEFAULT_LOCATION, 15f)
+                            position = CameraPosition.fromLatLngZoom(
+                                selectedLocation ?: LocationManager.DEFAULT_LOCATION, 15f
+                            )
                         }
                         val uiSettings by remember {
                             mutableStateOf(MapUiSettings(zoomControlsEnabled = true))
@@ -785,7 +816,7 @@ fun CustomViewLocationDialog(
                             // markers goes here
                             // It will be updated when location is updated through tapping on the map
                             // Only shown when the location is not null
-                            if (selectedLocation != null){
+                            if (selectedLocation != null) {
                                 Marker(
                                     state = markerState,
                                     title = "Item location"
@@ -828,8 +859,8 @@ fun CustomViewTwoLocationsDialog(
     isDialogShown: MutableState<Boolean>,
     selectedLocation1: LatLng?,   // no need to be mutable here
     selectedLocation2: LatLng?
-){
-    if (isDialogShown.value){
+) {
+    if (isDialogShown.value) {
         Dialog(
             onDismissRequest = {
                 isDialogShown.value = false
@@ -846,7 +877,7 @@ fun CustomViewTwoLocationsDialog(
                         .clip(RoundedCornerShape(dimensionResource(id = R.dimen.corner_radius)))
                         .background(color = MaterialTheme.colorScheme.background),
 
-                    ){
+                    ) {
                     Column(
                         modifier = Modifier.padding(
                             vertical = dimensionResource(id = R.dimen.title_margin),
@@ -854,7 +885,7 @@ fun CustomViewTwoLocationsDialog(
                         ),
                         verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin)),
                         horizontalAlignment = Alignment.CenterHorizontally
-                    ){
+                    ) {
                         Text(
                             text = "View location",
                             style = Typography.titleMedium,
@@ -864,16 +895,24 @@ fun CustomViewTwoLocationsDialog(
 
                         // Google maps composable
                         val markerState1 = remember {
-                            MarkerState(position = selectedLocation1 ?: LocationManager.DEFAULT_LOCATION)
+                            MarkerState(
+                                position = selectedLocation1 ?: LocationManager.DEFAULT_LOCATION
+                            )
                         }
                         val markerState2 = remember {
-                            MarkerState(position = selectedLocation2 ?: LocationManager.DEFAULT_LOCATION)
+                            MarkerState(
+                                position = selectedLocation2 ?: LocationManager.DEFAULT_LOCATION
+                            )
                         }
                         val cameraPositionState1 = rememberCameraPositionState {
-                            position = CameraPosition.fromLatLngZoom(selectedLocation1 ?: LocationManager.DEFAULT_LOCATION, 15f)
+                            position = CameraPosition.fromLatLngZoom(
+                                selectedLocation1 ?: LocationManager.DEFAULT_LOCATION, 15f
+                            )
                         }
                         val cameraPositionState2 = rememberCameraPositionState {
-                            position = CameraPosition.fromLatLngZoom(selectedLocation2 ?: LocationManager.DEFAULT_LOCATION, 15f)
+                            position = CameraPosition.fromLatLngZoom(
+                                selectedLocation2 ?: LocationManager.DEFAULT_LOCATION, 15f
+                            )
                         }
 
                         val uiSettings by remember {
@@ -897,7 +936,7 @@ fun CustomViewTwoLocationsDialog(
                         ) {
                             // markers goes here
                             // It will be updated when location is updated through tapping on the map
-                            if (selectedLocation1 != null){
+                            if (selectedLocation1 != null) {
                                 MapMarker(
                                     context = context,
                                     state = markerState1,
@@ -906,7 +945,7 @@ fun CustomViewTwoLocationsDialog(
                                 )
                             }
 
-                            if (selectedLocation2 != null){
+                            if (selectedLocation2 != null) {
                                 MapMarker(
                                     context = context,
                                     state = markerState2,
@@ -974,8 +1013,9 @@ fun bitmapDescriptor(
 
     // force the width of the drawable to be 48dp
     val displayMetrics = context.resources.displayMetrics
-    val width = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 48.toFloat(), displayMetrics).toInt()
-    val height = drawable.intrinsicHeight*width/drawable.intrinsicWidth
+    val width =
+        TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 48.toFloat(), displayMetrics).toInt()
+    val height = drawable.intrinsicHeight * width / drawable.intrinsicWidth
 
     drawable.setBounds(0, 0, width, height)
     val bm = Bitmap.createBitmap(

@@ -7,15 +7,14 @@ import android.content.SharedPreferences;
 
 import androidx.annotation.NonNull;
 
-import com.example.lostandfound.Utility.ErrorCallback;
 import com.example.lostandfound.Data.FirebaseNames;
 import com.example.lostandfound.Data.SharedPreferencesNames;
+import com.example.lostandfound.Utility.ErrorCallback;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
-import com.google.firebase.auth.FirebaseUser;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -25,23 +24,23 @@ This class only stores methods that involves using the context
 If not, use that in firestore manager!
  */
 public class FirebaseAuthManager {
-    private Context ctx;             // ctx required for accessing shared preferences
-    private FirebaseAuth mAuth;      // stores emails and passwords
-    private FirestoreManager db;     // stores emails to Userdata(firstName and lastName)
+    private final Context ctx;             // ctx required for accessing shared preferences
+    private final FirebaseAuth mAuth;      // stores emails and passwords
+    private final FirestoreManager db;     // stores emails to Userdata(firstName and lastName)
 
 
-    public FirebaseAuthManager(Context ctx){
+    public FirebaseAuthManager(Context ctx) {
         this.ctx = ctx;
         mAuth = FirebaseAuth.getInstance();
         db = new FirestoreManager();
     }
 
     // method to create user with email and password
-    public void createUser(String firstName, String lastName, String email, String password, String avatar, ErrorCallback callback){
+    public void createUser(String firstName, String lastName, String email, String password, String avatar, ErrorCallback callback) {
         mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
-                if (task.isSuccessful()){
+                if (task.isSuccessful()) {
                     // get the user id
                     String userID = mAuth.getUid();
 
@@ -56,7 +55,7 @@ public class FirebaseAuthManager {
                     db.put(FirebaseNames.COLLECTION_USERS, userID, data, new FirestoreManager.Callback<Boolean>() {
                         @Override
                         public void onComplete(Boolean result) {
-                            if (!result){
+                            if (!result) {
                                 callback.onComplete("Error adding user to the database");
                                 return;
                             }
@@ -89,11 +88,11 @@ public class FirebaseAuthManager {
 
 
     // method to login with user credentials
-    public void loginUser(String emailAddress, String password, ErrorCallback callback){
+    public void loginUser(String emailAddress, String password, ErrorCallback callback) {
         mAuth.signInWithEmailAndPassword(emailAddress, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
-                if (task.isSuccessful()){
+                if (task.isSuccessful()) {
                     // sign in successful
 
                     // get other parameters given the user ID
@@ -102,7 +101,7 @@ public class FirebaseAuthManager {
                     db.get(FirebaseNames.COLLECTION_USERS, userID, new FirestoreManager.Callback<Map<String, Object>>() {
                         @Override
                         public void onComplete(Map<String, Object> result) {
-                            if (result == null){
+                            if (result == null) {
                                 callback.onComplete("User not found in the database");
                                 return;
                             }
@@ -134,11 +133,11 @@ public class FirebaseAuthManager {
     }
 
     // method to update user credentials
-    public void updateUser(String emailAddress, String newFirstName, String newLastName, String avatar, ErrorCallback callback){
+    public void updateUser(String emailAddress, String newFirstName, String newLastName, String avatar, ErrorCallback callback) {
         // get uid
         String userID = mAuth.getUid();
         // if uid is null, return false
-        if (userID == null){
+        if (userID == null) {
             callback.onComplete("You are not logged in.");
             return;
         }
@@ -153,7 +152,7 @@ public class FirebaseAuthManager {
         db.put(FirebaseNames.COLLECTION_USERS, userID, data, new FirestoreManager.Callback<Boolean>() {
             @Override
             public void onComplete(Boolean result) {
-                if (!result){
+                if (!result) {
                     callback.onComplete("Error updating user information");
                     return;
                 }
@@ -174,12 +173,12 @@ public class FirebaseAuthManager {
     }
 
     // method to update a user's password given email
-    public void sendPasswordResetEmail(String emailAddress, ErrorCallback callback){
+    public void sendPasswordResetEmail(String emailAddress, ErrorCallback callback) {
         mAuth.sendPasswordResetEmail(emailAddress)
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
-                        if (task.isSuccessful()){
+                        if (task.isSuccessful()) {
                             callback.onComplete("");
                         } else {
                             callback.onComplete("Failed sending password reset email");
@@ -189,7 +188,7 @@ public class FirebaseAuthManager {
     }
 
     // method to logout
-    public void logoutUser(){
+    public void logoutUser() {
         mAuth.signOut();
 
         // reset shared preferences for User

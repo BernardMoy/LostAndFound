@@ -109,7 +109,7 @@ class ViewComparisonViewModel : ViewModel() {
                                 ItemManager.updateIsTracking(
                                     lostItemData.itemID,
                                     false,
-                                    object: ItemManager.UpdateLostCallback{
+                                    object : ItemManager.UpdateLostCallback {
                                         override fun onComplete(result: Boolean) {
                                             if (!result) {
                                                 callback.onComplete("Error updating item data")
@@ -125,7 +125,7 @@ class ViewComparisonViewModel : ViewModel() {
                                                     FirebaseNames.ACTIVITY_LOG_ITEM_USER_ID to FirebaseUtility.getUserID(),
                                                     FirebaseNames.ACTIVITY_LOG_ITEM_TIMESTAMP to DateTimeManager.getCurrentEpochTime()
                                                 ),
-                                                object: FirestoreManager.Callback<String>{
+                                                object : FirestoreManager.Callback<String> {
                                                     override fun onComplete(result: String?) {
                                                         // not necessary to throw an error if failed here
                                                         callback.onComplete("")

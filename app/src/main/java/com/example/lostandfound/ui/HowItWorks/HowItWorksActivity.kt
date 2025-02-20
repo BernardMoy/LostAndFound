@@ -17,7 +17,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.outlined.AddCircle
-import androidx.compose.material.icons.outlined.CheckCircle
 import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material.icons.outlined.TrackChanges
 import androidx.compose.material3.HorizontalDivider
@@ -45,7 +44,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.lostandfound.CustomElements.BackToolbar
 import com.example.lostandfound.CustomElements.ButtonType
 import com.example.lostandfound.CustomElements.CustomButton
-import com.example.lostandfound.CustomElements.CustomCard
 import com.example.lostandfound.CustomElements.CustomGrayTitle
 import com.example.lostandfound.CustomElements.CustomPopupText
 import com.example.lostandfound.R
@@ -109,7 +107,7 @@ fun MainContent(viewModel: HowItWorksViewModel = viewModel()) {
     // content
     Column(
         verticalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.title_margin))
-    ){
+    ) {
         addItem(viewModel = viewModel)
         HorizontalDivider(thickness = 1.dp, color = Color.Gray)
         searchItem(viewModel = viewModel)
@@ -123,11 +121,11 @@ fun MainContent(viewModel: HowItWorksViewModel = viewModel()) {
 }
 
 @Composable
-fun addItem(viewModel: HowItWorksViewModel){
+fun addItem(viewModel: HowItWorksViewModel) {
     Row(
         horizontalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.content_margin)),
         modifier = Modifier.padding(horizontal = dimensionResource(R.dimen.title_margin))
-    ){
+    ) {
         Icon(
             imageVector = Icons.Outlined.AddCircle,
             tint = MaterialTheme.colorScheme.primary,
@@ -135,10 +133,10 @@ fun addItem(viewModel: HowItWorksViewModel){
             modifier = Modifier.size(dimensionResource(R.dimen.profile_image_size))
         )
 
-        Column (
+        Column(
             verticalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.content_margin)),
             modifier = Modifier.weight(1f)
-        ){
+        ) {
             Text(
                 text = "Report a New Item",
                 style = Typography.titleMedium,
@@ -156,7 +154,7 @@ fun addItem(viewModel: HowItWorksViewModel){
                 style = Typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onBackground
             )
-            
+
             // show an image illustrating the bottom bar
             Image(
                 painter = painterResource(R.drawable.bottom_fragment),
@@ -169,15 +167,15 @@ fun addItem(viewModel: HowItWorksViewModel){
 }
 
 @Composable
-fun searchItem(viewModel: HowItWorksViewModel){
+fun searchItem(viewModel: HowItWorksViewModel) {
     Row(
         horizontalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.content_margin)),
         modifier = Modifier.padding(horizontal = dimensionResource(R.dimen.title_margin))
-    ){
-        Column (
+    ) {
+        Column(
             verticalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.content_margin)),
             modifier = Modifier.weight(1f)
-        ){
+        ) {
             Text(
                 text = "Search for your Lost Items",
                 style = Typography.titleMedium,
@@ -215,11 +213,11 @@ fun searchItem(viewModel: HowItWorksViewModel){
 }
 
 @Composable
-fun trackItem(viewModel: HowItWorksViewModel){
+fun trackItem(viewModel: HowItWorksViewModel) {
     Row(
         horizontalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.content_margin)),
         modifier = Modifier.padding(horizontal = dimensionResource(R.dimen.title_margin))
-    ){
+    ) {
         Icon(
             imageVector = Icons.Outlined.TrackChanges,
             tint = MaterialTheme.colorScheme.primary,
@@ -227,10 +225,10 @@ fun trackItem(viewModel: HowItWorksViewModel){
             modifier = Modifier.size(dimensionResource(R.dimen.profile_image_size))
         )
 
-        Column (
+        Column(
             verticalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.content_margin)),
             modifier = Modifier.weight(1f)
-        ){
+        ) {
             Text(
                 text = "Track your Items",
                 style = Typography.titleMedium,
@@ -255,10 +253,10 @@ fun trackItem(viewModel: HowItWorksViewModel){
             )
 
             // show the tracking logo
-            Row (
+            Row(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin_half))
-            ){
+            ) {
                 Icon(
                     imageVector = Icons.Outlined.TrackChanges,
                     tint = MaterialTheme.colorScheme.error,
@@ -278,15 +276,15 @@ fun trackItem(viewModel: HowItWorksViewModel){
 }
 
 @Composable
-fun approveItem(viewModel: HowItWorksViewModel){
+fun approveItem(viewModel: HowItWorksViewModel) {
     Row(
         horizontalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.content_margin)),
         modifier = Modifier.padding(horizontal = dimensionResource(R.dimen.title_margin))
-    ){
-        Column (
+    ) {
+        Column(
             verticalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.content_margin)),
             modifier = Modifier.weight(1f)
-        ){
+        ) {
             Text(
                 text = "Claim and Approve Claims",
                 style = Typography.titleMedium,
@@ -317,13 +315,13 @@ fun approveItem(viewModel: HowItWorksViewModel){
 }
 
 @Composable
-fun FAQs(viewModel: HowItWorksViewModel){
-    Column (
+fun FAQs(viewModel: HowItWorksViewModel) {
+    Column(
         verticalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.content_margin))
-    ){
+    ) {
         Box(
             modifier = Modifier.padding(horizontal = dimensionResource(R.dimen.content_margin))
-        ){
+        ) {
             CustomGrayTitle(text = "Frequently Asked Questions")
         }
 

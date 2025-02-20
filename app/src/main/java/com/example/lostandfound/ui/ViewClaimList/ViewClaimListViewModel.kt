@@ -1,6 +1,5 @@
 package com.example.lostandfound.ui.ViewClaimList
 
-import android.util.Log
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
@@ -28,15 +27,15 @@ class ViewClaimListViewModel : ViewModel() {
     called everytime the screen is reloaded
     return true if data are successfully retrieved (or no data), false otherwise
      */
-    fun getAllData(callback: Callback<Boolean>){
+    fun getAllData(callback: Callback<Boolean>) {
         // first clear the item data array
         claimPreviewList.clear()
 
         // get all data from firebase with matching user ids
-        ItemManager.getClaimsFromFoundId(foundItem.itemID, object: ItemManager.FoundClaimCallback{
+        ItemManager.getClaimsFromFoundId(foundItem.itemID, object : ItemManager.FoundClaimCallback {
             override fun onComplete(claimList: MutableList<Claim>) {
                 // the list should not be empty
-                if (claimList.isEmpty()){
+                if (claimList.isEmpty()) {
                     callback.onComplete(false)
                     return
                 }
@@ -46,28 +45,30 @@ class ViewClaimListViewModel : ViewModel() {
 
                 // for each item, get its claim item preview
                 claimList.forEach { claim ->
-                    ItemManager.getClaimPreviewFromClaim(claim, object : ItemManager.ClaimPreviewCallback{
-                        override fun onComplete(claimPreview: ClaimPreview?) {
-                           if (claimPreview == null){
-                               callback.onComplete(false)
-                               return
-                           }
-
-                            // add it to the result
-                            claimPreviewList.add(claimPreview)
-
-                            fetchedItems ++
-
-                            // return true when all items have been fetched
-                            if (fetchedItems == claimListSize){
-                                // sort the items by their timestamp
-                                claimPreviewList.sortByDescending { item ->
-                                    item.claimItem.timestamp
+                    ItemManager.getClaimPreviewFromClaim(
+                        claim,
+                        object : ItemManager.ClaimPreviewCallback {
+                            override fun onComplete(claimPreview: ClaimPreview?) {
+                                if (claimPreview == null) {
+                                    callback.onComplete(false)
+                                    return
                                 }
-                                callback.onComplete(true)
+
+                                // add it to the result
+                                claimPreviewList.add(claimPreview)
+
+                                fetchedItems++
+
+                                // return true when all items have been fetched
+                                if (fetchedItems == claimListSize) {
+                                    // sort the items by their timestamp
+                                    claimPreviewList.sortByDescending { item ->
+                                        item.claimItem.timestamp
+                                    }
+                                    callback.onComplete(true)
+                                }
                             }
-                        }
-                    })
+                        })
                 }
             }
         })

@@ -13,7 +13,7 @@ interface Callback<T> {
     fun onComplete(result: T)
 }
 
-class LostFragmentViewModel : ViewModel(){
+class LostFragmentViewModel : ViewModel() {
     // whether the screen is loading
     val isLoading: MutableState<Boolean> = mutableStateOf(false)
 
@@ -31,7 +31,7 @@ class LostFragmentViewModel : ViewModel(){
     called everytime the screen is reloaded
     return true if data are successfully retrieved (or no data), false otherwise
      */
-    fun getAllData(callback: Callback<Boolean>){
+    fun getAllData(callback: Callback<Boolean>) {
         // first clear the item data array
         itemData.clear()
 
@@ -47,7 +47,7 @@ class LostFragmentViewModel : ViewModel(){
             object : FirestoreManager.Callback<List<String>> {
                 override fun onComplete(result: List<String>?) {
                     // if result is null, fetching data failed
-                    if (result == null){
+                    if (result == null) {
                         callback.onComplete(false)
                         return
                     }
@@ -61,30 +61,32 @@ class LostFragmentViewModel : ViewModel(){
 
                     // if no result, return
                     // as the code below would not be executed
-                    if (resultSize == 0){
+                    if (resultSize == 0) {
                         callback.onComplete(true)
                         return
                     }
 
                     // for each retrieved item id, get their data and store that data into the itemData list
                     result.forEachIndexed { index, itemID ->
-                        ItemManager.getLostItemFromId(itemID, object: ItemManager.LostItemCallback{
-                            override fun onComplete(lostItem: LostItem?) {
-                                if (lostItem == null){
-                                    callback.onComplete(false)  // fetching data failed
-                                    return
-                                }
+                        ItemManager.getLostItemFromId(
+                            itemID,
+                            object : ItemManager.LostItemCallback {
+                                override fun onComplete(lostItem: LostItem?) {
+                                    if (lostItem == null) {
+                                        callback.onComplete(false)  // fetching data failed
+                                        return
+                                    }
 
-                                // add the data to the list at the correct position
-                                itemData[index] = lostItem
-                                fetchedItems ++
+                                    // add the data to the list at the correct position
+                                    itemData[index] = lostItem
+                                    fetchedItems++
 
-                                // return true when all items have been fetched
-                                if (fetchedItems == resultSize){
-                                    callback.onComplete(true)
+                                    // return true when all items have been fetched
+                                    if (fetchedItems == resultSize) {
+                                        callback.onComplete(true)
+                                    }
                                 }
-                            }
-                        })
+                            })
                     }
                 }
             }

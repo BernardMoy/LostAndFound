@@ -19,11 +19,11 @@ import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
 
 public class EmailSender {
-    private Context ctx;
-    private String emailAddress;
+    private final Context ctx;
+    private final String emailAddress;
     private MimeMessage mimeMessage;
     private Session newSession;
-    private ExecutorService executorService;
+    private final ExecutorService executorService;
 
     // Create email sender object where emailAddress is the recipient
     public EmailSender(Context ctx, String emailAddress) {
@@ -62,7 +62,7 @@ public class EmailSender {
                 transport.sendMessage(mimeMessage, mimeMessage.getAllRecipients());
 
                 // display successful message if requested
-                if(hasToastMessage) {
+                if (hasToastMessage) {
                     ((Activity) ctx).runOnUiThread(() ->
                             Toast.makeText(ctx, "Email successfully sent.", Toast.LENGTH_SHORT).show()
                     );

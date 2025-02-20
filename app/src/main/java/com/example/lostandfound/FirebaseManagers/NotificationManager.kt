@@ -1,6 +1,5 @@
 package com.example.lostandfound.FirebaseManagers
 
-import android.widget.Toast
 import com.example.lostandfound.Data.FirebaseNames
 import com.example.lostandfound.FirebaseManagers.FirestoreManager.Callback
 import com.example.lostandfound.Utility.DateTimeManager
@@ -8,16 +7,21 @@ import com.google.firebase.firestore.FirebaseFirestore
 
 object NotificationManager {
 
-    interface NotificationSendCallback{
+    interface NotificationSendCallback {
         fun onComplete(result: Boolean)  // true if successful, false if fails
     }
 
-    interface NotificationUpdateCallback{
+    interface NotificationUpdateCallback {
         fun onComplete(result: Boolean)
     }
 
     // method to send type 0 notification to the target user
-    fun sendNewMatchingItemNotification(targetUserId: String, lostItemID: String, foundItemID: String, callback: NotificationSendCallback){
+    fun sendNewMatchingItemNotification(
+        targetUserId: String,
+        lostItemID: String,
+        foundItemID: String,
+        callback: NotificationSendCallback
+    ) {
         val firestoreManager = FirestoreManager()
 
         // construct notification data
@@ -35,9 +39,9 @@ object NotificationManager {
         firestoreManager.putWithUniqueId(
             FirebaseNames.COLLECTION_NOTIFICATIONS,
             data,
-            object: Callback<String>{
+            object : Callback<String> {
                 override fun onComplete(result: String?) {
-                    if (result.isNullOrEmpty()){
+                    if (result.isNullOrEmpty()) {
                         callback.onComplete(false)
                         return
                     }
@@ -50,7 +54,11 @@ object NotificationManager {
 
     // method to send type 1 notification to the target user
     // currently the data passed for type 1 2 3 are the same (Except the type)
-    fun sendClaimApprovedNotification(targetUserId: String, claimID: String, callback: NotificationSendCallback){
+    fun sendClaimApprovedNotification(
+        targetUserId: String,
+        claimID: String,
+        callback: NotificationSendCallback
+    ) {
         val firestoreManager = FirestoreManager()
 
         // construct notification data
@@ -67,9 +75,9 @@ object NotificationManager {
         firestoreManager.putWithUniqueId(
             FirebaseNames.COLLECTION_NOTIFICATIONS,
             data,
-            object: Callback<String>{
+            object : Callback<String> {
                 override fun onComplete(result: String?) {
-                    if (result.isNullOrEmpty()){
+                    if (result.isNullOrEmpty()) {
                         callback.onComplete(false)
                         return
                     }
@@ -81,7 +89,11 @@ object NotificationManager {
     }
 
     // method to send type 2 notification to the target user
-    fun sendClaimRejectedNotification(targetUserId: String, claimID: String, callback: NotificationSendCallback){
+    fun sendClaimRejectedNotification(
+        targetUserId: String,
+        claimID: String,
+        callback: NotificationSendCallback
+    ) {
         val firestoreManager = FirestoreManager()
 
         // construct notification data
@@ -98,9 +110,9 @@ object NotificationManager {
         firestoreManager.putWithUniqueId(
             FirebaseNames.COLLECTION_NOTIFICATIONS,
             data,
-            object: Callback<String>{
+            object : Callback<String> {
                 override fun onComplete(result: String?) {
-                    if (result.isNullOrEmpty()){
+                    if (result.isNullOrEmpty()) {
                         callback.onComplete(false)
                         return
                     }
@@ -112,7 +124,11 @@ object NotificationManager {
     }
 
     // method to send type 3 notification to the target user
-    fun sendUserClaimedYourItemNotification(targetUserId: String, claimID: String, callback: NotificationSendCallback){
+    fun sendUserClaimedYourItemNotification(
+        targetUserId: String,
+        claimID: String,
+        callback: NotificationSendCallback
+    ) {
         val firestoreManager = FirestoreManager()
 
         // construct notification data
@@ -129,9 +145,9 @@ object NotificationManager {
         firestoreManager.putWithUniqueId(
             FirebaseNames.COLLECTION_NOTIFICATIONS,
             data,
-            object: Callback<String>{
+            object : Callback<String> {
                 override fun onComplete(result: String?) {
-                    if (result.isNullOrEmpty()){
+                    if (result.isNullOrEmpty()) {
                         callback.onComplete(false)
                         return
                     }
@@ -144,7 +160,7 @@ object NotificationManager {
 
     // function to mark all notifications as read (isRead = true)
     // return true if the operation is successful (Even when all are read), false otherwise
-    fun markAllNotificationsAsRead(userID: String, callback: NotificationUpdateCallback){
+    fun markAllNotificationsAsRead(userID: String, callback: NotificationUpdateCallback) {
         val db = FirebaseFirestore.getInstance()
         // get all notifications of the current user
         db.collection(FirebaseNames.COLLECTION_NOTIFICATIONS)

@@ -238,6 +238,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 } else if (clickedId == R.id.nav_drawer_take_a_tour){
                     // make the first step of the tutorial show
                     binding.tutorial1.setVisibility(VISIBLE);
+                    binding.tutorial2.setVisibility(GONE);
+                    binding.tutorial3.setVisibility(GONE);
 
                 } else if (clickedId == R.id.nav_drawer_how_it_works){
                     Intent i = new Intent(MainActivity.this, HowItWorksActivity.class);

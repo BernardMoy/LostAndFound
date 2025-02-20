@@ -16,8 +16,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.outlined.Logout
-import androidx.compose.material.icons.outlined.Description
 import androidx.compose.material.icons.outlined.PrivacyTip
 import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material3.MaterialTheme
@@ -26,7 +24,6 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.dimensionResource
@@ -99,9 +96,7 @@ fun MainContent(viewModel: AboutAppViewModel = viewModel()) {
     val inPreview = LocalInspectionMode.current
 
     // contents
-    Column (
-
-    ){
+    Column {
         AppInfo(viewModel = viewModel)
         AppVersion(viewModel = viewModel)
         PrivacyPolicy(context = context, viewModel = viewModel)
@@ -111,14 +106,14 @@ fun MainContent(viewModel: AboutAppViewModel = viewModel()) {
 
 // display the app icon and also app name
 @Composable
-fun AppInfo(viewModel: AboutAppViewModel){
+fun AppInfo(viewModel: AboutAppViewModel) {
     Column(
         verticalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.content_margin))
-    ){
-        Row (
+    ) {
+        Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.Center
-        ){
+        ) {
             /*
             When changing the app icon, aside from changing that in mimmap,
             also change the app_icon.png (Used to display here) in the drawables folder
@@ -130,10 +125,10 @@ fun AppInfo(viewModel: AboutAppViewModel){
             )
         }
 
-        Row (
+        Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.Center
-        ){
+        ) {
             Text(
                 text = "LOST AND FOUND",
                 color = MaterialTheme.colorScheme.onPrimaryContainer,
@@ -147,10 +142,10 @@ fun AppInfo(viewModel: AboutAppViewModel){
 }
 
 @Composable
-fun AppVersion(viewModel: AboutAppViewModel){
+fun AppVersion(viewModel: AboutAppViewModel) {
     Box(
         modifier = Modifier.padding(horizontal = dimensionResource(R.dimen.content_margin))
-    ){
+    ) {
         CustomGrayTitle("App version")
     }
 
@@ -163,7 +158,7 @@ fun AppVersion(viewModel: AboutAppViewModel){
 }
 
 @Composable
-fun PrivacyPolicy(context: Context, viewModel: AboutAppViewModel){
+fun PrivacyPolicy(context: Context, viewModel: AboutAppViewModel) {
     CustomActionRow(
         text = "View privacy policy",
         onClick = {

@@ -1,9 +1,7 @@
 package com.example.lostandfound.Data
 
-import android.net.Uri
 import android.os.Parcelable
 import com.example.lostandfound.R
-import com.google.android.gms.maps.model.LatLng
 import kotlinx.parcelize.Parcelize
 
 /*

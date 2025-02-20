@@ -2,23 +2,14 @@ package com.example.lostandfound.CustomElements
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Close
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonColors
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.dimensionResource
@@ -36,7 +27,7 @@ fun CustomButton(
 
 ) {
     // create different buttons depending on the type of button
-    when(type){
+    when (type) {
         // for primary main buttons
         ButtonType.FILLED -> {
             Button(
@@ -51,7 +42,12 @@ fun CustomButton(
                 shape = RoundedCornerShape(dimensionResource(id = R.dimen.corner_radius)),  // make the button have rounded corners
                 modifier = Modifier.background(
                     // add the gradient to the background instead of the container color
-                    Brush.horizontalGradient(listOf(MaterialTheme.colorScheme.primary, MaterialTheme.colorScheme.secondary)),
+                    Brush.horizontalGradient(
+                        listOf(
+                            MaterialTheme.colorScheme.primary,
+                            MaterialTheme.colorScheme.secondary
+                        )
+                    ),
                     shape = RoundedCornerShape(dimensionResource(id = R.dimen.corner_radius))   // also apply the shape to the background
                 )
             ) {
@@ -143,7 +139,7 @@ fun CustomButton(
 // it has no color as it is overridden by the content color of the button
 @Composable
 fun CustomButtonContent(text: String, small: Boolean) {
-    if (small){
+    if (small) {
         Text(
             text = text,
             style = MaterialTheme.typography.titleSmall,
@@ -168,7 +164,7 @@ fun CustomButtonContent(text: String, small: Boolean) {
 }
 
 // an enum class representing the type of buttons
-enum class ButtonType{
+enum class ButtonType {
     FILLED, TONAL, OUTLINED, WHITE, WARNING
 }
 

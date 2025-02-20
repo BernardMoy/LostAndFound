@@ -1,15 +1,14 @@
 package com.example.lostandfound.ui.VerifyEmail;
 
-import com.example.lostandfound.Data.DevData;
-
 import android.content.Context;
 
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.example.lostandfound.Data.DevData;
+import com.example.lostandfound.FirebaseManagers.FirebaseAuthManager;
 import com.example.lostandfound.Utility.EmailSender;
 import com.example.lostandfound.Utility.ErrorCallback;
-import com.example.lostandfound.FirebaseManagers.FirebaseAuthManager;
 import com.example.lostandfound.Utility.VerificationCodeManager;
 
 public class VerifyEmailViewModel extends ViewModel {
@@ -17,20 +16,19 @@ public class VerifyEmailViewModel extends ViewModel {
     // store the textview used to display error
     private final MutableLiveData<String> verificationError = new MutableLiveData<>("");
 
-    public MutableLiveData<String> getVerificationError(){
+    public MutableLiveData<String> getVerificationError() {
         return this.verificationError;
     }
 
-    public void setVerificationError(String s){
+    public void setVerificationError(String s) {
         this.verificationError.setValue(s);
     }
 
 
-
     // method to send an email containing verification code to the user, if the user has not generated another code last min
-    public void sendVerificationEmail(Context ctx, String emailAddress, boolean hasToastMessage){
+    public void sendVerificationEmail(Context ctx, String emailAddress, boolean hasToastMessage) {
         // dont send email if the email is DEV EMAIL
-        if (DevData.DEV_EMAILS.contains(emailAddress)){
+        if (DevData.DEV_EMAILS.contains(emailAddress)) {
             return;
         }
 
@@ -40,7 +38,7 @@ public class VerifyEmailViewModel extends ViewModel {
             @Override
             public void onCodeGenerated(String error, String code) {
                 // exit and set error if there is one
-                if (!error.isEmpty()){
+                if (!error.isEmpty()) {
                     setVerificationError(error);
                     return;
                 }
@@ -55,11 +53,11 @@ public class VerifyEmailViewModel extends ViewModel {
     }
 
     // method to validate user's entered code
-    public void validateVerificationCode(Context ctx, String emailAddress, String givenCode, ErrorCallback callback){
+    public void validateVerificationCode(Context ctx, String emailAddress, String givenCode, ErrorCallback callback) {
         /*
         Special permission is given to the user testDevHolo@warwick.ac.uk.
          */
-        if (DevData.DEV_EMAILS.contains(emailAddress)){
+        if (DevData.DEV_EMAILS.contains(emailAddress)) {
             callback.onComplete("");
         }
 
@@ -67,8 +65,8 @@ public class VerifyEmailViewModel extends ViewModel {
         VerificationCodeManager verificationCodeManager = new VerificationCodeManager(emailAddress);
         verificationCodeManager.validateVerificationCode(givenCode, new ErrorCallback() {
             @Override
-            public void onComplete(String error){
-                if (!error.isEmpty()){
+            public void onComplete(String error) {
+                if (!error.isEmpty()) {
                     setVerificationError(error);
                     callback.onComplete(error);
                     return;
@@ -80,14 +78,14 @@ public class VerifyEmailViewModel extends ViewModel {
     }
 
     // method to create user
-    public void createUser(Context ctx, String firstName, String lastName, String emailAddress, String password, ErrorCallback callback){
+    public void createUser(Context ctx, String firstName, String lastName, String emailAddress, String password, ErrorCallback callback) {
         FirebaseAuthManager firebaseAuthManager = new FirebaseAuthManager(ctx);
 
         // initially, the avatar is null (Empty string)
         firebaseAuthManager.createUser(firstName, lastName, emailAddress, password, "", new ErrorCallback() {
             @Override
             public void onComplete(String error) {
-                if (!error.isEmpty()){
+                if (!error.isEmpty()) {
                     setVerificationError(error);
                     callback.onComplete(error);
                     return;

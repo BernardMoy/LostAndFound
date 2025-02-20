@@ -5,7 +5,7 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 
-class ProfileViewModel : ViewModel(){
+class ProfileViewModel : ViewModel() {
     val imageUri: MutableState<Uri?> = mutableStateOf(null)
     val email: MutableState<String> = mutableStateOf("")
     val firstName: MutableState<String> = mutableStateOf("")
@@ -14,19 +14,19 @@ class ProfileViewModel : ViewModel(){
     val isChangePasswordDialogShown: MutableState<Boolean> = mutableStateOf(false)
     val isLogoutDialogShown: MutableState<Boolean> = mutableStateOf(false)
 
-    fun onImageChanged(uri: Uri?){
+    fun onImageChanged(uri: Uri?) {
         imageUri.value = uri
     }
 
-    fun onEmailChanged(s: String){
+    fun onEmailChanged(s: String) {
         email.value = s
     }
 
-    fun onFirstNameChanged(s: String){
+    fun onFirstNameChanged(s: String) {
         firstName.value = s
     }
 
-    fun onLastNameChanged(s: String){
+    fun onLastNameChanged(s: String) {
         lastName.value = s
     }
 }

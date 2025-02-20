@@ -7,11 +7,12 @@ import java.security.NoSuchAlgorithmException;
 // class to hash an String with SHA256
 public final class Hasher {
 
-    private Hasher(){}
+    private Hasher() {
+    }
 
     // hash a string using SHA-256, and return its hash.
-    public static String hash(String text){
-        try{
+    public static String hash(String text) {
+        try {
             MessageDigest digest = MessageDigest.getInstance("SHA-256");
             byte[] hashBytes = digest.digest(text.getBytes(StandardCharsets.UTF_8));
 
@@ -26,13 +27,13 @@ public final class Hasher {
             }
             return hexString.toString();
 
-        } catch (NoSuchAlgorithmException e){
+        } catch (NoSuchAlgorithmException e) {
             return "";
         }
     }
 
     // hash the text and compare with the targetHash
-    public static boolean compareHash(String text, String targetHash){
+    public static boolean compareHash(String text, String targetHash) {
         return targetHash.equals(hash(text));
     }
 }

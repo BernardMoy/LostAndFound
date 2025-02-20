@@ -11,36 +11,37 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
-import androidx.compose.ui.tooling.preview.Preview
 import com.example.lostandfound.R
 
 @Composable
-fun CustomProgressBar(){
+fun CustomProgressBar() {
     Box(
         modifier = Modifier.fillMaxWidth(),
         contentAlignment = Alignment.Center
-    ){
+    ) {
         CircularProgressIndicator(
             modifier = Modifier
                 .width(dimensionResource(id = R.dimen.image_button_size))
                 .padding(dimensionResource(id = R.dimen.content_margin_half)),
             color = MaterialTheme.colorScheme.background,
-            trackColor = MaterialTheme.colorScheme.onPrimaryContainer)
+            trackColor = MaterialTheme.colorScheme.onPrimaryContainer
+        )
     }
 }
 
 // progress bar that takes up the entire screen
 @Composable
-fun CustomCenteredProgressbar(){
+fun CustomCenteredProgressbar() {
     Box(
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
-    ){
+    ) {
         CircularProgressIndicator(
             modifier = Modifier
                 .width(dimensionResource(id = R.dimen.image_button_size))
                 .padding(dimensionResource(id = R.dimen.content_margin_half)),
             color = MaterialTheme.colorScheme.background,
-            trackColor = MaterialTheme.colorScheme.onPrimaryContainer)
+            trackColor = MaterialTheme.colorScheme.onPrimaryContainer
+        )
     }
 }

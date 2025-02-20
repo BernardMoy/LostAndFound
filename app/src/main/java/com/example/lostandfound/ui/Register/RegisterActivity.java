@@ -16,7 +16,6 @@ import androidx.lifecycle.ViewModelProvider;
 import com.example.lostandfound.R;
 import com.example.lostandfound.Utility.FontSizeManager;
 import com.example.lostandfound.databinding.ActivityRegisterBinding;
-import com.example.lostandfound.ui.Login.LoginActivity;
 import com.example.lostandfound.ui.VerifyEmail.VerifyEmailActivity;
 
 public class RegisterActivity extends AppCompatActivity {
@@ -59,7 +58,7 @@ public class RegisterActivity extends AppCompatActivity {
         registerViewModel.getRegisterError().observe(this, new Observer<String>() {
             @Override
             public void onChanged(String s) {
-                if (s.isEmpty()){
+                if (s.isEmpty()) {
                     // set the view to be gone
                     binding.registerError.setVisibility(View.GONE);
 
@@ -86,25 +85,25 @@ public class RegisterActivity extends AppCompatActivity {
                 resetErrorFields();
 
                 // validate first name
-                if (!registerViewModel.validateFirstName(firstName)){
+                if (!registerViewModel.validateFirstName(firstName)) {
                     binding.registerFirstName.setBackgroundResource(R.drawable.background_light_gray_error);
                     return;
                 }
 
                 // validate last name
-                if (!registerViewModel.validateLastName(lastName)){
+                if (!registerViewModel.validateLastName(lastName)) {
                     binding.registerLastName.setBackgroundResource(R.drawable.background_light_gray_error);
                     return;
                 }
 
                 // validate email
-                if (!registerViewModel.validateEmail(email)){
+                if (!registerViewModel.validateEmail(email)) {
                     binding.registerEmail.setBackgroundResource(R.drawable.background_light_gray_error);
                     return;
                 }
 
                 // validate password
-                if (!registerViewModel.validatePassword(password, confirmPassword)){
+                if (!registerViewModel.validatePassword(password, confirmPassword)) {
                     binding.registerPassword.setBackgroundResource(R.drawable.background_light_gray_error);
                     binding.registerPasswordConfirm.setBackgroundResource(R.drawable.background_light_gray_error);
                     return;
@@ -125,7 +124,7 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     // method to reset all error fields, to prevent inconsistent error indicators
-    private void resetErrorFields(){
+    private void resetErrorFields() {
         // reset error value
         registerViewModel.setRegisterError("");
 

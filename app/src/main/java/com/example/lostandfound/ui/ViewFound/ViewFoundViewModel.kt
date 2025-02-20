@@ -15,7 +15,7 @@ interface Callback<T> {
     fun onComplete(result: T)
 }
 
-class ViewFoundViewModel : ViewModel(){
+class ViewFoundViewModel : ViewModel() {
     val isLoading: MutableState<Boolean> = mutableStateOf(true)
     val isLocationDialogShown: MutableState<Boolean> = mutableStateOf(false)
     val isContactUserDialogShown: MutableState<Boolean> = mutableStateOf(false)
@@ -29,10 +29,10 @@ class ViewFoundViewModel : ViewModel(){
     var foundUser = User()
 
     // function to get user name given found item data
-    fun getUser(callback: Callback<Boolean>){
-        UserManager.getUserFromId(itemData.userID, object: UserManager.UserCallback{
+    fun getUser(callback: Callback<Boolean>) {
+        UserManager.getUserFromId(itemData.userID, object : UserManager.UserCallback {
             override fun onComplete(user: User?) {
-                if (user == null){
+                if (user == null) {
                     callback.onComplete(false)
 
                 } else {
@@ -45,14 +45,14 @@ class ViewFoundViewModel : ViewModel(){
 
     // function to delete item
     // return true if successful, false if failed
-    fun deleteItem(callback: Callback<Boolean>){
+    fun deleteItem(callback: Callback<Boolean>) {
         val firestoreManager = FirestoreManager()
         firestoreManager.delete(
             FirebaseNames.COLLECTION_FOUND_ITEMS,
             itemData.itemID,
-            object: FirestoreManager.Callback<Boolean>{
+            object : FirestoreManager.Callback<Boolean> {
                 override fun onComplete(result: Boolean?) {
-                    if (result == null || !result){
+                    if (result == null || !result) {
                         callback.onComplete(false)
                         return
                     }
@@ -66,7 +66,7 @@ class ViewFoundViewModel : ViewModel(){
                             FirebaseNames.ACTIVITY_LOG_ITEM_USER_ID to FirebaseUtility.getUserID(),
                             FirebaseNames.ACTIVITY_LOG_ITEM_TIMESTAMP to DateTimeManager.getCurrentEpochTime()
                         ),
-                        object: FirestoreManager.Callback<String>{
+                        object : FirestoreManager.Callback<String> {
                             override fun onComplete(result: String?) {
                                 // not necessary to throw an error if failed here
                                 callback.onComplete(true)  //return true

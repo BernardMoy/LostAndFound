@@ -1,7 +1,8 @@
 package com.example.lostandfound.Data;
 
 public final class FirebaseNames {
-    private FirebaseNames(){}
+    private FirebaseNames() {
+    }
 
     // strings that represent all collection names
     /*

@@ -4,7 +4,6 @@ import android.util.Log
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.lifecycle.ViewModel
 import com.example.lostandfound.Data.ChatMessage
 import com.example.lostandfound.Data.FirebaseNames
@@ -100,7 +99,7 @@ class ChatInboxViewModel : ViewModel() {
                         FirebaseUtility.getUserID(),
                         chatUser.userID,
                         result,
-                        object: ChatInboxUpdateCallback{
+                        object : ChatInboxUpdateCallback {
                             override fun onComplete(result: Boolean) {
                                 callback.onComplete(result)
                             }
@@ -135,8 +134,10 @@ class ChatInboxViewModel : ViewModel() {
                         if (documentChange.type == DocumentChange.Type.ADDED) {
                             // create new chat message object
                             val messageID = documentChange.document.id
-                            val isReadByRecipient = documentChange.document[FirebaseNames.CHAT_IS_READ_BY_RECIPIENT] as Boolean
-                            val messageSenderID = documentChange.document[FirebaseNames.CHAT_SENDER_USER_ID].toString()
+                            val isReadByRecipient =
+                                documentChange.document[FirebaseNames.CHAT_IS_READ_BY_RECIPIENT] as Boolean
+                            val messageSenderID =
+                                documentChange.document[FirebaseNames.CHAT_SENDER_USER_ID].toString()
 
                             val newChatMessage = ChatMessage(
                                 messageID = messageID,
@@ -151,11 +152,13 @@ class ChatInboxViewModel : ViewModel() {
                             chatMessageList.add(newChatMessage)
 
                             // if the message NOT sent by the current user and is not read, mark it as read
-                            if (messageSenderID != FirebaseUtility.getUserID() && !isReadByRecipient){
-                                ChatMessageManager.markChatAsRead(messageID, object: UpdateMessageCallback{
-                                    override fun onComplete(result: Boolean) {
-                                    }
-                                })
+                            if (messageSenderID != FirebaseUtility.getUserID() && !isReadByRecipient) {
+                                ChatMessageManager.markChatAsRead(
+                                    messageID,
+                                    object : UpdateMessageCallback {
+                                        override fun onComplete(result: Boolean) {
+                                        }
+                                    })
                             }
                         }
                     }

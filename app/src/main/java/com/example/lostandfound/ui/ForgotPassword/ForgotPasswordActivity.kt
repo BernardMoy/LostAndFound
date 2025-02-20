@@ -96,7 +96,7 @@ fun MainContent(viewModel: ForgotPasswordViewModel = viewModel()) {
 
     Box(
         modifier = Modifier.fillMaxSize()
-    ){
+    ) {
         Column(
             modifier = Modifier
                 .align(Alignment.Center)
@@ -106,7 +106,7 @@ fun MainContent(viewModel: ForgotPasswordViewModel = viewModel()) {
                     bottom = dimensionResource(id = R.dimen.centering_margin)
                 ),
             verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin))
-        ){
+        ) {
             Title(context = context, viewModel = viewModel)
             InputFields(context = context, viewModel = viewModel)
             Button(context = context, viewModel = viewModel)
@@ -118,10 +118,10 @@ fun MainContent(viewModel: ForgotPasswordViewModel = viewModel()) {
 fun Title(
     context: Context,
     viewModel: ForgotPasswordViewModel
-){
-    Column (
+) {
+    Column(
         verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin))
-    ){
+    ) {
         Text(
             text = "Forgot password",
             fontSize = 26.sp,
@@ -140,7 +140,7 @@ fun Title(
 fun InputFields(
     context: Context,
     viewModel: ForgotPasswordViewModel
-){
+) {
     CustomInputField(
         fieldContent = viewModel.email.value,
         isEditable = true,
@@ -159,16 +159,16 @@ fun InputFields(
 fun Button(
     context: Context,
     viewModel: ForgotPasswordViewModel
-){
-    Row (
+) {
+    Row(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.Center
-    ){
+    ) {
         CustomButton(
             text = "Done",
             type = ButtonType.FILLED,
             onClick = {
-                if (!viewModel.validateEmail()){
+                if (!viewModel.validateEmail()) {
                     return@CustomButton
                 }
 
@@ -176,15 +176,23 @@ fun Button(
                 val firebaseAuthManager: FirebaseAuthManager = FirebaseAuthManager(context)
                 firebaseAuthManager.sendPasswordResetEmail(
                     viewModel.email.value,
-                    object: ErrorCallback{
+                    object : ErrorCallback {
                         override fun onComplete(error: String) {
-                            if (error.isNotEmpty()){
-                                Toast.makeText(context, "Error sending password reset email", Toast.LENGTH_SHORT).show()
+                            if (error.isNotEmpty()) {
+                                Toast.makeText(
+                                    context,
+                                    "Error sending password reset email",
+                                    Toast.LENGTH_SHORT
+                                ).show()
                                 return
                             }
 
                             // sent email successful
-                            Toast.makeText(context, "A password reset email has been sent.", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(
+                                context,
+                                "A password reset email has been sent.",
+                                Toast.LENGTH_SHORT
+                            ).show()
 
                             // exit activity
                             (context as Activity).finish()

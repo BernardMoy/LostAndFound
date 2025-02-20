@@ -31,17 +31,17 @@ fun CustomDropdownMenu(
     selectedText: MutableState<String>, // placeholder is displayed if this value is ""
     placeholder: String = "Select an item...",
     isError: Boolean = false
-){
+) {
     var isExpanded by remember {
         mutableStateOf(false)
     }
 
-    Column (
+    Column(
         modifier = Modifier.fillMaxWidth()
-    ){
+    ) {
         ExposedDropdownMenuBox(
             expanded = isExpanded,
-            onExpandedChange = {isExpanded = !isExpanded},   // invert is Expanded
+            onExpandedChange = { isExpanded = !isExpanded },   // invert is Expanded
         ) {
             // the text displayed in the box
             OutlinedTextField(
@@ -76,12 +76,14 @@ fun CustomDropdownMenu(
                 modifier = Modifier.background(MaterialTheme.colorScheme.background),  // a small ring around the texts
                 onDismissRequest = { isExpanded = false }
             ) {
-                items.forEachIndexed{ index, text ->
+                items.forEachIndexed { index, text ->
                     DropdownMenuItem(
-                        text = { Text(
-                            text = text,
-                            style = MaterialTheme.typography.bodyMedium
-                        ) },
+                        text = {
+                            Text(
+                                text = text,
+                                style = MaterialTheme.typography.bodyMedium
+                            )
+                        },
                         modifier = Modifier.background(MaterialTheme.colorScheme.background),
                         onClick = {
                             selectedText.value = items[index]  // change the selected text

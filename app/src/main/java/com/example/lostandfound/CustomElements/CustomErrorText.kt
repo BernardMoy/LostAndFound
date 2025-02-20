@@ -1,6 +1,5 @@
 package com.example.lostandfound.CustomElements
 
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -12,7 +11,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.dp
 import com.example.lostandfound.R
 import com.example.lostandfound.ui.theme.Typography
 
@@ -21,7 +19,7 @@ fun CustomErrorText(
     text: String
 ) {
     // this is only displayed when the error field is not empty
-    if (text.isNotEmpty()){
+    if (text.isNotEmpty()) {
         // surface is a block for displaying content
         Box(
             modifier = Modifier.padding(vertical = dimensionResource(id = R.dimen.title_margin))
@@ -60,8 +58,8 @@ fun CustomErrorText(
 @Composable
 fun CustomErrorTextNoBox(
     text: String
-){
-    if (text.isNotEmpty()){
+) {
+    if (text.isNotEmpty()) {
         Text(
             text = text,
             style = Typography.bodyMedium,

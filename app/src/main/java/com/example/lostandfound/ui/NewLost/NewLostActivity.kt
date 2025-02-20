@@ -109,8 +109,8 @@ class NewLostActivity : ComponentActivity() {
 
         setContent {
             // first check if user is logged in
-            if (!FirebaseUtility.isUserLoggedIn()){
-                val isDialogOpen = remember{ mutableStateOf(true) }
+            if (!FirebaseUtility.isUserLoggedIn()) {
+                val isDialogOpen = remember { mutableStateOf(true) }
                 ComposeTheme {
                     CustomLoginDialog(
                         onDismissClicked = {
@@ -225,9 +225,9 @@ fun MainContent(viewModel: NewLostViewModel) {
     ImageBottomSheet(isSheetOpen = viewModel.isSheetOpen, viewModel = viewModel, context = context)
 
     // Display different input fields
-    Column (
+    Column(
         verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin_half))
-    ){
+    ) {
         ItemName(viewModel = viewModel)
         ItemImage(viewModel = viewModel)
         Category(viewModel = viewModel)
@@ -416,7 +416,7 @@ fun ItemColor(
         horizontalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin_half))
     ) {
         // for each category, create a custom filter chip for that
-        for ((name, color) in stringToColor){
+        for ((name, color) in stringToColor) {
             CustomFilterChip(
                 label = name,
                 leadingIcon = Icons.Filled.Circle,
@@ -425,8 +425,12 @@ fun ItemColor(
                 // change the selected category var
                 // to ensure only one can be selected at a time
                 onClick = {
-                    if (!viewModel.onColorSelected(name)){
-                        Toast.makeText(context, "You can only select at most 3 colors", Toast.LENGTH_SHORT).show()
+                    if (!viewModel.onColorSelected(name)) {
+                        Toast.makeText(
+                            context,
+                            "You can only select at most 3 colors",
+                            Toast.LENGTH_SHORT
+                        ).show()
                     }
                 },
                 isSelected = viewModel.isColorSelected(name),
@@ -500,12 +504,12 @@ fun Location(
      */
 
     // text message to show that location has been selected
-    if (viewModel.selectedLocation.value != null){
+    if (viewModel.selectedLocation.value != null) {
         Row(
             horizontalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.content_margin)),
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier.padding(bottom = dimensionResource(R.dimen.content_margin))
-        ){
+        ) {
             Icon(
                 imageVector = Icons.Filled.CheckCircle,
                 tint = colorResource(R.color.status2),
@@ -522,13 +526,12 @@ fun Location(
     }
 
 
-
     // the action text to choose a location from google maps or delete it
     Row(
         horizontalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.content_margin)),
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier.padding(bottom = dimensionResource(R.dimen.content_margin))
-    ){
+    ) {
         CustomActionText(
             text = "Add location",
             onClick = {
@@ -537,7 +540,7 @@ fun Location(
             },
         )
 
-        if (viewModel.selectedLocation.value != null){
+        if (viewModel.selectedLocation.value != null) {
             CustomActionText(
                 text = "Remove location",
                 color = MaterialTheme.colorScheme.error,
@@ -625,12 +628,12 @@ fun DoneButton(
                 isLoading = true
 
                 // add to firebase database
-                viewModel.onDoneButtonClicked(object: Callback<LostItem?>{
+                viewModel.onDoneButtonClicked(object : Callback<LostItem?> {
                     override fun onComplete(result: LostItem?) {
                         isLoading = false
 
                         // if the item is null, it error
-                        if (result == null){
+                        if (result == null) {
                             Toast.makeText(context, "Error adding item", Toast.LENGTH_SHORT).show()
 
                         } else {
@@ -653,14 +656,13 @@ fun DoneButton(
 }
 
 
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ImageBottomSheet(
     context: Context,
     viewModel: NewLostViewModel,
     isSheetOpen: MutableState<Boolean>
-){
+) {
     // stores the file of the image taken by camera
     val cameraImageFile = remember {
         File(context.externalCacheDir, "capture.jpg")
@@ -674,30 +676,32 @@ fun ImageBottomSheet(
     )
 
     // launcher to take image from camera
-    val cameraLauncher = rememberLauncherForActivityResult(ActivityResultContracts.TakePicture()) {success ->
-        if (success){
-            // Update the image uri with the taken photo
-            viewModel.itemImage.value = cameraImageUri
-            // close the bottom sheet here after the imageuri value has been set
-            isSheetOpen.value = false
+    val cameraLauncher =
+        rememberLauncherForActivityResult(ActivityResultContracts.TakePicture()) { success ->
+            if (success) {
+                // Update the image uri with the taken photo
+                viewModel.itemImage.value = cameraImageUri
+                // close the bottom sheet here after the imageuri value has been set
+                isSheetOpen.value = false
 
-        } else {
-            Toast.makeText(context, "Failed to take image", Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(context, "Failed to take image", Toast.LENGTH_SHORT).show()
+            }
         }
-    }
 
     // launcher to request camera permission
-    val cameraPermissionLauncher = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) {success ->
-        if (success){
-            // launch camera if permission is granted
-            cameraLauncher.launch(cameraImageUri)
-        } else {
-            Toast.makeText(context, "Camera permission denied", Toast.LENGTH_SHORT).show()
+    val cameraPermissionLauncher =
+        rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { success ->
+            if (success) {
+                // launch camera if permission is granted
+                cameraLauncher.launch(cameraImageUri)
+            } else {
+                Toast.makeText(context, "Camera permission denied", Toast.LENGTH_SHORT).show()
+            }
         }
-    }
 
     // bottom avatar sheet main content
-    if (isSheetOpen.value){
+    if (isSheetOpen.value) {
         ModalBottomSheet(
             onDismissRequest = { isSheetOpen.value = false },
             containerColor = MaterialTheme.colorScheme.background,
@@ -717,7 +721,7 @@ fun ImageBottomSheet(
             Column(
                 modifier = Modifier.padding(horizontal = dimensionResource(id = R.dimen.content_margin)),
                 verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin_half))
-            ){
+            ) {
                 CustomActionRow(
                     text = "Take image with camera",
                     leftIcon = Icons.Outlined.CameraAlt,
@@ -725,9 +729,10 @@ fun ImageBottomSheet(
                     onClick = {
                         // pick image from device camera
                         // request camera permission
-                        val permissionCheckResult = ContextCompat.checkSelfPermission(context, Manifest.permission.CAMERA)
+                        val permissionCheckResult =
+                            ContextCompat.checkSelfPermission(context, Manifest.permission.CAMERA)
 
-                        if (permissionCheckResult == PackageManager.PERMISSION_GRANTED){
+                        if (permissionCheckResult == PackageManager.PERMISSION_GRANTED) {
                             // if camera permission is granted, take picture
                             cameraLauncher.launch(cameraImageUri)
                         } else {

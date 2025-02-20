@@ -8,13 +8,14 @@ import com.google.firebase.auth.FirebaseUser;
  * For firebase functions that does not require any input parameters.
  */
 public class FirebaseUtility {
-    private FirebaseUtility(){}
+    private FirebaseUtility() {
+    }
 
     // get the current user's UID
-    public static String getUserID(){
+    public static String getUserID() {
         // if logged in, get the current user's UID
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        if (user == null){
+        if (user == null) {
             return "";
         }
 
@@ -22,15 +23,15 @@ public class FirebaseUtility {
     }
 
     // check if user is logged in
-    public static boolean isUserLoggedIn(){
+    public static boolean isUserLoggedIn() {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         return user != null;
     }
 
     // check if user id dev user
-    public static boolean isUserDev(){
+    public static boolean isUserDev() {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        if (user == null){
+        if (user == null) {
             return false;
         }
         return DevData.DEV_EMAILS.contains(user.getEmail());

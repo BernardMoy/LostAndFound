@@ -71,11 +71,11 @@ class LostFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         val view = ComposeView(requireContext())
-        view.apply{
+        view.apply {
             setContent {
-                ComposeTheme{
+                ComposeTheme {
                     // check if user is logged in
-                    if (!isLoggedIn.value){
+                    if (!isLoggedIn.value) {
                         CustomCenterText(text = "Please login first to view this content.")
                     } else {
                         LostFragmentScreen(viewModel = viewModel)
@@ -93,7 +93,7 @@ class LostFragment : Fragment() {
         isLoggedIn.value = FirebaseUtility.isUserLoggedIn()
 
         // refresh the data everytime the screen is reloaded
-        if (AutoLoadingManager.autoLoadingEnabled.value){
+        if (AutoLoadingManager.autoLoadingEnabled.value) {
             refreshData(
                 context = requireContext(),
                 viewModel = viewModel
@@ -117,13 +117,13 @@ fun LostFragmentScreen(viewModel: LostFragmentViewModel) {
         modifier = Modifier
             .fillMaxSize()
             .padding(dimensionResource(id = R.dimen.title_margin))
-    ){
+    ) {
         MainContent(viewModel = viewModel)
     }
 }
 
 @Composable
-fun MainContent(viewModel: LostFragmentViewModel){
+fun MainContent(viewModel: LostFragmentViewModel) {
     val context = LocalContext.current
 
     /*
@@ -134,7 +134,7 @@ fun MainContent(viewModel: LostFragmentViewModel){
      */
 
     // display content
-    if (viewModel.isLoading.value){
+    if (viewModel.isLoading.value) {
         CustomCenteredProgressbar()
 
     } else {
@@ -147,14 +147,14 @@ fun MainContent(viewModel: LostFragmentViewModel){
 fun RefreshButton(
     context: Context,
     viewModel: LostFragmentViewModel
-){
-    Row (
+) {
+    Row(
         modifier = Modifier
             .fillMaxWidth()
             .padding(bottom = dimensionResource(id = R.dimen.content_margin)),
         horizontalArrangement = Arrangement.Start,
         verticalAlignment = Alignment.CenterVertically,
-    ){
+    ) {
         // display the text at the start
         Text(
             text = "Your lost items",
@@ -166,10 +166,10 @@ fun RefreshButton(
 
         // the refresh button
         IconButton(
-           onClick = {
-               // refresh the list - manually (by now)
-               refreshData(context, viewModel)
-           }
+            onClick = {
+                // refresh the list - manually (by now)
+                refreshData(context, viewModel)
+            }
         ) {
             Icon(
                 imageVector = Icons.Outlined.Refresh,
@@ -185,12 +185,12 @@ fun RefreshButton(
 fun LostItemsColumn(
     context: Context,
     viewModel: LostFragmentViewModel
-){
+) {
     // if there are no data, display message
-    if (viewModel.itemData.size == 0){
+    if (viewModel.itemData.size == 0) {
         Box(
             modifier = Modifier.padding(horizontal = dimensionResource(id = R.dimen.title_margin))
-        ){
+        ) {
             CustomCenterText(text = "You have no lost items. Tap the '+' button to create one.")
         }
 
@@ -204,14 +204,15 @@ fun LostItemsColumn(
 
 
         // for each data, display it as a preview
-        LazyColumn (
+        LazyColumn(
             verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.title_margin))
-        ){
+        ) {
             items(
                 viewModel.itemData.filter { item ->
                     // filter items based on the item names or ids
                     // by default it shows all items if the search word is empty
-                    item.itemName.lowercase(Locale.UK).contains(viewModel.searchWord.value.lowercase(Locale.UK))
+                    item.itemName.lowercase(Locale.UK)
+                        .contains(viewModel.searchWord.value.lowercase(Locale.UK))
                             || item.itemID.startsWith(viewModel.searchWord.value.removePrefix("#"))
                 }
             ) { lostItem ->
@@ -221,7 +222,7 @@ fun LostItemsColumn(
                 }
 
                 // display each preview with animation, also display the same animation when reloaded
-                if (AnimationManager.animationEnabled.value){
+                if (AnimationManager.animationEnabled.value) {
                     AnimatedVisibility(
                         visibleState = visibleState,
                         enter = fadeIn() + scaleIn(),
@@ -268,16 +269,16 @@ fun LostItemsColumn(
 fun refreshData(
     context: Context,
     viewModel: LostFragmentViewModel
-){
+) {
     // is loading initially
     viewModel.isLoading.value = true
 
     // load lost item data of the current user from the view model
-    viewModel.getAllData(object: Callback<Boolean>{
+    viewModel.getAllData(object : Callback<Boolean> {
         override fun onComplete(result: Boolean) {
             viewModel.isLoading.value = false
 
-            if (!result){
+            if (!result) {
                 // display toast message for failed data retrieval
                 Toast.makeText(context, "Fetching data failed", Toast.LENGTH_SHORT).show()
             }

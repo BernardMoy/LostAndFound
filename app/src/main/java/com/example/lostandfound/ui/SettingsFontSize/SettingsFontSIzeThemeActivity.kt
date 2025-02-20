@@ -1,22 +1,16 @@
 package com.example.lostandfound.ui.SettingsFontSize
 
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.DarkMode
-import androidx.compose.material.icons.outlined.LightMode
-import androidx.compose.material.icons.outlined.Smartphone
 import androidx.compose.material.icons.outlined.TextFormat
 import androidx.compose.material.icons.outlined.TextIncrease
 import androidx.compose.material3.MaterialTheme
@@ -31,18 +25,14 @@ import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.core.content.ContextCompat.startActivity
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.lostandfound.CustomElements.BackToolbar
 import com.example.lostandfound.CustomElements.ButtonType
 import com.example.lostandfound.CustomElements.CustomButton
 import com.example.lostandfound.CustomElements.CustomChoiceTextField
-import com.example.lostandfound.MainActivity
 import com.example.lostandfound.R
-import com.example.lostandfound.Utility.DeviceThemeManager
 import com.example.lostandfound.Utility.FontSizeManager
 import com.example.lostandfound.ui.AboutApp.SettingsFontSizeViewModel
-import com.example.lostandfound.ui.NewLost.NewLostViewModel
 import com.example.lostandfound.ui.theme.ComposeTheme
 
 
@@ -98,8 +88,7 @@ fun MainContent(viewModel: SettingsFontSizeViewModel = viewModel()) {
     // boolean to determine if it is being rendered in preview
     val inPreview = LocalInspectionMode.current
 
-    Column (
-    ){
+    Column {
         CustomChoiceTextField(
             title = "Normal text",
             leadingIcon = Icons.Outlined.TextFormat,
@@ -150,11 +139,11 @@ fun ReminderMessage(
 fun RestartButton(
     context: Context,
     viewModel: SettingsFontSizeViewModel
-){
+) {
     Row(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.Center
-    ){
+    ) {
         CustomButton(
             text = "Restart now",
             type = ButtonType.TONAL,

@@ -10,15 +10,17 @@ import kotlin.io.encoding.ExperimentalEncodingApi
 
 object ImageManager {
     // stores the url to the default image
-    val PLACEHOLDER_IMAGE_STRING = "android.resource://com.example.lostandfound/" + R.drawable.placeholder_image
+    val PLACEHOLDER_IMAGE_STRING =
+        "android.resource://com.example.lostandfound/" + R.drawable.placeholder_image
 
     @OptIn(ExperimentalEncodingApi::class)
-    fun uriToString(context: Context, imageUri: Uri?): String{
-        if (imageUri == null){
+    fun uriToString(context: Context, imageUri: Uri?): String {
+        if (imageUri == null) {
             return ""
         }
 
-        val byteArray = context.contentResolver.openInputStream(imageUri)?.use { it.buffered().readBytes() }
+        val byteArray =
+            context.contentResolver.openInputStream(imageUri)?.use { it.buffered().readBytes() }
 
         // convert byte array to string
         if (byteArray != null) {
@@ -31,7 +33,7 @@ object ImageManager {
     @OptIn(ExperimentalEncodingApi::class)
     fun stringToUri(context: Context, string: String): Uri? {
         // if string is empty, return null
-        if (string == ""){
+        if (string == "") {
             return null
         }
 

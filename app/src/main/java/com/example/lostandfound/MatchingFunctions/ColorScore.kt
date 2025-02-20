@@ -1,10 +1,8 @@
 package com.example.lostandfound.MatchingFunctions
 
-import com.example.lostandfound.Data.FoundItem
-import com.example.lostandfound.Data.LostItem
 import kotlin.math.min
 
-fun getColorScore(lostColors: List<String>, foundColors: List<String>): Double{
+fun getColorScore(lostColors: List<String>, foundColors: List<String>): Double {
     // convert the lists to sets
     val lostSet = lostColors.toSet()
     val foundSet = foundColors.toSet()
@@ -13,5 +11,5 @@ fun getColorScore(lostColors: List<String>, foundColors: List<String>): Double{
     // so that subsets would still give a full score of 3
     // as some people may recognise an object as red, while others red and blue.
     val numIntersection = lostSet.intersect(foundSet).size
-    return 3*numIntersection / min(lostSet.size, foundSet.size).toDouble()
+    return 3 * numIntersection / min(lostSet.size, foundSet.size).toDouble()
 }

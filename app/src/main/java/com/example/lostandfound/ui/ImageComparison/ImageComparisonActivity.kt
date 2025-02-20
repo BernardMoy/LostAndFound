@@ -11,19 +11,17 @@ import androidx.activity.compose.setContent
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Close
+import androidx.compose.material.icons.filled.Cancel
+import androidx.compose.material.icons.filled.RadioButtonChecked
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
@@ -31,12 +29,12 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalInspectionMode
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil3.compose.rememberAsyncImagePainter
@@ -115,13 +113,14 @@ fun MainContent(viewModel: ImageComparisonViewModel = viewModel()) {
     )
 
     // content goes here
-    Column (
+    Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.title_margin))
-    ){
+    ) {
         TwoImages(context = context, viewModel = viewModel, launcher1, launcher2)
         CompareButton(context = context, viewModel = viewModel)
         Distance(context = context, viewModel = viewModel)
+        isMatch(context = context, viewModel = viewModel)
     }
 }
 
@@ -131,15 +130,15 @@ fun TwoImages(
     viewModel: ImageComparisonViewModel,
     launcher1: ManagedActivityResultLauncher<PickVisualMediaRequest, Uri?>,
     launcher2: ManagedActivityResultLauncher<PickVisualMediaRequest, Uri?>
-){
+) {
     Row(
         horizontalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.content_margin)),
         modifier = Modifier.padding(horizontal = dimensionResource(R.dimen.content_margin))
 
-    ){
-        Column (
+    ) {
+        Column(
             modifier = Modifier.weight(1f)
-        ){
+        ) {
             // box for storing the image
             if (viewModel.image1.value != null) {
                 Box(
@@ -158,7 +157,9 @@ fun TwoImages(
             }
             // the clickable text to add new image
             Box(
-                modifier = Modifier.fillMaxWidth().padding(vertical = dimensionResource(id = R.dimen.content_margin)),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = dimensionResource(id = R.dimen.content_margin)),
                 contentAlignment = Alignment.Center
             ) {
                 CustomActionText(
@@ -173,9 +174,9 @@ fun TwoImages(
             }
         }
 
-        Column (
+        Column(
             modifier = Modifier.weight(1f)
-        ){
+        ) {
             // box for storing the image
             if (viewModel.image2.value != null) {
                 Box(
@@ -194,7 +195,9 @@ fun TwoImages(
             }
             // the clickable text to add new image
             Box(
-                modifier = Modifier.fillMaxWidth().padding(vertical = dimensionResource(id = R.dimen.content_margin)),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = dimensionResource(id = R.dimen.content_margin)),
                 contentAlignment = Alignment.Center
             ) {
                 CustomActionText(
@@ -212,14 +215,14 @@ fun TwoImages(
 }
 
 @Composable
-fun CompareButton(context: Context, viewModel: ImageComparisonViewModel){
+fun CompareButton(context: Context, viewModel: ImageComparisonViewModel) {
     CustomButton(
         text = "Compare",
         type = ButtonType.FILLED,
         enabled = !viewModel.isLoading.value,
         onClick = {
             // create image classifier instance
-            if (viewModel.image1.value == null || viewModel.image2.value == null){
+            if (viewModel.image1.value == null || viewModel.image2.value == null) {
                 Toast.makeText(context, "One of the images are null", Toast.LENGTH_SHORT).show()
                 return@CustomButton
             }
@@ -228,31 +231,58 @@ fun CompareButton(context: Context, viewModel: ImageComparisonViewModel){
             val imageClassifier = ImageClassifier(context)
 
             // predict the distance
-            imageClassifier.predict(viewModel.image1.value!!, viewModel.image2.value!!, object: PredictCallback{
-                override fun onComplete(distance: Float) {
-                    viewModel.isLoading.value = false
-                    viewModel.distance.value = distance
+            imageClassifier.predict(
+                viewModel.image1.value!!,
+                viewModel.image2.value!!,
+                object : PredictCallback {
+                    override fun onComplete(distance: Float) {
+                        viewModel.isLoading.value = false
+                        viewModel.distance.value = distance
 
-                    // after the prediction is complete, close the model
-                    imageClassifier.close()
-                }
-            })
+                        // after the prediction is complete, close the model
+                        imageClassifier.close()
+                    }
+                })
 
         }
     )
 
-    if (viewModel.isLoading.value){
+    if (viewModel.isLoading.value) {
         CustomProgressBar()
     }
 }
 
 @Composable
-fun Distance(context: Context, viewModel: ImageComparisonViewModel){
+fun Distance(context: Context, viewModel: ImageComparisonViewModel) {
     Text(
         text = "Distance: " + viewModel.distance.value.toString(),
         style = Typography.bodyMedium,
         color = MaterialTheme.colorScheme.onBackground
     )
+}
+
+@Composable
+fun isMatch(context: Context, viewModel: ImageComparisonViewModel){
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin_half))
+    ) {
+        Icon(
+            imageVector = if (viewModel.distance.value <= 0.5) Icons.Filled.RadioButtonChecked
+            else Icons.Filled.Cancel,
+            tint = if (viewModel.distance.value <= 0.5) colorResource(id = R.color.status2)
+            else colorResource(id = R.color.status0),
+            contentDescription = if (viewModel.distance.value <= 0.5) "Matches" else "Does not match",
+            modifier = Modifier.width(dimensionResource(id = R.dimen.content_margin))
+        )
+        Text(
+            text = if (viewModel.distance.value <= 0.5) "Matches" else "Does not match",
+            style = Typography.bodyMedium,
+            color = if (viewModel.distance.value <= 0.5) colorResource(id = R.color.status2)
+            else colorResource(id = R.color.status0),
+            fontWeight = FontWeight.Bold,
+        )
+    }
 }
 
 

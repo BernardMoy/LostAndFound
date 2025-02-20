@@ -1,7 +1,8 @@
 package com.example.lostandfound.Data;
 
 public final class IntentExtraNames {
-    private IntentExtraNames(){}
+    private IntentExtraNames() {
+    }
 
     // strings that represent all collection names
     /*

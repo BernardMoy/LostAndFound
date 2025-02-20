@@ -2,8 +2,6 @@ package com.example.lostandfound.ui.NewFound
 
 import android.content.Context
 import android.net.Uri
-import android.util.Log
-import android.widget.Toast
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
@@ -26,7 +24,7 @@ import com.example.lostandfound.Utility.ErrorCallback
 import com.example.lostandfound.Utility.LocationManager
 import com.google.android.gms.maps.model.LatLng
 
-interface NotifyLostUsersCallback{
+interface NotifyLostUsersCallback {
     fun onComplete(result: Boolean)
 }
 
@@ -98,11 +96,11 @@ class NewFoundViewModel : ViewModel() {
     }
 
     // return true if successful, return false otherwise (When attempting to select more than 3 colors)
-    fun onColorSelected(c: String): Boolean{
-        if (selectedColor.contains(c)){
+    fun onColorSelected(c: String): Boolean {
+        if (selectedColor.contains(c)) {
             selectedColor.remove(c)
         } else {
-            if (selectedColor.size == 3){
+            if (selectedColor.size == 3) {
                 return false
             }
             selectedColor.add(c)
@@ -127,7 +125,7 @@ class NewFoundViewModel : ViewModel() {
         additionalDescription.value = s
     }
 
-    fun onAddLocationClicked(){
+    fun onAddLocationClicked() {
         // make the dialog appear
         isLocationDialogShown.value = true
     }
@@ -261,9 +259,13 @@ class NewFoundViewModel : ViewModel() {
                                         color = selectedColor.toList().sorted(),
                                         brand = itemBrand.value,
                                         dateTime = DateTimeManager.getDateTimeEpoch(
-                                            selectedDate.value ?: 0L, selectedHour.value ?: 0, selectedMinute.value ?: 0
+                                            selectedDate.value ?: 0L,
+                                            selectedHour.value ?: 0,
+                                            selectedMinute.value ?: 0
                                         ),
-                                        location = if (selectedLocation.value != null) LocationManager.latLngToPair(selectedLocation.value!!) else null,
+                                        location = if (selectedLocation.value != null) LocationManager.latLngToPair(
+                                            selectedLocation.value!!
+                                        ) else null,
                                         description = additionalDescription.value,
                                         timePosted = currentTime,
                                         status = 0, // newly posted found item always status 0
@@ -273,28 +275,31 @@ class NewFoundViewModel : ViewModel() {
                                     )
 
                                     // send notifications
-                                    notifyTrackingLostUsers(context, generatedFoundItem, object: NotifyLostUsersCallback{
-                                        override fun onComplete(result: Boolean) {
+                                    notifyTrackingLostUsers(
+                                        context,
+                                        generatedFoundItem,
+                                        object : NotifyLostUsersCallback {
+                                            override fun onComplete(result: Boolean) {
                                                 // still proceed, since this is not important to the current user
                                                 // if decide not to proceed here, the uploaded image will also have to be deleted
-                                            // add activity log item
-                                            firestoreManager.putWithUniqueId(
-                                                FirebaseNames.COLLECTION_ACTIVITY_LOG_ITEMS,
-                                                mapOf(
-                                                    FirebaseNames.ACTIVITY_LOG_ITEM_TYPE to 0,
-                                                    FirebaseNames.ACTIVITY_LOG_ITEM_CONTENT to itemName.value + " (#" + result + ")",
-                                                    FirebaseNames.ACTIVITY_LOG_ITEM_USER_ID to FirebaseUtility.getUserID(),
-                                                    FirebaseNames.ACTIVITY_LOG_ITEM_TIMESTAMP to DateTimeManager.getCurrentEpochTime()
-                                                ),
-                                                object: FirestoreManager.Callback<String>{
-                                                    override fun onComplete(result: String?) {
-                                                        // not necessary to throw an error if failed here
-                                                        callback.onComplete("")
+                                                // add activity log item
+                                                firestoreManager.putWithUniqueId(
+                                                    FirebaseNames.COLLECTION_ACTIVITY_LOG_ITEMS,
+                                                    mapOf(
+                                                        FirebaseNames.ACTIVITY_LOG_ITEM_TYPE to 0,
+                                                        FirebaseNames.ACTIVITY_LOG_ITEM_CONTENT to itemName.value + " (#" + result + ")",
+                                                        FirebaseNames.ACTIVITY_LOG_ITEM_USER_ID to FirebaseUtility.getUserID(),
+                                                        FirebaseNames.ACTIVITY_LOG_ITEM_TIMESTAMP to DateTimeManager.getCurrentEpochTime()
+                                                    ),
+                                                    object : FirestoreManager.Callback<String> {
+                                                        override fun onComplete(result: String?) {
+                                                            // not necessary to throw an error if failed here
+                                                            callback.onComplete("")
+                                                        }
                                                     }
-                                                }
-                                            )
-                                        }
-                                    })
+                                                )
+                                            }
+                                        })
                                 }
                             })
                     } else {
@@ -308,9 +313,13 @@ class NewFoundViewModel : ViewModel() {
                             color = selectedColor.toList().sorted(),
                             brand = itemBrand.value,
                             dateTime = DateTimeManager.getDateTimeEpoch(
-                                selectedDate.value ?: 0L, selectedHour.value ?: 0, selectedMinute.value ?: 0
+                                selectedDate.value ?: 0L,
+                                selectedHour.value ?: 0,
+                                selectedMinute.value ?: 0
                             ),
-                            location = if (selectedLocation.value != null) LocationManager.latLngToPair(selectedLocation.value!!) else null,
+                            location = if (selectedLocation.value != null) LocationManager.latLngToPair(
+                                selectedLocation.value!!
+                            ) else null,
                             description = additionalDescription.value,
                             timePosted = currentTime,
                             status = 0, // newly posted found item always status 0
@@ -320,74 +329,81 @@ class NewFoundViewModel : ViewModel() {
                         )
 
                         // send notifications
-                        notifyTrackingLostUsers(context, generatedFoundItem, object: NotifyLostUsersCallback{
-                            override fun onComplete(result: Boolean) {
-                                // still proceed, since this is not important to the current user
-                                // if decide not to proceed here, the uploaded image will also have to be deleted
-                                firestoreManager.putWithUniqueId(
-                                    FirebaseNames.COLLECTION_ACTIVITY_LOG_ITEMS,
-                                    mapOf(
-                                        FirebaseNames.ACTIVITY_LOG_ITEM_TYPE to 0,
-                                        FirebaseNames.ACTIVITY_LOG_ITEM_CONTENT to itemName.value + " (#" + result + ")",
-                                        FirebaseNames.ACTIVITY_LOG_ITEM_USER_ID to FirebaseUtility.getUserID(),
-                                        FirebaseNames.ACTIVITY_LOG_ITEM_TIMESTAMP to DateTimeManager.getCurrentEpochTime()
-                                    ),
-                                    object: FirestoreManager.Callback<String>{
-                                        override fun onComplete(result: String?) {
-                                            // not necessary to throw an error if failed here
-                                            callback.onComplete("")
+                        notifyTrackingLostUsers(
+                            context,
+                            generatedFoundItem,
+                            object : NotifyLostUsersCallback {
+                                override fun onComplete(result: Boolean) {
+                                    // still proceed, since this is not important to the current user
+                                    // if decide not to proceed here, the uploaded image will also have to be deleted
+                                    firestoreManager.putWithUniqueId(
+                                        FirebaseNames.COLLECTION_ACTIVITY_LOG_ITEMS,
+                                        mapOf(
+                                            FirebaseNames.ACTIVITY_LOG_ITEM_TYPE to 0,
+                                            FirebaseNames.ACTIVITY_LOG_ITEM_CONTENT to itemName.value + " (#" + result + ")",
+                                            FirebaseNames.ACTIVITY_LOG_ITEM_USER_ID to FirebaseUtility.getUserID(),
+                                            FirebaseNames.ACTIVITY_LOG_ITEM_TIMESTAMP to DateTimeManager.getCurrentEpochTime()
+                                        ),
+                                        object : FirestoreManager.Callback<String> {
+                                            override fun onComplete(result: String?) {
+                                                // not necessary to throw an error if failed here
+                                                callback.onComplete("")
+                                            }
                                         }
-                                    }
-                                )
-                            }
-                        })
+                                    )
+                                }
+                            })
                     }
                 }
             })
     }
 
     // method to notify all lost users that are tracking and matches this newly found item
-    fun notifyTrackingLostUsers(context: Context, foundItem: FoundItem, callback: NotifyLostUsersCallback){
+    fun notifyTrackingLostUsers(
+        context: Context,
+        foundItem: FoundItem,
+        callback: NotifyLostUsersCallback
+    ) {
         ItemManager.getTrackingMatchItemsFromFoundItem(
             context,
             foundItem,
-            object: ItemManager.MatchLostCallback{
-            override fun onComplete(result: MutableList<LostItem>?) {
-                if (result == null){
-                    callback.onComplete(false)
-                    return
-                }
+            object : ItemManager.MatchLostCallback {
+                override fun onComplete(result: MutableList<LostItem>?) {
+                    if (result == null) {
+                        callback.onComplete(false)
+                        return
+                    }
 
-                // for each lost item in result, notify the user
-                val resultSize = result.size
-                var sentItems = 0
-                if (resultSize == 0){
-                    callback.onComplete(true)
-                    return
-                }
+                    // for each lost item in result, notify the user
+                    val resultSize = result.size
+                    var sentItems = 0
+                    if (resultSize == 0) {
+                        callback.onComplete(true)
+                        return
+                    }
 
-                for (item in result){
-                    NotificationManager.sendNewMatchingItemNotification(
-                        targetUserId = item.userID,
-                        lostItemID = item.itemID,
-                        foundItemID = foundItem.itemID,
-                        object: NotificationManager.NotificationSendCallback{
-                            override fun onComplete(result: Boolean) {
-                                if (!result){
-                                    callback.onComplete(false)
-                                    return
-                                }
+                    for (item in result) {
+                        NotificationManager.sendNewMatchingItemNotification(
+                            targetUserId = item.userID,
+                            lostItemID = item.itemID,
+                            foundItemID = foundItem.itemID,
+                            object : NotificationManager.NotificationSendCallback {
+                                override fun onComplete(result: Boolean) {
+                                    if (!result) {
+                                        callback.onComplete(false)
+                                        return
+                                    }
 
-                                sentItems ++
-                                if (sentItems == resultSize){
-                                    callback.onComplete(true)
-                                    return
+                                    sentItems++
+                                    if (sentItems == resultSize) {
+                                        callback.onComplete(true)
+                                        return
+                                    }
                                 }
                             }
-                        }
-                    )
+                        )
+                    }
                 }
-            }
-        })
+            })
     }
 }

@@ -3,7 +3,6 @@ package com.example.lostandfound.CustomElements
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
-import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -103,8 +102,6 @@ fun Preview() {
         CustomLostItemPreviewSmall(data = LostItem())
 
 
-
-
     }
 }
 
@@ -154,11 +151,11 @@ fun CustomLostItemPreview(
                  */
 
                 // tracking data is only shown for lost items with status = 0 or 1
-                if (data.status == 0 || data.status == 1){
-                    Row (
+                if (data.status == 0 || data.status == 1) {
+                    Row(
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin_half))
-                    ){
+                    ) {
                         Icon(
                             imageVector = Icons.Outlined.TrackChanges,
                             tint = if (data.isTracking) MaterialTheme.colorScheme.error else Color.Gray,
@@ -178,13 +175,12 @@ fun CustomLostItemPreview(
 
 
 
-            Row(
-            ) {
+            Row {
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin_half)),
                     modifier = Modifier.weight(1f)
-                ){
+                ) {
                     Icon(
                         imageVector = Icons.Filled.Circle,
                         tint = colorResource(
@@ -211,7 +207,8 @@ fun CustomLostItemPreview(
                 horizontalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin))
             ) {
                 // if image string is empty, replace it with the default image
-                val displayedImage = if (data.image.isEmpty()) ImageManager.PLACEHOLDER_IMAGE_STRING else data.image
+                val displayedImage =
+                    if (data.image.isEmpty()) ImageManager.PLACEHOLDER_IMAGE_STRING else data.image
 
                 // image of the item is loaded using GlideImage
                 GlideImage(
@@ -294,8 +291,6 @@ fun CustomLostItemPreview(
 }
 
 
-
-
 @OptIn(ExperimentalGlideComposeApi::class)
 @Composable
 fun CustomLostItemPreviewSmall(
@@ -327,7 +322,8 @@ fun CustomLostItemPreviewSmall(
                 horizontalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin))
             ) {
                 // if image string is empty, replace it with the default image
-                val displayedImage = if (data.image.isEmpty()) ImageManager.PLACEHOLDER_IMAGE_STRING else data.image
+                val displayedImage =
+                    if (data.image.isEmpty()) ImageManager.PLACEHOLDER_IMAGE_STRING else data.image
 
                 // image of the item is loaded using GlideImage
                 GlideImage(
@@ -359,9 +355,9 @@ fun CustomLostItemPreviewSmall(
 
 
                     // number of matches found
-                    Row (
+                    Row(
                         verticalAlignment = Alignment.CenterVertically
-                    ){
+                    ) {
                         Text(
                             text = "Posted " + DateTimeManager.getDescription(data.timePosted),
                             style = Typography.bodyMedium,
@@ -462,7 +458,8 @@ fun CustomFoundItemPreview(
                 horizontalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin))
             ) {
                 // if image string is empty, replace it with the default image
-                val displayedImage = if (data.image.isEmpty()) ImageManager.PLACEHOLDER_IMAGE_STRING else data.image
+                val displayedImage =
+                    if (data.image.isEmpty()) ImageManager.PLACEHOLDER_IMAGE_STRING else data.image
 
                 // image of the item is loaded using GlideImage
                 GlideImage(
@@ -509,7 +506,7 @@ fun CustomFoundItemPreview(
                     )
 
                     // if image is close match, display this
-                    if (isImageCloseMatch){
+                    if (isImageCloseMatch) {
                         Row(
                             verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin_half))
@@ -530,7 +527,7 @@ fun CustomFoundItemPreview(
                     }
 
                     // if details are close match, display this
-                    if (isDetailsCloseMatch){
+                    if (isDetailsCloseMatch) {
                         Row(
                             verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin_half))
@@ -551,7 +548,7 @@ fun CustomFoundItemPreview(
                     }
 
                     // if location is close match, display this
-                    if (isLocationCloseMatch){
+                    if (isLocationCloseMatch) {
                         Row(
                             verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin_half))
@@ -634,7 +631,8 @@ fun CustomClaimPreview(
                 horizontalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin))
             ) {
                 // if image string is empty, replace it with the default image
-                val displayedImage = if (claimPreview.lostItemImage.isEmpty()) ImageManager.PLACEHOLDER_IMAGE_STRING else claimPreview.lostItemImage
+                val displayedImage =
+                    if (claimPreview.lostItemImage.isEmpty()) ImageManager.PLACEHOLDER_IMAGE_STRING else claimPreview.lostItemImage
 
                 // image of the item is loaded using GlideImage
                 GlideImage(
@@ -790,12 +788,13 @@ fun CustomChatInboxPreview(
             // replace all linebreaks of the message
             previewMessage = previewMessage.replace("\n", " ")
 
-            val previewMessageWithUser = if (chatInboxPreview.lastMessage.senderUserID == FirebaseUtility.getUserID()) "You: $previewMessage" else previewMessage
+            val previewMessageWithUser =
+                if (chatInboxPreview.lastMessage.senderUserID == FirebaseUtility.getUserID()) "You: $previewMessage" else previewMessage
 
-            Row (
+            Row(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin_half))
-            ){
+            ) {
                 Text(
                     text = previewMessageWithUser,
                     style = Typography.bodyMedium,
@@ -805,7 +804,8 @@ fun CustomChatInboxPreview(
 
                 // display dot if the last message is unread and the last message is not sent by the current user
                 if (chatInboxPreview.lastMessage.senderUserID != FirebaseUtility.getUserID() &&
-                    !chatInboxPreview.lastMessage.isReadByRecipient){
+                    !chatInboxPreview.lastMessage.isReadByRecipient
+                ) {
                     Icon(
                         imageVector = Icons.Filled.Circle,
                         tint = MaterialTheme.colorScheme.error,
@@ -827,7 +827,7 @@ fun CustomNotificationItemPreview(
     onClick: () -> Unit = {}  // to be implemented in notifications activity (To use that context)
 ) {
     // a isRead variable that would react to state changes
-    val isReadState = remember{
+    val isReadState = remember {
         mutableStateOf(isRead)
     }
 
@@ -891,7 +891,7 @@ fun CustomNotificationItemPreview(
                     )
 
                     // the red dot
-                    if (!isReadState.value){
+                    if (!isReadState.value) {
                         Icon(
                             imageVector = Icons.Filled.Circle,
                             tint = MaterialTheme.colorScheme.error,
@@ -940,7 +940,7 @@ fun CustomNotificationItemPreview(
 @Composable
 fun CustomActivityLogItemPreview(
     activityLogItem: ActivityLogItem
-){
+) {
     Box(
         modifier = Modifier
             .fillMaxWidth()

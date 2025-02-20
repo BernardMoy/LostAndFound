@@ -207,7 +207,8 @@ fun ItemImage(viewModel: ViewFoundViewModel) {
     Row(
         modifier = Modifier.fillMaxWidth()
     ) {
-        val displayedImage = if(viewModel.itemData.image.isEmpty()) ImageManager.PLACEHOLDER_IMAGE_STRING else viewModel.itemData.image
+        val displayedImage =
+            if (viewModel.itemData.image.isEmpty()) ImageManager.PLACEHOLDER_IMAGE_STRING else viewModel.itemData.image
         // image of the item
         GlideImage(
             model = Uri.parse(displayedImage),
@@ -255,9 +256,9 @@ fun ItemDetails(viewModel: ViewFoundViewModel) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin_half))
-        ){
+        ) {
             // display colors in text
-            Box(modifier = Modifier.weight(1f)){
+            Box(modifier = Modifier.weight(1f)) {
                 CustomEditText(
                     fieldLabel = "Color",
                     fieldContent = colorText,
@@ -267,7 +268,7 @@ fun ItemDetails(viewModel: ViewFoundViewModel) {
             }
 
             // display colors in circles
-            for (colorString in viewModel.itemData.color){
+            for (colorString in viewModel.itemData.color) {
                 Icon(
                     imageVector = Icons.Filled.Circle,
                     contentDescription = "Color",
@@ -320,7 +321,7 @@ fun LocationData(
         CustomGrayTitle(text = "Location")
 
         // if the location is not null, users can view it
-        if (viewModel.itemData.location != null){
+        if (viewModel.itemData.location != null) {
             CustomActionText(
                 text = "View location",
                 onClick = {
@@ -338,7 +339,9 @@ fun LocationData(
 
     CustomViewLocationDialog(
         isDialogShown = viewModel.isLocationDialogShown,
-        selectedLocation = if (viewModel.itemData.location != null) LocationManager.pairToLatlng(viewModel.itemData.location!!) else null
+        selectedLocation = if (viewModel.itemData.location != null) LocationManager.pairToLatlng(
+            viewModel.itemData.location!!
+        ) else null
     )
 }
 
@@ -450,7 +453,7 @@ fun ActionButtons(
                 }
 
                 // if the status is 0, display the deletable option
-                if (inPreview || viewModel.itemData.status == 0){
+                if (inPreview || viewModel.itemData.status == 0) {
                     CustomButton(
                         text = "Delete item",
                         type = ButtonType.WARNING,
@@ -473,21 +476,31 @@ fun ActionButtons(
                                     // delete item
                                     viewModel.deleteItem(object : Callback<Boolean> {
                                         override fun onComplete(result: Boolean) {
-                                            if (!result){
-                                                Toast.makeText(context, "Failed to delete item", Toast.LENGTH_SHORT).show()
+                                            if (!result) {
+                                                Toast.makeText(
+                                                    context,
+                                                    "Failed to delete item",
+                                                    Toast.LENGTH_SHORT
+                                                ).show()
                                                 return
                                             }
 
                                             // show successfully deleted message
-                                            Toast.makeText(context, "Item deleted!", Toast.LENGTH_SHORT).show()
+                                            Toast.makeText(
+                                                context,
+                                                "Item deleted!",
+                                                Toast.LENGTH_SHORT
+                                            ).show()
 
                                             // delete item successful, close dialog
                                             viewModel.isDeleteDialogShown.value = false
 
                                             // redirect the activity to home
-                                            val intent = Intent(context, MainActivity::class.java).apply {
-                                                flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
-                                            }
+                                            val intent =
+                                                Intent(context, MainActivity::class.java).apply {
+                                                    flags =
+                                                        Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
+                                                }
 
                                             // start main activity
                                             context.startActivity(intent)

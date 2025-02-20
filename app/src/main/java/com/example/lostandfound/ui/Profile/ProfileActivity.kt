@@ -305,8 +305,7 @@ fun TopProfileBox(
 fun AccountDetails(
     viewModel: ProfileViewModel
 ) {
-    Column(
-    ) {
+    Column {
         Box(
             modifier = Modifier.padding(
                 horizontal = dimensionResource(id = R.dimen.content_margin)
@@ -344,9 +343,7 @@ fun AccountDetails(
 fun Actions(
     viewModel: ProfileViewModel
 ) {
-    Column(
-
-    ) {
+    Column {
         Box(
             modifier = Modifier.padding(
                 horizontal = dimensionResource(R.dimen.content_margin)

@@ -30,7 +30,6 @@ import androidx.compose.material.icons.outlined.AccountCircle
 import androidx.compose.material.icons.outlined.CalendarMonth
 import androidx.compose.material.icons.outlined.Cancel
 import androidx.compose.material.icons.outlined.CheckCircle
-import androidx.compose.material.icons.outlined.Description
 import androidx.compose.material.icons.outlined.Edit
 import androidx.compose.material.icons.outlined.Folder
 import androidx.compose.material.icons.outlined.Palette
@@ -70,14 +69,12 @@ import com.example.lostandfound.CustomElements.CustomTextDialog
 import com.example.lostandfound.CustomElements.CustomUserDialog
 import com.example.lostandfound.CustomElements.CustomViewTwoLocationsDialog
 import com.example.lostandfound.Data.Claim
-import com.example.lostandfound.Data.FirebaseNames
 import com.example.lostandfound.Data.IntentExtraNames
 import com.example.lostandfound.Data.foundStatusText
 import com.example.lostandfound.Data.lostStatusText
 import com.example.lostandfound.Data.statusColor
 import com.example.lostandfound.Data.stringToColor
 import com.example.lostandfound.FirebaseManagers.FirebaseUtility
-import com.example.lostandfound.FirebaseManagers.FirestoreManager
 import com.example.lostandfound.R
 import com.example.lostandfound.Utility.DateTimeManager
 import com.example.lostandfound.Utility.ErrorCallback
@@ -352,7 +349,8 @@ fun ItemImage(viewModel: ViewClaimViewModel) {
     ) {
         CustomComparisonField(
             contentLeft = {
-                val displayedLostImage = if(viewModel.lostItemData.image.isEmpty()) ImageManager.PLACEHOLDER_IMAGE_STRING else viewModel.lostItemData.image
+                val displayedLostImage =
+                    if (viewModel.lostItemData.image.isEmpty()) ImageManager.PLACEHOLDER_IMAGE_STRING else viewModel.lostItemData.image
                 // image of the item
                 GlideImage(
                     model = Uri.parse(displayedLostImage),
@@ -364,7 +362,8 @@ fun ItemImage(viewModel: ViewClaimViewModel) {
                 )
             },
             contentRight = {
-                val displayedFoundImage = if(viewModel.foundItemData.image.isEmpty()) ImageManager.PLACEHOLDER_IMAGE_STRING else viewModel.foundItemData.image
+                val displayedFoundImage =
+                    if (viewModel.foundItemData.image.isEmpty()) ImageManager.PLACEHOLDER_IMAGE_STRING else viewModel.foundItemData.image
                 GlideImage(
                     model = Uri.parse(displayedFoundImage),
                     contentDescription = "Found item image",
@@ -407,10 +406,10 @@ fun ItemDetails(viewModel: ViewClaimViewModel) {
         // color
         CustomComparisonField(
             centerLabel = {
-                Row (
+                Row(
                     horizontalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin)),
                     verticalAlignment = Alignment.CenterVertically
-                ){
+                ) {
                     Icon(
                         imageVector = Icons.Outlined.Palette,
                         contentDescription = "color",
@@ -426,10 +425,10 @@ fun ItemDetails(viewModel: ViewClaimViewModel) {
             },
             contentLeft = {
                 val colorText = viewModel.lostItemData.color.joinToString(", ")
-                Column (
+                Column(
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin_half))
-                ){
+                ) {
                     Text(
                         text = colorText,
                         style = Typography.bodyMedium,
@@ -438,15 +437,19 @@ fun ItemDetails(viewModel: ViewClaimViewModel) {
                     )
                     Row(
                         horizontalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin_half))
-                    ){
+                    ) {
                         // display colors in circles
-                        for (colorString in viewModel.lostItemData.color){
+                        for (colorString in viewModel.lostItemData.color) {
                             Icon(
                                 imageVector = Icons.Filled.Circle,
                                 contentDescription = "Color",
-                                modifier = Modifier.size(dimensionResource(id = R.dimen.content_margin))
+                                modifier = Modifier
+                                    .size(dimensionResource(id = R.dimen.content_margin))
                                     .border(
-                                        border = BorderStroke(1.dp, MaterialTheme.colorScheme.onBackground),
+                                        border = BorderStroke(
+                                            1.dp,
+                                            MaterialTheme.colorScheme.onBackground
+                                        ),
                                         shape = CircleShape
                                     ),
                                 tint = stringToColor[colorString] ?: Color.Gray
@@ -457,10 +460,10 @@ fun ItemDetails(viewModel: ViewClaimViewModel) {
             },
             contentRight = {
                 val colorText = viewModel.foundItemData.color.joinToString(", ")
-                Column (
+                Column(
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin_half))
-                ){
+                ) {
                     Text(
                         text = colorText,
                         style = Typography.bodyMedium,
@@ -469,15 +472,19 @@ fun ItemDetails(viewModel: ViewClaimViewModel) {
                     )
                     Row(
                         horizontalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin_half))
-                    ){
+                    ) {
                         // display colors in circles
-                        for (colorString in viewModel.foundItemData.color){
+                        for (colorString in viewModel.foundItemData.color) {
                             Icon(
                                 imageVector = Icons.Filled.Circle,
                                 contentDescription = "Color",
-                                modifier = Modifier.size(dimensionResource(id = R.dimen.content_margin))
+                                modifier = Modifier
+                                    .size(dimensionResource(id = R.dimen.content_margin))
                                     .border(
-                                        border = BorderStroke(1.dp, MaterialTheme.colorScheme.onBackground),
+                                        border = BorderStroke(
+                                            1.dp,
+                                            MaterialTheme.colorScheme.onBackground
+                                        ),
                                         shape = CircleShape
                                     ),
                                 tint = stringToColor[colorString] ?: Color.Gray
@@ -531,7 +538,7 @@ fun LocationData(
         CustomGrayTitle(text = "Location")
 
         // if both lost and found users did not provide a location, then display none
-        if (viewModel.lostItemData.location != null || viewModel.foundItemData.location != null){
+        if (viewModel.lostItemData.location != null || viewModel.foundItemData.location != null) {
             CustomActionText(
                 text = "View location",
                 onClick = {
@@ -550,8 +557,12 @@ fun LocationData(
     CustomViewTwoLocationsDialog(
         context = context,
         isDialogShown = viewModel.isLocationDialogShown,
-        selectedLocation1 = if (viewModel.lostItemData.location != null) LocationManager.pairToLatlng(viewModel.lostItemData.location!!) else null,
-        selectedLocation2 = if (viewModel.foundItemData.location != null) LocationManager.pairToLatlng(viewModel.foundItemData.location!!) else null
+        selectedLocation1 = if (viewModel.lostItemData.location != null) LocationManager.pairToLatlng(
+            viewModel.lostItemData.location!!
+        ) else null,
+        selectedLocation2 = if (viewModel.foundItemData.location != null) LocationManager.pairToLatlng(
+            viewModel.foundItemData.location!!
+        ) else null
     )
 }
 
@@ -740,7 +751,7 @@ fun AcceptButton(
                     onClick = {
                         viewModel.isApproveLoading.value = true
                         // approve the claim
-                        viewModel.approveClaim(object : ErrorCallback{
+                        viewModel.approveClaim(object : ErrorCallback {
                             override fun onComplete(error: String) {
                                 viewModel.isApproveLoading.value = false
                                 if (error.isNotEmpty()) {

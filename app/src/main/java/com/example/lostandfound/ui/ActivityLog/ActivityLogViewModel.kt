@@ -10,11 +10,11 @@ import com.example.lostandfound.FirebaseManagers.FirebaseUtility
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 
-interface FetchActivityLogCallback{
+interface FetchActivityLogCallback {
     fun onComplete(result: Boolean)
 }
 
-class ActivityLogViewModel : ViewModel(){
+class ActivityLogViewModel : ViewModel() {
 
     val isLoading: MutableState<Boolean> = mutableStateOf(true)
 
@@ -23,7 +23,7 @@ class ActivityLogViewModel : ViewModel(){
 
     fun fetchActivityLogItems(
         callback: FetchActivityLogCallback
-    ){
+    ) {
         itemData.clear()
 
         val db = FirebaseFirestore.getInstance()
@@ -32,7 +32,7 @@ class ActivityLogViewModel : ViewModel(){
             .orderBy(FirebaseNames.ACTIVITY_LOG_ITEM_TIMESTAMP, Query.Direction.DESCENDING)
             .get()
             .addOnSuccessListener { result ->
-                for (document in result){
+                for (document in result) {
                     // construct activity log item data
                     val activityLogItem: ActivityLogItem = ActivityLogItem(
                         type = (document[FirebaseNames.ACTIVITY_LOG_ITEM_TYPE] as Long).toInt(),

@@ -3,11 +3,8 @@ package com.example.lostandfound.ui.Login;
 import android.content.Intent;
 import android.graphics.Paint;
 import android.os.Bundle;
-import android.text.method.PasswordTransformationMethod;
-import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -18,9 +15,8 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.example.lostandfound.MainActivity;
-import com.example.lostandfound.Utility.ErrorCallback;
 import com.example.lostandfound.R;
+import com.example.lostandfound.Utility.ErrorCallback;
 import com.example.lostandfound.Utility.FontSizeManager;
 import com.example.lostandfound.databinding.ActivityLoginBinding;
 import com.example.lostandfound.ui.ForgotPassword.ForgotPasswordActivity;
@@ -87,7 +83,7 @@ public class LoginActivity extends AppCompatActivity {
         loginViewModel.getLoginError().observe(this, new Observer<String>() {
             @Override
             public void onChanged(String s) {
-                if (s.isEmpty()){
+                if (s.isEmpty()) {
                     // set the view to be gone
                     binding.loginError.setVisibility(View.GONE);
 
@@ -142,7 +138,7 @@ public class LoginActivity extends AppCompatActivity {
                         }
 
                         // if sign in successful, current user would not be null
-                        if (loginViewModel.isUserSignedIn(LoginActivity.this)){
+                        if (loginViewModel.isUserSignedIn(LoginActivity.this)) {
                             // finish activity and display message
                             Toast.makeText(LoginActivity.this, "Signed in successfully", Toast.LENGTH_SHORT).show();
                             finish();
@@ -154,7 +150,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     // method to reset all error fields, to prevent inconsistent error indicators
-    private void resetErrorFields(){
+    private void resetErrorFields() {
         // reset error value
         loginViewModel.setLoginError("");
 
@@ -168,7 +164,7 @@ public class LoginActivity extends AppCompatActivity {
         super.onResume();
 
         // check if current user exists
-        if (loginViewModel.isUserSignedIn(LoginActivity.this)){
+        if (loginViewModel.isUserSignedIn(LoginActivity.this)) {
             // finish activity if current user exists
             // They are not supposed to be able to log in
             // This also exists the activity after returning to this page from registration

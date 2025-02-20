@@ -5,7 +5,6 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.widget.Space
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -26,7 +25,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.outlined.Logout
 import androidx.compose.material.icons.filled.Circle
 import androidx.compose.material.icons.outlined.AccountCircle
 import androidx.compose.material.icons.outlined.CalendarMonth
@@ -75,7 +73,6 @@ import com.example.lostandfound.Data.LostItem
 import com.example.lostandfound.Data.lostStatusText
 import com.example.lostandfound.Data.statusColor
 import com.example.lostandfound.Data.stringToColor
-import com.example.lostandfound.FirebaseManagers.FirebaseAuthManager
 import com.example.lostandfound.FirebaseManagers.FirebaseUtility
 import com.example.lostandfound.FirebaseManagers.ItemManager
 import com.example.lostandfound.MainActivity
@@ -83,7 +80,6 @@ import com.example.lostandfound.R
 import com.example.lostandfound.Utility.DateTimeManager
 import com.example.lostandfound.Utility.ImageManager
 import com.example.lostandfound.Utility.LocationManager
-import com.example.lostandfound.ui.Profile.ProfileActivity
 import com.example.lostandfound.ui.Search.SearchActivity
 import com.example.lostandfound.ui.ViewClaim.ViewClaimActivity
 import com.example.lostandfound.ui.theme.ComposeTheme
@@ -227,7 +223,8 @@ fun ItemImage(viewModel: ViewLostViewModel) {
     Row(
         modifier = Modifier.fillMaxWidth()
     ) {
-        val displayedImage = if(viewModel.itemData.image.isEmpty()) ImageManager.PLACEHOLDER_IMAGE_STRING else viewModel.itemData.image
+        val displayedImage =
+            if (viewModel.itemData.image.isEmpty()) ImageManager.PLACEHOLDER_IMAGE_STRING else viewModel.itemData.image
         // image of the item
         GlideImage(
             model = Uri.parse(displayedImage),
@@ -369,9 +366,9 @@ fun ItemDetails(viewModel: ViewLostViewModel) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin_half))
-        ){
+        ) {
             // display colors in text
-            Box(modifier = Modifier.weight(1f)){
+            Box(modifier = Modifier.weight(1f)) {
                 CustomEditText(
                     fieldLabel = "Color",
                     fieldContent = colorText,
@@ -381,11 +378,12 @@ fun ItemDetails(viewModel: ViewLostViewModel) {
             }
 
             // display colors in circles
-            for (colorString in viewModel.itemData.color){
+            for (colorString in viewModel.itemData.color) {
                 Icon(
                     imageVector = Icons.Filled.Circle,
                     contentDescription = "Color",
-                    modifier = Modifier.size(dimensionResource(id = R.dimen.title_margin))
+                    modifier = Modifier
+                        .size(dimensionResource(id = R.dimen.title_margin))
                         .border(
                             border = BorderStroke(1.dp, MaterialTheme.colorScheme.onBackground),
                             shape = CircleShape
@@ -426,7 +424,7 @@ fun LocationData(
         CustomGrayTitle(text = "Location")
 
         // if the location is not null, users can view it
-        if (viewModel.itemData.location != null){
+        if (viewModel.itemData.location != null) {
             CustomActionText(
                 text = "View location",
                 onClick = {
@@ -445,7 +443,9 @@ fun LocationData(
 
     CustomViewLocationDialog(
         isDialogShown = viewModel.isLocationDialogShown,
-        selectedLocation = if (viewModel.itemData.location != null) LocationManager.pairToLatlng(viewModel.itemData.location!!) else null
+        selectedLocation = if (viewModel.itemData.location != null) LocationManager.pairToLatlng(
+            viewModel.itemData.location!!
+        ) else null
     )
 }
 
@@ -465,7 +465,8 @@ fun UserData(
                 modifier = Modifier.weight(1f)
             ) {
                 // Name of user
-                val userDisplayName = viewModel.lostUser.firstName + ' ' + viewModel.lostUser.lastName
+                val userDisplayName =
+                    viewModel.lostUser.firstName + ' ' + viewModel.lostUser.lastName
 
                 CustomEditText(
                     fieldLabel = "User",
@@ -581,7 +582,7 @@ fun ActionButtons(
                 }
 
                 // if the status is 0, display the deletable option
-                if (inPreview || viewModel.itemData.status == 0){
+                if (inPreview || viewModel.itemData.status == 0) {
                     CustomButton(
                         text = "Delete item",
                         type = ButtonType.WARNING,
@@ -602,23 +603,33 @@ fun ActionButtons(
                                 type = ButtonType.WARNING,
                                 onClick = {
                                     // delete item
-                                    viewModel.deleteItem(object : Callback<Boolean>{
+                                    viewModel.deleteItem(object : Callback<Boolean> {
                                         override fun onComplete(result: Boolean) {
-                                            if (!result){
-                                                Toast.makeText(context, "Failed to delete item", Toast.LENGTH_SHORT).show()
+                                            if (!result) {
+                                                Toast.makeText(
+                                                    context,
+                                                    "Failed to delete item",
+                                                    Toast.LENGTH_SHORT
+                                                ).show()
                                                 return
                                             }
 
                                             // show successfully deleted message
-                                            Toast.makeText(context, "Item deleted!", Toast.LENGTH_SHORT).show()
+                                            Toast.makeText(
+                                                context,
+                                                "Item deleted!",
+                                                Toast.LENGTH_SHORT
+                                            ).show()
 
                                             // delete item successful, close dialog
                                             viewModel.isDeleteDialogShown.value = false
 
                                             // redirect the activity to home
-                                            val intent = Intent(context, MainActivity::class.java).apply {
-                                                flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
-                                            }
+                                            val intent =
+                                                Intent(context, MainActivity::class.java).apply {
+                                                    flags =
+                                                        Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
+                                                }
 
                                             // start main activity
                                             context.startActivity(intent)

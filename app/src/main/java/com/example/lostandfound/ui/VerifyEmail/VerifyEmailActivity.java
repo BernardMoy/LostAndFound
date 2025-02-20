@@ -18,11 +18,10 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.example.lostandfound.Utility.ErrorCallback;
 import com.example.lostandfound.R;
+import com.example.lostandfound.Utility.ErrorCallback;
 import com.example.lostandfound.Utility.FontSizeManager;
 import com.example.lostandfound.databinding.ActivityVerifyEmailBinding;
-import com.example.lostandfound.ui.Login.LoginActivity;
 
 public class VerifyEmailActivity extends AppCompatActivity {
 
@@ -150,7 +149,7 @@ public class VerifyEmailActivity extends AppCompatActivity {
                 // verify the code and create user if successful
                 verifyEmailViewModel.validateVerificationCode(VerifyEmailActivity.this, emailAddress, code, new ErrorCallback() {
                     @Override
-                    public void onComplete(String error){
+                    public void onComplete(String error) {
                         binding.progressBar.setVisibility(View.GONE);
                         binding.verifyEmailButton.setEnabled(true);
 

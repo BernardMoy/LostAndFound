@@ -74,7 +74,7 @@ fun Preview() {
  */
 
 @Composable
-fun PermissionsTestScreen(activity:PermissionsTestActivity, viewModel: PermissionsTestViewModel) {
+fun PermissionsTestScreen(activity: PermissionsTestActivity, viewModel: PermissionsTestViewModel) {
     ComposeTheme {
         Surface {
             Scaffold(
@@ -128,7 +128,11 @@ fun MainContent(
 
 
 @Composable
-fun TestImage(context: Context, viewModel: PermissionsTestViewModel, launcher: ManagedActivityResultLauncher<PickVisualMediaRequest, Uri?>){
+fun TestImage(
+    context: Context,
+    viewModel: PermissionsTestViewModel,
+    launcher: ManagedActivityResultLauncher<PickVisualMediaRequest, Uri?>
+) {
 
     // stores the file of the image taken by camera
     val cameraImageFile = remember {
@@ -143,29 +147,32 @@ fun TestImage(context: Context, viewModel: PermissionsTestViewModel, launcher: M
     )
 
     // launcher to take image from camera
-    val cameraLauncher = rememberLauncherForActivityResult(ActivityResultContracts.TakePicture()) {success ->
-        if (success){
-            viewModel.image.value = cameraImageUri   // Update the image uri with the taken photo
-        } else {
-            Toast.makeText(context, "Failed to take image", Toast.LENGTH_SHORT).show()
+    val cameraLauncher =
+        rememberLauncherForActivityResult(ActivityResultContracts.TakePicture()) { success ->
+            if (success) {
+                viewModel.image.value =
+                    cameraImageUri   // Update the image uri with the taken photo
+            } else {
+                Toast.makeText(context, "Failed to take image", Toast.LENGTH_SHORT).show()
+            }
         }
-    }
 
     // launcher to request camera permission
-    val cameraPermissionLauncher = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) {success ->
-        if (success){
-            // launch camera if permission is granted
-            cameraLauncher.launch(cameraImageUri)
-        } else {
-            Toast.makeText(context, "Camera permission denied", Toast.LENGTH_SHORT).show()
+    val cameraPermissionLauncher =
+        rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { success ->
+            if (success) {
+                // launch camera if permission is granted
+                cameraLauncher.launch(cameraImageUri)
+            } else {
+                Toast.makeText(context, "Camera permission denied", Toast.LENGTH_SHORT).show()
+            }
         }
-    }
 
 
 
-    Column (
+    Column(
         modifier = Modifier.padding(dimensionResource(R.dimen.title_margin))
-    ){
+    ) {
         // box for storing the image
         if (viewModel.image.value != null) {
             Box(
@@ -184,16 +191,19 @@ fun TestImage(context: Context, viewModel: PermissionsTestViewModel, launcher: M
         }
 
         Box(
-            modifier = Modifier.fillMaxWidth().padding(vertical = dimensionResource(id = R.dimen.content_margin)),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = dimensionResource(id = R.dimen.content_margin)),
             contentAlignment = Alignment.Center
         ) {
             CustomActionText(
                 text = "Get image from camera",
                 onClick = {
                     // request camera permission
-                    val permissionCheckResult = ContextCompat.checkSelfPermission(context, Manifest.permission.CAMERA)
+                    val permissionCheckResult =
+                        ContextCompat.checkSelfPermission(context, Manifest.permission.CAMERA)
 
-                    if (permissionCheckResult == PackageManager.PERMISSION_GRANTED){
+                    if (permissionCheckResult == PackageManager.PERMISSION_GRANTED) {
                         // if camera permission is granted, take picture
                         cameraLauncher.launch(cameraImageUri)
                     } else {
@@ -204,7 +214,9 @@ fun TestImage(context: Context, viewModel: PermissionsTestViewModel, launcher: M
             )
         }
         Box(
-            modifier = Modifier.fillMaxWidth().padding(vertical = dimensionResource(id = R.dimen.content_margin)),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = dimensionResource(id = R.dimen.content_margin)),
             contentAlignment = Alignment.Center
         ) {
             CustomActionText(
@@ -221,11 +233,9 @@ fun TestImage(context: Context, viewModel: PermissionsTestViewModel, launcher: M
 }
 
 
-
-
 @Composable
-fun TestLocation(context: Context, viewModel: PermissionsTestViewModel){
-    val fusedLocationClient = remember{
+fun TestLocation(context: Context, viewModel: PermissionsTestViewModel) {
+    val fusedLocationClient = remember {
         LocationServices.getFusedLocationProviderClient(context)
     }
 
@@ -237,8 +247,8 @@ fun TestLocation(context: Context, viewModel: PermissionsTestViewModel){
     val launcherMultiplePermissions = rememberLauncherForActivityResult(
         ActivityResultContracts.RequestMultiplePermissions()
     ) { permissionMaps ->
-        val areGranted = permissionMaps.values.reduce{acc, next -> acc && next}
-        if (areGranted){
+        val areGranted = permissionMaps.values.reduce { acc, next -> acc && next }
+        if (areGranted) {
             // if permissions are granted, get current user location
             getCurrentLocation(fusedLocationClient, context, viewModel)
         } else {
@@ -249,7 +259,7 @@ fun TestLocation(context: Context, viewModel: PermissionsTestViewModel){
 
     Column(
         modifier = Modifier.padding(dimensionResource(R.dimen.title_margin))
-    ){
+    ) {
         Text(
             text = "Lat: " + viewModel.currentLocation.value.latitude.toString(),
             style = Typography.bodyMedium,
@@ -262,7 +272,9 @@ fun TestLocation(context: Context, viewModel: PermissionsTestViewModel){
         )
 
         Box(
-            modifier = Modifier.fillMaxWidth().padding(vertical = dimensionResource(id = R.dimen.content_margin)),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = dimensionResource(id = R.dimen.content_margin)),
             contentAlignment = Alignment.Center
         ) {
             CustomActionText(
@@ -270,9 +282,12 @@ fun TestLocation(context: Context, viewModel: PermissionsTestViewModel){
                 onClick = {
                     // check if permissions are granted
                     if (locationPermissions.all {
-                        // location permissions are granted
-                        ContextCompat.checkSelfPermission(context, it) == PackageManager.PERMISSION_GRANTED
-                        }){
+                            // location permissions are granted
+                            ContextCompat.checkSelfPermission(
+                                context,
+                                it
+                            ) == PackageManager.PERMISSION_GRANTED
+                        }) {
                         // get device location
                         getCurrentLocation(fusedLocationClient, context, viewModel)
                     } else {
@@ -297,7 +312,7 @@ private fun getCurrentLocation(
     fusedLocationClient: FusedLocationProviderClient,
     context: Context,
     viewModel: PermissionsTestViewModel,
-){
+) {
     fusedLocationClient.lastLocation.addOnSuccessListener { location ->
         location?.let {
             // Set the location in viewmodel
@@ -310,14 +325,15 @@ private fun getCurrentLocation(
 }
 
 
-
 @Composable
-fun TestNotification(context: Context, viewModel: PermissionsTestViewModel){
+fun TestNotification(context: Context, viewModel: PermissionsTestViewModel) {
     Column(
         modifier = Modifier.padding(dimensionResource(R.dimen.title_margin))
-    ){
+    ) {
         Box(
-            modifier = Modifier.fillMaxWidth().padding(vertical = dimensionResource(id = R.dimen.content_margin)),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = dimensionResource(id = R.dimen.content_margin)),
             contentAlignment = Alignment.Center
         ) {
             CustomActionText(
