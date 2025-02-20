@@ -1,6 +1,7 @@
 package com.example.lostandfound.ui.AboutApp
 
 import android.content.Context
+import android.os.Build
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
@@ -16,6 +17,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.PhoneAndroid
 import androidx.compose.material.icons.outlined.PrivacyTip
 import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material3.MaterialTheme
@@ -100,6 +102,7 @@ fun MainContent(viewModel: AboutAppViewModel = viewModel()) {
         AppInfo(viewModel = viewModel)
         AppVersion(viewModel = viewModel)
         PrivacyPolicy(context = context, viewModel = viewModel)
+        DeviceInfo(context = context, viewModel = viewModel)
     }
 
 }
@@ -166,6 +169,37 @@ fun PrivacyPolicy(context: Context, viewModel: AboutAppViewModel) {
             Toast.makeText(context, "To be implemented", Toast.LENGTH_SHORT).show()
         },
         leftIcon = Icons.Outlined.PrivacyTip,
+    )
+}
+
+// display the device info of the user
+@Composable
+fun DeviceInfo(context: Context, viewModel: AboutAppViewModel){
+    Box(
+        modifier = Modifier.padding(horizontal = dimensionResource(R.dimen.content_margin))
+    ) {
+        CustomGrayTitle("Device info")
+    }
+
+    CustomEditText(
+        fieldLabel = "Brand",
+        fieldContent = Build.BRAND,
+        leftIcon = Icons.Outlined.PhoneAndroid,
+        isEditable = false
+    )
+
+    CustomEditText(
+        fieldLabel = "Model",
+        fieldContent = Build.MODEL,
+        leftIcon = Icons.Outlined.PhoneAndroid,
+        isEditable = false
+    )
+
+    CustomEditText(
+        fieldLabel = "SDK Version",
+        fieldContent = Build.VERSION.SDK_INT.toString(),
+        leftIcon = Icons.Outlined.Settings,
+        isEditable = false
     )
 }
 
