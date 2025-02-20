@@ -7,6 +7,8 @@ import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.DarkMode
 import androidx.compose.material.icons.outlined.LightMode
@@ -59,6 +61,7 @@ fun SettingsThemeScreen(activity: ComponentActivity) {
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(paddingValues = innerPadding)
+                        .verticalScroll(rememberScrollState())
                 ) {
                     // includes the top tab bar and the main content
                     MainContent()
