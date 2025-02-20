@@ -715,7 +715,7 @@ fun ImageBottomSheet(
 ) {
     // stores the file of the image taken by camera
     val cameraImageFile = remember {
-        File(context.externalCacheDir, "capture.jpg")
+        File(context.externalCacheDir, "capture_${System.currentTimeMillis()}.jpg")
     }
 
     // stores the image uri of the image taken by the camera
