@@ -3,23 +3,23 @@ package com.example.lostandfound
 import com.example.lostandfound.MatchingFunctions.areWordsSimilar
 import org.junit.Test
 
-class WordSimilarityTest{
+class WordSimilarityTest {
     @Test
-    fun testSameWord(){
+    fun testSameWord() {
         assert(
             areWordsSimilar("apple", "Apple")
         )
     }
 
     @Test
-    fun testDifferentWords(){
+    fun testDifferentWords() {
         assert(
             !areWordsSimilar("apple", "apkpe")
         )
     }
 
     @Test
-    fun testInversion(){
+    fun testInversion() {
         assert(
             areWordsSimilar("apple", "appel")
         )
@@ -32,7 +32,7 @@ class WordSimilarityTest{
     }
 
     @Test
-    fun testDeletion(){
+    fun testDeletion() {
         assert(
             areWordsSimilar("apple", "pple")
         )
@@ -42,14 +42,14 @@ class WordSimilarityTest{
     }
 
     @Test
-    fun testAddition(){
+    fun testAddition() {
         assert(
             areWordsSimilar("apple", "apples")
         )
     }
 
     @Test
-    fun testSubstitution(){
+    fun testSubstitution() {
         assert(
             areWordsSimilar("apple", "appme")
         )

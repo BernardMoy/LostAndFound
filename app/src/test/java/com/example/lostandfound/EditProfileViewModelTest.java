@@ -2,12 +2,10 @@ package com.example.lostandfound;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
 
 import com.example.lostandfound.ui.EditProfile.EditProfileViewModel;
-import com.example.lostandfound.ui.Login.LoginViewModel;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -26,12 +24,12 @@ public class EditProfileViewModelTest {
     Handler handler = Mockito.mock(Handler.class);
 
     @Before
-    public void setUp(){
+    public void setUp() {
         viewModel = new EditProfileViewModel();
     }
 
     @Test
-    public void testValidateEmail(){
+    public void testValidateEmail() {
         // test for invalid inputs
         viewModel.onFirstNameChanged("");
         viewModel.onLastNameChanged("Lastname");

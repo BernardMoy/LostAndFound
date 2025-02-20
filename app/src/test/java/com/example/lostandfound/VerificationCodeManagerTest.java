@@ -1,16 +1,12 @@
 package com.example.lostandfound;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doAnswer;
-import static org.mockito.Mockito.mock;
 
-import com.example.lostandfound.FirebaseManagers.FirestoreManager;
 import com.example.lostandfound.Data.FirebaseNames;
+import com.example.lostandfound.FirebaseManagers.FirestoreManager;
 import com.example.lostandfound.Utility.ErrorCallback;
 import com.example.lostandfound.Utility.Hasher;
 import com.example.lostandfound.Utility.VerificationCodeManager;
@@ -33,13 +29,13 @@ public class VerificationCodeManagerTest {
     private VerificationCodeManager verificationCodeManager;
 
     @Before
-    public void setUp(){
+    public void setUp() {
         MockitoAnnotations.openMocks(this);
     }
 
     // test when user havent generate code before
     @Test
-    public void testGenerateVerificationCodeSuccess() throws InterruptedException{
+    public void testGenerateVerificationCodeSuccess() throws InterruptedException {
         String testEmail = "test@warwick.ac.uk";
         verificationCodeManager = new VerificationCodeManager(testEmail, mockFirestoreManager);
 
@@ -74,7 +70,7 @@ public class VerificationCodeManagerTest {
 
     // test when user generated code very long ago
     @Test
-    public void testGenerateVerificationCodeSuccess2() throws InterruptedException{
+    public void testGenerateVerificationCodeSuccess2() throws InterruptedException {
         String testEmail = "test@warwick.ac.uk";
         verificationCodeManager = new VerificationCodeManager(testEmail, mockFirestoreManager);
 
@@ -114,7 +110,7 @@ public class VerificationCodeManagerTest {
 
     // test when user generated code recently, an error message should appear
     @Test
-    public void testGenerateVerificationCodeFail() throws InterruptedException{
+    public void testGenerateVerificationCodeFail() throws InterruptedException {
         String testEmail = "test@warwick.ac.uk";
         verificationCodeManager = new VerificationCodeManager(testEmail, mockFirestoreManager);
 
@@ -125,7 +121,7 @@ public class VerificationCodeManagerTest {
 
             Map<String, Object> result = new HashMap<>();
             result.put(FirebaseNames.USER_VERIFICATIONS_HASHEDCODE, "000000");
-            long testTimeStamp = Calendar.getInstance().getTimeInMillis() - 30*1000;
+            long testTimeStamp = Calendar.getInstance().getTimeInMillis() - 30 * 1000;
             result.put(FirebaseNames.USER_VERIFICATIONS_TIMESTAMP, testTimeStamp);
 
             callback.onComplete(result);
@@ -154,7 +150,7 @@ public class VerificationCodeManagerTest {
 
     // method to test success validation of the code (Within time limit and correct)
     @Test
-    public void testValidateVerificationCodeSuccess() throws InterruptedException{
+    public void testValidateVerificationCodeSuccess() throws InterruptedException {
         String testEmail = "test@warwick.ac.uk";
         verificationCodeManager = new VerificationCodeManager(testEmail, mockFirestoreManager);
 
@@ -165,7 +161,7 @@ public class VerificationCodeManagerTest {
 
             Map<String, Object> result = new HashMap<>();
             result.put(FirebaseNames.USER_VERIFICATIONS_HASHEDCODE, Hasher.hash("328334"));    // stores the hashed code
-            long testTimeStamp = Calendar.getInstance().getTimeInMillis() - 5*60*1000;
+            long testTimeStamp = Calendar.getInstance().getTimeInMillis() - 5 * 60 * 1000;
             result.put(FirebaseNames.USER_VERIFICATIONS_TIMESTAMP, testTimeStamp);
 
             callback.onComplete(result);
@@ -188,7 +184,7 @@ public class VerificationCodeManagerTest {
 
     // method to test fail validation, due to the time being more than 10 mins ago
     @Test
-    public void testValidateVerificationCodeFailTime() throws InterruptedException{
+    public void testValidateVerificationCodeFailTime() throws InterruptedException {
         String testEmail = "test@warwick.ac.uk";
         verificationCodeManager = new VerificationCodeManager(testEmail, mockFirestoreManager);
 
@@ -199,7 +195,7 @@ public class VerificationCodeManagerTest {
 
             Map<String, Object> result = new HashMap<>();
             result.put(FirebaseNames.USER_VERIFICATIONS_HASHEDCODE, Hasher.hash("328334"));    // stores the hashed code
-            long testTimeStamp = Calendar.getInstance().getTimeInMillis() - 5*60*1000;
+            long testTimeStamp = Calendar.getInstance().getTimeInMillis() - 5 * 60 * 1000;
             result.put(FirebaseNames.USER_VERIFICATIONS_TIMESTAMP, testTimeStamp);
 
             callback.onComplete(result);
@@ -222,7 +218,7 @@ public class VerificationCodeManagerTest {
 
     // method to test fail validation, due to the code being incorrect
     @Test
-    public void testValidateVerificationCodeFailCode() throws InterruptedException{
+    public void testValidateVerificationCodeFailCode() throws InterruptedException {
         String testEmail = "test@warwick.ac.uk";
         verificationCodeManager = new VerificationCodeManager(testEmail, mockFirestoreManager);
 
@@ -233,7 +229,7 @@ public class VerificationCodeManagerTest {
 
             Map<String, Object> result = new HashMap<>();
             result.put(FirebaseNames.USER_VERIFICATIONS_HASHEDCODE, Hasher.hash("328334"));    // stores the hashed code
-            long testTimeStamp = Calendar.getInstance().getTimeInMillis() - 11*60*1000;
+            long testTimeStamp = Calendar.getInstance().getTimeInMillis() - 11 * 60 * 1000;
             result.put(FirebaseNames.USER_VERIFICATIONS_TIMESTAMP, testTimeStamp);
 
             callback.onComplete(result);

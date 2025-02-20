@@ -6,8 +6,8 @@ import kotlin.math.abs
 
 class ImageSimilarityScoreTest {
     @Test
-    fun testGetScoreFromDistance(){
-        val score = getScoreFromDistance(0.8, N=3.0)
+    fun testGetScoreFromDistance() {
+        val score = getScoreFromDistance(0.8, N = 3.0)
         assert(abs(score - 0.49904) <= 1e-3)
     }
 }

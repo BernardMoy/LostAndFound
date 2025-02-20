@@ -18,19 +18,19 @@ class NewLostActivityTest {
     val composeTestRule = createComposeRule()
 
     @Test
-    fun testSelectCategory(){
+    fun testSelectCategory() {
         val viewModel = NewLostViewModel()
         composeTestRule.setContent {
             Category(viewModel = viewModel)  // set content to be category while passing the created VM to it
         }
-        
+
         val TESTNAME = categories[0].name  // use the name of the first category
         composeTestRule.onNodeWithText(TESTNAME).performClick()
         assert(viewModel.selectedCategory != null && viewModel.selectedCategory!!.name == TESTNAME)
     }
 
     @Test
-    fun testSelectSubCategory(){
+    fun testSelectSubCategory() {
         val viewModel = NewLostViewModel()
         composeTestRule.setContent {
             Category(viewModel = viewModel)  // set content to be category while passing the created VM to it
@@ -44,13 +44,14 @@ class NewLostActivityTest {
         composeTestRule.onNodeWithText(CATEGORYNAME).performClick()
 
         // select subcategory
-        composeTestRule.onNodeWithTag("SubCategoryDropdown").performClick() // open the dropdown menu
+        composeTestRule.onNodeWithTag("SubCategoryDropdown")
+            .performClick() // open the dropdown menu
         composeTestRule.onNodeWithText(SUBCATEGORYNAME).performClick()
         assert(viewModel.selectedSubCategory.value == SUBCATEGORYNAME)
     }
 
     @Test
-    fun testOtherCategory(){
+    fun testOtherCategory() {
         val viewModel = NewLostViewModel()
         composeTestRule.setContent {
             Category(viewModel = viewModel)  // set content to be category while passing the created VM to it
@@ -72,7 +73,7 @@ class NewLostActivityTest {
     }
 
     @Test
-    fun testSelectSubCategoryOverridden(){
+    fun testSelectSubCategoryOverridden() {
         val viewModel = NewLostViewModel()
         composeTestRule.setContent {
             Category(viewModel = viewModel)  // set content to be category while passing the created VM to it
@@ -87,7 +88,8 @@ class NewLostActivityTest {
         composeTestRule.onNodeWithText(CATEGORYNAME).performClick()
 
         // select subcategory
-        composeTestRule.onNodeWithTag("SubCategoryDropdown").performClick() // open the dropdown menu
+        composeTestRule.onNodeWithTag("SubCategoryDropdown")
+            .performClick() // open the dropdown menu
         composeTestRule.onNodeWithText(SUBCATEGORYNAME).performClick()
         assert(viewModel.selectedSubCategory.value == SUBCATEGORYNAME)
 

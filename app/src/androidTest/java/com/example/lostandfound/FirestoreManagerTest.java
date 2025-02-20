@@ -2,7 +2,6 @@ package com.example.lostandfound;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import android.util.Log;
@@ -15,6 +14,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -22,7 +22,7 @@ import java.util.concurrent.CountDownLatch;
 
 public class FirestoreManagerTest {
 
-    private String COLLECTION = "test_collection";
+    private final String COLLECTION = "test_collection";
     private FirestoreManager firestoreManager;
     private FirebaseFirestore firestore;
 
@@ -31,7 +31,7 @@ public class FirestoreManagerTest {
     private Map<String, Object> testValueUpdate;
 
     @Before
-    public void setUp() throws InterruptedException{
+    public void setUp() throws InterruptedException {
         // Create firestore manager
         firestoreManager = new FirestoreManager();
 
@@ -89,7 +89,7 @@ public class FirestoreManagerTest {
 
     // clear all entries present in the collection after the tests
     @After
-    public void tearDown() throws InterruptedException{
+    public void tearDown() throws InterruptedException {
 
         final CountDownLatch latch = new CountDownLatch(5);
 
@@ -106,7 +106,7 @@ public class FirestoreManagerTest {
 
 
     @Test
-    public void testPut() throws InterruptedException{
+    public void testPut() throws InterruptedException {
         final CountDownLatch putLatch = new CountDownLatch(1);
 
         firestoreManager.put(COLLECTION, "testPut", testValue, new FirestoreManager.Callback<Boolean>() {
@@ -145,7 +145,7 @@ public class FirestoreManagerTest {
     }
 
     @Test
-    public void testGet() throws InterruptedException{
+    public void testGet() throws InterruptedException {
         final CountDownLatch getLatch = new CountDownLatch(1);
 
         // validate if data can be retrieved using the method
@@ -166,7 +166,7 @@ public class FirestoreManagerTest {
     }
 
     @Test
-    public void testGetIdsWhere() throws InterruptedException{
+    public void testGetIdsWhere() throws InterruptedException {
         final CountDownLatch latch = new CountDownLatch(1);
 
         firestoreManager.getIdsWhere(COLLECTION, "att2", 3230329, "att2", new FirestoreManager.Callback<List<String>>() {
@@ -190,7 +190,7 @@ public class FirestoreManagerTest {
     This test method depend on whether testPut() is first executed. Fix that
      */
     @Test
-    public void testGetAllIds() throws InterruptedException{
+    public void testGetAllIds() throws InterruptedException {
         final CountDownLatch latch = new CountDownLatch(1);
 
         // force add the testPut data
@@ -199,7 +199,7 @@ public class FirestoreManagerTest {
             public void onSuccess(Void unused) {
 
                 // afterwards, perform getAllIDs to ensure testPut collection is present
-                firestoreManager.getAllIds(COLLECTION,  new FirestoreManager.Callback<List<String>>() {
+                firestoreManager.getAllIds(COLLECTION, new FirestoreManager.Callback<List<String>>() {
                     @Override
                     public void onComplete(List<String> result) {
                         Log.d("RESULT", result.toString());
@@ -218,7 +218,7 @@ public class FirestoreManagerTest {
     }
 
     @Test
-    public void testUpdate() throws InterruptedException{
+    public void testUpdate() throws InterruptedException {
         final CountDownLatch latch = new CountDownLatch(1);
 
         firestoreManager.update(COLLECTION, "testUpdate", "attSpecial", "Updated", new FirestoreManager.Callback<Boolean>() {
@@ -244,7 +244,7 @@ public class FirestoreManagerTest {
 
 
     @Test
-    public void testDelete() throws InterruptedException{
+    public void testDelete() throws InterruptedException {
 
         // validate data initially exists
         final CountDownLatch getLatch = new CountDownLatch(1);

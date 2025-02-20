@@ -29,12 +29,12 @@ public class LoginViewModelTest {
     Handler handler = Mockito.mock(Handler.class);
 
     @Before
-    public void setUp(){
+    public void setUp() {
         viewModel = new LoginViewModel();
     }
 
     @Test
-    public void testValidateEmail(){
+    public void testValidateEmail() {
         // test for invalid inputs
         assertFalse(viewModel.validateEmail(""));
         assertEquals("Email cannot be empty", viewModel.getLoginError().getValue());
@@ -44,7 +44,7 @@ public class LoginViewModelTest {
     }
 
     @Test
-    public void testValidatePassword(){
+    public void testValidatePassword() {
         // test for invalid inputs
         assertFalse(viewModel.validatePassword(""));
         assertEquals("Password cannot be empty", viewModel.getLoginError().getValue());

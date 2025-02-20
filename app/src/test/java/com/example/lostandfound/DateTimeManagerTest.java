@@ -2,7 +2,6 @@ package com.example.lostandfound;
 
 import static com.example.lostandfound.Utility.DateTimeManager.getCurrentEpochTime;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 import com.example.lostandfound.Utility.DateTimeManager;
 
@@ -19,49 +18,49 @@ public class DateTimeManagerTest {
     private static final long EPOCH = 1718730240L;
 
     @Test
-    public void testDateToString(){
+    public void testDateToString() {
         assertEquals("18 Jun 2024", DateTimeManager.dateToString(EPOCH_DATE_ONLY));
     }
 
     @Test
-    public void testTimeToString(){
+    public void testTimeToString() {
         assertEquals("17:04", DateTimeManager.timeToString(HOUR, MINUTE));
     }
 
     @Test
-    public void testGetDateTimeEpoch(){
+    public void testGetDateTimeEpoch() {
         assertEquals(EPOCH, DateTimeManager.getDateTimeEpoch(EPOCH_DATE_ONLY, HOUR, MINUTE));
     }
 
     @Test
-    public void testEpochToDate(){
+    public void testEpochToDate() {
         assertEquals(EPOCH_DATE_ONLY, DateTimeManager.epochToDate(EPOCH));
     }
 
     @Test
-    public void testEpochToHour(){
+    public void testEpochToHour() {
         assertEquals(HOUR, DateTimeManager.epochToHour(EPOCH));
     }
 
     @Test
-    public void testEpochToMinute(){
+    public void testEpochToMinute() {
         assertEquals(MINUTE, DateTimeManager.epochToMinute(EPOCH));
     }
 
     @Test
-    public void testDateTimeToString(){
+    public void testDateTimeToString() {
         assertEquals("18 Jun 2024 17:04", DateTimeManager.dateTimeToString(EPOCH));
     }
 
     @Test
-    public void testGetDescription(){
+    public void testGetDescription() {
         long currentEpoch = getCurrentEpochTime();
-        assertEquals("2 days ago", DateTimeManager.getDescription(currentEpoch - 86400*2-300));
+        assertEquals("2 days ago", DateTimeManager.getDescription(currentEpoch - 86400 * 2 - 300));
     }
 
     @Test
-    public void testGetChatTimeDescription(){
+    public void testGetChatTimeDescription() {
         long currentEpoch = getCurrentEpochTime();
-        assertEquals("a day ago", DateTimeManager.getChatTimeDescription(currentEpoch - 86400*1-300));
+        assertEquals("a day ago", DateTimeManager.getChatTimeDescription(currentEpoch - 86400 - 300));
     }
 }
