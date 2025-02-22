@@ -35,6 +35,8 @@ public class FirebaseCloudFunctionsTest {
 
     Remember if you want both the firebase firestore and the cloud functions to work
     do not do firebase emulators:start --only firestore
+
+    If the tests fails, try waiting for a minute for the emulator to set up then try again.
      */
 
     private static FirebaseFirestore firestore;
@@ -115,6 +117,36 @@ public class FirebaseCloudFunctionsTest {
         assert !snapshot.exists();
     }
 
+    @Test
+    public void testNotificationsOnClaimsDeleted() throws ExecutionException, InterruptedException, TimeoutException{
+        // create a claim
+        Map<String, Object> dataClaim = new HashMap<>();
+        dataClaim.put(FirebaseNames.CLAIM_IS_APPROVED, true);
+
+        Task<DocumentReference> task1 = firestore.collection(FirebaseNames.COLLECTION_CLAIMED_ITEMS).add(dataClaim);
+        DocumentReference claimItemRef = Tasks.await(task1, 60, TimeUnit.SECONDS);
+        String uidClaim = claimItemRef.getId();
+
+        // create a notif with type 3 and claim id = it
+        Map<String, Object> dataNotif = new HashMap<>();
+        dataNotif.put(FirebaseNames.NOTIFICATION_TYPE, 3);
+        dataNotif.put(FirebaseNames.NOTIFICATION_CLAIM_ID, uidClaim);
+        Task<DocumentReference> task2 = firestore.collection(FirebaseNames.COLLECTION_NOTIFICATIONS).add(dataNotif);
+        DocumentReference notifRef = Tasks.await(task2, 60, TimeUnit.SECONDS);
+        String uidNotif = notifRef.getId();
+
+        // delete the claim item
+        Task<Void> task3 = firestore.collection(FirebaseNames.COLLECTION_CLAIMED_ITEMS).document(uidClaim).delete();
+        Tasks.await(task3, 60, TimeUnit.SECONDS);
+
+        // assert that the notif no longer exists
+        Thread.sleep(2000);     // wait for 2 seconds for the function to activate
+        Task<DocumentSnapshot> task4 = firestore.collection(FirebaseNames.COLLECTION_NOTIFICATIONS).document(uidNotif).get();
+        DocumentSnapshot snapshot = Tasks.await(task4, 60, TimeUnit.SECONDS);
+        assert !snapshot.exists();
+    }
+
+    // test involving firebase auth
     @Test
     public void testItemsOnUserDeleted() throws ExecutionException, InterruptedException, TimeoutException {
 
