@@ -3,11 +3,15 @@ package com.example.lostandfound;
 import com.example.lostandfound.Data.FirebaseNames;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreSettings;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.storage.FirebaseStorage;
 
 import org.junit.After;
 import org.junit.Before;
@@ -40,6 +44,9 @@ public class FirebaseCloudFunctionsTest {
      */
 
     private static FirebaseFirestore firestore;
+    private static FirebaseAuth auth;
+    private static FirebaseStorage storage;
+
 
     @BeforeClass
     public static void setupClass() {
@@ -50,6 +57,14 @@ public class FirebaseCloudFunctionsTest {
                 .setPersistenceEnabled(false)
                 .build();
         firestore.setFirestoreSettings(settings);
+
+        // create auth emulator
+        auth = FirebaseAuth.getInstance();
+        auth.useEmulator("10.0.2.2", 9099);
+
+        // create storage emulator
+        storage = FirebaseStorage.getInstance();
+        storage.useEmulator("10.0.2.2", 9199);
     }
 
     @Before
@@ -148,13 +163,39 @@ public class FirebaseCloudFunctionsTest {
 
     // test involving firebase auth
     @Test
-    public void testItemsOnUserDeleted() throws ExecutionException, InterruptedException, TimeoutException {
+    public void testUserOnUserDeleted() throws ExecutionException, InterruptedException, TimeoutException {
+        // create a user
+        Task<AuthResult> task1 = auth.createUserWithEmailAndPassword("test@gmail.com", "test");
+        AuthResult authResult = Tasks.await(task1, 60, TimeUnit.SECONDS);
 
+        // get the user id
+        if (authResult.getUser() == null){
+            assert false;
+            return;
+        }
+        FirebaseUser currentUser = authResult.getUser();
+        String userId = currentUser.getUid();
+
+        // create an entry in the user firestore database with
+        Map<String, Object> dataUser = new HashMap<>();
+        dataUser.put(FirebaseNames.USERS_EMAIL, "test@gmail.com");
+        Task<Void> task2 = firestore.collection(FirebaseNames.COLLECTION_USERS).document(userId).set(dataUser);
+        Tasks.await(task2, 60, TimeUnit.SECONDS);
+
+        // delete the user from auth
+        Task<Void> task3 = currentUser.delete();
+        Tasks.await(task3, 60, TimeUnit.SECONDS);
+
+        // assert that the user entry in firestore no longer exists
+        Thread.sleep(2000);     // wait for 2 seconds for the function to activate
+        Task<DocumentSnapshot> task4 = firestore.collection(FirebaseNames.COLLECTION_USERS).document(userId).get();
+        DocumentSnapshot snapshot = Tasks.await(task4, 60, TimeUnit.SECONDS);
+        assert !snapshot.exists();
     }
 
     // test involving firebase auth
     @Test
-    public void testUserOnUserDeleted() throws ExecutionException, InterruptedException, TimeoutException {
+    public void testItemsOnUserDeleted() throws ExecutionException, InterruptedException, TimeoutException {
 
     }
 
