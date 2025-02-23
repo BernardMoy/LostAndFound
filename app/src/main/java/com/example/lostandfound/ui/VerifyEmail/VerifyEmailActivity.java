@@ -18,6 +18,7 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.example.lostandfound.MainActivity;
 import com.example.lostandfound.R;
 import com.example.lostandfound.Utility.ErrorCallback;
 import com.example.lostandfound.Utility.FontSizeManager;
@@ -177,8 +178,17 @@ public class VerifyEmailActivity extends AppCompatActivity {
 
                                         // If no error, display message and exit
                                         Toast.makeText(VerifyEmailActivity.this, "Account successfully created", Toast.LENGTH_SHORT).show();
-                                        finish();
 
+
+                                        // force redirect to the home page
+                                        Intent intent = new Intent(VerifyEmailActivity.this, MainActivity.class);
+                                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);   // bitwise or
+
+                                        // start main activity
+                                        startActivity(intent);
+
+                                        // finish current activity
+                                        finish();
                                     }
                                 });
                     }

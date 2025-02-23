@@ -10,6 +10,7 @@ public final class SharedPreferencesNames {
     public static final String NAME_ISLARGEFONT = "is_large_font";
     public static final String NAME_ANIMATION = "animation_enabled";
     public static final String NAME_AUTO_LOADING = "auto_loading_enabled";
+    public static final String NAME_SHOW_WELCOME_MESSAGE = "show_welcome_message";
 
     // strings that represent all key names
     public static final String USER_FIRSTNAME = "firstName";
@@ -21,4 +22,5 @@ public final class SharedPreferencesNames {
     public static final String ISLARGEFONT_VALUE = "value";
     public static final String ANIMATION_VALUE = "value";   // false or true whether animations are enabled
     public static final String AUTO_LOADING_VALUE = "value";
+    public static final String SHOW_WELCOME_MESSAGE_VALUE = "value";
 }
