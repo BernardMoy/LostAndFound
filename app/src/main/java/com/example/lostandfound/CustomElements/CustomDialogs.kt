@@ -123,7 +123,7 @@ fun CustomTextDialog(
     // Shown only when isDialogShown is true
     if (isDialogShown.value) {
         AlertDialog(
-            onDismissRequest = { isDialogShown.value = false },
+            onDismissRequest = { isDialogShown.value = false }, // dismissable
             containerColor = MaterialTheme.colorScheme.background,
             icon = {
                 Icon(

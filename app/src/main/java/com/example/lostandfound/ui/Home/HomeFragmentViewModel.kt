@@ -32,6 +32,8 @@ class HomeFragmentViewModel : ViewModel() {
 
     var isInitialStartUp = true
 
+    var isWelcomeDialogShown: MutableState<Boolean> = mutableStateOf(false)
+
 
     // load data into latestLostItem and latestLostItemMatches
     fun loadLatestLostItem(

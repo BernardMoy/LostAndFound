@@ -2,8 +2,8 @@ package com.example.lostandfound.ui.Home
 
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -37,6 +37,7 @@ import androidx.compose.material.icons.outlined.CheckCircle
 import androidx.compose.material.icons.outlined.Refresh
 import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material.icons.outlined.TrackChanges
+import androidx.compose.material.icons.outlined.WavingHand
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.HorizontalDivider
@@ -75,8 +76,10 @@ import com.example.lostandfound.CustomElements.CustomButton
 import com.example.lostandfound.CustomElements.CustomCard
 import com.example.lostandfound.CustomElements.CustomLostItemPreviewSmall
 import com.example.lostandfound.CustomElements.CustomProgressBar
+import com.example.lostandfound.CustomElements.CustomTextDialog
 import com.example.lostandfound.Data.IntentExtraNames
 import com.example.lostandfound.Data.LostItem
+import com.example.lostandfound.Data.SharedPreferencesNames
 import com.example.lostandfound.FirebaseManagers.FirebaseUtility
 import com.example.lostandfound.R
 import com.example.lostandfound.Utility.AnimationManager
@@ -125,6 +128,15 @@ class HomeFragment : Fragment() {
             loadRecentlyLostItem(requireContext(), viewModel)
             loadFoundItems(requireContext(), viewModel)
         }
+
+        // check if display the welcome user dialog
+        val sharedPreferences: SharedPreferences = requireContext().getSharedPreferences(
+            SharedPreferencesNames.NAME_SHOW_WELCOME_MESSAGE,
+            Context.MODE_PRIVATE
+        )
+        viewModel.isWelcomeDialogShown.value =
+            sharedPreferences.getBoolean(SharedPreferencesNames.SHOW_WELCOME_MESSAGE_VALUE, true)
+
     }
 }
 
@@ -166,6 +178,45 @@ fun MainContent(
             LargeLoginButton(context = context, viewModel = viewModel)
         }
     }
+
+    // the welcome dialog
+    val sp = context.getSharedPreferences(SharedPreferencesNames.NAME_USERS, Context.MODE_PRIVATE)
+    val userName = sp.getString(SharedPreferencesNames.USER_FIRSTNAME, "") + sp.getString(
+        SharedPreferencesNames.USER_LASTNAME,
+        ""
+    )
+
+    CustomTextDialog(
+        icon = Icons.Outlined.WavingHand,
+        title = "Welcome, $userName!",
+        content = "Welcome, new user!\nDo you want to view the guide and FAQs on how the app work?",
+        confirmButton = {
+            CustomButton(
+                text = "View How it Works",
+                type = ButtonType.FILLED,
+                onClick = {
+                    // start how it works activity
+                    val intent = Intent(context, HowItWorksActivity::class.java)
+                    context.startActivity(intent)
+
+                    // dismiss dialog
+                    viewModel.isWelcomeDialogShown.value = false
+                }
+            )
+        },
+        dismissButton = {
+            CustomButton(
+                text = "Dismiss",
+                type = ButtonType.OUTLINED,
+                onClick = {
+                    // dismiss dialog
+                    viewModel.isWelcomeDialogShown.value = false
+                }
+            )
+        },
+        isDialogShown = viewModel.isWelcomeDialogShown
+    )
+
 }
 
 @Composable
