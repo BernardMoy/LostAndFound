@@ -83,6 +83,7 @@ public class FirebaseCloudFunctionsTest {
         // The Task class allows async operations to block execution
         Task<DocumentReference> task1 = firestore.collection(FirebaseNames.COLLECTION_LOST_ITEMS).add(dataLost);
         DocumentReference lostItemRef = Tasks.await(task1, 60, TimeUnit.SECONDS);
+        Thread.sleep(2000);
         String uidLost = lostItemRef.getId();
 
         // create a claim with the lost item
@@ -90,16 +91,19 @@ public class FirebaseCloudFunctionsTest {
         dataClaim.put(FirebaseNames.CLAIM_LOST_ITEM_ID, uidLost);
         Task<DocumentReference> task2 = firestore.collection(FirebaseNames.COLLECTION_CLAIMED_ITEMS).add(dataClaim);
         DocumentReference claimRef = Tasks.await(task2, 60, TimeUnit.SECONDS);
+        Thread.sleep(2000);
         String uidClaim = claimRef.getId();
 
         // delete the lost item
         Task<Void> task3 = firestore.collection(FirebaseNames.COLLECTION_LOST_ITEMS).document(uidLost).delete();
         Tasks.await(task3, 60, TimeUnit.SECONDS);
+        Thread.sleep(2000);
 
         // assert that the claim no longer exists
-        Thread.sleep(2000);     // wait for 2 seconds for the function to activate
         Task<DocumentSnapshot> task4 = firestore.collection(FirebaseNames.COLLECTION_CLAIMED_ITEMS).document(uidClaim).get();
         DocumentSnapshot snapshot = Tasks.await(task4, 60, TimeUnit.SECONDS);
+        Thread.sleep(2000);
+
         assert !snapshot.exists();
     }
 
@@ -112,6 +116,7 @@ public class FirebaseCloudFunctionsTest {
         // The Task class allows async operations to block execution
         Task<DocumentReference> task1 = firestore.collection(FirebaseNames.COLLECTION_FOUND_ITEMS).add(dataFound);
         DocumentReference foundItemRef = Tasks.await(task1, 60, TimeUnit.SECONDS);
+        Thread.sleep(2000);
         String uidFound = foundItemRef.getId();
 
         // create a claim with the found item
@@ -119,16 +124,19 @@ public class FirebaseCloudFunctionsTest {
         dataClaim.put(FirebaseNames.CLAIM_FOUND_ITEM_ID, uidFound);
         Task<DocumentReference> task2 = firestore.collection(FirebaseNames.COLLECTION_CLAIMED_ITEMS).add(dataClaim);
         DocumentReference claimRef = Tasks.await(task2, 60, TimeUnit.SECONDS);
+        Thread.sleep(2000);
         String uidClaim = claimRef.getId();
 
         // delete the found item
         Task<Void> task3 = firestore.collection(FirebaseNames.COLLECTION_FOUND_ITEMS).document(uidFound).delete();
         Tasks.await(task3, 60, TimeUnit.SECONDS);
+        Thread.sleep(2000);
 
         // assert that the claim no longer exists
-        Thread.sleep(2000);     // wait for 2 seconds for the function to activate
         Task<DocumentSnapshot> task4 = firestore.collection(FirebaseNames.COLLECTION_CLAIMED_ITEMS).document(uidClaim).get();
         DocumentSnapshot snapshot = Tasks.await(task4, 60, TimeUnit.SECONDS);
+        Thread.sleep(2000);
+
         assert !snapshot.exists();
     }
 
@@ -140,6 +148,7 @@ public class FirebaseCloudFunctionsTest {
 
         Task<DocumentReference> task1 = firestore.collection(FirebaseNames.COLLECTION_CLAIMED_ITEMS).add(dataClaim);
         DocumentReference claimItemRef = Tasks.await(task1, 60, TimeUnit.SECONDS);
+        Thread.sleep(2000);
         String uidClaim = claimItemRef.getId();
 
         // create a notif with type 3 and claim id = it
@@ -148,16 +157,19 @@ public class FirebaseCloudFunctionsTest {
         dataNotif.put(FirebaseNames.NOTIFICATION_CLAIM_ID, uidClaim);
         Task<DocumentReference> task2 = firestore.collection(FirebaseNames.COLLECTION_NOTIFICATIONS).add(dataNotif);
         DocumentReference notifRef = Tasks.await(task2, 60, TimeUnit.SECONDS);
+        Thread.sleep(2000);
         String uidNotif = notifRef.getId();
 
         // delete the claim item
         Task<Void> task3 = firestore.collection(FirebaseNames.COLLECTION_CLAIMED_ITEMS).document(uidClaim).delete();
         Tasks.await(task3, 60, TimeUnit.SECONDS);
+        Thread.sleep(2000);
 
         // assert that the notif no longer exists
-        Thread.sleep(2000);     // wait for 2 seconds for the function to activate
         Task<DocumentSnapshot> task4 = firestore.collection(FirebaseNames.COLLECTION_NOTIFICATIONS).document(uidNotif).get();
         DocumentSnapshot snapshot = Tasks.await(task4, 60, TimeUnit.SECONDS);
+        Thread.sleep(2000);
+
         assert !snapshot.exists();
     }
 
@@ -165,8 +177,9 @@ public class FirebaseCloudFunctionsTest {
     @Test
     public void testUserOnUserDeleted() throws ExecutionException, InterruptedException, TimeoutException {
         // create a user
-        Task<AuthResult> task1 = auth.createUserWithEmailAndPassword("test@gmail.com", "test");
+        Task<AuthResult> task1 = auth.createUserWithEmailAndPassword("test@gmail.com", "testtest");
         AuthResult authResult = Tasks.await(task1, 60, TimeUnit.SECONDS);
+        Thread.sleep(2000);
 
         // get the user id
         if (authResult.getUser() == null){
@@ -181,15 +194,18 @@ public class FirebaseCloudFunctionsTest {
         dataUser.put(FirebaseNames.USERS_EMAIL, "test@gmail.com");
         Task<Void> task2 = firestore.collection(FirebaseNames.COLLECTION_USERS).document(userId).set(dataUser);
         Tasks.await(task2, 60, TimeUnit.SECONDS);
+        Thread.sleep(2000);
 
         // delete the user from auth
         Task<Void> task3 = currentUser.delete();
         Tasks.await(task3, 60, TimeUnit.SECONDS);
+        Thread.sleep(2000);
 
         // assert that the user entry in firestore no longer exists
-        Thread.sleep(2000);     // wait for 2 seconds for the function to activate
         Task<DocumentSnapshot> task4 = firestore.collection(FirebaseNames.COLLECTION_USERS).document(userId).get();
         DocumentSnapshot snapshot = Tasks.await(task4, 60, TimeUnit.SECONDS);
+        Thread.sleep(2000);
+
         assert !snapshot.exists();
     }
 
@@ -215,6 +231,9 @@ public class FirebaseCloudFunctionsTest {
         // clear all data
         deleteCollection(FirebaseNames.COLLECTION_LOST_ITEMS);
         deleteCollection(FirebaseNames.COLLECTION_CLAIMED_ITEMS);
+        deleteCollection(FirebaseNames.COLLECTION_FOUND_ITEMS);
+        deleteCollection(FirebaseNames.COLLECTION_NOTIFICATIONS);
+        deleteCollection(FirebaseNames.COLLECTION_USERS);
     }
 
     // private method to delete all elements inside a collection
@@ -232,5 +251,6 @@ public class FirebaseCloudFunctionsTest {
         }
         // execute all tasks
         Tasks.await(Tasks.whenAll(deleteTasks), 60, TimeUnit.SECONDS);
+        Thread.sleep(2000);
     }
 }
