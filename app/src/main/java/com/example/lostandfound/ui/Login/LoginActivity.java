@@ -158,18 +158,4 @@ public class LoginActivity extends AppCompatActivity {
         binding.loginEmail.setBackgroundResource(R.drawable.background_light_gray_selector);
         binding.loginPassword.setBackgroundResource(R.drawable.background_light_gray_selector);
     }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-
-        // check if current user exists
-        if (loginViewModel.isUserSignedIn(LoginActivity.this)) {
-            // finish activity if current user exists
-            // They are not supposed to be able to log in
-            // This also exists the activity after returning to this page from registration
-            finish();
-        }
-
-    }
 }
