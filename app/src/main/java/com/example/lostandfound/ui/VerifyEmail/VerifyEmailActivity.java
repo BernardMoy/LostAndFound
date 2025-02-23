@@ -1,6 +1,8 @@
 package com.example.lostandfound.ui.VerifyEmail;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.text.Editable;
@@ -18,6 +20,7 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.example.lostandfound.Data.SharedPreferencesNames;
 import com.example.lostandfound.MainActivity;
 import com.example.lostandfound.R;
 import com.example.lostandfound.Utility.ErrorCallback;
@@ -176,9 +179,14 @@ public class VerifyEmailActivity extends AppCompatActivity {
                                             return;
                                         }
 
-                                        // If no error, display message and exit
-                                        Toast.makeText(VerifyEmailActivity.this, "Account successfully created", Toast.LENGTH_SHORT).show();
+                                        // If no error, set shared preferences value to show welcome message
+                                        SharedPreferences sp = getSharedPreferences(SharedPreferencesNames.NAME_SHOW_WELCOME_MESSAGE, Context.MODE_PRIVATE);
+                                        SharedPreferences.Editor editor = sp.edit();
+                                        editor.putBoolean(SharedPreferencesNames.SHOW_WELCOME_MESSAGE_VALUE, true);
+                                        editor.apply();
 
+                                        // display message and exit
+                                        Toast.makeText(VerifyEmailActivity.this, "Account successfully created", Toast.LENGTH_SHORT).show();
 
                                         // force redirect to the home page
                                         Intent intent = new Intent(VerifyEmailActivity.this, MainActivity.class);
