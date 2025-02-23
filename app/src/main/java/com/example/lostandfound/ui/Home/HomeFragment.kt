@@ -135,7 +135,7 @@ class HomeFragment : Fragment() {
             Context.MODE_PRIVATE
         )
         viewModel.isWelcomeDialogShown.value =
-            sharedPreferences.getBoolean(SharedPreferencesNames.SHOW_WELCOME_MESSAGE_VALUE, true)
+            sharedPreferences.getBoolean(SharedPreferencesNames.SHOW_WELCOME_MESSAGE_VALUE, false)
 
     }
 }
@@ -180,8 +180,8 @@ fun MainContent(
     }
 
     // the welcome dialog
-    val sp = context.getSharedPreferences(SharedPreferencesNames.NAME_USERS, Context.MODE_PRIVATE)
-    val userName = sp.getString(SharedPreferencesNames.USER_FIRSTNAME, "") + sp.getString(
+    val spUser = context.getSharedPreferences(SharedPreferencesNames.NAME_USERS, Context.MODE_PRIVATE)
+    val userName = spUser.getString(SharedPreferencesNames.USER_FIRSTNAME, "") + spUser.getString(
         SharedPreferencesNames.USER_LASTNAME,
         ""
     )
@@ -199,6 +199,10 @@ fun MainContent(
                     val intent = Intent(context, HowItWorksActivity::class.java)
                     context.startActivity(intent)
 
+                    // change the shared pref value to be false
+                    val spShowWelcome = context.getSharedPreferences(SharedPreferencesNames.NAME_SHOW_WELCOME_MESSAGE, Context.MODE_PRIVATE)
+                    spShowWelcome.edit().putBoolean(SharedPreferencesNames.SHOW_WELCOME_MESSAGE_VALUE, false).apply()
+
                     // dismiss dialog
                     viewModel.isWelcomeDialogShown.value = false
                 }
@@ -209,6 +213,10 @@ fun MainContent(
                 text = "Dismiss",
                 type = ButtonType.OUTLINED,
                 onClick = {
+                    // change the shared pref value to be false
+                    val spShowWelcome = context.getSharedPreferences(SharedPreferencesNames.NAME_SHOW_WELCOME_MESSAGE, Context.MODE_PRIVATE)
+                    spShowWelcome.edit().putBoolean(SharedPreferencesNames.SHOW_WELCOME_MESSAGE_VALUE, false).apply()
+
                     // dismiss dialog
                     viewModel.isWelcomeDialogShown.value = false
                 }
