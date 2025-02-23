@@ -1,5 +1,7 @@
 package com.example.lostandfound;
 
+import android.net.Uri;
+
 import com.example.lostandfound.Data.FirebaseNames;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
@@ -12,12 +14,18 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreSettings;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -141,7 +149,7 @@ public class FirebaseCloudFunctionsTest {
     }
 
     @Test
-    public void testNotificationsOnClaimsDeleted() throws ExecutionException, InterruptedException, TimeoutException{
+    public void testNotificationsOnClaimsDeleted() throws ExecutionException, InterruptedException, TimeoutException {
         // create a claim
         Map<String, Object> dataClaim = new HashMap<>();
         dataClaim.put(FirebaseNames.CLAIM_IS_APPROVED, true);
@@ -182,7 +190,7 @@ public class FirebaseCloudFunctionsTest {
         Thread.sleep(2000);
 
         // get the user id
-        if (authResult.getUser() == null){
+        if (authResult.getUser() == null) {
             assert false;
             return;
         }
@@ -209,21 +217,95 @@ public class FirebaseCloudFunctionsTest {
         assert !snapshot.exists();
     }
 
-    // test involving firebase auth
-    @Test
-    public void testItemsOnUserDeleted() throws ExecutionException, InterruptedException, TimeoutException {
-
-    }
-
     // test involving firebase storage
     @Test
-    public void testImageOnLostItemDeleted() throws ExecutionException, InterruptedException, TimeoutException {
+    public void testImageOnLostItemDeleted() throws ExecutionException, InterruptedException, TimeoutException, IOException {
+        // create a new lost item
+        Map<String, Object> dataLost = new HashMap<>();
+        dataLost.put(FirebaseNames.LOSTFOUND_ITEMNAME, "test");
 
+        // The Task class allows async operations to block execution
+        Task<DocumentReference> task1 = firestore.collection(FirebaseNames.COLLECTION_LOST_ITEMS).add(dataLost);
+        DocumentReference lostItemRef = Tasks.await(task1, 60, TimeUnit.SECONDS);
+        Thread.sleep(2000);
+        String uidLost = lostItemRef.getId();
+
+        // add a storage image
+        File img = File.createTempFile(uidLost, ".jpeg");
+        try (OutputStream outputStream = Files.newOutputStream(img.toPath())) {
+            outputStream.write(new byte[1024]);    // write empty image
+        }
+
+        // upload the storage image to firebase storage
+        StorageReference ref = storage.getReference().child(FirebaseNames.FOLDER_LOST_IMAGE).child(uidLost);
+        Task<UploadTask.TaskSnapshot> task2 = ref.putFile(Uri.fromFile(img));
+        Tasks.await(task2, 60, TimeUnit.SECONDS);
+        Thread.sleep(2000);
+
+        // Delete the lost item
+        Task<Void> task3 = firestore.collection(FirebaseNames.COLLECTION_LOST_ITEMS).document(uidLost).delete();
+        Tasks.await(task3, 60, TimeUnit.SECONDS);
+        Thread.sleep(2000);
+
+        // assert the image no longer exists
+        StorageReference ref2 = storage.getReference().child(FirebaseNames.FOLDER_LOST_IMAGE).child(uidLost);
+
+        // catch the exception thrown when trying to access an image path that does not exist
+        Exception e = null;
+        try {
+            Task<Uri> task4 = ref2.getDownloadUrl();
+            Tasks.await(task4, 60, TimeUnit.SECONDS);
+            Thread.sleep(2000);
+        } catch (Exception ex) {
+            e = ex;
+        }
+        Thread.sleep(2000);
+        assert e != null;
     }
 
     @Test
-    public void testImageOnFoundItemDeleted() throws ExecutionException, InterruptedException, TimeoutException {
+    public void testImageOnFoundItemDeleted() throws ExecutionException, InterruptedException, TimeoutException, IOException {
+        // create a new found item
+        Map<String, Object> dataFound = new HashMap<>();
+        dataFound.put(FirebaseNames.LOSTFOUND_ITEMNAME, "test");
 
+        // The Task class allows async operations to block execution
+        Task<DocumentReference> task1 = firestore.collection(FirebaseNames.COLLECTION_FOUND_ITEMS).add(dataFound);
+        DocumentReference foundItemRef = Tasks.await(task1, 60, TimeUnit.SECONDS);
+        Thread.sleep(2000);
+        String uidFound = foundItemRef.getId();
+
+        // add a storage image
+        File img = File.createTempFile(uidFound, ".jpeg");
+        try (OutputStream outputStream = Files.newOutputStream(img.toPath())) {
+            outputStream.write(new byte[1024]);    // write empty image
+        }
+
+        // upload the storage image to firebase storage
+        StorageReference ref = storage.getReference().child(FirebaseNames.FOLDER_FOUND_IMAGE).child(uidFound);
+        Task<UploadTask.TaskSnapshot> task2 = ref.putFile(Uri.fromFile(img));
+        Tasks.await(task2, 60, TimeUnit.SECONDS);
+        Thread.sleep(2000);
+
+        // Delete the found item
+        Task<Void> task3 = firestore.collection(FirebaseNames.COLLECTION_FOUND_ITEMS).document(uidFound).delete();
+        Tasks.await(task3, 60, TimeUnit.SECONDS);
+        Thread.sleep(2000);
+
+        // assert the image no longer exists
+        StorageReference ref2 = storage.getReference().child(FirebaseNames.FOLDER_FOUND_IMAGE).child(uidFound);
+
+        // catch the exception thrown when trying to access an image path that does not exist
+        Exception e = null;
+        try {
+            Task<Uri> task4 = ref2.getDownloadUrl();
+            Tasks.await(task4, 60, TimeUnit.SECONDS);
+            Thread.sleep(2000);
+        } catch (Exception ex) {
+            e = ex;
+        }
+        Thread.sleep(2000);
+        assert e != null;
     }
 
     @After
