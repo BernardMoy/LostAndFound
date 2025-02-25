@@ -11,8 +11,13 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.DoneOutline
+import androidx.compose.material.icons.outlined.Edit
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -24,9 +29,12 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.lostandfound.CustomElements.BackToolbar
 import com.example.lostandfound.CustomElements.ButtonType
 import com.example.lostandfound.CustomElements.CustomButton
+import com.example.lostandfound.CustomElements.CustomGrayTitle
+import com.example.lostandfound.CustomElements.CustomInputField
 import com.example.lostandfound.CustomElements.CustomProgressBar
 import com.example.lostandfound.R
 import com.example.lostandfound.ui.theme.ComposeTheme
+import com.example.lostandfound.ui.theme.Typography
 
 
 class ItemComparisonActivity : ComponentActivity() {
@@ -85,21 +93,45 @@ fun MainContent(viewModel: ItemComparisonViewModel = viewModel()) {
     // content goes here
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.title_margin))
+        modifier = Modifier.padding(horizontal = dimensionResource(R.dimen.title_margin))
     ) {
+        IdInputs(context = context, viewModel = viewModel)
         CompareButton(context = context, viewModel = viewModel)
+        DataReturned(context = context, viewModel = viewModel)
     }
 }
 
 @Composable
 fun IdInputs(context: Context, viewModel: ItemComparisonViewModel) {
+    CustomGrayTitle(text = "Lost item ID (Without #)")
+    CustomInputField(
+        fieldContent = viewModel.lostItemID.value,
+        isEditable = true,
+        onTextChanged = {
+            viewModel.lostItemID.value = it
+        },
+        placeholder = "",
+        isError = false,
+        leadingIcon = Icons.Outlined.DoneOutline
+    )
 
+    CustomGrayTitle(text = "Found item ID (Without #)")
+    CustomInputField(
+        fieldContent = viewModel.foundItemID.value,
+        isEditable = true,
+        onTextChanged = {
+            viewModel.foundItemID.value = it
+        },
+        placeholder = "",
+        isError = false,
+        leadingIcon = Icons.Outlined.DoneOutline
+    )
 }
 
 @Composable
 fun CompareButton(context: Context, viewModel: ItemComparisonViewModel) {
     Row (
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier.fillMaxWidth().padding(vertical = dimensionResource(R.dimen.title_margin)),
         horizontalArrangement = Arrangement.Center
     ){
         CustomButton(
@@ -117,6 +149,14 @@ fun CompareButton(context: Context, viewModel: ItemComparisonViewModel) {
     }
 }
 
+@Composable
+fun DataReturned(context: Context, viewModel: ItemComparisonViewModel){
+    Text(
+        text = viewModel.comparisonResult.value,
+        color = MaterialTheme.colorScheme.onBackground,
+        style = Typography.bodyMedium
+    )
+}
 
 
 
