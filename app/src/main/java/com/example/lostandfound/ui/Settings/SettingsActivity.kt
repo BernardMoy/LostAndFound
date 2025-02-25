@@ -29,6 +29,7 @@ import androidx.compose.material.icons.outlined.LocationOn
 import androidx.compose.material.icons.outlined.Refresh
 import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material.icons.outlined.Settings
+import androidx.compose.material.icons.outlined.ShoppingCart
 import androidx.compose.material.icons.outlined.TextFields
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Scaffold
@@ -54,6 +55,7 @@ import com.example.lostandfound.R
 import com.example.lostandfound.ui.AboutApp.AboutAppActivity
 import com.example.lostandfound.ui.Done.DoneActivity
 import com.example.lostandfound.ui.ImageComparison.ImageComparisonActivity
+import com.example.lostandfound.ui.ItemComparison.ItemComparisonActivity
 import com.example.lostandfound.ui.PermissionsTest.PermissionsTestActivity
 import com.example.lostandfound.ui.Search.SearchActivity
 import com.example.lostandfound.ui.SettingsAnimation.SettingsAnimationActivity
@@ -566,6 +568,14 @@ fun Developer(
             leftIcon = Icons.Outlined.Image,
             onClick = {
                 val i: Intent = Intent(context, ImageComparisonActivity::class.java)
+                context.startActivity(i)
+            }
+        )
+
+        CustomActionRow(text = "Open item comparison activity",
+            leftIcon = Icons.Outlined.Compare,
+            onClick = {
+                val i: Intent = Intent(context, ItemComparisonActivity::class.java)
                 context.startActivity(i)
             }
         )

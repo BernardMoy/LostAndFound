@@ -66,6 +66,11 @@
             android:exported="false"
             android:windowSoftInputMode="adjustPan" />
         <activity
+            android:name=".ui.ItemComparison.ItemComparisonActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:exported="false"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
             android:name=".ui.ReportIssue.ReportIssueActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:exported="false"
