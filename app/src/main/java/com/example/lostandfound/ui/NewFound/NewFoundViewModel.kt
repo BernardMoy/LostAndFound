@@ -234,9 +234,9 @@ class NewFoundViewModel : ViewModel() {
                             FirebaseNames.FOLDER_FOUND_IMAGE,
                             result,
                             itemImage.value,
-                            object : FirebaseStorageManager.Callback<Boolean> {
-                                override fun onComplete(resultImage: Boolean) {
-                                    if (!resultImage) {
+                            object : FirebaseStorageManager.Callback<String> {
+                                override fun onComplete(resultImage: String) {
+                                    if (resultImage.isEmpty()) {
                                         // delete the previously uploaded firestore object if image uploading fails
                                         firestoreManager.delete(
                                             FirebaseNames.COLLECTION_LOST_ITEMS,
@@ -269,7 +269,7 @@ class NewFoundViewModel : ViewModel() {
                                         description = additionalDescription.value,
                                         timePosted = currentTime,
                                         status = 0, // newly posted found item always status 0
-                                        image = itemImage.toString(),  // uri to string
+                                        image = resultImage,   // use the download url returned by the put method
                                         securityQuestion = securityQuestion.value,
                                         securityQuestionAns = securityQuestionAns.value,
                                     )

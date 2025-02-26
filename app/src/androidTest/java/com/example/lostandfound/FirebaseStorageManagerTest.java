@@ -62,11 +62,11 @@ public class FirebaseStorageManagerTest {
     public void testPutAndGetAndDeleteImage() throws InterruptedException {
         final CountDownLatch latch = new CountDownLatch(1);
 
-        firebaseStorageManager.putImage(TESTFOLDER, TESTKEY, targetImage, new FirebaseStorageManager.Callback<Boolean>() {
+        firebaseStorageManager.putImage(TESTFOLDER, TESTKEY, targetImage, new FirebaseStorageManager.Callback<String>() {
             @Override
-            public void onComplete(Boolean result) {
+            public void onComplete(String uri) {
                 // assert image uploading successful
-                assert result;
+                assert !Objects.equals(uri, "");
                 latch.countDown();
             }
         });
