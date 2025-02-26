@@ -2,18 +2,16 @@ package com.example.lostandfound.ui.ItemComparison
 
 import android.content.Context
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.DoneOutline
-import androidx.compose.material.icons.outlined.Edit
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
@@ -130,16 +128,62 @@ fun IdInputs(context: Context, viewModel: ItemComparisonViewModel) {
 
 @Composable
 fun CompareButton(context: Context, viewModel: ItemComparisonViewModel) {
-    Row (
-        modifier = Modifier.fillMaxWidth().padding(vertical = dimensionResource(R.dimen.title_margin)),
-        horizontalArrangement = Arrangement.Center
-    ){
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = dimensionResource(R.dimen.title_margin)),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
         CustomButton(
             text = "Compare",
             type = ButtonType.FILLED,
             enabled = !viewModel.isLoading.value,
             onClick = {
+                // load lost and found data
+                if (viewModel.lostItemID.value.isEmpty() || viewModel.foundItemID.value.isEmpty()) {
+                    Toast.makeText(context, "One of the IDs are null", Toast.LENGTH_SHORT)
+                        .show()
+                    return@CustomButton
+                }
 
+                viewModel.isLoading.value = true
+
+                viewModel.loadLostItem(object : TestItemCallback {
+                    override fun onComplete(success: Boolean) {
+                        if (!success) {
+                            Toast.makeText(context, "Load lost data failed", Toast.LENGTH_SHORT)
+                                .show()
+                            viewModel.isLoading.value = false
+                            return
+                        }
+
+                        viewModel.loadFoundItem(object : TestItemCallback {
+                            override fun onComplete(success: Boolean) {
+                                if (!success) {
+                                    Toast.makeText(
+                                        context,
+                                        "Load found data failed",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                    viewModel.isLoading.value = false
+                                    return
+                                }
+
+                                // get the required score data!
+                                viewModel.loadData(context = context, object : TestItemCallback {
+                                    override fun onComplete(success: Boolean) {
+                                        viewModel.isLoading.value = false
+                                        return
+                                    }
+
+                                })
+
+                            }
+
+                        })
+                    }
+
+                })
             }
         )
 
@@ -150,9 +194,9 @@ fun CompareButton(context: Context, viewModel: ItemComparisonViewModel) {
 }
 
 @Composable
-fun DataReturned(context: Context, viewModel: ItemComparisonViewModel){
+fun DataReturned(context: Context, viewModel: ItemComparisonViewModel) {
     Text(
-        text = viewModel.comparisonResult.value,
+        text = viewModel.displayedString.value,
         color = MaterialTheme.colorScheme.onBackground,
         style = Typography.bodyMedium
     )
