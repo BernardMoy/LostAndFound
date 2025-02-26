@@ -4,7 +4,7 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.net.Uri
 import com.bumptech.glide.Glide
-import com.example.lostandfound.ml.Siamesemodel224
+import com.example.lostandfound.ml.SiameseModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -23,9 +23,8 @@ interface PredictCallback {
     fun onComplete(distance: Float)
 }
 
-
 class ImageClassifier(private val context: Context) {
-    val model = Siamesemodel224.newInstance(context)
+    val model = SiameseModel.newInstance(context)
     private val imageSize = 224
 
     private fun predictBitmap(image1: Bitmap, image2: Bitmap): Float {
