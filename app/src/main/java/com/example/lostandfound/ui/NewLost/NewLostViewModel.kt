@@ -209,9 +209,9 @@ class NewLostViewModel : ViewModel() {
                             FirebaseNames.FOLDER_LOST_IMAGE,
                             result,
                             itemImage.value,
-                            object : FirebaseStorageManager.Callback<Boolean> {
-                                override fun onComplete(resultImage: Boolean) {
-                                    if (!resultImage) {
+                            object : FirebaseStorageManager.Callback<String> {
+                                override fun onComplete(resultImage: String) {
+                                    if (resultImage.isEmpty()) {
                                         // delete the previously uploaded firestore object if image uploading fails
                                         firestoreManager.delete(
                                             FirebaseNames.COLLECTION_LOST_ITEMS,
@@ -243,7 +243,7 @@ class NewLostViewModel : ViewModel() {
                                         ) else null,
                                         description = additionalDescription.value,
                                         timePosted = currentTime,
-                                        image = itemImage.value.toString(), // convert uri to string
+                                        image = resultImage,
                                         status = 0,
                                         isTracking = false
                                     )

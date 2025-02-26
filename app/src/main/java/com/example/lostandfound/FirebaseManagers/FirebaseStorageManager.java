@@ -27,16 +27,17 @@ public class FirebaseStorageManager {
     /**
      * Put image given a key and a uri.
      * The image will be stored as "folder/key.jpg"
+     * return the DOWNLOAD URL (NOT THE UPLOAD URL), or empty string if fails
      *
      * @param folder   directory where the image is stored
      * @param key      unique identifier of the image, also name of the image
      * @param image    Uri image from user uploads
      * @param callback Return true if successful, false otherwise
      */
-    public void putImage(String folder, String key, Uri image, Callback<Boolean> callback) {
+    public void putImage(String folder, String key, Uri image, Callback<String> callback) {
         // if image is null, return false
         if (image == null) {
-            callback.onComplete(false);
+            callback.onComplete("");
             return;
         }
 
@@ -44,12 +45,28 @@ public class FirebaseStorageManager {
         imageReference.putFile(image).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                callback.onComplete(true);
+                // get the DOWNLOAD URL of the uploaded image
+                // so that it can be accessed using the getImage method
+                // without having to refer to the full path again
+                imageReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                    @Override
+                    public void onSuccess(Uri uri) {
+                        callback.onComplete(uri.toString());
+
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        callback.onComplete("");
+
+                    }
+                });
+
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                callback.onComplete(false);
+                callback.onComplete("");
             }
         });
     }
