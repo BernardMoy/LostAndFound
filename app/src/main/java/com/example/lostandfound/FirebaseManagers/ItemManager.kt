@@ -578,7 +578,7 @@ object ItemManager {
                                         if (fetchedItems == resultSize) {
                                             // sort the data here
                                             matchingItemList.sortByDescending { key ->
-                                                key.first.timePosted
+                                                key.second.overallScore
                                             }
 
                                             // return the matching item list

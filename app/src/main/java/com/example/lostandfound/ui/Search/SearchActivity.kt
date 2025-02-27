@@ -315,7 +315,7 @@ fun MatchingItemsColumn(
                     isImageCloseMatch = imageCloseMatch,
                     isDetailsCloseMatch = detailsCloseMatch,
                     isLocationCloseMatch = locationCloseMatch,
-                    percentageSimilarity = (round((scoreData.overallScore!! /3) * 1000) / 10).toString()
+                    percentageSimilarity = (round((scoreData.overallScore / 3) * 1000) / 10).toString()
                 )
             }
         }
