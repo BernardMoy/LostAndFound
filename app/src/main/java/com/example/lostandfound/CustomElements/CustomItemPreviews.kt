@@ -428,7 +428,7 @@ fun CustomFoundItemPreview(
 
                  */
 
-                if (percentageSimilarity.isNotEmpty()){
+                if (percentageSimilarity.isNotEmpty()) {
                     Icon(
                         imageVector = Icons.Filled.Star,
                         tint = colorResource(id = R.color.status2),
