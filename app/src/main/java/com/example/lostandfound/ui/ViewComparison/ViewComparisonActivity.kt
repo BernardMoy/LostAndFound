@@ -10,6 +10,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -50,6 +51,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalInspectionMode
@@ -153,7 +155,6 @@ fun ViewComparisonScreen(activity: ComponentActivity, viewModel: ViewComparisonV
                     modifier = Modifier
                         .fillMaxSize()
                         .padding(paddingValues = innerPadding)
-                        .padding(dimensionResource(id = R.dimen.title_margin))
                         .verticalScroll(rememberScrollState()),   // make screen scrollable
                 ) {
                     // content goes here
@@ -184,19 +185,52 @@ fun MainContent(viewModel: ViewComparisonViewModel) {
 
     } else {
         Column(
+            modifier = Modifier.padding(vertical = dimensionResource(R.dimen.title_margin)),
             verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin))
         ) {
-            Reference(context = context, viewModel = viewModel)
-            Status(viewModel = viewModel)
-            ItemImage(viewModel = viewModel)
-            ItemDetails(viewModel = viewModel)
-            DescriptionData(context = context, viewModel = viewModel)
-            LocationData(context = context, viewModel = viewModel)
-            SecurityQuestion(viewModel = viewModel)
-            UserData(context = context, viewModel = viewModel)
-            ClaimButton(context = context, viewModel = viewModel)
-
+            OverallSimilarity(context = context, viewModel = viewModel)
+            Column (
+                modifier = Modifier.padding(horizontal = dimensionResource(R.dimen.title_margin)),
+                verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin))
+            ){
+                Reference(context = context, viewModel = viewModel)
+                Status(viewModel = viewModel)
+                ItemImage(viewModel = viewModel)
+                ItemDetails(viewModel = viewModel)
+                DescriptionData(context = context, viewModel = viewModel)
+                LocationData(context = context, viewModel = viewModel)
+                SecurityQuestion(viewModel = viewModel)
+                UserData(context = context, viewModel = viewModel)
+                ClaimButton(context = context, viewModel = viewModel)
+            }
         }
+    }
+}
+
+@Composable
+fun OverallSimilarity(
+    context: Context,
+    viewModel: ViewComparisonViewModel
+){
+    Box(
+        modifier = Modifier.fillMaxWidth()
+            .background(brush = Brush.verticalGradient(
+                colors = listOf(
+                    MaterialTheme.colorScheme.primary,
+                    MaterialTheme.colorScheme.secondary
+                )
+            ))
+    ){
+        Text(
+            text = "Overall similarity: " + (round(viewModel.scoreData.getOverallSimilarity() * 1000) / 10).toString() + "%",
+            style = Typography.bodyMedium,
+            color = MaterialTheme.colorScheme.onPrimary,
+            textAlign = TextAlign.Center,
+            fontWeight = FontWeight.Bold,
+            modifier = Modifier.fillMaxWidth().padding(
+                dimensionResource(R.dimen.title_margin)
+            )
+        )
     }
 }
 
@@ -346,13 +380,16 @@ fun ItemImage(viewModel: ViewComparisonViewModel) {
                 )
             },
             centerLabel = {
-                Text(
-                    text = "Overall Similarity\n" + (round(viewModel.scoreData.getOverallSimilarity() * 1000) / 10).toString() + "%",
-                    style = Typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onPrimaryContainer,
-                    fontWeight = FontWeight.Bold,
-                    textAlign = TextAlign.Center
-                )
+                if (viewModel.scoreData.imageScore != null){
+                    Text(
+                        text = "Image Similarity\n" + (round((viewModel.scoreData.imageScore!! /3) * 1000) / 10).toString() + "%",
+                        style = Typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onPrimaryContainer,
+                        fontWeight = FontWeight.Bold,
+                        textAlign = TextAlign.Center
+                    )
+                }
+
             }
         )
     }
