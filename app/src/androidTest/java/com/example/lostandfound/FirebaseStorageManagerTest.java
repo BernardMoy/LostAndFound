@@ -9,8 +9,12 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreSettings;
+import com.google.firebase.storage.FirebaseStorage;
 
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.util.Objects;
@@ -22,10 +26,20 @@ public class FirebaseStorageManagerTest {
     private static final String TESTFOLDER = "Tests";
     private FirebaseStorageManager firebaseStorageManager;
 
-    /*
-    These tests are not tested by default.
-    This is to save quota for firebase storage queries.
-     */
+    private static FirebaseAuth auth;
+    private static FirebaseStorage storage;
+
+    @BeforeClass
+    public static void setupClass() {
+
+        // create auth emulator
+        auth = FirebaseAuth.getInstance();
+        auth.useEmulator("10.0.2.2", 9099);
+
+        // create storage emulator
+        storage = FirebaseStorage.getInstance();
+        storage.useEmulator("10.0.2.2", 9199);
+    }
 
     @Before
     public void setUp() throws InterruptedException {
@@ -35,7 +49,6 @@ public class FirebaseStorageManagerTest {
         // sign in firebase user as anonymous user
         // this is needed for the get method
         final CountDownLatch latch = new CountDownLatch(1);
-        FirebaseAuth auth = FirebaseAuth.getInstance();
         auth.signInAnonymously().addOnSuccessListener(new OnSuccessListener<AuthResult>() {
             @Override
             public void onSuccess(AuthResult authResult) {
