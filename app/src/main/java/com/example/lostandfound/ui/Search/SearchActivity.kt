@@ -49,6 +49,7 @@ import com.example.lostandfound.ui.ViewClaim.ViewClaimActivity
 import com.example.lostandfound.ui.ViewComparison.ViewComparisonActivity
 import com.example.lostandfound.ui.theme.ComposeTheme
 import com.example.lostandfound.ui.theme.Typography
+import kotlin.math.round
 
 
 class SearchActivity : ComponentActivity() {
@@ -313,7 +314,8 @@ fun MatchingItemsColumn(
                     viewButtonText = displayedButtonText,
                     isImageCloseMatch = imageCloseMatch,
                     isDetailsCloseMatch = detailsCloseMatch,
-                    isLocationCloseMatch = locationCloseMatch
+                    isLocationCloseMatch = locationCloseMatch,
+                    percentageSimilarity = (round((scoreData.overallScore!! /3) * 1000) / 10).toString()
                 )
             }
         }

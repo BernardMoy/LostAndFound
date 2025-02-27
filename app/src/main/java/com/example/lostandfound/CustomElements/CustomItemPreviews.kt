@@ -22,6 +22,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.ArrowForward
 import androidx.compose.material.icons.filled.Circle
 import androidx.compose.material.icons.filled.RadioButtonChecked
+import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.outlined.QuestionMark
 import androidx.compose.material.icons.outlined.TrackChanges
 import androidx.compose.material3.Icon
@@ -386,7 +387,8 @@ fun CustomFoundItemPreview(
     onViewButtonClicked: () -> Unit = {},
     isImageCloseMatch: Boolean = false,    // may be true when viewing the found items from SEARCHING them.
     isDetailsCloseMatch: Boolean = false,
-    isLocationCloseMatch: Boolean = false
+    isLocationCloseMatch: Boolean = false,
+    percentageSimilarity: String = ""
 ) {
     val isOwner: Boolean = FirebaseUtility.getUserID() == data.userID
 
@@ -415,6 +417,7 @@ fun CustomFoundItemPreview(
                     style = Typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onPrimaryContainer,
                     fontWeight = FontWeight.Bold,
+                    modifier = Modifier.weight(1f)
                 )
                 /*
                 Text(
@@ -424,6 +427,21 @@ fun CustomFoundItemPreview(
                 )
 
                  */
+
+                if (percentageSimilarity.isNotEmpty()){
+                    Icon(
+                        imageVector = Icons.Filled.Star,
+                        tint = colorResource(id = R.color.status2),
+                        contentDescription = "Similarity",
+                        modifier = Modifier.width(dimensionResource(id = R.dimen.content_margin))
+                    )
+                    Text(
+                        text = "$percentageSimilarity% Similar",
+                        style = Typography.bodyMedium,
+                        color = colorResource(R.color.status2),
+                        fontWeight = FontWeight.Bold
+                    )
+                }
             }
 
 
