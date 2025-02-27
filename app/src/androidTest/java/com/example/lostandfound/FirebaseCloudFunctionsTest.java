@@ -259,7 +259,7 @@ public class FirebaseCloudFunctionsTest {
         } catch (Exception ex) {
             e = ex;
         }
-        Thread.sleep(2000);
+        Thread.sleep(4000);
         assert e != null;
     }
 
@@ -304,7 +304,7 @@ public class FirebaseCloudFunctionsTest {
         } catch (Exception ex) {
             e = ex;
         }
-        Thread.sleep(2000);
+        Thread.sleep(4000);
         assert e != null;
     }
 
