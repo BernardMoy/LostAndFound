@@ -1,5 +1,6 @@
 package com.example.lostandfound
 
+import com.example.lostandfound.Data.Claim
 import com.example.lostandfound.Data.FirebaseNames
 import com.example.lostandfound.Data.FoundItem
 import com.example.lostandfound.Data.LostItem
@@ -184,7 +185,7 @@ class ItemManagerTest {
             FirebaseNames.CLAIM_IS_APPROVED to true,
             FirebaseNames.CLAIM_LOST_ITEM_ID to lost3ID.toString(),
             FirebaseNames.CLAIM_FOUND_ITEM_ID to found1ID.toString(),
-            FirebaseNames.CLAIM_SECURITY_QUESTION_ANS to ""
+            FirebaseNames.CLAIM_SECURITY_QUESTION_ANS to "claim3Text"
         )
 
         // Post the claims
@@ -264,12 +265,67 @@ class ItemManagerTest {
 
     @Test
     fun testGetClaimFromLostID(){
+        var target: Claim? = null
+        val latch = CountDownLatch(1)
 
+        ItemManager.getClaimFromLostId(lost2ID?:"", object: ItemManager.LostClaimCallback{
+            override fun onComplete(claim: Claim?) {
+                target = claim
+                latch.countDown()
+            }
+        })
+        latch.await(60, TimeUnit.SECONDS)
+
+        // assert the item is not null
+        assertNotNull(target)
+
+        // assert each attribute of the claim is correct
+        assertEquals(1739942998L, target?.timestamp)
     }
 
     @Test
     fun testGetClaimsFromFoundID(){
+        var target: List<Claim>? = null
+        val latch = CountDownLatch(1)
 
+        ItemManager.getClaimsFromFoundId(found1ID?:"", object: ItemManager.FoundClaimCallback{
+            override fun onComplete(claimList: MutableList<Claim>) {
+                target = claimList
+                latch.countDown()
+            }
+        })
+        latch.await(60, TimeUnit.SECONDS)
+
+        // assert the item is not null
+        assertNotNull(target)
+
+        // assert there are two claim ids
+        assertEquals(2, target?.size)
+
+        // assert the two claim ids are correct
+        assert(
+            setOf(target?.get(0)?.claimID, target?.get(1)?.claimID) == setOf(claimL2F1, claimL3F1)
+        )
+    }
+
+    @Test
+    fun testGetClaimFromClaimID(){
+        var target: Claim? = null
+        val latch = CountDownLatch(1)
+
+        ItemManager.getClaimFromClaimId(claimL3F1?:"", object: ItemManager.ClaimCallback{
+            override fun onComplete(claim: Claim?) {
+                target = claim
+                latch.countDown()
+            }
+        })
+        latch.await(60, TimeUnit.SECONDS)
+
+        // assert the item is not null
+        assertNotNull(target)
+
+        // assert each attribute of the claim is correct
+        assertEquals("claim3Text", target?.securityQuestionAns)
     }
 
     @Test
