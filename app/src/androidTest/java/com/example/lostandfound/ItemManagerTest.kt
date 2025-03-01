@@ -330,12 +330,72 @@ class ItemManagerTest {
 
     @Test
     fun testGetLostItemStatus(){
+        // statuses of the lost item l1, l2, l3 should be 0, 1, 2 respectively
+        var l1Status: Int = -1
+        var l2Status: Int = -1
+        var l3Status: Int = -1
 
+        val latch1 = CountDownLatch(1)
+        ItemManager.getLostItemStatus(lost1ID?:"", object: ItemManager.StatusCallback{
+            override fun onComplete(status: Int) {
+                l1Status = status
+                latch1.countDown()
+            }
+        })
+        latch1.await(60, TimeUnit.SECONDS)
+
+        val latch2 = CountDownLatch(1)
+        ItemManager.getLostItemStatus(lost2ID?:"", object: ItemManager.StatusCallback{
+            override fun onComplete(status: Int) {
+                l2Status = status
+                latch2.countDown()
+            }
+        })
+        latch2.await(60, TimeUnit.SECONDS)
+
+        val latch3 = CountDownLatch(1)
+        ItemManager.getLostItemStatus(lost3ID?:"", object: ItemManager.StatusCallback{
+            override fun onComplete(status: Int) {
+                l3Status = status
+                latch3.countDown()
+            }
+        })
+        latch3.await(60, TimeUnit.SECONDS)
+
+        // assert statuses are 0 1 2
+        assertEquals(0, l1Status)
+        assertEquals(1, l2Status)
+        assertEquals(2, l3Status)
     }
 
     @Test
     fun testGetFoundItemStatus(){
+        // statuses of the lost item f1, f2 should be 2, 0 respectively
+        var f1Status: Int = -1
+        var f2Status: Int = -1
 
+        val latch1 = CountDownLatch(1)
+        ItemManager.getFoundItemStatus(found1ID?:"", object: ItemManager.StatusCallback{
+            override fun onComplete(status: Int) {
+                f1Status = status
+                latch1.countDown()
+            }
+        })
+        latch1.await(60, TimeUnit.SECONDS)
+
+        val latch2 = CountDownLatch(1)
+        ItemManager.getFoundItemStatus(found2ID?:"", object: ItemManager.StatusCallback{
+            override fun onComplete(status: Int) {
+                f2Status = status
+                latch2.countDown()
+            }
+        })
+        latch2.await(60, TimeUnit.SECONDS)
+
+
+        // assert statuses are 2 0
+        assertEquals(2, f1Status)
+        assertEquals(0, f2Status)
     }
 
 
