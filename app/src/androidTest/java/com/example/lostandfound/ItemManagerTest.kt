@@ -9,6 +9,8 @@ import com.google.android.gms.tasks.Tasks
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.FirebaseFirestoreSettings
 import com.google.firebase.storage.FirebaseStorage
+import junit.framework.TestCase.assertEquals
+import junit.framework.TestCase.assertNotNull
 import org.junit.After
 import org.junit.Before
 import org.junit.BeforeClass
@@ -86,9 +88,21 @@ class ItemManagerTest {
         latch.await(60, TimeUnit.SECONDS)
 
         // assert the item is not null
-        assert(target != null)
+        assertNotNull(target)
 
-        // assert each attribute is correct
+        // assert each SPECIFIED attribute is correct
+        // the inferred attributes (status etc.) are tested separately
+        assertEquals("test", target?.itemName)
+        assertEquals("Rwowo", target?.userID)
+        assertEquals("testCat", target?.category)
+        assertEquals("testSubCat", target?.subCategory)
+        assertEquals(mutableListOf("Black", "Red"), target?.color)
+        assertEquals("testBrand", target?.brand)
+        assertEquals(1738819980L, target?.dateTime)
+        assertEquals(Pair(52.381162440739686, -1.5614377315953403), target?.location)
+        assertEquals("testDesc", target?.description)
+        assertEquals(false, target?.isTracking)
+        assertEquals(1739941511L, target?.timePosted)
     }
 
 
