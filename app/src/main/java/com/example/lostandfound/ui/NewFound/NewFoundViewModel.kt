@@ -323,7 +323,7 @@ class NewFoundViewModel : ViewModel() {
                             description = additionalDescription.value,
                             timePosted = currentTime,
                             status = 0, // newly posted found item always status 0
-                            image = "android.resource://com.example.lostandfound/" + R.drawable.placeholder_image,
+                            image = "",
                             securityQuestion = securityQuestion.value,
                             securityQuestionAns = securityQuestionAns.value,
                         )

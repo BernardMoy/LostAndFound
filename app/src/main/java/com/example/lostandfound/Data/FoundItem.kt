@@ -27,5 +27,5 @@ data class FoundItem(
     val timePosted: Long = 0L,
 
     // item image
-    val image: String = "android.resource://com.example.lostandfound/" + R.drawable.placeholder_image  // store the item image as string
+    val image: String = ""  // store the item image as string
 ) : Parcelable
