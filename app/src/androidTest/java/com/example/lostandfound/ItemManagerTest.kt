@@ -29,7 +29,14 @@ class ItemManagerTest {
 
         // item ids
         private var lost1ID: String? = null
+        private var lost2ID: String? = null
+        private var lost3ID: String? = null
+
         private var found1ID: String? = null
+        private var found2ID: String? = null
+
+        private var claimL2F1: String? = null
+        private var claimL3F1: String? = null
 
         @BeforeClass
         @JvmStatic
@@ -56,6 +63,13 @@ class ItemManagerTest {
         // add the necessary data to the firebase database
 
         // create a lost item to be added to firestore
+        /*
+        lost1 (Isolated)
+        lost2 -> made a claim to found1
+        lost3 -> made a claim to found1 and is approved
+        found1 -> claimed by L2 and L3
+        found2 (Isolated)
+         */
         // data lost 1 is isolated -> status 0
         val dataLost1 = mutableMapOf<String, Any>(
             FirebaseNames.LOSTFOUND_ITEMNAME to "test",
@@ -67,6 +81,34 @@ class ItemManagerTest {
             FirebaseNames.LOSTFOUND_EPOCHDATETIME to 1738819980L,
             FirebaseNames.LOSTFOUND_LOCATION to LatLng(52.381162440739686, -1.5614377315953403),
             FirebaseNames.LOSTFOUND_DESCRIPTION to "testDesc",
+            FirebaseNames.LOST_IS_TRACKING to false,
+            FirebaseNames.LOSTFOUND_TIMEPOSTED to 1739941511L
+        )
+
+        val dataLost2 = mutableMapOf<String, Any>(
+            FirebaseNames.LOSTFOUND_ITEMNAME to "test2",
+            FirebaseNames.LOSTFOUND_USER to "Rwowo2",
+            FirebaseNames.LOSTFOUND_CATEGORY to "testCat2",
+            FirebaseNames.LOSTFOUND_SUBCATEGORY to "testSubCat2",
+            FirebaseNames.LOSTFOUND_COLOR to mutableListOf("Black", "Red"),
+            FirebaseNames.LOSTFOUND_BRAND to "testBrand2",
+            FirebaseNames.LOSTFOUND_EPOCHDATETIME to 1738819980L,
+            FirebaseNames.LOSTFOUND_LOCATION to LatLng(52.381162440739686, -1.5614377315953403),
+            FirebaseNames.LOSTFOUND_DESCRIPTION to "testDesc2",
+            FirebaseNames.LOST_IS_TRACKING to false,
+            FirebaseNames.LOSTFOUND_TIMEPOSTED to 1739941511L
+        )
+
+        val dataLost3 = mutableMapOf<String, Any>(
+            FirebaseNames.LOSTFOUND_ITEMNAME to "test3",
+            FirebaseNames.LOSTFOUND_USER to "Rwowo3",
+            FirebaseNames.LOSTFOUND_CATEGORY to "testCat3",
+            FirebaseNames.LOSTFOUND_SUBCATEGORY to "testSubCat3",
+            FirebaseNames.LOSTFOUND_COLOR to mutableListOf("Black", "Red"),
+            FirebaseNames.LOSTFOUND_BRAND to "testBrand3",
+            FirebaseNames.LOSTFOUND_EPOCHDATETIME to 1738819980L,
+            FirebaseNames.LOSTFOUND_LOCATION to LatLng(52.381162440739686, -1.5614377315953403),
+            FirebaseNames.LOSTFOUND_DESCRIPTION to "testDesc3",
             FirebaseNames.LOST_IS_TRACKING to false,
             FirebaseNames.LOSTFOUND_TIMEPOSTED to 1739941511L
         )
@@ -86,6 +128,21 @@ class ItemManagerTest {
             FirebaseNames.LOSTFOUND_TIMEPOSTED to 1739941511L
         )
 
+        val dataFound2 = mutableMapOf<String, Any>(
+            FirebaseNames.LOSTFOUND_ITEMNAME to "test2",
+            FirebaseNames.LOSTFOUND_USER to "Rwowo2",
+            FirebaseNames.LOSTFOUND_CATEGORY to "testCat2",
+            FirebaseNames.LOSTFOUND_SUBCATEGORY to "testSubCat2",
+            FirebaseNames.LOSTFOUND_COLOR to mutableListOf("Black", "Red"),
+            FirebaseNames.LOSTFOUND_BRAND to "testBrand2",
+            FirebaseNames.LOSTFOUND_EPOCHDATETIME to 1738819980L,
+            FirebaseNames.LOSTFOUND_LOCATION to LatLng(52.381162440739686, -1.5614377315953403),
+            FirebaseNames.LOSTFOUND_DESCRIPTION to "testDesc2",
+            FirebaseNames.FOUND_SECURITY_Q to "testSecQ2",
+            FirebaseNames.FOUND_SECURITY_Q_ANS to "testSecQAns2",
+            FirebaseNames.LOSTFOUND_TIMEPOSTED to 1739941511L
+        )
+
         // Post the items
         val task1 = firestore!!.collection(FirebaseNames.COLLECTION_LOST_ITEMS).add(dataLost1)
         val ref1 = Tasks.await(task1, 60, TimeUnit.SECONDS)
@@ -96,6 +153,50 @@ class ItemManagerTest {
         val ref2 = Tasks.await(task2, 60, TimeUnit.SECONDS)
         Thread.sleep(2000)
         found1ID = ref2.id
+
+        val task3 = firestore!!.collection(FirebaseNames.COLLECTION_LOST_ITEMS).add(dataLost2)
+        val ref3 = Tasks.await(task3, 60, TimeUnit.SECONDS)
+        Thread.sleep(2000)
+        lost2ID = ref3.id
+
+        val task4 = firestore!!.collection(FirebaseNames.COLLECTION_LOST_ITEMS).add(dataLost3)
+        val ref4 = Tasks.await(task4, 60, TimeUnit.SECONDS)
+        Thread.sleep(2000)
+        lost3ID = ref4.id
+
+        val task7 = firestore!!.collection(FirebaseNames.COLLECTION_FOUND_ITEMS).add(dataFound2)
+        val ref7 = Tasks.await(task7, 60, TimeUnit.SECONDS)
+        Thread.sleep(2000)
+        found2ID = ref7.id
+
+
+        // create claims based on the ids
+        val dataClaimL2F1 = mutableMapOf<String, Any>(
+            FirebaseNames.CLAIM_TIMESTAMP to 1739942998L,
+            FirebaseNames.CLAIM_IS_APPROVED to false,
+            FirebaseNames.CLAIM_LOST_ITEM_ID to lost2ID.toString(),
+            FirebaseNames.CLAIM_FOUND_ITEM_ID to found1ID.toString(),
+            FirebaseNames.CLAIM_SECURITY_QUESTION_ANS to ""
+        )
+
+        val dataClaimL3F1 = mutableMapOf<String, Any>(
+            FirebaseNames.CLAIM_TIMESTAMP to 1739942555L,
+            FirebaseNames.CLAIM_IS_APPROVED to true,
+            FirebaseNames.CLAIM_LOST_ITEM_ID to lost3ID.toString(),
+            FirebaseNames.CLAIM_FOUND_ITEM_ID to found1ID.toString(),
+            FirebaseNames.CLAIM_SECURITY_QUESTION_ANS to ""
+        )
+
+        // Post the claims
+        val task5 = firestore!!.collection(FirebaseNames.COLLECTION_CLAIMED_ITEMS).add(dataClaimL2F1)
+        val ref5 = Tasks.await(task5, 60, TimeUnit.SECONDS)
+        Thread.sleep(2000)
+        claimL2F1 = ref5.id
+
+        val task6 = firestore!!.collection(FirebaseNames.COLLECTION_CLAIMED_ITEMS).add(dataClaimL3F1)
+        val ref6 = Tasks.await(task6, 60, TimeUnit.SECONDS)
+        Thread.sleep(2000)
+        claimL3F1 = ref6.id
     }
 
     @Test
@@ -159,6 +260,26 @@ class ItemManagerTest {
         assertEquals("testSecQ", target?.securityQuestion)
         assertEquals("testSecQAns", target?.securityQuestionAns)
         assertEquals(1739941511L, target?.timePosted)
+    }
+
+    @Test
+    fun testGetClaimFromLostID(){
+
+    }
+
+    @Test
+    fun testGetClaimsFromFoundID(){
+
+    }
+
+    @Test
+    fun testGetLostItemStatus(){
+
+    }
+
+    @Test
+    fun testGetFoundItemStatus(){
+
     }
 
 
