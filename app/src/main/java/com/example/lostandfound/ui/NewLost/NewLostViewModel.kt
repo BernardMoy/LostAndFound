@@ -288,7 +288,7 @@ class NewLostViewModel : ViewModel() {
                             ) else null,
                             description = additionalDescription.value,
                             timePosted = currentTime,
-                            image = "android.resource://com.example.lostandfound/" + R.drawable.placeholder_image,
+                            image = "",
                             status = 0,
                             isTracking = false
                         )
