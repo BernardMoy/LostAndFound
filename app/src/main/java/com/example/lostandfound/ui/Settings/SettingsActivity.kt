@@ -587,5 +587,18 @@ fun Developer(
                 context.startActivity(i)
             }
         )
+
+        CustomActionRow(text = "Show welcome message",
+            leftIcon = Icons.Outlined.LocationOn,
+            onClick = {
+                val sp: SharedPreferences = context.getSharedPreferences(
+                    SharedPreferencesNames.NAME_SHOW_WELCOME_MESSAGE,
+                    Context.MODE_PRIVATE
+                )
+                sp.edit().putBoolean(SharedPreferencesNames.SHOW_WELCOME_MESSAGE_VALUE, true).apply()
+
+                Toast.makeText(context, "Settings set", Toast.LENGTH_SHORT).show()
+            }
+        )
     }
 }

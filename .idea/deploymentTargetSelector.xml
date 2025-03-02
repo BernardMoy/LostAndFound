@@ -16,9 +16,6 @@
       <SelectionState runConfigName="ItemManagerTest">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="testGetClaimsFromFoundID()">
-        <option name="selectionMode" value="DROPDOWN" />
-      </SelectionState>
       <SelectionState runConfigName="testGetClaimFromClaimID()">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
