@@ -181,7 +181,7 @@ fun MainContent(
 
     // the welcome dialog
     val spUser = context.getSharedPreferences(SharedPreferencesNames.NAME_USERS, Context.MODE_PRIVATE)
-    val userName = spUser.getString(SharedPreferencesNames.USER_FIRSTNAME, "") + spUser.getString(
+    val userName = spUser.getString(SharedPreferencesNames.USER_FIRSTNAME, "") + " " + spUser.getString(
         SharedPreferencesNames.USER_LASTNAME,
         ""
     )
