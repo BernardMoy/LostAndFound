@@ -136,6 +136,11 @@
             android:exported="false"
             android:windowSoftInputMode="adjustPan" />
         <activity
+            android:name=".ui.EmailSenderTest.EmailSenderTestActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:exported="false"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
             android:name=".ui.HowItWorks.HowItWorksActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:exported="false"
