@@ -254,7 +254,8 @@ fun ItemName(
         onTextChanged = { viewModel.onItemNameChanged(it) },
         placeholder = "e.g. Bluetooth earbuds",
         isError = viewModel.nameError.value.isNotEmpty(),
-        leadingIcon = Icons.Outlined.Edit
+        leadingIcon = Icons.Outlined.Edit,
+        testTag = "NameInput"
     )
 
     CustomErrorText(
@@ -454,7 +455,8 @@ fun ItemBrand(
         onTextChanged = { viewModel.onItemBrandChanged(it) },
         placeholder = "What is the brand of your item?",
         leadingIcon = Icons.Outlined.Title,
-        isError = false // wont have error
+        isError = false, // wont have error
+        testTag = "BrandInput"
     )
 }
 
@@ -470,7 +472,9 @@ fun DateAndTime(
         isDialogShown = viewModel.isDateDialogShown,
         placeholder = "Select a date...",
         isError = viewModel.dateError.value.isNotEmpty(),
+        testTag = "DateInput"
     )
+
     CustomErrorText(text = viewModel.dateError.value)
 
     CustomTimePickerTextField(
@@ -478,7 +482,8 @@ fun DateAndTime(
         selectedMinute = viewModel.selectedMinute,
         isDialogShown = viewModel.isTimeDialogShown,
         placeholder = "Select a time...",
-        isError = viewModel.timeError.value.isNotEmpty()
+        isError = viewModel.timeError.value.isNotEmpty(),
+        testTag = "TimeInput"
     )
 
     CustomErrorText(text = viewModel.timeError.value)
@@ -572,7 +577,8 @@ fun AdditionalDescription(
         leadingIcon = Icons.Outlined.Description,
         onTextChanged = { viewModel.onDescriptionChanged(it) },
         placeholder = "What should be noted of about your item?",
-        isMultiLine = true
+        isMultiLine = true,
+        testTag = "DescriptionInput"
     )
 }
 

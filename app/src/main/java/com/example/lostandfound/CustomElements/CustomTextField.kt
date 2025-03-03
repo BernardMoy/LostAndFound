@@ -188,7 +188,8 @@ fun CustomDatePickerTextField(
     selectedDate: MutableState<Long?>,
     isDialogShown: MutableState<Boolean>,
     placeholder: String,
-    isError: Boolean = false
+    isError: Boolean = false,
+    testTag: String = ""
 ) {
 
     Column {
@@ -221,7 +222,8 @@ fun CustomDatePickerTextField(
                 .clickable {
                     // when the text field is clicked, open the dialog
                     isDialogShown.value = true
-                },
+                }
+                .testTag(testTag),
             colors = TextFieldDefaults.colors(
                 // for enabled (Editable) text
                 unfocusedContainerColor = MaterialTheme.colorScheme.background,
@@ -260,7 +262,8 @@ fun CustomTimePickerTextField(
     selectedMinute: MutableState<Int?>,
     isDialogShown: MutableState<Boolean>,
     placeholder: String,
-    isError: Boolean = false
+    isError: Boolean = false,
+    testTag: String = ""
 ) {
 
     Column {
@@ -292,7 +295,8 @@ fun CustomTimePickerTextField(
                 .clickable {
                     // when the text field is clicked, open the dialog
                     isDialogShown.value = true
-                },
+                }
+                .testTag(testTag),
             colors = TextFieldDefaults.colors(
                 // for enabled (Editable) text
                 unfocusedContainerColor = MaterialTheme.colorScheme.background,
