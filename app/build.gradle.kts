@@ -111,4 +111,6 @@ dependencies {
 
     implementation ("androidx.core:core-ktx:1.15.0")
 
+    implementation ("org.mockito:mockito-core:5.15.2")
+
 }

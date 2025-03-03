@@ -23,6 +23,7 @@ import androidx.compose.material.icons.outlined.CheckCircle
 import androidx.compose.material.icons.outlined.Compare
 import androidx.compose.material.icons.outlined.DarkMode
 import androidx.compose.material.icons.outlined.Delete
+import androidx.compose.material.icons.outlined.Email
 import androidx.compose.material.icons.outlined.Image
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.LocationOn
@@ -54,6 +55,7 @@ import com.example.lostandfound.FirebaseManagers.FirebaseUtility
 import com.example.lostandfound.R
 import com.example.lostandfound.ui.AboutApp.AboutAppActivity
 import com.example.lostandfound.ui.Done.DoneActivity
+import com.example.lostandfound.ui.EmailSenderTest.EmailSenderTestActivity
 import com.example.lostandfound.ui.ImageComparison.ImageComparisonActivity
 import com.example.lostandfound.ui.ItemComparison.ItemComparisonActivity
 import com.example.lostandfound.ui.PermissionsTest.PermissionsTestActivity
@@ -598,6 +600,14 @@ fun Developer(
                 sp.edit().putBoolean(SharedPreferencesNames.SHOW_WELCOME_MESSAGE_VALUE, true).apply()
 
                 Toast.makeText(context, "Settings set", Toast.LENGTH_SHORT).show()
+            }
+        )
+
+        CustomActionRow(text = "Email sending test",
+            leftIcon = Icons.Outlined.Email,
+            onClick = {
+                val i: Intent = Intent(context, EmailSenderTestActivity::class.java)
+                context.startActivity(i)
             }
         )
     }
