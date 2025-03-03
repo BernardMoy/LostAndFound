@@ -1,6 +1,7 @@
 package com.example.lostandfound.ui.VerifyEmail;
 
 import android.content.Context;
+import android.widget.Toast;
 
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -47,7 +48,12 @@ public class VerifyEmailViewModel extends ViewModel {
                 String subject = "Lost and Found app - Please confirm your email";
                 String body = code + " is your verification code.";
                 EmailSender emailSender = new EmailSender(ctx, emailAddress);
-                emailSender.sendEmail(subject, body, hasToastMessage);
+                emailSender.sendEmail(subject, body, hasToastMessage, new EmailSender.EmailCallback() {
+                    @Override
+                    public void onComplete(Boolean success) {
+
+                    }
+                });
             }
         });
     }

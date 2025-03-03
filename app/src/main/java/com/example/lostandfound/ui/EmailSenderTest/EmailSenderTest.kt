@@ -2,6 +2,7 @@ package com.example.lostandfound.ui.EmailSenderTest
 
 import android.content.Context
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Arrangement
@@ -27,6 +28,8 @@ import com.example.lostandfound.CustomElements.ButtonType
 import com.example.lostandfound.CustomElements.CustomButton
 import com.example.lostandfound.CustomElements.CustomInputField
 import com.example.lostandfound.R
+import com.example.lostandfound.Utility.EmailSender
+import com.example.lostandfound.Utility.EmailSender.EmailCallback
 import com.example.lostandfound.ui.AboutApp.EmailSenderTestViewModel
 import com.example.lostandfound.ui.theme.ComposeTheme
 
@@ -114,7 +117,17 @@ fun SendButton(context:Context, viewModel: EmailSenderTestViewModel){
         text = "Send email",
         type = ButtonType.FILLED,
         onClick = {
+            val emailSender = EmailSender(context, viewModel.email.value)
+            emailSender.sendEmail(
+                "Test subject",
+                "This is a test email",
+                true,
+                object: EmailCallback{
+                    override fun onComplete(success: Boolean) {
 
+                    }
+                }
+            )
         }
     )
 }

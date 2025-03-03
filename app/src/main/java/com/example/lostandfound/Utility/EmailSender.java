@@ -25,6 +25,11 @@ public class EmailSender {
     private Session newSession;
     private final ExecutorService executorService;
 
+    public interface EmailCallback {
+        void onComplete(Boolean success);
+    }
+
+
     // Create email sender object where emailAddress is the recipient
     public EmailSender(Context ctx, String emailAddress) {
         this.ctx = ctx;
@@ -40,7 +45,7 @@ public class EmailSender {
 
     // method to send email to the stored emailAddress.
     // param isRegenerated: If true, this will generate a toast message when email is sent
-    public void sendEmail(String subject, String body, boolean hasToastMessage) {
+    public void sendEmail(String subject, String body, boolean hasToastMessage, EmailCallback callback) {
 
         // Send email in a separate thread
         executorService.execute(() -> {
@@ -66,6 +71,13 @@ public class EmailSender {
                     ((Activity) ctx).runOnUiThread(() ->
                             Toast.makeText(ctx, "Email successfully sent.", Toast.LENGTH_SHORT).show()
                     );
+
+                    // return true
+                    callback.onComplete(true);
+
+                } else {
+                    // just return true
+                    callback.onComplete(true);
                 }
 
             } catch (MessagingException e) {
@@ -74,6 +86,8 @@ public class EmailSender {
                 ((Activity) ctx).runOnUiThread(() ->
                         Toast.makeText(ctx, "Email sending failed", Toast.LENGTH_SHORT).show()
                 );
+
+                callback.onComplete(false);
             }
         });
     }
