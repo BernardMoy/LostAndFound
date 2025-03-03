@@ -4,6 +4,7 @@ import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.matcher.RootMatchers.withDecorView;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
 
@@ -26,21 +27,15 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 @RunWith(AndroidJUnit4.class)
 public class EmailSenderTest {
-
-    @Mock
-    private EmailSender mockEmailSender;
-
-    private ExecutorService executorService;
     private Context context;
 
     @Before
     public void setUp() {
-        MockitoAnnotations.openMocks(this);
         context = InstrumentationRegistry.getInstrumentation().getTargetContext();
-        executorService = Executors.newSingleThreadExecutor();
     }
 
     @Test
@@ -49,15 +44,27 @@ public class EmailSenderTest {
         String subject = "Test Email";
         String body = "This is a test";
 
-        doNothing().when(mockEmailSender).sendEmail(any(), any(), true);
-
         CountDownLatch latch = new CountDownLatch(1);
+        AtomicBoolean res = new AtomicBoolean(false);
 
         // create email sender
-        EmailSender emailSender = new EmailSender(context, "testtestthisemaildoesnotexist32988923@warwick.ac.uk");
-        emailSender.sendEmail(subject, body, true);
+        EmailSender emailSender = new EmailSender(
+                context,
+                "testtestthisemaildoesnotexist32988923@warwick.ac.uk"
+        );
+        emailSender.sendEmail(subject, body, false, new EmailSender.EmailCallback() {
+            @Override
+            public void onComplete(Boolean success) {
+                res.set(success);
+                latch.countDown();
+            }
+        });
 
-        Thread.sleep(5000);
+        latch.await();
+        Thread.sleep(2000);
+
+        // assert send email successful
+        assertTrue(res.get());
 
     }
 }

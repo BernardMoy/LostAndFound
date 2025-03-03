@@ -13,16 +13,16 @@
         </DropdownSelection>
         <DialogSelection />
       </SelectionState>
-      <SelectionState runConfigName="ItemManagerTest">
-        <option name="selectionMode" value="DROPDOWN" />
-      </SelectionState>
-      <SelectionState runConfigName="testGetClaimFromClaimID()">
-        <option name="selectionMode" value="DROPDOWN" />
-      </SelectionState>
-      <SelectionState runConfigName="testGetLostItemStatus()">
-        <option name="selectionMode" value="DROPDOWN" />
-      </SelectionState>
       <SelectionState runConfigName="testGetFoundItemStatus()">
+        <option name="selectionMode" value="DROPDOWN" />
+      </SelectionState>
+      <SelectionState runConfigName="EmailSenderTest">
+        <option name="selectionMode" value="DROPDOWN" />
+      </SelectionState>
+      <SelectionState runConfigName="testSendEmail()">
+        <option name="selectionMode" value="DROPDOWN" />
+      </SelectionState>
+      <SelectionState runConfigName="ContextInstrumentedTest">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
     </selectionStates>
