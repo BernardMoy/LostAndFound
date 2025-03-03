@@ -12,6 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -23,7 +24,8 @@ fun CustomButton(
     type: ButtonType,
     onClick: () -> Unit,
     enabled: Boolean = true,
-    small: Boolean = false
+    small: Boolean = false,
+    testTag: String = ""
 
 ) {
     // create different buttons depending on the type of button
@@ -40,7 +42,7 @@ fun CustomButton(
                 ),
                 enabled = enabled,
                 shape = RoundedCornerShape(dimensionResource(id = R.dimen.corner_radius)),  // make the button have rounded corners
-                modifier = Modifier.background(
+                modifier = Modifier.testTag(testTag).background(
                     // add the gradient to the background instead of the container color
                     Brush.horizontalGradient(
                         listOf(
@@ -82,7 +84,7 @@ fun CustomButton(
                     disabledContainerColor = Color.Gray,
                     disabledContentColor = Color.White
                 ),
-                modifier = Modifier.border(
+                modifier = Modifier.testTag(testTag).border(
                     width = 1.dp,
                     color = MaterialTheme.colorScheme.onPrimaryContainer,
                     shape = RoundedCornerShape(dimensionResource(id = R.dimen.corner_radius))
@@ -104,6 +106,7 @@ fun CustomButton(
                     disabledContainerColor = Color.Gray,
                     disabledContentColor = Color.White
                 ),
+                modifier = Modifier.testTag(testTag),
                 enabled = enabled,
                 shape = RoundedCornerShape(dimensionResource(id = R.dimen.corner_radius))  // make the button have rounded corners
             ) {
@@ -123,7 +126,7 @@ fun CustomButton(
                 ),
                 enabled = enabled,
                 shape = RoundedCornerShape(dimensionResource(id = R.dimen.corner_radius)),  // make the button have rounded corners
-                modifier = Modifier.background(
+                modifier = Modifier.testTag(testTag).background(
                     // add the gradient to the background instead of the container color
                     color = MaterialTheme.colorScheme.error,
                     shape = RoundedCornerShape(dimensionResource(id = R.dimen.corner_radius))   // also apply the shape to the background
