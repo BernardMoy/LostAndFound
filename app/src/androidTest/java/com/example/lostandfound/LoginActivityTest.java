@@ -16,6 +16,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4;
 import com.example.lostandfound.Data.FirebaseNames;
 import com.example.lostandfound.ui.Login.LoginActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.auth.AuthResult;
@@ -27,6 +28,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreSettings;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import org.checkerframework.checker.units.qual.C;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -177,6 +179,22 @@ public class LoginActivityTest {
         // delete current user
         if (auth.getCurrentUser() != null) {
             auth.getCurrentUser().delete();
+
+        } else {
+            // else if not signed in, SIGN IN AND DELETE IT
+            CountDownLatch latch = new CountDownLatch(1);
+            auth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                @Override
+                public void onComplete(@NonNull Task<AuthResult> task) {
+                    if (task.isSuccessful() && auth.getCurrentUser() != null){
+                        // delete current user
+                        auth.getCurrentUser().delete();
+                    }
+                    
+                    latch.countDown();
+                }
+            });
+            latch.await();
         }
 
         deleteCollection(FirebaseNames.COLLECTION_USERS);
