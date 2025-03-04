@@ -159,6 +159,7 @@ public class LoginActivityTest {
         );
 
         // click the log in button
+        Espresso.closeSoftKeyboard();  // close the keyboard first
         Espresso.onView(ViewMatchers.withId(R.id.login_button)).perform(
                 ViewActions.click()
         );
