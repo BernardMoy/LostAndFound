@@ -67,13 +67,16 @@ class PostNewLostItemTest {
 
     /*
     Test that when a lost item is posted, its entry appears in the database.
-    Remember to start firebase emulator 
+    Remember to start firebase emulator
      */
     @Test
     fun testPostNewLostItemInDB() {
         val viewModel = NewLostViewModel()
         composeTestRule.setContent {
-            NewLostScreen(activity = ComponentActivity(), viewModel = viewModel)   // set content to be main content of new lost activity
+            NewLostScreen(
+                activity = ComponentActivity(),
+                viewModel = viewModel
+            )   // set content to be main content of new lost activity
         }
 
         // input the details
@@ -82,16 +85,17 @@ class PostNewLostItemTest {
         composeTestRule.onNodeWithText(categoryName).performScrollTo().performClick()  // category
         composeTestRule.onNodeWithTag("SubCategoryDropdown")
             .performScrollTo().performClick() // open the dropdown menu
-        composeTestRule.onNodeWithText(subCategoryName).performScrollTo().performClick()  // subcategory
+        composeTestRule.onNodeWithText(subCategoryName).performScrollTo()
+            .performClick()  // subcategory
         composeTestRule.onNodeWithText(color1).performScrollTo().performClick()  // color 1
         composeTestRule.onNodeWithText(color2).performScrollTo().performClick()  // color 2
         composeTestRule.onNodeWithTag("BrandInput").performTextInput(brand)  // brand
         composeTestRule.onNodeWithTag("DateInput").performScrollTo().performClick()
-        Thread.sleep(2000)
+        Thread.sleep(3000)
         composeTestRule.onNodeWithText("Select").performClick()  // date
         Thread.sleep(2000)
         composeTestRule.onNodeWithTag("TimeInput").performScrollTo().performClick()
-        Thread.sleep(2000)
+        Thread.sleep(3000)
         composeTestRule.onNodeWithText("Select").performClick()  // time
         Thread.sleep(2000)
         composeTestRule.onNodeWithTag("DescriptionInput")
@@ -119,8 +123,19 @@ class PostNewLostItemTest {
                 assertNotNull(document)
                 assertEquals(itemName, document[FirebaseNames.LOSTFOUND_ITEMNAME] as String)
                 assertEquals(categoryName, document[FirebaseNames.LOSTFOUND_CATEGORY] as String)
-                assertEquals(subCategoryName, document[FirebaseNames.LOSTFOUND_SUBCATEGORY] as String)
-                assertEquals(setOf(color1, color2), (document[FirebaseNames.LOSTFOUND_COLOR] as List<String>).toSet())
+                assertEquals(
+                    subCategoryName,
+                    document[FirebaseNames.LOSTFOUND_SUBCATEGORY] as String
+                )
+                assertEquals(
+                    setOf(color1, color2),
+                    (document[FirebaseNames.LOSTFOUND_COLOR] as List<String>).toSet()
+                )
+                assert(
+                    // reference date. If current datetime is selected it is def greater
+                    document[FirebaseNames.LOSTFOUND_EPOCHDATETIME] as Long > 1739978940
+                )
+
                 assertEquals(brand, document[FirebaseNames.LOSTFOUND_BRAND] as String)
                 assertEquals(description, document[FirebaseNames.LOSTFOUND_DESCRIPTION] as String)
 
