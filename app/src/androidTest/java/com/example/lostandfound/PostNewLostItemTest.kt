@@ -1,15 +1,18 @@
 package com.example.lostandfound
 
+import androidx.activity.ComponentActivity
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performTextInput
 import com.example.lostandfound.Data.FirebaseNames
 import com.example.lostandfound.Data.LostItem
 import com.example.lostandfound.Data.categories
 import com.example.lostandfound.ItemManagerTest.Companion
 import com.example.lostandfound.ui.NewLost.MainContent
+import com.example.lostandfound.ui.NewLost.NewLostScreen
 import com.example.lostandfound.ui.NewLost.NewLostViewModel
 import com.google.android.gms.tasks.Task
 import com.google.android.gms.tasks.Tasks
@@ -64,29 +67,30 @@ class PostNewLostItemTest {
 
     /*
     Test that when a lost item is posted, its entry appears in the database.
+    Remember to start firebase emulator 
      */
     @Test
     fun testPostNewLostItemInDB() {
         val viewModel = NewLostViewModel()
         composeTestRule.setContent {
-            MainContent(viewModel = viewModel)   // set content to be main content of new lost activity
+            NewLostScreen(activity = ComponentActivity(), viewModel = viewModel)   // set content to be main content of new lost activity
         }
 
         // input the details
         // tags are in the form of XXXInput
         composeTestRule.onNodeWithTag("NameInput").performTextInput(itemName)  // name
-        composeTestRule.onNodeWithText(categoryName).performClick()  // category
+        composeTestRule.onNodeWithText(categoryName).performScrollTo().performClick()  // category
         composeTestRule.onNodeWithTag("SubCategoryDropdown")
-            .performClick() // open the dropdown menu
-        composeTestRule.onNodeWithText(subCategoryName).performClick()  // subcategory
-        composeTestRule.onNodeWithText(color1).performClick()  // color 1
-        composeTestRule.onNodeWithText(color2).performClick()  // color 2
+            .performScrollTo().performClick() // open the dropdown menu
+        composeTestRule.onNodeWithText(subCategoryName).performScrollTo().performClick()  // subcategory
+        composeTestRule.onNodeWithText(color1).performScrollTo().performClick()  // color 1
+        composeTestRule.onNodeWithText(color2).performScrollTo().performClick()  // color 2
         composeTestRule.onNodeWithTag("BrandInput").performTextInput(brand)  // brand
-        composeTestRule.onNodeWithTag("DateInput").performClick()
+        composeTestRule.onNodeWithTag("DateInput").performScrollTo().performClick()
         Thread.sleep(2000)
         composeTestRule.onNodeWithText("Select").performClick()  // date
         Thread.sleep(2000)
-        composeTestRule.onNodeWithTag("TimeInput").performClick()
+        composeTestRule.onNodeWithTag("TimeInput").performScrollTo().performClick()
         Thread.sleep(2000)
         composeTestRule.onNodeWithText("Select").performClick()  // time
         Thread.sleep(2000)
@@ -94,7 +98,7 @@ class PostNewLostItemTest {
             .performTextInput(description)  // description
 
         // click the done button
-        composeTestRule.onNodeWithText("Done").performClick()
+        composeTestRule.onNodeWithText("Done").performScrollTo().performClick()
 
         // wait for 5 seconds
         Thread.sleep(5000)
