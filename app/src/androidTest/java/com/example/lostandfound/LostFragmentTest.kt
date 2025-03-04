@@ -140,6 +140,9 @@ class LostFragmentTest {
         // clear all data
         deleteCollection(FirebaseNames.COLLECTION_LOST_ITEMS)
         deleteCollection(FirebaseNames.COLLECTION_ACTIVITY_LOG_ITEMS)
+
+        // delete the current auth user
+        auth!!.currentUser!!.delete()
     }
 
     // private method to delete all elements inside a collection
