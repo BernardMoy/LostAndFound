@@ -188,8 +188,9 @@ fun CustomDatePickerTextField(
     selectedDate: MutableState<Long?>,
     isDialogShown: MutableState<Boolean>,
     placeholder: String,
+    datePickerTitle: String,
     isError: Boolean = false,
-    testTag: String = ""
+    testTag: String = "",
 ) {
 
     Column {
@@ -250,7 +251,8 @@ fun CustomDatePickerTextField(
         // if isDialogShown is true, show the date selection dialog
         CustomDatePickerDialog(
             selectedDate = selectedDate,
-            isDialogShown = isDialogShown
+            isDialogShown = isDialogShown,
+            datePickerTitle = datePickerTitle
         )
     }
 }

@@ -313,7 +313,8 @@ fun CustomInputDialog(
 @Composable
 fun CustomDatePickerDialog(
     selectedDate: MutableState<Long?>,
-    isDialogShown: MutableState<Boolean>
+    isDialogShown: MutableState<Boolean>,
+    datePickerTitle: String
 ) {
     if (isDialogShown.value) {
         val datePickerState = rememberDatePickerState()
@@ -363,7 +364,7 @@ fun CustomDatePickerDialog(
                 showModeToggle = false,
                 title = {
                     Text(
-                        text = "Date of lost item",
+                        text = datePickerTitle,
                         modifier = Modifier.padding(dimensionResource(id = R.dimen.title_margin))
                     )
                 },
