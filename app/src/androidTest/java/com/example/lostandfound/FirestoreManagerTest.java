@@ -8,13 +8,13 @@ import android.util.Log;
 
 import com.example.lostandfound.FirebaseManagers.FirestoreManager;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.FirebaseApp;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreSettings;
-import com.google.firebase.storage.FirebaseStorage;
 
 import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -300,4 +300,5 @@ public class FirestoreManagerTest {
         get2Latch.await();
 
     }
+
 }

@@ -8,17 +8,16 @@ import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performTextInput
 import com.example.lostandfound.Data.FirebaseNames
-import com.example.lostandfound.Data.LostItem
 import com.example.lostandfound.Data.categories
-import com.example.lostandfound.ItemManagerTest.Companion
-import com.example.lostandfound.ui.NewLost.MainContent
 import com.example.lostandfound.ui.NewLost.NewLostScreen
 import com.example.lostandfound.ui.NewLost.NewLostViewModel
 import com.google.android.gms.tasks.Task
 import com.google.android.gms.tasks.Tasks
+import com.google.firebase.FirebaseApp
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.FirebaseFirestoreSettings
 import org.junit.After
+import org.junit.AfterClass
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.fail
@@ -188,4 +187,5 @@ class PostNewLostItemTest {
         Tasks.await(Tasks.whenAll(deleteTasks), 60, TimeUnit.SECONDS)
         Thread.sleep(2000)
     }
+
 }

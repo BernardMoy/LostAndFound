@@ -8,12 +8,14 @@ import com.example.lostandfound.FirebaseManagers.ItemManager
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.tasks.Task
 import com.google.android.gms.tasks.Tasks
+import com.google.firebase.FirebaseApp
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.FirebaseFirestoreSettings
 import com.google.firebase.storage.FirebaseStorage
 import junit.framework.TestCase.assertEquals
 import junit.framework.TestCase.assertNotNull
 import org.junit.After
+import org.junit.AfterClass
 import org.junit.Before
 import org.junit.BeforeClass
 import org.junit.Test
@@ -189,12 +191,14 @@ class ItemManagerTest {
         )
 
         // Post the claims
-        val task5 = firestore!!.collection(FirebaseNames.COLLECTION_CLAIMED_ITEMS).add(dataClaimL2F1)
+        val task5 =
+            firestore!!.collection(FirebaseNames.COLLECTION_CLAIMED_ITEMS).add(dataClaimL2F1)
         val ref5 = Tasks.await(task5, 60, TimeUnit.SECONDS)
         Thread.sleep(2000)
         claimL2F1 = ref5.id
 
-        val task6 = firestore!!.collection(FirebaseNames.COLLECTION_CLAIMED_ITEMS).add(dataClaimL3F1)
+        val task6 =
+            firestore!!.collection(FirebaseNames.COLLECTION_CLAIMED_ITEMS).add(dataClaimL3F1)
         val ref6 = Tasks.await(task6, 60, TimeUnit.SECONDS)
         Thread.sleep(2000)
         claimL3F1 = ref6.id
@@ -205,7 +209,7 @@ class ItemManagerTest {
         var target: LostItem? = null
         val latch = CountDownLatch(1)
 
-        ItemManager.getLostItemFromId(lost1ID?:"", object: ItemManager.LostItemCallback{
+        ItemManager.getLostItemFromId(lost1ID ?: "", object : ItemManager.LostItemCallback {
             override fun onComplete(lostItem: LostItem?) {
                 target = lostItem
                 latch.countDown()
@@ -232,11 +236,11 @@ class ItemManagerTest {
     }
 
     @Test
-    fun testGetFoundItemFromID(){
+    fun testGetFoundItemFromID() {
         var target: FoundItem? = null
         val latch = CountDownLatch(1)
 
-        ItemManager.getFoundItemFromId(found1ID?:"", object: ItemManager.FoundItemCallback{
+        ItemManager.getFoundItemFromId(found1ID ?: "", object : ItemManager.FoundItemCallback {
             override fun onComplete(foundItem: FoundItem?) {
                 target = foundItem
                 latch.countDown()
@@ -264,11 +268,11 @@ class ItemManagerTest {
     }
 
     @Test
-    fun testGetClaimFromLostID(){
+    fun testGetClaimFromLostID() {
         var target: Claim? = null
         val latch = CountDownLatch(1)
 
-        ItemManager.getClaimFromLostId(lost2ID?:"", object: ItemManager.LostClaimCallback{
+        ItemManager.getClaimFromLostId(lost2ID ?: "", object : ItemManager.LostClaimCallback {
             override fun onComplete(claim: Claim?) {
                 target = claim
                 latch.countDown()
@@ -284,11 +288,11 @@ class ItemManagerTest {
     }
 
     @Test
-    fun testGetClaimsFromFoundID(){
+    fun testGetClaimsFromFoundID() {
         var target: List<Claim>? = null
         val latch = CountDownLatch(1)
 
-        ItemManager.getClaimsFromFoundId(found1ID?:"", object: ItemManager.FoundClaimCallback{
+        ItemManager.getClaimsFromFoundId(found1ID ?: "", object : ItemManager.FoundClaimCallback {
             override fun onComplete(claimList: MutableList<Claim>) {
                 target = claimList
                 latch.countDown()
@@ -309,11 +313,11 @@ class ItemManagerTest {
     }
 
     @Test
-    fun testGetClaimFromClaimID(){
+    fun testGetClaimFromClaimID() {
         var target: Claim? = null
         val latch = CountDownLatch(1)
 
-        ItemManager.getClaimFromClaimId(claimL3F1?:"", object: ItemManager.ClaimCallback{
+        ItemManager.getClaimFromClaimId(claimL3F1 ?: "", object : ItemManager.ClaimCallback {
             override fun onComplete(claim: Claim?) {
                 target = claim
                 latch.countDown()
@@ -329,14 +333,14 @@ class ItemManagerTest {
     }
 
     @Test
-    fun testGetLostItemStatus(){
+    fun testGetLostItemStatus() {
         // statuses of the lost item l1, l2, l3 should be 0, 1, 2 respectively
         var l1Status: Int = -1
         var l2Status: Int = -1
         var l3Status: Int = -1
 
         val latch1 = CountDownLatch(1)
-        ItemManager.getLostItemStatus(lost1ID?:"", object: ItemManager.StatusCallback{
+        ItemManager.getLostItemStatus(lost1ID ?: "", object : ItemManager.StatusCallback {
             override fun onComplete(status: Int) {
                 l1Status = status
                 latch1.countDown()
@@ -345,7 +349,7 @@ class ItemManagerTest {
         latch1.await(60, TimeUnit.SECONDS)
 
         val latch2 = CountDownLatch(1)
-        ItemManager.getLostItemStatus(lost2ID?:"", object: ItemManager.StatusCallback{
+        ItemManager.getLostItemStatus(lost2ID ?: "", object : ItemManager.StatusCallback {
             override fun onComplete(status: Int) {
                 l2Status = status
                 latch2.countDown()
@@ -354,7 +358,7 @@ class ItemManagerTest {
         latch2.await(60, TimeUnit.SECONDS)
 
         val latch3 = CountDownLatch(1)
-        ItemManager.getLostItemStatus(lost3ID?:"", object: ItemManager.StatusCallback{
+        ItemManager.getLostItemStatus(lost3ID ?: "", object : ItemManager.StatusCallback {
             override fun onComplete(status: Int) {
                 l3Status = status
                 latch3.countDown()
@@ -369,13 +373,13 @@ class ItemManagerTest {
     }
 
     @Test
-    fun testGetFoundItemStatus(){
+    fun testGetFoundItemStatus() {
         // statuses of the lost item f1, f2 should be 2, 0 respectively
         var f1Status: Int = -1
         var f2Status: Int = -1
 
         val latch1 = CountDownLatch(1)
-        ItemManager.getFoundItemStatus(found1ID?:"", object: ItemManager.StatusCallback{
+        ItemManager.getFoundItemStatus(found1ID ?: "", object : ItemManager.StatusCallback {
             override fun onComplete(status: Int) {
                 f1Status = status
                 latch1.countDown()
@@ -384,7 +388,7 @@ class ItemManagerTest {
         latch1.await(60, TimeUnit.SECONDS)
 
         val latch2 = CountDownLatch(1)
-        ItemManager.getFoundItemStatus(found2ID?:"", object: ItemManager.StatusCallback{
+        ItemManager.getFoundItemStatus(found2ID ?: "", object : ItemManager.StatusCallback {
             override fun onComplete(status: Int) {
                 f2Status = status
                 latch2.countDown()
@@ -397,7 +401,6 @@ class ItemManagerTest {
         assertEquals(2, f1Status)
         assertEquals(0, f2Status)
     }
-
 
 
     // clear all data in firestore after tests
@@ -438,4 +441,5 @@ class ItemManagerTest {
         Tasks.await(Tasks.whenAll(deleteTasks), 60, TimeUnit.SECONDS)
         Thread.sleep(2000)
     }
+
 }

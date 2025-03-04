@@ -6,19 +6,17 @@ import static org.junit.Assert.fail;
 
 import androidx.annotation.NonNull;
 import androidx.test.espresso.Espresso;
-import androidx.test.espresso.ViewAssertion;
 import androidx.test.espresso.action.ViewActions;
 import androidx.test.espresso.assertion.ViewAssertions;
 import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
-import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import com.example.lostandfound.Data.FirebaseNames;
 import com.example.lostandfound.ui.Login.LoginActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
+import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -28,14 +26,12 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreSettings;
 import com.google.firebase.firestore.QuerySnapshot;
 
-import org.checkerframework.checker.units.qual.C;
 import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.internal.matchers.Matches;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -174,7 +170,6 @@ public class LoginActivityTest {
     }
 
 
-
     @After
     public void tearDown() throws ExecutionException, InterruptedException, TimeoutException {
         // delete current user
@@ -187,11 +182,11 @@ public class LoginActivityTest {
             auth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                 @Override
                 public void onComplete(@NonNull Task<AuthResult> task) {
-                    if (task.isSuccessful() && auth.getCurrentUser() != null){
+                    if (task.isSuccessful() && auth.getCurrentUser() != null) {
                         // delete current user
                         auth.getCurrentUser().delete();
                     }
-                    
+
                     latch.countDown();
                 }
             });
