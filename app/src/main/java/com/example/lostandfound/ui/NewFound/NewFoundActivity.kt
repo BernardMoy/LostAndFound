@@ -262,7 +262,8 @@ fun ItemName(
         onTextChanged = { viewModel.onItemNameChanged(it) },
         placeholder = "e.g. Bluetooth earbuds",
         leadingIcon = Icons.Outlined.Edit,
-        isError = viewModel.nameError.value.isNotEmpty()
+        isError = viewModel.nameError.value.isNotEmpty(),
+        testTag = "NameInput"
     )
 
     CustomErrorText(
@@ -462,7 +463,8 @@ fun ItemBrand(
         onTextChanged = { viewModel.onItemBrandChanged(it) },
         placeholder = "What is the brand of your item?",
         leadingIcon = Icons.Outlined.Title,
-        isError = false // wont have error
+        isError = false, // wont have error
+        testTag = "BrandInput"
     )
 }
 
@@ -478,7 +480,8 @@ fun DateAndTime(
         isDialogShown = viewModel.isDateDialogShown,
         placeholder = "Select a date...",
         isError = viewModel.dateError.value.isNotEmpty(),
-        datePickerTitle = "Date of found item"
+        datePickerTitle = "Date of found item",
+        testTag = "DateInput"
     )
     CustomErrorText(text = viewModel.dateError.value)
 
@@ -487,7 +490,8 @@ fun DateAndTime(
         selectedMinute = viewModel.selectedMinute,
         isDialogShown = viewModel.isTimeDialogShown,
         placeholder = "Select a time...",
-        isError = viewModel.timeError.value.isNotEmpty()
+        isError = viewModel.timeError.value.isNotEmpty(),
+        testTag = "TimeInput"
     )
 
     CustomErrorText(text = viewModel.timeError.value)
@@ -582,7 +586,8 @@ fun AdditionalDescription(
         leadingIcon = Icons.Outlined.Description,
         onTextChanged = { viewModel.onDescriptionChanged(it) },
         placeholder = "What should be noted of about the item?",
-        isMultiLine = true
+        isMultiLine = true,
+        testTag = "DescriptionInput"
     )
 }
 
@@ -602,7 +607,8 @@ fun SecurityQuestion(
         leadingIcon = Icons.Outlined.Lock,
         onTextChanged = { viewModel.onSecurityQuestionChanged(it) },
         placeholder = "Question",
-        isMultiLine = true
+        isMultiLine = true,
+        testTag = "SecurityQuestionInput"
     )
     // wont error
 }
@@ -619,7 +625,8 @@ fun SecurityQuestionAns(
         placeholder = "Answer",
         isMultiLine = true,
         leadingIcon = Icons.Outlined.QuestionAnswer,
-        isError = viewModel.securityQuestionAnsError.value.isNotEmpty()
+        isError = viewModel.securityQuestionAnsError.value.isNotEmpty(),
+        testTag = "SecurityQuestionAnsInput"
     )
     CustomErrorText(text = viewModel.securityQuestionAnsError.value)
 }
