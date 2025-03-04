@@ -30,11 +30,11 @@ import java.util.concurrent.TimeUnit
 import java.util.concurrent.TimeoutException
 
 
-class PostNewLostItemTest {
+class PostNewLostItemTest: FirebaseTestsSetUp() {
 
     // set up firestore emulator in static context
     companion object {
-        private var firestore: FirebaseFirestore? = null
+        private var firestore: FirebaseFirestore? = getFirestore()
 
         // store item details
         private val itemName: String = "TESTITEM"
@@ -45,20 +45,6 @@ class PostNewLostItemTest {
         private val brand: String = "TESTBRAND"
         private val description: String = "TESTDESCRIPTION"  // use current date time
 
-
-        @BeforeClass
-        @JvmStatic
-        fun setupClass() {
-            firestore = FirebaseFirestore.getInstance()
-            firestore!!.useEmulator(
-                "10.0.2.2",
-                8080
-            ) // use the emulator host, not 127.0.0.1 localhost
-            val settings = FirebaseFirestoreSettings.Builder()
-                .setPersistenceEnabled(false)
-                .build()
-            firestore!!.firestoreSettings = settings
-        }
     }
 
     @get:Rule

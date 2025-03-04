@@ -24,11 +24,11 @@ import java.util.concurrent.ExecutionException
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.TimeoutException
 
-class ItemManagerTest {
+class ItemManagerTest: FirebaseTestsSetUp() {
     // static context, visible to the whole class for variables inside here
     companion object {
-        private var firestore: FirebaseFirestore? = null
-        private var storage: FirebaseStorage? = null
+        private var firestore: FirebaseFirestore? = getFirestore()
+        private var storage: FirebaseStorage? = getStorage()
 
         // item ids
         private var lost1ID: String? = null
@@ -41,24 +41,6 @@ class ItemManagerTest {
         private var claimL2F1: String? = null
         private var claimL3F1: String? = null
 
-        @BeforeClass
-        @JvmStatic
-        fun setupClass() {
-            firestore = FirebaseFirestore.getInstance()
-            firestore!!.useEmulator(
-                "10.0.2.2",
-                8080
-            ) // use the emulator host, not 127.0.0.1 localhost
-            val settings = FirebaseFirestoreSettings.Builder()
-                .setPersistenceEnabled(false)
-                .build()
-            firestore!!.firestoreSettings =
-                settings
-
-            // create storage emulator
-            storage = FirebaseStorage.getInstance()
-            storage!!.useEmulator("10.0.2.2", 9199)
-        }
     }
 
     @Before

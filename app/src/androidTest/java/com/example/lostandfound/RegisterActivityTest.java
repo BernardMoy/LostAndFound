@@ -32,9 +32,9 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
 
-public class RegisterActivityTest {
-    private static FirebaseFirestore firestore;
-    private static FirebaseAuth auth;
+public class RegisterActivityTest extends FirebaseTestsSetUp{
+    private static final FirebaseFirestore firestore = getFirestore();
+    private static final FirebaseAuth auth = getAuth();
 
     // user credentials
     private static final String email = "te23eweqwqweeqwads222222st@warwick.ac.uk";
@@ -45,20 +45,6 @@ public class RegisterActivityTest {
     @Rule
     public final ActivityScenarioRule<RegisterActivity> activityRule = new ActivityScenarioRule<>(RegisterActivity.class);
 
-    @BeforeClass
-    public static void setupClass() {
-        // create emulated firestore environment before everything is set up, and is performed only once
-        firestore = FirebaseFirestore.getInstance();
-        firestore.useEmulator("10.0.2.2", 8080);   // use the emulator host, not 127.0.0.1 localhost
-        FirebaseFirestoreSettings settings = new FirebaseFirestoreSettings.Builder()
-                .setPersistenceEnabled(false)
-                .build();
-        firestore.setFirestoreSettings(settings);
-
-        // create auth emulator
-        auth = FirebaseAuth.getInstance();
-        auth.useEmulator("10.0.2.2", 9099);
-    }
 
     /*
     Create the user in the database
