@@ -26,40 +26,15 @@ import java.util.concurrent.TimeUnit
 import java.util.concurrent.TimeoutException
 
 
-class LostFragmentTest {
+class LostFragmentTest: FirebaseTestsSetUp() {
 
     // set up firestore emulator in static context
     companion object {
-        private var firestore: FirebaseFirestore? = null
-        private var auth: FirebaseAuth? = null
+        private var firestore: FirebaseFirestore? = getFirestore()
+        private var auth: FirebaseAuth? = getAuth()
         private var lostID: String? = null
         private var userID: String? = null
 
-        @BeforeClass
-        @JvmStatic
-        fun setupClass() {
-            firestore = FirebaseFirestore.getInstance()
-            firestore!!.useEmulator(
-                "10.0.2.2",
-                8080
-            ) // use the emulator host, not 127.0.0.1 localhost
-            val settings = FirebaseFirestoreSettings.Builder()
-                .setPersistenceEnabled(false)
-                .build()
-            firestore!!.firestoreSettings = settings
-
-
-            // create auth emulator
-            auth = FirebaseAuth.getInstance()
-            auth!!.useEmulator("10.0.2.2", 9099)
-
-        }
-
-        @JvmStatic
-        @AfterClass
-        fun tearDownFirebase(): Unit {
-            FirebaseApp.getInstance().delete()
-        }
     }
 
     @Before

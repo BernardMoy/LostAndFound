@@ -5,23 +5,19 @@ import android.net.Uri;
 import com.example.lostandfound.Data.FirebaseNames;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
-import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreSettings;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.io.File;
@@ -36,7 +32,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
-public class FirebaseCloudFunctionsTest {
+public class FirebaseCloudFunctionsTest extends FirebaseTestsSetUp {
     /*
     BEFORE RUNNING THIS TEST
     cd to the firebase directory at home then run:
@@ -53,29 +49,10 @@ public class FirebaseCloudFunctionsTest {
     If the tests fails, try waiting for a minute for the emulator to set up then try again.
      */
 
-    private static FirebaseFirestore firestore;
-    private static FirebaseAuth auth;
-    private static FirebaseStorage storage;
+    private static final FirebaseFirestore firestore = getFirestore();
+    private static final FirebaseAuth auth = getAuth();
+    private static final FirebaseStorage storage = getStorage();
 
-
-    @BeforeClass
-    public static void setupClass() {
-        // create emulated firestore environment before everything is set up, and is performed only once
-        firestore = FirebaseFirestore.getInstance();
-        firestore.useEmulator("10.0.2.2", 8080);   // use the emulator host, not 127.0.0.1 localhost
-        FirebaseFirestoreSettings settings = new FirebaseFirestoreSettings.Builder()
-                .setPersistenceEnabled(false)
-                .build();
-        firestore.setFirestoreSettings(settings);
-
-        // create auth emulator
-        auth = FirebaseAuth.getInstance();
-        auth.useEmulator("10.0.2.2", 9099);
-
-        // create storage emulator
-        storage = FirebaseStorage.getInstance();
-        storage.useEmulator("10.0.2.2", 9199);
-    }
 
     @Before
     public void setUp() {

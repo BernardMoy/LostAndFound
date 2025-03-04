@@ -16,9 +16,6 @@
       <SelectionState runConfigName="LoginActivityTest">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="RegisterActivityTest">
-        <option name="selectionMode" value="DROPDOWN" />
-      </SelectionState>
       <SelectionState runConfigName="VerifyEmailActivityTest">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>

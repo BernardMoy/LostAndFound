@@ -43,9 +43,9 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
 
-public class LoginActivityTest {
-    private static FirebaseFirestore firestore;
-    private static FirebaseAuth auth;
+public class LoginActivityTest extends FirebaseTestsSetUp{
+    private static final FirebaseFirestore firestore = getFirestore();
+    private static final FirebaseAuth auth = getAuth();
 
     // user credentials
     private static String userID;  // the one in firebase auth, not the one in firestore
@@ -56,21 +56,6 @@ public class LoginActivityTest {
 
     @Rule
     public final ActivityScenarioRule<LoginActivity> activityRule = new ActivityScenarioRule<>(LoginActivity.class);
-
-    @BeforeClass
-    public static void setupClass() {
-        // create emulated firestore environment before everything is set up, and is performed only once
-        firestore = FirebaseFirestore.getInstance();
-        firestore.useEmulator("10.0.2.2", 8080);   // use the emulator host, not 127.0.0.1 localhost
-        FirebaseFirestoreSettings settings = new FirebaseFirestoreSettings.Builder()
-                .setPersistenceEnabled(false)
-                .build();
-        firestore.setFirestoreSettings(settings);
-
-        // create auth emulator
-        auth = FirebaseAuth.getInstance();
-        auth.useEmulator("10.0.2.2", 9099);
-    }
 
     /*
     Create the user in the database
@@ -172,9 +157,12 @@ public class LoginActivityTest {
 
     @After
     public void tearDown() throws ExecutionException, InterruptedException, TimeoutException {
+        // delete user from firestore
+        deleteCollection(FirebaseNames.COLLECTION_USERS);
+
         // delete current user
         if (auth.getCurrentUser() != null) {
-            auth.getCurrentUser().delete();
+            Tasks.await(auth.getCurrentUser().delete(), 60, TimeUnit.SECONDS);
 
         } else {
             // else if not signed in, SIGN IN AND DELETE IT
@@ -182,18 +170,15 @@ public class LoginActivityTest {
             auth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                 @Override
                 public void onComplete(@NonNull Task<AuthResult> task) {
-                    if (task.isSuccessful() && auth.getCurrentUser() != null) {
-                        // delete current user
-                        auth.getCurrentUser().delete();
-                    }
-
                     latch.countDown();
                 }
             });
             latch.await();
-        }
 
-        deleteCollection(FirebaseNames.COLLECTION_USERS);
+            if (auth.getCurrentUser() != null) {
+                Tasks.await(auth.getCurrentUser().delete(), 60, TimeUnit.SECONDS);
+            }
+        }
     }
 
     // private method to delete all elements inside a collection

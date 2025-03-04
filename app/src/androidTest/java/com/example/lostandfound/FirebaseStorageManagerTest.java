@@ -7,39 +7,24 @@ import androidx.annotation.NonNull;
 import com.example.lostandfound.FirebaseManagers.FirebaseStorageManager;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.storage.FirebaseStorage;
 
-import org.junit.AfterClass;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.util.Objects;
 import java.util.concurrent.CountDownLatch;
 
-public class FirebaseStorageManagerTest {
+public class FirebaseStorageManagerTest extends FirebaseTestsSetUp {
     private Uri targetImage;
     private static final String TESTKEY = "ABCDEF0";
     private static final String TESTFOLDER = "Tests";
     private FirebaseStorageManager firebaseStorageManager;
 
-    private static FirebaseAuth auth;
-    private static FirebaseStorage storage;
-
-    @BeforeClass
-    public static void setupClass() {
-
-        // create auth emulator
-        auth = FirebaseAuth.getInstance();
-        auth.useEmulator("10.0.2.2", 9099);
-
-        // create storage emulator
-        storage = FirebaseStorage.getInstance();
-        storage.useEmulator("10.0.2.2", 9199);
-    }
+    private static final FirebaseAuth auth = getAuth();
+    private static final FirebaseStorage storage = getStorage();
 
     @Before
     public void setUp() throws InterruptedException {
