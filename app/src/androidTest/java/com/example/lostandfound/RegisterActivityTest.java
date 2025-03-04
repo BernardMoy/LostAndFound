@@ -47,7 +47,6 @@ public class RegisterActivityTest {
     private static FirebaseAuth auth;
 
     // user credentials
-    private static String userID;  // the one in firebase auth, not the one in firestore
     private static final String email = "te23eweqwqweeqwads222222st@warwick.ac.uk";
     private static final String password = "1234ABCde*";
     private static final String firstName = "FN";
