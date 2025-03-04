@@ -163,6 +163,7 @@ class PostNewLostItemTest {
     fun tearDown() {
         // clear all data
         deleteCollection(FirebaseNames.COLLECTION_LOST_ITEMS)
+        deleteCollection(FirebaseNames.COLLECTION_ACTIVITY_LOG_ITEMS)
     }
 
     // private method to delete all elements inside a collection

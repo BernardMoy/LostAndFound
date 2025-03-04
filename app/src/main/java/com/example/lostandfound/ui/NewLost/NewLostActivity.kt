@@ -472,7 +472,8 @@ fun DateAndTime(
         isDialogShown = viewModel.isDateDialogShown,
         placeholder = "Select a date...",
         isError = viewModel.dateError.value.isNotEmpty(),
-        testTag = "DateInput"
+        datePickerTitle = "Date of lost item",
+        testTag = "DateInput",
     )
 
     CustomErrorText(text = viewModel.dateError.value)
