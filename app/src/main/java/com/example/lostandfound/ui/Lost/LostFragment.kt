@@ -31,12 +31,14 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.fragment.app.Fragment
@@ -112,18 +114,18 @@ fun Preview() {
 }
 
 @Composable
-fun LostFragmentScreen(viewModel: LostFragmentViewModel) {
+fun LostFragmentScreen(viewModel: LostFragmentViewModel, isTesting: Boolean = false) {
     Column(
         modifier = Modifier
             .fillMaxSize()
             .padding(dimensionResource(id = R.dimen.title_margin))
     ) {
-        MainContent(viewModel = viewModel)
+        MainContent(viewModel = viewModel, isTesting = isTesting)
     }
 }
 
 @Composable
-fun MainContent(viewModel: LostFragmentViewModel) {
+fun MainContent(viewModel: LostFragmentViewModel, isTesting: Boolean) {
     val context = LocalContext.current
 
     /*
@@ -132,6 +134,14 @@ fun MainContent(viewModel: LostFragmentViewModel) {
         refreshData(context, viewModel)
     }
      */
+
+    // if is testing is true, it refreshes data on launch. Otherwise it refresh during onResume
+    // because onResume() wont be triggered in tests
+    if (isTesting){
+        LaunchedEffect(Unit) {
+            refreshData(context, viewModel)
+        }
+    }
 
     // display content
     if (viewModel.isLoading.value) {
@@ -169,7 +179,8 @@ fun RefreshButton(
             onClick = {
                 // refresh the list - manually (by now)
                 refreshData(context, viewModel)
-            }
+            },
+            modifier = Modifier.testTag("LostRefreshButton")
         ) {
             Icon(
                 imageVector = Icons.Outlined.Refresh,
