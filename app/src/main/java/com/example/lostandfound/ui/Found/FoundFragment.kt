@@ -31,6 +31,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -109,18 +110,18 @@ fun Preview() {
 }
 
 @Composable
-fun FoundFragmentScreen(viewmodel: FoundFragmentViewModel) {
+fun FoundFragmentScreen(viewmodel: FoundFragmentViewModel, isTesting: Boolean = false) {
     Column(
         modifier = Modifier
             .fillMaxSize()
             .padding(dimensionResource(id = R.dimen.title_margin))
     ) {
-        MainContent(viewModel = viewmodel)
+        MainContent(viewModel = viewmodel, isTesting = isTesting)
     }
 }
 
 @Composable
-fun MainContent(viewModel: FoundFragmentViewModel) {
+fun MainContent(viewModel: FoundFragmentViewModel, isTesting: Boolean) {
     val context = LocalContext.current
 
     /*
@@ -129,6 +130,12 @@ fun MainContent(viewModel: FoundFragmentViewModel) {
         refreshData(context, viewModel)
     }
      */
+
+    if (isTesting) {
+        LaunchedEffect(Unit) {
+            refreshData(context, viewModel)
+        }
+    }
 
     // display content
     if (viewModel.isLoading.value) {
