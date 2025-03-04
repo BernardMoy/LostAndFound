@@ -7,29 +7,25 @@ import static org.junit.Assert.fail;
 import android.content.Intent;
 
 import androidx.annotation.NonNull;
-import androidx.test.core.app.ActivityScenario;
 import androidx.test.core.app.ApplicationProvider;
 import androidx.test.espresso.Espresso;
 import androidx.test.espresso.action.ViewActions;
+import androidx.test.espresso.assertion.ViewAssertions;
 import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 
 import com.example.lostandfound.Data.FirebaseNames;
-import com.example.lostandfound.Utility.DateTimeManager;
 import com.example.lostandfound.Utility.Hasher;
-import com.example.lostandfound.ui.Register.RegisterActivity;
 import com.example.lostandfound.ui.VerifyEmail.VerifyEmailActivity;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreSettings;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.google.type.DateTime;
 
 import org.junit.After;
 import org.junit.Before;
@@ -38,7 +34,6 @@ import org.junit.Rule;
 import org.junit.Test;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -59,7 +54,8 @@ public class VerifyEmailActivityTest {
     private static final String lastName = "LN";
 
     static Intent i;
-    static{
+
+    static {
         // create an intent with extra values
         i = new Intent(ApplicationProvider.getApplicationContext(), VerifyEmailActivity.class);
         i.putExtra("first_name", firstName);
@@ -149,7 +145,7 @@ public class VerifyEmailActivityTest {
                 .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                     @Override
                     public void onSuccess(DocumentSnapshot documentSnapshot) {
-                        assert(documentSnapshot.exists());
+                        assert (documentSnapshot.exists());
                         assertEquals(firstName, documentSnapshot.get("firstName"));
                         assertEquals(lastName, documentSnapshot.get("lastName"));
                         latch.countDown();
@@ -166,16 +162,53 @@ public class VerifyEmailActivityTest {
 
     }
 
+    @Test
+    public void testVerifyEmailFailed() throws InterruptedException {
+        // input the correct verification code (273292)
+        Espresso.onView(ViewMatchers.withId(R.id.code1)).perform(
+                ViewActions.typeText("2")
+        );
+        Espresso.onView(ViewMatchers.withId(R.id.code2)).perform(
+                ViewActions.typeText("8")
+        );
+        Espresso.onView(ViewMatchers.withId(R.id.code3)).perform(
+                ViewActions.typeText("3")
+        );
+        Espresso.onView(ViewMatchers.withId(R.id.code4)).perform(
+                ViewActions.typeText("2")
+        );
+        Espresso.onView(ViewMatchers.withId(R.id.code5)).perform(
+                ViewActions.typeText("9")
+        );
+        Espresso.onView(ViewMatchers.withId(R.id.code6)).perform(
+                ViewActions.typeText("2")
+        );
+
+        // click the verify email button
+        Espresso.closeSoftKeyboard();  // close the keyboard first
+        Espresso.onView(ViewMatchers.withId(R.id.verify_email_button)).perform(
+                ViewActions.click()
+        );
+
+        // assert the user is created
+        Thread.sleep(5000);
+
+        // assert an error message is displayed
+        Espresso.onView(ViewMatchers.withId(R.id.verification_error)).check(
+                ViewAssertions.matches(ViewMatchers.withText("Invalid verification code"))
+        );
+    }
 
 
     @After
     public void tearDown() throws ExecutionException, InterruptedException, TimeoutException {
-        // delete current user
-        if (auth.getCurrentUser() != null) {
-            auth.getCurrentUser().delete();   // this will also delete the user in firestore through cloud function
-        }
-
         deleteCollection(FirebaseNames.COLLECTION_USER_VERIFICATIONS);
+        deleteCollection(FirebaseNames.COLLECTION_USERS);
+
+        // delete current user at the end, as this will trigger cloud functions
+        if (auth.getCurrentUser() != null) {
+            Tasks.await(auth.getCurrentUser().delete(), 60, TimeUnit.SECONDS);
+        }
     }
 
     // private method to delete all elements inside a collection

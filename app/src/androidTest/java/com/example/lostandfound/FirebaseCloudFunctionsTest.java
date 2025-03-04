@@ -5,6 +5,7 @@ import android.net.Uri;
 import com.example.lostandfound.Data.FirebaseNames;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
+import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -18,6 +19,7 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -245,7 +247,7 @@ public class FirebaseCloudFunctionsTest {
         // Delete the lost item
         Task<Void> task3 = firestore.collection(FirebaseNames.COLLECTION_LOST_ITEMS).document(uidLost).delete();
         Tasks.await(task3, 60, TimeUnit.SECONDS);
-        Thread.sleep(2000);
+        Thread.sleep(4000);
 
         // assert the image no longer exists
         StorageReference ref2 = storage.getReference().child(FirebaseNames.FOLDER_LOST_IMAGE).child(uidLost);
@@ -290,7 +292,7 @@ public class FirebaseCloudFunctionsTest {
         // Delete the found item
         Task<Void> task3 = firestore.collection(FirebaseNames.COLLECTION_FOUND_ITEMS).document(uidFound).delete();
         Tasks.await(task3, 60, TimeUnit.SECONDS);
-        Thread.sleep(2000);
+        Thread.sleep(4000);
 
         // assert the image no longer exists
         StorageReference ref2 = storage.getReference().child(FirebaseNames.FOLDER_FOUND_IMAGE).child(uidFound);
@@ -316,6 +318,7 @@ public class FirebaseCloudFunctionsTest {
         deleteCollection(FirebaseNames.COLLECTION_FOUND_ITEMS);
         deleteCollection(FirebaseNames.COLLECTION_NOTIFICATIONS);
         deleteCollection(FirebaseNames.COLLECTION_USERS);
+        Thread.sleep(2000);
     }
 
     // private method to delete all elements inside a collection
@@ -335,4 +338,6 @@ public class FirebaseCloudFunctionsTest {
         Tasks.await(Tasks.whenAll(deleteTasks), 60, TimeUnit.SECONDS);
         Thread.sleep(2000);
     }
+
+
 }

@@ -1,23 +1,19 @@
 package com.example.lostandfound
 
-import android.util.Log
 import androidx.compose.ui.test.junit4.createComposeRule
-import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
-import androidx.compose.ui.test.performClick
 import com.example.lostandfound.Data.FirebaseNames
-import com.example.lostandfound.FirebaseManagers.FirebaseUtility
 import com.example.lostandfound.ui.Lost.LostFragmentScreen
 import com.example.lostandfound.ui.Lost.LostFragmentViewModel
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.tasks.Task
 import com.google.android.gms.tasks.Tasks
+import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.FirebaseFirestoreSettings
 import org.junit.After
-import org.junit.Assert
-import org.junit.Assert.assertEquals
+import org.junit.AfterClass
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.fail
 import org.junit.Before
@@ -58,6 +54,12 @@ class LostFragmentTest {
             auth!!.useEmulator("10.0.2.2", 9099)
 
         }
+
+        @JvmStatic
+        @AfterClass
+        fun tearDownFirebase(): Unit {
+            FirebaseApp.getInstance().delete()
+        }
     }
 
     @Before
@@ -67,7 +69,7 @@ class LostFragmentTest {
         val password = "1234ABCde"
 
         val latch: CountDownLatch = CountDownLatch(1)
-        auth!!.createUserWithEmailAndPassword(email, password).addOnCompleteListener{task ->
+        auth!!.createUserWithEmailAndPassword(email, password).addOnCompleteListener { task ->
             if (task.isSuccessful) {
                 val user = auth!!.currentUser
                 if (user != null) {
@@ -125,7 +127,8 @@ class LostFragmentTest {
 
         // assert the lost item preview details of the current user is shown on screen
         composeTestRule.onNodeWithText("298heh29").assertExists()
-        composeTestRule.onNodeWithText("Category: " + "testSubCatwqq2").assertExists() // only the subcat is shown
+        composeTestRule.onNodeWithText("Category: " + "testSubCatwqq2")
+            .assertExists() // only the subcat is shown
     }
 
 
@@ -141,8 +144,12 @@ class LostFragmentTest {
         deleteCollection(FirebaseNames.COLLECTION_LOST_ITEMS)
         deleteCollection(FirebaseNames.COLLECTION_ACTIVITY_LOG_ITEMS)
 
-        // delete the current auth user
-        auth!!.currentUser!!.delete()
+        // delete current user at the end, as this will trigger cloud functions
+        if (auth!!.currentUser != null) {
+            Tasks.await(
+                auth!!.currentUser!!.delete(), 60, TimeUnit.SECONDS
+            )
+        }
     }
 
     // private method to delete all elements inside a collection
@@ -167,4 +174,5 @@ class LostFragmentTest {
         Tasks.await(Tasks.whenAll(deleteTasks), 60, TimeUnit.SECONDS)
         Thread.sleep(2000)
     }
+
 }

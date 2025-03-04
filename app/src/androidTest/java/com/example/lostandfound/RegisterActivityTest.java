@@ -1,42 +1,32 @@
 package com.example.lostandfound;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.fail;
 
-import androidx.annotation.NonNull;
 import androidx.test.espresso.Espresso;
 import androidx.test.espresso.action.ViewActions;
-import androidx.test.espresso.assertion.ViewAssertions;
 import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 
 import com.example.lostandfound.Data.FirebaseNames;
-import com.example.lostandfound.ui.Login.LoginActivity;
 import com.example.lostandfound.ui.Register.RegisterActivity;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
-import com.google.firebase.auth.AuthResult;
+import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreSettings;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
@@ -115,15 +105,14 @@ public class RegisterActivityTest {
     }
 
 
-
     @After
     public void tearDown() throws ExecutionException, InterruptedException, TimeoutException {
-        // delete current user
-        if (auth.getCurrentUser() != null) {
-            auth.getCurrentUser().delete();
-        }
-
         deleteCollection(FirebaseNames.COLLECTION_USER_VERIFICATIONS);
+
+        // delete current user at the end, as this will trigger cloud functions
+        if (auth.getCurrentUser() != null) {
+            Tasks.await(auth.getCurrentUser().delete(), 60, TimeUnit.SECONDS);
+        }
     }
 
     // private method to delete all elements inside a collection
