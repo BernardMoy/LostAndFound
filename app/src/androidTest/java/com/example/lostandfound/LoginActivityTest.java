@@ -6,7 +6,9 @@ import static org.junit.Assert.fail;
 
 import androidx.annotation.NonNull;
 import androidx.test.espresso.Espresso;
+import androidx.test.espresso.ViewAssertion;
 import androidx.test.espresso.action.ViewActions;
+import androidx.test.espresso.assertion.ViewAssertions;
 import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
@@ -31,6 +33,7 @@ import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.internal.matchers.Matches;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -138,6 +141,36 @@ public class LoginActivityTest {
         // assert the user is logged in
         assertEquals(userID, auth.getCurrentUser().getUid());
     }
+
+    @Test
+    public void testLoginFailed() throws InterruptedException {
+        // make sure initially no users are logged in
+        assertNull(auth.getCurrentUser());
+
+        // input email
+        Espresso.onView(ViewMatchers.withId(R.id.login_email)).perform(
+                ViewActions.typeText(email)
+        );
+        // input password
+        Espresso.onView(ViewMatchers.withId(R.id.login_password)).perform(
+                ViewActions.typeText("whatisthis?")
+        );
+
+        // click the log in button
+        Espresso.onView(ViewMatchers.withId(R.id.login_button)).perform(
+                ViewActions.click()
+        );
+
+        // wait for 5 seconds
+        Thread.sleep(5000);
+
+        // assert error message appears
+        Espresso.onView(ViewMatchers.withId(R.id.login_error)).check(
+                ViewAssertions.matches(ViewMatchers.withText("The provided user credentials are incorrect"))
+        );
+    }
+
+
 
     @After
     public void tearDown() throws ExecutionException, InterruptedException, TimeoutException {
