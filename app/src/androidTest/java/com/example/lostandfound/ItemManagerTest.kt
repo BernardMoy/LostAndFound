@@ -8,23 +8,19 @@ import com.example.lostandfound.FirebaseManagers.ItemManager
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.tasks.Task
 import com.google.android.gms.tasks.Tasks
-import com.google.firebase.FirebaseApp
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.FirebaseFirestoreSettings
 import com.google.firebase.storage.FirebaseStorage
 import junit.framework.TestCase.assertEquals
 import junit.framework.TestCase.assertNotNull
 import org.junit.After
-import org.junit.AfterClass
 import org.junit.Before
-import org.junit.BeforeClass
 import org.junit.Test
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.ExecutionException
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.TimeoutException
 
-class ItemManagerTest: FirebaseTestsSetUp() {
+class ItemManagerTest : FirebaseTestsSetUp() {
     // static context, visible to the whole class for variables inside here
     companion object {
         private var firestore: FirebaseFirestore? = getFirestore()
@@ -400,28 +396,4 @@ class ItemManagerTest: FirebaseTestsSetUp() {
         deleteCollection(FirebaseNames.COLLECTION_NOTIFICATIONS)
         deleteCollection(FirebaseNames.COLLECTION_USERS)
     }
-
-    // private method to delete all elements inside a collection
-    @Throws(
-        ExecutionException::class,
-        InterruptedException::class,
-        TimeoutException::class
-    )
-    private fun deleteCollection(name: String) {
-        val taskGet = firestore!!.collection(name).get()
-        val docs = Tasks.await(taskGet, 60, TimeUnit.SECONDS)
-
-        // create a list of delete tasks for each doc
-        val deleteTasks: MutableList<Task<Void>> = ArrayList()
-        for (doc in docs) {
-            val deleteTask = firestore!!.collection(name)
-                .document(doc.id)
-                .delete()
-            deleteTasks.add(deleteTask)
-        }
-        // execute all tasks
-        Tasks.await(Tasks.whenAll(deleteTasks), 60, TimeUnit.SECONDS)
-        Thread.sleep(2000)
-    }
-
 }

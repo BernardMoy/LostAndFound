@@ -24,12 +24,11 @@ public class FirestoreManagerTest extends FirebaseTestsSetUp {
 
     private final String COLLECTION = "test_collection";
     private FirestoreManager firestoreManager;
-    private static FirebaseFirestore firestore = getFirestore();
+    private static final FirebaseFirestore firestore = getFirestore();
 
     private Map<String, Object> testValue;
     private Map<String, Object> testValueGetWhere;
     private Map<String, Object> testValueUpdate;
-
 
 
     @Before
