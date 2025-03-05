@@ -97,6 +97,7 @@ dependencies {
     implementation ("com.github.bumptech.glide:glide:4.16.0")
 
     androidTestImplementation("androidx.compose.ui:ui-test-junit4-android:1.7.6")
+    androidTestImplementation("io.github.aungthiha:compose-ui-test:1.0.0")
     debugImplementation("androidx.compose.ui:ui-test-manifest:1.7.6")
 
     implementation ("com.github.bumptech.glide:compose:1.0.0-beta01")
