@@ -730,7 +730,7 @@ fun AcceptButton(
             )
 
             CustomButton(
-                text = "Approve this claim",
+                text = "Approve this Claim",
                 type = ButtonType.FILLED,
                 onClick = {
                     // open the dialog to accept

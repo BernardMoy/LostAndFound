@@ -2,21 +2,15 @@ package com.example.lostandfound
 
 import android.content.Intent
 import androidx.compose.ui.test.junit4.createComposeRule
-import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
-import androidx.compose.ui.test.performTextInput
 import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.ApplicationProvider
 import com.example.lostandfound.Data.Claim
 import com.example.lostandfound.Data.FirebaseNames
-import com.example.lostandfound.Data.FoundItem
 import com.example.lostandfound.Data.IntentExtraNames
-import com.example.lostandfound.Data.LostItem
-import com.example.lostandfound.Data.ScoreData
 import com.example.lostandfound.ui.ViewClaim.ViewClaimActivity
-import com.example.lostandfound.ui.ViewComparison.ViewComparisonActivity
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.tasks.Tasks
 import com.google.firebase.auth.FirebaseAuth
@@ -37,7 +31,8 @@ class ViewClaimActivityTest : FirebaseTestsSetUp() {
         private var firestore: FirebaseFirestore? = getFirestore()
         private var auth: FirebaseAuth? = getAuth()
 
-        private var userID: String? = null
+        private var userLostID: String = "SIWSJI2332"
+        private var userFoundID: String? = null
         private var lostID: String? = "duwindwmw"
         private var foundID: String? = "2e9j8qijwqiie"
         private var claimID: String? = "928je29e"
@@ -60,7 +55,7 @@ class ViewClaimActivityTest : FirebaseTestsSetUp() {
             if (task.isSuccessful) {
                 val user = auth!!.currentUser
                 if (user != null) {
-                    userID = user.uid
+                    userFoundID = user.uid  // you are logged in as the found user
                 }
                 latch.countDown()
             } else {
@@ -84,16 +79,31 @@ class ViewClaimActivityTest : FirebaseTestsSetUp() {
         )
 
         // document the found user id and add it
-        val task1 = firestore!!.collection(FirebaseNames.COLLECTION_USERS)
-            .document(lostID.toString())
+        val task0 = firestore!!.collection(FirebaseNames.COLLECTION_USERS)
+            .document(userLostID)
             .set(dataLostUser)
+        Tasks.await(task0, 60, TimeUnit.SECONDS)
+        Thread.sleep(2000)
+
+        val dataFoundUser = mutableMapOf<String, Any>(
+            FirebaseNames.USERS_EMAIL to "testEmail2",
+            FirebaseNames.USERS_AVATAR to "",
+            FirebaseNames.USERS_FIRSTNAME to "testFirstName2",
+            FirebaseNames.USERS_LASTNAME to "testLastName2"
+        )
+
+        // document the found user id and add it
+        val task1 = firestore!!.collection(FirebaseNames.COLLECTION_USERS)
+            .document(userFoundID.toString())
+            .set(dataFoundUser)
         Tasks.await(task1, 60, TimeUnit.SECONDS)
         Thread.sleep(2000)
+
 
         // add the lost item and found item
         val dataLost1 = mutableMapOf<String, Any>(
             FirebaseNames.LOSTFOUND_ITEMNAME to "TestItem",
-            FirebaseNames.LOSTFOUND_USER to "SIWSJI2332",
+            FirebaseNames.LOSTFOUND_USER to userLostID.toString(),
             FirebaseNames.LOSTFOUND_CATEGORY to "TestCat",
             FirebaseNames.LOSTFOUND_SUBCATEGORY to "TestSubCat",
             FirebaseNames.LOSTFOUND_COLOR to mutableListOf("Black", "Red"),
@@ -107,13 +117,13 @@ class ViewClaimActivityTest : FirebaseTestsSetUp() {
 
         // Post the items
         val task2 = firestore!!.collection(FirebaseNames.COLLECTION_LOST_ITEMS)
-            .document(foundID.toString()).set(dataLost1)
+            .document(lostID.toString()).set(dataLost1)
         Tasks.await(task2, 60, TimeUnit.SECONDS)
         Thread.sleep(2000)
 
         val dataFound1 = mutableMapOf<String, Any>(
             FirebaseNames.LOSTFOUND_ITEMNAME to "TestItem",
-            FirebaseNames.LOSTFOUND_USER to userID.toString(),
+            FirebaseNames.LOSTFOUND_USER to userFoundID.toString(),
             FirebaseNames.LOSTFOUND_CATEGORY to "TestCat",
             FirebaseNames.LOSTFOUND_SUBCATEGORY to "TestSubCat",
             FirebaseNames.LOSTFOUND_COLOR to mutableListOf("Black", "Red"),
@@ -127,7 +137,7 @@ class ViewClaimActivityTest : FirebaseTestsSetUp() {
 
         // Post the items
         val task3 = firestore!!.collection(FirebaseNames.COLLECTION_FOUND_ITEMS)
-            .document("2e9j8erwrwrw").set(dataFound1)
+            .document(foundID.toString()).set(dataFound1)
         Tasks.await(task3, 60, TimeUnit.SECONDS)
         Thread.sleep(2000)
 
@@ -151,7 +161,7 @@ class ViewClaimActivityTest : FirebaseTestsSetUp() {
             claimID = claimID.toString(),
             lostItemID = lostID.toString(),
             foundItemID = foundID.toString(),
-            isApproved = false,
+            isApproved = false,     // initially is approved is false
             timestamp = 1739941511L,
             securityQuestionAns = ""
         )
@@ -183,6 +193,12 @@ class ViewClaimActivityTest : FirebaseTestsSetUp() {
                 IntentExtraNames.INTENT_CLAIM_ITEM
             )
         )
+
+        // click the "Approve this claim" button
+        Thread.sleep(2000)
+        composeTestRule.onNodeWithText("Approve this Claim").performScrollTo().performClick()
+
+        Thread.sleep(20300)
     }
 
     @After
