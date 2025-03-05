@@ -248,7 +248,8 @@ fun CustomInputDialog(
     confirmButton: @Composable (() -> Unit),
     dismissButton: @Composable (() -> Unit)? = null,   // optional secondary button
     isDialogShown: MutableState<Boolean>,
-    errorMessage: MutableState<String>
+    errorMessage: MutableState<String>,
+    testTag: String = ""
 ) {
     if (isDialogShown.value) {
         AlertDialog(
@@ -290,7 +291,8 @@ fun CustomInputDialog(
                         isMultiLine = true,
                         onTextChanged = { s ->
                             inputText.value = s
-                        }
+                        },
+                        testTag = testTag
                     )
 
                     // error message

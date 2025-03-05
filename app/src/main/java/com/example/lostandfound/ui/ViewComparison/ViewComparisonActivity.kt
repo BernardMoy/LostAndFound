@@ -74,7 +74,6 @@ import com.example.lostandfound.CustomElements.CustomComparisonTextField
 import com.example.lostandfound.CustomElements.CustomEditText
 import com.example.lostandfound.CustomElements.CustomGrayTitle
 import com.example.lostandfound.CustomElements.CustomInputDialog
-import com.example.lostandfound.CustomElements.CustomProgressBar
 import com.example.lostandfound.CustomElements.CustomUserDialog
 import com.example.lostandfound.CustomElements.CustomViewTwoLocationsDialog
 import com.example.lostandfound.Data.Claim
@@ -189,10 +188,10 @@ fun MainContent(viewModel: ViewComparisonViewModel) {
             verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin))
         ) {
             OverallSimilarity(context = context, viewModel = viewModel)
-            Column (
+            Column(
                 modifier = Modifier.padding(horizontal = dimensionResource(R.dimen.title_margin)),
                 verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin))
-            ){
+            ) {
                 Reference(context = context, viewModel = viewModel)
                 Status(viewModel = viewModel)
                 ItemImage(viewModel = viewModel)
@@ -211,25 +210,30 @@ fun MainContent(viewModel: ViewComparisonViewModel) {
 fun OverallSimilarity(
     context: Context,
     viewModel: ViewComparisonViewModel
-){
+) {
     Box(
-        modifier = Modifier.fillMaxWidth()
-            .background(brush = Brush.verticalGradient(
-                colors = listOf(
-                    MaterialTheme.colorScheme.primary,
-                    MaterialTheme.colorScheme.secondary
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(
+                brush = Brush.verticalGradient(
+                    colors = listOf(
+                        MaterialTheme.colorScheme.primary,
+                        MaterialTheme.colorScheme.secondary
+                    )
                 )
-            ))
-    ){
+            )
+    ) {
         Text(
             text = "Overall similarity: " + (round(viewModel.scoreData.getOverallSimilarity() * 1000) / 10).toString() + "%",
             style = Typography.bodyMedium,
             color = MaterialTheme.colorScheme.onPrimary,
             textAlign = TextAlign.Center,
             fontWeight = FontWeight.Bold,
-            modifier = Modifier.fillMaxWidth().padding(
-                dimensionResource(R.dimen.title_margin)
-            )
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(
+                    dimensionResource(R.dimen.title_margin)
+                )
         )
     }
 }
@@ -380,9 +384,9 @@ fun ItemImage(viewModel: ViewComparisonViewModel) {
                 )
             },
             centerLabel = {
-                if (viewModel.scoreData.imageScore != null){
+                if (viewModel.scoreData.imageScore != null) {
                     Text(
-                        text = "Image Similarity\n" + (round((viewModel.scoreData.imageScore!! /3) * 1000) / 10).toString() + "%",
+                        text = "Image Similarity\n" + (round((viewModel.scoreData.imageScore!! / 3) * 1000) / 10).toString() + "%",
                         style = Typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onPrimaryContainer,
                         fontWeight = FontWeight.Bold,
@@ -811,7 +815,8 @@ fun ClaimButton(
                             }
                         )
                     },
-                    errorMessage = viewModel.securityQuestionInputError
+                    errorMessage = viewModel.securityQuestionInputError,
+                    testTag = "SecurityQuestionInput"
 
                 )
             } else if (viewModel.claim.foundItemID == viewModel.foundItemData.itemID) {

@@ -2,6 +2,11 @@ package com.example.lostandfound
 
 import android.content.Intent
 import androidx.compose.ui.test.junit4.createComposeRule
+import androidx.compose.ui.test.onNodeWithTag
+import androidx.compose.ui.test.onNodeWithText
+import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performScrollTo
+import androidx.compose.ui.test.performTextInput
 import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.ApplicationProvider
 import com.example.lostandfound.Data.Claim
@@ -11,6 +16,7 @@ import com.example.lostandfound.Data.IntentExtraNames
 import com.example.lostandfound.Data.LostItem
 import com.example.lostandfound.Data.ScoreData
 import com.example.lostandfound.ui.ViewComparison.ViewComparisonActivity
+import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.tasks.Tasks
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -126,6 +132,47 @@ class ViewComparisonActivityTest : FirebaseTestsSetUp() {
             .set(dataFoundUser)
         Tasks.await(task1, 60, TimeUnit.SECONDS)
         Thread.sleep(2000)
+
+        // add the lost item and found item
+        val dataLost1 = mutableMapOf<String, Any>(
+            FirebaseNames.LOSTFOUND_ITEMNAME to "TestItem",
+            FirebaseNames.LOSTFOUND_USER to userID.toString(),
+            FirebaseNames.LOSTFOUND_CATEGORY to "TestCat",
+            FirebaseNames.LOSTFOUND_SUBCATEGORY to "TestSubCat",
+            FirebaseNames.LOSTFOUND_COLOR to mutableListOf("Black", "Red"),
+            FirebaseNames.LOSTFOUND_BRAND to "TestBrand",
+            FirebaseNames.LOSTFOUND_EPOCHDATETIME to 1738819980L,
+            FirebaseNames.LOSTFOUND_LOCATION to LatLng(52.381162440739686, -1.5614377315953403),
+            FirebaseNames.LOSTFOUND_DESCRIPTION to "TestDesc",
+            FirebaseNames.LOST_IS_TRACKING to false,
+            FirebaseNames.LOSTFOUND_TIMEPOSTED to 1739941511L
+        )
+
+        // Post the items
+        val task2 = firestore!!.collection(FirebaseNames.COLLECTION_LOST_ITEMS)
+            .document("2e9j8qijwqiie").set(dataLost1)
+        Tasks.await(task2, 60, TimeUnit.SECONDS)
+        Thread.sleep(2000)
+
+        val dataFound1 = mutableMapOf<String, Any>(
+            FirebaseNames.LOSTFOUND_ITEMNAME to "TestItem",
+            FirebaseNames.LOSTFOUND_USER to "duwindwmw",
+            FirebaseNames.LOSTFOUND_CATEGORY to "TestCat",
+            FirebaseNames.LOSTFOUND_SUBCATEGORY to "TestSubCat",
+            FirebaseNames.LOSTFOUND_COLOR to mutableListOf("Black", "Red"),
+            FirebaseNames.LOSTFOUND_BRAND to "TestBrand",
+            FirebaseNames.LOSTFOUND_EPOCHDATETIME to 1738819980L,
+            FirebaseNames.LOSTFOUND_LOCATION to LatLng(52.381162440739686, -1.5614377315953403),
+            FirebaseNames.LOSTFOUND_DESCRIPTION to "TestDesc",
+            FirebaseNames.LOST_IS_TRACKING to false,
+            FirebaseNames.LOSTFOUND_TIMEPOSTED to 1739941511L
+        )
+
+        // Post the items
+        val task3 = firestore!!.collection(FirebaseNames.COLLECTION_FOUND_ITEMS)
+            .document("2e9j8erwrwrw").set(dataFound1)
+        Tasks.await(task3, 60, TimeUnit.SECONDS)
+        Thread.sleep(2000)
     }
 
     /*
@@ -172,11 +219,62 @@ class ViewComparisonActivityTest : FirebaseTestsSetUp() {
             )
         )
 
+        // try clicking on the claim button
+        composeTestRule.onNodeWithText("Claim this Item").performScrollTo().performClick()
+        Thread.sleep(2000)
+
+        // assert that it asks for a security question
+        composeTestRule.onNodeWithText("TestSecQ").assertExists()
+
+        // try inputting the security question
+        composeTestRule.onNodeWithTag("SecurityQuestionInput")
+            .performTextInput("Sample answer to this")
+
+        // make a claim
+        composeTestRule.onNodeWithText("Claim").performClick()
+
+        // assert a claim entry exist in the firestore database
+        val latch = CountDownLatch(1)
+        firestore!!.collection(FirebaseNames.COLLECTION_CLAIMED_ITEMS)
+            .whereEqualTo(FirebaseNames.CLAIM_LOST_ITEM_ID, "2e9j8qijwqiie")
+            .whereEqualTo(FirebaseNames.CLAIM_FOUND_ITEM_ID, "2e9j8erwrwrw")
+            .get()
+            .addOnSuccessListener { querySnapshot ->
+                // assert only one item exists
+                assertEquals(1, querySnapshot.size())
+
+                // get the claim item
+                val document = querySnapshot.documents[0]
+
+                // verify the security question answer is stored there
+                assertNotNull(document)
+                assertEquals(
+                    "Sample answer to this",
+                    document[FirebaseNames.CLAIM_SECURITY_QUESTION_ANS] as String
+                )
+
+                // countdown
+                latch.countDown()
+
+            }
+            .addOnFailureListener { e ->
+                fail("Failed during db query")
+                latch.countDown()
+            }
+
+        latch.await(60, TimeUnit.SECONDS)
+
 
     }
 
     @After
     fun tearDown() {
+        deleteCollection(FirebaseNames.COLLECTION_LOST_ITEMS)
+        deleteCollection(FirebaseNames.COLLECTION_FOUND_ITEMS)
+        deleteCollection(FirebaseNames.COLLECTION_CLAIMED_ITEMS)
+        deleteCollection(FirebaseNames.COLLECTION_NOTIFICATIONS)
+        deleteCollection(FirebaseNames.COLLECTION_USERS)
+
         // delete current user at the end, as this will trigger cloud functions
         if (auth!!.currentUser != null) {
             Tasks.await(
