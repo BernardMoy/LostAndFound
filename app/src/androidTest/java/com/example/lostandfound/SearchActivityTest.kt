@@ -1,7 +1,9 @@
 package com.example.lostandfound
 
 import android.content.Intent
+import androidx.compose.ui.test.junit4.ComposeTestRule
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
+import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithText
 import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.ApplicationProvider
@@ -35,7 +37,7 @@ class SearchActivityTest : FirebaseTestsSetUp() {
     }
 
     @get:Rule
-    val composeTestRule = createAndroidComposeRule<SearchActivity>()
+    val composeTestRule = createComposeRule()
 
 
     @Before
@@ -102,7 +104,6 @@ class SearchActivityTest : FirebaseTestsSetUp() {
 
     @Test
     fun testSearch() {
-
         val intent =
             Intent(ApplicationProvider.getApplicationContext(), SearchActivity::class.java).apply {
                 putExtra(
@@ -122,6 +123,7 @@ class SearchActivityTest : FirebaseTestsSetUp() {
         )
 
         // assert the search result exists
+        Thread.sleep(4000)
         composeTestRule.onNodeWithText("298heh29").assertExists()  // the found item name
     }
 
