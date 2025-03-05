@@ -11,17 +11,11 @@ import com.example.lostandfound.Data.FirebaseNames
 import com.example.lostandfound.Data.categories
 import com.example.lostandfound.ui.NewLost.NewLostScreen
 import com.example.lostandfound.ui.NewLost.NewLostViewModel
-import com.google.android.gms.tasks.Task
-import com.google.android.gms.tasks.Tasks
-import com.google.firebase.FirebaseApp
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.FirebaseFirestoreSettings
 import org.junit.After
-import org.junit.AfterClass
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.fail
-import org.junit.BeforeClass
 import org.junit.Rule
 import org.junit.Test
 import java.util.concurrent.CountDownLatch
@@ -30,7 +24,7 @@ import java.util.concurrent.TimeUnit
 import java.util.concurrent.TimeoutException
 
 
-class PostNewLostItemTest: FirebaseTestsSetUp() {
+class PostNewLostItemTest : FirebaseTestsSetUp() {
 
     // set up firestore emulator in static context
     companion object {
@@ -150,28 +144,4 @@ class PostNewLostItemTest: FirebaseTestsSetUp() {
         deleteCollection(FirebaseNames.COLLECTION_LOST_ITEMS)
         deleteCollection(FirebaseNames.COLLECTION_ACTIVITY_LOG_ITEMS)
     }
-
-    // private method to delete all elements inside a collection
-    @Throws(
-        ExecutionException::class,
-        InterruptedException::class,
-        TimeoutException::class
-    )
-    private fun deleteCollection(name: String) {
-        val taskGet = firestore!!.collection(name).get()
-        val docs = Tasks.await(taskGet, 60, TimeUnit.SECONDS)
-
-        // create a list of delete tasks for each doc
-        val deleteTasks: MutableList<Task<Void>> = ArrayList()
-        for (doc in docs) {
-            val deleteTask = firestore!!.collection(name)
-                .document(doc.id)
-                .delete()
-            deleteTasks.add(deleteTask)
-        }
-        // execute all tasks
-        Tasks.await(Tasks.whenAll(deleteTasks), 60, TimeUnit.SECONDS)
-        Thread.sleep(2000)
-    }
-
 }

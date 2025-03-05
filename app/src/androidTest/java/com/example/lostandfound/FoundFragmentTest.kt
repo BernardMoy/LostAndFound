@@ -6,7 +6,6 @@ import com.example.lostandfound.Data.FirebaseNames
 import com.example.lostandfound.ui.Found.FoundFragmentScreen
 import com.example.lostandfound.ui.Found.FoundFragmentViewModel
 import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.tasks.Task
 import com.google.android.gms.tasks.Tasks
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -120,28 +119,4 @@ class FoundFragmentTest : FirebaseTestsSetUp() {
             )
         }
     }
-
-    // private method to delete all elements inside a collection
-    @Throws(
-        ExecutionException::class,
-        InterruptedException::class,
-        TimeoutException::class
-    )
-    private fun deleteCollection(name: String) {
-        val taskGet = firestore!!.collection(name).get()
-        val docs = Tasks.await(taskGet, 60, TimeUnit.SECONDS)
-
-        // create a list of delete tasks for each doc
-        val deleteTasks: MutableList<Task<Void>> = ArrayList()
-        for (doc in docs) {
-            val deleteTask = firestore!!.collection(name)
-                .document(doc.id)
-                .delete()
-            deleteTasks.add(deleteTask)
-        }
-        // execute all tasks
-        Tasks.await(Tasks.whenAll(deleteTasks), 60, TimeUnit.SECONDS)
-        Thread.sleep(2000)
-    }
-
 }

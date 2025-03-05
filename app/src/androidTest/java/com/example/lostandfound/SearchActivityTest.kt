@@ -1,8 +1,6 @@
 package com.example.lostandfound
 
 import android.content.Intent
-import androidx.compose.ui.test.junit4.ComposeTestRule
-import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithText
 import androidx.test.core.app.ActivityScenario
@@ -129,8 +127,13 @@ class SearchActivityTest : FirebaseTestsSetUp() {
 
     @After
     fun tearDown() {
-        // clear all data in firestore
+        deleteCollection(FirebaseNames.COLLECTION_FOUND_ITEMS)
 
-        // logout the user
+        // delete current user at the end, as this will trigger cloud functions
+        if (auth!!.currentUser != null) {
+            Tasks.await(
+                auth!!.currentUser!!.delete(), 60, TimeUnit.SECONDS
+            )
+        }
     }
 }

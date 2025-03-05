@@ -11,28 +11,21 @@ import com.example.lostandfound.Data.FirebaseNames;
 import com.example.lostandfound.ui.Register.RegisterActivity;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
-import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreSettings;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
 
-public class RegisterActivityTest extends FirebaseTestsSetUp{
+public class RegisterActivityTest extends FirebaseTestsSetUp {
     private static final FirebaseFirestore firestore = getFirestore();
     private static final FirebaseAuth auth = getAuth();
 
@@ -99,24 +92,6 @@ public class RegisterActivityTest extends FirebaseTestsSetUp{
         if (auth.getCurrentUser() != null) {
             Tasks.await(auth.getCurrentUser().delete(), 60, TimeUnit.SECONDS);
         }
-    }
-
-    // private method to delete all elements inside a collection
-    private void deleteCollection(String name) throws ExecutionException, InterruptedException, TimeoutException {
-        Task<QuerySnapshot> taskGet = firestore.collection(name).get();
-        QuerySnapshot docs = Tasks.await(taskGet, 60, TimeUnit.SECONDS);
-
-        // create a list of delete tasks for each doc
-        List<Task<Void>> deleteTasks = new ArrayList<>();
-        for (DocumentSnapshot doc : docs) {
-            Task<Void> deleteTask = firestore.collection(name)
-                    .document(doc.getId())
-                    .delete();
-            deleteTasks.add(deleteTask);
-        }
-        // execute all tasks
-        Tasks.await(Tasks.whenAll(deleteTasks), 60, TimeUnit.SECONDS);
-        Thread.sleep(2000);
     }
 
 }
