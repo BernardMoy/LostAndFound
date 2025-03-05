@@ -10,6 +10,7 @@ import androidx.test.core.app.ApplicationProvider
 import com.example.lostandfound.Data.Claim
 import com.example.lostandfound.Data.FirebaseNames
 import com.example.lostandfound.Data.IntentExtraNames
+import com.example.lostandfound.ViewComparisonActivityTest.Companion
 import com.example.lostandfound.ui.ViewClaim.ViewClaimActivity
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.tasks.Tasks
@@ -18,6 +19,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
+import org.junit.Assert.assertTrue
 import org.junit.Assert.fail
 import org.junit.Before
 import org.junit.Rule
@@ -195,10 +197,41 @@ class ViewClaimActivityTest : FirebaseTestsSetUp() {
         )
 
         // click the "Approve this claim" button
-        Thread.sleep(2000)
         composeTestRule.onNodeWithText("Approve this Claim").performScrollTo().performClick()
+        Thread.sleep(3000)
 
-        Thread.sleep(20300)
+        // click the approve button in the pop up dialog
+        composeTestRule.onNodeWithText("Approve").performClick()
+        Thread.sleep(2000)
+
+        // assert the claim is marked as approved
+        val latch = CountDownLatch(1)
+        firestore!!.collection(FirebaseNames.COLLECTION_CLAIMED_ITEMS)
+            .whereEqualTo(FirebaseNames.CLAIM_LOST_ITEM_ID, lostID)
+            .whereEqualTo(FirebaseNames.CLAIM_FOUND_ITEM_ID, foundID)
+            .get()
+            .addOnSuccessListener { querySnapshot ->
+                // assert only one item exists
+                assertEquals(1, querySnapshot.size())
+
+                // get the claim item
+                val document = querySnapshot.documents[0]
+
+                // verify the security question answer is stored there
+                assertNotNull(document)
+                assertTrue(document[FirebaseNames.CLAIM_IS_APPROVED] as Boolean)
+
+                // countdown
+                latch.countDown()
+
+            }
+            .addOnFailureListener { e ->
+                fail("Failed during db query")
+                latch.countDown()
+            }
+
+        latch.await(60, TimeUnit.SECONDS)
+
     }
 
     @After
