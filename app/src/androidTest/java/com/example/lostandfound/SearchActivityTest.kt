@@ -1,25 +1,19 @@
 package com.example.lostandfound
 
 import android.content.Intent
-import android.os.Bundle
-import androidx.activity.ComponentActivity
-import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
-import androidx.compose.ui.test.junit4.createComposeRule
-import androidx.compose.ui.test.runAndroidComposeUiTest
+import androidx.compose.ui.test.onNodeWithText
 import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.ApplicationProvider
-import androidx.test.ext.junit.rules.ActivityScenarioRule
+import com.example.lostandfound.Data.FirebaseNames
 import com.example.lostandfound.Data.IntentExtraNames
 import com.example.lostandfound.Data.LostItem
-import com.example.lostandfound.ui.NewLost.NewLostScreen
 import com.example.lostandfound.ui.Search.SearchActivity
-import com.example.lostandfound.ui.Search.SearchScreen
-import com.example.lostandfound.ui.Search.SearchViewModel
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.tasks.Tasks
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import org.junit.After
-import org.junit.Assert
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.fail
@@ -27,6 +21,7 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import java.util.concurrent.CountDownLatch
+import java.util.concurrent.TimeUnit
 
 class SearchActivityTest : FirebaseTestsSetUp() {
     // set up firestore emulator in static context
@@ -84,33 +79,50 @@ class SearchActivityTest : FirebaseTestsSetUp() {
             isTracking = false,
             timePosted = 1739941511L
         )
+
+        // post a very similar found item
+        val dataFound1 = mutableMapOf<String, Any>(
+            FirebaseNames.LOSTFOUND_ITEMNAME to "298heh29",
+            FirebaseNames.LOSTFOUND_USER to "sauqsiqis",  // different user id
+            FirebaseNames.LOSTFOUND_CATEGORY to "TestCat",
+            FirebaseNames.LOSTFOUND_SUBCATEGORY to "TestSubCat",
+            FirebaseNames.LOSTFOUND_COLOR to mutableListOf("Black", "Red"),
+            FirebaseNames.LOSTFOUND_BRAND to "TestBrand",
+            FirebaseNames.LOSTFOUND_EPOCHDATETIME to 1738819980L,
+            FirebaseNames.LOSTFOUND_LOCATION to LatLng(52.381162440739686, -1.5614377315953403),
+            FirebaseNames.LOSTFOUND_DESCRIPTION to "testDesc",
+            FirebaseNames.LOSTFOUND_TIMEPOSTED to 1739941513L
+        )
+
+        // Post the items
+        val task1 = firestore!!.collection(FirebaseNames.COLLECTION_FOUND_ITEMS).add(dataFound1)
+        val ref1 = Tasks.await(task1, 60, TimeUnit.SECONDS)
+        Thread.sleep(2000)
     }
 
     @Test
     fun testSearch() {
 
-        val intent = Intent(ApplicationProvider.getApplicationContext(), SearchActivity::class.java).apply {
-            putExtra(
-                IntentExtraNames.INTENT_LOST_ID,
-                dataLost
-            )
-        }
+        val intent =
+            Intent(ApplicationProvider.getApplicationContext(), SearchActivity::class.java).apply {
+                putExtra(
+                    IntentExtraNames.INTENT_LOST_ID,
+                    dataLost
+                )
+            }
 
         ActivityScenario.launch<SearchActivity>(intent)
         composeTestRule.waitForIdle()
 
-        // WAIT FOR 5S for the results to load
-        Thread.sleep(5000)
-
         // assert the correct intent has been passed
-        assertEquals(dataLost, intent.getParcelableExtra(
-            IntentExtraNames.INTENT_LOST_ID
-        ))
+        assertEquals(
+            dataLost, intent.getParcelableExtra(
+                IntentExtraNames.INTENT_LOST_ID
+            )
+        )
 
         // assert the search result exists
-
-
-
+        composeTestRule.onNodeWithText("298heh29").assertExists()  // the found item name
     }
 
     @After
