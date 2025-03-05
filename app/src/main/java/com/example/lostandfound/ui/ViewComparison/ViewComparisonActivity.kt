@@ -725,7 +725,7 @@ fun ClaimButton(
 
     // when isLoading changes, functions that uses the variable are re-composed
     if (isLoading) {
-        CustomProgressBar()
+        CustomCenteredProgressbar()
     }
 
     Row(
