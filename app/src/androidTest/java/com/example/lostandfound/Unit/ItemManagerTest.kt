@@ -1,5 +1,6 @@
 package com.example.lostandfound.Unit
 
+import android.net.Uri
 import com.example.lostandfound.Data.Claim
 import com.example.lostandfound.Data.FirebaseNames
 import com.example.lostandfound.Data.FoundItem
@@ -7,14 +8,18 @@ import com.example.lostandfound.Data.LostItem
 import com.example.lostandfound.FirebaseManagers.ItemManager
 import com.example.lostandfound.FirebaseTestsSetUp
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.tasks.Task
 import com.google.android.gms.tasks.Tasks
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.UploadTask
 import junit.framework.TestCase.assertEquals
 import junit.framework.TestCase.assertNotNull
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
+import java.io.File
+import java.nio.file.Files
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.ExecutionException
 import java.util.concurrent.TimeUnit
@@ -39,6 +44,10 @@ class ItemManagerTest : FirebaseTestsSetUp() {
         private var claimL2F1: String? = null
         private var claimL3F1: String? = null
         private var claimL4F3: String? = null
+
+        // image download urls
+        private var lost1imageURL: String? = null
+        private var found1imageURL: String? = null
 
     }
 
@@ -238,6 +247,38 @@ class ItemManagerTest : FirebaseTestsSetUp() {
         val ref10 = Tasks.await(task10, 60, TimeUnit.SECONDS)
         Thread.sleep(2000)
         claimL4F3 = ref10.id
+
+        // add the images for lost1 and found1, which is used in testGetLostItemFromID and testGetFoundItemFromID
+
+        // add a storage image
+        val lostImg = File.createTempFile(lost1ID.toString(), ".jpeg")
+        Files.newOutputStream(lostImg.toPath()).use { outputStream ->
+            outputStream.write(ByteArray(1024)) // write empty image
+        }
+        // upload the storage image to firebase storage
+        val ref11 = storage!!.reference.child(FirebaseNames.FOLDER_LOST_IMAGE).child(lost1ID.toString())
+        val task11: Task<UploadTask.TaskSnapshot> = ref11.putFile(Uri.fromFile(lostImg))
+        Tasks.await(task11, 60, TimeUnit.SECONDS)
+        Thread.sleep(2000)
+
+        val urlTask: Task<Uri> = ref11.downloadUrl  // get the download url of the image
+        lost1imageURL = Tasks.await(urlTask, 60, TimeUnit.SECONDS).toString()
+        Thread.sleep(2000)
+
+
+        val foundImg = File.createTempFile(lost1ID.toString(), ".jpeg")
+        Files.newOutputStream(foundImg.toPath()).use { outputStream ->
+            outputStream.write(ByteArray(1024)) // write empty image
+        }
+        // upload the storage image to firebase storage
+        val ref12 = storage!!.reference.child(FirebaseNames.FOLDER_FOUND_IMAGE).child(found1ID.toString())
+        val task12: Task<UploadTask.TaskSnapshot> = ref12.putFile(Uri.fromFile(foundImg))
+        Tasks.await(task12, 60, TimeUnit.SECONDS)
+        Thread.sleep(2000)
+
+        val urlTask2: Task<Uri> = ref12.downloadUrl  // get the download url of the image
+        found1imageURL = Tasks.await(urlTask2, 60, TimeUnit.SECONDS).toString()
+        Thread.sleep(2000)
     }
 
     @Test
@@ -269,6 +310,9 @@ class ItemManagerTest : FirebaseTestsSetUp() {
         assertEquals("testDesc", target?.description)
         assertEquals(false, target?.isTracking)
         assertEquals(1739941511L, target?.timePosted)
+
+        // assert the image is equal
+        assertEquals(lost1imageURL, target?.image)
     }
 
     @Test
@@ -301,6 +345,9 @@ class ItemManagerTest : FirebaseTestsSetUp() {
         assertEquals("testSecQ", target?.securityQuestion)
         assertEquals("testSecQAns", target?.securityQuestionAns)
         assertEquals(1739941511L, target?.timePosted)
+
+        // assert the image is equal
+        assertEquals(found1imageURL, target?.image)
     }
 
     @Test
