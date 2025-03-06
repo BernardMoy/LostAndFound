@@ -31,13 +31,13 @@ import org.junit.Test
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit
 
-class ViewComparisonActivityTest : FirebaseTestsSetUp() {
+class NotificationType3Test : FirebaseTestsSetUp() {
     // set up firestore emulator in static context
     companion object {
         private var firestore: FirebaseFirestore? = getFirestore()
         private var auth: FirebaseAuth? = getAuth()
 
-        private var userID: String? = null
+        private var userID: String? = null     // the current logged in (Lost) user
         private var dataLost: LostItem? = null
         private var dataFound: FoundItem? = null
         private var dataScore: ScoreData? = null
@@ -103,8 +103,6 @@ class ViewComparisonActivityTest : FirebaseTestsSetUp() {
             dateTime = 1738819980L,
             location = Pair(52.381162440739686, -1.5614377315953403),
             description = "TestDesc",
-            securityQuestion = "TestSecQ",
-            securityQuestionAns = "TestSecQAns",
             timePosted = 1739941511L
         )
 
@@ -178,10 +176,10 @@ class ViewComparisonActivityTest : FirebaseTestsSetUp() {
     }
 
     /*
-    Test that an item can be claimed through clicking the "Claim this Item" button
+    Test that a notification is sent to the found user when the current user claimed the item
      */
     @Test
-    fun testClaimItem() {
+    fun testNotificationClaimedItem() {
         val intent =
             Intent(
                 ApplicationProvider.getApplicationContext(),
@@ -225,39 +223,20 @@ class ViewComparisonActivityTest : FirebaseTestsSetUp() {
         composeTestRule.onNodeWithText("Claim this Item").performScrollTo().performClick()
         Thread.sleep(2000)
 
-        // assert that it asks for a security question
-        composeTestRule.onNodeWithText("TestSecQ").assertExists()
 
-        // try inputting the security question
-        composeTestRule.onNodeWithTag("SecurityQuestionInput")
-            .performTextInput("Sample answer to this")
-
-        // make a claim
-        composeTestRule.onNodeWithText("Claim").performClick()
-
-        // assert a claim entry exist in the firestore database
+        // assert a notification entry exist in the database
         val latch = CountDownLatch(1)
-        firestore!!.collection(FirebaseNames.COLLECTION_CLAIMED_ITEMS)
-            .whereEqualTo(FirebaseNames.CLAIM_LOST_ITEM_ID, "2e9j8qijwqiie")
-            .whereEqualTo(FirebaseNames.CLAIM_FOUND_ITEM_ID, "2e9j8erwrwrw")
+        firestore!!.collection(FirebaseNames.COLLECTION_NOTIFICATIONS)
+            .whereEqualTo(FirebaseNames.NOTIFICATION_USER_ID, "duwindwmw")
+            .whereEqualTo(FirebaseNames.NOTIFICATION_TYPE, 3)
+            .whereNotEqualTo(FirebaseNames.NOTIFICATION_CLAIM_ID, null)
             .get()
             .addOnSuccessListener { querySnapshot ->
                 // assert only one item exists
                 assertEquals(1, querySnapshot.size())
 
-                // get the claim item
-                val document = querySnapshot.documents[0]
-
-                // verify the security question answer is stored there
-                assertNotNull(document)
-                assertEquals(
-                    "Sample answer to this",
-                    document[FirebaseNames.CLAIM_SECURITY_QUESTION_ANS] as String
-                )
-
                 // countdown
                 latch.countDown()
-
             }
             .addOnFailureListener { e ->
                 fail("Failed during db query")
@@ -265,8 +244,6 @@ class ViewComparisonActivityTest : FirebaseTestsSetUp() {
             }
 
         latch.await(60, TimeUnit.SECONDS)
-
-
     }
 
     @After
