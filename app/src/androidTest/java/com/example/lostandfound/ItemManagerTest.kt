@@ -30,12 +30,15 @@ class ItemManagerTest : FirebaseTestsSetUp() {
         private var lost1ID: String? = null
         private var lost2ID: String? = null
         private var lost3ID: String? = null
+        private var lost4ID: String? = null
 
         private var found1ID: String? = null
         private var found2ID: String? = null
+        private var found3ID: String? = null
 
         private var claimL2F1: String? = null
         private var claimL3F1: String? = null
+        private var claimL4F3: String? = null
 
     }
 
@@ -46,10 +49,12 @@ class ItemManagerTest : FirebaseTestsSetUp() {
         // create a lost item to be added to firestore
         /*
         lost1 (Isolated)
-        lost2 -> made a claim to found1
+        lost2 -> made a claim to found1 and havent approved
         lost3 -> made a claim to found1 and is approved
+        lost4 -> made a claim to found3 and havent approved
         found1 -> claimed by L2 and L3
         found2 (Isolated)
+        found3 -> claimed by L4
          */
         // data lost 1 is isolated -> status 0
         val dataLost1 = mutableMapOf<String, Any>(
@@ -94,6 +99,20 @@ class ItemManagerTest : FirebaseTestsSetUp() {
             FirebaseNames.LOSTFOUND_TIMEPOSTED to 1739941511L
         )
 
+        val dataLost4 = mutableMapOf<String, Any>(
+            FirebaseNames.LOSTFOUND_ITEMNAME to "test4",
+            FirebaseNames.LOSTFOUND_USER to "Rwowo4",
+            FirebaseNames.LOSTFOUND_CATEGORY to "testCat4",
+            FirebaseNames.LOSTFOUND_SUBCATEGORY to "testSubCat4",
+            FirebaseNames.LOSTFOUND_COLOR to mutableListOf("Black", "Red"),
+            FirebaseNames.LOSTFOUND_BRAND to "testBrand4",
+            FirebaseNames.LOSTFOUND_EPOCHDATETIME to 1748819980L,
+            FirebaseNames.LOSTFOUND_LOCATION to LatLng(52.481162440749685, -1.5614477415954404),
+            FirebaseNames.LOSTFOUND_DESCRIPTION to "testDesc4",
+            FirebaseNames.LOST_IS_TRACKING to false,
+            FirebaseNames.LOSTFOUND_TIMEPOSTED to 1739941511L
+        )
+
         val dataFound1 = mutableMapOf<String, Any>(
             FirebaseNames.LOSTFOUND_ITEMNAME to "test",
             FirebaseNames.LOSTFOUND_USER to "Rwowo",
@@ -124,6 +143,21 @@ class ItemManagerTest : FirebaseTestsSetUp() {
             FirebaseNames.LOSTFOUND_TIMEPOSTED to 1739941511L
         )
 
+        val dataFound3 = mutableMapOf<String, Any>(
+            FirebaseNames.LOSTFOUND_ITEMNAME to "test3",
+            FirebaseNames.LOSTFOUND_USER to "Rwowo3",
+            FirebaseNames.LOSTFOUND_CATEGORY to "testCat3",
+            FirebaseNames.LOSTFOUND_SUBCATEGORY to "testSubCat3",
+            FirebaseNames.LOSTFOUND_COLOR to mutableListOf("Black", "Red"),
+            FirebaseNames.LOSTFOUND_BRAND to "testBrand3",
+            FirebaseNames.LOSTFOUND_EPOCHDATETIME to 1738819980L,
+            FirebaseNames.LOSTFOUND_LOCATION to LatLng(53.381163440739684, -1.5614377315953403),
+            FirebaseNames.LOSTFOUND_DESCRIPTION to "testDesc3",
+            FirebaseNames.FOUND_SECURITY_Q to "testSecQ3",
+            FirebaseNames.FOUND_SECURITY_Q_ANS to "testSecQAns3",
+            FirebaseNames.LOSTFOUND_TIMEPOSTED to 1739941511L
+        )
+
         // Post the items
         val task1 = firestore!!.collection(FirebaseNames.COLLECTION_LOST_ITEMS).add(dataLost1)
         val ref1 = Tasks.await(task1, 60, TimeUnit.SECONDS)
@@ -150,6 +184,16 @@ class ItemManagerTest : FirebaseTestsSetUp() {
         Thread.sleep(2000)
         found2ID = ref7.id
 
+        val task8 = firestore!!.collection(FirebaseNames.COLLECTION_LOST_ITEMS).add(dataLost4)
+        val ref8 = Tasks.await(task8, 60, TimeUnit.SECONDS)
+        Thread.sleep(2000)
+        lost4ID = ref8.id
+
+        val task9 = firestore!!.collection(FirebaseNames.COLLECTION_FOUND_ITEMS).add(dataFound3)
+        val ref9 = Tasks.await(task9, 60, TimeUnit.SECONDS)
+        Thread.sleep(2000)
+        found3ID = ref9.id
+
 
         // create claims based on the ids
         val dataClaimL2F1 = mutableMapOf<String, Any>(
@@ -168,6 +212,14 @@ class ItemManagerTest : FirebaseTestsSetUp() {
             FirebaseNames.CLAIM_SECURITY_QUESTION_ANS to "claim3Text"
         )
 
+        val dataClaimL4F3 = mutableMapOf<String, Any>(
+            FirebaseNames.CLAIM_TIMESTAMP to 1739942555L,
+            FirebaseNames.CLAIM_IS_APPROVED to false,
+            FirebaseNames.CLAIM_LOST_ITEM_ID to lost4ID.toString(),
+            FirebaseNames.CLAIM_FOUND_ITEM_ID to found3ID.toString(),
+            FirebaseNames.CLAIM_SECURITY_QUESTION_ANS to "claim4Text"
+        )
+
         // Post the claims
         val task5 =
             firestore!!.collection(FirebaseNames.COLLECTION_CLAIMED_ITEMS).add(dataClaimL2F1)
@@ -180,6 +232,12 @@ class ItemManagerTest : FirebaseTestsSetUp() {
         val ref6 = Tasks.await(task6, 60, TimeUnit.SECONDS)
         Thread.sleep(2000)
         claimL3F1 = ref6.id
+
+        val task10 =
+            firestore!!.collection(FirebaseNames.COLLECTION_CLAIMED_ITEMS).add(dataClaimL4F3)
+        val ref10 = Tasks.await(task10, 60, TimeUnit.SECONDS)
+        Thread.sleep(2000)
+        claimL4F3 = ref10.id
     }
 
     @Test
@@ -355,6 +413,7 @@ class ItemManagerTest : FirebaseTestsSetUp() {
         // statuses of the lost item f1, f2 should be 2, 0 respectively
         var f1Status: Int = -1
         var f2Status: Int = -1
+        var f3Status: Int = -1
 
         val latch1 = CountDownLatch(1)
         ItemManager.getFoundItemStatus(found1ID ?: "", object : ItemManager.StatusCallback {
@@ -374,10 +433,19 @@ class ItemManagerTest : FirebaseTestsSetUp() {
         })
         latch2.await(60, TimeUnit.SECONDS)
 
+        val latch3 = CountDownLatch(1)
+        ItemManager.getFoundItemStatus(found3ID ?: "", object : ItemManager.StatusCallback {
+            override fun onComplete(status: Int) {
+                f3Status = status
+                latch3.countDown()
+            }
+        })
+        latch3.await(60, TimeUnit.SECONDS)
 
-        // assert statuses are 2 0
+        // assert statuses are 2 0 1
         assertEquals(2, f1Status)
         assertEquals(0, f2Status)
+        assertEquals(1, f3Status)
     }
 
 
