@@ -1,10 +1,12 @@
-package com.example.lostandfound;
+package com.example.lostandfound.Unit;
 
 import android.net.Uri;
 
 import androidx.annotation.NonNull;
 
 import com.example.lostandfound.FirebaseManagers.FirebaseStorageManager;
+import com.example.lostandfound.FirebaseTestsSetUp;
+import com.example.lostandfound.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.AuthResult;
