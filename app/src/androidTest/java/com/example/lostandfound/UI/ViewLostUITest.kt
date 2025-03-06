@@ -1,0 +1,149 @@
+package com.example.lostandfound.UI
+
+import android.content.Intent
+import androidx.compose.ui.test.assertTextContains
+import androidx.compose.ui.test.assertTextEquals
+import androidx.compose.ui.test.junit4.createComposeRule
+import androidx.compose.ui.test.onNodeWithTag
+import androidx.compose.ui.test.onNodeWithText
+import androidx.compose.ui.test.performScrollTo
+import androidx.test.core.app.ActivityScenario
+import androidx.test.core.app.ApplicationProvider
+import com.example.lostandfound.Data.FirebaseNames
+import com.example.lostandfound.Data.IntentExtraNames
+import com.example.lostandfound.Data.LostItem
+import com.example.lostandfound.FirebaseTestsSetUp
+import com.example.lostandfound.ui.ViewLost.ViewLostActivity
+import com.google.android.gms.tasks.Tasks
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
+import org.junit.After
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNotNull
+import org.junit.Assert.fail
+import org.junit.Before
+import org.junit.Rule
+import org.junit.Test
+import java.util.concurrent.CountDownLatch
+import java.util.concurrent.TimeUnit
+
+class ViewLostUITest : FirebaseTestsSetUp() {
+    // set up firestore emulator in static context
+    companion object {
+        private var firestore: FirebaseFirestore? = getFirestore()
+        private var auth: FirebaseAuth? = getAuth()
+
+        private var userID: String? = null
+        private var dataLost: LostItem? = null
+
+    }
+
+    @get:Rule
+    val composeTestRule = createComposeRule()
+
+
+    @Before
+    fun setUp() {
+        // create and sign in test user
+        val email = "test@warwick"
+        val password = "1234ABCde"
+
+        val latch: CountDownLatch = CountDownLatch(1)
+        auth!!.createUserWithEmailAndPassword(email, password).addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                val user = auth!!.currentUser
+                if (user != null) {
+                    userID = user.uid
+                }
+                latch.countDown()
+            } else {
+                fail("Failed while creating a user")
+                latch.countDown()
+            }
+        }
+        latch.await()  // wait for user creation
+
+        // after user creation, the user is logged in
+        // assert current user is not null
+        assertNotNull(auth!!.currentUser)
+
+
+        // create item details
+        dataLost = LostItem(
+            itemID = "2e9j8qijwqiie",
+            userID = userID ?: "",    // use the current user ID
+            itemName = "TestItem",
+            category = "TestCat",
+            subCategory = "TestSubCat",
+            color = listOf("Black", "Red"),
+            brand = "TestBrand",
+            dateTime = 1738819980L,
+            location = Pair(52.381162440739686, -1.5614377315953403),
+            description = "TestDesc",
+            isTracking = false,
+            timePosted = 1739941511L
+        )
+
+        // upload the user to firebase firestore
+        val dataLostUser = mutableMapOf<String, Any>(
+            FirebaseNames.USERS_EMAIL to email,
+            FirebaseNames.USERS_AVATAR to "",
+            FirebaseNames.USERS_FIRSTNAME to "testFirstName2",
+            FirebaseNames.USERS_LASTNAME to "testLastName2"
+        )
+
+        // document the found user id and add it
+        val task1 = firestore!!.collection(FirebaseNames.COLLECTION_USERS)
+            .document(userID.toString())
+            .set(dataLostUser)
+        Tasks.await(task1, 60, TimeUnit.SECONDS)
+        Thread.sleep(2000)
+    }
+
+    /*
+    Unable to isolate tests, as this will require isolating the intent
+    but this cannot be done because need to wait until the lost item is created
+    and directly isolating them will lead to the application interface being relaunched
+    multiple times
+     */
+    @Test
+    fun testCorrectItemDetails() {
+        val intent =
+            Intent(
+                ApplicationProvider.getApplicationContext(),
+                ViewLostActivity::class.java
+            ).apply {
+                putExtra(
+                    IntentExtraNames.INTENT_LOST_ID,
+                    dataLost
+                )
+            }
+
+        ActivityScenario.launch<ViewLostActivity>(intent)
+        composeTestRule.waitForIdle()
+
+        // assert the correct intent has been passed
+        assertEquals(
+            dataLost, intent.getParcelableExtra(
+                IntentExtraNames.INTENT_LOST_ID
+            )
+        )
+
+        // assert the correct item details are posted
+        Thread.sleep(2000)
+        composeTestRule.onNodeWithText("Reference: #2e9j8qijwqiie").assertExists()  // ref
+        composeTestRule.onNodeWithTag("ViewLostName").performScrollTo().assertTextContains("TestItem")
+    }
+
+    @After
+    fun tearDown() {
+        deleteCollection(FirebaseNames.COLLECTION_USERS)
+
+        // delete current user at the end, as this will trigger cloud functions
+        if (auth!!.currentUser != null) {
+            Tasks.await(
+                auth!!.currentUser!!.delete(), 60, TimeUnit.SECONDS
+            )
+        }
+    }
+}

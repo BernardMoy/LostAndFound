@@ -56,7 +56,8 @@ fun CustomEditText(
     leftIcon: ImageVector,
     rightIcon: ImageVector? = null,
     onTextChanged: ((String) -> Unit)? = null,
-    isError: Boolean = false
+    isError: Boolean = false,
+    testTag: String = ""
 ) {
     // mutable field content text
     var varFieldContent by remember { mutableStateOf(fieldContent) }
@@ -96,7 +97,8 @@ fun CustomEditText(
             .fillMaxWidth()
             .padding(
                 horizontal = 0.dp, vertical = dimensionResource(id = R.dimen.content_margin_half)
-            ),
+            )
+            .testTag(testTag),
         enabled = isEditable,
         isError = isError,
         colors = TextFieldDefaults.colors(
