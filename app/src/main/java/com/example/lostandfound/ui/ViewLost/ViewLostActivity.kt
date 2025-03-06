@@ -349,7 +349,8 @@ fun ItemDetails(viewModel: ViewLostViewModel) {
             fieldLabel = "Category",
             fieldContent = viewModel.itemData.category + ", " + viewModel.itemData.subCategory,
             leftIcon = Icons.Outlined.Folder,
-            isEditable = false
+            isEditable = false,
+            testTag = "ViewLostCategory"
         )
         HorizontalDivider(thickness = 1.dp)
 
@@ -358,7 +359,8 @@ fun ItemDetails(viewModel: ViewLostViewModel) {
             fieldLabel = "Date and time",
             fieldContent = DateTimeManager.dateTimeToString(viewModel.itemData.dateTime),
             leftIcon = Icons.Outlined.CalendarMonth,
-            isEditable = false
+            isEditable = false,
+            testTag = "ViewLostDateTime"
         )
         HorizontalDivider(thickness = 1.dp)
 
@@ -374,7 +376,8 @@ fun ItemDetails(viewModel: ViewLostViewModel) {
                     fieldLabel = "Color",
                     fieldContent = colorText,
                     leftIcon = Icons.Outlined.Palette,
-                    isEditable = false
+                    isEditable = false,
+                    testTag = "ViewLostColor"
                 )
             }
 
@@ -402,7 +405,8 @@ fun ItemDetails(viewModel: ViewLostViewModel) {
             fieldLabel = "Brand",
             fieldContent = if (viewModel.itemData.brand.isNotEmpty()) viewModel.itemData.brand else "(Not provided)",
             leftIcon = Icons.Outlined.Title,
-            isEditable = false
+            isEditable = false,
+            testTag = "ViewLostBrand"
         )
         HorizontalDivider(thickness = 1.dp)
 
@@ -411,7 +415,8 @@ fun ItemDetails(viewModel: ViewLostViewModel) {
             fieldLabel = "Description",
             fieldContent = if (viewModel.itemData.description.isNotEmpty()) viewModel.itemData.description else "(Not provided)",
             leftIcon = Icons.Outlined.Description,
-            isEditable = false
+            isEditable = false,
+            testTag = "ViewLostDescription"
         )
         HorizontalDivider(thickness = 1.dp)
     }
@@ -473,7 +478,8 @@ fun UserData(
                     fieldLabel = "User",
                     fieldContent = if (viewModel.itemData.userID == FirebaseUtility.getUserID()) "$userDisplayName (You)" else userDisplayName,
                     leftIcon = Icons.Outlined.AccountCircle,
-                    isEditable = false
+                    isEditable = false,
+                    testTag = "ViewLostUser"
                 )
             }
 
@@ -496,7 +502,8 @@ fun UserData(
             fieldLabel = "Time posted",
             fieldContent = DateTimeManager.dateTimeToString(viewModel.itemData.timePosted),
             leftIcon = Icons.Outlined.CalendarMonth,
-            isEditable = false
+            isEditable = false,
+            testTag = "ViewLostTimePosted"
         )
         HorizontalDivider(thickness = 1.dp)
     }
