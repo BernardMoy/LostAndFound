@@ -229,7 +229,8 @@ fun ItemDetails(viewModel: ViewFoundViewModel) {
             fieldLabel = "Item name",
             fieldContent = viewModel.itemData.itemName,
             leftIcon = Icons.Outlined.Edit,
-            isEditable = false
+            isEditable = false,
+            testTag = "ViewFoundName"
         )
         HorizontalDivider(thickness = 1.dp)
 
@@ -238,7 +239,8 @@ fun ItemDetails(viewModel: ViewFoundViewModel) {
             fieldLabel = "Category",
             fieldContent = viewModel.itemData.category + ", " + viewModel.itemData.subCategory,
             leftIcon = Icons.Outlined.Folder,
-            isEditable = false
+            isEditable = false,
+            testTag = "ViewFoundCategory"
         )
         HorizontalDivider(thickness = 1.dp)
 
@@ -247,7 +249,8 @@ fun ItemDetails(viewModel: ViewFoundViewModel) {
             fieldLabel = "Date and time",
             fieldContent = DateTimeManager.dateTimeToString(viewModel.itemData.dateTime),
             leftIcon = Icons.Outlined.CalendarMonth,
-            isEditable = false
+            isEditable = false,
+            testTag = "ViewFoundDateTime"
         )
         HorizontalDivider(thickness = 1.dp)
 
@@ -263,7 +266,8 @@ fun ItemDetails(viewModel: ViewFoundViewModel) {
                     fieldLabel = "Color",
                     fieldContent = colorText,
                     leftIcon = Icons.Outlined.Palette,
-                    isEditable = false
+                    isEditable = false,
+                    testTag = "ViewFoundColor"
                 )
             }
 
@@ -290,7 +294,8 @@ fun ItemDetails(viewModel: ViewFoundViewModel) {
             fieldLabel = "Brand",
             fieldContent = if (viewModel.itemData.brand.isNotEmpty()) viewModel.itemData.brand else "(Not provided)",
             leftIcon = Icons.Outlined.Title,
-            isEditable = false
+            isEditable = false,
+            testTag = "ViewFoundBrand"
         )
         HorizontalDivider(thickness = 1.dp)
 
@@ -299,7 +304,8 @@ fun ItemDetails(viewModel: ViewFoundViewModel) {
             fieldLabel = "Description",
             fieldContent = if (viewModel.itemData.description.isNotEmpty()) viewModel.itemData.description else "(Not provided)",
             leftIcon = Icons.Outlined.Description,
-            isEditable = false
+            isEditable = false,
+            testTag = "ViewFoundDescription"
         )
         HorizontalDivider(thickness = 1.dp)
 
@@ -308,7 +314,8 @@ fun ItemDetails(viewModel: ViewFoundViewModel) {
             fieldLabel = "Security question",
             fieldContent = if (viewModel.itemData.securityQuestion.isEmpty()) "No" else "Yes",
             isEditable = false,
-            leftIcon = Icons.Outlined.Lock
+            leftIcon = Icons.Outlined.Lock,
+            testTag = "ViewFoundSecurityQuestion"
         )
     }
 }
@@ -360,12 +367,16 @@ fun UserData(
         ) {
             Box(
                 modifier = Modifier.weight(1f)
-            ) {
+            ) { // Name of user
+                val userDisplayName =
+                    viewModel.foundUser.firstName + ' ' + viewModel.foundUser.lastName
+
                 CustomEditText(
                     fieldLabel = "User",
-                    fieldContent = viewModel.foundUser.firstName + ' ' + viewModel.foundUser.lastName,
+                    fieldContent = if (viewModel.itemData.userID == FirebaseUtility.getUserID()) "$userDisplayName (You)" else userDisplayName,
                     leftIcon = Icons.Outlined.AccountCircle,
                     isEditable = false,
+                    testTag = "ViewFoundUser"
                 )
             }
 
@@ -399,7 +410,8 @@ fun UserData(
             fieldLabel = "Time posted",
             fieldContent = DateTimeManager.dateTimeToString(viewModel.itemData.timePosted),
             leftIcon = Icons.Outlined.CalendarMonth,
-            isEditable = false
+            isEditable = false,
+            testTag = "ViewFoundTimePosted"
         )
         HorizontalDivider(thickness = 1.dp)
     }
