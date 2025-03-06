@@ -339,7 +339,8 @@ fun ItemDetails(viewModel: ViewLostViewModel) {
             fieldLabel = "Item name",
             fieldContent = viewModel.itemData.itemName,
             leftIcon = Icons.Outlined.Edit,
-            isEditable = false
+            isEditable = false,
+            testTag = "ViewLostName"
         )
         HorizontalDivider(thickness = 1.dp)
 
