@@ -1,12 +1,12 @@
-package com.example.lostandfound
+package com.example.lostandfound.Unit
 
 import com.example.lostandfound.Data.Claim
 import com.example.lostandfound.Data.FirebaseNames
 import com.example.lostandfound.Data.FoundItem
 import com.example.lostandfound.Data.LostItem
 import com.example.lostandfound.FirebaseManagers.ItemManager
+import com.example.lostandfound.FirebaseTestsSetUp
 import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.tasks.Task
 import com.google.android.gms.tasks.Tasks
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage

@@ -1,4 +1,4 @@
-package com.example.lostandfound
+package com.example.lostandfound.UI
 
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
@@ -12,7 +12,7 @@ import com.example.lostandfound.ui.NewLost.Subcategory
 import org.junit.Rule
 import org.junit.Test
 
-class NewLostActivityTest {
+class NewLostUITest {
 
     @get:Rule
     val composeTestRule = createComposeRule()

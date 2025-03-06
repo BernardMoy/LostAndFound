@@ -1,4 +1,4 @@
-package com.example.lostandfound;
+package com.example.lostandfound.Unit;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -7,6 +7,7 @@ import static org.junit.Assert.assertTrue;
 import android.util.Log;
 
 import com.example.lostandfound.FirebaseManagers.FirestoreManager;
+import com.example.lostandfound.FirebaseTestsSetUp;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;

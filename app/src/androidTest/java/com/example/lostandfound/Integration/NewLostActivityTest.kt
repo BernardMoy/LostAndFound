@@ -1,4 +1,4 @@
-package com.example.lostandfound
+package com.example.lostandfound.Integration
 
 import androidx.activity.ComponentActivity
 import androidx.compose.ui.test.junit4.createComposeRule
@@ -9,8 +9,9 @@ import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performTextInput
 import com.example.lostandfound.Data.FirebaseNames
 import com.example.lostandfound.Data.categories
-import com.example.lostandfound.ui.NewFound.NewFoundScreen
-import com.example.lostandfound.ui.NewFound.NewFoundViewModel
+import com.example.lostandfound.FirebaseTestsSetUp
+import com.example.lostandfound.ui.NewLost.NewLostScreen
+import com.example.lostandfound.ui.NewLost.NewLostViewModel
 import com.google.firebase.firestore.FirebaseFirestore
 import org.junit.After
 import org.junit.Assert.assertEquals
@@ -24,7 +25,7 @@ import java.util.concurrent.TimeUnit
 import java.util.concurrent.TimeoutException
 
 
-class PostNewFoundItemTest : FirebaseTestsSetUp() {
+class NewLostActivityTest : FirebaseTestsSetUp() {
 
     // set up firestore emulator in static context
     companion object {
@@ -38,8 +39,6 @@ class PostNewFoundItemTest : FirebaseTestsSetUp() {
         private val color2: String = "Pink"
         private val brand: String = "TESTBRAND"
         private val description: String = "TESTDESCRIPTION"  // use current date time
-        private val securityQuestion: String = "SECURITYQQQ"
-        private val securityQuestionAns: String = "SECURITYQQQA"
 
     }
 
@@ -47,14 +46,14 @@ class PostNewFoundItemTest : FirebaseTestsSetUp() {
     val composeTestRule = createComposeRule()
 
     /*
-    Test that when a found item is posted, its entry appears in the database.
+    Test that when a lost item is posted, its entry appears in the database.
     Remember to start firebase emulator
      */
     @Test
-    fun testPostNewFoundItemInDB() {
-        val viewModel = NewFoundViewModel()
+    fun testPostNewLostItemInDB() {
+        val viewModel = NewLostViewModel()
         composeTestRule.setContent {
-            NewFoundScreen(
+            NewLostScreen(
                 activity = ComponentActivity(),
                 viewModel = viewModel
             )   // set content to be main content of new lost activity
@@ -81,9 +80,6 @@ class PostNewFoundItemTest : FirebaseTestsSetUp() {
         Thread.sleep(2000)
         composeTestRule.onNodeWithTag("DescriptionInput")
             .performTextInput(description)  // description
-        composeTestRule.onNodeWithTag("SecurityQuestionInput").performTextInput(securityQuestion)
-        composeTestRule.onNodeWithTag("SecurityQuestionAnsInput")
-            .performTextInput(securityQuestionAns)
 
         // click the done button
         composeTestRule.onNodeWithText("Done").performScrollTo().performClick()
@@ -93,7 +89,7 @@ class PostNewFoundItemTest : FirebaseTestsSetUp() {
 
         // assert the entry exists in the database
         val latch = CountDownLatch(1)
-        firestore!!.collection(FirebaseNames.COLLECTION_FOUND_ITEMS)
+        firestore!!.collection(FirebaseNames.COLLECTION_LOST_ITEMS)
             .whereEqualTo(FirebaseNames.LOSTFOUND_ITEMNAME, itemName)
             .get()
             .addOnSuccessListener { querySnapshot ->
@@ -122,11 +118,6 @@ class PostNewFoundItemTest : FirebaseTestsSetUp() {
 
                 assertEquals(brand, document[FirebaseNames.LOSTFOUND_BRAND] as String)
                 assertEquals(description, document[FirebaseNames.LOSTFOUND_DESCRIPTION] as String)
-                assertEquals(securityQuestion, document[FirebaseNames.FOUND_SECURITY_Q] as String)
-                assertEquals(
-                    securityQuestionAns,
-                    document[FirebaseNames.FOUND_SECURITY_Q_ANS] as String
-                )
 
                 // countdown
                 latch.countDown()
@@ -151,8 +142,7 @@ class PostNewFoundItemTest : FirebaseTestsSetUp() {
     )
     fun tearDown() {
         // clear all data
-        deleteCollection(FirebaseNames.COLLECTION_FOUND_ITEMS)
+        deleteCollection(FirebaseNames.COLLECTION_LOST_ITEMS)
         deleteCollection(FirebaseNames.COLLECTION_ACTIVITY_LOG_ITEMS)
     }
-
 }

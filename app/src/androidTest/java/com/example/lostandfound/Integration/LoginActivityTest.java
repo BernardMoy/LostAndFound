@@ -1,4 +1,4 @@
-package com.example.lostandfound;
+package com.example.lostandfound.Integration;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
@@ -12,6 +12,8 @@ import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 
 import com.example.lostandfound.Data.FirebaseNames;
+import com.example.lostandfound.FirebaseTestsSetUp;
+import com.example.lostandfound.R;
 import com.example.lostandfound.ui.Login.LoginActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;

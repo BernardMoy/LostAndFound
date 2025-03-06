@@ -1,8 +1,9 @@
-package com.example.lostandfound
+package com.example.lostandfound.UI
 
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithText
 import com.example.lostandfound.Data.FirebaseNames
+import com.example.lostandfound.FirebaseTestsSetUp
 import com.example.lostandfound.ui.Lost.LostFragmentScreen
 import com.example.lostandfound.ui.Lost.LostFragmentViewModel
 import com.google.android.gms.maps.model.LatLng
@@ -21,7 +22,7 @@ import java.util.concurrent.TimeUnit
 import java.util.concurrent.TimeoutException
 
 
-class LostFragmentTest : FirebaseTestsSetUp() {
+class LostFragmentUITest : FirebaseTestsSetUp() {
 
     // set up firestore emulator in static context
     companion object {
