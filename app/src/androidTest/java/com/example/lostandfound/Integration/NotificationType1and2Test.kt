@@ -27,7 +27,7 @@ import org.junit.Test
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit
 
-class NotificationType2Test : FirebaseTestsSetUp() {
+class NotificationType1and2Test : FirebaseTestsSetUp() {
     // set up firestore emulator in static context
     companion object {
         private var firestore: FirebaseFirestore? = getFirestore()
@@ -73,7 +73,7 @@ class NotificationType2Test : FirebaseTestsSetUp() {
 
 
         // post an user entry of the found user in firestore. this is because it is required in fetching data
-        val dataLostUser = mutableMapOf<String, Any>(
+        val dataLostUser1 = mutableMapOf<String, Any>(
             FirebaseNames.USERS_EMAIL to "testEmail",
             FirebaseNames.USERS_AVATAR to "",
             FirebaseNames.USERS_FIRSTNAME to "testFirstName",
@@ -83,7 +83,7 @@ class NotificationType2Test : FirebaseTestsSetUp() {
         // document the found user id and add it
         val task0 = firestore!!.collection(FirebaseNames.COLLECTION_USERS)
             .document(userLostID)
-            .set(dataLostUser)
+            .set(dataLostUser1)
         Tasks.await(task0, 60, TimeUnit.SECONDS)
         Thread.sleep(2000)
 
@@ -170,7 +170,8 @@ class NotificationType2Test : FirebaseTestsSetUp() {
     }
 
     /*
-    Test that a claim can be approved using the "Approve this Claim" button
+    Test that approving a claim generates a type 1 notification to the lost user
+    and generates a type 2 notification to other users
      */
     @Test
     fun testApproveClaim() {
@@ -204,22 +205,16 @@ class NotificationType2Test : FirebaseTestsSetUp() {
         composeTestRule.onNodeWithText("Approve").performClick()
         Thread.sleep(2000)
 
-        // assert the claim is marked as approved
+        // assert a notification is sent
         val latch = CountDownLatch(1)
-        firestore!!.collection(FirebaseNames.COLLECTION_CLAIMED_ITEMS)
-            .whereEqualTo(FirebaseNames.CLAIM_LOST_ITEM_ID, lostID)
-            .whereEqualTo(FirebaseNames.CLAIM_FOUND_ITEM_ID, foundID)
+        firestore!!.collection(FirebaseNames.COLLECTION_NOTIFICATIONS)
+            .whereEqualTo(FirebaseNames.NOTIFICATION_TYPE, 1)
+            .whereEqualTo(FirebaseNames.NOTIFICATION_USER_ID, userLostID)
+            .whereEqualTo(FirebaseNames.NOTIFICATION_CLAIM_ID, claimID)
             .get()
             .addOnSuccessListener { querySnapshot ->
                 // assert only one item exists
                 assertEquals(1, querySnapshot.size())
-
-                // get the claim item
-                val document = querySnapshot.documents[0]
-
-                // verify the security question answer is stored there
-                assertNotNull(document)
-                assertTrue(document[FirebaseNames.CLAIM_IS_APPROVED] as Boolean)
 
                 // countdown
                 latch.countDown()
