@@ -2,11 +2,9 @@ package com.example.lostandfound.UI
 
 import android.content.Intent
 import androidx.compose.ui.test.assertTextContains
-import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
-import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
 import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.ApplicationProvider
@@ -133,13 +131,24 @@ class ViewLostUITest : FirebaseTestsSetUp() {
         // assert the correct item details are posted
         Thread.sleep(2000)
         composeTestRule.onNodeWithText("Reference: #2e9j8qijwqiie").assertExists()  // ref
-        composeTestRule.onNodeWithText("This item is not being tracked").assertExists() // is tracking
-        composeTestRule.onNodeWithTag("ViewLostName").performScrollTo().assertTextContains("TestItem")
-        composeTestRule.onNodeWithTag("ViewLostCategory").performScrollTo().assertTextContains("TestCat, TestSubCat")
-        composeTestRule.onNodeWithTag("ViewLostColor").performScrollTo().assertTextContains("Black, Red")
-        composeTestRule.onNodeWithTag("ViewLostBrand").performScrollTo().assertTextContains("TestBrand")
-        composeTestRule.onNodeWithTag("ViewLostDescription").performScrollTo().assertTextContains("TestDesc")
-        composeTestRule.onNodeWithTag("ViewLostUser").performScrollTo().assertTextContains("testFirstName2 testLastName2 (You)")
+        composeTestRule.onNodeWithText("This item is not being tracked")
+            .assertExists() // is tracking
+        composeTestRule.onNodeWithTag("ViewLostName").performScrollTo()
+            .assertTextContains("TestItem")
+        composeTestRule.onNodeWithTag("ViewLostCategory").performScrollTo()
+            .assertTextContains("TestCat, TestSubCat")
+        composeTestRule.onNodeWithTag("ViewLostDateTime").performScrollTo()
+            .assertTextContains("06 Feb 2025 05:33")
+        composeTestRule.onNodeWithTag("ViewLostColor").performScrollTo()
+            .assertTextContains("Black, Red")
+        composeTestRule.onNodeWithTag("ViewLostBrand").performScrollTo()
+            .assertTextContains("TestBrand")
+        composeTestRule.onNodeWithTag("ViewLostDescription").performScrollTo()
+            .assertTextContains("TestDesc")
+        composeTestRule.onNodeWithTag("ViewLostUser").performScrollTo()
+            .assertTextContains("testFirstName2 testLastName2 (You)")
+        composeTestRule.onNodeWithTag("ViewLostTimePosted").performScrollTo()
+            .assertTextContains("19 Feb 2025 05:05")
     }
 
     @After
