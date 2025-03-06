@@ -27,7 +27,7 @@ import org.junit.Test
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit
 
-class ViewClaimActivityTest : FirebaseTestsSetUp() {
+class NotificationType2Test : FirebaseTestsSetUp() {
     // set up firestore emulator in static context
     companion object {
         private var firestore: FirebaseFirestore? = getFirestore()

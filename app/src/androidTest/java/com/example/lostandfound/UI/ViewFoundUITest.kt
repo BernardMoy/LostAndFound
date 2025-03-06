@@ -2,17 +2,15 @@ package com.example.lostandfound.UI
 
 import android.content.Intent
 import androidx.compose.ui.test.assertTextContains
-import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
-import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
 import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.ApplicationProvider
 import com.example.lostandfound.Data.FirebaseNames
-import com.example.lostandfound.Data.IntentExtraNames
 import com.example.lostandfound.Data.FoundItem
+import com.example.lostandfound.Data.IntentExtraNames
 import com.example.lostandfound.FirebaseTestsSetUp
 import com.example.lostandfound.ui.ViewFound.ViewFoundActivity
 import com.google.android.gms.tasks.Tasks
@@ -134,13 +132,24 @@ class ViewFoundUITest : FirebaseTestsSetUp() {
         // assert the correct item details are posted
         Thread.sleep(2000)
         composeTestRule.onNodeWithText("Reference: #3rdweerrwewre").assertExists()  // ref
-        composeTestRule.onNodeWithTag("ViewFoundName").performScrollTo().assertTextContains("TestItem")
-        composeTestRule.onNodeWithTag("ViewFoundCategory").performScrollTo().assertTextContains("TestCat, TestSubCat")
-        composeTestRule.onNodeWithTag("ViewFoundColor").performScrollTo().assertTextContains("Black, Red")
-        composeTestRule.onNodeWithTag("ViewFoundBrand").performScrollTo().assertTextContains("TestBrand")
-        composeTestRule.onNodeWithTag("ViewFoundDescription").performScrollTo().assertTextContains("TestDesc")
-        composeTestRule.onNodeWithTag("ViewFoundUser").performScrollTo().assertTextContains("testFirstName2 testLastName2 (You)")
-        composeTestRule.onNodeWithTag("ViewFoundSecurityQuestion").performScrollTo().assertTextContains("Yes")
+        composeTestRule.onNodeWithTag("ViewFoundName").performScrollTo()
+            .assertTextContains("TestItem")
+        composeTestRule.onNodeWithTag("ViewFoundCategory").performScrollTo()
+            .assertTextContains("TestCat, TestSubCat")
+        composeTestRule.onNodeWithTag("ViewFoundDateTime").performScrollTo()
+            .assertTextContains("06 Feb 2025 05:33")
+        composeTestRule.onNodeWithTag("ViewFoundColor").performScrollTo()
+            .assertTextContains("Black, Red")
+        composeTestRule.onNodeWithTag("ViewFoundBrand").performScrollTo()
+            .assertTextContains("TestBrand")
+        composeTestRule.onNodeWithTag("ViewFoundDescription").performScrollTo()
+            .assertTextContains("TestDesc")
+        composeTestRule.onNodeWithTag("ViewFoundUser").performScrollTo()
+            .assertTextContains("testFirstName2 testLastName2 (You)")
+        composeTestRule.onNodeWithTag("ViewFoundSecurityQuestion").performScrollTo()
+            .assertTextContains("Yes")
+        composeTestRule.onNodeWithTag("ViewFoundTimePosted").performScrollTo()
+            .assertTextContains("19 Feb 2025 05:05")
     }
 
     @After
