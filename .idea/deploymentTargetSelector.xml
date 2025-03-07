@@ -19,13 +19,13 @@
       <SelectionState runConfigName="ViewFoundUITest">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="ViewComparisonActivityTest">
-        <option name="selectionMode" value="DROPDOWN" />
-      </SelectionState>
       <SelectionState runConfigName="NotificationType3Test">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
       <SelectionState runConfigName="NotificationType1and2Test">
+        <option name="selectionMode" value="DROPDOWN" />
+      </SelectionState>
+      <SelectionState runConfigName="NotificationType0Test">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
     </selectionStates>
