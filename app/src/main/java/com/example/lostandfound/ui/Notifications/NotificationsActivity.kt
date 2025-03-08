@@ -26,6 +26,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -74,11 +75,15 @@ class MockActivity : ComponentActivity()
 @Preview(showBackground = true)
 @Composable
 fun Preview() {
-    NotificationsScreen(activity = MockActivity(), viewModel = viewModel())
+    NotificationsScreen(activity = MockActivity(), viewModel = viewModel(), isTesting = false)
 }
 
 @Composable
-fun NotificationsScreen(activity: ComponentActivity, viewModel: NotificationsViewModel) {
+fun NotificationsScreen(
+    activity: ComponentActivity,
+    viewModel: NotificationsViewModel,
+    isTesting: Boolean = false
+) {
     ComposeTheme {
         Surface {
             Scaffold(
@@ -87,13 +92,18 @@ fun NotificationsScreen(activity: ComponentActivity, viewModel: NotificationsVie
                     BackToolbar(title = "Notifications", activity = activity)
                 }
             ) { innerPadding ->
+                val context: Context = LocalContext.current
+                if (isTesting) {
+                    LaunchedEffect(Unit) {
+                        loadNotifications(context, viewModel)
+                    }
+                }
+
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(paddingValues = innerPadding)
                 ) {
-                    // Items tab
-                    val context: Context = LocalContext.current
 
                     Box(
                         modifier = Modifier
@@ -273,7 +283,7 @@ fun Items(
             // the action text to mark all as read
             Box(
                 modifier = Modifier.weight(1f)
-            ){
+            ) {
                 CustomActionText(
                     text = "Mark all as read",
                     onClick = {
