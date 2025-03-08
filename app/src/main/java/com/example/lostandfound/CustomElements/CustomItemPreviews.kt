@@ -44,6 +44,7 @@ import androidx.compose.ui.unit.dp
 import coil3.compose.rememberAsyncImagePainter
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.example.lostandfound.Data.ActivityLogItem
 import com.example.lostandfound.Data.ChatInboxPreview
 import com.example.lostandfound.Data.ClaimPreview
@@ -216,7 +217,10 @@ fun CustomLostItemPreview(
                     model = Uri.parse(displayedImage),  // parse the string stored back to uri
                     contentDescription = "Item image",
                     modifier = Modifier.weight(1F)
-                )
+                ){
+                    it.override(ImageManager.PREVIEW_IMAGE_SIZE, ImageManager.PREVIEW_IMAGE_SIZE)
+                        .diskCacheStrategy(DiskCacheStrategy.ALL)
+                }
 
                 // other attributes of the item
                 Column(
@@ -331,7 +335,11 @@ fun CustomLostItemPreviewSmall(
                     model = Uri.parse(displayedImage),  // parse the string stored back to uri
                     contentDescription = "Item image",
                     modifier = Modifier.weight(1F)
-                )
+                ){
+                    it.override(ImageManager.PREVIEW_IMAGE_SIZE, ImageManager.PREVIEW_IMAGE_SIZE)
+                        .diskCacheStrategy(DiskCacheStrategy.ALL)
+                }
+
 
                 // other attributes of the item
                 Column(
@@ -484,7 +492,10 @@ fun CustomFoundItemPreview(
                     model = Uri.parse(displayedImage),
                     contentDescription = "Item image",
                     modifier = Modifier.weight(1F)
-                )
+                ){
+                    it.override(ImageManager.PREVIEW_IMAGE_SIZE, ImageManager.PREVIEW_IMAGE_SIZE)
+                        .diskCacheStrategy(DiskCacheStrategy.ALL)
+                }
 
                 // other attributes of the item
                 Column(
@@ -657,7 +668,10 @@ fun CustomClaimPreview(
                     model = Uri.parse(displayedImage),
                     contentDescription = "Item image",
                     modifier = Modifier.weight(1F)
-                )
+                ){
+                    it.override(ImageManager.PREVIEW_IMAGE_SIZE, ImageManager.PREVIEW_IMAGE_SIZE)
+                        .diskCacheStrategy(DiskCacheStrategy.ALL)
+                }
 
                 // other attributes of the item
                 Column(
