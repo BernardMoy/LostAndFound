@@ -1,12 +1,13 @@
 package com.example.lostandfound.UI
 
+import androidx.activity.ComponentActivity
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithText
 import com.example.lostandfound.Data.FirebaseNames
+import com.example.lostandfound.Data.notificationTitle
 import com.example.lostandfound.FirebaseTestsSetUp
-import com.example.lostandfound.ui.Lost.LostFragmentScreen
-import com.example.lostandfound.ui.Lost.LostFragmentViewModel
-import com.google.android.gms.maps.model.LatLng
+import com.example.lostandfound.ui.Notifications.NotificationsScreen
+import com.example.lostandfound.ui.Notifications.NotificationsViewModel
 import com.google.android.gms.tasks.Tasks
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -58,29 +59,79 @@ class NotificationsActivityTest : FirebaseTestsSetUp() {
         assertNotNull(auth!!.currentUser)
 
         // add all types of notifications 0 1 2 3
+        // type 0 (Only this is unread)
+        val dataNotif0 = mutableMapOf<String, Any>(
+            FirebaseNames.NOTIFICATION_USER_ID to userID.toString(),
+            FirebaseNames.NOTIFICATION_TYPE to 0,
+            FirebaseNames.NOTIFICATION_TIMESTAMP to 1739942999L,
+            FirebaseNames.NOTIFICATION_IS_READ to false,
+            FirebaseNames.NOTIFICATION_LOST_ITEM_ID to "2092i2didoi",
+            FirebaseNames.NOTIFICATION_FOUND_ITEM_ID to "2e92ie2iooe2"
+        )
+        val task0 = firestore!!.collection(FirebaseNames.COLLECTION_NOTIFICATIONS).add(dataNotif0)
+        Tasks.await(task0, 60, TimeUnit.SECONDS)
+        Thread.sleep(2000)
 
+        // type 1
+        val dataNotif1 = mutableMapOf<String, Any>(
+            FirebaseNames.NOTIFICATION_USER_ID to userID.toString(),
+            FirebaseNames.NOTIFICATION_TYPE to 1,
+            FirebaseNames.NOTIFICATION_TIMESTAMP to 1739942910L,
+            FirebaseNames.NOTIFICATION_IS_READ to true,
+            FirebaseNames.NOTIFICATION_CLAIM_ID to "skiwiio2oi"
+        )
+        val task1 = firestore!!.collection(FirebaseNames.COLLECTION_NOTIFICATIONS).add(dataNotif1)
+        Tasks.await(task1, 60, TimeUnit.SECONDS)
+        Thread.sleep(2000)
+
+        // type 2
+        val dataNotif2 = mutableMapOf<String, Any>(
+            FirebaseNames.NOTIFICATION_USER_ID to userID.toString(),
+            FirebaseNames.NOTIFICATION_TYPE to 2,
+            FirebaseNames.NOTIFICATION_TIMESTAMP to 1739942911L,
+            FirebaseNames.NOTIFICATION_IS_READ to true,
+            FirebaseNames.NOTIFICATION_CLAIM_ID to "skiwiio2oi"
+        )
+        val task2 = firestore!!.collection(FirebaseNames.COLLECTION_NOTIFICATIONS).add(dataNotif2)
+        Tasks.await(task2, 60, TimeUnit.SECONDS)
+        Thread.sleep(2000)
+
+        // type 3
+        val dataNotif3 = mutableMapOf<String, Any>(
+            FirebaseNames.NOTIFICATION_USER_ID to userID.toString(),
+            FirebaseNames.NOTIFICATION_TYPE to 3,
+            FirebaseNames.NOTIFICATION_TIMESTAMP to 1739942910L,
+            FirebaseNames.NOTIFICATION_IS_READ to true,
+            FirebaseNames.NOTIFICATION_CLAIM_ID to "skiwiio2oi"
+        )
+        val task3 = firestore!!.collection(FirebaseNames.COLLECTION_NOTIFICATIONS).add(dataNotif3)
+        Tasks.await(task3, 60, TimeUnit.SECONDS)
+        Thread.sleep(2000)
     }
 
     @get:Rule
     val composeTestRule = createComposeRule()
 
-    // test that in the lost fragment, the item added is shown
+    // test that the correct notification titles are shown at correct positions
     @Test
-    fun testLostItemShown() {
-        val viewModel = LostFragmentViewModel()
+    fun testNotificationsShown() {
+        val viewModel = NotificationsViewModel()
         composeTestRule.setContent {
-            LostFragmentScreen(
+            NotificationsScreen(
+                activity = ComponentActivity(),
                 viewModel = viewModel,
                 isTesting = true
             )
         }
 
-        Thread.sleep(5000)
+        composeTestRule.waitForIdle()
+        Thread.sleep(2000)
 
-        // assert the lost item preview details of the current user is shown on screen
-        composeTestRule.onNodeWithText("298heh29").assertExists()
-        composeTestRule.onNodeWithText("Category: " + "testSubCatwqq2")
-            .assertExists() // only the subcat is shown
+        // assert the 4 titles and contents of the notifications are displayed
+        for(i in 1 until 4){
+            composeTestRule.onNodeWithText(notificationTitle[0]!!).assertExists()
+        }
+
     }
 
 
@@ -93,8 +144,7 @@ class NotificationsActivityTest : FirebaseTestsSetUp() {
     )
     fun tearDown() {
         // clear all data
-        deleteCollection(FirebaseNames.COLLECTION_LOST_ITEMS)
-        deleteCollection(FirebaseNames.COLLECTION_ACTIVITY_LOG_ITEMS)
+        deleteCollection(FirebaseNames.COLLECTION_NOTIFICATIONS)
 
         // delete current user at the end, as this will trigger cloud functions
         if (auth!!.currentUser != null) {
