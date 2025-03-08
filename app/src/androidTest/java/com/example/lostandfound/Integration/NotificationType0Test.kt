@@ -76,7 +76,7 @@ class NotificationType0Test : FirebaseTestsSetUp() {
 
         val dataLost2 = mutableMapOf<String, Any>(
             FirebaseNames.LOSTFOUND_ITEMNAME to itemName,
-            FirebaseNames.LOSTFOUND_USER to userLost1ID,
+            FirebaseNames.LOSTFOUND_USER to userLost2ID,
             FirebaseNames.LOSTFOUND_CATEGORY to categoryName,
             FirebaseNames.LOSTFOUND_SUBCATEGORY to subCategoryName,
             FirebaseNames.LOSTFOUND_COLOR to mutableListOf(color1, color2),
