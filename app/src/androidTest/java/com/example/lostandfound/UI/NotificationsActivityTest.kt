@@ -2,8 +2,11 @@ package com.example.lostandfound.UI
 
 import androidx.activity.ComponentActivity
 import androidx.compose.ui.test.junit4.createComposeRule
+import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
+import androidx.compose.ui.test.performClick
 import com.example.lostandfound.Data.FirebaseNames
+import com.example.lostandfound.Data.notificationContent
 import com.example.lostandfound.Data.notificationTitle
 import com.example.lostandfound.FirebaseTestsSetUp
 import com.example.lostandfound.ui.Notifications.NotificationsScreen
@@ -30,6 +33,7 @@ class NotificationsActivityTest : FirebaseTestsSetUp() {
         private var firestore: FirebaseFirestore? = getFirestore()
         private var auth: FirebaseAuth? = getAuth()
         private var userID: String? = null
+        private var notification0ID: String? = null
 
     }
 
@@ -69,7 +73,8 @@ class NotificationsActivityTest : FirebaseTestsSetUp() {
             FirebaseNames.NOTIFICATION_FOUND_ITEM_ID to "2e92ie2iooe2"
         )
         val task0 = firestore!!.collection(FirebaseNames.COLLECTION_NOTIFICATIONS).add(dataNotif0)
-        Tasks.await(task0, 60, TimeUnit.SECONDS)
+        val ref0 = Tasks.await(task0, 60, TimeUnit.SECONDS)
+        notification0ID = ref0.id
         Thread.sleep(2000)
 
         // type 1
@@ -128,10 +133,19 @@ class NotificationsActivityTest : FirebaseTestsSetUp() {
         Thread.sleep(2000)
 
         // assert the 4 titles and contents of the notifications are displayed
-        for(i in 1 until 4){
-            composeTestRule.onNodeWithText(notificationTitle[0]!!).assertExists()
+        for (i in 1 until 4) {
+            composeTestRule.onNodeWithText(notificationTitle[i]!!).assertExists()  // all are distinct
         }
 
+        // assert that the red dot for the notification type 0 one exist
+        composeTestRule.onNodeWithTag("red_dot_$notification0ID", useUnmergedTree = true).assertExists()
+
+        // now try clicking on the notification of type 0
+        composeTestRule.onNodeWithText(notificationTitle[0]!!).performClick()
+
+        // now that the red dot should disappear
+        Thread.sleep(2000)
+        composeTestRule.onNodeWithTag("red_dot_$notification0ID", useUnmergedTree = true).assertDoesNotExist()
     }
 
 
