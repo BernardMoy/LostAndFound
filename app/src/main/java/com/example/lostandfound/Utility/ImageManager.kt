@@ -13,6 +13,9 @@ object ImageManager {
     val PLACEHOLDER_IMAGE_STRING =
         "android.resource://com.example.lostandfound/" + R.drawable.placeholder_image
 
+    // stores the image dimension to be displayed in previews
+    val PREVIEW_IMAGE_SIZE = 300
+
     @OptIn(ExperimentalEncodingApi::class)
     fun uriToString(context: Context, imageUri: Uri?): String {
         if (imageUri == null) {

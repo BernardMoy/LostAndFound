@@ -75,6 +75,12 @@ class ImageClassifier(private val context: Context) {
         }
     }
 
+    private suspend fun resizeBitmap(image: Bitmap): Bitmap {
+        return withContext(Dispatchers.Default) {
+            Bitmap.createScaledBitmap(image, imageSize, imageSize, false)
+        }
+    }
+
     // method to close the model after finish using it
     fun close() {
         model.close()
