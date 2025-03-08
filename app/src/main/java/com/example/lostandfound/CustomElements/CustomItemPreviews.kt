@@ -35,6 +35,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
@@ -929,6 +930,7 @@ fun CustomNotificationItemPreview(
                             tint = MaterialTheme.colorScheme.error,
                             contentDescription = "Unread",
                             modifier = Modifier.width(dimensionResource(id = R.dimen.content_margin))
+                                .testTag("red_dot_$notificationID")  // test if the dot exists
                         )
                     }
                 }
