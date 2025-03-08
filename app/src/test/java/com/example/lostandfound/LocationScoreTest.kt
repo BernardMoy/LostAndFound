@@ -13,7 +13,6 @@ class LocationScoreTest {
         )
 
         // the distance should be 0.84
-        println(score)
         assert(
             abs(0.84 - score) <= 1e-1
         )
