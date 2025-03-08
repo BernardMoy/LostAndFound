@@ -58,8 +58,8 @@ class ImageClassifier(private val context: Context) {
         CoroutineScope(Dispatchers.IO).launch {
             // convert uri to bitmap
             // this blocks main thread so a callback function is needed
-            val image1bm = Glide.with(context).asBitmap().load(image1).submit().get()
-            val image2bm = Glide.with(context).asBitmap().load(image2).submit().get()
+            val image1bm = Glide.with(context).asBitmap().load(image1).override(1080, 1080).submit().get()
+            val image2bm = Glide.with(context).asBitmap().load(image2).override(1080, 1080).submit().get()
 
             // resize the bitmap to the size (224 224) accepted by the model
             val image1bmResized = Bitmap.createScaledBitmap(image1bm, imageSize, imageSize, false)
