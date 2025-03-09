@@ -222,7 +222,7 @@ class ActivityLogActivityTest : FirebaseTestsSetUp() {
             .onChildren()
             .assertAny(hasText(activityLogTitles[0]!!))
         Thread.sleep(1000)
-        
+
         composeTestRule.onNodeWithTag("activity_log_$activityLog1ID")
             .performScrollTo()
             .onChildren()
