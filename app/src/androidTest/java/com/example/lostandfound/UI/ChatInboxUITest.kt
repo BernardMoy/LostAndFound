@@ -1,7 +1,13 @@
 package com.example.lostandfound.UI
 
 import android.content.Intent
+import androidx.compose.ui.test.assertTextContains
+import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.junit4.createComposeRule
+import androidx.compose.ui.test.onNodeWithContentDescription
+import androidx.compose.ui.test.onNodeWithTag
+import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performTextInput
 import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.ApplicationProvider
 import com.example.lostandfound.Data.FirebaseNames
@@ -122,7 +128,7 @@ class ChatInboxUITest : FirebaseTestsSetUp() {
             ).apply {
                 putExtra(
                     IntentExtraNames.INTENT_CHAT_USER,
-                    user1
+                    user2   // you are logged in as user1, user2 is passed
                 )
             }
 
@@ -131,13 +137,28 @@ class ChatInboxUITest : FirebaseTestsSetUp() {
 
         // assert the correct intent has been passed
         assertEquals(
-            user1, intent.getParcelableExtra(
+            user2, intent.getParcelableExtra(
                 IntentExtraNames.INTENT_CHAT_USER
             )
         )
 
-        // assert the correct item details are posted
+
         Thread.sleep(2000)
+
+        // assert the correct user details are displayed
+        composeTestRule.onNodeWithContentDescription("User avatar").assertExists()
+        composeTestRule.onNodeWithTag("RecipientName").assertTextEquals("u2f u2l")
+
+        // try input a message and click send
+        composeTestRule.onNodeWithTag("ChatInput").performTextInput("Test message")
+        Thread.sleep(2000)
+
+        composeTestRule.onNodeWithTag("SendButton").performClick()
+        Thread.sleep(2000)
+
+        // assert the new message is displayed on the screen and assert the input is cleared
+        composeTestRule.onNodeWithTag("ChatInput").assertTextContains("Type your message...")
+
 
     }
 
