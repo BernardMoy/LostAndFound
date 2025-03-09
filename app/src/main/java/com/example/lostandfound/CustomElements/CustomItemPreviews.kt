@@ -857,7 +857,8 @@ fun CustomNotificationItemPreview(
     notificationID: String,
     timestamp: Long,
     isRead: Boolean,
-    onClick: () -> Unit = {}  // to be implemented in notifications activity (To use that context)
+    onClick: () -> Unit = {},  // to be implemented in notifications activity (To use that context)
+    testTag: String = ""
 ) {
     // a isRead variable that would react to state changes
     val isReadState = remember {
@@ -897,6 +898,7 @@ fun CustomNotificationItemPreview(
                 )
             )
             .padding(dimensionResource(id = R.dimen.content_margin))
+            .testTag(testTag)
 
 
     ) {
