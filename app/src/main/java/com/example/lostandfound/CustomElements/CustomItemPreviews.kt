@@ -975,7 +975,7 @@ fun CustomNotificationItemPreview(
 
 @Composable
 fun CustomActivityLogItemPreview(
-    activityLogItem: ActivityLogItem
+    activityLogItem: ActivityLogItem,
 ) {
     Box(
         modifier = Modifier
@@ -988,6 +988,7 @@ fun CustomActivityLogItemPreview(
                 )
             )
             .padding(dimensionResource(id = R.dimen.content_margin))
+            .testTag("activity_log_${activityLogItem.id}")
     ) {
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -1002,7 +1003,8 @@ fun CustomActivityLogItemPreview(
                 modifier = Modifier.size(dimensionResource(id = R.dimen.image_button_size))
             )
 
-            Column {
+            Column (
+            ){
                 Row {
                     Text(
                         text = activityLogTitles[activityLogItem.type] ?: "",

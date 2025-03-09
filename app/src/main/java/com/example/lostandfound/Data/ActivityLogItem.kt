@@ -1,6 +1,7 @@
 package com.example.lostandfound.Data
 
 data class ActivityLogItem(
+    val id: String = "",
     val type: Int = 0,  // 0 to 7
     val content: String = "",
     val userID: String = "",
