@@ -212,7 +212,7 @@ fun ItemImage(viewModel: ViewFoundViewModel) {
         // image of the item
         GlideImage(
             model = Uri.parse(displayedImage),
-            contentDescription = "Item image",
+            contentDescription = if (viewModel.itemData.image.isEmpty()) "No image provided" else "Item image",
             modifier = Modifier.fillMaxWidth(),
             alignment = Alignment.Center
         )
