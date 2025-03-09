@@ -344,6 +344,7 @@ fun Items(
                         notificationID = notificationID,
                         timestamp = timeStamp,
                         isRead = isRead,
+                        testTag = "notification_$notificationID",
                         onClick = {
                             val lostItemID =
                                 notification[FirebaseNames.NOTIFICATION_LOST_ITEM_ID].toString()
@@ -444,6 +445,7 @@ fun Items(
                         notificationID = notificationID,
                         timestamp = timeStamp,
                         isRead = isRead,
+                        testTag = "notification_$notificationID",
                         onClick = {
                             val claimID =
                                 notification[FirebaseNames.NOTIFICATION_CLAIM_ID] as String
@@ -477,6 +479,7 @@ fun Items(
                         notificationID = notificationID,
                         timestamp = timeStamp,
                         isRead = isRead,
+                        testTag = "notification_$notificationID",
                         onClick = {
                             val claimID =
                                 notification[FirebaseNames.NOTIFICATION_CLAIM_ID] as String
@@ -511,6 +514,7 @@ fun Items(
                             notificationID = notificationID,
                             timestamp = timeStamp,
                             isRead = isRead,
+                            testTag = "notification_$notificationID",
                             onClick = {
                                 val claimID =
                                     notification[FirebaseNames.NOTIFICATION_CLAIM_ID] as String
