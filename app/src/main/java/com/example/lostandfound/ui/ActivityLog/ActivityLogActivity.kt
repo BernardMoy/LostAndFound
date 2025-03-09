@@ -106,7 +106,9 @@ fun ActivityLogItems(
         verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin))
     ) {
         items(viewModel.itemData) { activityLogItem ->
-            CustomActivityLogItemPreview(activityLogItem = activityLogItem)
+            CustomActivityLogItemPreview(
+                activityLogItem = activityLogItem
+            )
         }
     }
 }

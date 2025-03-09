@@ -35,6 +35,7 @@ class ActivityLogViewModel : ViewModel() {
                 for (document in result) {
                     // construct activity log item data
                     val activityLogItem: ActivityLogItem = ActivityLogItem(
+                        id = document.id,
                         type = (document[FirebaseNames.ACTIVITY_LOG_ITEM_TYPE] as Long).toInt(),
                         content = document[FirebaseNames.ACTIVITY_LOG_ITEM_CONTENT].toString(),
                         userID = document[FirebaseNames.ACTIVITY_LOG_ITEM_USER_ID].toString(),
