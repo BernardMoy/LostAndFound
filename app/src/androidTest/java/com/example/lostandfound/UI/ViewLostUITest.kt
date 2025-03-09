@@ -1,8 +1,10 @@
 package com.example.lostandfound.UI
 
 import android.content.Intent
+import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertTextContains
 import androidx.compose.ui.test.junit4.createComposeRule
+import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performScrollTo
@@ -11,6 +13,7 @@ import androidx.test.core.app.ApplicationProvider
 import com.example.lostandfound.Data.FirebaseNames
 import com.example.lostandfound.Data.IntentExtraNames
 import com.example.lostandfound.Data.LostItem
+import com.example.lostandfound.Data.foundStatusText
 import com.example.lostandfound.FirebaseTestsSetUp
 import com.example.lostandfound.ui.ViewLost.ViewLostActivity
 import com.google.android.gms.tasks.Tasks
@@ -130,9 +133,15 @@ class ViewLostUITest : FirebaseTestsSetUp() {
 
         // assert the correct item details are posted
         Thread.sleep(2000)
+
+        // assert that the unknown image is displayed
+        composeTestRule.onNodeWithContentDescription("No image provided").assertIsDisplayed()
+
+        // assert the correct item details are posted
         composeTestRule.onNodeWithText("Reference: #2e9j8qijwqiie").assertExists()  // ref
         composeTestRule.onNodeWithText("This item is not being tracked")
             .assertExists() // is tracking
+        composeTestRule.onNodeWithText("Status: " + foundStatusText[0]) // status
         composeTestRule.onNodeWithTag("ViewLostName").performScrollTo()
             .assertTextContains("TestItem")
         composeTestRule.onNodeWithTag("ViewLostCategory").performScrollTo()
