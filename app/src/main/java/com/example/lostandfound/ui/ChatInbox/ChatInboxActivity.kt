@@ -44,6 +44,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalInspectionMode
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -201,8 +202,8 @@ fun UserData(
             style = Typography.bodyMedium,
             fontWeight = FontWeight.Bold,
             color = MaterialTheme.colorScheme.onBackground,
-            modifier = Modifier.weight(1f),
-            textAlign = TextAlign.Start
+            modifier = Modifier.weight(1f).testTag("RecipientName"),
+            textAlign = TextAlign.Start,
         )
     }
 }
@@ -326,7 +327,8 @@ fun SendBar(
                 .weight(1f)
                 .padding(
                     vertical = dimensionResource(id = R.dimen.content_margin)
-                ),
+                )
+                .testTag("ChatInput"),
             colors = TextFieldDefaults.colors(
                 // for enabled (Editable) text
                 unfocusedContainerColor = MaterialTheme.colorScheme.background,
@@ -373,6 +375,7 @@ fun SendBar(
                     ),
                     shape = CircleShape
                 )
+                .testTag("SendButton")
                 .padding(3.dp)  // content margin half half
         ) {
             Icon(
