@@ -12,6 +12,7 @@ object LocationManager {
     val DEFAULT_LOCATION = LatLng(52.37930763817003, -1.5614912710215834)
 
     // get location description given a latlng value
+    /*
     fun getLocationDescription(context: Context, latlng: LatLng): String {
         val geocoder = Geocoder(context, Locale.UK)
         val address = geocoder.getFromLocation(latlng.latitude, latlng.longitude, 1)
@@ -22,6 +23,8 @@ object LocationManager {
             address[0].getAddressLine(0).toString()
         }
     }
+
+     */
 
     // convert a pair double value (Used for parcelable class) to LatLng object
     fun pairToLatlng(pair: Pair<Double, Double>): LatLng {
