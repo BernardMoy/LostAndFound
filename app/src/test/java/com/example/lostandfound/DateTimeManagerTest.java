@@ -2,6 +2,7 @@ package com.example.lostandfound;
 
 import static com.example.lostandfound.Utility.DateTimeManager.getCurrentEpochTime;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import com.example.lostandfound.Utility.DateTimeManager;
 
@@ -54,13 +55,34 @@ public class DateTimeManagerTest {
 
     @Test
     public void testGetDescription() {
-        long currentEpoch = getCurrentEpochTime();
+        long currentEpoch = DateTimeManager.getCurrentEpochTime();
+        assertEquals("Last hour", DateTimeManager.getDescription(currentEpoch - 300));
+        assertEquals("1 hour ago", DateTimeManager.getDescription(currentEpoch - 3700));
+        assertEquals("3 hours ago", DateTimeManager.getDescription(currentEpoch - 11000));
+        assertEquals("a day ago", DateTimeManager.getDescription(currentEpoch - 86400-300));
         assertEquals("2 days ago", DateTimeManager.getDescription(currentEpoch - 86400 * 2 - 300));
     }
 
     @Test
     public void testGetChatTimeDescription() {
-        long currentEpoch = getCurrentEpochTime();
+        long currentEpoch = DateTimeManager.getCurrentEpochTime();
         assertEquals("a day ago", DateTimeManager.getChatTimeDescription(currentEpoch - 86400 - 300));
+        assertEquals("2 days ago", DateTimeManager.getChatTimeDescription(currentEpoch - 86400*2 - 300));
+    }
+
+    @Test
+    public void testGetCurrentEpochTime(){
+        assert(1741483478L < DateTimeManager.getCurrentEpochTime());
+    }
+
+    @Test
+    public void testGetCurrentEpochDate(){
+        assert(DateTimeManager.getCurrentEpochTime() - DateTimeManager.getCurrentEpochDate() < 86400);
+        assert(DateTimeManager.getCurrentEpochTime() - DateTimeManager.getCurrentEpochDate() >= 0);
+    }
+
+    @Test
+    public void testIsTimeInFuture(){
+        assertTrue(DateTimeManager.isTimeInFuture(1881483478L));
     }
 }
