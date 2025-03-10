@@ -28,6 +28,17 @@ class LocationScoreTest {
     }
 
     @Test
+    fun testGetLocationScoreTooLong(){
+        val score = getLocationScore(
+            Pair(52.38040320697202, -1.5605640104046208),
+            Pair(51.383647967653, -2.99945903312389)
+        )
+
+        // 0 because larger than threshold
+        Assert.assertEquals(0.0, score, 0.0001)
+    }
+
+    @Test
     fun testPairToLatLng(){
         Assert.assertEquals(locationLatLng, LocationManager.pairToLatlng(locationPair))
     }
