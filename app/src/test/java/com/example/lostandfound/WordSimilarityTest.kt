@@ -16,6 +16,16 @@ class WordSimilarityTest {
         assert(
             !areWordsSimilar("apple", "apkpe")
         )
+        assert(
+            !areWordsSimilar("apple", "appoes")
+        )
+    }
+
+    @Test
+    fun testDifferentWords2() {
+        assert(
+            !areWordsSimilar("apple", "appleapple")
+        )
     }
 
     @Test
@@ -58,6 +68,13 @@ class WordSimilarityTest {
         )
         assert(
             !areWordsSimilar("apple", "applws")
+        )
+    }
+
+    @Test
+    fun testTwoMoreDifference() {
+        assert(
+            !areWordsSimilar("apple", "aooke")
         )
     }
 }
