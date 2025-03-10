@@ -23,11 +23,6 @@ public class VerificationCodeManager {
     }
 
 
-    public VerificationCodeManager(String emailAddress) {
-        this.emailAddress = emailAddress;
-        this.db = new FirestoreManager();
-    }
-
     public VerificationCodeManager(String emailAddress, FirestoreManager db) {
         this.emailAddress = emailAddress;
         this.db = db;

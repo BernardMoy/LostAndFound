@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModel;
 
 import com.example.lostandfound.Data.DevData;
 import com.example.lostandfound.FirebaseManagers.FirebaseAuthManager;
+import com.example.lostandfound.FirebaseManagers.FirestoreManager;
 import com.example.lostandfound.Utility.EmailSender;
 import com.example.lostandfound.Utility.ErrorCallback;
 import com.example.lostandfound.Utility.VerificationCodeManager;
@@ -34,7 +35,7 @@ public class VerifyEmailViewModel extends ViewModel {
         }
 
         // generate a new verification code
-        VerificationCodeManager verificationCodeManager = new VerificationCodeManager(emailAddress);
+        VerificationCodeManager verificationCodeManager = new VerificationCodeManager(emailAddress, new FirestoreManager());
         verificationCodeManager.generateNewVerificationCode(new VerificationCodeManager.CodeGenerationCallback() {
             @Override
             public void onCodeGenerated(String error, String code) {
@@ -68,7 +69,7 @@ public class VerifyEmailViewModel extends ViewModel {
         }
 
         // validate the given code
-        VerificationCodeManager verificationCodeManager = new VerificationCodeManager(emailAddress);
+        VerificationCodeManager verificationCodeManager = new VerificationCodeManager(emailAddress, new FirestoreManager());
         verificationCodeManager.validateVerificationCode(givenCode, new ErrorCallback() {
             @Override
             public void onComplete(String error) {
