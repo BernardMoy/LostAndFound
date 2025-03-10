@@ -1,10 +1,19 @@
 package com.example.lostandfound
 
 import com.example.lostandfound.MatchingFunctions.getLocationScore
+import com.example.lostandfound.Utility.LocationManager
+import com.google.android.gms.maps.model.LatLng
+import org.junit.Assert
 import org.junit.Test
 import kotlin.math.abs
 
 class LocationScoreTest {
+    val locationPair = Pair(52.38040320697202, -1.5605640104046208)
+    val locationLatLng = LatLng(52.38040320697202, -1.5605640104046208)
+    val locationHashMap = hashMapOf(
+        "latitude" to 52.38040320697202,
+        "longitude" to -1.5605640104046208
+    )
     @Test
     fun testGetLocationScore() {
         val score = getLocationScore(
@@ -16,5 +25,20 @@ class LocationScoreTest {
         assert(
             abs(0.84 - score) <= 1e-1
         )
+    }
+
+    @Test
+    fun testPairToLatLng(){
+        Assert.assertEquals(locationLatLng, LocationManager.pairToLatlng(locationPair))
+    }
+
+    @Test
+    fun testLatLngToPair(){
+        Assert.assertEquals(locationPair, LocationManager.latLngToPair(locationLatLng))
+    }
+
+    @Test
+    fun testLocationToPair(){
+        Assert.assertEquals(locationPair, LocationManager.LocationToPair(locationHashMap))
     }
 }
