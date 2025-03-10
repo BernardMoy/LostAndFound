@@ -1,4 +1,4 @@
-package com.example.lostandfound.UI
+package com.example.lostandfound.Integration
 
 import android.content.Intent
 import androidx.compose.ui.test.assertTextContains
@@ -11,11 +11,9 @@ import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTextInput
 import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.ApplicationProvider
-import com.example.lostandfound.Data.ChatMessage
 import com.example.lostandfound.Data.FirebaseNames
 import com.example.lostandfound.Data.IntentExtraNames
 import com.example.lostandfound.Data.User
-import com.example.lostandfound.FirebaseManagers.FirebaseUtility
 import com.example.lostandfound.FirebaseTestsSetUp
 import com.example.lostandfound.Utility.DateTimeManager
 import com.example.lostandfound.ui.ChatInbox.ChatInboxActivity
@@ -32,7 +30,7 @@ import org.junit.Test
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit
 
-class ChatInboxUITest : FirebaseTestsSetUp() {
+class ChatInboxActivityTest : FirebaseTestsSetUp() {
     // set up firestore emulator in static context
     companion object {
         private var firestore: FirebaseFirestore? = getFirestore()
@@ -115,46 +113,14 @@ class ChatInboxUITest : FirebaseTestsSetUp() {
             firestore!!.collection(FirebaseNames.COLLECTION_USERS).document(user2ID).set(dataUser2)
         Tasks.await(task2, 60, TimeUnit.SECONDS)
         Thread.sleep(2000)
-
-
-        // create two chats, one from u1 to u2, the other from u2 to u1, in the db
-        val newChat1 = mutableMapOf<String, Any>(
-            FirebaseNames.CHAT_SENDER_USER_ID to user1ID.toString(),
-            FirebaseNames.CHAT_RECIPIENT_USER_ID to user2ID,
-            FirebaseNames.CHAT_FROM_TO to listOf(  // [from user, to user]
-                user1ID, user2ID
-            ),
-            FirebaseNames.CHAT_CONTENT to "Sent292929",
-            FirebaseNames.CHAT_TIMESTAMP to DateTimeManager.getCurrentEpochTime(),
-            FirebaseNames.CHAT_IS_READ_BY_RECIPIENT to false, // default false
-        )
-        val task3 = firestore!!.collection(FirebaseNames.COLLECTION_CHATS).add(newChat1)
-        Tasks.await(task3, 60, TimeUnit.SECONDS)
-        Thread.sleep(2000)
-
-        val newChat2 = mutableMapOf<String, Any>(
-            FirebaseNames.CHAT_SENDER_USER_ID to user2ID,
-            FirebaseNames.CHAT_RECIPIENT_USER_ID to user1ID.toString(),
-            FirebaseNames.CHAT_FROM_TO to listOf(  // [from user, to user]
-                user2ID, user1ID
-            ),
-            FirebaseNames.CHAT_CONTENT to "Reply232323",
-            FirebaseNames.CHAT_TIMESTAMP to DateTimeManager.getCurrentEpochTime(),
-            FirebaseNames.CHAT_IS_READ_BY_RECIPIENT to false, // default false
-        )
-        val task4 = firestore!!.collection(FirebaseNames.COLLECTION_CHATS).add(newChat2)
-        Tasks.await(task4, 60, TimeUnit.SECONDS)
-        Thread.sleep(2000)
     }
 
 
     /*
-    Test if chat messages appear immediately after they are posted
-    either from the current user by pressing the send button
-    or by the recipient user
+    Test if chat messages appear when the database is modified.
      */
     @Test
-    fun testChatMessagesAppear() {
+    fun testChatMessagesSent() {
         val intent =
             Intent(
                 ApplicationProvider.getApplicationContext(),
@@ -179,15 +145,33 @@ class ChatInboxUITest : FirebaseTestsSetUp() {
 
         Thread.sleep(2000)
 
-        // assert the correct user details are displayed
-        composeTestRule.onNodeWithContentDescription("User avatar").assertExists()
-        composeTestRule.onNodeWithTag("RecipientName").assertTextEquals("u2f u2l")
+        // try input a message and click send
+        composeTestRule.onNodeWithTag("ChatInput").performTextInput("Test message")
+        Thread.sleep(2000)
+
+        composeTestRule.onNodeWithTag("SendButton").performClick()
+        Thread.sleep(2000)
 
         // assert the new message is displayed on the screen and assert the input is cleared
         composeTestRule.onNodeWithTag("ChatInput").assertTextContains("Type your message...")
 
         // assert the message is displayed
-        composeTestRule.onNodeWithText("Sent292929").assertExists()
+        composeTestRule.onNodeWithText("Test message").assertExists()
+
+        // simulate that another message is added to the database
+        val newChat = mutableMapOf<String, Any>(
+            FirebaseNames.CHAT_SENDER_USER_ID to user2ID,
+            FirebaseNames.CHAT_RECIPIENT_USER_ID to user1ID.toString(),
+            FirebaseNames.CHAT_FROM_TO to listOf(  // [from user, to user]
+                user2ID, user1ID
+            ),
+            FirebaseNames.CHAT_CONTENT to "Reply232323",
+            FirebaseNames.CHAT_TIMESTAMP to DateTimeManager.getCurrentEpochTime(),
+            FirebaseNames.CHAT_IS_READ_BY_RECIPIENT to false, // default false
+        )
+        val task2 = firestore!!.collection(FirebaseNames.COLLECTION_CHATS).add(newChat)
+        Tasks.await(task2, 60, TimeUnit.SECONDS)
+        Thread.sleep(2000)
 
         // assert the reply message is displayed
         composeTestRule.onNodeWithText("Reply232323").assertExists()
