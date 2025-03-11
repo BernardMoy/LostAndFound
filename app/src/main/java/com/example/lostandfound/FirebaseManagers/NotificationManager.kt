@@ -45,6 +45,7 @@ object NotificationManager {
                         callback.onComplete(false)
                         return
                     }
+
                     // notification added to db successfully
                     callback.onComplete(true)
                 }
