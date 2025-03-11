@@ -27,6 +27,7 @@ import androidx.compose.material.icons.outlined.Email
 import androidx.compose.material.icons.outlined.Image
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.LocationOn
+import androidx.compose.material.icons.outlined.Notifications
 import androidx.compose.material.icons.outlined.Refresh
 import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material.icons.outlined.Settings
@@ -59,6 +60,7 @@ import com.example.lostandfound.ui.EmailSenderTest.EmailSenderTestActivity
 import com.example.lostandfound.ui.ImageComparison.ImageComparisonActivity
 import com.example.lostandfound.ui.ItemComparison.ItemComparisonActivity
 import com.example.lostandfound.ui.PermissionsTest.PermissionsTestActivity
+import com.example.lostandfound.ui.PushNotificationsTest.PushNotificationsTestActivity
 import com.example.lostandfound.ui.Search.SearchActivity
 import com.example.lostandfound.ui.SettingsAnimation.SettingsAnimationActivity
 import com.example.lostandfound.ui.SettingsAutoLoading.SettingsAutoLoadingActivity
@@ -607,6 +609,14 @@ fun Developer(
             leftIcon = Icons.Outlined.Email,
             onClick = {
                 val i: Intent = Intent(context, EmailSenderTestActivity::class.java)
+                context.startActivity(i)
+            }
+        )
+
+        CustomActionRow(text = "Push notification test",
+            leftIcon = Icons.Outlined.Notifications,
+            onClick = {
+                val i: Intent = Intent(context, PushNotificationsTestActivity::class.java)
                 context.startActivity(i)
             }
         )

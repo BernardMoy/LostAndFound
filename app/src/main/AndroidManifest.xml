@@ -169,6 +169,11 @@
             android:exported="false"
             android:windowSoftInputMode="adjustPan" />
         <activity
+            android:name=".ui.PushNotificationsTest.PushNotificationsTestActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:exported="false"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
             android:name=".ui.Search.SearchActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:exported="false"
