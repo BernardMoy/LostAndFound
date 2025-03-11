@@ -18,9 +18,6 @@ class PushNotificationService : FirebaseMessagingService(){
 
     override fun onMessageReceived(message: RemoteMessage) {
         super.onMessageReceived(message)
-
-        // send notifications
-        showNotification("Testtitle", "testbody")
     }
 
     // updates the token in firebase firestore if it updates
