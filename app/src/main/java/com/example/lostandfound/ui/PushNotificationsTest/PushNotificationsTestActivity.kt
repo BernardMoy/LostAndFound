@@ -192,11 +192,7 @@ fun SendButton(
             type = ButtonType.FILLED,
             onClick = {
                 // send the notification here
-                FirebaseMessagingManager.sendPushNotification(
-                    userID = viewModel.userID.value,
-                    title = viewModel.title.value,
-                    content = viewModel.content.value
-                )
+                viewModel.sendNotification(context)
             }
         )
     }

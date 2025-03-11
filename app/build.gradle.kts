@@ -20,6 +20,12 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    packaging {
+        resources {
+            excludes += "META-INF/DEPENDENCIES"
+        }
+    }
+
     buildTypes {
         release {
             isMinifyEnabled = false
@@ -122,5 +128,8 @@ dependencies {
 
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("com.squareup.retrofit2:converter-moshi:2.9.0")
+
+    implementation("com.google.auth:google-auth-library-oauth2-http:1.17.0")
+
 
 }
