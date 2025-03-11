@@ -2,7 +2,6 @@ package com.example.lostandfound.FirebaseManagers
 
 import android.util.Log
 import com.example.lostandfound.Data.FirebaseNames
-import com.example.lostandfound.Data.User
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.messaging.FirebaseMessaging
 
@@ -13,7 +12,7 @@ object FirebaseMessagingManager {
     }
 
     // method to save the FCM token of the user when given a user id
-    fun saveFCMTOken(userID: String, callback: FCMTokenCallback){
+    fun updateFCMToken(userID: String, callback: FCMTokenCallback){
         FirebaseMessaging.getInstance().token.addOnCompleteListener{ task ->
             if (!task.isSuccessful){
                 Log.e("Firebase messaging error", task.exception!!.message.toString())

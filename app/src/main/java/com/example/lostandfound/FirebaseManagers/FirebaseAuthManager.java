@@ -69,8 +69,19 @@ public class FirebaseAuthManager {
                             editor.putString(SharedPreferencesNames.USER_AVATAR, avatar);
                             editor.apply();
 
-                            // task successful code executes here
-                            callback.onComplete("");
+                            // update the FCM token
+                            FirebaseMessagingManager.INSTANCE.updateFCMToken(userID, new FirebaseMessagingManager.FCMTokenCallback() {
+                                @Override
+                                public void onComplete(boolean success) {
+                                    if (!success){
+                                        callback.onComplete("Failed generating FCM token");
+                                        return;
+                                    }
+
+                                    // task successful code executes here
+                                    callback.onComplete("");
+                                }
+                            });
                         }
                     });
 
