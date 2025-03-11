@@ -73,6 +73,7 @@ dependencies {
     implementation(libs.tensorflow.lite.support)
     implementation(libs.tensorflow.lite.metadata)
     implementation(libs.tensorflow.lite.gpu)
+    implementation(libs.volley)
     testImplementation(libs.junit)
     testImplementation (libs.mockito.core)
     testImplementation (libs.coreTesting)

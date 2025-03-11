@@ -4,8 +4,11 @@ import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
 
 import android.annotation.SuppressLint;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -96,6 +99,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // initialise firebase app
         FirebaseApp.initializeApp(MainActivity.this);
         db = FirebaseFirestore.getInstance();
+
+        // create a new notification channel
+        NotificationChannel channel = new NotificationChannel(
+                "FCM_CHANNEL",
+                "Notifications",
+                NotificationManager.IMPORTANCE_HIGH
+        );
+        NotificationManager manager = getSystemService(NotificationManager.class);
+        manager.createNotificationChannel(channel);
 
         // load the theme from theme manager
         DeviceThemeManager.INSTANCE.loadTheme(
