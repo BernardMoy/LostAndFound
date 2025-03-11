@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.example.lostandfound.FirebaseManagers.FirebaseAuthManager;
+import com.example.lostandfound.FirebaseManagers.FirebaseMessagingManager;
 import com.example.lostandfound.FirebaseManagers.FirebaseUtility;
 import com.example.lostandfound.Utility.ErrorCallback;
 
@@ -61,8 +62,19 @@ public class LoginViewModel extends ViewModel {
                     return;
                 }
 
-                // no errors
-                callback.onComplete("");
+                FirebaseMessagingManager.INSTANCE.updateFCMToken(FirebaseUtility.getUserID(), new FirebaseMessagingManager.FCMTokenCallback() {
+                    @Override
+                    public void onComplete(boolean success) {
+                        if (!success){
+                            setLoginError("Failed generating an FCM token");
+                            callback.onComplete(error);
+                            return;
+                        }
+
+                        // no errors
+                        callback.onComplete("");
+                    }
+                });
             }
         });
     }
