@@ -196,6 +196,13 @@
             </intent-filter>
         </activity>
 
+        <service android:name=".PushNotificationService.PushNotificationService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+
         <!-- Provider for storing the camera captured image -->
         <provider
             android:name="androidx.core.content.FileProvider"
