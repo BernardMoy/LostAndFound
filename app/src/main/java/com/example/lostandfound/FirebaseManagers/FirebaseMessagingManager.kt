@@ -62,48 +62,4 @@ object FirebaseMessagingManager {
                 callback.onComplete(null)
             }
     }
-
-    // method to send notifications
-    fun sendPushNotification(userID: String, title: String, content: String){
-        // first get the fcm token of the user id
-        getFCMTokenFromUser(userID, object: FCMTokenGetCallback{
-            override fun onComplete(token: String?) {
-                if (token == null){
-                    return
-                }
-                val notification = JSONObject().apply {
-                    put("title", title)
-                    put("body", content)
-                }
-
-                val message = JSONObject().apply {
-                    put("token", token)
-                    put("notification", notification)
-                }
-
-                val payload = JSONObject().apply {
-                    put("message", message)
-                }
-
-                // make a JSON Post request
-                val request = object : JsonObjectRequest(
-                    Method.POST, "https://fcm.googleapis.com/v1/projects/lostandfound-d4afc/messages:send",
-                    payload,
-                    { response -> Log.d("FCM", "Notification sent: $response") },
-                    { error -> Log.e("FCM", "Error sending notification", error) }
-                ) {
-                    override fun getHeaders(): MutableMap<String, String> {
-                        return mutableMapOf(
-                            "Authorization" to "Bearer YOUR_OAUTH_ACCESS_TOKEN",
-                            "Content-Type" to "application/json"
-                        )
-                    }
-                }
-
-                val requestQueue = Volley.newRequestQueue(FirebaseAuth.getInstance().app.applicationContext)
-                requestQueue.add(request)
-
-            }
-        })
-    }
 }

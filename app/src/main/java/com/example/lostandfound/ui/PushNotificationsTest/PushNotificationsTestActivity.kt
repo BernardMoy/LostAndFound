@@ -100,7 +100,6 @@ fun MainContent(
         verticalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.content_margin_half))
     ) {
         FcmTokenInput(context, viewModel)
-        UserIDInput(context, viewModel)
         TitleInput(context, viewModel)
         ContentInput(context, viewModel)
         SendButton(context, viewModel)
@@ -119,23 +118,6 @@ fun FcmTokenInput(
         isEditable = true,
         onTextChanged = { t ->
             viewModel.fcmToken.value = t
-        },
-        placeholder = "",
-        leadingIcon = Icons.Outlined.Edit,
-    )
-}
-
-@Composable
-fun UserIDInput(
-    context: Context,
-    viewModel: PushNotificationsTestViewModel
-) {
-    CustomGrayTitle(text = "User ID")
-    CustomInputField(
-        fieldContent = viewModel.userID.value,
-        isEditable = true,
-        onTextChanged = { t ->
-            viewModel.userID.value = t
         },
         placeholder = "",
         leadingIcon = Icons.Outlined.Edit,
