@@ -72,6 +72,8 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil3.compose.rememberAsyncImagePainter
+import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
+import com.bumptech.glide.integration.compose.GlideImage
 import com.example.lostandfound.CustomElements.BackToolbar
 import com.example.lostandfound.CustomElements.ButtonType
 import com.example.lostandfound.CustomElements.CustomActionRow
@@ -263,6 +265,7 @@ fun ItemName(
     )
 }
 
+@OptIn(ExperimentalGlideComposeApi::class)
 @Composable
 fun ItemImage(
     viewModel: NewLostViewModel,
@@ -283,10 +286,8 @@ fun ItemImage(
                     modifier = Modifier.padding(vertical = dimensionResource(id = R.dimen.content_margin))
                 ) {
                     // display the image of the item only when it is not null
-                    val painter = rememberAsyncImagePainter(model = viewModel.itemImage.value)
-
-                    Image(
-                        painter = painter,
+                    GlideImage(
+                        model = viewModel.itemImage.value,
                         contentDescription = "Item image",
                         contentScale = ContentScale.FillWidth,  // make the image fill width
                         modifier = Modifier
