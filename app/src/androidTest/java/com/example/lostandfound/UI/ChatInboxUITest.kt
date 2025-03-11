@@ -7,15 +7,11 @@ import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
-import androidx.compose.ui.test.performClick
-import androidx.compose.ui.test.performTextInput
 import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.ApplicationProvider
-import com.example.lostandfound.Data.ChatMessage
 import com.example.lostandfound.Data.FirebaseNames
 import com.example.lostandfound.Data.IntentExtraNames
 import com.example.lostandfound.Data.User
-import com.example.lostandfound.FirebaseManagers.FirebaseUtility
 import com.example.lostandfound.FirebaseTestsSetUp
 import com.example.lostandfound.Utility.DateTimeManager
 import com.example.lostandfound.ui.ChatInbox.ChatInboxActivity
