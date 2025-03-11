@@ -26,8 +26,8 @@ import com.example.lostandfound.CustomElements.ButtonType
 import com.example.lostandfound.CustomElements.CustomButton
 import com.example.lostandfound.CustomElements.CustomGrayTitle
 import com.example.lostandfound.CustomElements.CustomInputField
+import com.example.lostandfound.FirebaseManagers.FirebaseMessagingManager
 import com.example.lostandfound.R
-import com.example.lostandfound.ui.PermissionsTest.PushNotificationsTestViewModel
 import com.example.lostandfound.ui.theme.ComposeTheme
 
 
@@ -100,6 +100,7 @@ fun MainContent(
         verticalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.content_margin_half))
     ) {
         FcmTokenInput(context, viewModel)
+        UserIDInput(context, viewModel)
         TitleInput(context, viewModel)
         ContentInput(context, viewModel)
         SendButton(context, viewModel)
@@ -118,6 +119,23 @@ fun FcmTokenInput(
         isEditable = true,
         onTextChanged = { t ->
             viewModel.fcmToken.value = t
+        },
+        placeholder = "",
+        leadingIcon = Icons.Outlined.Edit,
+    )
+}
+
+@Composable
+fun UserIDInput(
+    context: Context,
+    viewModel: PushNotificationsTestViewModel
+) {
+    CustomGrayTitle(text = "User ID")
+    CustomInputField(
+        fieldContent = viewModel.userID.value,
+        isEditable = true,
+        onTextChanged = { t ->
+            viewModel.userID.value = t
         },
         placeholder = "",
         leadingIcon = Icons.Outlined.Edit,
@@ -172,7 +190,14 @@ fun SendButton(
         CustomButton(
             text = "Send",
             type = ButtonType.FILLED,
-            onClick = {}
+            onClick = {
+                // send the notification here
+                FirebaseMessagingManager.sendPushNotification(
+                    userID = viewModel.userID.value,
+                    title = viewModel.title.value,
+                    content = viewModel.content.value
+                )
+            }
         )
     }
 }
