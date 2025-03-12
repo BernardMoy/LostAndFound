@@ -74,7 +74,7 @@ public class FirebaseAuthManager {
                             editor.apply();
 
                             // update the FCM token
-                            FirebaseMessagingManager.INSTANCE.updateFCMToken(userID, new FirebaseMessagingManager.FCMTokenUpdateCallback() {
+                            FCMTokenManager.INSTANCE.updateFCMToken(userID, new FCMTokenManager.FCMTokenUpdateCallback() {
                                 @Override
                                 public void onComplete(boolean success) {
                                     if (!success){
@@ -205,7 +205,7 @@ public class FirebaseAuthManager {
     // method to logout
     public void logoutUser(LogoutCallback callback) {
         // clear the FCM token for the user so that the user no longer receive push notifications
-        FirebaseMessagingManager.INSTANCE.removeFCMTokenFromUser(FirebaseUtility.getUserID(), new FirebaseMessagingManager.FCMTokenDeleteCallback() {
+        FCMTokenManager.INSTANCE.removeFCMTokenFromUser(FirebaseUtility.getUserID(), new FCMTokenManager.FCMTokenDeleteCallback() {
             @Override
             public void onComplete(boolean success) {
                 if (!success){
