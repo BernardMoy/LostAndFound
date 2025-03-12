@@ -6,37 +6,26 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.lostandfound.FirebaseManagers.FCMApi
-import com.example.lostandfound.FirebaseManagers.MessageBody
-import com.example.lostandfound.FirebaseManagers.NotificationBody
-import com.example.lostandfound.FirebaseManagers.SendMessageDto
-import com.google.auth.oauth2.GoogleCredentials
+import com.example.lostandfound.PushNotificationManagers.MessageBody
+import com.example.lostandfound.PushNotificationManagers.NotificationBody
+import com.example.lostandfound.PushNotificationManagers.SendMessageDto
+import com.example.lostandfound.PushNotificationManagers.PushNotificationManager.fcmApi
+import com.example.lostandfound.PushNotificationManagers.PushNotificationManager.getAccessToken
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import okio.IOException
 import retrofit2.HttpException
-import retrofit2.Retrofit
-import retrofit2.converter.moshi.MoshiConverterFactory
-import retrofit2.create
-import java.io.FileInputStream
 
 class PushNotificationsTestViewModel : ViewModel() {
     val fcmToken: MutableState<String> = mutableStateOf("")
-    val userID: MutableState<String> = mutableStateOf("")
     val title: MutableState<String> = mutableStateOf("")
     val content: MutableState<String> = mutableStateOf("")
 
-
-    private val fcmApi: FCMApi = Retrofit.Builder()
-        .baseUrl("https://fcm.googleapis.com/")
-        .addConverterFactory(MoshiConverterFactory.create())
-        .build()
-        .create(FCMApi::class.java)
-
-    fun sendNotification(context: Context){
-        viewModelScope.launch(Dispatchers.IO){
+    fun sendNotification(context: Context) {
+        viewModelScope.launch(Dispatchers.IO) {
             val adminToken = getAccessToken(context)
 
+            // create the message dto object for the contents of the push notifications
             val messageDto = SendMessageDto(
                 message = MessageBody(
                     token = fcmToken.value,
@@ -49,24 +38,15 @@ class PushNotificationsTestViewModel : ViewModel() {
 
             try {
                 fcmApi.sendMessage("Bearer $adminToken", messageDto)
-                Log.d("PUSH NOTIF", "Push notification sent")
-            } catch (e: HttpException){
+                Log.d("Push notification", "Push notification sent")
+
+            } catch (e: HttpException) {
                 e.printStackTrace()
-            } catch (e: IOException){
+
+            } catch (e: IOException) {
                 e.printStackTrace()
+
             }
         }
-    }
-
-
-    fun getAccessToken(context: Context): String {
-        val credentials = GoogleCredentials
-            .fromStream(
-                context.assets.open("service-account.json")
-            )
-            .createScoped(listOf("https://www.googleapis.com/auth/firebase.messaging"))
-
-        credentials.refreshIfExpired()
-        return credentials.accessToken.tokenValue
     }
 }
