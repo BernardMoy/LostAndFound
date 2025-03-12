@@ -1,4 +1,10 @@
-package com.example.lostandfound.FirebaseManagers
+package com.example.lostandfound.PushNotificationManagers
+
+/*
+These formats must be exactly followed
+the names of variables also cannot be changed
+otherwise it 400 bad request
+ */
 
 data class SendMessageDto(
     val message: MessageBody

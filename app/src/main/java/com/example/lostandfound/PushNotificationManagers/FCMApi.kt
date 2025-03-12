@@ -1,4 +1,4 @@
-package com.example.lostandfound.FirebaseManagers
+package com.example.lostandfound.PushNotificationManagers
 
 import retrofit2.http.Body
 import retrofit2.http.Header
