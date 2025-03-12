@@ -19,6 +19,7 @@ import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import java.util.HashMap;
 import java.util.Map;
 
+
 /*
 This class only stores methods that involves using the context
 If not, use that in firestore manager!
@@ -28,6 +29,9 @@ public class FirebaseAuthManager {
     private final FirebaseAuth mAuth;      // stores emails and passwords
     private final FirestoreManager db;     // stores emails to Userdata(firstName and lastName)
 
+    public interface LogoutCallback {
+        void onComplete(boolean success);
+    }
 
     public FirebaseAuthManager(Context ctx) {
         this.ctx = ctx;
@@ -70,7 +74,7 @@ public class FirebaseAuthManager {
                             editor.apply();
 
                             // update the FCM token
-                            FirebaseMessagingManager.INSTANCE.updateFCMToken(userID, new FirebaseMessagingManager.FCMTokenCallback() {
+                            FCMTokenManager.INSTANCE.updateFCMToken(userID, new FCMTokenManager.FCMTokenUpdateCallback() {
                                 @Override
                                 public void onComplete(boolean success) {
                                     if (!success){
@@ -199,15 +203,30 @@ public class FirebaseAuthManager {
     }
 
     // method to logout
-    public void logoutUser() {
-        mAuth.signOut();
+    public void logoutUser(LogoutCallback callback) {
+        // clear the FCM token for the user so that the user no longer receive push notifications
+        FCMTokenManager.INSTANCE.removeFCMTokenFromUser(FirebaseUtility.getUserID(), new FCMTokenManager.FCMTokenDeleteCallback() {
+            @Override
+            public void onComplete(boolean success) {
+                if (!success){
+                    callback.onComplete(false);
+                    return;
+                }
 
-        // reset shared preferences for User
-        SharedPreferences sharedPreferences = ctx.getSharedPreferences(SharedPreferencesNames.NAME_USERS, MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
+                // sign out the user here
+                mAuth.signOut();
 
-        // clear user data
-        editor.clear();
-        editor.apply();
+                // reset shared preferences for User
+                SharedPreferences sharedPreferences = ctx.getSharedPreferences(SharedPreferencesNames.NAME_USERS, MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+
+                // clear user data
+                editor.clear();
+                editor.apply();
+
+                // return result
+                callback.onComplete(true);
+            }
+        });
     }
 }

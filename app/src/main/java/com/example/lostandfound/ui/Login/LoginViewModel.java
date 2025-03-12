@@ -6,7 +6,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.example.lostandfound.FirebaseManagers.FirebaseAuthManager;
-import com.example.lostandfound.FirebaseManagers.FirebaseMessagingManager;
+import com.example.lostandfound.FirebaseManagers.FCMTokenManager;
 import com.example.lostandfound.FirebaseManagers.FirebaseUtility;
 import com.example.lostandfound.Utility.ErrorCallback;
 
@@ -62,7 +62,7 @@ public class LoginViewModel extends ViewModel {
                     return;
                 }
 
-                FirebaseMessagingManager.INSTANCE.updateFCMToken(FirebaseUtility.getUserID(), new FirebaseMessagingManager.FCMTokenCallback() {
+                FCMTokenManager.INSTANCE.updateFCMToken(FirebaseUtility.getUserID(), new FCMTokenManager.FCMTokenUpdateCallback() {
                     @Override
                     public void onComplete(boolean success) {
                         if (!success){

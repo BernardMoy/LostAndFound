@@ -1,25 +1,25 @@
 package com.example.lostandfound.FirebaseManagers
 
 import android.util.Log
-import com.android.volley.toolbox.JsonObjectRequest
-import com.android.volley.toolbox.Volley
 import com.example.lostandfound.Data.FirebaseNames
-import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.messaging.FirebaseMessaging
-import org.json.JSONObject
 
-object FirebaseMessagingManager {
+object FCMTokenManager {
 
-    interface FCMTokenCallback{
+    interface FCMTokenUpdateCallback{
         fun onComplete(success: Boolean)
     }
     interface FCMTokenGetCallback{
         fun onComplete(token: String?)   // return token if successful or null
     }
+    interface FCMTokenDeleteCallback{
+        fun onComplete(success: Boolean)
+    }
 
     // method to save the FCM token of the user when given a user id
-    fun updateFCMToken(userID: String, callback: FCMTokenCallback){
+    fun updateFCMToken(userID: String, callback: FCMTokenUpdateCallback){
         FirebaseMessaging.getInstance().token.addOnCompleteListener{ task ->
             if (!task.isSuccessful){
                 Log.e("Firebase messaging error", task.exception!!.message.toString())
@@ -60,6 +60,20 @@ object FirebaseMessagingManager {
             .addOnFailureListener { e ->
                 Log.e("FCM token get error", "Failed to get FCM token", e)
                 callback.onComplete(null)
+            }
+    }
+
+    // method to clear FCM token for a user
+    fun removeFCMTokenFromUser(userID: String, callback: FCMTokenDeleteCallback){
+        FirebaseFirestore.getInstance().collection("users")
+            .document(userID)
+            .update(FirebaseNames.USERS_FCM_TOKEN, FieldValue.delete())     // delete the attribute
+            .addOnSuccessListener {
+                callback.onComplete(true)
+            }
+            .addOnFailureListener{ e ->
+                Log.e("Firebase user delete error", e.message.toString())
+                callback.onComplete(false)
             }
     }
 }
