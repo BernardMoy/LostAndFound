@@ -62,7 +62,7 @@ public class LoginViewModel extends ViewModel {
                     return;
                 }
 
-                FirebaseMessagingManager.INSTANCE.updateFCMToken(FirebaseUtility.getUserID(), new FirebaseMessagingManager.FCMTokenCallback() {
+                FirebaseMessagingManager.INSTANCE.updateFCMToken(FirebaseUtility.getUserID(), new FirebaseMessagingManager.FCMTokenUpdateCallback() {
                     @Override
                     public void onComplete(boolean success) {
                         if (!success){
