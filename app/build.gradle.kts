@@ -20,6 +20,12 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    packaging {
+        resources {
+            excludes += "META-INF/DEPENDENCIES"
+        }
+    }
+
     buildTypes {
         release {
             isMinifyEnabled = false
@@ -73,6 +79,7 @@ dependencies {
     implementation(libs.tensorflow.lite.support)
     implementation(libs.tensorflow.lite.metadata)
     implementation(libs.tensorflow.lite.gpu)
+    implementation(libs.volley)
     testImplementation(libs.junit)
     testImplementation (libs.mockito.core)
     testImplementation (libs.coreTesting)
@@ -98,6 +105,7 @@ dependencies {
     implementation(platform("com.google.firebase:firebase-bom:33.9.0"))
     implementation("com.google.firebase:firebase-storage:21.0.1")
     implementation("com.google.firebase:firebase-functions")
+    implementation("com.google.firebase:firebase-messaging")
     implementation ("com.github.bumptech.glide:glide:4.16.0")
 
     androidTestImplementation("androidx.compose.ui:ui-test-junit4-android:1.7.6")
@@ -117,5 +125,11 @@ dependencies {
     implementation ("androidx.core:core-ktx:1.15.0")
 
     implementation ("org.mockito:mockito-core:5.15.2")
+
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation("com.squareup.retrofit2:converter-moshi:2.9.0")
+
+    implementation("com.google.auth:google-auth-library-oauth2-http:1.17.0")
+
 
 }
