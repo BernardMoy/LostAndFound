@@ -6,7 +6,7 @@ import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.messaging.FirebaseMessaging
 
-object FirebaseMessagingManager {
+object FCMTokenManager {
 
     interface FCMTokenUpdateCallback{
         fun onComplete(success: Boolean)
