@@ -54,6 +54,7 @@ import com.example.lostandfound.CustomElements.CustomGrayTitle
 import com.example.lostandfound.CustomElements.CustomTextDialog
 import com.example.lostandfound.Data.SharedPreferencesNames
 import com.example.lostandfound.FirebaseManagers.FirebaseAuthManager
+import com.example.lostandfound.FirebaseManagers.FirebaseAuthManager.LogoutCallback
 import com.example.lostandfound.R
 import com.example.lostandfound.Utility.ErrorCallback
 import com.example.lostandfound.Utility.ImageManager
@@ -150,10 +151,18 @@ fun MainContent(viewModel: ProfileViewModel) {
                 type = ButtonType.FILLED,
                 onClick = {
                     val manager: FirebaseAuthManager = FirebaseAuthManager(context)
-                    manager.logoutUser()
-                    Toast.makeText(context, "Logged out successfully", Toast.LENGTH_SHORT).show()
-                    viewModel.isLogoutDialogShown.value = false
-                    (context as ProfileActivity).finish()
+                    manager.logoutUser(object: LogoutCallback{
+                        override fun onComplete(success: Boolean) {
+                            if (!success){
+                                Toast.makeText(context, "Failed updating user data", Toast.LENGTH_SHORT).show()
+                                return
+                            }
+
+                            Toast.makeText(context, "Logged out successfully", Toast.LENGTH_SHORT).show()
+                            viewModel.isLogoutDialogShown.value = false
+                            (context as ProfileActivity).finish()
+                        }
+                    })
                 }
             )
         },
