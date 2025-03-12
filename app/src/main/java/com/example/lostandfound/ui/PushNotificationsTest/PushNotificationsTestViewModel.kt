@@ -11,18 +11,4 @@ class PushNotificationsTestViewModel : ViewModel() {
     val fcmToken: MutableState<String> = mutableStateOf("")
     val title: MutableState<String> = mutableStateOf("")
     val content: MutableState<String> = mutableStateOf("")
-
-    fun sendNotification(context: Context) {
-        PushNotificationManager.sendPushNotification(
-            context,
-            fcmToken.value,
-            title.value,
-            content.value,
-            object : PushNotificationCallback {
-                override fun onComplete(success: Boolean) {
-                    // do nothing
-                }
-            }
-        )
-    }
 }
