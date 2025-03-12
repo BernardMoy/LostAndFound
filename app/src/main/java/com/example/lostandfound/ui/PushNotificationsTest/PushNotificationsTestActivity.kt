@@ -2,6 +2,7 @@ package com.example.lostandfound.ui.PushNotificationsTest
 
 import android.content.Context
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
@@ -26,7 +27,8 @@ import com.example.lostandfound.CustomElements.ButtonType
 import com.example.lostandfound.CustomElements.CustomButton
 import com.example.lostandfound.CustomElements.CustomGrayTitle
 import com.example.lostandfound.CustomElements.CustomInputField
-import com.example.lostandfound.FirebaseManagers.FirebaseMessagingManager
+import com.example.lostandfound.PushNotificationManagers.PushNotificationCallback
+import com.example.lostandfound.PushNotificationManagers.PushNotificationManager
 import com.example.lostandfound.R
 import com.example.lostandfound.ui.theme.ComposeTheme
 
@@ -174,7 +176,25 @@ fun SendButton(
             type = ButtonType.FILLED,
             onClick = {
                 // send the notification here
-                viewModel.sendNotification(context)
+                PushNotificationManager.sendPushNotification(
+                    context,
+                    viewModel.fcmToken.value,
+                    viewModel.title.value,
+                    viewModel.content.value,
+                    object : PushNotificationCallback {
+                        override fun onComplete(success: Boolean) {
+                            if (!success) {
+                                Toast.makeText(
+                                    context,
+                                    "Sending notifications failed",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            } else {
+                                Toast.makeText(context, "Sent!", Toast.LENGTH_SHORT).show()
+                            }
+                        }
+                    }
+                )
             }
         )
     }
