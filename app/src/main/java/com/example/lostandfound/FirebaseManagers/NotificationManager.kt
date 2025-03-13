@@ -20,6 +20,7 @@ object NotificationManager {
         targetUserId: String,
         lostItemID: String,
         foundItemID: String,
+        lostItemName: String,
         callback: NotificationSendCallback
     ) {
         val firestoreManager = FirestoreManager()
@@ -128,6 +129,7 @@ object NotificationManager {
     fun sendUserClaimedYourItemNotification(
         targetUserId: String,
         claimID: String,
+        foundItemName: String,
         callback: NotificationSendCallback
     ) {
         val firestoreManager = FirestoreManager()

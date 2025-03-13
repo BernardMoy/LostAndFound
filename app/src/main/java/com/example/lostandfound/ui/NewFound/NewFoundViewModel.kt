@@ -387,6 +387,7 @@ class NewFoundViewModel : ViewModel() {
                             targetUserId = item.userID,
                             lostItemID = item.itemID,
                             foundItemID = foundItem.itemID,
+                            lostItemName = item.itemName,
                             object : NotificationManager.NotificationSendCallback {
                                 override fun onComplete(result: Boolean) {
                                     if (!result) {

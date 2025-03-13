@@ -138,4 +138,19 @@ object PushNotificationManager {
             }
         )
     }
+
+    // method to send a push notification about a notif of type 0
+    fun sendPushNotificationNewMatchingItem(
+        context: Context,
+        userID: String,
+        callback: PushNotificationCallback
+    ){
+
+    }
+
+    // method to send push notif type 1
+
+    // method to send push notif type 2
+
+    // method to send push notif type 3
 }

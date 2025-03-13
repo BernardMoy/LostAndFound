@@ -96,9 +96,10 @@ class ViewComparisonViewModel : ViewModel() {
 
                     // send a notification to the found user, saying that a user has claimed their item
                     NotificationManager.sendUserClaimedYourItemNotification(
-                        foundUser.userID,
-                        result,  // the claim id
-                        object : NotificationManager.NotificationSendCallback {
+                        targetUserId = foundUser.userID,
+                        claimID = result,  // the claim id
+                        foundItemName = foundItemData.itemName,
+                        callback = object : NotificationManager.NotificationSendCallback {
                             override fun onComplete(result: Boolean) {
                                 if (!result) {
                                     callback.onComplete("Error sending notification to user")
