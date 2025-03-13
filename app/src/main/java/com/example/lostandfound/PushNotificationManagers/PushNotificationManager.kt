@@ -117,4 +117,25 @@ object PushNotificationManager {
 
         })
     }
+
+    // method to send a push notification of a new message
+    fun sendPushNotificationNewMessage(
+        context: Context,
+        userID: String,
+        userName: String,
+        message: String,   // the new message
+        callback: PushNotificationCallback
+    ){
+        sendPushNotificationToUserID(
+            context = context,
+            userID = userID,
+            title = "New message",
+            content = "$userName: $message",
+            object: PushNotificationCallback{
+                override fun onComplete(success: Boolean) {
+                    callback.onComplete(success)
+                }
+            }
+        )
+    }
 }

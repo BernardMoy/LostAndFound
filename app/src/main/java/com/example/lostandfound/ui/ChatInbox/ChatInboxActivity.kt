@@ -59,6 +59,8 @@ import com.example.lostandfound.CustomElements.CustomCenteredProgressbar
 import com.example.lostandfound.CustomElements.CustomChatCard
 import com.example.lostandfound.Data.IntentExtraNames
 import com.example.lostandfound.Data.User
+import com.example.lostandfound.PushNotificationManagers.PushNotificationCallback
+import com.example.lostandfound.PushNotificationManagers.PushNotificationManager
 import com.example.lostandfound.R
 import com.example.lostandfound.Utility.ImageManager
 import com.example.lostandfound.ui.theme.ComposeTheme
@@ -353,6 +355,9 @@ fun SendBar(
                     return@IconButton
                 }
 
+                // store the typed text as it will be reset later
+                val typedTextCache: String = viewModel.typedText.value
+
                 viewModel.sendMessage(object : SendMessageCallback {
                     override fun onComplete(result: Boolean) {
                         if (!result) {
@@ -361,7 +366,18 @@ fun SendBar(
                             return
                         }
 
-                        // do nothing when send message successful
+                        // when send message successful, send a push notification to the user
+                        PushNotificationManager.sendPushNotificationNewMessage(
+                            context = context,
+                            userID = viewModel.chatUser.userID,
+                            userName = "${viewModel.chatUser.firstName} ${viewModel.chatUser.lastName}",
+                            message = typedTextCache,
+                            object : PushNotificationCallback{
+                                override fun onComplete(success: Boolean) {
+                                    // do nothing
+                                }
+                            }
+                        )
                     }
                 })
             },
