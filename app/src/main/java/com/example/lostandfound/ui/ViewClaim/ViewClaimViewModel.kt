@@ -1,5 +1,6 @@
 package com.example.lostandfound.ui.ViewClaim
 
+import android.content.Context
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
@@ -124,7 +125,10 @@ class ViewClaimViewModel : ViewModel() {
 
     // function to mark the claim as accepted
     // once a claim is approved, it cannot be un-approved
-    fun approveClaim(callback: ErrorCallback) {
+    fun approveClaim(
+        context: Context,
+        callback: ErrorCallback
+    ) {
         val firestoreManager = FirestoreManager()
         firestoreManager.update(FirebaseNames.COLLECTION_CLAIMED_ITEMS,
             claimData.claimID,
@@ -138,11 +142,11 @@ class ViewClaimViewModel : ViewModel() {
                     }
 
                     // send notification type 1 (To the target lost user) and 2 (To other lost users)
-                    sendApprovalNotification(object : Callback<Boolean> {
+                    sendApprovalNotification(context, object : Callback<Boolean> {
                         override fun onComplete(result: Boolean) {
                             // continue regardless of result
 
-                            sendRejectionNotifications(object : Callback<Boolean> {
+                            sendRejectionNotifications(context, object : Callback<Boolean> {
                                 override fun onComplete(result: Boolean) {
                                     // continue regardless of result
 
@@ -176,9 +180,11 @@ class ViewClaimViewModel : ViewModel() {
 
     // function to send notification type 1 to the approved user
     fun sendApprovalNotification(
+        context: Context,
         callback: Callback<Boolean>
     ) {
         NotificationManager.sendClaimApprovedNotification(
+            context,
             lostUser.userID,
             claimData.claimID,  // current claim id
             object : NotificationManager.NotificationSendCallback {
@@ -196,6 +202,7 @@ class ViewClaimViewModel : ViewModel() {
 
     // function to send notification type 2 to the rejected users
     fun sendRejectionNotifications(
+        context: Context,
         callback: Callback<Boolean>
     ) {
         // get all claims from the found item
@@ -224,6 +231,7 @@ class ViewClaimViewModel : ViewModel() {
                                     // send notif type 2 to every user that isnt the user of the current claim
                                     if (lostItem.userID != lostUser.userID) {
                                         NotificationManager.sendClaimRejectedNotification(
+                                            context,
                                             lostItem.userID,
                                             claim.claimID,  // pass the current claim data
                                             object : NotificationManager.NotificationSendCallback {

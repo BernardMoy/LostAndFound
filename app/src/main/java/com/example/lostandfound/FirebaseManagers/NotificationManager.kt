@@ -1,7 +1,9 @@
 package com.example.lostandfound.FirebaseManagers
 
+import android.content.Context
 import com.example.lostandfound.Data.FirebaseNames
 import com.example.lostandfound.FirebaseManagers.FirestoreManager.Callback
+import com.example.lostandfound.PushNotificationManagers.PushNotificationManager
 import com.example.lostandfound.Utility.DateTimeManager
 import com.google.firebase.firestore.FirebaseFirestore
 
@@ -17,6 +19,7 @@ object NotificationManager {
 
     // method to send type 0 notification to the target user
     fun sendNewMatchingItemNotification(
+        context: Context,    // for push notif
         targetUserId: String,
         lostItemID: String,
         foundItemID: String,
@@ -48,6 +51,7 @@ object NotificationManager {
                     }
 
                     // notification added to db successfully
+                    // send push notification
                     callback.onComplete(true)
                 }
             }
@@ -57,6 +61,7 @@ object NotificationManager {
     // method to send type 1 notification to the target user
     // currently the data passed for type 1 2 3 are the same (Except the type)
     fun sendClaimApprovedNotification(
+        context: Context,    // for push notif
         targetUserId: String,
         claimID: String,
         callback: NotificationSendCallback
@@ -92,6 +97,7 @@ object NotificationManager {
 
     // method to send type 2 notification to the target user
     fun sendClaimRejectedNotification(
+        context: Context,    // for push notif
         targetUserId: String,
         claimID: String,
         callback: NotificationSendCallback
@@ -127,6 +133,7 @@ object NotificationManager {
 
     // method to send type 3 notification to the target user
     fun sendUserClaimedYourItemNotification(
+        context: Context,    // for push notif
         targetUserId: String,
         claimID: String,
         foundItemName: String,

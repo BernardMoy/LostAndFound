@@ -751,7 +751,7 @@ fun AcceptButton(
                     onClick = {
                         viewModel.isApproveLoading.value = true
                         // approve the claim
-                        viewModel.approveClaim(object : ErrorCallback {
+                        viewModel.approveClaim(context, object : ErrorCallback {
                             override fun onComplete(error: String) {
                                 viewModel.isApproveLoading.value = false
                                 if (error.isNotEmpty()) {

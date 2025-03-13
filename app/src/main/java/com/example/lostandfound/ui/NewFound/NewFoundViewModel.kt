@@ -384,6 +384,7 @@ class NewFoundViewModel : ViewModel() {
 
                     for (item in result) {
                         NotificationManager.sendNewMatchingItemNotification(
+                            context = context,
                             targetUserId = item.userID,
                             lostItemID = item.itemID,
                             foundItemID = foundItem.itemID,

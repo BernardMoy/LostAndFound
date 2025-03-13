@@ -848,7 +848,7 @@ fun claimItem(
     viewModel: ViewComparisonViewModel
 ) {
     // update statuses of the item
-    viewModel.putClaimedItems(object : ErrorCallback {
+    viewModel.putClaimedItems(context = context, object : ErrorCallback {
         override fun onComplete(error: String) {
             if (error.isNotEmpty()) {
                 Toast.makeText(context, error, Toast.LENGTH_SHORT).show()

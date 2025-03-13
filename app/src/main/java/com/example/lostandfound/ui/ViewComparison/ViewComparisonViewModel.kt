@@ -1,5 +1,6 @@
 package com.example.lostandfound.ui.ViewComparison
 
+import android.content.Context
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
@@ -72,7 +73,10 @@ class ViewComparisonViewModel : ViewModel() {
 
 
     // function to add the items to the claimed collection, and also update the item status
-    fun putClaimedItems(callback: ErrorCallback) {
+    fun putClaimedItems(
+        context: Context,
+        callback: ErrorCallback
+    ) {
         val firestoreManager = FirestoreManager()
 
         val data: Map<String, Any> = mutableMapOf(
@@ -96,6 +100,7 @@ class ViewComparisonViewModel : ViewModel() {
 
                     // send a notification to the found user, saying that a user has claimed their item
                     NotificationManager.sendUserClaimedYourItemNotification(
+                        context = context,
                         targetUserId = foundUser.userID,
                         claimID = result,  // the claim id
                         foundItemName = foundItemData.itemName,
