@@ -3,6 +3,7 @@ package com.example.lostandfound.FirebaseManagers
 import android.content.Context
 import com.example.lostandfound.Data.FirebaseNames
 import com.example.lostandfound.FirebaseManagers.FirestoreManager.Callback
+import com.example.lostandfound.PushNotificationManagers.PushNotificationCallback
 import com.example.lostandfound.PushNotificationManagers.PushNotificationManager
 import com.example.lostandfound.Utility.DateTimeManager
 import com.google.firebase.firestore.FirebaseFirestore
@@ -52,7 +53,17 @@ object NotificationManager {
 
                     // notification added to db successfully
                     // send push notification
-                    callback.onComplete(true)
+                    PushNotificationManager.sendPushNotificationNewMatchingItem(
+                        context = context,
+                        userID = targetUserId,
+                        lostItemName = lostItemName,
+                        object: PushNotificationCallback{
+                            override fun onComplete(success: Boolean) {
+                                // regardless of the result, return true
+                                callback.onComplete(true)
+                            }
+                        }
+                    )
                 }
             }
         )
@@ -89,7 +100,17 @@ object NotificationManager {
                         return
                     }
                     // notification added to db successfully
-                    callback.onComplete(true)
+                    // send push notification
+                    PushNotificationManager.sendPushNotificationClaimApproved(
+                        context = context,
+                        userID = targetUserId,
+                        object: PushNotificationCallback{
+                            override fun onComplete(success: Boolean) {
+                                // regardless of the result, return true
+                                callback.onComplete(true)
+                            }
+                        }
+                    )
                 }
             }
         )
@@ -125,7 +146,17 @@ object NotificationManager {
                         return
                     }
                     // notification added to db successfully
-                    callback.onComplete(true)
+                    // send push notification
+                    PushNotificationManager.sendPushNotificationClaimRejected(
+                        context = context,
+                        userID = targetUserId,
+                        object: PushNotificationCallback{
+                            override fun onComplete(success: Boolean) {
+                                // regardless of the result, return true
+                                callback.onComplete(true)
+                            }
+                        }
+                    )
                 }
             }
         )
@@ -162,7 +193,18 @@ object NotificationManager {
                         return
                     }
                     // notification added to db successfully
-                    callback.onComplete(true)
+                    // send push notification
+                    PushNotificationManager.sendPushNotificationUserClaimedYourItem(
+                        context = context,
+                        userID = targetUserId,
+                        foundItemName = foundItemName,
+                        object: PushNotificationCallback{
+                            override fun onComplete(success: Boolean) {
+                                // regardless of the result, return true
+                                callback.onComplete(true)
+                            }
+                        }
+                    )
                 }
             }
         )

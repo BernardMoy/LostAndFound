@@ -180,7 +180,7 @@ object PushNotificationManager {
 
 
     // method to send push notif type 2
-    fun sendPushNotificationClaimApprovedRejected(
+    fun sendPushNotificationClaimRejected(
         context: Context,
         userID: String,
         callback: PushNotificationCallback
