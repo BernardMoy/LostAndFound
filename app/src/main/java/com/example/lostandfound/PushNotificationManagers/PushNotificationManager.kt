@@ -143,14 +143,79 @@ object PushNotificationManager {
     fun sendPushNotificationNewMatchingItem(
         context: Context,
         userID: String,
+        lostItemName: String,
         callback: PushNotificationCallback
     ){
-
+        sendPushNotificationToUserID(
+            context = context,
+            userID = userID,
+            title = "New matching item!",
+            content = "A new matching item has been found for your item $lostItemName.",
+            object: PushNotificationCallback{
+                override fun onComplete(success: Boolean) {
+                    callback.onComplete(success)
+                }
+            }
+        )
     }
 
     // method to send push notif type 1
+    fun sendPushNotificationClaimApproved(
+        context: Context,
+        userID: String,
+        callback: PushNotificationCallback
+    ){
+        sendPushNotificationToUserID(
+            context = context,
+            userID = userID,
+            title = "Claim approved!",
+            content = "Your claim has been approved!",
+            object: PushNotificationCallback{
+                override fun onComplete(success: Boolean) {
+                    callback.onComplete(success)
+                }
+            }
+        )
+    }
+
 
     // method to send push notif type 2
+    fun sendPushNotificationClaimApprovedRejected(
+        context: Context,
+        userID: String,
+        callback: PushNotificationCallback
+    ){
+        sendPushNotificationToUserID(
+            context = context,
+            userID = userID,
+            title = "Claim rejected",
+            content = "Contact the user for more details.",
+            object: PushNotificationCallback{
+                override fun onComplete(success: Boolean) {
+                    callback.onComplete(success)
+                }
+            }
+        )
+    }
+
 
     // method to send push notif type 3
+    fun sendPushNotificationUserClaimedYourItem(
+        context: Context,
+        userID: String,
+        foundItemName: String,
+        callback: PushNotificationCallback
+    ){
+        sendPushNotificationToUserID(
+            context = context,
+            userID = userID,
+            title = "New claim to your found item",
+            content = "A user has claimed your item $foundItemName.",
+            object: PushNotificationCallback{
+                override fun onComplete(success: Boolean) {
+                    callback.onComplete(success)
+                }
+            }
+        )
+    }
 }
