@@ -11,6 +11,8 @@ public final class SharedPreferencesNames {
     public static final String NAME_ANIMATION = "animation_enabled";
     public static final String NAME_AUTO_LOADING = "auto_loading_enabled";
     public static final String NAME_SHOW_WELCOME_MESSAGE = "show_welcome_message";
+    public static final String NAME_PUSH_NOTIFICATION_ITEM = "item_notification";
+    public static final String NAME_PUSH_NOTIFICATION_MESSAGE = "message_notification";
 
     // strings that represent all key names
     public static final String USER_FIRSTNAME = "firstName";
@@ -23,4 +25,6 @@ public final class SharedPreferencesNames {
     public static final String ANIMATION_VALUE = "value";   // false or true whether animations are enabled
     public static final String AUTO_LOADING_VALUE = "value";
     public static final String SHOW_WELCOME_MESSAGE_VALUE = "value";
+    public static final String ITEM_PUSH_NOTIFICATION_VALUE = "value";
+    public static final String MESSAGE_PUSH_NOTIFICATION_VALUE = "value";
 }
