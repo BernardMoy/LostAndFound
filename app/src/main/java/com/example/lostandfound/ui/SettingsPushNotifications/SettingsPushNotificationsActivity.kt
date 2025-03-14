@@ -1,7 +1,9 @@
 package com.example.lostandfound.ui.SettingsPushNotifications
 
+import android.app.Activity
 import android.content.Context
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Arrangement
@@ -34,7 +36,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.lostandfound.CustomElements.BackToolbar
 import com.example.lostandfound.CustomElements.ButtonType
 import com.example.lostandfound.CustomElements.CustomButton
-import com.example.lostandfound.PushNotificationManagers.PushNotificationManager
+import com.example.lostandfound.CustomElements.CustomProgressBar
 import com.example.lostandfound.R
 import com.example.lostandfound.ui.theme.ComposeTheme
 import com.example.lostandfound.ui.theme.Typography
@@ -94,9 +96,14 @@ fun MainContent(viewModel: SettingsPushNotificationsViewModel = viewModel()) {
     val inPreview = LocalInspectionMode.current
 
     // initially, load the push notif states
-    LaunchedEffect(Unit){
-        viewModel.isItemNotificationChecked.value = PushNotificationManager.loadItemPushNotificationEnabled(context)
-        viewModel.isMessageNotificationChecked.value = PushNotificationManager.loadMessagePushNotificationEnabled(context)
+    LaunchedEffect(Unit) {
+        viewModel.loadUserSettings(object : PushNotificationSettingsCallback {
+            override fun onComplete(success: Boolean) {
+                if (!success) {
+                    Toast.makeText(context, "Failed to fetch data", Toast.LENGTH_SHORT).show()
+                }
+            }
+        })
     }
 
     // the switches of item notifications and chat notifications
@@ -122,13 +129,8 @@ fun MainContent(viewModel: SettingsPushNotificationsViewModel = viewModel()) {
             Switch(
                 checked = viewModel.isItemNotificationChecked.value,
                 onCheckedChange = {
-                    viewModel.isItemNotificationChecked.value = !viewModel.isItemNotificationChecked.value
-
-                    // change the sp settings
-                    PushNotificationManager.setItemPushNotificationEnabled(
-                        context = context,
-                        enabled = viewModel.isItemNotificationChecked.value
-                    )
+                    viewModel.isItemNotificationChecked.value =
+                        !viewModel.isItemNotificationChecked.value
                 },
                 colors = SwitchDefaults.colors(
                     checkedThumbColor = MaterialTheme.colorScheme.background,
@@ -161,12 +163,6 @@ fun MainContent(viewModel: SettingsPushNotificationsViewModel = viewModel()) {
                 checked = viewModel.isMessageNotificationChecked.value,
                 onCheckedChange = {
                     viewModel.isMessageNotificationChecked.value = it
-
-                    // change the sp settings
-                    PushNotificationManager.setMessagePushNotificationEnabled(
-                        context = context,
-                        enabled = viewModel.isMessageNotificationChecked.value
-                    )
                 },
                 colors = SwitchDefaults.colors(
                     checkedThumbColor = MaterialTheme.colorScheme.background,
@@ -177,7 +173,10 @@ fun MainContent(viewModel: SettingsPushNotificationsViewModel = viewModel()) {
             )
         }
 
-        // DoneButton(context, viewModel)
+        if (viewModel.isLoading.value) {
+            CustomProgressBar()
+        }
+        DoneButton(context, viewModel)
     }
 }
 
@@ -196,8 +195,30 @@ fun DoneButton(
         CustomButton(
             text = "Done",
             type = ButtonType.FILLED,
+            enabled = !viewModel.isLoading.value,
             onClick = {
+                viewModel.isLoading.value = true
 
+                viewModel.updateUserSettings(
+                    object : PushNotificationSettingsCallback {
+                        override fun onComplete(success: Boolean) {
+                            viewModel.isLoading.value = false
+                            if (!success) {
+                                Toast.makeText(context, "Failed to update data", Toast.LENGTH_SHORT)
+                                    .show()
+                                return
+                            }
+                            Toast.makeText(
+                                context,
+                                "Settings updated successfully",
+                                Toast.LENGTH_SHORT
+                            ).show()
+
+                            // exit activity
+                            (context as Activity?)?.finish()
+                        }
+                    }
+                )
             }
         )
     }

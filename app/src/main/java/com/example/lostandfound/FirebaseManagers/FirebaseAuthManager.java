@@ -54,6 +54,8 @@ public class FirebaseAuthManager {
                     data.put(FirebaseNames.USERS_FIRSTNAME, firstName);
                     data.put(FirebaseNames.USERS_LASTNAME, lastName);
                     data.put(FirebaseNames.USERS_AVATAR, avatar);
+                    data.put(FirebaseNames.USERS_ITEM_NOTIFICATION_ENABLED, true);
+                    data.put(FirebaseNames.USERS_MESSAGE_NOTIFICATION_ENABLED, true);
 
                     // add the data to firestore db
                     db.put(FirebaseNames.COLLECTION_USERS, userID, data, new FirestoreManager.Callback<Boolean>() {

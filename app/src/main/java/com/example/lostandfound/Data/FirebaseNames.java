@@ -25,6 +25,8 @@ public final class FirebaseNames {
     public static final String USERS_AVATAR = "avatar";
     public static final String USERS_EMAIL = "email";
     public static final String USERS_FCM_TOKEN = "fcm_token";
+    public static final String USERS_ITEM_NOTIFICATION_ENABLED = "item_notification";
+    public static final String USERS_MESSAGE_NOTIFICATION_ENABLED = "message_notification";
 
     public static final String USER_VERIFICATIONS_HASHEDCODE = "hashedCode";
     public static final String USER_VERIFICATIONS_TIMESTAMP = "timestamp";
