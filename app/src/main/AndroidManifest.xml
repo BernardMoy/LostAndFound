@@ -64,6 +64,11 @@
             android:exported="false"
             android:windowSoftInputMode="adjustPan" />
         <activity
+            android:name=".ui.SettingsPushNotifications.SettingsPushNotificationsActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:exported="false"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
             android:name=".ui.Notifications.NotificationsActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:exported="false"

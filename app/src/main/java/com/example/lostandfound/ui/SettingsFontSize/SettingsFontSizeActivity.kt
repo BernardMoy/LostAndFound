@@ -34,7 +34,6 @@ import com.example.lostandfound.CustomElements.CustomButton
 import com.example.lostandfound.CustomElements.CustomChoiceTextField
 import com.example.lostandfound.R
 import com.example.lostandfound.Utility.FontSizeManager
-import com.example.lostandfound.ui.AboutApp.SettingsFontSizeViewModel
 import com.example.lostandfound.ui.theme.ComposeTheme
 
 

@@ -17,7 +17,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Android
 import androidx.compose.material.icons.outlined.Animation
 import androidx.compose.material.icons.outlined.CheckCircle
 import androidx.compose.material.icons.outlined.Compare
@@ -31,7 +30,6 @@ import androidx.compose.material.icons.outlined.Notifications
 import androidx.compose.material.icons.outlined.Refresh
 import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material.icons.outlined.Settings
-import androidx.compose.material.icons.outlined.ShoppingCart
 import androidx.compose.material.icons.outlined.TextFields
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Scaffold
@@ -65,6 +63,7 @@ import com.example.lostandfound.ui.Search.SearchActivity
 import com.example.lostandfound.ui.SettingsAnimation.SettingsAnimationActivity
 import com.example.lostandfound.ui.SettingsAutoLoading.SettingsAutoLoadingActivity
 import com.example.lostandfound.ui.SettingsFontSize.SettingsFontSizeActivity
+import com.example.lostandfound.ui.SettingsPushNotifications.SettingsPushNotificationsActivity
 import com.example.lostandfound.ui.SettingsTheme.SettingsThemeActivity
 import com.example.lostandfound.ui.ViewComparison.ViewComparisonActivity
 import com.example.lostandfound.ui.theme.ComposeTheme
@@ -196,6 +195,18 @@ fun Appearance(
                 context.startActivity(intent)
             }
         )
+
+        // only available when the user is logged in
+        // whether to send push notifications
+        if (FirebaseUtility.isUserLoggedIn()){
+            CustomActionRow(text = "Push notifications",
+                leftIcon = Icons.Outlined.Notifications,
+                onClick = {
+                    val intent = Intent(context, SettingsPushNotificationsActivity::class.java)
+                    context.startActivity(intent)
+                }
+            )
+        }
     }
 }
 
@@ -599,7 +610,8 @@ fun Developer(
                     SharedPreferencesNames.NAME_SHOW_WELCOME_MESSAGE,
                     Context.MODE_PRIVATE
                 )
-                sp.edit().putBoolean(SharedPreferencesNames.SHOW_WELCOME_MESSAGE_VALUE, true).apply()
+                sp.edit().putBoolean(SharedPreferencesNames.SHOW_WELCOME_MESSAGE_VALUE, true)
+                    .apply()
 
                 Toast.makeText(context, "Settings set", Toast.LENGTH_SHORT).show()
             }

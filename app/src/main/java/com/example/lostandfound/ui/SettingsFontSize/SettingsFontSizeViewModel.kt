@@ -1,4 +1,4 @@
-package com.example.lostandfound.ui.AboutApp
+package com.example.lostandfound.ui.SettingsFontSize
 
 import androidx.compose.runtime.getValue
 import androidx.lifecycle.ViewModel
