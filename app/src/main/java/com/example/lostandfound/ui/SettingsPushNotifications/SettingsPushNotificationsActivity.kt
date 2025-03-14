@@ -22,6 +22,7 @@ import androidx.compose.material3.Switch
 import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -33,6 +34,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.lostandfound.CustomElements.BackToolbar
 import com.example.lostandfound.CustomElements.ButtonType
 import com.example.lostandfound.CustomElements.CustomButton
+import com.example.lostandfound.PushNotificationManagers.PushNotificationManager
 import com.example.lostandfound.R
 import com.example.lostandfound.ui.theme.ComposeTheme
 import com.example.lostandfound.ui.theme.Typography
@@ -91,6 +93,12 @@ fun MainContent(viewModel: SettingsPushNotificationsViewModel = viewModel()) {
     // boolean to determine if it is being rendered in preview
     val inPreview = LocalInspectionMode.current
 
+    // initially, load the push notif states
+    LaunchedEffect(Unit){
+        viewModel.isItemNotificationChecked.value = PushNotificationManager.loadItemPushNotificationEnabled(context)
+        viewModel.isMessageNotificationChecked.value = PushNotificationManager.loadMessagePushNotificationEnabled(context)
+    }
+
     // the switches of item notifications and chat notifications
     Column {
         Row(
@@ -114,7 +122,13 @@ fun MainContent(viewModel: SettingsPushNotificationsViewModel = viewModel()) {
             Switch(
                 checked = viewModel.isItemNotificationChecked.value,
                 onCheckedChange = {
-                    viewModel.isItemNotificationChecked.value = it
+                    viewModel.isItemNotificationChecked.value = !viewModel.isItemNotificationChecked.value
+
+                    // change the sp settings
+                    PushNotificationManager.setItemPushNotificationEnabled(
+                        context = context,
+                        enabled = viewModel.isItemNotificationChecked.value
+                    )
                 },
                 colors = SwitchDefaults.colors(
                     checkedThumbColor = MaterialTheme.colorScheme.background,
@@ -147,6 +161,12 @@ fun MainContent(viewModel: SettingsPushNotificationsViewModel = viewModel()) {
                 checked = viewModel.isMessageNotificationChecked.value,
                 onCheckedChange = {
                     viewModel.isMessageNotificationChecked.value = it
+
+                    // change the sp settings
+                    PushNotificationManager.setMessagePushNotificationEnabled(
+                        context = context,
+                        enabled = viewModel.isMessageNotificationChecked.value
+                    )
                 },
                 colors = SwitchDefaults.colors(
                     checkedThumbColor = MaterialTheme.colorScheme.background,
@@ -157,7 +177,7 @@ fun MainContent(viewModel: SettingsPushNotificationsViewModel = viewModel()) {
             )
         }
 
-        DoneButton(context, viewModel)
+        // DoneButton(context, viewModel)
     }
 }
 
