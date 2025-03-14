@@ -1,9 +1,12 @@
 package com.example.lostandfound.PushNotificationManagers
 
 import android.content.Context
+import android.util.Log
+import com.example.lostandfound.Data.FirebaseNames
 import com.example.lostandfound.Data.SharedPreferencesNames
 import com.example.lostandfound.FirebaseManagers.FCMTokenManager
 import com.google.auth.oauth2.GoogleCredentials
+import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -85,7 +88,7 @@ object PushNotificationManager {
     // method of sending a notification to a user given a user id,
     // or do nothing when the user does not have a valid fcm token
     // return true only when the notif is sent, false otherwise
-    fun sendPushNotificationToUserID(
+    private fun sendPushNotificationToUserID(
         context: Context,
         userID: String,
         title: String,
@@ -127,17 +130,34 @@ object PushNotificationManager {
         message: String,   // the new message
         callback: PushNotificationCallback
     ){
-        sendPushNotificationToUserID(
-            context = context,
-            userID = userID,
-            title = "New message",
-            content = "$userName: $message",
-            object: PushNotificationCallback{
-                override fun onComplete(success: Boolean) {
-                    callback.onComplete(success)
+        // first use the user id to see if the user has message notif enabled
+        FirebaseFirestore.getInstance().collection(FirebaseNames.COLLECTION_USERS)
+            .document(userID)
+            .get()
+            .addOnSuccessListener { doc ->
+                val enabled = (doc[FirebaseNames.USERS_MESSAGE_NOTIFICATION_ENABLED] as? Boolean)?:true
+                if (!enabled){
+                    callback.onComplete(true)
+                    return@addOnSuccessListener
                 }
+
+                // if enabled, send push notif
+                sendPushNotificationToUserID(
+                    context = context,
+                    userID = userID,
+                    title = "New message",
+                    content = "$userName: $message",
+                    object: PushNotificationCallback{
+                        override fun onComplete(success: Boolean) {
+                            callback.onComplete(success)
+                        }
+                    }
+                )
             }
-        )
+            .addOnFailureListener{ e ->
+                Log.e("Firebase firestore error", e.message.toString())
+                callback.onComplete(false)
+            }
     }
 
     // method to send a push notification about a notif of type 0
@@ -147,17 +167,33 @@ object PushNotificationManager {
         lostItemName: String,
         callback: PushNotificationCallback
     ){
-        sendPushNotificationToUserID(
-            context = context,
-            userID = userID,
-            title = "New matching item!",
-            content = "A new matching item has been found for your item $lostItemName.",
-            object: PushNotificationCallback{
-                override fun onComplete(success: Boolean) {
-                    callback.onComplete(success)
+        FirebaseFirestore.getInstance().collection(FirebaseNames.COLLECTION_USERS)
+            .document(userID)
+            .get()
+            .addOnSuccessListener { doc ->
+                val enabled = (doc[FirebaseNames.USERS_ITEM_NOTIFICATION_ENABLED] as? Boolean)?:true
+                if (!enabled){
+                    callback.onComplete(true)
+                    return@addOnSuccessListener
                 }
+
+                // if enabled, send push notif
+                sendPushNotificationToUserID(
+                    context = context,
+                    userID = userID,
+                    title = "New matching item!",
+                    content = "A new matching item has been found for your item $lostItemName.",
+                    object: PushNotificationCallback{
+                        override fun onComplete(success: Boolean) {
+                            callback.onComplete(success)
+                        }
+                    }
+                )
             }
-        )
+            .addOnFailureListener{ e ->
+                Log.e("Firebase firestore error", e.message.toString())
+                callback.onComplete(false)
+            }
     }
 
     // method to send push notif type 1
@@ -166,17 +202,33 @@ object PushNotificationManager {
         userID: String,
         callback: PushNotificationCallback
     ){
-        sendPushNotificationToUserID(
-            context = context,
-            userID = userID,
-            title = "Claim approved!",
-            content = "Your claim has been approved!",
-            object: PushNotificationCallback{
-                override fun onComplete(success: Boolean) {
-                    callback.onComplete(success)
+        FirebaseFirestore.getInstance().collection(FirebaseNames.COLLECTION_USERS)
+            .document(userID)
+            .get()
+            .addOnSuccessListener { doc ->
+                val enabled = (doc[FirebaseNames.USERS_ITEM_NOTIFICATION_ENABLED] as? Boolean)?:true
+                if (!enabled){
+                    callback.onComplete(true)
+                    return@addOnSuccessListener
                 }
+
+                // if enabled, send push notif
+                sendPushNotificationToUserID(
+                    context = context,
+                    userID = userID,
+                    title = "Claim approved!",
+                    content = "Your claim has been approved!",
+                    object: PushNotificationCallback{
+                        override fun onComplete(success: Boolean) {
+                            callback.onComplete(success)
+                        }
+                    }
+                )
             }
-        )
+            .addOnFailureListener{ e ->
+                Log.e("Firebase firestore error", e.message.toString())
+                callback.onComplete(false)
+            }
     }
 
 
@@ -186,17 +238,33 @@ object PushNotificationManager {
         userID: String,
         callback: PushNotificationCallback
     ){
-        sendPushNotificationToUserID(
-            context = context,
-            userID = userID,
-            title = "Claim rejected",
-            content = "Contact the user for more details.",
-            object: PushNotificationCallback{
-                override fun onComplete(success: Boolean) {
-                    callback.onComplete(success)
+        FirebaseFirestore.getInstance().collection(FirebaseNames.COLLECTION_USERS)
+            .document(userID)
+            .get()
+            .addOnSuccessListener { doc ->
+                val enabled = (doc[FirebaseNames.USERS_ITEM_NOTIFICATION_ENABLED] as? Boolean)?:true
+                if (!enabled){
+                    callback.onComplete(true)
+                    return@addOnSuccessListener
                 }
+
+                // if enabled, send push notif
+                sendPushNotificationToUserID(
+                    context = context,
+                    userID = userID,
+                    title = "Claim rejected",
+                    content = "Contact the user for more details.",
+                    object: PushNotificationCallback{
+                        override fun onComplete(success: Boolean) {
+                            callback.onComplete(success)
+                        }
+                    }
+                )
             }
-        )
+            .addOnFailureListener{ e ->
+                Log.e("Firebase firestore error", e.message.toString())
+                callback.onComplete(false)
+            }
     }
 
 
@@ -207,16 +275,32 @@ object PushNotificationManager {
         foundItemName: String,
         callback: PushNotificationCallback
     ){
-        sendPushNotificationToUserID(
-            context = context,
-            userID = userID,
-            title = "New claim to your found item",
-            content = "A user has claimed your item $foundItemName.",
-            object: PushNotificationCallback{
-                override fun onComplete(success: Boolean) {
-                    callback.onComplete(success)
+        FirebaseFirestore.getInstance().collection(FirebaseNames.COLLECTION_USERS)
+            .document(userID)
+            .get()
+            .addOnSuccessListener { doc ->
+                val enabled = (doc[FirebaseNames.USERS_ITEM_NOTIFICATION_ENABLED] as? Boolean)?:true
+                if (!enabled){
+                    callback.onComplete(true)
+                    return@addOnSuccessListener
                 }
+
+                // if enabled, send push notif
+                sendPushNotificationToUserID(
+                    context = context,
+                    userID = userID,
+                    title = "New claim to your found item",
+                    content = "A user has claimed your item $foundItemName.",
+                    object: PushNotificationCallback{
+                        override fun onComplete(success: Boolean) {
+                            callback.onComplete(success)
+                        }
+                    }
+                )
             }
-        )
+            .addOnFailureListener{ e ->
+                Log.e("Firebase firestore error", e.message.toString())
+                callback.onComplete(false)
+            }
     }
 }
