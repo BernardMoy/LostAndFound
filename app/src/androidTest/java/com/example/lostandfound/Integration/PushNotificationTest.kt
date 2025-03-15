@@ -18,7 +18,7 @@ import java.util.concurrent.TimeUnit
 
 /*
 IMPORTANT -- Launch the app and ENABLE NOTIFICATION PERMISSIONS FIRST
-Otherwise THIS TEST WILL FAIL 
+Otherwise THIS TEST WILL FAIL
  */
 class PushNotificationTest : FirebaseMessagingService(){
     private lateinit var device: UiDevice

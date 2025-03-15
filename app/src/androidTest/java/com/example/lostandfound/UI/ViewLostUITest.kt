@@ -160,6 +160,38 @@ class ViewLostUITest : FirebaseTestsSetUp() {
             .assertTextContains("19 Feb 2025 05:05")
     }
 
+
+
+    @Test
+    fun testCorrectItemDetails2() {
+        val intent =
+            Intent(
+                ApplicationProvider.getApplicationContext(),
+                ViewLostActivity::class.java
+            ).apply {
+                putExtra(
+                    IntentExtraNames.INTENT_LOST_ID,
+                    dataLost
+                )
+            }
+
+        ActivityScenario.launch<ViewLostActivity>(intent)
+        composeTestRule.waitForIdle()
+
+        // assert the correct intent has been passed
+        assertEquals(
+            dataLost, intent.getParcelableExtra(
+                IntentExtraNames.INTENT_LOST_ID
+            )
+        )
+
+        // assert the correct item details are posted
+        Thread.sleep(2000)
+
+        // assert the delete button exists
+        composeTestRule.onNodeWithText("Delete item").assertExists()
+    }
+
     @After
     fun tearDown() {
         deleteCollection(FirebaseNames.COLLECTION_USERS)
