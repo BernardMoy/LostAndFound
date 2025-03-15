@@ -37,10 +37,18 @@ class ViewComparisonActivityTest : FirebaseTestsSetUp() {
         private var firestore: FirebaseFirestore? = getFirestore()
         private var auth: FirebaseAuth? = getAuth()
 
+        // the score is fixed in all examples
+        private var dataScore: ScoreData = ScoreData(
+            categoryScore = 3.0,
+            colorScore = 3.0,
+            brandScore = 3.0,
+            locationScore = 3.0,
+            overallScore = 3.0
+        )
+
         private var userID: String? = null
         private var dataLost: LostItem? = null
         private var dataFound: FoundItem? = null
-        private var dataScore: ScoreData? = null
         private var dataClaim: Claim? = null   // these are the intents required
 
     }
@@ -109,15 +117,6 @@ class ViewComparisonActivityTest : FirebaseTestsSetUp() {
         )
 
         // keep dataClaim null
-
-        // create a 100% score data
-        dataScore = ScoreData(
-            categoryScore = 3.0,
-            colorScore = 3.0,
-            brandScore = 3.0,
-            locationScore = 3.0,
-            overallScore = 3.0
-        )
 
         // post an user entry of the found user in firestore. this is because it is required in fetching data
         val dataFoundUser = mutableMapOf<String, Any>(
