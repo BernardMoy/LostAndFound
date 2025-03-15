@@ -36,7 +36,12 @@ class ViewLostUITest : FirebaseTestsSetUp() {
         private var auth: FirebaseAuth? = getAuth()
 
         private var userID: String? = null
-        private var dataLost: LostItem? = null
+        private var userID2: String = "e299e2e20e2"
+
+        private var dataLost0: LostItem? = null  // status 0
+        private var dataLost1: LostItem? = null
+        private var dataLost2: LostItem? = null
+        private var dataLostOtherUser: LostItem? = null
 
     }
 
@@ -71,7 +76,7 @@ class ViewLostUITest : FirebaseTestsSetUp() {
 
 
         // create item details
-        dataLost = LostItem(
+        dataLost0 = LostItem(
             itemID = "2e9j8qijwqiie",
             userID = userID ?: "",    // use the current user ID
             itemName = "TestItem",
@@ -83,8 +88,59 @@ class ViewLostUITest : FirebaseTestsSetUp() {
             location = Pair(52.381162440739686, -1.5614377315953403),
             description = "TestDesc",
             isTracking = false,
-            timePosted = 1739941511L
+            timePosted = 1739941511L,
+            status = 0
         )
+
+        // also create lost item of status 1 and 2
+        dataLost1 = LostItem(
+            itemID = "2e9j8qijwqiie5",
+            userID = userID ?: "",    // use the current user ID
+            itemName = "TestItem",
+            category = "TestCat",
+            subCategory = "TestSubCat",
+            color = listOf("Black", "Red"),
+            brand = "TestBrand",
+            dateTime = 1738819980L,
+            location = Pair(52.381162440739686, -1.5614377315953403),
+            description = "TestDesc",
+            isTracking = false,
+            timePosted = 1739941511L,
+            status = 1
+        )
+
+        dataLost2 = LostItem(
+            itemID = "2e9j8qijwqiie3",
+            userID = userID ?: "",    // use the current user ID
+            itemName = "TestItem",
+            category = "TestCat",
+            subCategory = "TestSubCat",
+            color = listOf("Black", "Red"),
+            brand = "TestBrand",
+            dateTime = 1738819980L,
+            location = Pair(52.381162440739686, -1.5614377315953403),
+            description = "TestDesc",
+            isTracking = false,
+            timePosted = 1739941511L,
+            status = 2
+        )
+
+        dataLostOtherUser = LostItem(
+            itemID = "2e9j8qijwqiie2",
+            userID = userID2,    // use the current user ID
+            itemName = "TestItem",
+            category = "TestCat",
+            subCategory = "TestSubCat",
+            color = listOf("Black", "Red"),
+            brand = "TestBrand",
+            dateTime = 1738819980L,
+            location = Pair(52.381162440739686, -1.5614377315953403),
+            description = "TestDesc",
+            isTracking = false,
+            timePosted = 1739941511L,
+            status = 0
+        )
+
 
         // upload the user to firebase firestore
         val dataLostUser = mutableMapOf<String, Any>(
@@ -99,6 +155,21 @@ class ViewLostUITest : FirebaseTestsSetUp() {
             .document(userID.toString())
             .set(dataLostUser)
         Tasks.await(task1, 60, TimeUnit.SECONDS)
+        Thread.sleep(2000)
+
+        // upload another user
+        val dataLostUser2 = mutableMapOf<String, Any>(
+            FirebaseNames.USERS_EMAIL to email,
+            FirebaseNames.USERS_AVATAR to "",
+            FirebaseNames.USERS_FIRSTNAME to "testFirstName3",
+            FirebaseNames.USERS_LASTNAME to "testLastName3"
+        )
+
+        // document the found user id and add it
+        val task2 = firestore!!.collection(FirebaseNames.COLLECTION_USERS)
+            .document(userID2)
+            .set(dataLostUser2)
+        Tasks.await(task2, 60, TimeUnit.SECONDS)
         Thread.sleep(2000)
     }
 
@@ -117,7 +188,7 @@ class ViewLostUITest : FirebaseTestsSetUp() {
             ).apply {
                 putExtra(
                     IntentExtraNames.INTENT_LOST_ID,
-                    dataLost
+                    dataLost0
                 )
             }
 
@@ -126,7 +197,7 @@ class ViewLostUITest : FirebaseTestsSetUp() {
 
         // assert the correct intent has been passed
         assertEquals(
-            dataLost, intent.getParcelableExtra(
+            dataLost0, intent.getParcelableExtra(
                 IntentExtraNames.INTENT_LOST_ID
             )
         )
@@ -161,9 +232,11 @@ class ViewLostUITest : FirebaseTestsSetUp() {
     }
 
 
-
+    /*
+    Test whether certain buttons and messages appear under some conditions.
+     */
     @Test
-    fun testCorrectItemDetails2() {
+    fun testOwnerAndStatus0() {
         val intent =
             Intent(
                 ApplicationProvider.getApplicationContext(),
@@ -171,25 +244,111 @@ class ViewLostUITest : FirebaseTestsSetUp() {
             ).apply {
                 putExtra(
                     IntentExtraNames.INTENT_LOST_ID,
-                    dataLost
+                    dataLost0
                 )
             }
-
         ActivityScenario.launch<ViewLostActivity>(intent)
         composeTestRule.waitForIdle()
-
         // assert the correct intent has been passed
         assertEquals(
-            dataLost, intent.getParcelableExtra(
+            dataLost0, intent.getParcelableExtra(
                 IntentExtraNames.INTENT_LOST_ID
             )
         )
-
         // assert the correct item details are posted
         Thread.sleep(2000)
 
         // assert the delete button exists
         composeTestRule.onNodeWithText("Delete item").assertExists()
+        composeTestRule.onNodeWithText("View matching items").assertExists()
+        composeTestRule.onNodeWithText("View claim").assertDoesNotExist()
+    }
+
+    @Test
+    fun testOwnerAndStatus1() {
+        val intent =
+            Intent(
+                ApplicationProvider.getApplicationContext(),
+                ViewLostActivity::class.java
+            ).apply {
+                putExtra(
+                    IntentExtraNames.INTENT_LOST_ID,
+                    dataLost1
+                )
+            }
+        ActivityScenario.launch<ViewLostActivity>(intent)
+        composeTestRule.waitForIdle()
+        // assert the correct intent has been passed
+        assertEquals(
+            dataLost1, intent.getParcelableExtra(
+                IntentExtraNames.INTENT_LOST_ID
+            )
+        )
+        // assert the correct item details are posted
+        Thread.sleep(2000)
+
+        // assert the delete button exists
+        composeTestRule.onNodeWithText("View claim").assertExists()
+        composeTestRule.onNodeWithText("View matching items").assertExists()
+        composeTestRule.onNodeWithText("Delete item").assertDoesNotExist()
+    }
+
+    @Test
+    fun testOwnerAndStatus2() {
+        val intent =
+            Intent(
+                ApplicationProvider.getApplicationContext(),
+                ViewLostActivity::class.java
+            ).apply {
+                putExtra(
+                    IntentExtraNames.INTENT_LOST_ID,
+                    dataLost2
+                )
+            }
+        ActivityScenario.launch<ViewLostActivity>(intent)
+        composeTestRule.waitForIdle()
+        // assert the correct intent has been passed
+        assertEquals(
+            dataLost2, intent.getParcelableExtra(
+                IntentExtraNames.INTENT_LOST_ID
+            )
+        )
+        // assert the correct item details are posted
+        Thread.sleep(2000)
+
+        // assert the delete button exists
+        composeTestRule.onNodeWithText("View claim").assertExists()
+        composeTestRule.onNodeWithText("View matching items").assertDoesNotExist()
+        composeTestRule.onNodeWithText("Delete item").assertDoesNotExist()
+    }
+
+    @Test
+    fun testNotOwner() {
+        val intent =
+            Intent(
+                ApplicationProvider.getApplicationContext(),
+                ViewLostActivity::class.java
+            ).apply {
+                putExtra(
+                    IntentExtraNames.INTENT_LOST_ID,
+                    dataLostOtherUser
+                )
+            }
+        ActivityScenario.launch<ViewLostActivity>(intent)
+        composeTestRule.waitForIdle()
+        // assert the correct intent has been passed
+        assertEquals(
+            dataLostOtherUser, intent.getParcelableExtra(
+                IntentExtraNames.INTENT_LOST_ID
+            )
+        )
+        // assert the correct item details are posted
+        Thread.sleep(2000)
+
+        // assert the delete button exists
+        composeTestRule.onNodeWithText("View claim").assertDoesNotExist()
+        composeTestRule.onNodeWithText("View matching items").assertDoesNotExist()
+        composeTestRule.onNodeWithText("Delete item").assertDoesNotExist()
     }
 
     @After
