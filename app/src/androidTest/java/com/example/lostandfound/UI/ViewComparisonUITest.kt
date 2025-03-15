@@ -290,12 +290,7 @@ class ViewComparisonUITest : FirebaseTestsSetUp() {
         Thread.sleep(2000)
     }
 
-    /*
-    Unable to isolate tests, as this will require isolating the intent
-    but this cannot be done because need to wait until the lost item is created
-    and directly isolating them will lead to the application interface being relaunched
-    multiple times
-     */
+
     @Test
     fun testOwnerAndLostStatus0() {
         val intent =
@@ -343,7 +338,117 @@ class ViewComparisonUITest : FirebaseTestsSetUp() {
         )
 
         // assert the claim this item button appears
+
         composeTestRule.onNodeWithText("Claim this Item").assertExists()
+        composeTestRule.onNodeWithText("You have already claimed this item.").assertDoesNotExist()
+        composeTestRule.onNodeWithText("You cannot claim this item as you have already claimed another item.").assertDoesNotExist()
+    }
+
+
+    @Test
+    fun testOwnerAndClaimFoundIsFound() {
+        val intent =
+            Intent(
+                ApplicationProvider.getApplicationContext(),
+                ViewComparisonActivity::class.java
+            ).apply {
+                putExtra(
+                    IntentExtraNames.INTENT_LOST_ID,
+                    dataLost1
+                )
+                putExtra(
+                    IntentExtraNames.INTENT_FOUND_ID,
+                    dataFound1
+                )
+                putExtra(
+                    IntentExtraNames.INTENT_CLAIM_ITEM,
+                    dataClaim1
+                )
+                putExtra(
+                    IntentExtraNames.INTENT_SCORE_DATA,
+                    dataScore
+                )
+            }
+
+        ActivityScenario.launch<ViewComparisonActivity>(intent)
+        composeTestRule.waitForIdle()
+        Thread.sleep(2000)
+
+        // assert the correct intent has been passed
+        assertEquals(
+            dataLost1, intent.getParcelableExtra(
+                IntentExtraNames.INTENT_LOST_ID
+            )
+        )
+        assertEquals(
+            dataFound1, intent.getParcelableExtra(
+                IntentExtraNames.INTENT_FOUND_ID
+            )
+        )
+        assertEquals(
+            dataClaim1, intent.getParcelableExtra(
+                IntentExtraNames.INTENT_CLAIM_ITEM
+            )
+        )
+
+        // assert the message of already claimed appears
+
+        composeTestRule.onNodeWithText("Claim this Item").assertDoesNotExist()
+        composeTestRule.onNodeWithText("You have already claimed this item.").assertExists()
+        composeTestRule.onNodeWithText("You cannot claim this item as you have already claimed another item.").assertDoesNotExist()
+    }
+
+
+    @Test
+    fun testOwnerAndElse() {
+        val intent =
+            Intent(
+                ApplicationProvider.getApplicationContext(),
+                ViewComparisonActivity::class.java
+            ).apply {
+                putExtra(
+                    IntentExtraNames.INTENT_LOST_ID,
+                    dataLost2
+                )
+                putExtra(
+                    IntentExtraNames.INTENT_FOUND_ID,
+                    dataFound2
+                )
+                putExtra(
+                    IntentExtraNames.INTENT_CLAIM_ITEM,
+                    dataClaim2
+                )
+                putExtra(
+                    IntentExtraNames.INTENT_SCORE_DATA,
+                    dataScore
+                )
+            }
+
+        ActivityScenario.launch<ViewComparisonActivity>(intent)
+        composeTestRule.waitForIdle()
+        Thread.sleep(2000)
+
+        // assert the correct intent has been passed
+        assertEquals(
+            dataLost2, intent.getParcelableExtra(
+                IntentExtraNames.INTENT_LOST_ID
+            )
+        )
+        assertEquals(
+            dataFound2, intent.getParcelableExtra(
+                IntentExtraNames.INTENT_FOUND_ID
+            )
+        )
+        assertEquals(
+            dataClaim2, intent.getParcelableExtra(
+                IntentExtraNames.INTENT_CLAIM_ITEM
+            )
+        )
+
+        // assert the message of already claimed appears
+        composeTestRule.onNodeWithText("Claim this Item").assertDoesNotExist()
+        composeTestRule.onNodeWithText("You have already claimed this item.").assertDoesNotExist()
+        composeTestRule.onNodeWithText("You cannot claim this item as you have already claimed another item.").assertExists()
     }
 
 
