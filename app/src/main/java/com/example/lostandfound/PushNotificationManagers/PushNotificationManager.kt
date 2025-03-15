@@ -28,7 +28,7 @@ object PushNotificationManager {
         .create(FCMApi::class.java)
 
 
-    fun getAccessToken(context: Context): String {
+    private fun getAccessToken(context: Context): String {
         val credentials = GoogleCredentials
             .fromStream(
                 context.assets.open("service-account.json")

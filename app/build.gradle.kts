@@ -130,6 +130,7 @@ dependencies {
     implementation("com.squareup.retrofit2:converter-moshi:2.9.0")
 
     implementation("com.google.auth:google-auth-library-oauth2-http:1.17.0")
+    implementation("com.android.support.test.uiautomator:uiautomator-v18:2.1.1")
 
 
 }
