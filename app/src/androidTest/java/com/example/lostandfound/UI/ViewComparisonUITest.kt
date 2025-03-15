@@ -451,6 +451,59 @@ class ViewComparisonUITest : FirebaseTestsSetUp() {
         composeTestRule.onNodeWithText("You cannot claim this item as you have already claimed another item.").assertExists()
     }
 
+    @Test
+    fun testNotOwner() {
+        val intent =
+            Intent(
+                ApplicationProvider.getApplicationContext(),
+                ViewComparisonActivity::class.java
+            ).apply {
+                putExtra(
+                    IntentExtraNames.INTENT_LOST_ID,
+                    dataLost3
+                )
+                putExtra(
+                    IntentExtraNames.INTENT_FOUND_ID,
+                    dataFound3
+                )
+                putExtra(
+                    IntentExtraNames.INTENT_CLAIM_ITEM,
+                    dataClaim3
+                )
+                putExtra(
+                    IntentExtraNames.INTENT_SCORE_DATA,
+                    dataScore
+                )
+            }
+
+        ActivityScenario.launch<ViewComparisonActivity>(intent)
+        composeTestRule.waitForIdle()
+        Thread.sleep(2000)
+
+        // assert the correct intent has been passed
+        assertEquals(
+            dataLost3, intent.getParcelableExtra(
+                IntentExtraNames.INTENT_LOST_ID
+            )
+        )
+        assertEquals(
+            dataFound3, intent.getParcelableExtra(
+                IntentExtraNames.INTENT_FOUND_ID
+            )
+        )
+        assertEquals(
+            dataClaim3, intent.getParcelableExtra(
+                IntentExtraNames.INTENT_CLAIM_ITEM
+            )
+        )
+
+        // assert the message of already claimed appears
+        composeTestRule.onNodeWithText("Claim this Item").assertDoesNotExist()
+        composeTestRule.onNodeWithText("You have already claimed this item.").assertDoesNotExist()
+        composeTestRule.onNodeWithText("You cannot claim this item as you have already claimed another item.").assertDoesNotExist()
+    }
+
+
 
     @After
     fun tearDown() {
