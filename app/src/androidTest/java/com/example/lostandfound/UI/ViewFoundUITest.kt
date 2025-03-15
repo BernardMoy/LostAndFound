@@ -36,8 +36,12 @@ class ViewFoundUITest : FirebaseTestsSetUp() {
         private var auth: FirebaseAuth? = getAuth()
 
         private var userID: String? = null
-        private var dataFound: FoundItem? = null
+        private var userID2: String = "e299e2e20e2"
 
+        private var dataFound0: FoundItem? = null
+        private var dataFound1: FoundItem? = null
+        private var dataFound2: FoundItem? = null
+        private var dataFoundOtherUser: FoundItem? = null
     }
 
     @get:Rule
@@ -71,7 +75,7 @@ class ViewFoundUITest : FirebaseTestsSetUp() {
 
 
         // create item details
-        dataFound = FoundItem(
+        dataFound0 = FoundItem(
             itemID = "3rdweerrwewre",
             userID = userID ?: "",    // use the current user ID
             itemName = "TestItem",
@@ -84,7 +88,59 @@ class ViewFoundUITest : FirebaseTestsSetUp() {
             description = "TestDesc",
             timePosted = 1739941511L,
             securityQuestion = "SecQ?",
-            securityQuestionAns = "Ansowoowo"
+            securityQuestionAns = "Ansowoowo",
+            status = 0
+        )
+
+        dataFound1 = FoundItem(
+            itemID = "3rdweerrwewre1",
+            userID = userID ?: "",    // use the current user ID
+            itemName = "TestItem",
+            category = "TestCat",
+            subCategory = "TestSubCat",
+            color = listOf("Black", "Red"),
+            brand = "TestBrand",
+            dateTime = 1738819980L,
+            location = Pair(52.381162440739686, -1.5614377315953403),
+            description = "TestDesc",
+            timePosted = 1739941511L,
+            securityQuestion = "SecQ?",
+            securityQuestionAns = "Ansowoowo",
+            status = 1
+        )
+
+        dataFound2 = FoundItem(
+            itemID = "3rdweerrwewr2e",
+            userID = userID ?: "",    // use the current user ID
+            itemName = "TestItem",
+            category = "TestCat",
+            subCategory = "TestSubCat",
+            color = listOf("Black", "Red"),
+            brand = "TestBrand",
+            dateTime = 1738819980L,
+            location = Pair(52.381162440739686, -1.5614377315953403),
+            description = "TestDesc",
+            timePosted = 1739941511L,
+            securityQuestion = "SecQ?",
+            securityQuestionAns = "Ansowoowo",
+            status = 2
+        )
+
+        dataFoundOtherUser = FoundItem(
+            itemID = "3rdweerrwe3wre",
+            userID = userID2,    // use the current user ID
+            itemName = "TestItem",
+            category = "TestCat",
+            subCategory = "TestSubCat",
+            color = listOf("Black", "Red"),
+            brand = "TestBrand",
+            dateTime = 1738819980L,
+            location = Pair(52.381162440739686, -1.5614377315953403),
+            description = "TestDesc",
+            timePosted = 1739941511L,
+            securityQuestion = "SecQ?",
+            securityQuestionAns = "Ansowoowo",
+            status = 0
         )
 
         // upload the user to firebase firestore
@@ -100,6 +156,21 @@ class ViewFoundUITest : FirebaseTestsSetUp() {
             .document(userID.toString())
             .set(dataFoundUser)
         Tasks.await(task1, 60, TimeUnit.SECONDS)
+        Thread.sleep(2000)
+
+        // upload another user
+        val dataFoundUser2 = mutableMapOf<String, Any>(
+            FirebaseNames.USERS_EMAIL to email,
+            FirebaseNames.USERS_AVATAR to "",
+            FirebaseNames.USERS_FIRSTNAME to "testFirstName3",
+            FirebaseNames.USERS_LASTNAME to "testLastName3"
+        )
+
+        // document the found user id and add it
+        val task2 = firestore!!.collection(FirebaseNames.COLLECTION_USERS)
+            .document(userID2)
+            .set(dataFoundUser2)
+        Tasks.await(task2, 60, TimeUnit.SECONDS)
         Thread.sleep(2000)
     }
 
@@ -118,7 +189,7 @@ class ViewFoundUITest : FirebaseTestsSetUp() {
             ).apply {
                 putExtra(
                     IntentExtraNames.INTENT_FOUND_ID,
-                    dataFound
+                    dataFound0
                 )
             }
 
@@ -127,7 +198,7 @@ class ViewFoundUITest : FirebaseTestsSetUp() {
 
         // assert the correct intent has been passed
         assertEquals(
-            dataFound, intent.getParcelableExtra(
+            dataFound0, intent.getParcelableExtra(
                 IntentExtraNames.INTENT_FOUND_ID
             )
         )
@@ -159,6 +230,92 @@ class ViewFoundUITest : FirebaseTestsSetUp() {
         composeTestRule.onNodeWithTag("ViewFoundTimePosted").performScrollTo()
             .assertTextContains("19 Feb 2025 05:05")
     }
+
+
+    @Test
+    fun testOwnerAndStatus0() {
+        val intent =
+            Intent(
+                ApplicationProvider.getApplicationContext(),
+                ViewFoundActivity::class.java
+            ).apply {
+                putExtra(
+                    IntentExtraNames.INTENT_FOUND_ID,
+                    dataFound0
+                )
+            }
+        ActivityScenario.launch<ViewFoundActivity>(intent)
+        composeTestRule.waitForIdle()
+        // assert the correct intent has been passed
+        assertEquals(
+            dataFound0, intent.getParcelableExtra(
+                IntentExtraNames.INTENT_FOUND_ID
+            )
+        )
+        // assert the correct item details are posted
+        Thread.sleep(2000)
+
+        // assert the delete button exists
+        composeTestRule.onNodeWithText("Delete item").assertExists()
+        composeTestRule.onNodeWithText("View claims for this item").assertDoesNotExist()
+    }
+
+    @Test
+    fun testOwnerAndStatus1() {
+        val intent =
+            Intent(
+                ApplicationProvider.getApplicationContext(),
+                ViewFoundActivity::class.java
+            ).apply {
+                putExtra(
+                    IntentExtraNames.INTENT_FOUND_ID,
+                    dataFound1
+                )
+            }
+        ActivityScenario.launch<ViewFoundActivity>(intent)
+        composeTestRule.waitForIdle()
+        // assert the correct intent has been passed
+        assertEquals(
+            dataFound1, intent.getParcelableExtra(
+                IntentExtraNames.INTENT_FOUND_ID
+            )
+        )
+        // assert the correct item details are posted
+        Thread.sleep(2000)
+
+        // assert the delete button exists
+        composeTestRule.onNodeWithText("Delete item").assertDoesNotExist()
+        composeTestRule.onNodeWithText("View claims for this item").assertExists()
+    }
+
+    @Test
+    fun testOwnerAndStatus2() {
+        val intent =
+            Intent(
+                ApplicationProvider.getApplicationContext(),
+                ViewFoundActivity::class.java
+            ).apply {
+                putExtra(
+                    IntentExtraNames.INTENT_FOUND_ID,
+                    dataFound2
+                )
+            }
+        ActivityScenario.launch<ViewFoundActivity>(intent)
+        composeTestRule.waitForIdle()
+        // assert the correct intent has been passed
+        assertEquals(
+            dataFound2, intent.getParcelableExtra(
+                IntentExtraNames.INTENT_FOUND_ID
+            )
+        )
+        // assert the correct item details are posted
+        Thread.sleep(2000)
+
+        // assert the delete button exists
+        composeTestRule.onNodeWithText("Delete item").assertDoesNotExist()
+        composeTestRule.onNodeWithText("View claims for this item").assertExists()
+    }
+
 
     @After
     fun tearDown() {
