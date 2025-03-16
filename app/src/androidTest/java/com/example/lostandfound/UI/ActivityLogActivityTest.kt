@@ -2,6 +2,7 @@ package com.example.lostandfound.UI
 
 import androidx.activity.ComponentActivity
 import androidx.compose.ui.test.assertAny
+import androidx.compose.ui.test.hasTestTag
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onChildren
@@ -94,7 +95,7 @@ class ActivityLogActivityTest : FirebaseTestsSetUp() {
         val dataActivityLog1 = mutableMapOf<String, Any>(
             FirebaseNames.ACTIVITY_LOG_ITEM_USER_ID to userID.toString(),
             FirebaseNames.ACTIVITY_LOG_ITEM_TYPE to 1,
-            FirebaseNames.ACTIVITY_LOG_ITEM_TIMESTAMP to 1739942999L,
+            FirebaseNames.ACTIVITY_LOG_ITEM_TIMESTAMP to 1739943999L,
             FirebaseNames.ACTIVITY_LOG_ITEM_CONTENT to "content 1",
         )
         firestore!!.collection(FirebaseNames.COLLECTION_ACTIVITY_LOG_ITEMS).add(dataActivityLog1)
@@ -109,7 +110,7 @@ class ActivityLogActivityTest : FirebaseTestsSetUp() {
         val dataActivityLog2 = mutableMapOf<String, Any>(
             FirebaseNames.ACTIVITY_LOG_ITEM_USER_ID to userID.toString(),
             FirebaseNames.ACTIVITY_LOG_ITEM_TYPE to 2,
-            FirebaseNames.ACTIVITY_LOG_ITEM_TIMESTAMP to 1739942999L,
+            FirebaseNames.ACTIVITY_LOG_ITEM_TIMESTAMP to 1739944999L,
             FirebaseNames.ACTIVITY_LOG_ITEM_CONTENT to "content 2",
         )
         firestore!!.collection(FirebaseNames.COLLECTION_ACTIVITY_LOG_ITEMS).add(dataActivityLog2)
@@ -124,7 +125,7 @@ class ActivityLogActivityTest : FirebaseTestsSetUp() {
         val dataActivityLog3 = mutableMapOf<String, Any>(
             FirebaseNames.ACTIVITY_LOG_ITEM_USER_ID to userID.toString(),
             FirebaseNames.ACTIVITY_LOG_ITEM_TYPE to 3,
-            FirebaseNames.ACTIVITY_LOG_ITEM_TIMESTAMP to 1739942999L,
+            FirebaseNames.ACTIVITY_LOG_ITEM_TIMESTAMP to 1739945999L,
             FirebaseNames.ACTIVITY_LOG_ITEM_CONTENT to "content 3",
         )
         firestore!!.collection(FirebaseNames.COLLECTION_ACTIVITY_LOG_ITEMS).add(dataActivityLog3)
@@ -139,7 +140,7 @@ class ActivityLogActivityTest : FirebaseTestsSetUp() {
         val dataActivityLog4 = mutableMapOf<String, Any>(
             FirebaseNames.ACTIVITY_LOG_ITEM_USER_ID to userID.toString(),
             FirebaseNames.ACTIVITY_LOG_ITEM_TYPE to 4,
-            FirebaseNames.ACTIVITY_LOG_ITEM_TIMESTAMP to 1739942999L,
+            FirebaseNames.ACTIVITY_LOG_ITEM_TIMESTAMP to 1739946999L,
             FirebaseNames.ACTIVITY_LOG_ITEM_CONTENT to "content 4",
         )
         firestore!!.collection(FirebaseNames.COLLECTION_ACTIVITY_LOG_ITEMS).add(dataActivityLog4)
@@ -154,7 +155,7 @@ class ActivityLogActivityTest : FirebaseTestsSetUp() {
         val dataActivityLog5 = mutableMapOf<String, Any>(
             FirebaseNames.ACTIVITY_LOG_ITEM_USER_ID to userID.toString(),
             FirebaseNames.ACTIVITY_LOG_ITEM_TYPE to 5,
-            FirebaseNames.ACTIVITY_LOG_ITEM_TIMESTAMP to 1739942999L,
+            FirebaseNames.ACTIVITY_LOG_ITEM_TIMESTAMP to 1739947999L,
             FirebaseNames.ACTIVITY_LOG_ITEM_CONTENT to "content 5",
         )
         firestore!!.collection(FirebaseNames.COLLECTION_ACTIVITY_LOG_ITEMS).add(dataActivityLog5)
@@ -169,7 +170,7 @@ class ActivityLogActivityTest : FirebaseTestsSetUp() {
         val dataActivityLog6 = mutableMapOf<String, Any>(
             FirebaseNames.ACTIVITY_LOG_ITEM_USER_ID to userID.toString(),
             FirebaseNames.ACTIVITY_LOG_ITEM_TYPE to 6,
-            FirebaseNames.ACTIVITY_LOG_ITEM_TIMESTAMP to 1739942999L,
+            FirebaseNames.ACTIVITY_LOG_ITEM_TIMESTAMP to 1739948999L,
             FirebaseNames.ACTIVITY_LOG_ITEM_CONTENT to "content 6",
         )
         firestore!!.collection(FirebaseNames.COLLECTION_ACTIVITY_LOG_ITEMS).add(dataActivityLog6)
@@ -184,7 +185,7 @@ class ActivityLogActivityTest : FirebaseTestsSetUp() {
         val dataActivityLog7 = mutableMapOf<String, Any>(
             FirebaseNames.ACTIVITY_LOG_ITEM_USER_ID to userID.toString(),
             FirebaseNames.ACTIVITY_LOG_ITEM_TYPE to 7,
-            FirebaseNames.ACTIVITY_LOG_ITEM_TIMESTAMP to 1739942999L,
+            FirebaseNames.ACTIVITY_LOG_ITEM_TIMESTAMP to 1739949999L,
             FirebaseNames.ACTIVITY_LOG_ITEM_CONTENT to "content 7",
         )
         firestore!!.collection(FirebaseNames.COLLECTION_ACTIVITY_LOG_ITEMS).add(dataActivityLog7)
@@ -217,40 +218,10 @@ class ActivityLogActivityTest : FirebaseTestsSetUp() {
         Thread.sleep(4000)
 
         // Select the text nodes that are may not be a direct child of the outer box
-        composeTestRule.onNodeWithTag("activity_log_$activityLog0ID")
+        composeTestRule.onNodeWithTag("activity_log_$activityLog7ID")
             .performScrollTo()
             .onChildren()
-            .assertAny(hasText(activityLogTitles[0]!!))
-        Thread.sleep(1000)
-
-        composeTestRule.onNodeWithTag("activity_log_$activityLog1ID")
-            .performScrollTo()
-            .onChildren()
-            .assertAny(hasText(activityLogTitles[1]!!))
-        Thread.sleep(1000)
-
-        composeTestRule.onNodeWithTag("activity_log_$activityLog2ID")
-            .performScrollTo()
-            .onChildren()
-            .assertAny(hasText(activityLogTitles[2]!!))
-        Thread.sleep(1000)
-
-        composeTestRule.onNodeWithTag("activity_log_$activityLog3ID")
-            .performScrollTo()
-            .onChildren()
-            .assertAny(hasText(activityLogTitles[3]!!))
-        Thread.sleep(1000)
-
-        composeTestRule.onNodeWithTag("activity_log_$activityLog4ID")
-            .performScrollTo()
-            .onChildren()
-            .assertAny(hasText(activityLogTitles[4]!!))
-        Thread.sleep(1000)
-
-        composeTestRule.onNodeWithTag("activity_log_$activityLog5ID")
-            .performScrollTo()
-            .onChildren()
-            .assertAny(hasText(activityLogTitles[5]!!))
+            .assertAny(hasText(activityLogTitles[7]!!))
         Thread.sleep(1000)
 
         composeTestRule.onNodeWithTag("activity_log_$activityLog6ID")
@@ -259,12 +230,41 @@ class ActivityLogActivityTest : FirebaseTestsSetUp() {
             .assertAny(hasText(activityLogTitles[6]!!))
         Thread.sleep(1000)
 
-        composeTestRule.onNodeWithTag("activity_log_$activityLog7ID")
+        composeTestRule.onNodeWithTag("activity_log_$activityLog5ID")
             .performScrollTo()
             .onChildren()
-            .assertAny(hasText(activityLogTitles[7]!!))
+            .assertAny(hasText(activityLogTitles[5]!!))
         Thread.sleep(1000)
 
+        composeTestRule.onNodeWithTag("activity_log_$activityLog4ID")
+            .performScrollTo()
+            .onChildren()
+            .assertAny(hasText(activityLogTitles[4]!!))
+        Thread.sleep(1000)
+
+        composeTestRule.onNodeWithTag("activity_log_$activityLog3ID")
+            .performScrollTo()
+            .onChildren()
+            .assertAny(hasText(activityLogTitles[3]!!))
+        Thread.sleep(1000)
+
+        composeTestRule.onNodeWithTag("activity_log_$activityLog2ID")
+            .performScrollTo()
+            .onChildren()
+            .assertAny(hasText(activityLogTitles[2]!!))
+        Thread.sleep(1000)
+
+        composeTestRule.onNodeWithTag("activity_log_$activityLog1ID")
+            .performScrollTo()
+            .onChildren()
+            .assertAny(hasText(activityLogTitles[1]!!))
+        Thread.sleep(1000)
+
+        composeTestRule.onNodeWithTag("activity_log_$activityLog0ID")
+            .performScrollTo()
+            .onChildren()
+            .assertAny(hasText(activityLogTitles[0]!!))
+        Thread.sleep(1000)
     }
 
 
