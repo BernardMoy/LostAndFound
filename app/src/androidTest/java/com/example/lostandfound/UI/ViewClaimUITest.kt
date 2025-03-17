@@ -36,12 +36,18 @@ class ViewClaimUITest : FirebaseTestsSetUp() {
         // for the first case (Found user is current user and status 1)
         private var lost2ID: String? = null
         private var lost3ID: String? = null
+        private var lost4ID: String? = null
+
         private var found1ID: String? = null
+        private var found2ID: String? = null
+
         private var claimL2F1: String? = null
         private var claimL3F1: String? = null
+        private var claimL4F2: String? = null
 
         private var claim1: Claim? = null
         private var claim2: Claim? = null
+        private var claim3: Claim? = null
 
     }
 
@@ -150,6 +156,38 @@ class ViewClaimUITest : FirebaseTestsSetUp() {
         )
 
 
+        val dataLost4 = mutableMapOf<String, Any>(
+            FirebaseNames.LOSTFOUND_ITEMNAME to "test4",
+            FirebaseNames.LOSTFOUND_USER to userLostID,
+            FirebaseNames.LOSTFOUND_CATEGORY to "testCat4",
+            FirebaseNames.LOSTFOUND_SUBCATEGORY to "testSubCat4",
+            FirebaseNames.LOSTFOUND_COLOR to mutableListOf("Black", "Red"),
+            FirebaseNames.LOSTFOUND_BRAND to "testBrand4",
+            FirebaseNames.LOSTFOUND_EPOCHDATETIME to 1748819980L,
+            FirebaseNames.LOSTFOUND_LOCATION to LatLng(52.481162440749685, -1.5614477415954404),
+            FirebaseNames.LOSTFOUND_DESCRIPTION to "testDesc4",
+            FirebaseNames.LOST_IS_TRACKING to false,
+            FirebaseNames.LOSTFOUND_TIMEPOSTED to 1739941511L
+        )
+
+        val dataFound2 = mutableMapOf<String, Any>(
+            FirebaseNames.LOSTFOUND_ITEMNAME to "test2",
+            FirebaseNames.LOSTFOUND_USER to userFoundID.toString(),
+            FirebaseNames.LOSTFOUND_CATEGORY to "testCat",
+            FirebaseNames.LOSTFOUND_SUBCATEGORY to "testSubCat",
+            FirebaseNames.LOSTFOUND_COLOR to mutableListOf("Black", "Red"),
+            FirebaseNames.LOSTFOUND_BRAND to "testBrand",
+            FirebaseNames.LOSTFOUND_EPOCHDATETIME to 1738819980L,
+            FirebaseNames.LOSTFOUND_LOCATION to LatLng(52.381162440739686, -1.5614377315953403),
+            FirebaseNames.LOSTFOUND_DESCRIPTION to "testDesc",
+            FirebaseNames.FOUND_SECURITY_Q to "testSecQ",
+            FirebaseNames.FOUND_SECURITY_Q_ANS to "testSecQAns",
+            FirebaseNames.LOSTFOUND_TIMEPOSTED to 1739941511L
+        )
+
+
+
+
         // Post the items
         val task2 = firestore!!.collection(FirebaseNames.COLLECTION_FOUND_ITEMS).add(dataFound1)
         val ref2 = Tasks.await(task2, 60, TimeUnit.SECONDS)
@@ -165,6 +203,19 @@ class ViewClaimUITest : FirebaseTestsSetUp() {
         val ref4 = Tasks.await(task4, 60, TimeUnit.SECONDS)
         Thread.sleep(2000)
         lost3ID = ref4.id
+
+
+        val task7 = firestore!!.collection(FirebaseNames.COLLECTION_LOST_ITEMS).add(dataLost4)
+        val ref7 = Tasks.await(task7, 60, TimeUnit.SECONDS)
+        Thread.sleep(2000)
+        lost4ID = ref7.id
+
+        val task8 = firestore!!.collection(FirebaseNames.COLLECTION_FOUND_ITEMS).add(dataFound2)
+        val ref8 = Tasks.await(task8, 60, TimeUnit.SECONDS)
+        Thread.sleep(2000)
+        found2ID = ref8.id
+
+
 
 
         // create claims based on the ids
@@ -184,6 +235,14 @@ class ViewClaimUITest : FirebaseTestsSetUp() {
             FirebaseNames.CLAIM_SECURITY_QUESTION_ANS to "claim3Text"
         )
 
+        val dataClaimL4F2 = mutableMapOf<String, Any>(
+            FirebaseNames.CLAIM_TIMESTAMP to 1739942555L,
+            FirebaseNames.CLAIM_IS_APPROVED to false,
+            FirebaseNames.CLAIM_LOST_ITEM_ID to lost4ID.toString(),
+            FirebaseNames.CLAIM_FOUND_ITEM_ID to found2ID.toString(),
+            FirebaseNames.CLAIM_SECURITY_QUESTION_ANS to "claim4Text"
+        )
+
 
         // Post the claims
         val task5 =
@@ -197,6 +256,12 @@ class ViewClaimUITest : FirebaseTestsSetUp() {
         val ref6 = Tasks.await(task6, 60, TimeUnit.SECONDS)
         Thread.sleep(2000)
         claimL3F1 = ref6.id
+
+        val task10 =
+            firestore!!.collection(FirebaseNames.COLLECTION_CLAIMED_ITEMS).add(dataClaimL4F2)
+        val ref10 = Tasks.await(task10, 60, TimeUnit.SECONDS)
+        Thread.sleep(2000)
+        claimL4F2 = ref10.id
 
 
         claim1 = Claim(
@@ -215,6 +280,15 @@ class ViewClaimUITest : FirebaseTestsSetUp() {
             isApproved = false,
             timestamp = 23909239L,
             securityQuestionAns = "siswi"
+        )
+
+        claim3 = Claim(
+            claimID = claimL4F2.toString(),
+            lostItemID = lost4ID.toString(),
+            foundItemID = found2ID.toString(),
+            isApproved = false,
+            timestamp = 23909239L,
+            securityQuestionAns = "sisi"
         )
 
     }
@@ -247,6 +321,10 @@ class ViewClaimUITest : FirebaseTestsSetUp() {
         composeTestRule.onNodeWithText("Approve this Claim").assertExists()
     }
 
+    @Test
+    fun testLostStatus1FoundStatus2(){
+
+    }
 
     @After
     fun tearDown() {
