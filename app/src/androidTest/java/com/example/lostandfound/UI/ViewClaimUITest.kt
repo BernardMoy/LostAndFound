@@ -221,7 +221,7 @@ class ViewClaimUITest : FirebaseTestsSetUp() {
         // create claims based on the ids
         val dataClaimL2F1 = mutableMapOf<String, Any>(
             FirebaseNames.CLAIM_TIMESTAMP to 1739942998L,
-            FirebaseNames.CLAIM_IS_APPROVED to false,
+            FirebaseNames.CLAIM_IS_APPROVED to true,
             FirebaseNames.CLAIM_LOST_ITEM_ID to lost2ID.toString(),
             FirebaseNames.CLAIM_FOUND_ITEM_ID to found1ID.toString(),
             FirebaseNames.CLAIM_SECURITY_QUESTION_ANS to ""
@@ -268,7 +268,7 @@ class ViewClaimUITest : FirebaseTestsSetUp() {
             claimID = claimL2F1.toString(),
             lostItemID = lost2ID.toString(),
             foundItemID = found1ID.toString(),
-            isApproved = false,
+            isApproved = true,
             timestamp = 23909239L,
             securityQuestionAns = "siswi"
         )
@@ -303,7 +303,7 @@ class ViewClaimUITest : FirebaseTestsSetUp() {
             ).apply {
                 putExtra(
                     IntentExtraNames.INTENT_CLAIM_ITEM,
-                    claim1
+                    claim2
                 )
             }
 
@@ -313,7 +313,34 @@ class ViewClaimUITest : FirebaseTestsSetUp() {
 
         // assert the correct intent has been passed
         assertEquals(
-            claim1, intent.getParcelableExtra(
+            claim2, intent.getParcelableExtra(
+                IntentExtraNames.INTENT_CLAIM_ITEM
+            )
+        )
+
+        composeTestRule.onNodeWithText("You cannot approve this item as you have already approved another item.").assertExists()
+    }
+
+    @Test
+    fun testLostStatus1FoundStatus2(){
+        val intent =
+            Intent(
+                ApplicationProvider.getApplicationContext(),
+                ViewClaimActivity::class.java
+            ).apply {
+                putExtra(
+                    IntentExtraNames.INTENT_CLAIM_ITEM,
+                    claim3
+                )
+            }
+
+        ActivityScenario.launch<ViewClaimActivity>(intent)
+        composeTestRule.waitForIdle()
+        Thread.sleep(2000)
+
+        // assert the correct intent has been passed
+        assertEquals(
+            claim3, intent.getParcelableExtra(
                 IntentExtraNames.INTENT_CLAIM_ITEM
             )
         )
@@ -321,14 +348,12 @@ class ViewClaimUITest : FirebaseTestsSetUp() {
         composeTestRule.onNodeWithText("Approve this Claim").assertExists()
     }
 
-    @Test
-    fun testLostStatus1FoundStatus2(){
-
-    }
-
     @After
     fun tearDown() {
         deleteCollection(FirebaseNames.COLLECTION_USERS)
+        deleteCollection(FirebaseNames.COLLECTION_LOST_ITEMS)
+        deleteCollection(FirebaseNames.COLLECTION_FOUND_ITEMS)
+        deleteCollection(FirebaseNames.COLLECTION_CLAIMED_ITEMS)
 
         // delete current user at the end, as this will trigger cloud functions
         if (auth!!.currentUser != null) {
