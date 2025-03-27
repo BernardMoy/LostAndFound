@@ -225,7 +225,7 @@
         </provider>
 
         <!-- Google maps API key -->
-        <meta-data android:name="com.google.android.geo.API_KEY" android:value="AIzaSyAcSXkuphqkmbR2XN5Cf27C4zcpU4BTfGg" />
+        <meta-data android:name="com.google.android.geo.API_KEY" android:value="${MAPS_API_KEY}" />
     </application>
 
 

@@ -1,3 +1,6 @@
+import java.io.FileInputStream
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.google.gms.google.services)
@@ -6,6 +9,9 @@ plugins {
     id("kotlin-parcelize")
     jacoco
 }
+
+val properties = Properties()
+properties.load(FileInputStream(project.rootProject.file("local.properties")))
 
 android {
     namespace = "com.example.lostandfound"
@@ -17,8 +23,13 @@ android {
         targetSdk = 33
         versionCode = 1
         versionName = "1.0"
-
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        
+        buildConfigField("String", "MAPS_API_KEY", properties.getProperty("MAPS_API_KEY"))
+        buildConfigField("String", "SENDER_EMAIL", properties.getProperty("SENDER_EMAIL"))
+        buildConfigField("String", "SENDER_PASSWORD", properties.getProperty("SENDER_PASSWORD"))
+
+        manifestPlaceholders["MAPS_API_KEY"] = properties.getProperty("MAPS_API_KEY")
     }
 
     packaging {
@@ -46,6 +57,7 @@ android {
     }
 
     buildFeatures {
+        buildConfig = true
         viewBinding = true
         compose = true
         mlModelBinding = true

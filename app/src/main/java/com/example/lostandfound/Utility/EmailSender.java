@@ -5,6 +5,7 @@ import android.content.Context;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.example.lostandfound.BuildConfig;
 import com.example.lostandfound.R;
 
 import java.util.Properties;
@@ -51,8 +52,8 @@ public class EmailSender {
         executorService.execute(() -> {
 
             // get sender details
-            String fromEmail = ctx.getString(R.string.sender_email);
-            String fromPassword = ctx.getString(R.string.sender_password);
+            String fromEmail = BuildConfig.SENDER_EMAIL;
+            String fromPassword = BuildConfig.SENDER_PASSWORD;
             String emailHost = ctx.getString(R.string.sender_host);
 
             // send the email
