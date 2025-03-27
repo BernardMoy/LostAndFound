@@ -43,8 +43,4 @@
 
     <!-- Variables used for sending emails -->
     <string name="sender_host">smtp.gmail.com</string>
-
-    <!-- Securely store these variables -->
-    <string name="sender_email">lostfoundapp3@gmail.com</string>
-    <string name="sender_password">autx qzqx wcdr ebke</string>
 </resources>
