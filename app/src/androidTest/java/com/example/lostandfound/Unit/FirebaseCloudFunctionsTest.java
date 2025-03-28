@@ -17,6 +17,7 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -211,6 +212,8 @@ public class FirebaseCloudFunctionsTest extends FirebaseTestsSetUp {
         File img = File.createTempFile(uidLost, ".jpeg");
         try (OutputStream outputStream = Files.newOutputStream(img.toPath())) {
             outputStream.write(new byte[1024]);    // write empty image
+        } catch (Exception e){
+            Assert.fail(e.getMessage());
         }
 
         // upload the storage image to firebase storage
@@ -256,6 +259,8 @@ public class FirebaseCloudFunctionsTest extends FirebaseTestsSetUp {
         File img = File.createTempFile(uidFound, ".jpeg");
         try (OutputStream outputStream = Files.newOutputStream(img.toPath())) {
             outputStream.write(new byte[1024]);    // write empty image
+        } catch (Exception e){
+            Assert.fail(e.getMessage());
         }
 
         // upload the storage image to firebase storage
