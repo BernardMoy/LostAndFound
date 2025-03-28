@@ -21,5 +21,9 @@ A lost and found mobile application for the third year dissertation project at t
 # Deployment
 
 This is an app mainly developed for Android devices, so it can be run in an emulator in Android Studio:
+
 Android Studio version: `Android Studio Ladybug Feature Drop | 2-24.2.2`
+
 Emulator: `Medium Phone API 35`
+
+Include the ```SENDER_EMAIL```, ```SENDER_PASSWORD```, ```MAPS_API_KEY```, the ```google-services.json``` and the ```service-account.json``` for the full functionality.
