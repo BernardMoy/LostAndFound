@@ -62,6 +62,7 @@ public class LoginViewModel extends ViewModel {
                     return;
                 }
 
+                // update FCM token only when login successful
                 FCMTokenManager.INSTANCE.updateFCMToken(FirebaseUtility.getUserID(), new FCMTokenManager.FCMTokenUpdateCallback() {
                     @Override
                     public void onComplete(boolean success) {
