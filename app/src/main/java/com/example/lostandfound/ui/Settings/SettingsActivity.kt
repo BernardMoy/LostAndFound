@@ -28,6 +28,7 @@ import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.LocationOn
 import androidx.compose.material.icons.outlined.Notifications
 import androidx.compose.material.icons.outlined.Refresh
+import androidx.compose.material.icons.outlined.Report
 import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material.icons.outlined.TextFields
@@ -66,6 +67,8 @@ import com.example.lostandfound.ui.SettingsFontSize.SettingsFontSizeActivity
 import com.example.lostandfound.ui.SettingsPushNotifications.SettingsPushNotificationsActivity
 import com.example.lostandfound.ui.SettingsTheme.SettingsThemeActivity
 import com.example.lostandfound.ui.ViewComparison.ViewComparisonActivity
+import com.example.lostandfound.ui.ViewReportedIssues.ViewReportedIssuesActivity
+import com.example.lostandfound.ui.ViewReportedUsers.ViewReportedUsersActivity
 import com.example.lostandfound.ui.theme.ComposeTheme
 import com.google.firebase.firestore.FirebaseFirestore
 
@@ -306,10 +309,19 @@ fun Admin(
     Column(
         verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin_half))
     ) {
-        CustomActionRow(text = "View reported items",
-            leftIcon = Icons.Outlined.Delete,
+        CustomActionRow(text = "View reported issues",
+            leftIcon = Icons.Outlined.Report,
             onClick = {
+                val i: Intent = Intent(context, ViewReportedIssuesActivity::class.java)
+                context.startActivity(i)
+            }
+        )
 
+        CustomActionRow(text = "View reported users",
+            leftIcon = Icons.Outlined.Report,
+            onClick = {
+                val i: Intent = Intent(context, ViewReportedUsersActivity::class.java)
+                context.startActivity(i)
             }
         )
     }
