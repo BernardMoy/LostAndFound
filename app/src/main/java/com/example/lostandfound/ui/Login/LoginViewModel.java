@@ -42,41 +42,4 @@ public class LoginViewModel extends ViewModel {
         }
         return true;
     }
-
-
-    // method to validate if user is already logged in
-    public boolean isUserSignedIn(Context ctx) {
-        FirebaseAuthManager firebaseAuthManager = new FirebaseAuthManager(ctx);
-        return FirebaseUtility.isUserLoggedIn();
-    }
-
-    // method to log in user
-    public void loginUser(Context ctx, String emailAddress, String password, ErrorCallback callback) {
-        FirebaseAuthManager firebaseAuthManager = new FirebaseAuthManager(ctx);
-        firebaseAuthManager.loginUser(emailAddress, password, new ErrorCallback() {
-            @Override
-            public void onComplete(String error) {
-                if (!error.trim().isEmpty()) {
-                    setLoginError(error);
-                    callback.onComplete(error);
-                    return;
-                }
-
-                // update FCM token only when login successful
-                FCMTokenManager.INSTANCE.updateFCMToken(FirebaseUtility.getUserID(), new FCMTokenManager.FCMTokenUpdateCallback() {
-                    @Override
-                    public void onComplete(boolean success) {
-                        if (!success){
-                            setLoginError("Failed generating an FCM token");
-                            callback.onComplete(error);
-                            return;
-                        }
-
-                        // no errors
-                        callback.onComplete("");
-                    }
-                });
-            }
-        });
-    }
 }
