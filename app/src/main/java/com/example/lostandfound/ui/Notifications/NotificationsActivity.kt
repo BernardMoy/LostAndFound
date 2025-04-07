@@ -43,6 +43,7 @@ import com.example.lostandfound.Data.FirebaseNames
 import com.example.lostandfound.Data.FoundItem
 import com.example.lostandfound.Data.IntentExtraNames
 import com.example.lostandfound.Data.LostItem
+import com.example.lostandfound.Data.ScoreData
 import com.example.lostandfound.FirebaseManagers.ItemManager
 import com.example.lostandfound.R
 import com.example.lostandfound.ui.ViewClaim.ViewClaimActivity
@@ -351,6 +352,16 @@ fun Items(
                             val foundItemID =
                                 notification[FirebaseNames.NOTIFICATION_FOUND_ITEM_ID].toString()
 
+                            // get scores
+                            val passedScoreData = ScoreData(
+                                imageScore = notification[FirebaseNames.NOTIFICATION_IMAGE_SCORE] as? Double,
+                                categoryScore = notification[FirebaseNames.NOTIFICATION_CATEGORY_SCORE] as? Double ?: 0.0,
+                                colorScore = notification[FirebaseNames.NOTIFICATION_COLOR_SCORE] as? Double ?: 0.0,
+                                brandScore = notification[FirebaseNames.NOTIFICATION_BRAND_SCORE] as? Double,
+                                locationScore = notification[FirebaseNames.NOTIFICATION_LOCATION_SCORE] as? Double,
+                                overallScore = notification[FirebaseNames.NOTIFICATION_OVERALL_SCORE] as? Double ?: 0.0
+                            )
+
                             ItemManager.getLostItemFromId(
                                 lostItemID = lostItemID,
                                 object : ItemManager.LostItemCallback {
@@ -408,6 +419,11 @@ fun Items(
                                                                     intent.putExtra(
                                                                         IntentExtraNames.INTENT_CLAIM_ITEM,
                                                                         claim
+                                                                    )
+                                                                    // and pass the score data
+                                                                    intent.putExtra(
+                                                                        IntentExtraNames.INTENT_SCORE_DATA,
+                                                                        passedScoreData
                                                                     )
                                                                     context.startActivity(intent)
                                                                 }

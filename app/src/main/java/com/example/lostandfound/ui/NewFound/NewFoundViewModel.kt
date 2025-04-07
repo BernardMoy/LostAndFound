@@ -13,6 +13,7 @@ import com.example.lostandfound.Data.Category
 import com.example.lostandfound.Data.FirebaseNames
 import com.example.lostandfound.Data.FoundItem
 import com.example.lostandfound.Data.LostItem
+import com.example.lostandfound.Data.ScoreData
 import com.example.lostandfound.FirebaseManagers.FirebaseStorageManager
 import com.example.lostandfound.FirebaseManagers.FirebaseUtility
 import com.example.lostandfound.FirebaseManagers.FirestoreManager
@@ -368,7 +369,7 @@ class NewFoundViewModel : ViewModel() {
             context,
             foundItem,
             object : ItemManager.MatchLostCallback {
-                override fun onComplete(result: MutableList<LostItem>?) {
+                override fun onComplete(result: MutableList<Pair<LostItem, ScoreData>>?) {
                     if (result == null) {
                         callback.onComplete(false)
                         return
@@ -385,10 +386,11 @@ class NewFoundViewModel : ViewModel() {
                     for (item in result) {
                         NotificationManager.sendNewMatchingItemNotification(
                             context = context,
-                            targetUserId = item.userID,
-                            lostItemID = item.itemID,
+                            targetUserId = item.first.userID,
+                            lostItemID = item.first.itemID,
                             foundItemID = foundItem.itemID,
-                            lostItemName = item.itemName,
+                            lostItemName = item.first.itemName,
+                            scoreData = item.second,
                             object : NotificationManager.NotificationSendCallback {
                                 override fun onComplete(result: Boolean) {
                                     if (!result) {

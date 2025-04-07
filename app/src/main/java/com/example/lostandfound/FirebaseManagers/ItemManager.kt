@@ -51,7 +51,7 @@ object ItemManager {
     }
 
     interface MatchLostCallback {
-        fun onComplete(result: MutableList<LostItem>?)
+        fun onComplete(result: MutableList<Pair<LostItem, ScoreData>>?)
     }
 
     interface UpdateLostCallback {
@@ -603,7 +603,7 @@ object ItemManager {
         foundItem: FoundItem,
         callback: MatchLostCallback
     ) {
-        val matchingItemList: MutableList<LostItem> = mutableListOf()
+        val matchingItemList: MutableList<Pair<LostItem, ScoreData>> = mutableListOf()
 
         // extract all found items from the database
         val db = FirebaseFirestore.getInstance()
@@ -651,7 +651,7 @@ object ItemManager {
                                 object : ScoreDataCallback {
                                     override fun onScoreCalculated(scoreData: ScoreData) {
                                         if (scoreData.overallScore >= SCORE_THRESHOLD) {
-                                            matchingItemList.add(lostItem)
+                                            matchingItemList.add(Pair(lostItem, scoreData))
                                         }
 
                                         // add as fetched item regardless
@@ -661,7 +661,7 @@ object ItemManager {
                                         if (fetchedItems == resultSize) {
                                             // sort the data here
                                             matchingItemList.sortByDescending { key ->
-                                                key.timePosted
+                                                key.first.timePosted
                                             }
 
                                             // return the matching item list

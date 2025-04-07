@@ -84,6 +84,15 @@ public final class FirebaseNames {
     public static final String NOTIFICATION_FOUND_ITEM_ID = "found_item_id";   // for type 0 only
     public static final String NOTIFICATION_CLAIM_ID = "claim_id";   // for type 1 2 3
 
+    // the following are for type 0 notifications only
+    public static final String NOTIFICATION_IMAGE_SCORE = "image_score";
+    public static final String NOTIFICATION_CATEGORY_SCORE = "category_score";
+    public static final String NOTIFICATION_COLOR_SCORE = "color_score";
+    public static final String NOTIFICATION_BRAND_SCORE = "brand_score";
+    public static final String NOTIFICATION_LOCATION_SCORE = "location_score";
+    public static final String NOTIFICATION_OVERALL_SCORE = "overall_score";
+
+
     // for activity log items
     public static final String ACTIVITY_LOG_ITEM_TYPE = "type";  // 0 1 2 3 4 5
     public static final String ACTIVITY_LOG_ITEM_CONTENT = "content";

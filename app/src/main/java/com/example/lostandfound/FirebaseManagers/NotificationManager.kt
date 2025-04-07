@@ -2,6 +2,7 @@ package com.example.lostandfound.FirebaseManagers
 
 import android.content.Context
 import com.example.lostandfound.Data.FirebaseNames
+import com.example.lostandfound.Data.ScoreData
 import com.example.lostandfound.FirebaseManagers.FirestoreManager.Callback
 import com.example.lostandfound.PushNotificationManagers.PushNotificationCallback
 import com.example.lostandfound.PushNotificationManagers.PushNotificationManager
@@ -25,21 +26,36 @@ object NotificationManager {
         lostItemID: String,
         foundItemID: String,
         lostItemName: String,
+        scoreData: ScoreData,
         callback: NotificationSendCallback
     ) {
         val firestoreManager = FirestoreManager()
 
         // construct notification data
-        val data: Map<String, Any> = mapOf(
+        val data: MutableMap<String, Any> = mutableMapOf(
             FirebaseNames.NOTIFICATION_USER_ID to targetUserId,
             FirebaseNames.NOTIFICATION_TYPE to 0,
             FirebaseNames.NOTIFICATION_TIMESTAMP to DateTimeManager.getCurrentEpochTime(),  // current time
             FirebaseNames.NOTIFICATION_IS_READ to false,
+            FirebaseNames.NOTIFICATION_CATEGORY_SCORE to scoreData.categoryScore,
+            FirebaseNames.NOTIFICATION_COLOR_SCORE to scoreData.colorScore,
+            FirebaseNames.NOTIFICATION_OVERALL_SCORE to scoreData.overallScore,
 
             // also pass the lost and found item id
             FirebaseNames.NOTIFICATION_LOST_ITEM_ID to lostItemID,
             FirebaseNames.NOTIFICATION_FOUND_ITEM_ID to foundItemID
         )
+
+        // add optional nullable values
+        scoreData.imageScore?.let {
+            data[FirebaseNames.NOTIFICATION_IMAGE_SCORE] = it
+        }
+        scoreData.brandScore?.let {
+            data[FirebaseNames.NOTIFICATION_BRAND_SCORE] = it
+        }
+        scoreData.locationScore?.let {
+            data[FirebaseNames.NOTIFICATION_LOCATION_SCORE] = it
+        }
 
         firestoreManager.putWithUniqueId(
             FirebaseNames.COLLECTION_NOTIFICATIONS,
