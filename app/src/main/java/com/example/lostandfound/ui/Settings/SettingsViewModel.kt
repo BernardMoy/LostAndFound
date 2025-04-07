@@ -1,11 +1,15 @@
 package com.example.lostandfound.ui.Settings
 
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import com.example.lostandfound.Data.FoundItem
 import com.example.lostandfound.Data.LostItem
+import com.example.lostandfound.FirebaseManagers.FirebaseUtility
 import com.example.lostandfound.R
 
 class SettingsViewModel : ViewModel() {
+    val isAdmin: MutableState<Boolean> = mutableStateOf(false)
 
     // placeholder lost and found items used for developer settings
     var placeholderLostItem = LostItem(
@@ -42,5 +46,13 @@ class SettingsViewModel : ViewModel() {
         status = 0
     )
 
-
+    // a async function to load if the user is admin
+    // called during on create of the activity
+    fun loadIsAdmin(){
+        FirebaseUtility.isUserAdmin(object: FirebaseUtility.isAdminCallback {
+            override fun onComplete(result: Boolean) {
+                isAdmin.value = result
+            }
+        })
+    }
 }

@@ -123,11 +123,20 @@ fun MainContent(viewModel: SettingsViewModel = viewModel()) {
     // boolean to determine if it is being rendered in preview
     val inPreview = LocalInspectionMode.current
 
+    // initially, load whether the user is admin from the view model
+    viewModel.loadIsAdmin()
+
     Appearance(context = context)
     HorizontalDivider(thickness = 1.dp, color = Color.Gray)
     Permissions(context = context)
     HorizontalDivider(thickness = 1.dp, color = Color.Gray)
     AboutTheApp(context = context)
+
+    // if the user is admin, enable these
+    if (viewModel.isAdmin.value){
+        HorizontalDivider(thickness = 1.dp, color = Color.Gray)
+        Admin(context=context, viewModel=viewModel)
+    }
 
     // if the user is developer and dev settings are enabled, enable these
     if (FirebaseUtility.isUserDev() && DevData.IS_DEV_SETTINGS_SHOWN) {
@@ -278,6 +287,31 @@ fun AboutTheApp(
         )
 
          */
+    }
+}
+
+// admin settings
+@Composable
+fun Admin(
+    context: Context,
+    viewModel: SettingsViewModel
+){
+    Box(
+        modifier = Modifier.padding(
+            horizontal = dimensionResource(id = R.dimen.content_margin)
+        )
+    ) {
+        CustomGrayTitle(text = "Admin settings")
+    }
+    Column(
+        verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin_half))
+    ) {
+        CustomActionRow(text = "View reported items",
+            leftIcon = Icons.Outlined.Delete,
+            onClick = {
+
+            }
+        )
     }
 }
 
