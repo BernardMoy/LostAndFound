@@ -2,7 +2,6 @@ package com.example.lostandfound.FirebaseManagers
 
 import com.example.lostandfound.Data.FirebaseNames
 import com.example.lostandfound.Data.User
-import com.google.firebase.messaging.FirebaseMessaging
 
 object UserManager {
 
@@ -28,8 +27,7 @@ object UserManager {
                             userID = userID,
                             avatar = result[FirebaseNames.USERS_AVATAR].toString(),
                             firstName = result[FirebaseNames.USERS_FIRSTNAME].toString(),
-                            lastName = result[FirebaseNames.USERS_LASTNAME].toString(),
-                            email = result[FirebaseNames.USERS_EMAIL].toString()
+                            lastName = result[FirebaseNames.USERS_LASTNAME].toString()
                         )
 
                         callback.onComplete(userData)

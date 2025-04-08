@@ -369,11 +369,11 @@ fun UserData(
                 modifier = Modifier.weight(1f)
             ) { // Name of user
                 val userDisplayName =
-                    viewModel.itemData.userFirstName + ' ' + viewModel.itemData.userLastName
+                    viewModel.itemData.user.firstName + ' ' + viewModel.itemData.user.lastName
 
                 CustomEditText(
                     fieldLabel = "User",
-                    fieldContent = if (viewModel.itemData.userID == FirebaseUtility.getUserID()) "$userDisplayName (You)" else userDisplayName,
+                    fieldContent = if (viewModel.itemData.user.userID == FirebaseUtility.getUserID()) "$userDisplayName (You)" else userDisplayName,
                     leftIcon = Icons.Outlined.AccountCircle,
                     isEditable = false,
                     testTag = "ViewFoundUser"
@@ -381,7 +381,7 @@ fun UserData(
             }
 
             // contact user button and dialog, when the user is not the current user
-            if (viewModel.itemData.userID != FirebaseUtility.getUserID()) {
+            if (viewModel.itemData.user.userID != FirebaseUtility.getUserID()) {
                 CustomButton(
                     text = "Contact",
                     type = ButtonType.TONAL,
@@ -395,7 +395,7 @@ fun UserData(
         }
 
         CustomUserDialog(
-            user = viewModel.getUser(),
+            user = viewModel.itemData.user,
             context = context,
             isDialogShown = viewModel.isContactUserDialogShown
         )
@@ -430,7 +430,7 @@ fun ActionButtons(
             .padding(vertical = dimensionResource(id = R.dimen.content_margin))
     ) {
         // only display buttons when the lost item is found by the current user
-        if (inPreview || FirebaseUtility.getUserID() == viewModel.itemData.userID) {
+        if (inPreview || FirebaseUtility.getUserID() == viewModel.itemData.user.userID) {
             Column(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalAlignment = Alignment.CenterHorizontally,

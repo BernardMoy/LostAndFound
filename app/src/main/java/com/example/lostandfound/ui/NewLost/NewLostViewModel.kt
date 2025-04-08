@@ -11,6 +11,7 @@ import androidx.lifecycle.ViewModel
 import com.example.lostandfound.Data.Category
 import com.example.lostandfound.Data.FirebaseNames
 import com.example.lostandfound.Data.LostItem
+import com.example.lostandfound.Data.User
 import com.example.lostandfound.FirebaseManagers.FirebaseStorageManager
 import com.example.lostandfound.FirebaseManagers.FirebaseUtility
 import com.example.lostandfound.FirebaseManagers.FirestoreManager
@@ -235,7 +236,6 @@ class NewLostViewModel : ViewModel() {
                                     // create lost item here
                                     val generatedLostItem: LostItem = LostItem(
                                         itemID = result,
-                                        userID = FirebaseUtility.getUserID(),
                                         itemName = itemName.value,
                                         category = selectedCategory!!.name,
                                         subCategory = selectedSubCategory.value,
@@ -254,9 +254,12 @@ class NewLostViewModel : ViewModel() {
                                         image = resultImage,
                                         status = 0,
                                         isTracking = false,
-                                        userAvatar = userAvatar.value,
-                                        userFirstName = userFirstName.value,
-                                        userLastName = userLastName.value
+                                        user = User(
+                                            userID = FirebaseUtility.getUserID(),
+                                            avatar = userAvatar.value,
+                                            firstName = userFirstName.value,
+                                            lastName = userLastName.value
+                                        ),
                                     )
 
                                     // add activity log item
@@ -283,7 +286,6 @@ class NewLostViewModel : ViewModel() {
                         // only exception is that there are no item images
                         val generatedLostItem: LostItem = LostItem(
                             itemID = result,
-                            userID = FirebaseUtility.getUserID(),
                             itemName = itemName.value,
                             category = selectedCategory!!.name,
                             subCategory = selectedSubCategory.value,
@@ -302,9 +304,12 @@ class NewLostViewModel : ViewModel() {
                             image = "",
                             status = 0,
                             isTracking = false,
-                            userAvatar = userAvatar.value,
-                            userFirstName = userFirstName.value,
-                            userLastName = userLastName.value
+                            user = User(
+                                userID = FirebaseUtility.getUserID(),
+                                avatar = userAvatar.value,
+                                firstName = userFirstName.value,
+                                lastName = userLastName.value
+                            ),
                         )
 
                         // add activity log item

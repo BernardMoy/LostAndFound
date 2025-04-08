@@ -742,7 +742,7 @@ fun ClaimButton(
         // they have the power to claim the item
 
         // display messages if the user owns the lost item
-        if (viewModel.lostItemData.userID == FirebaseUtility.getUserID()) {
+        if (viewModel.lostItemData.user.userID == FirebaseUtility.getUserID()) {
 
             // if lost item status = 0 and the user is the owner of the lost item, they can claim
             // else if lost item status = 1 and the found item is the lost item's claimed item, display already claimed message
@@ -873,18 +873,6 @@ fun loadData(
 ) {
     // is loading initially
     viewModel.isLoading.value = true
-
-    // load lost item data of the current user from the view model
-    viewModel.getFoundUser(object : Callback<Boolean> {
-        override fun onComplete(result: Boolean) {
-            viewModel.isLoading.value = false
-
-            if (!result) {
-                // display toast message for failed data retrieval
-                Toast.makeText(context, "Fetching data failed", Toast.LENGTH_SHORT).show()
-            }
-        }
-    })
 }
 
 

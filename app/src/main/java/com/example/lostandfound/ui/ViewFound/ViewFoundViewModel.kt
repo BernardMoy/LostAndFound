@@ -24,17 +24,6 @@ class ViewFoundViewModel : ViewModel() {
     // item data are stored here
     var itemData = FoundItem()
 
-    // function to get user object from item data
-    fun getUser(): User{
-        return User(
-            userID = itemData.userID,
-            avatar = itemData.userAvatar,
-            firstName = itemData.userFirstName,
-            lastName = itemData.userLastName,
-            email = ""  // hide it
-        )
-    }
-
     // function to delete item
     // return true if successful, false if failed
     fun deleteItem(callback: Callback<Boolean>) {

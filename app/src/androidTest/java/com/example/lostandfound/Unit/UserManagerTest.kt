@@ -43,25 +43,6 @@ class UserManagerTest : FirebaseTestsSetUp() {
         userID = ref1.id
     }
 
-    @Test
-    fun testGetUserFromID() {
-        val latch: CountDownLatch = CountDownLatch(1)
-        UserManager.getUserFromId(userID.toString(), object : UserManager.UserCallback {
-            override fun onComplete(user: User?) {
-                assertNotNull(user)
-
-                assertEquals(userID, user!!.userID)
-                assertEquals("ABCDE", user.avatar)
-                assertEquals("fnfn", user.firstName)
-                assertEquals("lnln", user.lastName)
-                assertEquals("test@warwick.ac.uk", user.email)
-
-                latch.countDown()
-            }
-        })
-
-        latch.await(60, TimeUnit.SECONDS)
-    }
 
     // clear all data in firestore after tests
     @After

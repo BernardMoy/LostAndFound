@@ -8,8 +8,7 @@ data class User(
     val userID: String = "",
     val avatar: String = "",
     val firstName: String = "",
-    val lastName: String = "",
-    val email: String = ""
+    val lastName: String = ""
     // does not contain isAdmin, notificationEnable etc
 
 ) : Parcelable

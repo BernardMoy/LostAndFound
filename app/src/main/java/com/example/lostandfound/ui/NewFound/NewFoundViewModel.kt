@@ -14,6 +14,7 @@ import com.example.lostandfound.Data.FirebaseNames
 import com.example.lostandfound.Data.FoundItem
 import com.example.lostandfound.Data.LostItem
 import com.example.lostandfound.Data.ScoreData
+import com.example.lostandfound.Data.User
 import com.example.lostandfound.FirebaseManagers.FirebaseStorageManager
 import com.example.lostandfound.FirebaseManagers.FirebaseUtility
 import com.example.lostandfound.FirebaseManagers.FirestoreManager
@@ -261,7 +262,6 @@ class NewFoundViewModel : ViewModel() {
                                     // create the newly found item
                                     val generatedFoundItem = FoundItem(
                                         itemID = result,
-                                        userID = FirebaseUtility.getUserID(),
                                         itemName = itemName.value,
                                         category = selectedCategory!!.name,
                                         subCategory = selectedSubCategory.value,
@@ -281,9 +281,12 @@ class NewFoundViewModel : ViewModel() {
                                         image = resultImage,   // use the download url returned by the put method
                                         securityQuestion = securityQuestion.value,
                                         securityQuestionAns = securityQuestionAns.value,
-                                        userAvatar = userAvatar.value,
-                                        userFirstName = userFirstName.value,
-                                        userLastName = userLastName.value
+                                        user = User(
+                                            userID = FirebaseUtility.getUserID(),
+                                            avatar = userAvatar.value,
+                                            firstName = userFirstName.value,
+                                            lastName = userLastName.value
+                                        ),
                                     )
 
                                     // send notifications
@@ -318,7 +321,6 @@ class NewFoundViewModel : ViewModel() {
                         // create the newly found item
                         val generatedFoundItem = FoundItem(
                             itemID = result,
-                            userID = FirebaseUtility.getUserID(),
                             itemName = itemName.value,
                             category = selectedCategory!!.name,
                             subCategory = selectedSubCategory.value,
@@ -338,9 +340,12 @@ class NewFoundViewModel : ViewModel() {
                             image = "",
                             securityQuestion = securityQuestion.value,
                             securityQuestionAns = securityQuestionAns.value,
-                            userAvatar = userAvatar.value,
-                            userFirstName = userFirstName.value,
-                            userLastName = userLastName.value
+                            user = User(
+                                userID = FirebaseUtility.getUserID(),
+                                avatar = userAvatar.value,
+                                firstName = userFirstName.value,
+                                lastName = userLastName.value
+                            ),
                         )
 
                         // send notifications
@@ -400,7 +405,7 @@ class NewFoundViewModel : ViewModel() {
                     for (item in result) {
                         NotificationManager.sendNewMatchingItemNotification(
                             context = context,
-                            targetUserId = item.first.userID,
+                            targetUserId = item.first.user.userID,
                             lostItemID = item.first.itemID,
                             foundItemID = foundItem.itemID,
                             lostItemName = item.first.itemName,

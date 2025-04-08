@@ -12,7 +12,6 @@ It is possible to convert to storing LostItem classes instead of the map by modi
 data class LostItem(
     // ids
     val itemID: String = "Unknown",
-    val userID: String = "Unknown",
 
     // item information
     val itemName: String = "Unknown",
@@ -33,7 +32,5 @@ data class LostItem(
     val image: String = "",  // store the item image as string
 
     // user info
-    val userAvatar: String = "",
-    val userFirstName: String = "",
-    val userLastName: String = ""
+    val user: User = User()
 ) : Parcelable

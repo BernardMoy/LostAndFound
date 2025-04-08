@@ -29,16 +29,6 @@ class ViewLostViewModel : ViewModel() {
     val isItemTracking: MutableState<Boolean> =
         mutableStateOf(false)  // to be reflected in the ui after pressing button
 
-    // function to get user object from item data
-    fun getUser(): User{
-        return User(
-            userID = itemData.userID,
-            avatar = itemData.userAvatar,
-            firstName = itemData.userFirstName,
-            lastName = itemData.userLastName,
-            email = ""  // hide it
-        )
-    }
 
     // function to update the lost item to be tracking
     fun updateIsTracking(

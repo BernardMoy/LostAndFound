@@ -48,29 +48,6 @@ class ViewComparisonViewModel : ViewModel() {
     // score data when navigated from search activity
     var scoreData = ScoreData()
 
-    // function to get user name of found item
-    fun getFoundUser(callback: Callback<Boolean>) {
-        // get user
-        UserManager.getUserFromId(
-            foundItemData.userID,
-            object : UserManager.UserCallback {
-                override fun onComplete(user: User?) {
-                    if (user == null) {
-                        callback.onComplete(false)
-                        return
-                    }
-
-                    // set user
-                    foundUser = user
-
-                    // return true
-                    callback.onComplete(true)
-
-                }
-            }
-        )
-    }
-
 
     // function to add the items to the claimed collection, and also update the item status
     fun putClaimedItems(
