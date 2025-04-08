@@ -802,7 +802,7 @@ fun CustomChatInboxPreview(
                 )
 
                 Text(
-                    text = DateTimeManager.getChatTimeDescription(chatInboxPreview.lastMessage.timestamp),
+                    text = DateTimeManager.getChatTimeDescription(chatInboxPreview.lastMessageTimestamp),
                     style = Typography.bodyMedium,
                     color = Color.Gray,
                 )
@@ -810,35 +810,34 @@ fun CustomChatInboxPreview(
 
 
             // last message and red dot
+
+            // determine if the last message is sent by the current user
+            val isLastMessageSentByCurrentUser = chatInboxPreview.lastMessageSenderUserID == FirebaseUtility.getUserID()
+
             // trim the message
             var previewMessage =
-                if (chatInboxPreview.lastMessage.text.length > 50) chatInboxPreview.lastMessage.text.substring(
+                if (chatInboxPreview.lastMessageContent.length > 50) chatInboxPreview.lastMessageContent.substring(
                     0,
                     50
                 ) + "..."
-                else chatInboxPreview.lastMessage.text
+                else chatInboxPreview.lastMessageContent
 
             // replace all linebreaks of the message
             previewMessage = previewMessage.replace("\n", " ")
-
-            val previewMessageWithUser =
-                if (chatInboxPreview.lastMessage.senderUserID == FirebaseUtility.getUserID()) "You: $previewMessage" else previewMessage
 
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin_half))
             ) {
                 Text(
-                    text = previewMessageWithUser,
+                    text = if (isLastMessageSentByCurrentUser) "You: $previewMessage" else previewMessage,
                     style = Typography.bodyMedium,
                     color = Color.Gray,
                     modifier = Modifier.weight(1f)  // fill remaining space to push dot to end
                 )
 
                 // display dot if the last message is unread and the last message is not sent by the current user
-                if (chatInboxPreview.lastMessage.senderUserID != FirebaseUtility.getUserID() &&
-                    !chatInboxPreview.lastMessage.isReadByRecipient
-                ) {
+                if (!isLastMessageSentByCurrentUser && !chatInboxPreview.lastMessageIsRead) {
                     Icon(
                         imageVector = Icons.Filled.Circle,
                         tint = MaterialTheme.colorScheme.error,

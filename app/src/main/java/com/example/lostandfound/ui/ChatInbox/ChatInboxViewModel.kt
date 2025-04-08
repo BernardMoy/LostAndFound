@@ -33,6 +33,9 @@ class ChatInboxViewModel : ViewModel() {
     // loaded on create
     var chatUser: User = User()
 
+    // also loaded on create
+    var currentUser: User = User()
+
     // store the current typed message content
     val typedText: MutableState<String> = mutableStateOf("")
 
@@ -63,20 +66,30 @@ class ChatInboxViewModel : ViewModel() {
         return typedText.value.trim().isNotEmpty()
     }
 
+
     // method to send message
     fun sendMessage(callback: SendMessageCallback) {
         val db = FirestoreManager()
 
+        // get current time
+        val currentTime = DateTimeManager.getCurrentEpochTime()
+
         // create chat data
         val data = mapOf(
-            FirebaseNames.CHAT_SENDER_USER_ID to FirebaseUtility.getUserID(),
+            FirebaseNames.CHAT_SENDER_USER_ID to currentUser.userID,
+            FirebaseNames.CHAT_SENDER_USER_AVATAR to currentUser.avatar,
+            FirebaseNames.CHAT_SENDER_USER_FIRST_NAME to currentUser.firstName,
+            FirebaseNames.CHAT_SENDER_USER_LAST_NAME to currentUser.lastName,
             FirebaseNames.CHAT_RECIPIENT_USER_ID to chatUser.userID,
+            FirebaseNames.CHAT_RECIPIENT_USER_AVATAR to chatUser.avatar,
+            FirebaseNames.CHAT_RECIPIENT_USER_FIRST_NAME to chatUser.firstName,
+            FirebaseNames.CHAT_RECIPIENT_USER_LAST_NAME to chatUser.lastName,
             FirebaseNames.CHAT_FROM_TO to listOf(  // [from user, to user]
-                FirebaseUtility.getUserID(),
+                currentUser.userID,
                 chatUser.userID
             ),
             FirebaseNames.CHAT_CONTENT to typedText.value,
-            FirebaseNames.CHAT_TIMESTAMP to DateTimeManager.getCurrentEpochTime(),
+            FirebaseNames.CHAT_TIMESTAMP to currentTime,
             FirebaseNames.CHAT_IS_READ_BY_RECIPIENT to false, // default false
         )
 
@@ -91,16 +104,20 @@ class ChatInboxViewModel : ViewModel() {
                         return
                     }
 
-                    // success, then reset the typed text
-                    typedText.value = ""
-
                     // update the chat inbox data
                     ChatInboxManager.updateChatInbox(
-                        FirebaseUtility.getUserID(),
-                        chatUser.userID,
-                        result,
+                        senderUser = currentUser,
+                        recipientUser = chatUser,
+                        lastMessageID = result,
+                        lastMessageContent = typedText.value,
+                        lastMessageIsRead = false,
+                        lastMessageTimestamp = currentTime,
+                        lastMessageSenderUserID = currentUser.userID,
                         object : ChatInboxUpdateCallback {
                             override fun onComplete(result: Boolean) {
+                                // success, then reset the typed text
+                                typedText.value = ""
+
                                 callback.onComplete(result)
                             }
                         }
@@ -141,8 +158,18 @@ class ChatInboxViewModel : ViewModel() {
 
                             val newChatMessage = ChatMessage(
                                 messageID = messageID,
-                                senderUserID = messageSenderID,
-                                recipientUserID = documentChange.document[FirebaseNames.CHAT_RECIPIENT_USER_ID].toString(),
+                                senderUser = User(
+                                    messageSenderID,
+                                    documentChange.document[FirebaseNames.CHAT_SENDER_USER_AVATAR].toString(),
+                                    documentChange.document[FirebaseNames.CHAT_SENDER_USER_FIRST_NAME].toString(),
+                                    documentChange.document[FirebaseNames.CHAT_SENDER_USER_LAST_NAME].toString()
+                                ),
+                                recipientUser = User(
+                                    documentChange.document[FirebaseNames.CHAT_RECIPIENT_USER_ID].toString(),
+                                    documentChange.document[FirebaseNames.CHAT_RECIPIENT_USER_AVATAR].toString(),
+                                    documentChange.document[FirebaseNames.CHAT_RECIPIENT_USER_FIRST_NAME].toString(),
+                                    documentChange.document[FirebaseNames.CHAT_RECIPIENT_USER_LAST_NAME].toString()
+                                ),
                                 text = documentChange.document[FirebaseNames.CHAT_CONTENT].toString(),
                                 timestamp = documentChange.document[FirebaseNames.CHAT_TIMESTAMP] as Long,
                                 isReadByRecipient = isReadByRecipient

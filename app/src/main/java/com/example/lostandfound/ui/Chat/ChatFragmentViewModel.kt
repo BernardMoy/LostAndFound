@@ -6,14 +6,11 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import com.example.lostandfound.Data.ChatInboxPreview
-import com.example.lostandfound.Data.ChatMessage
 import com.example.lostandfound.Data.FirebaseNames
 import com.example.lostandfound.Data.User
-import com.example.lostandfound.FirebaseManagers.ChatMessageCallback
-import com.example.lostandfound.FirebaseManagers.ChatMessageManager
 import com.example.lostandfound.FirebaseManagers.FirebaseUtility
-import com.example.lostandfound.FirebaseManagers.UserManager
 import com.google.firebase.firestore.DocumentChange
+import com.google.firebase.firestore.Filter
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ListenerRegistration
 import com.google.firebase.firestore.Query
@@ -34,6 +31,7 @@ class ChatFragmentViewModel : ViewModel() {
 
     fun loadData(callback: ChatInboxPreviewCallback) {
         val db = FirebaseFirestore.getInstance()
+        val currentUserID = FirebaseUtility.getUserID()
 
         // clear the list
         chatInboxPreviewList.clear()
@@ -41,10 +39,15 @@ class ChatFragmentViewModel : ViewModel() {
         // remove previous listener
         listenerRegistration?.remove()
 
-        // assign new listener
+        // assign new listener to retrieve all chat inbox entries
         listenerRegistration = db.collection(FirebaseNames.COLLECTION_CHAT_INBOXES)
-            .whereArrayContains(FirebaseNames.CHAT_INBOX_PARTICIPANTS, FirebaseUtility.getUserID())
-            .orderBy(FirebaseNames.CHAT_INBOX_UPDATED_TIMESTAMP, Query.Direction.DESCENDING)
+            .where(
+                Filter.or(
+                    Filter.equalTo(FirebaseNames.CHAT_INBOX_PARTICIPANT1_USER_ID, currentUserID),
+                    Filter.equalTo(FirebaseNames.CHAT_INBOX_PARTICIPANT2_USER_ID, currentUserID)
+                )
+            )
+            .orderBy(FirebaseNames.CHAT_INBOX_LAST_MESSAGE_TIMESTAMP, Query.Direction.DESCENDING)
             .addSnapshotListener { snapshot, error ->       // listen for real time updates
                 if (error != null) {
                     Log.d("Snapshot error", error.message.toString())
@@ -73,57 +76,46 @@ class ChatFragmentViewModel : ViewModel() {
                             || documentChange.type == DocumentChange.Type.MODIFIED
                         ) {
 
+                            // get the user information of the user that is communicating with
                             // the recipient of the chat inbox is the participant in the participants array
                             // that does not equal to the current user, given that a user cannot chat with themselves.
-                            val participants =
-                                documentChange.document[FirebaseNames.CHAT_INBOX_PARTICIPANTS] as List<*>
-                            val inboxRecipientUserID =
-                                (if (participants[0] != FirebaseUtility.getUserID()) participants[0] else participants[1]).toString()
+                            val userID1 =
+                                documentChange.document[FirebaseNames.CHAT_INBOX_PARTICIPANT1_USER_ID].toString()
+                            val userID2 =
+                                documentChange.document[FirebaseNames.CHAT_INBOX_PARTICIPANT2_USER_ID].toString()
+                            val inboxRecipientUser = if (userID1 != currentUserID) User(
+                                userID = userID1,
+                                avatar = documentChange.document[FirebaseNames.CHAT_INBOX_PARTICIPANT1_USER_AVATAR].toString(),
+                                firstName = documentChange.document[FirebaseNames.CHAT_INBOX_PARTICIPANT1_USER_FIRST_NAME].toString(),
+                                lastName = documentChange.document[FirebaseNames.CHAT_INBOX_PARTICIPANT1_USER_LAST_NAME].toString(),
+                            ) else User(
+                                userID = userID2,
+                                avatar = documentChange.document[FirebaseNames.CHAT_INBOX_PARTICIPANT2_USER_AVATAR].toString(),
+                                firstName = documentChange.document[FirebaseNames.CHAT_INBOX_PARTICIPANT2_USER_FIRST_NAME].toString(),
+                                lastName = documentChange.document[FirebaseNames.CHAT_INBOX_PARTICIPANT2_USER_LAST_NAME].toString(),
+                            )
 
-                            // get the user object from id
-                            UserManager.getUserFromId(
-                                inboxRecipientUserID,
-                                object : UserManager.UserCallback {
-                                    override fun onComplete(user: User?) {
 
-                                        // get the chatMessage object from id
-                                        val lastMessageID =
-                                            documentChange.document[FirebaseNames.CHAT_INBOX_LAST_MESSAGE_ID]?.toString()
-                                                ?: "Unknown"
+                            // get the chatMessage preview
+                            val newChatInboxPreview = ChatInboxPreview(
+                                recipientUser = inboxRecipientUser,
+                                lastMessageContent = documentChange.document[FirebaseNames.CHAT_INBOX_LAST_MESSAGE_CONTENT].toString(),
+                                lastMessageTimestamp = documentChange.document[FirebaseNames.CHAT_INBOX_LAST_MESSAGE_TIMESTAMP] as Long,
+                                lastMessageIsRead = documentChange.document[FirebaseNames.CHAT_INBOX_LAST_MESSAGE_IS_READ] as Boolean,
+                                lastMessageSenderUserID = documentChange.document[FirebaseNames.CHAT_INBOX_LAST_MESSAGE_SENDER_USER_ID] as String
+                            )
 
-                                        ChatMessageManager.getChatMessageFromMessageId(
-                                            lastMessageID,
-                                            object : ChatMessageCallback {
-                                                override fun onComplete(result: ChatMessage?) {
-                                                    if (result == null) {
-                                                        callback.onComplete(false)
-                                                        return
-                                                    }
+                            // add to list
+                            chatInboxPreviewList[index] =
+                                newChatInboxPreview
 
-                                                    // create new chat message preview object
-                                                    val newChatInboxPreview = ChatInboxPreview(
-                                                        recipientUser = user ?: User(
-                                                            inboxRecipientUserID,
-                                                            "",
-                                                            "Deleted user",
-                                                            "",
-                                                        ),
-                                                        lastMessage = result
-                                                    )
+                            // if all fetched, sort and return
+                            fetchedItems++
+                            if (fetchedItems == totalSize) {
+                                callback.onComplete(true)
+                            }
 
-                                                    // add to list
-                                                    chatInboxPreviewList[index] =
-                                                        newChatInboxPreview
 
-                                                    // if all fetched, sort and return
-                                                    fetchedItems++
-                                                    if (fetchedItems == totalSize) {
-                                                        callback.onComplete(true)
-                                                    }
-                                                }
-                                            })
-                                    }
-                                })
                         }
                     }
 

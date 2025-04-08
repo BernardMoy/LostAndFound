@@ -142,7 +142,7 @@ fun CustomChatCard(
     chatMessage: ChatMessage
 ) {
     // if the sender user id is the current user id, it is sent by current user
-    val isSentByCurrentUser = chatMessage.senderUserID == FirebaseUtility.getUserID()
+    val isSentByCurrentUser = chatMessage.senderUser.userID == FirebaseUtility.getUserID()
 
     Column(
         modifier = Modifier.fillMaxWidth(),

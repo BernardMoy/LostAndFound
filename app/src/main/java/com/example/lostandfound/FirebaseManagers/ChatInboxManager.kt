@@ -2,6 +2,7 @@ package com.example.lostandfound.FirebaseManagers
 
 import android.util.Log
 import com.example.lostandfound.Data.FirebaseNames
+import com.example.lostandfound.Data.User
 import com.example.lostandfound.Utility.DateTimeManager
 import com.google.firebase.firestore.FirebaseFirestore
 
@@ -13,29 +14,46 @@ object ChatInboxManager {
 
     // given a chat message, CREATE OR UPDATE the chat inbox data
     fun updateChatInbox(
-        user1ID: String,
-        user2ID: String,
+        senderUser: User,
+        recipientUser: User,
         lastMessageID: String,  // the last message is the id of this message, because users cannot send message in the past of the current latest message
+        lastMessageContent: String,
+        lastMessageIsRead: Boolean,
+        lastMessageTimestamp: Long,
+        lastMessageSenderUserID: String,
         callback: ChatInboxUpdateCallback
     ) {
-        // get the participants of the message in sorted order
-        val sortedParticipants =
-            arrayOf(user1ID, user2ID).sorted()
 
+        // participant 1 and 2 are not random, the first participant must have a smaller order when sorting
+        // to allow easy comparison
+        val (participant1, participant2) = listOf(senderUser, recipientUser).sortedBy { it ->
+            it.userID  // sort by their user ids
+        }
 
         // check if the chat inbox with the same participants already exist
         val db = FirebaseFirestore.getInstance()
         db.collection(FirebaseNames.COLLECTION_CHAT_INBOXES)
-            .whereEqualTo(FirebaseNames.CHAT_INBOX_PARTICIPANTS, sortedParticipants)
+            .whereEqualTo(FirebaseNames.CHAT_INBOX_PARTICIPANT1_USER_ID, participant1.userID)
+            .whereEqualTo(FirebaseNames.CHAT_INBOX_PARTICIPANT2_USER_ID, participant2.userID)
             .get()
             .addOnSuccessListener { result ->
                 if (result.isEmpty) {
                     // if the chat box does not exist, then create it using put
                     // create data
                     val data = mapOf(
-                        FirebaseNames.CHAT_INBOX_PARTICIPANTS to sortedParticipants,
+                        FirebaseNames.CHAT_INBOX_PARTICIPANT1_USER_ID to participant1.userID,
+                        FirebaseNames.CHAT_INBOX_PARTICIPANT1_USER_AVATAR to participant1.avatar,
+                        FirebaseNames.CHAT_INBOX_PARTICIPANT1_USER_FIRST_NAME to participant1.firstName,
+                        FirebaseNames.CHAT_INBOX_PARTICIPANT1_USER_LAST_NAME to participant1.lastName,
+                        FirebaseNames.CHAT_INBOX_PARTICIPANT2_USER_ID to participant2.userID,
+                        FirebaseNames.CHAT_INBOX_PARTICIPANT2_USER_AVATAR to participant2.avatar,
+                        FirebaseNames.CHAT_INBOX_PARTICIPANT2_USER_FIRST_NAME to participant2.firstName,
+                        FirebaseNames.CHAT_INBOX_PARTICIPANT2_USER_LAST_NAME to participant2.lastName,
                         FirebaseNames.CHAT_INBOX_LAST_MESSAGE_ID to lastMessageID,
-                        FirebaseNames.CHAT_INBOX_UPDATED_TIMESTAMP to DateTimeManager.getCurrentEpochTime()
+                        FirebaseNames.CHAT_INBOX_LAST_MESSAGE_CONTENT to lastMessageContent,
+                        FirebaseNames.CHAT_INBOX_LAST_MESSAGE_IS_READ to lastMessageIsRead,
+                        FirebaseNames.CHAT_INBOX_LAST_MESSAGE_TIMESTAMP to lastMessageTimestamp,
+                        FirebaseNames.CHAT_INBOX_LAST_MESSAGE_SENDER_USER_ID to lastMessageSenderUserID
                     )
 
                     db.collection(FirebaseNames.COLLECTION_CHAT_INBOXES)
@@ -49,12 +67,17 @@ object ChatInboxManager {
                         }
 
                 } else {
-                    // else, update the last message of the chatbox
+                    // else, update the last message id, content, isread, timestamp of the chatbox
                     // there should only be one document
                     for (document in result) {
                         document.reference.update(
-                            FirebaseNames.CHAT_INBOX_LAST_MESSAGE_ID,
-                            lastMessageID  // only update the last msg id
+                            mapOf(
+                                FirebaseNames.CHAT_INBOX_LAST_MESSAGE_ID to lastMessageID,
+                                FirebaseNames.CHAT_INBOX_LAST_MESSAGE_CONTENT to lastMessageContent,
+                                FirebaseNames.CHAT_INBOX_LAST_MESSAGE_IS_READ to lastMessageIsRead,
+                                FirebaseNames.CHAT_INBOX_LAST_MESSAGE_TIMESTAMP to lastMessageTimestamp,
+                                FirebaseNames.CHAT_INBOX_LAST_MESSAGE_SENDER_USER_ID to lastMessageSenderUserID
+                            )
                         )
                             .addOnSuccessListener {
                                 callback.onComplete(true)

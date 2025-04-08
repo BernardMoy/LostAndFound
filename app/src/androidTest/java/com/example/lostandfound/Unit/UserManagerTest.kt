@@ -2,7 +2,6 @@ package com.example.lostandfound.Unit
 
 import com.example.lostandfound.Data.FirebaseNames
 import com.example.lostandfound.Data.User
-import com.example.lostandfound.FirebaseManagers.UserManager
 import com.example.lostandfound.FirebaseTestsSetUp
 import com.google.android.gms.tasks.Tasks
 import com.google.firebase.firestore.FirebaseFirestore
