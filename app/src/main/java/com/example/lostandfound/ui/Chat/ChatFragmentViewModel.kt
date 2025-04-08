@@ -107,7 +107,6 @@ class ChatFragmentViewModel : ViewModel() {
                                                             "",
                                                             "Deleted user",
                                                             "",
-                                                            ""
                                                         ),
                                                         lastMessage = result
                                                     )

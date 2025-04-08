@@ -173,7 +173,7 @@ fun MainContent(viewModel: ViewClaimViewModel) {
             // the user have the power to accept this claim if:
             // 1. they are the owner of the found item
             // 2. the found item has status 1, i.e. no claims that are approved
-            val canAccept = viewModel.foundItemData.userID == FirebaseUtility.getUserID()
+            val canAccept = viewModel.foundItemData.user.userID == FirebaseUtility.getUserID()
                     && viewModel.foundItemData.status == 1
 
             // action buttons
@@ -573,7 +573,7 @@ fun UserData(
 ) {
     // the view claim screen can be viewed by either the lost user or the found user.
     // if the viewer is the lost user, display this
-    if (viewModel.lostItemData.userID == FirebaseUtility.getUserID()) {
+    if (viewModel.lostItemData.user.userID == FirebaseUtility.getUserID()) {
         Column {
             CustomGrayTitle(text = "Contact user who found this item")
             Row(
@@ -607,7 +607,7 @@ fun UserData(
     }
 
     // if the viewer is the found user, display this
-    if (viewModel.foundItemData.userID == FirebaseUtility.getUserID()) {
+    if (viewModel.foundItemData.user.userID == FirebaseUtility.getUserID()) {
         Column {
             CustomGrayTitle(text = "Contact user who claimed this item")
             Row(
@@ -642,7 +642,7 @@ fun UserData(
 
     // common dialog for contacting user
     CustomUserDialog(
-        user = if (viewModel.lostItemData.userID == FirebaseUtility.getUserID()) viewModel.foundUser else viewModel.lostUser,
+        user = if (viewModel.lostItemData.user.userID == FirebaseUtility.getUserID()) viewModel.foundUser else viewModel.lostUser,
         context = context,
         isDialogShown = viewModel.isContactUserDialogShown
     )
@@ -653,7 +653,7 @@ fun SecurityQuestion(
     viewModel: ViewClaimViewModel
 ) {
     // if the viewer is the found user and the found item has security question, display this
-    if (viewModel.foundItemData.userID == FirebaseUtility.getUserID()
+    if (viewModel.foundItemData.user.userID == FirebaseUtility.getUserID()
         && viewModel.foundItemData.securityQuestion.isNotEmpty()
     ) {
 

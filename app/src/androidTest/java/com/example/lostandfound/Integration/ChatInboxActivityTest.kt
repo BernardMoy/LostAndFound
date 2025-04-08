@@ -78,8 +78,7 @@ class ChatInboxActivityTest : FirebaseTestsSetUp() {
             userID = user1ID.toString(),
             avatar = "",
             firstName = "u1f",
-            lastName = "u1l",
-            email = email
+            lastName = "u1l"
         )
 
         val dataUser1 = mutableMapOf<String, Any>(
@@ -100,8 +99,7 @@ class ChatInboxActivityTest : FirebaseTestsSetUp() {
             userID = user2ID,
             avatar = "",
             firstName = "u2f",
-            lastName = "u2l",
-            email = "test2@warwick"
+            lastName = "u2l"
         )
         val dataUser2 = mutableMapOf<String, Any>(
             FirebaseNames.USERS_FIRSTNAME to "u2f",

@@ -5,6 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import com.example.lostandfound.Data.FoundItem
 import com.example.lostandfound.Data.LostItem
+import com.example.lostandfound.Data.User
 import com.example.lostandfound.FirebaseManagers.FirebaseUtility
 import com.example.lostandfound.R
 
@@ -14,7 +15,12 @@ class SettingsViewModel : ViewModel() {
     // placeholder lost and found items used for developer settings
     var placeholderLostItem = LostItem(
         itemID = "Placeholder lost",
-        userID = "Unknown",
+        user = User(
+            userID = "userID",
+            avatar = "",
+            firstName = "placeholderFN",
+            lastName = "placeholderLN"
+        ),
         itemName = "Unknown",
         category = "Unknown",
         subCategory = "Unknown",
@@ -30,7 +36,12 @@ class SettingsViewModel : ViewModel() {
 
     var placeholderFoundItem = FoundItem(
         itemID = "Placeholder found",
-        userID = "Unknown",
+        user = User(
+            userID = "userID",
+            avatar = "",
+            firstName = "placeholderFN",
+            lastName = "placeholderLN"
+        ),
         itemName = "Unknown",
         category = "Unknown",
         subCategory = "Unknown",

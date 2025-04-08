@@ -114,7 +114,7 @@ fun CustomLostItemPreview(
     data: LostItem,
     onViewButtonClicked: () -> Unit = {},
 ) {
-    val isOwner: Boolean = FirebaseUtility.getUserID() == data.userID
+    val isOwner: Boolean = FirebaseUtility.getUserID() == data.user.userID
 
     Box(
         modifier = Modifier
@@ -399,7 +399,7 @@ fun CustomFoundItemPreview(
     isLocationCloseMatch: Boolean = false,
     percentageSimilarity: String = ""
 ) {
-    val isOwner: Boolean = FirebaseUtility.getUserID() == data.userID
+    val isOwner: Boolean = FirebaseUtility.getUserID() == data.user.userID
 
     Box(
         modifier = Modifier

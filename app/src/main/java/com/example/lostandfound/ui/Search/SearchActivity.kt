@@ -147,7 +147,7 @@ fun MainContent(viewModel: SearchViewModel) {
             modifier = Modifier.fillMaxWidth(),
             verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin))
         ) {
-            if (viewModel.lostItem.userID == FirebaseUtility.getUserID()) {
+            if (viewModel.lostItem.user.userID == FirebaseUtility.getUserID()) {
                 TopDescription(context = context, viewModel = viewModel)
             }
             MatchingItemsColumn(context = context, viewModel = viewModel)
@@ -257,7 +257,7 @@ fun MatchingItemsColumn(
                 // else if lost item status = 1 and the found item is claimed, then the user can view claim
                 // else, the user can only view the item
                 var displayedButtonText = "View"
-                if (viewModel.lostItem.userID == FirebaseUtility.getUserID()) {
+                if (viewModel.lostItem.user.userID == FirebaseUtility.getUserID()) {
                     if (viewModel.lostItem.status == 0) {
                         displayedButtonText = "View"
 
