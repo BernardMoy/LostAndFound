@@ -8,7 +8,6 @@ import kotlinx.parcelize.Parcelize
 data class FoundItem(
     // ids
     val itemID: String = "Unknown",
-    val userID: String = "Unknown",
 
     // item information
     val itemName: String = "Unknown",
@@ -27,5 +26,8 @@ data class FoundItem(
     val timePosted: Long = 0L,
 
     // item image
-    val image: String = ""  // store the item image as string
+    val image: String = "",  // store the item image as string
+
+    // user info
+    val user: User = User()
 ) : Parcelable

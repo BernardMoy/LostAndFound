@@ -143,29 +143,20 @@ fun MainContent(viewModel: ViewFoundViewModel) {
     // boolean to determine if it is being rendered in preview
     val inPreview = LocalInspectionMode.current
 
-    LaunchedEffect(Unit) {
-        loadData(context, viewModel)
+    Column(
+        verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin))
+    ) {
+        Reference(viewModel = viewModel)
+        Status(viewModel = viewModel)
+        ItemImage(viewModel = viewModel)
+        ItemDetails(viewModel = viewModel)
+        LocationData(viewModel = viewModel)
+        UserData(context = context, viewModel = viewModel)
+        ActionButtons(context = context, inPreview = inPreview, viewModel = viewModel)
+
+        // also display the user
     }
-
-    // display content
-    if (!inPreview && viewModel.isLoading.value) {
-        CustomCenteredProgressbar()
-
-    } else {
-        Column(
-            verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin))
-        ) {
-            Reference(viewModel = viewModel)
-            Status(viewModel = viewModel)
-            ItemImage(viewModel = viewModel)
-            ItemDetails(viewModel = viewModel)
-            LocationData(viewModel = viewModel)
-            UserData(context = context, viewModel = viewModel)
-            ActionButtons(context = context, inPreview = inPreview, viewModel = viewModel)
-
-            // also display the user
-        }
-    }
+    
 }
 
 @Composable
@@ -369,11 +360,11 @@ fun UserData(
                 modifier = Modifier.weight(1f)
             ) { // Name of user
                 val userDisplayName =
-                    viewModel.foundUser.firstName + ' ' + viewModel.foundUser.lastName
+                    viewModel.itemData.user.firstName + ' ' + viewModel.itemData.user.lastName
 
                 CustomEditText(
                     fieldLabel = "User",
-                    fieldContent = if (viewModel.itemData.userID == FirebaseUtility.getUserID()) "$userDisplayName (You)" else userDisplayName,
+                    fieldContent = if (viewModel.itemData.user.userID == FirebaseUtility.getUserID()) "$userDisplayName (You)" else userDisplayName,
                     leftIcon = Icons.Outlined.AccountCircle,
                     isEditable = false,
                     testTag = "ViewFoundUser"
@@ -381,7 +372,7 @@ fun UserData(
             }
 
             // contact user button and dialog, when the user is not the current user
-            if (viewModel.foundUser.userID != FirebaseUtility.getUserID()) {
+            if (viewModel.itemData.user.userID != FirebaseUtility.getUserID()) {
                 CustomButton(
                     text = "Contact",
                     type = ButtonType.TONAL,
@@ -395,7 +386,7 @@ fun UserData(
         }
 
         CustomUserDialog(
-            user = viewModel.foundUser,
+            user = viewModel.itemData.user,
             context = context,
             isDialogShown = viewModel.isContactUserDialogShown
         )
@@ -430,7 +421,7 @@ fun ActionButtons(
             .padding(vertical = dimensionResource(id = R.dimen.content_margin))
     ) {
         // only display buttons when the lost item is found by the current user
-        if (inPreview || FirebaseUtility.getUserID() == viewModel.itemData.userID) {
+        if (inPreview || FirebaseUtility.getUserID() == viewModel.itemData.user.userID) {
             Column(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalAlignment = Alignment.CenterHorizontally,
@@ -541,28 +532,6 @@ fun ActionButtons(
         }
     }
 }
-
-// function to load data, called when the activity is created
-fun loadData(
-    context: Context,
-    viewModel: ViewFoundViewModel
-) {
-    // is loading initially
-    viewModel.isLoading.value = true
-
-    // load found item data of the current user from the view model
-    viewModel.getUser(object : Callback<Boolean> {
-        override fun onComplete(result: Boolean) {
-            viewModel.isLoading.value = false
-
-            if (!result) {
-                // display toast message for failed data retrieval
-                Toast.makeText(context, "Fetching data failed", Toast.LENGTH_SHORT).show()
-            }
-        }
-    })
-}
-
 
 
 

@@ -13,7 +13,6 @@ import com.example.lostandfound.FirebaseManagers.FirebaseUtility
 import com.example.lostandfound.FirebaseManagers.FirestoreManager
 import com.example.lostandfound.FirebaseManagers.ItemManager
 import com.example.lostandfound.FirebaseManagers.NotificationManager
-import com.example.lostandfound.FirebaseManagers.UserManager
 import com.example.lostandfound.Utility.DateTimeManager
 import com.example.lostandfound.Utility.ErrorCallback
 
@@ -73,54 +72,35 @@ class ViewClaimViewModel : ViewModel() {
 
                                 lostItemData = lostItem
 
-                                // get the lost user
-                                UserManager.getUserFromId(
-                                    lostItemData.userID,
-                                    object : UserManager.UserCallback {
-                                        override fun onComplete(user: User?) {
-                                            if (user == null) {
-                                                callback.onComplete("Error fetching user data")
+
+                                lostUser = lostItemData.user
+
+                                // load found data
+                                ItemManager.getFoundItemFromId(
+                                    foundItemId,
+                                    object : ItemManager.FoundItemCallback {
+                                        override fun onComplete(foundItem: FoundItem?) {
+                                            if (foundItem == null) {
+                                                callback.onComplete("Error fetching found item")
                                                 return
                                             }
 
-                                            lostUser = user
+                                            foundItemData = foundItem
 
-                                            // load found data
-                                            ItemManager.getFoundItemFromId(
-                                                foundItemId,
-                                                object : ItemManager.FoundItemCallback {
-                                                    override fun onComplete(foundItem: FoundItem?) {
-                                                        if (foundItem == null) {
-                                                            callback.onComplete("Error fetching found item")
-                                                            return
-                                                        }
 
-                                                        foundItemData = foundItem
 
-                                                        // get the found user name
-                                                        UserManager.getUserFromId(
-                                                            foundItemData.userID,
-                                                            object : UserManager.UserCallback {
-                                                                override fun onComplete(user: User?) {
-                                                                    if (user == null) {
-                                                                        callback.onComplete("Error fetching user data")
-                                                                        return
-                                                                    }
+                                            foundUser = foundItem.user
 
-                                                                    foundUser = user
-
-                                                                    // callback with no errors
-                                                                    callback.onComplete("")
-                                                                }
-                                                            })
-                                                    }
-                                                })
+                                            // callback with no errors
+                                            callback.onComplete("")
                                         }
                                     })
                             }
                         })
                 }
             })
+
+
     }
 
     // function to mark the claim as accepted
@@ -229,10 +209,10 @@ class ViewClaimViewModel : ViewModel() {
                                     }
 
                                     // send notif type 2 to every user that isnt the user of the current claim
-                                    if (lostItem.userID != lostUser.userID) {
+                                    if (lostItem.user.userID != lostUser.userID) {
                                         NotificationManager.sendClaimRejectedNotification(
                                             context,
-                                            lostItem.userID,
+                                            lostItem.user.userID,
                                             claim.claimID,  // pass the current claim data
                                             object : NotificationManager.NotificationSendCallback {
                                                 override fun onComplete(result: Boolean) {

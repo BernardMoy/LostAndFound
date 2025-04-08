@@ -9,6 +9,7 @@ import com.example.lostandfound.Data.FirebaseNames
 import com.example.lostandfound.Data.FoundItem
 import com.example.lostandfound.Data.LostItem
 import com.example.lostandfound.Data.ScoreData
+import com.example.lostandfound.Data.User
 import com.example.lostandfound.FirebaseManagers.FirestoreManager.Callback
 import com.example.lostandfound.MatchingFunctions.SCORE_THRESHOLD
 import com.example.lostandfound.MatchingFunctions.ScoreDataCallback
@@ -95,8 +96,13 @@ object ItemManager {
                                         // create lost item class object
                                         val thisLostItem = LostItem(
                                             itemID = lostItemID,
-                                            userID = itemResult[FirebaseNames.LOSTFOUND_USER] as? String
-                                                ?: "Unknown",
+                                            user= User(
+                                                userID = itemResult[FirebaseNames.LOSTFOUND_USER] as? String
+                                                    ?: "Unknown",
+                                                avatar = itemResult[FirebaseNames.USERS_AVATAR] as? String ?:"",
+                                                firstName = itemResult[FirebaseNames.USERS_FIRSTNAME] as? String ?: "",
+                                                lastName = itemResult[FirebaseNames.USERS_LASTNAME] as? String ?: "",
+                                            ),
                                             itemName = itemResult[FirebaseNames.LOSTFOUND_ITEMNAME] as? String
                                                 ?: "Unknown",
                                             category = itemResult[FirebaseNames.LOSTFOUND_CATEGORY] as? String
@@ -202,8 +208,13 @@ object ItemManager {
                                             // create found item class object
                                             val thisFoundItem = FoundItem(
                                                 itemID = foundItemID,
-                                                userID = itemResult[FirebaseNames.LOSTFOUND_USER] as? String
+                                                user= User(
+                                                    userID = itemResult[FirebaseNames.LOSTFOUND_USER] as? String
                                                     ?: "Unknown",
+                                                    avatar = itemResult[FirebaseNames.USERS_AVATAR] as? String ?:"",
+                                                    firstName = itemResult[FirebaseNames.USERS_FIRSTNAME] as? String ?: "",
+                                                    lastName = itemResult[FirebaseNames.USERS_LASTNAME] as? String ?: "",
+                                                ),
                                                 itemName = itemResult[FirebaseNames.LOSTFOUND_ITEMNAME] as? String
                                                     ?: "Unknown",
                                                 category = itemResult[FirebaseNames.LOSTFOUND_CATEGORY] as? String
@@ -407,25 +418,16 @@ object ItemManager {
                     return
                 }
 
-                UserManager.getUserFromId(lostItem.userID, object : UserManager.UserCallback {
-                    override fun onComplete(user: com.example.lostandfound.Data.User?) {
-                        if (user == null) {
-                            callback.onComplete(null)
-                            return
-                        }
+                // create the preview item
+                val thisClaimPreview = ClaimPreview(
+                    lostItemImage = lostItem.image,
+                    lostItemName = lostItem.itemName,
+                    lostUserName = lostItem.user.firstName + " " + lostItem.user.lastName,
+                    claimItem = claimItem
+                )
 
-                        // create the preview item
-                        val thisClaimPreview = ClaimPreview(
-                            lostItemImage = lostItem.image,
-                            lostItemName = lostItem.itemName,
-                            lostUserName = user.firstName + ' ' + user.lastName,
-                            claimItem = claimItem
-                        )
-
-                        // return the preview item
-                        callback.onComplete(thisClaimPreview)
-                    }
-                })
+                // return the preview item
+                callback.onComplete(thisClaimPreview)
             }
         })
     }
@@ -526,7 +528,7 @@ object ItemManager {
         db.collection(FirebaseNames.COLLECTION_FOUND_ITEMS)
             .whereNotEqualTo(  // the found item user id cannot be equal to the lost item uid
                 FirebaseNames.LOSTFOUND_USER,
-                lostItem.userID
+                lostItem.user.userID
             )
             .get()   // currently there are no orderby, they are done later
             .addOnSuccessListener { result ->
@@ -614,7 +616,7 @@ object ItemManager {
             )
             .whereNotEqualTo(
                 FirebaseNames.LOSTFOUND_USER,
-                foundItem.userID
+                foundItem.user.userID
             )  // the lost user id cannot be same as the current one (Found user id)
             .get()    // no need order by
             .addOnSuccessListener { result ->

@@ -70,6 +70,7 @@ import com.example.lostandfound.CustomElements.CustomViewLocationDialog
 import com.example.lostandfound.Data.Claim
 import com.example.lostandfound.Data.IntentExtraNames
 import com.example.lostandfound.Data.LostItem
+import com.example.lostandfound.Data.User
 import com.example.lostandfound.Data.lostStatusText
 import com.example.lostandfound.Data.statusColor
 import com.example.lostandfound.Data.stringToColor
@@ -151,37 +152,29 @@ fun MainContent(viewModel: ViewLostViewModel) {
     // boolean to determine if it is being rendered in preview
     val inPreview = LocalInspectionMode.current
 
-    LaunchedEffect(Unit) {
-        loadData(context, viewModel)
-    }
 
-    // display content
-    if (!inPreview && viewModel.isLoading.value) {
-        CustomCenteredProgressbar()
-
-    } else {
-        Column(
-            verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin))
-        ) {
-            // show the track button only when the lost item user is the current user
-            if (viewModel.itemData.userID == FirebaseUtility.getUserID()) {
-                TrackButton(context = context, viewModel = viewModel)
-                Spacer(modifier = Modifier.width(dimensionResource(id = R.dimen.title_margin)))
-            }
-
-            Reference(viewModel = viewModel)
-            Status(viewModel = viewModel)
-            ItemImage(viewModel = viewModel)
-            ItemDetails(viewModel = viewModel)
-            LocationData(viewModel = viewModel)
-            UserData(context = context, viewModel = viewModel)
-
-            // if status = 0 or 1, display matching items
-            ActionButtons(context = context, inPreview = inPreview, viewModel = viewModel)
-
-            // also display the user
+    Column(
+        verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin))
+    ) {
+        // show the track button only when the lost item user is the current user
+        if (viewModel.itemData.user.userID == FirebaseUtility.getUserID()) {
+            TrackButton(context = context, viewModel = viewModel)
+            Spacer(modifier = Modifier.width(dimensionResource(id = R.dimen.title_margin)))
         }
+
+        Reference(viewModel = viewModel)
+        Status(viewModel = viewModel)
+        ItemImage(viewModel = viewModel)
+        ItemDetails(viewModel = viewModel)
+        LocationData(viewModel = viewModel)
+        UserData(context = context, viewModel = viewModel)
+
+        // if status = 0 or 1, display matching items
+        ActionButtons(context = context, inPreview = inPreview, viewModel = viewModel)
+
+        // also display the user
     }
+
 }
 
 @Composable
@@ -472,11 +465,11 @@ fun UserData(
             ) {
                 // Name of user
                 val userDisplayName =
-                    viewModel.lostUser.firstName + ' ' + viewModel.lostUser.lastName
+                    viewModel.itemData.user.firstName + ' ' + viewModel.itemData.user.lastName
 
                 CustomEditText(
                     fieldLabel = "User",
-                    fieldContent = if (viewModel.itemData.userID == FirebaseUtility.getUserID()) "$userDisplayName (You)" else userDisplayName,
+                    fieldContent = if (viewModel.itemData.user.userID == FirebaseUtility.getUserID()) "$userDisplayName (You)" else userDisplayName,
                     leftIcon = Icons.Outlined.AccountCircle,
                     isEditable = false,
                     testTag = "ViewLostUser"
@@ -484,7 +477,7 @@ fun UserData(
             }
 
             // contact user button and dialog, when the user is not the current user
-            if (viewModel.lostUser.userID != FirebaseUtility.getUserID()) {
+            if (viewModel.itemData.user.userID != FirebaseUtility.getUserID()) {
                 CustomButton(
                     text = "Contact",
                     type = ButtonType.TONAL,
@@ -509,7 +502,7 @@ fun UserData(
     }
 
     CustomUserDialog(
-        user = viewModel.lostUser,
+        user = viewModel.itemData.user,
         context = context,
         isDialogShown = viewModel.isContactUserDialogShown
     )
@@ -527,7 +520,7 @@ fun ActionButtons(
             .padding(vertical = dimensionResource(id = R.dimen.content_margin))
     ) {
         // only display buttons when the lost item is reported by the current user
-        if (inPreview || FirebaseUtility.getUserID() == viewModel.itemData.userID) {
+        if (inPreview || FirebaseUtility.getUserID() == viewModel.itemData.user.userID) {
             Column(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalAlignment = Alignment.CenterHorizontally,
@@ -665,27 +658,6 @@ fun ActionButtons(
             }
         }
     }
-}
-
-// function to load data, called when the activity is created
-fun loadData(
-    context: Context,
-    viewModel: ViewLostViewModel
-) {
-    // is loading initially
-    viewModel.isLoading.value = true
-
-    // load lost item data of the current user from the view model
-    viewModel.getUser(object : Callback<Boolean> {
-        override fun onComplete(result: Boolean) {
-            viewModel.isLoading.value = false
-
-            if (!result) {
-                // display toast message for failed data retrieval
-                Toast.makeText(context, "Fetching data failed", Toast.LENGTH_SHORT).show()
-            }
-        }
-    })
 }
 
 

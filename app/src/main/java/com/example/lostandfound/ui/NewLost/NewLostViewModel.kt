@@ -11,6 +11,7 @@ import androidx.lifecycle.ViewModel
 import com.example.lostandfound.Data.Category
 import com.example.lostandfound.Data.FirebaseNames
 import com.example.lostandfound.Data.LostItem
+import com.example.lostandfound.Data.User
 import com.example.lostandfound.FirebaseManagers.FirebaseStorageManager
 import com.example.lostandfound.FirebaseManagers.FirebaseUtility
 import com.example.lostandfound.FirebaseManagers.FirestoreManager
@@ -37,6 +38,11 @@ class NewLostViewModel : ViewModel() {
     val selectedLocation: MutableState<LatLng?> = mutableStateOf(null) // default location
     val additionalDescription: MutableState<String> = mutableStateOf("")
     val isLocationDialogShown: MutableState<Boolean> = mutableStateOf(false)
+
+    // user info to be retrieved from shared pref using context
+    val userAvatar: MutableState<String> = mutableStateOf("")
+    val userFirstName: MutableState<String> = mutableStateOf("")
+    val userLastName: MutableState<String> = mutableStateOf("")
 
     // initially the selected category is null
     var selectedCategory by mutableStateOf<Category?>(null)
@@ -187,6 +193,9 @@ class NewLostViewModel : ViewModel() {
             FirebaseNames.LOSTFOUND_DESCRIPTION to additionalDescription.value,
             FirebaseNames.LOSTFOUND_TIMEPOSTED to currentTime,
             FirebaseNames.LOST_IS_TRACKING to false, // default not tracking
+            FirebaseNames.USERS_AVATAR to userAvatar.value,
+            FirebaseNames.USERS_FIRSTNAME to userFirstName.value,
+            FirebaseNames.USERS_LASTNAME to userLastName.value
         )
 
         // add to the firestore db
@@ -227,7 +236,6 @@ class NewLostViewModel : ViewModel() {
                                     // create lost item here
                                     val generatedLostItem: LostItem = LostItem(
                                         itemID = result,
-                                        userID = FirebaseUtility.getUserID(),
                                         itemName = itemName.value,
                                         category = selectedCategory!!.name,
                                         subCategory = selectedSubCategory.value,
@@ -245,7 +253,13 @@ class NewLostViewModel : ViewModel() {
                                         timePosted = currentTime,
                                         image = resultImage,
                                         status = 0,
-                                        isTracking = false
+                                        isTracking = false,
+                                        user = User(
+                                            userID = FirebaseUtility.getUserID(),
+                                            avatar = userAvatar.value,
+                                            firstName = userFirstName.value,
+                                            lastName = userLastName.value
+                                        ),
                                     )
 
                                     // add activity log item
@@ -272,7 +286,6 @@ class NewLostViewModel : ViewModel() {
                         // only exception is that there are no item images
                         val generatedLostItem: LostItem = LostItem(
                             itemID = result,
-                            userID = FirebaseUtility.getUserID(),
                             itemName = itemName.value,
                             category = selectedCategory!!.name,
                             subCategory = selectedSubCategory.value,
@@ -290,7 +303,13 @@ class NewLostViewModel : ViewModel() {
                             timePosted = currentTime,
                             image = "",
                             status = 0,
-                            isTracking = false
+                            isTracking = false,
+                            user = User(
+                                userID = FirebaseUtility.getUserID(),
+                                avatar = userAvatar.value,
+                                firstName = userFirstName.value,
+                                lastName = userLastName.value
+                            ),
                         )
 
                         // add activity log item

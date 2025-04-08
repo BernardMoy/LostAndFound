@@ -1,6 +1,7 @@
 package com.example.lostandfound.FirebaseManagers;
 
 import android.net.Uri;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 
@@ -20,7 +21,7 @@ public class FirebaseStorageManager {
     }
 
     public FirebaseStorageManager() {
-        storage = FirebaseStorage.getInstance();
+        storage = FirebaseStorage.getInstance("gs://lostandfound-d4afc"); // this must be the folder path
         storageReference = storage.getReference();
     }
 
@@ -57,6 +58,7 @@ public class FirebaseStorageManager {
                 }).addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
+                        Log.e("STORAGE ERROR", e.getMessage());
                         callback.onComplete("");
 
                     }
@@ -66,6 +68,7 @@ public class FirebaseStorageManager {
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
+                Log.e("STORAGE ERROR", e.getMessage());
                 callback.onComplete("");
             }
         });

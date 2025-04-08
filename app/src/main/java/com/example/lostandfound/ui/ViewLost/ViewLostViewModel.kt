@@ -5,11 +5,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import com.example.lostandfound.Data.FirebaseNames
 import com.example.lostandfound.Data.LostItem
-import com.example.lostandfound.Data.User
 import com.example.lostandfound.FirebaseManagers.FirebaseUtility
 import com.example.lostandfound.FirebaseManagers.FirestoreManager
 import com.example.lostandfound.FirebaseManagers.ItemManager
-import com.example.lostandfound.FirebaseManagers.UserManager
 import com.example.lostandfound.Utility.DateTimeManager
 
 interface Callback<T> {
@@ -17,7 +15,6 @@ interface Callback<T> {
 }
 
 class ViewLostViewModel : ViewModel() {
-    val isLoading: MutableState<Boolean> = mutableStateOf(true)
     val isTrackUpdateLoading: MutableState<Boolean> = mutableStateOf(false)
     val isLocationDialogShown: MutableState<Boolean> = mutableStateOf(false)
     val isContactUserDialogShown: MutableState<Boolean> = mutableStateOf(false)
@@ -29,24 +26,6 @@ class ViewLostViewModel : ViewModel() {
     val isItemTracking: MutableState<Boolean> =
         mutableStateOf(false)  // to be reflected in the ui after pressing button
 
-    // username used to display the user
-    var lostUser = User()
-
-    // function to get user name and load it into the var
-    fun getUser(callback: Callback<Boolean>) {
-        UserManager.getUserFromId(itemData.userID, object : UserManager.UserCallback {
-            override fun onComplete(user: User?) {
-                if (user == null) {
-                    callback.onComplete(false)
-                    return
-                }
-
-                lostUser = user
-                callback.onComplete(true)
-            }
-
-        })
-    }
 
     // function to update the lost item to be tracking
     fun updateIsTracking(
