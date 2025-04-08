@@ -28,6 +28,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
@@ -294,8 +295,9 @@ fun ItemImage(
                     modifier = Modifier.padding(vertical = dimensionResource(id = R.dimen.content_margin))
                 ) {
                     // display the image of the item only when it is not null
-                    GlideImage(
-                        model = viewModel.itemImage.value,
+                    val painter = rememberAsyncImagePainter(model = viewModel.itemImage.value)
+                    Image(
+                        painter = painter,
                         contentDescription = "Item image",
                         contentScale = ContentScale.FillWidth,  // make the image fill width
                         modifier = Modifier
