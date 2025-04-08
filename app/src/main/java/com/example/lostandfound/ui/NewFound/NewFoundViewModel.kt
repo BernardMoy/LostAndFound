@@ -47,6 +47,11 @@ class NewFoundViewModel : ViewModel() {
     val securityQuestion: MutableState<String> = mutableStateOf("")
     val securityQuestionAns: MutableState<String> = mutableStateOf("")
 
+    // user info to be retrieved from shared pref using context
+    val userAvatar: MutableState<String> = mutableStateOf("")
+    val userFirstName: MutableState<String> = mutableStateOf("")
+    val userLastName: MutableState<String> = mutableStateOf("")
+
     // initially the selected category is null
     var selectedCategory by mutableStateOf<Category?>(null)
 
@@ -212,7 +217,10 @@ class NewFoundViewModel : ViewModel() {
             FirebaseNames.FOUND_SECURITY_Q to securityQuestion.value,
             FirebaseNames.FOUND_SECURITY_Q_ANS to securityQuestionAns.value,
             FirebaseNames.LOSTFOUND_TIMEPOSTED to currentTime,
-            FirebaseNames.LOSTFOUND_LOCATION to selectedLocation.value
+            FirebaseNames.LOSTFOUND_LOCATION to selectedLocation.value,
+            FirebaseNames.USERS_FIRSTNAME to userFirstName.value,
+            FirebaseNames.USERS_LASTNAME to userLastName.value,
+            FirebaseNames.USERS_AVATAR to userAvatar.value
         )
 
         // add to the firestore db
@@ -273,6 +281,9 @@ class NewFoundViewModel : ViewModel() {
                                         image = resultImage,   // use the download url returned by the put method
                                         securityQuestion = securityQuestion.value,
                                         securityQuestionAns = securityQuestionAns.value,
+                                        userAvatar = userAvatar.value,
+                                        userFirstName = userFirstName.value,
+                                        userLastName = userLastName.value
                                     )
 
                                     // send notifications
@@ -327,6 +338,9 @@ class NewFoundViewModel : ViewModel() {
                             image = "",
                             securityQuestion = securityQuestion.value,
                             securityQuestionAns = securityQuestionAns.value,
+                            userAvatar = userAvatar.value,
+                            userFirstName = userFirstName.value,
+                            userLastName = userLastName.value
                         )
 
                         // send notifications
