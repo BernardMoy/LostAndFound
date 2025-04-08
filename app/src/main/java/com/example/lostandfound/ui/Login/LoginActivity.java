@@ -134,6 +134,9 @@ public class LoginActivity extends AppCompatActivity {
                     public void onComplete(String error) {
                         if (!error.trim().isEmpty()) {
                             loginViewModel.setLoginError(error);
+
+                            binding.progressBar.setVisibility(View.GONE);
+                            binding.loginButton.setEnabled(true);
                             return;
                         }
 

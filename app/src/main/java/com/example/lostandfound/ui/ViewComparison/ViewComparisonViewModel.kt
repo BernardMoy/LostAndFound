@@ -42,9 +42,6 @@ class ViewComparisonViewModel : ViewModel() {
     var claim =
         Claim()  // used to check whether the found item is the claimed item of the lost item
 
-    // username used to display the found user, only that is needed
-    var foundUser = User()
-
     // score data when navigated from search activity
     var scoreData = ScoreData()
 
@@ -78,7 +75,7 @@ class ViewComparisonViewModel : ViewModel() {
                     // send a notification to the found user, saying that a user has claimed their item
                     NotificationManager.sendUserClaimedYourItemNotification(
                         context = context,
-                        targetUserId = foundUser.userID,
+                        targetUserId = foundItemData.user.userID,
                         claimID = result,  // the claim id
                         foundItemName = foundItemData.itemName,
                         callback = object : NotificationManager.NotificationSendCallback {

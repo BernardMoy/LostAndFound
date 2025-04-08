@@ -691,14 +691,14 @@ fun UserData(
             ) {
                 CustomEditText(
                     fieldLabel = "User",
-                    fieldContent = viewModel.foundUser.firstName + ' ' + viewModel.foundUser.lastName,
+                    fieldContent = viewModel.foundItemData.user.firstName + ' ' + viewModel.foundItemData.user.lastName,
                     leftIcon = Icons.Outlined.AccountCircle,
                     isEditable = false
                 )
             }
 
             // contact user button and dialog, when the user is not the current user
-            if (viewModel.foundUser.userID != FirebaseUtility.getUserID()) {
+            if (viewModel.foundItemData.user.userID != FirebaseUtility.getUserID()) {
                 CustomButton(
                     text = "Contact",
                     type = ButtonType.TONAL,
@@ -713,7 +713,7 @@ fun UserData(
     }
 
     CustomUserDialog(
-        user = viewModel.foundUser,
+        user = viewModel.foundItemData.user,
         context = context,
         isDialogShown = viewModel.isContactUserDialogShown
     )
