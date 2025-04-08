@@ -10,5 +10,6 @@ data class User(
     val firstName: String = "",
     val lastName: String = "",
     val email: String = ""
+    // does not contain isAdmin, notificationEnable etc
 
 ) : Parcelable

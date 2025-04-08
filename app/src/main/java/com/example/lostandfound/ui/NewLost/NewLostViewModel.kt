@@ -38,6 +38,11 @@ class NewLostViewModel : ViewModel() {
     val additionalDescription: MutableState<String> = mutableStateOf("")
     val isLocationDialogShown: MutableState<Boolean> = mutableStateOf(false)
 
+    // user info to be retrieved from shared pref using context
+    val userAvatar: MutableState<String> = mutableStateOf("")
+    val userFirstName: MutableState<String> = mutableStateOf("")
+    val userLastName: MutableState<String> = mutableStateOf("")
+
     // initially the selected category is null
     var selectedCategory by mutableStateOf<Category?>(null)
 
@@ -187,6 +192,9 @@ class NewLostViewModel : ViewModel() {
             FirebaseNames.LOSTFOUND_DESCRIPTION to additionalDescription.value,
             FirebaseNames.LOSTFOUND_TIMEPOSTED to currentTime,
             FirebaseNames.LOST_IS_TRACKING to false, // default not tracking
+            FirebaseNames.USERS_AVATAR to userAvatar.value,
+            FirebaseNames.USERS_FIRSTNAME to userFirstName.value,
+            FirebaseNames.USERS_LASTNAME to userLastName.value
         )
 
         // add to the firestore db
@@ -245,7 +253,10 @@ class NewLostViewModel : ViewModel() {
                                         timePosted = currentTime,
                                         image = resultImage,
                                         status = 0,
-                                        isTracking = false
+                                        isTracking = false,
+                                        userAvatar = userAvatar.value,
+                                        userFirstName = userFirstName.value,
+                                        userLastName = userLastName.value
                                     )
 
                                     // add activity log item
@@ -290,7 +301,10 @@ class NewLostViewModel : ViewModel() {
                             timePosted = currentTime,
                             image = "",
                             status = 0,
-                            isTracking = false
+                            isTracking = false,
+                            userAvatar = userAvatar.value,
+                            userFirstName = userFirstName.value,
+                            userLastName = userLastName.value
                         )
 
                         // add activity log item

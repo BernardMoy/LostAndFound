@@ -4,6 +4,7 @@ import android.Manifest
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.widget.Toast
@@ -92,6 +93,7 @@ import com.example.lostandfound.CustomElements.CustomTextDialog
 import com.example.lostandfound.CustomElements.CustomTimePickerTextField
 import com.example.lostandfound.Data.IntentExtraNames
 import com.example.lostandfound.Data.LostItem
+import com.example.lostandfound.Data.SharedPreferencesNames
 import com.example.lostandfound.Data.categories
 import com.example.lostandfound.Data.stringToColor
 import com.example.lostandfound.FirebaseManagers.FirebaseUtility
@@ -225,6 +227,12 @@ fun MainContent(viewModel: NewLostViewModel) {
 
     // the bottom sheet for getting image from camera or gallery options
     ImageBottomSheet(isSheetOpen = viewModel.isSheetOpen, viewModel = viewModel, context = context)
+
+    // load data from shared prefs to view models
+    val sp: SharedPreferences = context.getSharedPreferences(SharedPreferencesNames.NAME_USERS, Context.MODE_PRIVATE)
+    viewModel.userAvatar.value = sp.getString(SharedPreferencesNames.USER_AVATAR, "") ?: ""
+    viewModel.userFirstName.value = sp.getString(SharedPreferencesNames.USER_FIRSTNAME, "") ?: ""
+    viewModel.userLastName.value = sp.getString(SharedPreferencesNames.USER_LASTNAME, "") ?: ""
 
     // Display different input fields
     Column(

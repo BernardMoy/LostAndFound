@@ -30,5 +30,10 @@ data class LostItem(
     val timePosted: Long = 0L,
 
     // item image
-    val image: String = ""  // store the item image as string
+    val image: String = "",  // store the item image as string
+
+    // user info
+    val userAvatar: String = "",
+    val userFirstName: String = "",
+    val userLastName: String = ""
 ) : Parcelable
