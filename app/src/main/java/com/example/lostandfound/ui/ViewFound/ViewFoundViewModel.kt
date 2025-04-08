@@ -21,26 +21,18 @@ class ViewFoundViewModel : ViewModel() {
     val isContactUserDialogShown: MutableState<Boolean> = mutableStateOf(false)
     val isDeleteDialogShown: MutableState<Boolean> = mutableStateOf(false)
 
-
     // item data are stored here
     var itemData = FoundItem()
 
-    // username used to display the user
-    var foundUser = User()
-
-    // function to get user name given found item data
-    fun getUser(callback: Callback<Boolean>) {
-        UserManager.getUserFromId(itemData.userID, object : UserManager.UserCallback {
-            override fun onComplete(user: User?) {
-                if (user == null) {
-                    callback.onComplete(false)
-
-                } else {
-                    foundUser = user
-                    callback.onComplete(true)
-                }
-            }
-        })
+    // function to get user object from item data
+    fun getUser(): User{
+        return User(
+            userID = itemData.userID,
+            avatar = itemData.userAvatar,
+            firstName = itemData.userFirstName,
+            lastName = itemData.userLastName,
+            email = ""  // hide it
+        )
     }
 
     // function to delete item

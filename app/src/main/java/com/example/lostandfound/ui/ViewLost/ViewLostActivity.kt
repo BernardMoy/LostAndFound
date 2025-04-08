@@ -70,6 +70,7 @@ import com.example.lostandfound.CustomElements.CustomViewLocationDialog
 import com.example.lostandfound.Data.Claim
 import com.example.lostandfound.Data.IntentExtraNames
 import com.example.lostandfound.Data.LostItem
+import com.example.lostandfound.Data.User
 import com.example.lostandfound.Data.lostStatusText
 import com.example.lostandfound.Data.statusColor
 import com.example.lostandfound.Data.stringToColor
@@ -472,7 +473,7 @@ fun UserData(
             ) {
                 // Name of user
                 val userDisplayName =
-                    viewModel.lostUser.firstName + ' ' + viewModel.lostUser.lastName
+                    viewModel.itemData.userFirstName + ' ' + viewModel.itemData.userLastName
 
                 CustomEditText(
                     fieldLabel = "User",
@@ -484,7 +485,7 @@ fun UserData(
             }
 
             // contact user button and dialog, when the user is not the current user
-            if (viewModel.lostUser.userID != FirebaseUtility.getUserID()) {
+            if (viewModel.itemData.userID != FirebaseUtility.getUserID()) {
                 CustomButton(
                     text = "Contact",
                     type = ButtonType.TONAL,
@@ -509,7 +510,7 @@ fun UserData(
     }
 
     CustomUserDialog(
-        user = viewModel.lostUser,
+        user = viewModel.getUser(),
         context = context,
         isDialogShown = viewModel.isContactUserDialogShown
     )
@@ -674,18 +675,6 @@ fun loadData(
 ) {
     // is loading initially
     viewModel.isLoading.value = true
-
-    // load lost item data of the current user from the view model
-    viewModel.getUser(object : Callback<Boolean> {
-        override fun onComplete(result: Boolean) {
-            viewModel.isLoading.value = false
-
-            if (!result) {
-                // display toast message for failed data retrieval
-                Toast.makeText(context, "Fetching data failed", Toast.LENGTH_SHORT).show()
-            }
-        }
-    })
 }
 
 

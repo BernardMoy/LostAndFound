@@ -369,7 +369,7 @@ fun UserData(
                 modifier = Modifier.weight(1f)
             ) { // Name of user
                 val userDisplayName =
-                    viewModel.foundUser.firstName + ' ' + viewModel.foundUser.lastName
+                    viewModel.itemData.userFirstName + ' ' + viewModel.itemData.userLastName
 
                 CustomEditText(
                     fieldLabel = "User",
@@ -381,7 +381,7 @@ fun UserData(
             }
 
             // contact user button and dialog, when the user is not the current user
-            if (viewModel.foundUser.userID != FirebaseUtility.getUserID()) {
+            if (viewModel.itemData.userID != FirebaseUtility.getUserID()) {
                 CustomButton(
                     text = "Contact",
                     type = ButtonType.TONAL,
@@ -395,7 +395,7 @@ fun UserData(
         }
 
         CustomUserDialog(
-            user = viewModel.foundUser,
+            user = viewModel.getUser(),
             context = context,
             isDialogShown = viewModel.isContactUserDialogShown
         )
@@ -549,18 +549,6 @@ fun loadData(
 ) {
     // is loading initially
     viewModel.isLoading.value = true
-
-    // load found item data of the current user from the view model
-    viewModel.getUser(object : Callback<Boolean> {
-        override fun onComplete(result: Boolean) {
-            viewModel.isLoading.value = false
-
-            if (!result) {
-                // display toast message for failed data retrieval
-                Toast.makeText(context, "Fetching data failed", Toast.LENGTH_SHORT).show()
-            }
-        }
-    })
 }
 
 

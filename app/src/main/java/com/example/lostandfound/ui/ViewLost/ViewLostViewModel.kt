@@ -29,23 +29,15 @@ class ViewLostViewModel : ViewModel() {
     val isItemTracking: MutableState<Boolean> =
         mutableStateOf(false)  // to be reflected in the ui after pressing button
 
-    // username used to display the user
-    var lostUser = User()
-
-    // function to get user name and load it into the var
-    fun getUser(callback: Callback<Boolean>) {
-        UserManager.getUserFromId(itemData.userID, object : UserManager.UserCallback {
-            override fun onComplete(user: User?) {
-                if (user == null) {
-                    callback.onComplete(false)
-                    return
-                }
-
-                lostUser = user
-                callback.onComplete(true)
-            }
-
-        })
+    // function to get user object from item data
+    fun getUser(): User{
+        return User(
+            userID = itemData.userID,
+            avatar = itemData.userAvatar,
+            firstName = itemData.userFirstName,
+            lastName = itemData.userLastName,
+            email = ""  // hide it
+        )
     }
 
     // function to update the lost item to be tracking
