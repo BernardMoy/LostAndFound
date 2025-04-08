@@ -174,15 +174,6 @@ fun MainContent(viewModel: ViewComparisonViewModel) {
     // boolean to determine if it is being rendered in preview
     val inPreview = LocalInspectionMode.current
 
-    LaunchedEffect(Unit) {
-        loadData(context, viewModel)
-    }
-
-    // display content
-    if (!inPreview && viewModel.isLoading.value) {
-        CustomCenteredProgressbar()
-
-    } else {
         Column(
             modifier = Modifier.padding(vertical = dimensionResource(R.dimen.title_margin)),
             verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin))
@@ -202,7 +193,7 @@ fun MainContent(viewModel: ViewComparisonViewModel) {
                 UserData(context = context, viewModel = viewModel)
                 ClaimButton(context = context, viewModel = viewModel)
             }
-        }
+
     }
 }
 
@@ -865,16 +856,6 @@ fun claimItem(
         }
     })
 }
-
-// function to load data, called when the activity is created
-fun loadData(
-    context: Context,
-    viewModel: ViewComparisonViewModel
-) {
-    // is loading initially
-    viewModel.isLoading.value = true
-}
-
 
 
 

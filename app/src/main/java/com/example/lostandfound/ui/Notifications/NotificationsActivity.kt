@@ -447,6 +447,11 @@ fun Items(
                                                             IntentExtraNames.INTENT_CLAIM_ITEM,
                                                             Claim()  // no claim data
                                                         )
+                                                        // and pass the score data
+                                                        intent.putExtra(
+                                                            IntentExtraNames.INTENT_SCORE_DATA,
+                                                            passedScoreData
+                                                        )
                                                         context.startActivity(intent)
                                                     }
                                                 }

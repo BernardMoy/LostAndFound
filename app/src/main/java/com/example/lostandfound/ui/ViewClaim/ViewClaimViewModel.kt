@@ -71,8 +71,6 @@ class ViewClaimViewModel : ViewModel() {
                                 }
 
                                 lostItemData = lostItem
-
-
                                 lostUser = lostItemData.user
 
                                 // load found data
@@ -86,9 +84,6 @@ class ViewClaimViewModel : ViewModel() {
                                             }
 
                                             foundItemData = foundItem
-
-
-
                                             foundUser = foundItem.user
 
                                             // callback with no errors
