@@ -21,7 +21,7 @@ public class FirebaseStorageManager {
     }
 
     public FirebaseStorageManager() {
-        storage = FirebaseStorage.getInstance("gs://lostandfound-d4afc"); // this must be the folder path
+        storage = FirebaseStorage.getInstance(); // this must be the folder path
         storageReference = storage.getReference();
     }
 
