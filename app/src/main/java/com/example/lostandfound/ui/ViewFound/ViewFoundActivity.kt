@@ -143,29 +143,20 @@ fun MainContent(viewModel: ViewFoundViewModel) {
     // boolean to determine if it is being rendered in preview
     val inPreview = LocalInspectionMode.current
 
-    LaunchedEffect(Unit) {
-        loadData(context, viewModel)
+    Column(
+        verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin))
+    ) {
+        Reference(viewModel = viewModel)
+        Status(viewModel = viewModel)
+        ItemImage(viewModel = viewModel)
+        ItemDetails(viewModel = viewModel)
+        LocationData(viewModel = viewModel)
+        UserData(context = context, viewModel = viewModel)
+        ActionButtons(context = context, inPreview = inPreview, viewModel = viewModel)
+
+        // also display the user
     }
-
-    // display content
-    if (!inPreview && viewModel.isLoading.value) {
-        CustomCenteredProgressbar()
-
-    } else {
-        Column(
-            verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin))
-        ) {
-            Reference(viewModel = viewModel)
-            Status(viewModel = viewModel)
-            ItemImage(viewModel = viewModel)
-            ItemDetails(viewModel = viewModel)
-            LocationData(viewModel = viewModel)
-            UserData(context = context, viewModel = viewModel)
-            ActionButtons(context = context, inPreview = inPreview, viewModel = viewModel)
-
-            // also display the user
-        }
-    }
+    
 }
 
 @Composable
@@ -541,16 +532,6 @@ fun ActionButtons(
         }
     }
 }
-
-// function to load data, called when the activity is created
-fun loadData(
-    context: Context,
-    viewModel: ViewFoundViewModel
-) {
-    // is loading initially
-    viewModel.isLoading.value = true
-}
-
 
 
 

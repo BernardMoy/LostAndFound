@@ -152,37 +152,29 @@ fun MainContent(viewModel: ViewLostViewModel) {
     // boolean to determine if it is being rendered in preview
     val inPreview = LocalInspectionMode.current
 
-    LaunchedEffect(Unit) {
-        loadData(context, viewModel)
-    }
 
-    // display content
-    if (!inPreview && viewModel.isLoading.value) {
-        CustomCenteredProgressbar()
-
-    } else {
-        Column(
-            verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin))
-        ) {
-            // show the track button only when the lost item user is the current user
-            if (viewModel.itemData.user.userID == FirebaseUtility.getUserID()) {
-                TrackButton(context = context, viewModel = viewModel)
-                Spacer(modifier = Modifier.width(dimensionResource(id = R.dimen.title_margin)))
-            }
-
-            Reference(viewModel = viewModel)
-            Status(viewModel = viewModel)
-            ItemImage(viewModel = viewModel)
-            ItemDetails(viewModel = viewModel)
-            LocationData(viewModel = viewModel)
-            UserData(context = context, viewModel = viewModel)
-
-            // if status = 0 or 1, display matching items
-            ActionButtons(context = context, inPreview = inPreview, viewModel = viewModel)
-
-            // also display the user
+    Column(
+        verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin))
+    ) {
+        // show the track button only when the lost item user is the current user
+        if (viewModel.itemData.user.userID == FirebaseUtility.getUserID()) {
+            TrackButton(context = context, viewModel = viewModel)
+            Spacer(modifier = Modifier.width(dimensionResource(id = R.dimen.title_margin)))
         }
+
+        Reference(viewModel = viewModel)
+        Status(viewModel = viewModel)
+        ItemImage(viewModel = viewModel)
+        ItemDetails(viewModel = viewModel)
+        LocationData(viewModel = viewModel)
+        UserData(context = context, viewModel = viewModel)
+
+        // if status = 0 or 1, display matching items
+        ActionButtons(context = context, inPreview = inPreview, viewModel = viewModel)
+
+        // also display the user
     }
+
 }
 
 @Composable
@@ -666,15 +658,6 @@ fun ActionButtons(
             }
         }
     }
-}
-
-// function to load data, called when the activity is created
-fun loadData(
-    context: Context,
-    viewModel: ViewLostViewModel
-) {
-    // is loading initially
-    viewModel.isLoading.value = true
 }
 
 

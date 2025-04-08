@@ -5,11 +5,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import com.example.lostandfound.Data.FirebaseNames
 import com.example.lostandfound.Data.LostItem
-import com.example.lostandfound.Data.User
 import com.example.lostandfound.FirebaseManagers.FirebaseUtility
 import com.example.lostandfound.FirebaseManagers.FirestoreManager
 import com.example.lostandfound.FirebaseManagers.ItemManager
-import com.example.lostandfound.FirebaseManagers.UserManager
 import com.example.lostandfound.Utility.DateTimeManager
 
 interface Callback<T> {
@@ -17,7 +15,6 @@ interface Callback<T> {
 }
 
 class ViewLostViewModel : ViewModel() {
-    val isLoading: MutableState<Boolean> = mutableStateOf(true)
     val isTrackUpdateLoading: MutableState<Boolean> = mutableStateOf(false)
     val isLocationDialogShown: MutableState<Boolean> = mutableStateOf(false)
     val isContactUserDialogShown: MutableState<Boolean> = mutableStateOf(false)

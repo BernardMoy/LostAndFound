@@ -16,7 +16,6 @@ interface Callback<T> {
 }
 
 class ViewFoundViewModel : ViewModel() {
-    val isLoading: MutableState<Boolean> = mutableStateOf(true)
     val isLocationDialogShown: MutableState<Boolean> = mutableStateOf(false)
     val isContactUserDialogShown: MutableState<Boolean> = mutableStateOf(false)
     val isDeleteDialogShown: MutableState<Boolean> = mutableStateOf(false)
