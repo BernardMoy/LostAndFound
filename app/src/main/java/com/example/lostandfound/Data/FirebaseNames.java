@@ -63,16 +63,31 @@ public final class FirebaseNames {
 
     // for chat system
     public static final String CHAT_SENDER_USER_ID = "sender_user_id";
+    public static final String CHAT_SENDER_USER_FIRST_NAME = "sender_first_name";
+    public static final String CHAT_SENDER_USER_LAST_NAME = "sender_last_name";
+    public static final String CHAT_SENDER_USER_AVATAR = "sender_avatar";
     public static final String CHAT_RECIPIENT_USER_ID = "recipient_user_id";
+    public static final String CHAT_RECIPIENT_USER_FIRST_NAME = "recipient_first_name";
+    public static final String CHAT_RECIPIENT_USER_LAST_NAME = "recipient_last_name";
+    public static final String CHAT_RECIPIENT_USER_AVATAR = "sender_avatar";
     public static final String CHAT_FROM_TO = "from_to";  // an array for storing [from user id, to user id]
     public static final String CHAT_CONTENT = "chat_content";
     public static final String CHAT_TIMESTAMP = "timestamp";
     public static final String CHAT_IS_READ_BY_RECIPIENT = "is_read_by_recipient";
 
     // for chat inbox whether the message is read or unread
-    public static final String CHAT_INBOX_PARTICIPANTS = "participants";  // sorted by alphabetical order
+    public static final String CHAT_INBOX_PARTICIPANT1_USER_ID = "participant1_user_id";
+    public static final String CHAT_INBOX_PARTICIPANT1_USER_AVATAR = "participant1_avatar";
+    public static final String CHAT_INBOX_PARTICIPANT1_USER_FIRST_NAME = "participant1_first_name";
+    public static final String CHAT_INBOX_PARTICIPANT1_USER_LAST_NAME = "participant1_last_name";
+    public static final String CHAT_INBOX_PARTICIPANT2_USER_ID = "participant2_user_id";
+    public static final String CHAT_INBOX_PARTICIPANT2_USER_AVATAR = "participant2_avatar";
+    public static final String CHAT_INBOX_PARTICIPANT2_USER_FIRST_NAME = "participant2_first_name";
+    public static final String CHAT_INBOX_PARTICIPANT2_USER_LAST_NAME = "participant2_last_name";
     public static final String CHAT_INBOX_LAST_MESSAGE_ID = "last_message_id";
-    public static final String CHAT_INBOX_UPDATED_TIMESTAMP = "updated_timestamp";
+    public static final String CHAT_INBOX_LAST_MESSAGE_CONTENT = "last_message_content";
+    public static final String CHAT_INBOX_LAST_MESSAGE_IS_READ = "last_message_is_read";
+    public static final String CHAT_INBOX_LAST_MESSAGE_TIMESTAMP = "last_message_timestamp";  // order by this
 
     // for notifications
     public static final String NOTIFICATION_ID = "notification_id";

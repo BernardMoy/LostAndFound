@@ -1,6 +1,7 @@
 package com.example.lostandfound.ui.ChatInbox
 
 import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
@@ -58,7 +59,9 @@ import com.example.lostandfound.CustomElements.CustomButton
 import com.example.lostandfound.CustomElements.CustomCenteredProgressbar
 import com.example.lostandfound.CustomElements.CustomChatCard
 import com.example.lostandfound.Data.IntentExtraNames
+import com.example.lostandfound.Data.SharedPreferencesNames
 import com.example.lostandfound.Data.User
+import com.example.lostandfound.FirebaseManagers.FirebaseUtility
 import com.example.lostandfound.PushNotificationManagers.PushNotificationCallback
 import com.example.lostandfound.PushNotificationManagers.PushNotificationManager
 import com.example.lostandfound.R
@@ -149,6 +152,16 @@ fun MainContent(viewModel: ChatInboxViewModel) {
     // boolean to determine if it is being rendered in preview
     val inPreview = LocalInspectionMode.current
 
+    // load the current user
+    val sp: SharedPreferences =
+        context.getSharedPreferences(SharedPreferencesNames.NAME_USERS, Context.MODE_PRIVATE)
+    viewModel.currentUser = User(
+        userID = FirebaseUtility.getUserID(),
+        avatar = sp.getString(SharedPreferencesNames.USER_AVATAR, "") ?: "",
+        firstName = sp.getString(SharedPreferencesNames.USER_FIRSTNAME, "") ?: "",
+        lastName = sp.getString(SharedPreferencesNames.USER_LASTNAME, "") ?: ""
+    )
+
 
     Column {
         Box(
@@ -204,7 +217,9 @@ fun UserData(
             style = Typography.bodyMedium,
             fontWeight = FontWeight.Bold,
             color = MaterialTheme.colorScheme.onBackground,
-            modifier = Modifier.weight(1f).testTag("RecipientName"),
+            modifier = Modifier
+                .weight(1f)
+                .testTag("RecipientName"),
             textAlign = TextAlign.Start,
         )
     }
@@ -372,7 +387,7 @@ fun SendBar(
                             userID = viewModel.chatUser.userID,
                             userName = "${viewModel.chatUser.firstName} ${viewModel.chatUser.lastName}",
                             message = typedTextCache,
-                            object : PushNotificationCallback{
+                            object : PushNotificationCallback {
                                 override fun onComplete(success: Boolean) {
                                     // do nothing
                                 }
