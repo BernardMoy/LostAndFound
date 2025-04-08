@@ -101,7 +101,8 @@ class ChatFragmentViewModel : ViewModel() {
                                 recipientUser = inboxRecipientUser,
                                 lastMessageContent = documentChange.document[FirebaseNames.CHAT_INBOX_LAST_MESSAGE_CONTENT].toString(),
                                 lastMessageTimestamp = documentChange.document[FirebaseNames.CHAT_INBOX_LAST_MESSAGE_TIMESTAMP] as Long,
-                                lastMessageIsRead = documentChange.document[FirebaseNames.CHAT_INBOX_LAST_MESSAGE_IS_READ] as Boolean
+                                lastMessageIsRead = documentChange.document[FirebaseNames.CHAT_INBOX_LAST_MESSAGE_IS_READ] as Boolean,
+                                lastMessageSenderUserID = documentChange.document[FirebaseNames.CHAT_INBOX_LAST_MESSAGE_SENDER_USER_ID] as String
                             )
 
                             // add to list

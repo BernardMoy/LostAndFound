@@ -6,5 +6,6 @@ data class ChatInboxPreview(
     // display data of the last message
     val lastMessageContent: String = "",
     val lastMessageIsRead: Boolean = false,
+    val lastMessageSenderUserID: String = "",
     val lastMessageTimestamp: Long = 0L // epoch time
 )

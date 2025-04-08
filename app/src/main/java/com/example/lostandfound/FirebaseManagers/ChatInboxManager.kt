@@ -20,6 +20,7 @@ object ChatInboxManager {
         lastMessageContent: String,
         lastMessageIsRead: Boolean,
         lastMessageTimestamp: Long,
+        lastMessageSenderUserID: String,
         callback: ChatInboxUpdateCallback
     ) {
 
@@ -51,7 +52,8 @@ object ChatInboxManager {
                         FirebaseNames.CHAT_INBOX_LAST_MESSAGE_ID to lastMessageID,
                         FirebaseNames.CHAT_INBOX_LAST_MESSAGE_CONTENT to lastMessageContent,
                         FirebaseNames.CHAT_INBOX_LAST_MESSAGE_IS_READ to lastMessageIsRead,
-                        FirebaseNames.CHAT_INBOX_LAST_MESSAGE_TIMESTAMP to lastMessageTimestamp
+                        FirebaseNames.CHAT_INBOX_LAST_MESSAGE_TIMESTAMP to lastMessageTimestamp,
+                        FirebaseNames.CHAT_INBOX_LAST_MESSAGE_SENDER_USER_ID to lastMessageSenderUserID
                     )
 
                     db.collection(FirebaseNames.COLLECTION_CHAT_INBOXES)
@@ -73,7 +75,8 @@ object ChatInboxManager {
                                 FirebaseNames.CHAT_INBOX_LAST_MESSAGE_ID to lastMessageID,
                                 FirebaseNames.CHAT_INBOX_LAST_MESSAGE_CONTENT to lastMessageContent,
                                 FirebaseNames.CHAT_INBOX_LAST_MESSAGE_IS_READ to lastMessageIsRead,
-                                FirebaseNames.CHAT_INBOX_LAST_MESSAGE_TIMESTAMP to lastMessageTimestamp
+                                FirebaseNames.CHAT_INBOX_LAST_MESSAGE_TIMESTAMP to lastMessageTimestamp,
+                                FirebaseNames.CHAT_INBOX_LAST_MESSAGE_SENDER_USER_ID to lastMessageSenderUserID
                             )
                         )
                             .addOnSuccessListener {

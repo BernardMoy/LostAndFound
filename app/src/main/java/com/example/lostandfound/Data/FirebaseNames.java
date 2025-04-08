@@ -87,6 +87,7 @@ public final class FirebaseNames {
     public static final String CHAT_INBOX_LAST_MESSAGE_ID = "last_message_id";
     public static final String CHAT_INBOX_LAST_MESSAGE_CONTENT = "last_message_content";
     public static final String CHAT_INBOX_LAST_MESSAGE_IS_READ = "last_message_is_read";
+    public static final String CHAT_INBOX_LAST_MESSAGE_SENDER_USER_ID = "last_message_sender_user_id"; // determine if show red dot
     public static final String CHAT_INBOX_LAST_MESSAGE_TIMESTAMP = "last_message_timestamp";  // order by this
 
     // for notifications

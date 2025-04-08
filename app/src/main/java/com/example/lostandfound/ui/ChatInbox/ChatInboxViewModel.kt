@@ -104,9 +104,6 @@ class ChatInboxViewModel : ViewModel() {
                         return
                     }
 
-                    // success, then reset the typed text
-                    typedText.value = ""
-
                     // update the chat inbox data
                     ChatInboxManager.updateChatInbox(
                         senderUser = currentUser,
@@ -115,8 +112,12 @@ class ChatInboxViewModel : ViewModel() {
                         lastMessageContent = typedText.value,
                         lastMessageIsRead = false,
                         lastMessageTimestamp = currentTime,
+                        lastMessageSenderUserID = currentUser.userID,
                         object : ChatInboxUpdateCallback {
                             override fun onComplete(result: Boolean) {
+                                // success, then reset the typed text
+                                typedText.value = ""
+
                                 callback.onComplete(result)
                             }
                         }
