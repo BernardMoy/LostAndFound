@@ -79,7 +79,9 @@ class ViewFoundUITest : FirebaseTestsSetUp() {
         dataFound0 = FoundItem(
             itemID = "3rdweerrwewre",
             user = User(
-                userID = userID ?: ""
+                userID = userID ?: "",
+                firstName = "testFirstName2",
+                lastName = "testLastName2"
             ),     // use the current user ID
             itemName = "TestItem",
             category = "TestCat",
@@ -98,7 +100,9 @@ class ViewFoundUITest : FirebaseTestsSetUp() {
         dataFound1 = FoundItem(
             itemID = "3rdweerrwewre1",
             user = User(
-                userID = userID ?: ""
+                userID = userID ?: "",
+                firstName = "testFirstName2",
+                lastName = "testLastName2"
             ),    // use the current user ID
             itemName = "TestItem",
             category = "TestCat",
@@ -117,7 +121,9 @@ class ViewFoundUITest : FirebaseTestsSetUp() {
         dataFound2 = FoundItem(
             itemID = "3rdweerrwewr2e",
             user = User(
-                userID = userID ?: ""
+                userID = userID ?: "",
+                firstName = "testFirstName2",
+                lastName = "testLastName2"
             ),     // use the current user ID
             itemName = "TestItem",
             category = "TestCat",
@@ -136,7 +142,9 @@ class ViewFoundUITest : FirebaseTestsSetUp() {
         dataFoundOtherUser = FoundItem(
             itemID = "3rdweerrwe3wre",
             user = User(
-                userID = userID2 ?: ""
+                userID = userID2,
+                firstName = "testFirstName3",
+                lastName = "testLastName3"
             ),     // use the current user ID
             itemName = "TestItem",
             category = "TestCat",

@@ -81,7 +81,9 @@ class ViewLostUITest : FirebaseTestsSetUp() {
         dataLost0 = LostItem(
             itemID = "2e9j8qijwqiie",
             user = User(
-                userID = userID ?: ""
+                userID = userID ?: "",
+                firstName = "testFirstName2",
+                lastName = "testLastName2"
             ),    // use the current user ID
             itemName = "TestItem",
             category = "TestCat",
@@ -100,7 +102,9 @@ class ViewLostUITest : FirebaseTestsSetUp() {
         dataLost1 = LostItem(
             itemID = "2e9j8qijwqiie5",
             user = User(
-                userID = userID ?: ""
+                userID = userID ?: "",
+                firstName = "testFirstName2",
+                lastName = "testLastName2"
             ),    // use the current user ID
             itemName = "TestItem",
             category = "TestCat",
@@ -118,7 +122,9 @@ class ViewLostUITest : FirebaseTestsSetUp() {
         dataLost2 = LostItem(
             itemID = "2e9j8qijwqiie3",
             user = User(
-                userID = userID ?: ""
+                userID = userID ?: "",
+                firstName = "testFirstName2",
+                lastName = "testLastName2"
             ),    // use the current user ID
             itemName = "TestItem",
             category = "TestCat",
@@ -136,7 +142,9 @@ class ViewLostUITest : FirebaseTestsSetUp() {
         dataLostOtherUser = LostItem(
             itemID = "2e9j8qijwqiie2",
             user = User(
-                userID = userID2
+                userID = userID2,
+                firstName = "testFirstName3",
+                lastName = "testLastName3"
             ),
             itemName = "TestItem",
             category = "TestCat",
