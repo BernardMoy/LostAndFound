@@ -5,6 +5,7 @@ import androidx.test.platform.app.InstrumentationRegistry
 import com.example.lostandfound.Data.FoundItem
 import com.example.lostandfound.Data.LostItem
 import com.example.lostandfound.Data.ScoreData
+import com.example.lostandfound.Data.User
 import com.example.lostandfound.MatchingFunctions.ScoreDataCallback
 import com.example.lostandfound.MatchingFunctions.getMatchingScores
 import junit.framework.TestCase.assertEquals
@@ -32,7 +33,9 @@ class MatchingFunctionTest {
 
         val dataLost = LostItem(
             itemID = "ABCDE",
-            userID = "TYUIO",
+            user= User(
+                userID = "TYUIO"
+            ),
             itemName = "test",
             category = "Electronics",
             subCategory = "Calculator",
@@ -48,7 +51,9 @@ class MatchingFunctionTest {
 
         val dataFound = FoundItem(
             itemID = "ABCDE",
-            userID = "TYUIO",
+            user = User(
+                userID = "TYUIO"
+            ),
             itemName = "test",
             category = "Electronics",
             subCategory = "Calculator",

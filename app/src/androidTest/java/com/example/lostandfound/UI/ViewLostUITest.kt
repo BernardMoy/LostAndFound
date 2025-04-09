@@ -13,8 +13,10 @@ import androidx.test.core.app.ApplicationProvider
 import com.example.lostandfound.Data.FirebaseNames
 import com.example.lostandfound.Data.IntentExtraNames
 import com.example.lostandfound.Data.LostItem
+import com.example.lostandfound.Data.User
 import com.example.lostandfound.Data.foundStatusText
 import com.example.lostandfound.FirebaseTestsSetUp
+import com.example.lostandfound.UI.ViewFoundUITest.Companion
 import com.example.lostandfound.ui.ViewLost.ViewLostActivity
 import com.google.android.gms.tasks.Tasks
 import com.google.firebase.auth.FirebaseAuth
@@ -78,7 +80,9 @@ class ViewLostUITest : FirebaseTestsSetUp() {
         // create item details
         dataLost0 = LostItem(
             itemID = "2e9j8qijwqiie",
-            userID = userID ?: "",    // use the current user ID
+            user = User(
+                userID = userID ?: ""
+            ),    // use the current user ID
             itemName = "TestItem",
             category = "TestCat",
             subCategory = "TestSubCat",
@@ -95,7 +99,9 @@ class ViewLostUITest : FirebaseTestsSetUp() {
         // also create lost item of status 1 and 2
         dataLost1 = LostItem(
             itemID = "2e9j8qijwqiie5",
-            userID = userID ?: "",    // use the current user ID
+            user = User(
+                userID = userID ?: ""
+            ),    // use the current user ID
             itemName = "TestItem",
             category = "TestCat",
             subCategory = "TestSubCat",
@@ -111,7 +117,9 @@ class ViewLostUITest : FirebaseTestsSetUp() {
 
         dataLost2 = LostItem(
             itemID = "2e9j8qijwqiie3",
-            userID = userID ?: "",    // use the current user ID
+            user = User(
+                userID = userID ?: ""
+            ),    // use the current user ID
             itemName = "TestItem",
             category = "TestCat",
             subCategory = "TestSubCat",
@@ -127,7 +135,9 @@ class ViewLostUITest : FirebaseTestsSetUp() {
 
         dataLostOtherUser = LostItem(
             itemID = "2e9j8qijwqiie2",
-            userID = userID2,    // use the current user ID
+            user = User(
+                userID = userID2
+            ),
             itemName = "TestItem",
             category = "TestCat",
             subCategory = "TestSubCat",

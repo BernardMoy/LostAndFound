@@ -13,6 +13,7 @@ import androidx.test.core.app.ApplicationProvider
 import com.example.lostandfound.Data.FirebaseNames
 import com.example.lostandfound.Data.FoundItem
 import com.example.lostandfound.Data.IntentExtraNames
+import com.example.lostandfound.Data.User
 import com.example.lostandfound.Data.foundStatusText
 import com.example.lostandfound.FirebaseTestsSetUp
 import com.example.lostandfound.ui.ViewFound.ViewFoundActivity
@@ -77,7 +78,9 @@ class ViewFoundUITest : FirebaseTestsSetUp() {
         // create item details
         dataFound0 = FoundItem(
             itemID = "3rdweerrwewre",
-            userID = userID ?: "",    // use the current user ID
+            user = User(
+                userID = userID ?: ""
+            ),     // use the current user ID
             itemName = "TestItem",
             category = "TestCat",
             subCategory = "TestSubCat",
@@ -94,7 +97,9 @@ class ViewFoundUITest : FirebaseTestsSetUp() {
 
         dataFound1 = FoundItem(
             itemID = "3rdweerrwewre1",
-            userID = userID ?: "",    // use the current user ID
+            user = User(
+                userID = userID ?: ""
+            ),    // use the current user ID
             itemName = "TestItem",
             category = "TestCat",
             subCategory = "TestSubCat",
@@ -111,7 +116,9 @@ class ViewFoundUITest : FirebaseTestsSetUp() {
 
         dataFound2 = FoundItem(
             itemID = "3rdweerrwewr2e",
-            userID = userID ?: "",    // use the current user ID
+            user = User(
+                userID = userID ?: ""
+            ),     // use the current user ID
             itemName = "TestItem",
             category = "TestCat",
             subCategory = "TestSubCat",
@@ -128,7 +135,9 @@ class ViewFoundUITest : FirebaseTestsSetUp() {
 
         dataFoundOtherUser = FoundItem(
             itemID = "3rdweerrwe3wre",
-            userID = userID2,    // use the current user ID
+            user = User(
+                userID = userID2 ?: ""
+            ),     // use the current user ID
             itemName = "TestItem",
             category = "TestCat",
             subCategory = "TestSubCat",

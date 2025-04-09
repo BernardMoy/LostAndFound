@@ -15,6 +15,7 @@ import com.example.lostandfound.Data.FoundItem
 import com.example.lostandfound.Data.IntentExtraNames
 import com.example.lostandfound.Data.LostItem
 import com.example.lostandfound.Data.ScoreData
+import com.example.lostandfound.Data.User
 import com.example.lostandfound.FirebaseTestsSetUp
 import com.example.lostandfound.ui.ViewComparison.ViewComparisonActivity
 import com.google.android.gms.maps.model.LatLng
@@ -86,7 +87,9 @@ class ViewComparisonActivityTest : FirebaseTestsSetUp() {
         // create item details
         dataLost = LostItem(
             itemID = "2e9j8qijwqiie",
-            userID = userID ?: "",    // use the current user ID
+            user = User(
+                userID= userID ?: ""
+            ),
             itemName = "TestItem",
             category = "TestCat",
             subCategory = "TestSubCat",
@@ -102,7 +105,9 @@ class ViewComparisonActivityTest : FirebaseTestsSetUp() {
         // post a very similar found item
         dataFound = FoundItem(
             itemID = "2e9j8erwrwrw",
-            userID = "duwindwmw",    // different uid
+            user = User(
+                userID="jnwwwww"
+            ),
             itemName = "TestItem",
             category = "TestCat",
             subCategory = "TestSubCat",

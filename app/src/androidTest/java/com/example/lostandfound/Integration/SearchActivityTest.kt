@@ -8,6 +8,7 @@ import androidx.test.core.app.ApplicationProvider
 import com.example.lostandfound.Data.FirebaseNames
 import com.example.lostandfound.Data.IntentExtraNames
 import com.example.lostandfound.Data.LostItem
+import com.example.lostandfound.Data.User
 import com.example.lostandfound.FirebaseTestsSetUp
 import com.example.lostandfound.ui.Search.SearchActivity
 import com.google.android.gms.maps.model.LatLng
@@ -68,7 +69,9 @@ class SearchActivityTest : FirebaseTestsSetUp() {
         // create item details
         dataLost = LostItem(
             itemID = "2e9j8qijwqiie",
-            userID = userID ?: "",    // use the current user ID
+            user = User(
+                userID =  userID ?: "",    // use the current user ID
+            ),
             itemName = "TestItem",
             category = "TestCat",
             subCategory = "TestSubCat",

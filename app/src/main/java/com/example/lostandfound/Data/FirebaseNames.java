@@ -58,8 +58,13 @@ public final class FirebaseNames {
     public static final String FOLDER_FOUND_IMAGE = "found_images";
 
     // for reporting issues
-    public static final String REPORT_ISSUE_USER = "user";
+    public static final String REPORT_ISSUE_USER = "user_id";
     public static final String REPORT_ISSUE_DESC = "description";
+
+    // for reporting users
+    public static final String REPORT_USER_FROM = "user_from_id";
+    public static final String REPORT_USER_TO = "user_to_id";
+    public static final String REPORT_USER_DESC = "description";
 
     // for chat system
     public static final String CHAT_SENDER_USER_ID = "sender_user_id";
@@ -69,7 +74,7 @@ public final class FirebaseNames {
     public static final String CHAT_RECIPIENT_USER_ID = "recipient_user_id";
     public static final String CHAT_RECIPIENT_USER_FIRST_NAME = "recipient_first_name";
     public static final String CHAT_RECIPIENT_USER_LAST_NAME = "recipient_last_name";
-    public static final String CHAT_RECIPIENT_USER_AVATAR = "sender_avatar";
+    public static final String CHAT_RECIPIENT_USER_AVATAR = "recipient_avatar";
     public static final String CHAT_FROM_TO = "from_to";  // an array for storing [from user id, to user id]
     public static final String CHAT_CONTENT = "chat_content";
     public static final String CHAT_TIMESTAMP = "timestamp";

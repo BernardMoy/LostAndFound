@@ -11,6 +11,7 @@ import com.example.lostandfound.Data.FoundItem
 import com.example.lostandfound.Data.IntentExtraNames
 import com.example.lostandfound.Data.LostItem
 import com.example.lostandfound.Data.ScoreData
+import com.example.lostandfound.Data.User
 import com.example.lostandfound.FirebaseTestsSetUp
 import com.example.lostandfound.ui.ViewComparison.ViewComparisonActivity
 import com.google.android.gms.tasks.Tasks
@@ -100,7 +101,9 @@ class ViewComparisonUITest : FirebaseTestsSetUp() {
         // the first case 0
         dataLost0 = LostItem(
             itemID = "2e9j8qirereerjwqiie",
-            userID = userID ?: "",    // use the current user ID
+            user = User(
+                userID = userID ?: ""
+            ),    // use the current user ID
             itemName = "TestItem",
             category = "TestCat",
             subCategory = "TestSubCat",
@@ -116,7 +119,9 @@ class ViewComparisonUITest : FirebaseTestsSetUp() {
 
         dataFound0 = FoundItem(
             itemID = "3rdweereerrerwewre",
-            userID = userID ?: "",    // use the current user ID
+            user = User(
+                userID = userID ?: ""
+            ),    // use the current user ID
             itemName = "TestItem",
             category = "TestCat",
             subCategory = "TestSubCat",
@@ -137,7 +142,9 @@ class ViewComparisonUITest : FirebaseTestsSetUp() {
         // second case 1
         dataLost1 = LostItem(
             itemID = "2e9j8qijwqiie",
-            userID = userID ?: "",    // use the current user ID
+            user = User(
+                userID = userID ?: ""
+            ),    // use the current user ID
             itemName = "TestItem",
             category = "TestCat",
             subCategory = "TestSubCat",
@@ -153,7 +160,9 @@ class ViewComparisonUITest : FirebaseTestsSetUp() {
 
         dataFound1 = FoundItem(
             itemID = "3rdweerrwewre",
-            userID = userID ?: "",    // use the current user ID
+            user = User(
+                userID = userID ?: ""
+            ),    // use the current user ID
             itemName = "TestItem",
             category = "TestCat",
             subCategory = "TestSubCat",
@@ -181,7 +190,9 @@ class ViewComparisonUITest : FirebaseTestsSetUp() {
         // second case 2
         dataLost2 = LostItem(
             itemID = "2e9j8qijsddasddaswqiie",
-            userID = userID ?: "",    // use the current user ID
+            user = User(
+                userID = userID ?: ""
+            ),    // use the current user ID
             itemName = "TestItem",
             category = "TestCat",
             subCategory = "TestSubCat",
@@ -197,7 +208,9 @@ class ViewComparisonUITest : FirebaseTestsSetUp() {
 
         dataFound2 = FoundItem(
             itemID = "3rdwadadsdadsadseerrwewre",
-            userID = userID ?: "",    // use the current user ID
+            user = User(
+                userID = userID ?: ""
+            ),    // use the current user ID
             itemName = "TestItem",
             category = "TestCat",
             subCategory = "TestSubCat",
@@ -225,7 +238,9 @@ class ViewComparisonUITest : FirebaseTestsSetUp() {
         // the last case 3
         dataLost3 = LostItem(
             itemID = "2e9qiie",
-            userID = userID2,    // use the current user ID
+            user = User(
+                userID = userID2
+            ),    // use the current user ID
             itemName = "TestItem",
             category = "TestCat",
             subCategory = "TestSubCat",
@@ -241,7 +256,9 @@ class ViewComparisonUITest : FirebaseTestsSetUp() {
 
         dataFound3 = FoundItem(
             itemID = "3rdweereerrerwewre",
-            userID = userID ?: "",    // use the current user ID
+            user = User(
+                userID = userID ?: ""
+            ),    // use the current user ID
             itemName = "TestItem",
             category = "TestCat",
             subCategory = "TestSubCat",
@@ -341,7 +358,8 @@ class ViewComparisonUITest : FirebaseTestsSetUp() {
 
         composeTestRule.onNodeWithText("Claim this Item").assertExists()
         composeTestRule.onNodeWithText("You have already claimed this item.").assertDoesNotExist()
-        composeTestRule.onNodeWithText("You cannot claim this item as you have already claimed another item.").assertDoesNotExist()
+        composeTestRule.onNodeWithText("You cannot claim this item as you have already claimed another item.")
+            .assertDoesNotExist()
     }
 
 
@@ -395,7 +413,8 @@ class ViewComparisonUITest : FirebaseTestsSetUp() {
 
         composeTestRule.onNodeWithText("Claim this Item").assertDoesNotExist()
         composeTestRule.onNodeWithText("You have already claimed this item.").assertExists()
-        composeTestRule.onNodeWithText("You cannot claim this item as you have already claimed another item.").assertDoesNotExist()
+        composeTestRule.onNodeWithText("You cannot claim this item as you have already claimed another item.")
+            .assertDoesNotExist()
     }
 
 
@@ -448,7 +467,8 @@ class ViewComparisonUITest : FirebaseTestsSetUp() {
         // assert the message of already claimed appears
         composeTestRule.onNodeWithText("Claim this Item").assertDoesNotExist()
         composeTestRule.onNodeWithText("You have already claimed this item.").assertDoesNotExist()
-        composeTestRule.onNodeWithText("You cannot claim this item as you have already claimed another item.").assertExists()
+        composeTestRule.onNodeWithText("You cannot claim this item as you have already claimed another item.")
+            .assertExists()
     }
 
     @Test
@@ -500,9 +520,9 @@ class ViewComparisonUITest : FirebaseTestsSetUp() {
         // assert the message of already claimed appears
         composeTestRule.onNodeWithText("Claim this Item").assertDoesNotExist()
         composeTestRule.onNodeWithText("You have already claimed this item.").assertDoesNotExist()
-        composeTestRule.onNodeWithText("You cannot claim this item as you have already claimed another item.").assertDoesNotExist()
+        composeTestRule.onNodeWithText("You cannot claim this item as you have already claimed another item.")
+            .assertDoesNotExist()
     }
-
 
 
     @After

@@ -300,7 +300,7 @@ class ItemManagerTest : FirebaseTestsSetUp() {
         // assert each SPECIFIED attribute is correct
         // the inferred attributes (status etc.) are tested separately
         assertEquals("test", target?.itemName)
-        assertEquals("Rwowo", target?.userID)
+        assertEquals("Rwowo", target?.user?.userID)
         assertEquals("testCat", target?.category)
         assertEquals("testSubCat", target?.subCategory)
         assertEquals(mutableListOf("Black", "Red"), target?.color)
@@ -334,7 +334,7 @@ class ItemManagerTest : FirebaseTestsSetUp() {
         // assert each SPECIFIED attribute is correct
         // the inferred attributes (status etc.) are tested separately
         assertEquals("test", target?.itemName)
-        assertEquals("Rwowo", target?.userID)
+        assertEquals("Rwowo", target?.user?.userID)
         assertEquals("testCat", target?.category)
         assertEquals("testSubCat", target?.subCategory)
         assertEquals(mutableListOf("Black", "Red"), target?.color)
