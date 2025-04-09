@@ -293,10 +293,10 @@ public class FirebaseCloudFunctionsTest extends FirebaseTestsSetUp {
 
     @Test
     public void testLostItemOnUserUpdated() throws ExecutionException, InterruptedException, TimeoutException {
-
         // create a user
         Map<String, Object> dataUser = new HashMap<>();
         dataUser.put(FirebaseNames.USERS_FIRSTNAME, "test");
+        dataUser.put(FirebaseNames.USERS_LASTNAME, "testL");
 
         // The Task class allows async operations to block execution
         Task<DocumentReference> task1 = firestore.collection(FirebaseNames.COLLECTION_USERS).add(dataUser);
@@ -308,6 +308,7 @@ public class FirebaseCloudFunctionsTest extends FirebaseTestsSetUp {
         Map<String, Object> dataLost = new HashMap<>();
         dataLost.put(FirebaseNames.LOSTFOUND_USER, uidUser);
         dataLost.put(FirebaseNames.USERS_FIRSTNAME, "test");
+        dataLost.put(FirebaseNames.USERS_LASTNAME, "testL");
         Task<DocumentReference> task2 = firestore.collection(FirebaseNames.COLLECTION_LOST_ITEMS).add(dataLost);
         DocumentReference lostRef = Tasks.await(task2, 60, TimeUnit.SECONDS);
         Thread.sleep(2000);
@@ -315,7 +316,8 @@ public class FirebaseCloudFunctionsTest extends FirebaseTestsSetUp {
 
         // update the user data
         Task<Void> task3 = firestore.collection(FirebaseNames.COLLECTION_USERS).document(uidUser).update(Map.of(
-                FirebaseNames.USERS_FIRSTNAME, "test2"
+                FirebaseNames.USERS_FIRSTNAME, "test2",
+                FirebaseNames.USERS_LASTNAME, "testl2"
         ));
         Tasks.await(task3, 60, TimeUnit.SECONDS);
         Thread.sleep(2000);
@@ -323,10 +325,12 @@ public class FirebaseCloudFunctionsTest extends FirebaseTestsSetUp {
         // assert that the lost item has new data
         Task<DocumentSnapshot> task4 = firestore.collection(FirebaseNames.COLLECTION_LOST_ITEMS).document(uidLost).get();
         DocumentSnapshot snapshot = Tasks.await(task4, 60, TimeUnit.SECONDS);
-        String newName = snapshot.getString(FirebaseNames.USERS_FIRSTNAME);
+        String newFirstName = snapshot.getString(FirebaseNames.USERS_FIRSTNAME);
+        String newLastName = snapshot.getString(FirebaseNames.USERS_LASTNAME);
         Thread.sleep(2000);
 
-        assert Objects.equals(newName, "test2");
+        assert Objects.equals(newFirstName, "test2");
+        assert Objects.equals(newLastName, "testl2");
     }
 
 
