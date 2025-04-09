@@ -383,7 +383,7 @@ public class FirebaseCloudFunctionsTest extends FirebaseTestsSetUp {
         Tasks.await(task3, 60, TimeUnit.SECONDS);
         Thread.sleep(2000);
 
-        // assert that the lost item has new data
+        // assert that the chat item has new data
         Task<DocumentSnapshot> task4 = firestore.collection(FirebaseNames.COLLECTION_CHATS).document(uidChat).get();
         DocumentSnapshot snapshot = Tasks.await(task4, 60, TimeUnit.SECONDS);
         String newFirstNameL = snapshot.getString(FirebaseNames.CHAT_SENDER_USER_FIRST_NAME);
@@ -425,7 +425,7 @@ public class FirebaseCloudFunctionsTest extends FirebaseTestsSetUp {
         Tasks.await(task3, 60, TimeUnit.SECONDS);
         Thread.sleep(2000);
 
-        // assert that the lost item has new data
+        // assert that the chat inbox item has new data
         Task<DocumentSnapshot> task4 = firestore.collection(FirebaseNames.COLLECTION_CHAT_INBOXES).document(uidChat).get();
         DocumentSnapshot snapshot = Tasks.await(task4, 60, TimeUnit.SECONDS);
         String newFirstNameL = snapshot.getString(FirebaseNames.CHAT_INBOX_PARTICIPANT1_USER_FIRST_NAME);
@@ -435,6 +435,43 @@ public class FirebaseCloudFunctionsTest extends FirebaseTestsSetUp {
         Assert.assertEquals("test2", newFirstNameL );
         Assert.assertEquals("testl2", newLastNameL );
     }
+
+    @Test
+    public void testChatInboxesUpdatedOnChatUpdated() throws ExecutionException, InterruptedException, TimeoutException {
+        // create a chat
+        Map<String, Object> dataChat = new HashMap<>();
+        dataChat.put(FirebaseNames.CHAT_IS_READ_BY_RECIPIENT, false);
+
+        Task<DocumentReference> task1 = firestore.collection(FirebaseNames.COLLECTION_CHATS).add(dataChat);
+        DocumentReference chatItemRef = Tasks.await(task1, 60, TimeUnit.SECONDS);
+        Thread.sleep(2000);
+        String uidChat = chatItemRef.getId();
+
+        // create a chat inbox with is read set to false
+        Map<String, Object> dataChatInbox = new HashMap<>();
+        dataChatInbox.put(FirebaseNames.CHAT_INBOX_LAST_MESSAGE_ID, uidChat);
+        dataChatInbox.put(FirebaseNames.CHAT_INBOX_LAST_MESSAGE_IS_READ, false);
+        Task<DocumentReference> task2 = firestore.collection(FirebaseNames.COLLECTION_CHAT_INBOXES).add(dataChatInbox);
+        DocumentReference chatInboxRef = Tasks.await(task2, 60, TimeUnit.SECONDS);
+        Thread.sleep(2000);
+        String uidChatInbox = chatInboxRef.getId();
+
+        // update the chat data
+        Task<Void> task3 = firestore.collection(FirebaseNames.COLLECTION_CHATS).document(uidChat).update(Map.of(
+                FirebaseNames.CHAT_IS_READ_BY_RECIPIENT, true
+        ));
+        Tasks.await(task3, 60, TimeUnit.SECONDS);
+        Thread.sleep(2000);
+
+        // assert that the chat inbox have its last read also marked to true
+        Task<DocumentSnapshot> task4 = firestore.collection(FirebaseNames.COLLECTION_CHAT_INBOXES).document(uidChatInbox).get();
+        DocumentSnapshot snapshot = Tasks.await(task4, 60, TimeUnit.SECONDS);
+        Boolean isRead = snapshot.getBoolean(FirebaseNames.CHAT_INBOX_LAST_MESSAGE_IS_READ);
+        Thread.sleep(2000);
+
+        Assert.assertTrue(isRead);
+    }
+
 
 
     @After
