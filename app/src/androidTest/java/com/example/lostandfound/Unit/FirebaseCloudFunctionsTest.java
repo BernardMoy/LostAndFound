@@ -352,6 +352,90 @@ public class FirebaseCloudFunctionsTest extends FirebaseTestsSetUp {
         Assert.assertEquals("testl2", newLastNameF );
     }
 
+    @Test
+    public void testChatsUpdatedOnUserUpdated() throws ExecutionException, InterruptedException, TimeoutException {
+        // create a user
+        Map<String, Object> dataUser = new HashMap<>();
+        dataUser.put(FirebaseNames.USERS_FIRSTNAME, "test");
+        dataUser.put(FirebaseNames.USERS_LASTNAME, "testL");
+
+        // The Task class allows async operations to block execution
+        Task<DocumentReference> task1 = firestore.collection(FirebaseNames.COLLECTION_USERS).add(dataUser);
+        DocumentReference userItemRef = Tasks.await(task1, 60, TimeUnit.SECONDS);
+        Thread.sleep(2000);
+        String uidUser = userItemRef.getId();
+
+        // create a chat with sender user name
+        Map<String, Object> dataChat = new HashMap<>();
+        dataChat.put(FirebaseNames.CHAT_SENDER_USER_ID, uidUser);
+        dataChat.put(FirebaseNames.CHAT_SENDER_USER_FIRST_NAME, "test");
+        dataChat.put(FirebaseNames.CHAT_SENDER_USER_LAST_NAME, "testL");
+        Task<DocumentReference> task2 = firestore.collection(FirebaseNames.COLLECTION_CHATS).add(dataChat);
+        DocumentReference chatRef = Tasks.await(task2, 60, TimeUnit.SECONDS);
+        Thread.sleep(2000);
+        String uidChat = chatRef.getId();
+
+        // update the user data
+        Task<Void> task3 = firestore.collection(FirebaseNames.COLLECTION_USERS).document(uidUser).update(Map.of(
+                FirebaseNames.USERS_FIRSTNAME, "test2",
+                FirebaseNames.USERS_LASTNAME, "testl2"
+        ));
+        Tasks.await(task3, 60, TimeUnit.SECONDS);
+        Thread.sleep(2000);
+
+        // assert that the lost item has new data
+        Task<DocumentSnapshot> task4 = firestore.collection(FirebaseNames.COLLECTION_CHATS).document(uidChat).get();
+        DocumentSnapshot snapshot = Tasks.await(task4, 60, TimeUnit.SECONDS);
+        String newFirstNameL = snapshot.getString(FirebaseNames.CHAT_SENDER_USER_FIRST_NAME);
+        String newLastNameL = snapshot.getString(FirebaseNames.CHAT_SENDER_USER_LAST_NAME);
+        Thread.sleep(2000);
+
+        Assert.assertEquals("test2", newFirstNameL );
+        Assert.assertEquals("testl2", newLastNameL );
+    }
+
+    @Test
+    public void testChatInboxesUpdatedOnUserUpdated() throws ExecutionException, InterruptedException, TimeoutException {
+        // create a user
+        Map<String, Object> dataUser = new HashMap<>();
+        dataUser.put(FirebaseNames.USERS_FIRSTNAME, "test");
+        dataUser.put(FirebaseNames.USERS_LASTNAME, "testL");
+
+        // The Task class allows async operations to block execution
+        Task<DocumentReference> task1 = firestore.collection(FirebaseNames.COLLECTION_USERS).add(dataUser);
+        DocumentReference userItemRef = Tasks.await(task1, 60, TimeUnit.SECONDS);
+        Thread.sleep(2000);
+        String uidUser = userItemRef.getId();
+
+        // create a chat inbox with participant 1 user name
+        Map<String, Object> dataChat = new HashMap<>();
+        dataChat.put(FirebaseNames.CHAT_INBOX_PARTICIPANT1_USER_ID, uidUser);
+        dataChat.put(FirebaseNames.CHAT_INBOX_PARTICIPANT1_USER_FIRST_NAME, "test");
+        dataChat.put(FirebaseNames.CHAT_INBOX_PARTICIPANT1_USER_LAST_NAME, "testL");
+        Task<DocumentReference> task2 = firestore.collection(FirebaseNames.COLLECTION_CHAT_INBOXES).add(dataChat);
+        DocumentReference chatRef = Tasks.await(task2, 60, TimeUnit.SECONDS);
+        Thread.sleep(2000);
+        String uidChat = chatRef.getId();
+
+        // update the user data
+        Task<Void> task3 = firestore.collection(FirebaseNames.COLLECTION_USERS).document(uidUser).update(Map.of(
+                FirebaseNames.USERS_FIRSTNAME, "test2",
+                FirebaseNames.USERS_LASTNAME, "testl2"
+        ));
+        Tasks.await(task3, 60, TimeUnit.SECONDS);
+        Thread.sleep(2000);
+
+        // assert that the lost item has new data
+        Task<DocumentSnapshot> task4 = firestore.collection(FirebaseNames.COLLECTION_CHAT_INBOXES).document(uidChat).get();
+        DocumentSnapshot snapshot = Tasks.await(task4, 60, TimeUnit.SECONDS);
+        String newFirstNameL = snapshot.getString(FirebaseNames.CHAT_INBOX_PARTICIPANT1_USER_FIRST_NAME);
+        String newLastNameL = snapshot.getString(FirebaseNames.CHAT_INBOX_PARTICIPANT1_USER_LAST_NAME);
+        Thread.sleep(2000);
+
+        Assert.assertEquals("test2", newFirstNameL );
+        Assert.assertEquals("testl2", newLastNameL );
+    }
+
 
     @After
     public void tearDown() throws ExecutionException, InterruptedException, TimeoutException {
