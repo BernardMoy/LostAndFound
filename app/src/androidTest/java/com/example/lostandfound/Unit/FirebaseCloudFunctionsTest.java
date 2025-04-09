@@ -292,7 +292,7 @@ public class FirebaseCloudFunctionsTest extends FirebaseTestsSetUp {
     }
 
     @Test
-    public void testLostItemOnUserUpdated() throws ExecutionException, InterruptedException, TimeoutException {
+    public void testItemsOnUserUpdated() throws ExecutionException, InterruptedException, TimeoutException {
         // create a user
         Map<String, Object> dataUser = new HashMap<>();
         dataUser.put(FirebaseNames.USERS_FIRSTNAME, "test");
@@ -314,6 +314,16 @@ public class FirebaseCloudFunctionsTest extends FirebaseTestsSetUp {
         Thread.sleep(2000);
         String uidLost = lostRef.getId();
 
+        // create a found item also with the user name
+        Map<String, Object> dataFound = new HashMap<>();
+        dataFound.put(FirebaseNames.LOSTFOUND_USER, uidUser);
+        dataFound.put(FirebaseNames.USERS_FIRSTNAME, "test");
+        dataFound.put(FirebaseNames.USERS_LASTNAME, "testL");
+        Task<DocumentReference> task5 = firestore.collection(FirebaseNames.COLLECTION_FOUND_ITEMS).add(dataFound);
+        DocumentReference foundRef = Tasks.await(task5, 60, TimeUnit.SECONDS);
+        Thread.sleep(2000);
+        String uidFound = foundRef.getId();
+
         // update the user data
         Task<Void> task3 = firestore.collection(FirebaseNames.COLLECTION_USERS).document(uidUser).update(Map.of(
                 FirebaseNames.USERS_FIRSTNAME, "test2",
@@ -325,12 +335,21 @@ public class FirebaseCloudFunctionsTest extends FirebaseTestsSetUp {
         // assert that the lost item has new data
         Task<DocumentSnapshot> task4 = firestore.collection(FirebaseNames.COLLECTION_LOST_ITEMS).document(uidLost).get();
         DocumentSnapshot snapshot = Tasks.await(task4, 60, TimeUnit.SECONDS);
-        String newFirstName = snapshot.getString(FirebaseNames.USERS_FIRSTNAME);
-        String newLastName = snapshot.getString(FirebaseNames.USERS_LASTNAME);
+        String newFirstNameL = snapshot.getString(FirebaseNames.USERS_FIRSTNAME);
+        String newLastNameL = snapshot.getString(FirebaseNames.USERS_LASTNAME);
         Thread.sleep(2000);
 
-        assert Objects.equals(newFirstName, "test2");
-        assert Objects.equals(newLastName, "testl2");
+        // assert that the found item has new data
+        Task<DocumentSnapshot> task6 = firestore.collection(FirebaseNames.COLLECTION_FOUND_ITEMS).document(uidFound).get();
+        DocumentSnapshot snapshot2 = Tasks.await(task6, 60, TimeUnit.SECONDS);
+        String newFirstNameF = snapshot2.getString(FirebaseNames.USERS_FIRSTNAME);
+        String newLastNameF = snapshot2.getString(FirebaseNames.USERS_LASTNAME);
+        Thread.sleep(2000);
+
+        Assert.assertEquals("test2", newFirstNameL );
+        Assert.assertEquals("testl2", newLastNameL );
+        Assert.assertEquals("test2", newFirstNameF );
+        Assert.assertEquals("testl2", newLastNameF );
     }
 
 
