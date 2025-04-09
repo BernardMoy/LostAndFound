@@ -127,9 +127,10 @@ dependencies {
 
     implementation ("com.github.bumptech.glide:compose:1.0.0-beta01")
 
-    implementation("com.google.maps.android:maps-compose:6.2.1")
-    implementation("com.google.maps.android:maps-compose-utils:6.2.1")
-    implementation("com.google.maps.android:maps-compose-widgets:6.2.1")
+    implementation("com.google.android.gms:play-services-maps:19.0.0")
+    implementation("com.google.maps.android:maps-compose:6.4.1")
+    implementation("com.google.maps.android:maps-compose-utils:6.4.1")
+    implementation("com.google.maps.android:maps-compose-widgets:6.4.1")
     implementation ("com.google.android.gms:play-services-location:21.3.0")
 
     implementation ("org.tensorflow:tensorflow-lite:2.12.0")
