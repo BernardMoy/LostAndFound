@@ -27,6 +27,7 @@ import java.io.OutputStream;
 import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
@@ -290,6 +291,45 @@ public class FirebaseCloudFunctionsTest extends FirebaseTestsSetUp {
         assert e != null;
     }
 
+    @Test
+    public void testLostItemOnUserUpdated() throws ExecutionException, InterruptedException, TimeoutException {
+
+        // create a user
+        Map<String, Object> dataUser = new HashMap<>();
+        dataUser.put(FirebaseNames.USERS_FIRSTNAME, "test");
+
+        // The Task class allows async operations to block execution
+        Task<DocumentReference> task1 = firestore.collection(FirebaseNames.COLLECTION_USERS).add(dataUser);
+        DocumentReference userItemRef = Tasks.await(task1, 60, TimeUnit.SECONDS);
+        Thread.sleep(2000);
+        String uidUser = userItemRef.getId();
+
+        // create a lost item with the user name
+        Map<String, Object> dataLost = new HashMap<>();
+        dataLost.put(FirebaseNames.LOSTFOUND_USER, uidUser);
+        dataLost.put(FirebaseNames.USERS_FIRSTNAME, "test");
+        Task<DocumentReference> task2 = firestore.collection(FirebaseNames.COLLECTION_LOST_ITEMS).add(dataLost);
+        DocumentReference lostRef = Tasks.await(task2, 60, TimeUnit.SECONDS);
+        Thread.sleep(2000);
+        String uidLost = lostRef.getId();
+
+        // update the user data
+        Task<Void> task3 = firestore.collection(FirebaseNames.COLLECTION_USERS).document(uidUser).update(Map.of(
+                FirebaseNames.USERS_FIRSTNAME, "test2"
+        ));
+        Tasks.await(task3, 60, TimeUnit.SECONDS);
+        Thread.sleep(2000);
+
+        // assert that the lost item has new data
+        Task<DocumentSnapshot> task4 = firestore.collection(FirebaseNames.COLLECTION_LOST_ITEMS).document(uidLost).get();
+        DocumentSnapshot snapshot = Tasks.await(task4, 60, TimeUnit.SECONDS);
+        String newName = snapshot.getString(FirebaseNames.USERS_FIRSTNAME);
+        Thread.sleep(2000);
+
+        assert Objects.equals(newName, "test2");
+    }
+
+
     @After
     public void tearDown() throws ExecutionException, InterruptedException, TimeoutException {
         // clear all data
@@ -298,6 +338,8 @@ public class FirebaseCloudFunctionsTest extends FirebaseTestsSetUp {
         deleteCollection(FirebaseNames.COLLECTION_FOUND_ITEMS);
         deleteCollection(FirebaseNames.COLLECTION_NOTIFICATIONS);
         deleteCollection(FirebaseNames.COLLECTION_USERS);
+        deleteCollection(FirebaseNames.COLLECTION_CHATS);
+        deleteCollection(FirebaseNames.COLLECTION_CHAT_INBOXES);
         Thread.sleep(2000);
     }
 }
