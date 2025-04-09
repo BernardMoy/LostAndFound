@@ -13,16 +13,19 @@
         </DropdownSelection>
         <DialogSelection />
       </SelectionState>
-      <SelectionState runConfigName="testImageOnLostItemDeleted()">
+      <SelectionState runConfigName="SearchActivityTest">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="GoogleMapsUITest">
+      <SelectionState runConfigName="VerifyEmailActivityTest">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="FirebaseStorageManagerTest">
+      <SelectionState runConfigName="ViewClaimActivityTest">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="ChatInboxActivityTest">
+      <SelectionState runConfigName="ViewComparisonActivityTest">
+        <option name="selectionMode" value="DROPDOWN" />
+      </SelectionState>
+      <SelectionState runConfigName="Tests in 'com.example.lostandfound.UI'">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
     </selectionStates>

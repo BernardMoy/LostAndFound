@@ -232,7 +232,7 @@ class NotificationType3Test : FirebaseTestsSetUp() {
         // assert a notification entry exist in the database
         val latch = CountDownLatch(1)
         firestore!!.collection(FirebaseNames.COLLECTION_NOTIFICATIONS)
-            .whereEqualTo(FirebaseNames.NOTIFICATION_USER_ID, "duwindwmw")
+            .whereEqualTo(FirebaseNames.NOTIFICATION_USER_ID, "aakkaka")
             .whereEqualTo(FirebaseNames.NOTIFICATION_TYPE, 3)
             .whereNotEqualTo(FirebaseNames.NOTIFICATION_CLAIM_ID, null)
             .get()
