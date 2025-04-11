@@ -59,7 +59,6 @@ import com.example.lostandfound.CustomElements.ButtonType
 import com.example.lostandfound.CustomElements.CustomButton
 import com.example.lostandfound.CustomElements.CustomCenteredProgressbar
 import com.example.lostandfound.CustomElements.CustomChatCard
-import com.example.lostandfound.CustomElements.CustomInputDialog
 import com.example.lostandfound.CustomElements.CustomReportUserDialog
 import com.example.lostandfound.Data.IntentExtraNames
 import com.example.lostandfound.Data.SharedPreferencesNames
@@ -250,8 +249,31 @@ fun UserData(
             inputText = viewModel.reportUserInputText,
             isDialogShown = viewModel.isReportUserDialogShown,
             errorMessage = viewModel.reportUserErrorMessage,
-            onConfirmButtonClicked = {},
-            onDismissButtonClicked = {}
+            onConfirmButtonClicked = {
+                // first check if the description is not empty
+                if (viewModel.reportUserInputText.value.isEmpty()) {
+                    viewModel.reportUserErrorMessage.value = "Description cannot be empty"
+                    return@CustomReportUserDialog
+                }
+
+                // reset error
+                viewModel.reportUserErrorMessage.value = ""
+
+                // upload the report issue to db
+                viewModel.reportUser(object : ReportUserCallback {
+                    override fun onComplete(result: Boolean) {
+
+
+                        // close dialog
+                        viewModel.isReportUserDialogShown.value = false
+                    }
+
+                })
+
+            },
+            onDismissButtonClicked = {
+                viewModel.isReportUserDialogShown.value = false
+            }
         )
 
 

@@ -28,6 +28,10 @@ interface FetchMessageCallback {
     fun onComplete(result: Boolean)
 }
 
+interface ReportUserCallback {
+    fun onComplete(result: Boolean)
+}
+
 class ChatInboxViewModel : ViewModel() {
     // only store the user that the current user is chatting with, because the second user must be the current user
     // loaded on create
@@ -199,6 +203,11 @@ class ChatInboxViewModel : ViewModel() {
                 // return true
                 callback.onComplete(true)
             }
+    }
+
+    // upload to database when a user is reported
+    fun reportUser(callback: ReportUserCallback) {
+
     }
 
     // clear the previous listener when the view model is destroyed
