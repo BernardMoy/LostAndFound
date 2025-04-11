@@ -57,6 +57,11 @@ class ChatInboxViewModel : ViewModel() {
     // whether is initial load. If yes, it will be forced to scroll to bottom and button wont show
     val isInitialLoad: MutableState<Boolean> = mutableStateOf(true)
 
+    // whether the report user dialog is shown
+    val isReportUserDialogShown: MutableState<Boolean> = mutableStateOf(false)
+    val reportUserInputText: MutableState<String> = mutableStateOf("")
+    val reportUserErrorMessage: MutableState<String> = mutableStateOf("")
+
     // keep track of the listener registration
     private var listenerRegistration: ListenerRegistration? = null
 

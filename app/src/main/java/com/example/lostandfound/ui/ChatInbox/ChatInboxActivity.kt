@@ -26,6 +26,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.outlined.Send
+import androidx.compose.material.icons.outlined.Report
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -58,6 +59,8 @@ import com.example.lostandfound.CustomElements.ButtonType
 import com.example.lostandfound.CustomElements.CustomButton
 import com.example.lostandfound.CustomElements.CustomCenteredProgressbar
 import com.example.lostandfound.CustomElements.CustomChatCard
+import com.example.lostandfound.CustomElements.CustomInputDialog
+import com.example.lostandfound.CustomElements.CustomReportUserDialog
 import com.example.lostandfound.Data.IntentExtraNames
 import com.example.lostandfound.Data.SharedPreferencesNames
 import com.example.lostandfound.Data.User
@@ -222,6 +225,36 @@ fun UserData(
                 .testTag("RecipientName"),
             textAlign = TextAlign.Start,
         )
+
+        // report icon
+        IconButton(
+            onClick = {
+                // set dialog visible
+                viewModel.isReportUserDialogShown.value = true
+            },
+            modifier = Modifier  // add the background circle
+                .testTag("ReportButton")
+        ) {
+            Icon(
+                imageVector = Icons.Outlined.Report,
+                contentDescription = "Report user",
+                tint = MaterialTheme.colorScheme.primary,
+                modifier = Modifier.size(
+                    dimensionResource(R.dimen.image_button_size)
+                )
+            )
+        }
+
+        // dialog of reporting user
+        CustomReportUserDialog(
+            inputText = viewModel.reportUserInputText,
+            isDialogShown = viewModel.isReportUserDialogShown,
+            errorMessage = viewModel.reportUserErrorMessage,
+            onConfirmButtonClicked = {},
+            onDismissButtonClicked = {}
+        )
+
+
     }
 }
 

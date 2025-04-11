@@ -28,6 +28,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Close
 import androidx.compose.material.icons.outlined.Lock
 import androidx.compose.material.icons.outlined.Person
+import androidx.compose.material.icons.outlined.Report
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDefaults
@@ -1031,4 +1032,85 @@ fun bitmapDescriptor(
     val canvas = android.graphics.Canvas(bm)
     drawable.draw(canvas)
     return BitmapDescriptorFactory.fromBitmap(bm)
+}
+
+
+@Composable
+fun CustomReportUserDialog(
+    inputText: MutableState<String>,
+    isDialogShown: MutableState<Boolean>,
+    errorMessage: MutableState<String>,
+    onConfirmButtonClicked: (() -> Unit),
+    onDismissButtonClicked: (() -> Unit),
+    testTag: String = ""
+) {
+    if (isDialogShown.value) {
+        AlertDialog(
+            onDismissRequest = { isDialogShown.value = false },
+            containerColor = MaterialTheme.colorScheme.background,
+            icon = {
+                Icon(
+                    imageVector = Icons.Outlined.Report,
+                    contentDescription = "Report icon",
+                    tint = MaterialTheme.colorScheme.onPrimaryContainer,
+                    modifier = Modifier.size(dimensionResource(R.dimen.image_button_size))
+                )
+            },
+            title = {
+                Text(
+                    text = "Report user?",
+                    style = MaterialTheme.typography.titleMedium,
+                    color = MaterialTheme.colorScheme.onBackground
+                )
+            },
+            text = {
+                Column(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin))
+                ) {
+                    Text(
+                        text = "Do you want to report this user for their misconduct behaviour?",
+                        modifier = Modifier.fillMaxWidth(),
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onBackground,
+                        textAlign = TextAlign.Center
+                    )
+
+                    // input field
+                    CustomInputField(
+                        placeholder = "Describe the reason for reporting the user...",
+                        fieldContent = inputText.value,
+                        isEditable = true,
+                        isMultiLine = true,
+                        onTextChanged = { s ->
+                            inputText.value = s
+                        },
+                        testTag = testTag
+                    )
+
+                    // error message
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.Center
+                    ) {
+                        CustomErrorTextNoBox(text = errorMessage.value)
+                    }
+                }
+            },
+            confirmButton = {
+                CustomButton(
+                    text = "Report",
+                    type = ButtonType.WARNING,
+                    onClick = onConfirmButtonClicked
+                )
+            },
+            dismissButton = {
+                CustomButton(
+                    text = "Cancel",
+                    type = ButtonType.OUTLINED,
+                    onClick = onDismissButtonClicked
+                )
+            }
+        )
+    }
 }
