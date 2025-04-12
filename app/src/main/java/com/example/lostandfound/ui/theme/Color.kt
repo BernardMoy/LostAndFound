@@ -12,13 +12,13 @@ val LightGray = Color(0xFFE7E7E7)
 // Primary colors
 val PrimaryColor = Color(0xFF5DAADE)
 val PrimaryColorVariant = Color(0xFF4099BC)
-val PrimaryColorLight = Color(0xFFC1E5EB)
+val PrimaryColorLight = Color(0xFFCAEBF0)
 val OnPrimary = Color(0xFFFFFFFF)
 
 // Secondary colors
 val SecondaryColor = Color(0xFF697BD7)
 val SecondaryColorVariant = Color(0xFF4E68AB)
-val SecondaryColorLight = Color(0xFF8EA9EF)
+val SecondaryColorLight = Color(0xFFB2C2ED)
 val OnSecondary = Color(0xFFFFFFFF)
 
 // Background colors
