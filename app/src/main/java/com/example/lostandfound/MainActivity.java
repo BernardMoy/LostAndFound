@@ -292,6 +292,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // the alpha value is set in the XML to be initially 0
         isMenuExpanded = false;
 
+        // set tooltip text for the floating buttons
+        binding.floatingActionButton.setTooltipText("Report item");
+        binding.lostFloatingActionButton.setTooltipText("Report lost item");
+        binding.foundFloatingActionButton.setTooltipText("Report found item");
+
         binding.foundFloatingActionButton.setEnabled(false);
         binding.lostFloatingActionButton.setEnabled(false);
 
