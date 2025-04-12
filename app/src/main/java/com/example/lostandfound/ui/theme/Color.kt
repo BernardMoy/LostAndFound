@@ -30,4 +30,4 @@ val OnBackgroundDark = White
 // Error colors
 val Error = Color(0xFFF5425D)
 val ErrorDark = Color(0xFF7C2633)
-val ErrorLight = Color(0xFFEDB4BD)
+val ErrorLight = Color(0xFFEDC2C9)
