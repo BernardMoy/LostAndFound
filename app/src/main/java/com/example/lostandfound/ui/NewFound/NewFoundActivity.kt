@@ -188,12 +188,13 @@ fun NewFoundScreen(activity: ComponentActivity, viewModel: NewFoundViewModel) {
             // the dialog when the back button is pressed
             CustomTextDialog(
                 icon = Icons.Outlined.Cancel,
+                isWarning = true ,
                 title = "Discard changes?",
                 content = "All your changes will be lost.",
                 confirmButton = {
                     CustomButton(
                         text = "Discard",
-                        type = ButtonType.FILLED,
+                        type = ButtonType.WARNING,
                         onClick = {
                             // dismiss the dialog
                             isDialogShown.value = false

@@ -119,7 +119,8 @@ fun CustomTextDialog(
     content: String,
     confirmButton: @Composable (() -> Unit),
     dismissButton: @Composable (() -> Unit)? = null,   // optional secondary button
-    isDialogShown: MutableState<Boolean>
+    isDialogShown: MutableState<Boolean>,
+    isWarning: Boolean = false
 ) {
     // Shown only when isDialogShown is true
     if (isDialogShown.value) {
@@ -130,7 +131,7 @@ fun CustomTextDialog(
                 Icon(
                     imageVector = icon,
                     contentDescription = "Dialog icon",
-                    tint = MaterialTheme.colorScheme.onPrimaryContainer,
+                    tint = if (isWarning) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.onPrimaryContainer,
                     modifier = Modifier.size(dimensionResource(R.dimen.image_button_size))
                 )
             },
