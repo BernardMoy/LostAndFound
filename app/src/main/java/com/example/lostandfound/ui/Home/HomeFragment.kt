@@ -77,6 +77,7 @@ import com.example.lostandfound.CustomElements.CustomCard
 import com.example.lostandfound.CustomElements.CustomLostItemPreviewSmall
 import com.example.lostandfound.CustomElements.CustomProgressBar
 import com.example.lostandfound.CustomElements.CustomTextDialog
+import com.example.lostandfound.CustomElements.CustomTooltipBox
 import com.example.lostandfound.Data.IntentExtraNames
 import com.example.lostandfound.Data.LostItem
 import com.example.lostandfound.Data.SharedPreferencesNames
@@ -405,18 +406,21 @@ fun HowItWorksPager(
             }
 
             // the next button
-            IconButton(
-                onClick = {
-                    // trigger to scroll to next page
-                    trigger.value = true
+            CustomTooltipBox(text = "Next"){
+                IconButton(
+                    onClick = {
+                        // trigger to scroll to next page
+                        trigger.value = true
+                    }
+                ) {
+                    Icon(
+                        imageVector = Icons.AutoMirrored.Outlined.ArrowForward,
+                        contentDescription = "View next",
+                        tint = MaterialTheme.colorScheme.onPrimaryContainer
+                    )
                 }
-            ) {
-                Icon(
-                    imageVector = Icons.AutoMirrored.Outlined.ArrowForward,
-                    contentDescription = "View next",
-                    tint = MaterialTheme.colorScheme.onPrimaryContainer
-                )
             }
+
         }
 
 
@@ -508,19 +512,22 @@ fun RecentlyLostItem(
             )
 
             // the refresh button
-            IconButton(
-                modifier = Modifier.size(dimensionResource(R.dimen.image_button_size_small)),
-                onClick = {
-                    loadRecentlyLostItem(context, viewModel)
-                }
-            ) {
-                Icon(
-                    imageVector = Icons.Outlined.Refresh,
-                    contentDescription = "Reload",
+            CustomTooltipBox(text = "Refresh"){
+                IconButton(
                     modifier = Modifier.size(dimensionResource(R.dimen.image_button_size_small)),
-                    tint = MaterialTheme.colorScheme.secondary
-                )
+                    onClick = {
+                        loadRecentlyLostItem(context, viewModel)
+                    }
+                ) {
+                    Icon(
+                        imageVector = Icons.Outlined.Refresh,
+                        contentDescription = "Reload",
+                        modifier = Modifier.size(dimensionResource(R.dimen.image_button_size_small)),
+                        tint = MaterialTheme.colorScheme.secondary
+                    )
+                }
             }
+
         }
 
 
@@ -597,19 +604,22 @@ fun FoundItemData(
             )
 
             // the refresh button
-            IconButton(
-                modifier = Modifier.size(dimensionResource(R.dimen.image_button_size_small)),
-                onClick = {
-                    loadFoundItems(context, viewModel)
-                }
-            ) {
-                Icon(
-                    imageVector = Icons.Outlined.Refresh,
-                    contentDescription = "Reload",
+            CustomTooltipBox(text = "Refresh"){
+                IconButton(
                     modifier = Modifier.size(dimensionResource(R.dimen.image_button_size_small)),
-                    tint = MaterialTheme.colorScheme.secondary
-                )
+                    onClick = {
+                        loadFoundItems(context, viewModel)
+                    }
+                ) {
+                    Icon(
+                        imageVector = Icons.Outlined.Refresh,
+                        contentDescription = "Reload",
+                        modifier = Modifier.size(dimensionResource(R.dimen.image_button_size_small)),
+                        tint = MaterialTheme.colorScheme.secondary
+                    )
+                }
             }
+
         }
 
         if (viewModel.isLoadingFoundItem.value) {

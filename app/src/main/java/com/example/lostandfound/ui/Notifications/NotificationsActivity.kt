@@ -38,6 +38,7 @@ import com.example.lostandfound.CustomElements.CustomActionText
 import com.example.lostandfound.CustomElements.CustomCenterText
 import com.example.lostandfound.CustomElements.CustomCenteredProgressbar
 import com.example.lostandfound.CustomElements.CustomNotificationItemPreview
+import com.example.lostandfound.CustomElements.CustomTooltipBox
 import com.example.lostandfound.Data.Claim
 import com.example.lostandfound.Data.FirebaseNames
 import com.example.lostandfound.Data.FoundItem
@@ -309,19 +310,22 @@ fun Items(
 
 
             // the refresh button
-            IconButton(
-                onClick = {
-                    // refresh the list - manually (by now)
-                    loadNotifications(context, viewModel)
+            CustomTooltipBox(text = "Refresh"){
+                IconButton(
+                    onClick = {
+                        // refresh the list - manually (by now)
+                        loadNotifications(context, viewModel)
+                    }
+                ) {
+                    Icon(
+                        imageVector = Icons.Outlined.Refresh,
+                        contentDescription = "Reload",
+                        modifier = Modifier.size(dimensionResource(id = R.dimen.image_button_size)),
+                        tint = MaterialTheme.colorScheme.secondary
+                    )
                 }
-            ) {
-                Icon(
-                    imageVector = Icons.Outlined.Refresh,
-                    contentDescription = "Reload",
-                    modifier = Modifier.size(dimensionResource(id = R.dimen.image_button_size)),
-                    tint = MaterialTheme.colorScheme.secondary
-                )
             }
+
         }
 
 

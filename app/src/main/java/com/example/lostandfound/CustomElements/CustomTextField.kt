@@ -504,17 +504,20 @@ fun CustomSearchField(
         },
         shape = RoundedCornerShape(dimensionResource(id = R.dimen.corner_radius_small)),
         trailingIcon = {
-            IconButton(
-                onClick = {
-                    fieldContent.value = ""
+            CustomTooltipBox(text = "Clear"){
+                IconButton(
+                    onClick = {
+                        fieldContent.value = ""
+                    }
+                ) {
+                    Icon(
+                        imageVector = Icons.Outlined.Close,
+                        contentDescription = "Clear",
+                        tint = Color.Gray
+                    )
                 }
-            ) {
-                Icon(
-                    imageVector = Icons.Outlined.Close,
-                    contentDescription = "Clear",
-                    tint = Color.Gray
-                )
             }
+
         },
         modifier = Modifier
             .fillMaxWidth()

@@ -47,6 +47,7 @@ import com.example.lostandfound.CustomElements.CustomCenterText
 import com.example.lostandfound.CustomElements.CustomCenteredProgressbar
 import com.example.lostandfound.CustomElements.CustomFoundItemPreview
 import com.example.lostandfound.CustomElements.CustomSearchField
+import com.example.lostandfound.CustomElements.CustomTooltipBox
 import com.example.lostandfound.Data.IntentExtraNames
 import com.example.lostandfound.FirebaseManagers.FirebaseUtility
 import com.example.lostandfound.R
@@ -167,19 +168,22 @@ fun RefreshButton(
             modifier = Modifier.weight(1f) // make the refresh button go to the end by taking up all available space
 
         )
-        IconButton(
-            onClick = {
-                // refresh the list - manually (by now)
-                refreshData(context, viewModel)
+        CustomTooltipBox(text = "Refresh"){
+            IconButton(
+                onClick = {
+                    // refresh the list - manually (by now)
+                    refreshData(context, viewModel)
+                }
+            ) {
+                Icon(
+                    imageVector = Icons.Outlined.Refresh,
+                    contentDescription = "Reload",
+                    modifier = Modifier.size(dimensionResource(id = R.dimen.image_button_size)),
+                    tint = MaterialTheme.colorScheme.secondary
+                )
             }
-        ) {
-            Icon(
-                imageVector = Icons.Outlined.Refresh,
-                contentDescription = "Reload",
-                modifier = Modifier.size(dimensionResource(id = R.dimen.image_button_size)),
-                tint = MaterialTheme.colorScheme.secondary
-            )
         }
+
     }
 }
 
