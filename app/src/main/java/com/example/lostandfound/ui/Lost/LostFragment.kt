@@ -13,6 +13,7 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -26,10 +27,15 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Refresh
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.PlainTooltip
 import androidx.compose.material3.Text
+import androidx.compose.material3.TooltipBox
+import androidx.compose.material3.TooltipDefaults
+import androidx.compose.material3.TooltipState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
@@ -41,6 +47,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -48,6 +55,7 @@ import com.example.lostandfound.CustomElements.CustomCenterText
 import com.example.lostandfound.CustomElements.CustomCenteredProgressbar
 import com.example.lostandfound.CustomElements.CustomLostItemPreview
 import com.example.lostandfound.CustomElements.CustomSearchField
+import com.example.lostandfound.CustomElements.CustomTooltipBox
 import com.example.lostandfound.Data.IntentExtraNames
 import com.example.lostandfound.FirebaseManagers.FirebaseUtility
 import com.example.lostandfound.R
@@ -153,6 +161,7 @@ fun MainContent(viewModel: LostFragmentViewModel, isTesting: Boolean) {
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RefreshButton(
     context: Context,
@@ -175,19 +184,21 @@ fun RefreshButton(
         )
 
         // the refresh button
-        IconButton(
-            onClick = {
-                // refresh the list - manually (by now)
-                refreshData(context, viewModel)
-            },
-            modifier = Modifier.testTag("LostRefreshButton")
-        ) {
-            Icon(
-                imageVector = Icons.Outlined.Refresh,
-                contentDescription = "Reload",
-                modifier = Modifier.size(dimensionResource(id = R.dimen.image_button_size)),
-                tint = MaterialTheme.colorScheme.secondary
-            )
+        CustomTooltipBox(text = "Refresh"){
+            IconButton(
+                onClick = {
+                    // refresh the list - manually (by now)
+                    refreshData(context, viewModel)
+                },
+                modifier = Modifier.testTag("LostRefreshButton")
+            ) {
+                Icon(
+                    imageVector = Icons.Outlined.Refresh,
+                    contentDescription = "Reload",
+                    modifier = Modifier.size(dimensionResource(id = R.dimen.image_button_size)),
+                    tint = MaterialTheme.colorScheme.secondary
+                )
+            }
         }
     }
 }
