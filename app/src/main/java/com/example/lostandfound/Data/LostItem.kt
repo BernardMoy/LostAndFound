@@ -1,7 +1,6 @@
 package com.example.lostandfound.Data
 
 import android.os.Parcelable
-import com.example.lostandfound.R
 import kotlinx.parcelize.Parcelize
 
 /*
