@@ -44,7 +44,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -85,7 +84,7 @@ import com.example.lostandfound.Data.foundStatusText
 import com.example.lostandfound.Data.lostStatusText
 import com.example.lostandfound.Data.statusColor
 import com.example.lostandfound.Data.stringToColor
-import com.example.lostandfound.FirebaseManagers.FirebaseUtility
+import com.example.lostandfound.FirebaseManagers.UserManager
 import com.example.lostandfound.R
 import com.example.lostandfound.Utility.DateTimeManager
 import com.example.lostandfound.Utility.ErrorCallback
@@ -689,7 +688,7 @@ fun UserData(
             }
 
             // contact user button and dialog, when the user is not the current user
-            if (viewModel.foundItemData.user.userID != FirebaseUtility.getUserID()) {
+            if (viewModel.foundItemData.user.userID != UserManager.getUserID()) {
                 CustomButton(
                     text = "Contact",
                     type = ButtonType.TONAL,
@@ -733,7 +732,7 @@ fun ClaimButton(
         // they have the power to claim the item
 
         // display messages if the user owns the lost item
-        if (viewModel.lostItemData.user.userID == FirebaseUtility.getUserID()) {
+        if (viewModel.lostItemData.user.userID == UserManager.getUserID()) {
 
             // if lost item status = 0 and the user is the owner of the lost item, they can claim
             // else if lost item status = 1 and the found item is the lost item's claimed item, display already claimed message

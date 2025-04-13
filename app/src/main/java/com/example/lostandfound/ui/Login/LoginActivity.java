@@ -17,7 +17,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.lostandfound.FirebaseManagers.FCMTokenManager;
 import com.example.lostandfound.FirebaseManagers.FirebaseAuthManager;
-import com.example.lostandfound.FirebaseManagers.FirebaseUtility;
+import com.example.lostandfound.FirebaseManagers.UserManager;
 import com.example.lostandfound.R;
 import com.example.lostandfound.Utility.ErrorCallback;
 import com.example.lostandfound.Utility.FontSizeManager;
@@ -141,7 +141,7 @@ public class LoginActivity extends AppCompatActivity {
                         }
 
                         // update FCM token only when login successful
-                        FCMTokenManager.INSTANCE.updateFCMToken(FirebaseUtility.getUserID(), new FCMTokenManager.FCMTokenUpdateCallback() {
+                        FCMTokenManager.INSTANCE.updateFCMToken(UserManager.getUserID(), new FCMTokenManager.FCMTokenUpdateCallback() {
                             @Override
                             public void onComplete(boolean success) {
                                 if (!success){
@@ -151,7 +151,7 @@ public class LoginActivity extends AppCompatActivity {
 
                                 // no errors
                                 // if sign in successful, current user would not be null
-                                if (FirebaseUtility.isUserLoggedIn()) {
+                                if (UserManager.isUserLoggedIn()) {
                                     // finish activity and display message
                                     Toast.makeText(LoginActivity.this, "Signed in successfully", Toast.LENGTH_SHORT).show();
                                     finish();

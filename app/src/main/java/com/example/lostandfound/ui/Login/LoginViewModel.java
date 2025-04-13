@@ -1,14 +1,7 @@
 package com.example.lostandfound.ui.Login;
 
-import android.content.Context;
-
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
-
-import com.example.lostandfound.FirebaseManagers.FirebaseAuthManager;
-import com.example.lostandfound.FirebaseManagers.FCMTokenManager;
-import com.example.lostandfound.FirebaseManagers.FirebaseUtility;
-import com.example.lostandfound.Utility.ErrorCallback;
 
 public class LoginViewModel extends ViewModel {
 

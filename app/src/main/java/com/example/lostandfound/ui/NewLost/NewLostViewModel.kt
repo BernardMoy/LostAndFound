@@ -13,9 +13,8 @@ import com.example.lostandfound.Data.FirebaseNames
 import com.example.lostandfound.Data.LostItem
 import com.example.lostandfound.Data.User
 import com.example.lostandfound.FirebaseManagers.FirebaseStorageManager
-import com.example.lostandfound.FirebaseManagers.FirebaseUtility
+import com.example.lostandfound.FirebaseManagers.UserManager
 import com.example.lostandfound.FirebaseManagers.FirestoreManager
-import com.example.lostandfound.R
 import com.example.lostandfound.Utility.DateTimeManager
 import com.example.lostandfound.Utility.LocationManager
 import com.google.android.gms.maps.model.LatLng
@@ -180,7 +179,7 @@ class NewLostViewModel : ViewModel() {
         val currentTime = DateTimeManager.getCurrentEpochTime()
 
         val data = mapOf(
-            FirebaseNames.LOSTFOUND_USER to FirebaseUtility.getUserID(),
+            FirebaseNames.LOSTFOUND_USER to UserManager.getUserID(),
             FirebaseNames.LOSTFOUND_ITEMNAME to itemName.value,
             FirebaseNames.LOSTFOUND_CATEGORY to selectedCategory!!.name,      // wont be null, otherwise it is captured above
             FirebaseNames.LOSTFOUND_SUBCATEGORY to selectedSubCategory.value,
@@ -255,7 +254,7 @@ class NewLostViewModel : ViewModel() {
                                         status = 0,
                                         isTracking = false,
                                         user = User(
-                                            userID = FirebaseUtility.getUserID(),
+                                            userID = UserManager.getUserID(),
                                             avatar = userAvatar.value,
                                             firstName = userFirstName.value,
                                             lastName = userLastName.value
@@ -268,7 +267,7 @@ class NewLostViewModel : ViewModel() {
                                         mapOf(
                                             FirebaseNames.ACTIVITY_LOG_ITEM_TYPE to 0,
                                             FirebaseNames.ACTIVITY_LOG_ITEM_CONTENT to itemName.value + " (#" + result + ")",
-                                            FirebaseNames.ACTIVITY_LOG_ITEM_USER_ID to FirebaseUtility.getUserID(),
+                                            FirebaseNames.ACTIVITY_LOG_ITEM_USER_ID to UserManager.getUserID(),
                                             FirebaseNames.ACTIVITY_LOG_ITEM_TIMESTAMP to DateTimeManager.getCurrentEpochTime()
                                         ),
                                         object : FirestoreManager.Callback<String> {
@@ -305,7 +304,7 @@ class NewLostViewModel : ViewModel() {
                             status = 0,
                             isTracking = false,
                             user = User(
-                                userID = FirebaseUtility.getUserID(),
+                                userID = UserManager.getUserID(),
                                 avatar = userAvatar.value,
                                 firstName = userFirstName.value,
                                 lastName = userLastName.value
@@ -318,7 +317,7 @@ class NewLostViewModel : ViewModel() {
                             mapOf(
                                 FirebaseNames.ACTIVITY_LOG_ITEM_TYPE to 0,
                                 FirebaseNames.ACTIVITY_LOG_ITEM_CONTENT to itemName.value + " (#" + result + ")",
-                                FirebaseNames.ACTIVITY_LOG_ITEM_USER_ID to FirebaseUtility.getUserID(),
+                                FirebaseNames.ACTIVITY_LOG_ITEM_USER_ID to UserManager.getUserID(),
                                 FirebaseNames.ACTIVITY_LOG_ITEM_TIMESTAMP to DateTimeManager.getCurrentEpochTime()
                             ),
                             object : FirestoreManager.Callback<String> {

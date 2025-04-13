@@ -8,7 +8,7 @@ import androidx.lifecycle.ViewModel
 import com.example.lostandfound.Data.ChatInboxPreview
 import com.example.lostandfound.Data.FirebaseNames
 import com.example.lostandfound.Data.User
-import com.example.lostandfound.FirebaseManagers.FirebaseUtility
+import com.example.lostandfound.FirebaseManagers.UserManager
 import com.google.firebase.firestore.DocumentChange
 import com.google.firebase.firestore.Filter
 import com.google.firebase.firestore.FirebaseFirestore
@@ -31,7 +31,7 @@ class ChatFragmentViewModel : ViewModel() {
 
     fun loadData(callback: ChatInboxPreviewCallback) {
         val db = FirebaseFirestore.getInstance()
-        val currentUserID = FirebaseUtility.getUserID()
+        val currentUserID = UserManager.getUserID()
 
         // clear the list
         chatInboxPreviewList.clear()

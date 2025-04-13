@@ -63,7 +63,7 @@ import com.example.lostandfound.CustomElements.CustomReportUserDialog
 import com.example.lostandfound.Data.IntentExtraNames
 import com.example.lostandfound.Data.SharedPreferencesNames
 import com.example.lostandfound.Data.User
-import com.example.lostandfound.FirebaseManagers.FirebaseUtility
+import com.example.lostandfound.FirebaseManagers.UserManager
 import com.example.lostandfound.PushNotificationManagers.PushNotificationCallback
 import com.example.lostandfound.PushNotificationManagers.PushNotificationManager
 import com.example.lostandfound.R
@@ -158,7 +158,7 @@ fun MainContent(viewModel: ChatInboxViewModel) {
     val sp: SharedPreferences =
         context.getSharedPreferences(SharedPreferencesNames.NAME_USERS, Context.MODE_PRIVATE)
     viewModel.currentUser = User(
-        userID = FirebaseUtility.getUserID(),
+        userID = UserManager.getUserID(),
         avatar = sp.getString(SharedPreferencesNames.USER_AVATAR, "") ?: "",
         firstName = sp.getString(SharedPreferencesNames.USER_FIRSTNAME, "") ?: "",
         lastName = sp.getString(SharedPreferencesNames.USER_LASTNAME, "") ?: ""

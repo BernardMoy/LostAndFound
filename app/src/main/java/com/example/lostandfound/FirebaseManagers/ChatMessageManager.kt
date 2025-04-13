@@ -4,16 +4,14 @@ import com.example.lostandfound.Data.ChatMessage
 import com.example.lostandfound.Data.FirebaseNames
 import com.example.lostandfound.FirebaseManagers.FirestoreManager.Callback
 
-interface ChatMessageCallback {
-    fun onComplete(result: ChatMessage?)  // return chat message or null if failed
-}
-
-interface UpdateMessageCallback {
-    fun onComplete(result: Boolean)
-}
-
 
 object ChatMessageManager {
+
+    interface UpdateMessageCallback {
+        fun onComplete(result: Boolean)
+    }
+
+
     // given a message id, mark it as read
     fun markChatAsRead(messageID: String, callback: UpdateMessageCallback) {
         val firestoreManager = FirestoreManager()

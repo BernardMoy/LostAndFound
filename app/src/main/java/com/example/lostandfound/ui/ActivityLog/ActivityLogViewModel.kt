@@ -6,7 +6,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import com.example.lostandfound.Data.ActivityLogItem
 import com.example.lostandfound.Data.FirebaseNames
-import com.example.lostandfound.FirebaseManagers.FirebaseUtility
+import com.example.lostandfound.FirebaseManagers.UserManager
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 
@@ -28,7 +28,7 @@ class ActivityLogViewModel : ViewModel() {
 
         val db = FirebaseFirestore.getInstance()
         db.collection(FirebaseNames.COLLECTION_ACTIVITY_LOG_ITEMS)
-            .whereEqualTo(FirebaseNames.ACTIVITY_LOG_ITEM_USER_ID, FirebaseUtility.getUserID())
+            .whereEqualTo(FirebaseNames.ACTIVITY_LOG_ITEM_USER_ID, UserManager.getUserID())
             .orderBy(FirebaseNames.ACTIVITY_LOG_ITEM_TIMESTAMP, Query.Direction.DESCENDING)
             .get()
             .addOnSuccessListener { result ->

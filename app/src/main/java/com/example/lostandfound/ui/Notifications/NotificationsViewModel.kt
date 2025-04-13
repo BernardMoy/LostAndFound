@@ -6,7 +6,7 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import com.example.lostandfound.Data.FirebaseNames
-import com.example.lostandfound.FirebaseManagers.FirebaseUtility
+import com.example.lostandfound.FirebaseManagers.UserManager
 import com.example.lostandfound.FirebaseManagers.NotificationManager
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ListenerRegistration
@@ -81,7 +81,7 @@ class NotificationsViewModel : ViewModel() {
 
         // get all notifications of the current user from the db
         db.collection(FirebaseNames.COLLECTION_NOTIFICATIONS)
-            .whereEqualTo(FirebaseNames.NOTIFICATION_USER_ID, FirebaseUtility.getUserID())
+            .whereEqualTo(FirebaseNames.NOTIFICATION_USER_ID, UserManager.getUserID())
             .orderBy(FirebaseNames.NOTIFICATION_TIMESTAMP, Query.Direction.DESCENDING)
             .get()
             .addOnSuccessListener { snapshot ->
@@ -112,7 +112,7 @@ class NotificationsViewModel : ViewModel() {
     // return true if successful false otherwise
     fun markAllAsRead(callback: LoadNotificationsCallback) {
         NotificationManager.markAllNotificationsAsRead(
-            FirebaseUtility.getUserID(),
+            UserManager.getUserID(),
             object : NotificationManager.NotificationUpdateCallback {
                 override fun onComplete(result: Boolean) {
                     if (!result) {

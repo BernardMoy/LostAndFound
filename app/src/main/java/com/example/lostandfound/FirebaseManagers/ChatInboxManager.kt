@@ -3,14 +3,14 @@ package com.example.lostandfound.FirebaseManagers
 import android.util.Log
 import com.example.lostandfound.Data.FirebaseNames
 import com.example.lostandfound.Data.User
-import com.example.lostandfound.Utility.DateTimeManager
 import com.google.firebase.firestore.FirebaseFirestore
 
-interface ChatInboxUpdateCallback {
-    fun onComplete(result: Boolean)
-}
-
 object ChatInboxManager {
+
+    interface ChatInboxUpdateCallback {
+        fun onComplete(result: Boolean)
+    }
+
 
     // given a chat message, CREATE OR UPDATE the chat inbox data
     fun updateChatInbox(

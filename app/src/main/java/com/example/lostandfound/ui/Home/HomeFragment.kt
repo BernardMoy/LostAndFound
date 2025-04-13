@@ -81,7 +81,7 @@ import com.example.lostandfound.CustomElements.CustomTooltipBox
 import com.example.lostandfound.Data.IntentExtraNames
 import com.example.lostandfound.Data.LostItem
 import com.example.lostandfound.Data.SharedPreferencesNames
-import com.example.lostandfound.FirebaseManagers.FirebaseUtility
+import com.example.lostandfound.FirebaseManagers.UserManager
 import com.example.lostandfound.R
 import com.example.lostandfound.Utility.AnimationManager
 import com.example.lostandfound.Utility.AutoLoadingManager
@@ -122,7 +122,7 @@ class HomeFragment : Fragment() {
         super.onResume()
 
         // update the user's log in status
-        viewModel.isLoggedIn.value = FirebaseUtility.isUserLoggedIn()
+        viewModel.isLoggedIn.value = UserManager.isUserLoggedIn()
 
         // refresh the data everytime the screen is reloaded
         if (AutoLoadingManager.autoLoadingEnabled.value) {

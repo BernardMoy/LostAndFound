@@ -8,20 +8,22 @@ import com.google.firebase.messaging.FirebaseMessaging
 
 object FCMTokenManager {
 
-    interface FCMTokenUpdateCallback{
+    interface FCMTokenUpdateCallback {
         fun onComplete(success: Boolean)
     }
-    interface FCMTokenGetCallback{
+
+    interface FCMTokenGetCallback {
         fun onComplete(token: String?)   // return token if successful or null
     }
-    interface FCMTokenDeleteCallback{
+
+    interface FCMTokenDeleteCallback {
         fun onComplete(success: Boolean)
     }
 
     // method to save the FCM token of the user when given a user id
-    fun updateFCMToken(userID: String, callback: FCMTokenUpdateCallback){
-        FirebaseMessaging.getInstance().token.addOnCompleteListener{ task ->
-            if (!task.isSuccessful){
+    fun updateFCMToken(userID: String, callback: FCMTokenUpdateCallback) {
+        FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
+            if (!task.isSuccessful) {
                 Log.e("Firebase messaging error", task.exception!!.message.toString())
                 callback.onComplete(false)
                 return@addOnCompleteListener
@@ -37,7 +39,7 @@ object FCMTokenManager {
                 .addOnSuccessListener {
                     callback.onComplete(true)
                 }
-                .addOnFailureListener{ e ->
+                .addOnFailureListener { e ->
                     Log.e("Firebase user update error", e.message.toString())
                     callback.onComplete(false)
                 }
@@ -45,13 +47,13 @@ object FCMTokenManager {
     }
 
     // method to get fcm token given a user id
-    fun getFCMTokenFromUser(userID: String, callback: FCMTokenGetCallback){
+    fun getFCMTokenFromUser(userID: String, callback: FCMTokenGetCallback) {
         FirebaseFirestore.getInstance().collection("users")
             .document(userID)
             .get()
             .addOnSuccessListener { document ->
                 val token = document.getString(FirebaseNames.USERS_FCM_TOKEN)
-                if (token == null){
+                if (token == null) {
                     callback.onComplete(null)
                     return@addOnSuccessListener
                 }
@@ -64,14 +66,14 @@ object FCMTokenManager {
     }
 
     // method to clear FCM token for a user
-    fun removeFCMTokenFromUser(userID: String, callback: FCMTokenDeleteCallback){
+    fun removeFCMTokenFromUser(userID: String, callback: FCMTokenDeleteCallback) {
         FirebaseFirestore.getInstance().collection("users")
             .document(userID)
             .update(FirebaseNames.USERS_FCM_TOKEN, FieldValue.delete())     // delete the attribute
             .addOnSuccessListener {
                 callback.onComplete(true)
             }
-            .addOnFailureListener{ e ->
+            .addOnFailureListener { e ->
                 Log.e("Firebase user delete error", e.message.toString())
                 callback.onComplete(false)
             }

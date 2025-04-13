@@ -9,12 +9,11 @@ import com.example.lostandfound.Data.ChatMessage
 import com.example.lostandfound.Data.FirebaseNames
 import com.example.lostandfound.Data.User
 import com.example.lostandfound.FirebaseManagers.ChatInboxManager
-import com.example.lostandfound.FirebaseManagers.ChatInboxUpdateCallback
+import com.example.lostandfound.FirebaseManagers.ChatInboxManager.ChatInboxUpdateCallback
 import com.example.lostandfound.FirebaseManagers.ChatMessageManager
-import com.example.lostandfound.FirebaseManagers.FirebaseUtility
+import com.example.lostandfound.FirebaseManagers.UserManager
 import com.example.lostandfound.FirebaseManagers.FirestoreManager
 import com.example.lostandfound.FirebaseManagers.FirestoreManager.Callback
-import com.example.lostandfound.FirebaseManagers.UpdateMessageCallback
 import com.example.lostandfound.Utility.DateTimeManager
 import com.google.firebase.firestore.DocumentChange
 import com.google.firebase.firestore.FirebaseFirestore
@@ -145,7 +144,7 @@ class ChatInboxViewModel : ViewModel() {
 
         // fetch all messages where the user is either the sender or recipient
         listenerRegistration = db.collection(FirebaseNames.COLLECTION_CHATS)
-            .whereArrayContains(FirebaseNames.CHAT_FROM_TO, FirebaseUtility.getUserID())
+            .whereArrayContains(FirebaseNames.CHAT_FROM_TO, UserManager.getUserID())
             .orderBy(FirebaseNames.CHAT_TIMESTAMP)
             .addSnapshotListener { snapshot, error ->       // listen for real time updates
                 if (error != null) {
@@ -188,10 +187,10 @@ class ChatInboxViewModel : ViewModel() {
                             chatMessageList.add(newChatMessage)
 
                             // if the message NOT sent by the current user and is not read, mark it as read
-                            if (messageSenderID != FirebaseUtility.getUserID() && !isReadByRecipient) {
+                            if (messageSenderID != UserManager.getUserID() && !isReadByRecipient) {
                                 ChatMessageManager.markChatAsRead(
                                     messageID,
-                                    object : UpdateMessageCallback {
+                                    object : ChatMessageManager.UpdateMessageCallback {
                                         override fun onComplete(result: Boolean) {
                                         }
                                     })

@@ -11,8 +11,8 @@ import java.util.Map;
 /**
  * For firebase functions that does not require any input parameters.
  */
-public class FirebaseUtility {
-    private FirebaseUtility() {
+public class UserManager {
+    private UserManager() {
     }
 
     public interface isAdminCallback {
@@ -46,12 +46,12 @@ public class FirebaseUtility {
     }
 
     // check if user is admin user
-    public static void isUserAdmin(isAdminCallback callback){
+    public static void isUserAdmin(isAdminCallback callback) {
         FirestoreManager manager = new FirestoreManager();
-        manager.get(FirebaseNames.COLLECTION_USERS, FirebaseUtility.getUserID(), new FirestoreManager.Callback<Map<String, Object>>() {
+        manager.get(FirebaseNames.COLLECTION_USERS, UserManager.getUserID(), new FirestoreManager.Callback<Map<String, Object>>() {
             @Override
             public void onComplete(Map<String, Object> result) {
-                if (result == null || result.get(FirebaseNames.USERS_IS_ADMIN) == null){
+                if (result == null || result.get(FirebaseNames.USERS_IS_ADMIN) == null) {
                     callback.onComplete(false);
                     return;
                 }

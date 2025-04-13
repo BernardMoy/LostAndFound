@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel
 import com.example.lostandfound.Data.FoundItem
 import com.example.lostandfound.Data.LostItem
 import com.example.lostandfound.Data.User
-import com.example.lostandfound.FirebaseManagers.FirebaseUtility
+import com.example.lostandfound.FirebaseManagers.UserManager
 import com.example.lostandfound.R
 
 class SettingsViewModel : ViewModel() {
@@ -60,7 +60,7 @@ class SettingsViewModel : ViewModel() {
     // a async function to load if the user is admin
     // called during on create of the activity
     fun loadIsAdmin(){
-        FirebaseUtility.isUserAdmin(object: FirebaseUtility.isAdminCallback {
+        UserManager.isUserAdmin(object: UserManager.isAdminCallback {
             override fun onComplete(result: Boolean) {
                 isAdmin.value = result
             }

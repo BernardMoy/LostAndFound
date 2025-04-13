@@ -61,7 +61,7 @@ import com.example.lostandfound.Data.notificationContent
 import com.example.lostandfound.Data.notificationIcon
 import com.example.lostandfound.Data.notificationTitle
 import com.example.lostandfound.Data.statusColor
-import com.example.lostandfound.FirebaseManagers.FirebaseUtility
+import com.example.lostandfound.FirebaseManagers.UserManager
 import com.example.lostandfound.FirebaseManagers.FirestoreManager
 import com.example.lostandfound.FirebaseManagers.FirestoreManager.Callback
 import com.example.lostandfound.R
@@ -114,7 +114,7 @@ fun CustomLostItemPreview(
     data: LostItem,
     onViewButtonClicked: () -> Unit = {},
 ) {
-    val isOwner: Boolean = FirebaseUtility.getUserID() == data.user.userID
+    val isOwner: Boolean = UserManager.getUserID() == data.user.userID
 
     Box(
         modifier = Modifier
@@ -399,7 +399,7 @@ fun CustomFoundItemPreview(
     isLocationCloseMatch: Boolean = false,
     percentageSimilarity: String = ""
 ) {
-    val isOwner: Boolean = FirebaseUtility.getUserID() == data.user.userID
+    val isOwner: Boolean = UserManager.getUserID() == data.user.userID
 
     Box(
         modifier = Modifier
@@ -812,7 +812,7 @@ fun CustomChatInboxPreview(
             // last message and red dot
 
             // determine if the last message is sent by the current user
-            val isLastMessageSentByCurrentUser = chatInboxPreview.lastMessageSenderUserID == FirebaseUtility.getUserID()
+            val isLastMessageSentByCurrentUser = chatInboxPreview.lastMessageSenderUserID == UserManager.getUserID()
 
             // trim the message
             var previewMessage =

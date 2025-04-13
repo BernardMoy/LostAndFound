@@ -42,7 +42,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -60,7 +59,6 @@ import com.example.lostandfound.CustomElements.BackToolbar
 import com.example.lostandfound.CustomElements.ButtonType
 import com.example.lostandfound.CustomElements.CustomActionText
 import com.example.lostandfound.CustomElements.CustomButton
-import com.example.lostandfound.CustomElements.CustomCenteredProgressbar
 import com.example.lostandfound.CustomElements.CustomEditText
 import com.example.lostandfound.CustomElements.CustomGrayTitle
 import com.example.lostandfound.CustomElements.CustomProgressBar
@@ -70,11 +68,10 @@ import com.example.lostandfound.CustomElements.CustomViewLocationDialog
 import com.example.lostandfound.Data.Claim
 import com.example.lostandfound.Data.IntentExtraNames
 import com.example.lostandfound.Data.LostItem
-import com.example.lostandfound.Data.User
 import com.example.lostandfound.Data.lostStatusText
 import com.example.lostandfound.Data.statusColor
 import com.example.lostandfound.Data.stringToColor
-import com.example.lostandfound.FirebaseManagers.FirebaseUtility
+import com.example.lostandfound.FirebaseManagers.UserManager
 import com.example.lostandfound.FirebaseManagers.ItemManager
 import com.example.lostandfound.MainActivity
 import com.example.lostandfound.R
@@ -157,7 +154,7 @@ fun MainContent(viewModel: ViewLostViewModel) {
         verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin))
     ) {
         // show the track button only when the lost item user is the current user
-        if (viewModel.itemData.user.userID == FirebaseUtility.getUserID()) {
+        if (viewModel.itemData.user.userID == UserManager.getUserID()) {
             TrackButton(context = context, viewModel = viewModel)
             Spacer(modifier = Modifier.width(dimensionResource(id = R.dimen.title_margin)))
         }
@@ -469,7 +466,7 @@ fun UserData(
 
                 CustomEditText(
                     fieldLabel = "User",
-                    fieldContent = if (viewModel.itemData.user.userID == FirebaseUtility.getUserID()) "$userDisplayName (You)" else userDisplayName,
+                    fieldContent = if (viewModel.itemData.user.userID == UserManager.getUserID()) "$userDisplayName (You)" else userDisplayName,
                     leftIcon = Icons.Outlined.AccountCircle,
                     isEditable = false,
                     testTag = "ViewLostUser"
@@ -477,7 +474,7 @@ fun UserData(
             }
 
             // contact user button and dialog, when the user is not the current user
-            if (viewModel.itemData.user.userID != FirebaseUtility.getUserID()) {
+            if (viewModel.itemData.user.userID != UserManager.getUserID()) {
                 CustomButton(
                     text = "Contact",
                     type = ButtonType.TONAL,
@@ -520,7 +517,7 @@ fun ActionButtons(
             .padding(vertical = dimensionResource(id = R.dimen.content_margin))
     ) {
         // only display buttons when the lost item is reported by the current user
-        if (inPreview || FirebaseUtility.getUserID() == viewModel.itemData.user.userID) {
+        if (inPreview || UserManager.getUserID() == viewModel.itemData.user.userID) {
             Column(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalAlignment = Alignment.CenterHorizontally,

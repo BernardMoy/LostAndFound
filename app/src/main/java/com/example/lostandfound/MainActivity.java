@@ -4,7 +4,6 @@ import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Intent;
@@ -25,7 +24,6 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -39,8 +37,7 @@ import androidx.navigation.ui.NavigationUI;
 
 import com.example.lostandfound.Data.FirebaseNames;
 import com.example.lostandfound.Data.SharedPreferencesNames;
-import com.example.lostandfound.FirebaseManagers.FirebaseAuthManager;
-import com.example.lostandfound.FirebaseManagers.FirebaseUtility;
+import com.example.lostandfound.FirebaseManagers.UserManager;
 import com.example.lostandfound.Utility.AnimationManager;
 import com.example.lostandfound.Utility.AutoLoadingManager;
 import com.example.lostandfound.Utility.DeviceThemeManager;
@@ -48,7 +45,6 @@ import com.example.lostandfound.Utility.FontSizeManager;
 import com.example.lostandfound.Utility.ImageManager;
 import com.example.lostandfound.databinding.ActivityMainBinding;
 import com.example.lostandfound.ui.ActivityLog.ActivityLogActivity;
-import com.example.lostandfound.ui.Home.HomeFragmentViewModel;
 import com.example.lostandfound.ui.HowItWorks.HowItWorksActivity;
 import com.example.lostandfound.ui.Login.LoginActivity;
 import com.example.lostandfound.ui.NewFound.NewFoundActivity;
@@ -62,14 +58,12 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.badge.BadgeDrawable;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.imageview.ShapeableImageView;
-import com.google.android.material.internal.NavigationMenuView;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.google.firebase.functions.FirebaseFunctions;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -364,7 +358,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // Display the notifications red dot based on whether there are any unread messages from the current user
         // set up snapshot listener for any changed value of the query
         db.collection(FirebaseNames.COLLECTION_NOTIFICATIONS)
-                .whereEqualTo(FirebaseNames.NOTIFICATION_USER_ID, FirebaseUtility.getUserID())
+                .whereEqualTo(FirebaseNames.NOTIFICATION_USER_ID, UserManager.getUserID())
                 .whereEqualTo(FirebaseNames.NOTIFICATION_IS_READ, false)
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
@@ -386,7 +380,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // initially when the app is first started, check if there are any unread notifications
         // if yes, display the red dot
         db.collection(FirebaseNames.COLLECTION_NOTIFICATIONS)
-                .whereEqualTo(FirebaseNames.NOTIFICATION_USER_ID, FirebaseUtility.getUserID())
+                .whereEqualTo(FirebaseNames.NOTIFICATION_USER_ID, UserManager.getUserID())
                 .whereEqualTo(FirebaseNames.NOTIFICATION_IS_READ, false)
                 .get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
@@ -407,7 +401,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // Display the bottom nav bar chat icon red dot
         // based on whether there are messages sent towards the current user and is unread
         db.collection(FirebaseNames.COLLECTION_CHATS)
-                .whereEqualTo(FirebaseNames.CHAT_RECIPIENT_USER_ID, FirebaseUtility.getUserID())
+                .whereEqualTo(FirebaseNames.CHAT_RECIPIENT_USER_ID, UserManager.getUserID())
                 .whereEqualTo(FirebaseNames.CHAT_IS_READ_BY_RECIPIENT, false)
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
@@ -499,7 +493,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     // method to update the displayed data depending on whether they are logged in
     public void updateUserDisplayedData(){
-        if (FirebaseUtility.isUserLoggedIn()){ // user is signed in
+        if (UserManager.isUserLoggedIn()){ // user is signed in
             // hide the log in button
             binding.loginButton.setEnabled(false);
             binding.loginButton.setVisibility(GONE);

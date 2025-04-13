@@ -13,7 +13,6 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -31,11 +30,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.PlainTooltip
 import androidx.compose.material3.Text
-import androidx.compose.material3.TooltipBox
-import androidx.compose.material3.TooltipDefaults
-import androidx.compose.material3.TooltipState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
@@ -47,7 +42,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -57,7 +51,7 @@ import com.example.lostandfound.CustomElements.CustomLostItemPreview
 import com.example.lostandfound.CustomElements.CustomSearchField
 import com.example.lostandfound.CustomElements.CustomTooltipBox
 import com.example.lostandfound.Data.IntentExtraNames
-import com.example.lostandfound.FirebaseManagers.FirebaseUtility
+import com.example.lostandfound.FirebaseManagers.UserManager
 import com.example.lostandfound.R
 import com.example.lostandfound.Utility.AnimationManager
 import com.example.lostandfound.Utility.AutoLoadingManager
@@ -70,7 +64,7 @@ import java.util.Locale
 class LostFragment : Fragment() {
 
     // variable to keep track of whether the user is logged in
-    val isLoggedIn = mutableStateOf(FirebaseUtility.isUserLoggedIn())
+    val isLoggedIn = mutableStateOf(UserManager.isUserLoggedIn())
 
     // create the view model here
     val viewModel: LostFragmentViewModel by viewModels()
@@ -100,7 +94,7 @@ class LostFragment : Fragment() {
         super.onResume()
 
         // update the user's log in status
-        isLoggedIn.value = FirebaseUtility.isUserLoggedIn()
+        isLoggedIn.value = UserManager.isUserLoggedIn()
 
         // refresh the data everytime the screen is reloaded
         if (AutoLoadingManager.autoLoadingEnabled.value) {

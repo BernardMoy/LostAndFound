@@ -96,12 +96,15 @@ object ItemManager {
                                         // create lost item class object
                                         val thisLostItem = LostItem(
                                             itemID = lostItemID,
-                                            user= User(
+                                            user = User(
                                                 userID = itemResult[FirebaseNames.LOSTFOUND_USER] as? String
                                                     ?: "Unknown",
-                                                avatar = itemResult[FirebaseNames.USERS_AVATAR] as? String ?:"",
-                                                firstName = itemResult[FirebaseNames.USERS_FIRSTNAME] as? String ?: "",
-                                                lastName = itemResult[FirebaseNames.USERS_LASTNAME] as? String ?: "",
+                                                avatar = itemResult[FirebaseNames.USERS_AVATAR] as? String
+                                                    ?: "",
+                                                firstName = itemResult[FirebaseNames.USERS_FIRSTNAME] as? String
+                                                    ?: "",
+                                                lastName = itemResult[FirebaseNames.USERS_LASTNAME] as? String
+                                                    ?: "",
                                             ),
                                             itemName = itemResult[FirebaseNames.LOSTFOUND_ITEMNAME] as? String
                                                 ?: "Unknown",
@@ -208,12 +211,15 @@ object ItemManager {
                                             // create found item class object
                                             val thisFoundItem = FoundItem(
                                                 itemID = foundItemID,
-                                                user= User(
+                                                user = User(
                                                     userID = itemResult[FirebaseNames.LOSTFOUND_USER] as? String
-                                                    ?: "Unknown",
-                                                    avatar = itemResult[FirebaseNames.USERS_AVATAR] as? String ?:"",
-                                                    firstName = itemResult[FirebaseNames.USERS_FIRSTNAME] as? String ?: "",
-                                                    lastName = itemResult[FirebaseNames.USERS_LASTNAME] as? String ?: "",
+                                                        ?: "Unknown",
+                                                    avatar = itemResult[FirebaseNames.USERS_AVATAR] as? String
+                                                        ?: "",
+                                                    firstName = itemResult[FirebaseNames.USERS_FIRSTNAME] as? String
+                                                        ?: "",
+                                                    lastName = itemResult[FirebaseNames.USERS_LASTNAME] as? String
+                                                        ?: "",
                                                 ),
                                                 itemName = itemResult[FirebaseNames.LOSTFOUND_ITEMNAME] as? String
                                                     ?: "Unknown",

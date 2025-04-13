@@ -28,7 +28,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
@@ -75,7 +74,6 @@ import androidx.core.content.FileProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil3.compose.rememberAsyncImagePainter
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
-import com.bumptech.glide.integration.compose.GlideImage
 import com.example.lostandfound.CustomElements.BackToolbar
 import com.example.lostandfound.CustomElements.ButtonType
 import com.example.lostandfound.CustomElements.CustomActionRow
@@ -97,7 +95,7 @@ import com.example.lostandfound.Data.LostItem
 import com.example.lostandfound.Data.SharedPreferencesNames
 import com.example.lostandfound.Data.categories
 import com.example.lostandfound.Data.stringToColor
-import com.example.lostandfound.FirebaseManagers.FirebaseUtility
+import com.example.lostandfound.FirebaseManagers.UserManager
 import com.example.lostandfound.R
 import com.example.lostandfound.ui.Login.LoginActivity
 import com.example.lostandfound.ui.Search.SearchActivity
@@ -114,7 +112,7 @@ class NewLostActivity : ComponentActivity() {
 
         setContent {
             // first check if user is logged in
-            if (!FirebaseUtility.isUserLoggedIn()) {
+            if (!UserManager.isUserLoggedIn()) {
                 val isDialogOpen = remember { mutableStateOf(true) }
                 ComposeTheme {
                     CustomLoginDialog(

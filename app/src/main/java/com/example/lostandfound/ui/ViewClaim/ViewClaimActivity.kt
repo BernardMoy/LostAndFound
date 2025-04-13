@@ -74,7 +74,7 @@ import com.example.lostandfound.Data.foundStatusText
 import com.example.lostandfound.Data.lostStatusText
 import com.example.lostandfound.Data.statusColor
 import com.example.lostandfound.Data.stringToColor
-import com.example.lostandfound.FirebaseManagers.FirebaseUtility
+import com.example.lostandfound.FirebaseManagers.UserManager
 import com.example.lostandfound.R
 import com.example.lostandfound.Utility.DateTimeManager
 import com.example.lostandfound.Utility.ErrorCallback
@@ -173,7 +173,7 @@ fun MainContent(viewModel: ViewClaimViewModel) {
             // the user have the power to accept this claim if:
             // 1. they are the owner of the found item
             // 2. the found item has status 1, i.e. no claims that are approved
-            val canAccept = viewModel.foundItemData.user.userID == FirebaseUtility.getUserID()
+            val canAccept = viewModel.foundItemData.user.userID == UserManager.getUserID()
                     && viewModel.foundItemData.status == 1
 
             // action buttons
@@ -573,7 +573,7 @@ fun UserData(
 ) {
     // the view claim screen can be viewed by either the lost user or the found user.
     // if the viewer is the lost user, display this
-    if (viewModel.lostItemData.user.userID == FirebaseUtility.getUserID()) {
+    if (viewModel.lostItemData.user.userID == UserManager.getUserID()) {
         Column {
             CustomGrayTitle(text = "Contact user who found this item")
             Row(
@@ -591,7 +591,7 @@ fun UserData(
                 }
 
                 // contact user button and dialog, when the user is not the current user
-                if (viewModel.foundUser.userID != FirebaseUtility.getUserID()) {
+                if (viewModel.foundUser.userID != UserManager.getUserID()) {
                     CustomButton(
                         text = "Contact",
                         type = ButtonType.TONAL,
@@ -607,7 +607,7 @@ fun UserData(
     }
 
     // if the viewer is the found user, display this
-    if (viewModel.foundItemData.user.userID == FirebaseUtility.getUserID()) {
+    if (viewModel.foundItemData.user.userID == UserManager.getUserID()) {
         Column {
             CustomGrayTitle(text = "Contact user who claimed this item")
             Row(
@@ -625,7 +625,7 @@ fun UserData(
                 }
 
                 // contact user button and dialog, when the user is not the current user
-                if (viewModel.lostUser.userID != FirebaseUtility.getUserID()) {
+                if (viewModel.lostUser.userID != UserManager.getUserID()) {
                     CustomButton(
                         text = "Contact",
                         type = ButtonType.TONAL,
@@ -642,7 +642,7 @@ fun UserData(
 
     // common dialog for contacting user
     CustomUserDialog(
-        user = if (viewModel.lostItemData.user.userID == FirebaseUtility.getUserID()) viewModel.foundUser else viewModel.lostUser,
+        user = if (viewModel.lostItemData.user.userID == UserManager.getUserID()) viewModel.foundUser else viewModel.lostUser,
         context = context,
         isDialogShown = viewModel.isContactUserDialogShown
     )
@@ -653,7 +653,7 @@ fun SecurityQuestion(
     viewModel: ViewClaimViewModel
 ) {
     // if the viewer is the found user and the found item has security question, display this
-    if (viewModel.foundItemData.user.userID == FirebaseUtility.getUserID()
+    if (viewModel.foundItemData.user.userID == UserManager.getUserID()
         && viewModel.foundItemData.securityQuestion.isNotEmpty()
     ) {
 

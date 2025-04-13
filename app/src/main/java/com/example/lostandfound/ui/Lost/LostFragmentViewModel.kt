@@ -5,7 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import com.example.lostandfound.Data.FirebaseNames
 import com.example.lostandfound.Data.LostItem
-import com.example.lostandfound.FirebaseManagers.FirebaseUtility
+import com.example.lostandfound.FirebaseManagers.UserManager
 import com.example.lostandfound.FirebaseManagers.FirestoreManager
 import com.example.lostandfound.FirebaseManagers.ItemManager
 
@@ -36,7 +36,7 @@ class LostFragmentViewModel : ViewModel() {
         itemData.clear()
 
         // get the current user id
-        val userID = FirebaseUtility.getUserID()
+        val userID = UserManager.getUserID()
 
         // get all data from firebase with matching user ids
         firestoreManager.getIdsWhere(

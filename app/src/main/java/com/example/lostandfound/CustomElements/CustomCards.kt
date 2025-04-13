@@ -29,7 +29,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.lostandfound.Data.ChatMessage
-import com.example.lostandfound.FirebaseManagers.FirebaseUtility
+import com.example.lostandfound.FirebaseManagers.UserManager
 import com.example.lostandfound.R
 import com.example.lostandfound.Utility.DateTimeManager
 import com.example.lostandfound.ui.theme.ComposeTheme
@@ -142,7 +142,7 @@ fun CustomChatCard(
     chatMessage: ChatMessage
 ) {
     // if the sender user id is the current user id, it is sent by current user
-    val isSentByCurrentUser = chatMessage.senderUser.userID == FirebaseUtility.getUserID()
+    val isSentByCurrentUser = chatMessage.senderUser.userID == UserManager.getUserID()
 
     Column(
         modifier = Modifier.fillMaxWidth(),

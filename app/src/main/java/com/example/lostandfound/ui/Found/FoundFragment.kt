@@ -49,7 +49,7 @@ import com.example.lostandfound.CustomElements.CustomFoundItemPreview
 import com.example.lostandfound.CustomElements.CustomSearchField
 import com.example.lostandfound.CustomElements.CustomTooltipBox
 import com.example.lostandfound.Data.IntentExtraNames
-import com.example.lostandfound.FirebaseManagers.FirebaseUtility
+import com.example.lostandfound.FirebaseManagers.UserManager
 import com.example.lostandfound.R
 import com.example.lostandfound.Utility.AnimationManager
 import com.example.lostandfound.Utility.AutoLoadingManager
@@ -62,7 +62,7 @@ import java.util.Locale
 class FoundFragment : Fragment() {
 
     // variable to keep track of whether the user is logged in
-    val isLoggedIn = mutableStateOf(FirebaseUtility.isUserLoggedIn())
+    val isLoggedIn = mutableStateOf(UserManager.isUserLoggedIn())
 
     // create the view model here
     val viewModel: FoundFragmentViewModel by viewModels()
@@ -92,7 +92,7 @@ class FoundFragment : Fragment() {
         super.onResume()
 
         // update the user's log in status
-        isLoggedIn.value = FirebaseUtility.isUserLoggedIn()
+        isLoggedIn.value = UserManager.isUserLoggedIn()
 
         // refresh the data everytime the screen is reloaded
         if (AutoLoadingManager.autoLoadingEnabled.value) {

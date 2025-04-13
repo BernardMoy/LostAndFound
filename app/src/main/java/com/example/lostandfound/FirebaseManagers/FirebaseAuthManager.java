@@ -80,7 +80,7 @@ public class FirebaseAuthManager {
                             FCMTokenManager.INSTANCE.updateFCMToken(userID, new FCMTokenManager.FCMTokenUpdateCallback() {
                                 @Override
                                 public void onComplete(boolean success) {
-                                    if (!success){
+                                    if (!success) {
                                         callback.onComplete("Failed generating FCM token");
                                         return;
                                     }
@@ -208,10 +208,10 @@ public class FirebaseAuthManager {
     // method to logout
     public void logoutUser(LogoutCallback callback) {
         // clear the FCM token for the user so that the user no longer receive push notifications
-        FCMTokenManager.INSTANCE.removeFCMTokenFromUser(FirebaseUtility.getUserID(), new FCMTokenManager.FCMTokenDeleteCallback() {
+        FCMTokenManager.INSTANCE.removeFCMTokenFromUser(UserManager.getUserID(), new FCMTokenManager.FCMTokenDeleteCallback() {
             @Override
             public void onComplete(boolean success) {
-                if (!success){
+                if (!success) {
                     callback.onComplete(false);
                     return;
                 }

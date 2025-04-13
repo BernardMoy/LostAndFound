@@ -73,7 +73,7 @@ object NotificationManager {
                         context = context,
                         userID = targetUserId,
                         lostItemName = lostItemName,
-                        object: PushNotificationCallback{
+                        object : PushNotificationCallback {
                             override fun onComplete(success: Boolean) {
                                 // regardless of the result, return true
                                 callback.onComplete(true)
@@ -120,7 +120,7 @@ object NotificationManager {
                     PushNotificationManager.sendPushNotificationClaimApproved(
                         context = context,
                         userID = targetUserId,
-                        object: PushNotificationCallback{
+                        object : PushNotificationCallback {
                             override fun onComplete(success: Boolean) {
                                 // regardless of the result, return true
                                 callback.onComplete(true)
@@ -166,7 +166,7 @@ object NotificationManager {
                     PushNotificationManager.sendPushNotificationClaimRejected(
                         context = context,
                         userID = targetUserId,
-                        object: PushNotificationCallback{
+                        object : PushNotificationCallback {
                             override fun onComplete(success: Boolean) {
                                 // regardless of the result, return true
                                 callback.onComplete(true)
@@ -214,7 +214,7 @@ object NotificationManager {
                         context = context,
                         userID = targetUserId,
                         foundItemName = foundItemName,
-                        object: PushNotificationCallback{
+                        object : PushNotificationCallback {
                             override fun onComplete(success: Boolean) {
                                 // regardless of the result, return true
                                 callback.onComplete(true)
@@ -232,7 +232,7 @@ object NotificationManager {
         val db = FirebaseFirestore.getInstance()
         // get all notifications of the current user
         db.collection(FirebaseNames.COLLECTION_NOTIFICATIONS)
-            .whereEqualTo(FirebaseNames.NOTIFICATION_USER_ID, FirebaseUtility.getUserID())
+            .whereEqualTo(FirebaseNames.NOTIFICATION_USER_ID, UserManager.getUserID())
             .get()
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {

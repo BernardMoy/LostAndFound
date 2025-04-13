@@ -28,14 +28,14 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.lostandfound.CustomElements.CustomCenterText
 import com.example.lostandfound.CustomElements.CustomCenteredProgressbar
 import com.example.lostandfound.CustomElements.CustomChatInboxPreview
-import com.example.lostandfound.FirebaseManagers.FirebaseUtility
+import com.example.lostandfound.FirebaseManagers.UserManager
 import com.example.lostandfound.R
 import com.example.lostandfound.ui.theme.ComposeTheme
 
 
 class ChatFragment : Fragment() {
     // variable to keep track of whether the user is logged in
-    val isLoggedIn = mutableStateOf(FirebaseUtility.isUserLoggedIn())
+    val isLoggedIn = mutableStateOf(UserManager.isUserLoggedIn())
 
     // create the view model here
     val viewModel: ChatFragmentViewModel by viewModels()
@@ -66,7 +66,7 @@ class ChatFragment : Fragment() {
         super.onResume()
 
         // update the user's log in status
-        isLoggedIn.value = FirebaseUtility.isUserLoggedIn()
+        isLoggedIn.value = UserManager.isUserLoggedIn()
 
         // refresh the chat inbox
         // here, refreshing includes updating whether the chat inbox's last message is read or not

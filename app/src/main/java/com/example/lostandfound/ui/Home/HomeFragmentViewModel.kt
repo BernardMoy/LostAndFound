@@ -7,7 +7,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import com.example.lostandfound.Data.FirebaseNames
 import com.example.lostandfound.Data.LostItem
-import com.example.lostandfound.FirebaseManagers.FirebaseUtility
+import com.example.lostandfound.FirebaseManagers.UserManager
 import com.example.lostandfound.FirebaseManagers.FirestoreManager
 import com.example.lostandfound.FirebaseManagers.ItemManager
 import com.google.firebase.firestore.FirebaseFirestore
@@ -22,7 +22,7 @@ class HomeFragmentViewModel : ViewModel() {
     val isLoadingLostItem: MutableState<Boolean> = mutableStateOf(false)
     val isLoadingFoundItem: MutableState<Boolean> = mutableStateOf(false)
 
-    val isLoggedIn: MutableState<Boolean> = mutableStateOf(FirebaseUtility.isUserLoggedIn())
+    val isLoggedIn: MutableState<Boolean> = mutableStateOf(UserManager.isUserLoggedIn())
 
     // for displaying the small lost item
     var latestLostItem: MutableState<LostItem?> =
@@ -40,7 +40,7 @@ class HomeFragmentViewModel : ViewModel() {
         callback: Callback<Boolean>
     ) {
         // if not logged in, reset it
-        if (!FirebaseUtility.isUserLoggedIn()) {
+        if (!UserManager.isUserLoggedIn()) {
             latestLostItem.value = null
             callback.onComplete(true)
             return
@@ -48,7 +48,7 @@ class HomeFragmentViewModel : ViewModel() {
 
         val db = FirebaseFirestore.getInstance()
         db.collection(FirebaseNames.COLLECTION_LOST_ITEMS)
-            .whereEqualTo(FirebaseNames.LOSTFOUND_USER, FirebaseUtility.getUserID())
+            .whereEqualTo(FirebaseNames.LOSTFOUND_USER, UserManager.getUserID())
             .orderBy(FirebaseNames.LOSTFOUND_TIMEPOSTED, Query.Direction.DESCENDING)
             .limit(1)
             .get()
@@ -91,7 +91,7 @@ class HomeFragmentViewModel : ViewModel() {
     ) {
         val db = FirebaseFirestore.getInstance()
         db.collection(FirebaseNames.COLLECTION_FOUND_ITEMS)
-            .whereEqualTo(FirebaseNames.LOSTFOUND_USER, FirebaseUtility.getUserID())
+            .whereEqualTo(FirebaseNames.LOSTFOUND_USER, UserManager.getUserID())
             .get()
             .addOnSuccessListener { querySnapshot ->
                 numberFound.value = querySnapshot.size()
@@ -137,7 +137,7 @@ class HomeFragmentViewModel : ViewModel() {
                                         return
                                     }
 
-                                    if (result[FirebaseNames.LOSTFOUND_USER] == FirebaseUtility.getUserID()) {
+                                    if (result[FirebaseNames.LOSTFOUND_USER] == UserManager.getUserID()) {
                                         count++
                                     }
 

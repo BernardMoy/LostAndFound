@@ -4,7 +4,7 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import com.example.lostandfound.Data.FirebaseNames
-import com.example.lostandfound.FirebaseManagers.FirebaseUtility
+import com.example.lostandfound.FirebaseManagers.UserManager
 import com.example.lostandfound.FirebaseManagers.FirestoreManager
 import com.example.lostandfound.Utility.ErrorCallback
 
@@ -34,7 +34,7 @@ class ReportIssueViewModel : ViewModel() {
 
         // add the issue to database with the user id
         val data = mapOf(
-            FirebaseNames.REPORT_ISSUE_USER to FirebaseUtility.getUserID(),
+            FirebaseNames.REPORT_ISSUE_USER to UserManager.getUserID(),
             FirebaseNames.REPORT_ISSUE_DESC to description.value
         )
 

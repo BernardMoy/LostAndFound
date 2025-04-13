@@ -51,7 +51,7 @@ import com.example.lostandfound.Data.DevData
 import com.example.lostandfound.Data.FirebaseNames
 import com.example.lostandfound.Data.IntentExtraNames
 import com.example.lostandfound.Data.SharedPreferencesNames
-import com.example.lostandfound.FirebaseManagers.FirebaseUtility
+import com.example.lostandfound.FirebaseManagers.UserManager
 import com.example.lostandfound.R
 import com.example.lostandfound.ui.AboutApp.AboutAppActivity
 import com.example.lostandfound.ui.Done.DoneActivity
@@ -142,7 +142,7 @@ fun MainContent(viewModel: SettingsViewModel = viewModel()) {
     }
 
     // if the user is developer and dev settings are enabled, enable these
-    if (FirebaseUtility.isUserDev() && DevData.IS_DEV_SETTINGS_SHOWN) {
+    if (UserManager.isUserDev() && DevData.IS_DEV_SETTINGS_SHOWN) {
         HorizontalDivider(thickness = 1.dp, color = Color.Gray)
         Developer(context = context, viewModel = viewModel)
     }
@@ -210,7 +210,7 @@ fun Appearance(
 
         // only available when the user is logged in
         // whether to send push notifications
-        if (FirebaseUtility.isUserLoggedIn()){
+        if (UserManager.isUserLoggedIn()){
             CustomActionRow(text = "Push notifications",
                 leftIcon = Icons.Outlined.Notifications,
                 onClick = {

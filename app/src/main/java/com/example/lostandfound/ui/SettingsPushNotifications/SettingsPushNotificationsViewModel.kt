@@ -5,7 +5,7 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import com.example.lostandfound.Data.FirebaseNames
-import com.example.lostandfound.FirebaseManagers.FirebaseUtility
+import com.example.lostandfound.FirebaseManagers.UserManager
 import com.google.firebase.firestore.FirebaseFirestore
 
 interface PushNotificationSettingsCallback {
@@ -21,7 +21,7 @@ class SettingsPushNotificationsViewModel : ViewModel() {
     // when the done button is clicked, update the attributes from the db
     fun updateUserSettings(callback: PushNotificationSettingsCallback) {
         firestore.collection(FirebaseNames.COLLECTION_USERS)
-            .document(FirebaseUtility.getUserID())
+            .document(UserManager.getUserID())
             .update(
                 mapOf(
                     FirebaseNames.USERS_ITEM_NOTIFICATION_ENABLED to isItemNotificationChecked.value,
@@ -40,7 +40,7 @@ class SettingsPushNotificationsViewModel : ViewModel() {
     // load the saved user settings in the db initially
     fun loadUserSettings(callback: PushNotificationSettingsCallback) {
         firestore.collection(FirebaseNames.COLLECTION_USERS)
-            .document(FirebaseUtility.getUserID())
+            .document(UserManager.getUserID())
             .get()
             .addOnSuccessListener { doc ->
                 isItemNotificationChecked.value =

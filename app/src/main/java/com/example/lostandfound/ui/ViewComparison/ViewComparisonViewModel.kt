@@ -9,8 +9,7 @@ import com.example.lostandfound.Data.FirebaseNames
 import com.example.lostandfound.Data.FoundItem
 import com.example.lostandfound.Data.LostItem
 import com.example.lostandfound.Data.ScoreData
-import com.example.lostandfound.Data.User
-import com.example.lostandfound.FirebaseManagers.FirebaseUtility
+import com.example.lostandfound.FirebaseManagers.UserManager
 import com.example.lostandfound.FirebaseManagers.FirestoreManager
 import com.example.lostandfound.FirebaseManagers.ItemManager
 import com.example.lostandfound.FirebaseManagers.NotificationManager
@@ -100,7 +99,7 @@ class ViewComparisonViewModel : ViewModel() {
                                                 mapOf(
                                                     FirebaseNames.ACTIVITY_LOG_ITEM_TYPE to 4,
                                                     FirebaseNames.ACTIVITY_LOG_ITEM_CONTENT to lostItemData.itemName + " (#" + lostItemData.itemID + ") claimed " + foundItemData.itemName + " (#" + foundItemData.itemID + ")",
-                                                    FirebaseNames.ACTIVITY_LOG_ITEM_USER_ID to FirebaseUtility.getUserID(),
+                                                    FirebaseNames.ACTIVITY_LOG_ITEM_USER_ID to UserManager.getUserID(),
                                                     FirebaseNames.ACTIVITY_LOG_ITEM_TIMESTAMP to DateTimeManager.getCurrentEpochTime()
                                                 ),
                                                 object : FirestoreManager.Callback<String> {
