@@ -1,6 +1,7 @@
 package com.example.lostandfound.ui.ViewReportedIssues
 
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Column
@@ -11,6 +12,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalInspectionMode
@@ -18,6 +20,7 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.lostandfound.CustomElements.BackToolbar
+import com.example.lostandfound.CustomElements.CustomCenteredProgressbar
 import com.example.lostandfound.R
 import com.example.lostandfound.ui.theme.ComposeTheme
 
@@ -76,8 +79,22 @@ fun MainContent(viewModel: ViewReportedIssuesViewModel = viewModel()) {
     // boolean to determine if it is being rendered in preview
     val inPreview = LocalInspectionMode.current
 
+    // load data
+    LaunchedEffect(Unit) {
+        viewModel.loadData(object : ViewReportedIssuesViewModel.LoadReportedIssuesCallback{
+            override fun onComplete(success: Boolean) {
+                if (!success){
+                    Toast.makeText(context, "Fetching data failed", Toast.LENGTH_SHORT).show()
+                }
+            }
+        })
+    }
     // contents
-    Column {
+    if (viewModel.isLoading.value){
+        CustomCenteredProgressbar()
+    } else {
+        Column {
 
+        }
     }
 }
