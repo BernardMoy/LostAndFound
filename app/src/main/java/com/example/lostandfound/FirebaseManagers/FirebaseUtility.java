@@ -51,7 +51,7 @@ public class FirebaseUtility {
         manager.get(FirebaseNames.COLLECTION_USERS, FirebaseUtility.getUserID(), new FirestoreManager.Callback<Map<String, Object>>() {
             @Override
             public void onComplete(Map<String, Object> result) {
-                if (result == null){
+                if (result == null || result.get(FirebaseNames.USERS_IS_ADMIN) == null){
                     callback.onComplete(false);
                     return;
                 }
