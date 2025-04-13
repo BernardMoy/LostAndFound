@@ -86,9 +86,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        // set up main view model
-        MainViewModel mainViewModel = new ViewModelProvider(this).get(MainViewModel.class);
-
         // Set toolbar as the topActionbar
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
