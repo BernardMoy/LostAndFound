@@ -30,8 +30,7 @@ val WEIGHT_COLOR = 1.5 // Higher: Less likely to make mistakes with the intellig
 val WEIGHT_BRAND = 1.5 // Medium: The same brand may have different representations (Future work)
 val WEIGHT_LOCATION = 1.5         // Medium: The item might be brought elsewhere
 
-val SCORE_THRESHOLD =
-    2.25  // items will be considered matching if their score is larger than this threshold
+val SCORE_THRESHOLD = 2.25  // items will be considered matching if their score is larger than this threshold
 
 /*
 Given a lost item and found item, return the map containing an overall score
@@ -49,15 +48,6 @@ fun getMatchingScores(
     foundItem: FoundItem,
     scoreDataCallback: ScoreDataCallback
 ) {
-    // only retrieve items with lost time - found time <= 7 days (604800s)
-    // if they fail this condition, return score of all 0.0 (Will definitely not be greater than threshold and not considered)
-    if (lostItem.dateTime - foundItem.dateTime > 604800) {
-        scoreDataCallback.onScoreCalculated(
-            ScoreData(overallScore = 0.0)
-        )
-        return
-    }
-
     // instantiate result
     val result = ScoreData()
 
