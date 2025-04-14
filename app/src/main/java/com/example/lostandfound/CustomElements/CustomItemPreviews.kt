@@ -1050,7 +1050,7 @@ fun CustomReportIssuePreview(
     ) {
         // the user name
         Text(
-            text = "Reported by " + reportedIssue.user.firstName + " " + reportedIssue.user.lastName,
+            text = "Reported by " + reportedIssue.firstName + " " + reportedIssue.lastName,
             style = Typography.bodyMedium,
             fontWeight = FontWeight.Bold,
             color = MaterialTheme.colorScheme.onPrimaryContainer

@@ -35,29 +35,22 @@ class ViewReportedIssuesViewModel : ViewModel() {
                 for (snapshot: QueryDocumentSnapshot in doc) {
                     val uid = snapshot[FirebaseNames.REPORT_ISSUE_USER].toString()
                     val desc = snapshot[FirebaseNames.REPORT_ISSUE_DESC].toString()
+                    val userFirstName = snapshot[FirebaseNames.REPORT_ISSUE_USER_FIRST_NAME].toString()
+                    val userLastName = snapshot[FirebaseNames.REPORT_ISSUE_USER_LAST_NAME].toString()
 
-                    Log.d("USER", uid)
+                    val item = ReportedIssue(
+                        uid = uid,
+                        firstName = userFirstName,
+                        lastName = userLastName,
+                        description = desc
+                    )
+                    reportedIssueList.add(item)
 
-                    UserManager.getUserFromId(uid, object : GetUserCallback {
-                        override fun onComplete(user: User?) {
-                            if (user == null){
-                                isLoading.value = false
-                                callback.onComplete(false)
-                            }
-
-                            val item = ReportedIssue(
-                                user = user ?: User(),
-                                description = desc
-                            )
-
-                            reportedIssueList.add(item)
-                            n += 1
-                            if (n == count) {
-                                isLoading.value = false
-                                callback.onComplete(true)
-                            }
-                        }
-                    })
+                    n += 1
+                    if (n == count) {
+                        isLoading.value = false
+                        callback.onComplete(true)
+                    }
                 }
             }.addOnFailureListener { e ->
                 Log.d("Firebase error", e.message.toString())

@@ -60,11 +60,18 @@ public final class FirebaseNames {
     // for reporting issues
     public static final String REPORT_ISSUE_USER = "user_id";
     public static final String REPORT_ISSUE_DESC = "description";
+    public static final String REPORT_ISSUE_USER_FIRST_NAME = "first_name";
+    public static final String REPORT_ISSUE_USER_LAST_NAME = "last_name";
 
     // for reporting users
     public static final String REPORT_USER_FROM = "user_from_id";
     public static final String REPORT_USER_TO = "user_to_id";
     public static final String REPORT_USER_DESC = "description";
+    public static final String REPORT_USER_FROM_FIRST_NAME = "from_first_name";
+    public static final String REPORT_USER_FROM_LAST_NAME = "from_last_name";
+    public static final String REPORT_USER_TO_FIRST_NAME = "to_first_name";
+    public static final String REPORT_USER_TO_LAST_NAME = "to_last_name";
+
 
     // for chat system
     public static final String CHAT_SENDER_USER_ID = "sender_user_id";

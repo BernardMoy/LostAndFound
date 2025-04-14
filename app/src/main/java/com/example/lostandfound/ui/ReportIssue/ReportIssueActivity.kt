@@ -2,6 +2,7 @@ package com.example.lostandfound.ui.ReportIssue
 
 import android.app.Activity
 import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
@@ -40,6 +41,7 @@ import com.example.lostandfound.CustomElements.CustomGrayTitle
 import com.example.lostandfound.CustomElements.CustomInputField
 import com.example.lostandfound.CustomElements.CustomProgressBar
 import com.example.lostandfound.CustomElements.CustomTextDialog
+import com.example.lostandfound.Data.SharedPreferencesNames
 import com.example.lostandfound.R
 import com.example.lostandfound.Utility.ErrorCallback
 import com.example.lostandfound.ui.theme.ComposeTheme
@@ -142,6 +144,11 @@ fun MainContent(viewModel: ReportIssueViewModel = viewModel()) {
 
     // boolean to determine if it is being rendered in preview
     val inPreview = LocalInspectionMode.current
+
+    // load data from shared prefs to view models
+    val sp: SharedPreferences = context.getSharedPreferences(SharedPreferencesNames.NAME_USERS, Context.MODE_PRIVATE)
+    viewModel.userFirstName.value = sp.getString(SharedPreferencesNames.USER_FIRSTNAME, "") ?: ""
+    viewModel.userLastName.value = sp.getString(SharedPreferencesNames.USER_LASTNAME, "") ?: ""
 
     Description(viewModel = viewModel)
     ReminderMessage(viewModel = viewModel)

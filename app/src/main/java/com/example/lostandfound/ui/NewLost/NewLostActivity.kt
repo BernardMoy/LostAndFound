@@ -716,7 +716,7 @@ fun ImageBottomSheet(
                 Toast.makeText(context, "Camera permission denied", Toast.LENGTH_SHORT).show()
             }
         }
-    
+
 
     // bottom avatar sheet main content
     if (isSheetOpen.value) {

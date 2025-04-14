@@ -13,6 +13,10 @@ class ReportIssueViewModel : ViewModel() {
     val description: MutableState<String> = mutableStateOf("")
     val descriptionError: MutableState<String> = mutableStateOf("")
 
+    // user info to be retrieved from shared pref using context
+    val userFirstName: MutableState<String> = mutableStateOf("")
+    val userLastName: MutableState<String> = mutableStateOf("")
+
     fun onDescriptionChanged(s: String) {
         description.value = s
     }
@@ -35,7 +39,9 @@ class ReportIssueViewModel : ViewModel() {
         // add the issue to database with the user id
         val data = mapOf(
             FirebaseNames.REPORT_ISSUE_USER to UserManager.getUserID(),
-            FirebaseNames.REPORT_ISSUE_DESC to description.value
+            FirebaseNames.REPORT_ISSUE_DESC to description.value,
+            FirebaseNames.REPORT_ISSUE_USER_FIRST_NAME to userFirstName.value,
+            FirebaseNames.REPORT_ISSUE_USER_LAST_NAME to userLastName.value
         )
 
         val manager = FirestoreManager()

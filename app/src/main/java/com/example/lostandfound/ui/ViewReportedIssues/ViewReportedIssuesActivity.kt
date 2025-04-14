@@ -26,6 +26,7 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.lostandfound.CustomElements.BackToolbar
+import com.example.lostandfound.CustomElements.CustomCenterText
 import com.example.lostandfound.CustomElements.CustomCenteredProgressbar
 import com.example.lostandfound.CustomElements.CustomReportIssuePreview
 import com.example.lostandfound.R
@@ -100,7 +101,7 @@ fun MainContent(viewModel: ViewReportedIssuesViewModel = viewModel()) {
     // contents
     if (viewModel.isLoading.value){
         CustomCenteredProgressbar()
-    } else {
+    } else if (viewModel.reportedIssueList.isNotEmpty()){
         LazyColumn(
             verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.title_margin)),
             modifier = Modifier.padding(horizontal = dimensionResource(R.dimen.title_margin))
@@ -113,5 +114,7 @@ fun MainContent(viewModel: ViewReportedIssuesViewModel = viewModel()) {
                 HorizontalDivider()
             }
         }
+    } else {
+        CustomCenterText("There are no reported issues.")
     }
 }
