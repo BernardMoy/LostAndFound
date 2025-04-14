@@ -9,6 +9,7 @@ import android.provider.Settings
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -74,12 +75,20 @@ import com.google.firebase.firestore.FirebaseFirestore
 
 
 class SettingsActivity : ComponentActivity() {
+    val viewModel: SettingsViewModel by viewModels()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         setContent {
             SettingsScreen(activity = this)
         }
+    }
+
+    // load admin on start
+    override fun onStart() {
+        super.onStart()
+        viewModel.loadIsAdmin()
     }
 }
 
@@ -126,8 +135,6 @@ fun MainContent(viewModel: SettingsViewModel = viewModel()) {
     // boolean to determine if it is being rendered in preview
     val inPreview = LocalInspectionMode.current
 
-    // initially, load whether the user is admin from the view model
-    viewModel.loadIsAdmin()
 
     Appearance(context = context)
     HorizontalDivider(thickness = 1.dp, color = Color.Gray)
