@@ -36,8 +36,15 @@ class ViewReportedIssuesViewModel : ViewModel() {
                     val uid = snapshot[FirebaseNames.REPORT_ISSUE_USER].toString()
                     val desc = snapshot[FirebaseNames.REPORT_ISSUE_DESC].toString()
 
+                    Log.d("USER", uid)
+
                     UserManager.getUserFromId(uid, object : GetUserCallback {
                         override fun onComplete(user: User?) {
+                            if (user == null){
+                                isLoading.value = false
+                                callback.onComplete(false)
+                            }
+
                             val item = ReportedIssue(
                                 user = user ?: User(),
                                 description = desc

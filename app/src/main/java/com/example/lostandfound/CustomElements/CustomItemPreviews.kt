@@ -53,6 +53,7 @@ import com.example.lostandfound.Data.FirebaseNames
 import com.example.lostandfound.Data.FoundItem
 import com.example.lostandfound.Data.IntentExtraNames
 import com.example.lostandfound.Data.LostItem
+import com.example.lostandfound.Data.ReportedIssue
 import com.example.lostandfound.Data.activityLogIcons
 import com.example.lostandfound.Data.activityLogTitles
 import com.example.lostandfound.Data.foundStatusText
@@ -61,9 +62,9 @@ import com.example.lostandfound.Data.notificationContent
 import com.example.lostandfound.Data.notificationIcon
 import com.example.lostandfound.Data.notificationTitle
 import com.example.lostandfound.Data.statusColor
-import com.example.lostandfound.FirebaseManagers.UserManager
 import com.example.lostandfound.FirebaseManagers.FirestoreManager
 import com.example.lostandfound.FirebaseManagers.FirestoreManager.Callback
+import com.example.lostandfound.FirebaseManagers.UserManager
 import com.example.lostandfound.R
 import com.example.lostandfound.Utility.DateTimeManager
 import com.example.lostandfound.Utility.ImageManager
@@ -218,7 +219,7 @@ fun CustomLostItemPreview(
                     model = Uri.parse(displayedImage),  // parse the string stored back to uri
                     contentDescription = "Item image",
                     modifier = Modifier.weight(1F)
-                ){
+                ) {
                     it.override(ImageManager.PREVIEW_IMAGE_SIZE, ImageManager.PREVIEW_IMAGE_SIZE)
                         .diskCacheStrategy(DiskCacheStrategy.ALL)
                 }
@@ -336,7 +337,7 @@ fun CustomLostItemPreviewSmall(
                     model = Uri.parse(displayedImage),  // parse the string stored back to uri
                     contentDescription = "Item image",
                     modifier = Modifier.weight(1F)
-                ){
+                ) {
                     it.override(ImageManager.PREVIEW_IMAGE_SIZE, ImageManager.PREVIEW_IMAGE_SIZE)
                         .diskCacheStrategy(DiskCacheStrategy.ALL)
                 }
@@ -493,7 +494,7 @@ fun CustomFoundItemPreview(
                     model = Uri.parse(displayedImage),
                     contentDescription = "Item image",
                     modifier = Modifier.weight(1F)
-                ){
+                ) {
                     it.override(ImageManager.PREVIEW_IMAGE_SIZE, ImageManager.PREVIEW_IMAGE_SIZE)
                         .diskCacheStrategy(DiskCacheStrategy.ALL)
                 }
@@ -669,7 +670,7 @@ fun CustomClaimPreview(
                     model = Uri.parse(displayedImage),
                     contentDescription = "Item image",
                     modifier = Modifier.weight(1F)
-                ){
+                ) {
                     it.override(ImageManager.PREVIEW_IMAGE_SIZE, ImageManager.PREVIEW_IMAGE_SIZE)
                         .diskCacheStrategy(DiskCacheStrategy.ALL)
                 }
@@ -812,7 +813,8 @@ fun CustomChatInboxPreview(
             // last message and red dot
 
             // determine if the last message is sent by the current user
-            val isLastMessageSentByCurrentUser = chatInboxPreview.lastMessageSenderUserID == UserManager.getUserID()
+            val isLastMessageSentByCurrentUser =
+                chatInboxPreview.lastMessageSenderUserID == UserManager.getUserID()
 
             // trim the message
             var previewMessage =
@@ -930,7 +932,8 @@ fun CustomNotificationItemPreview(
                             imageVector = Icons.Filled.Circle,
                             tint = MaterialTheme.colorScheme.error,
                             contentDescription = "Unread",
-                            modifier = Modifier.width(dimensionResource(id = R.dimen.content_margin))
+                            modifier = Modifier
+                                .width(dimensionResource(id = R.dimen.content_margin))
                                 .testTag("red_dot_$notificationID")  // test if the dot exists
                         )
                     }
@@ -1002,8 +1005,7 @@ fun CustomActivityLogItemPreview(
                 modifier = Modifier.size(dimensionResource(id = R.dimen.image_button_size))
             )
 
-            Column (
-            ){
+            Column {
                 Row {
                     Text(
                         text = activityLogTitles[activityLogItem.type] ?: "",
@@ -1036,5 +1038,29 @@ fun CustomActivityLogItemPreview(
                 }
             }
         }
+    }
+}
+
+@Composable
+fun CustomReportIssuePreview(
+    reportedIssue: ReportedIssue
+) {
+    Column(
+        verticalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.content_margin))
+    ) {
+        // the user name
+        Text(
+            text = "Reported by " + reportedIssue.user.firstName + " " + reportedIssue.user.lastName,
+            style = Typography.bodyMedium,
+            fontWeight = FontWeight.Bold,
+            color = MaterialTheme.colorScheme.onPrimaryContainer
+        )
+
+        // the description
+        Text(
+            text = reportedIssue.description,
+            style = Typography.bodyMedium,
+            color = MaterialTheme.colorScheme.onBackground,
+        )
     }
 }
