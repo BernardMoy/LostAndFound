@@ -513,6 +513,49 @@ public class FirebaseCloudFunctionsTest extends FirebaseTestsSetUp {
     }
 
 
+    @Test
+    public void testReportedUsersUpdatedOnUserUpdated() throws ExecutionException, InterruptedException, TimeoutException {
+        // create a user
+        Map<String, Object> dataUser = new HashMap<>();
+        dataUser.put(FirebaseNames.USERS_FIRSTNAME, "test");
+        dataUser.put(FirebaseNames.USERS_LASTNAME, "testL");
+
+        // The Task class allows async operations to block execution
+        Task<DocumentReference> task1 = firestore.collection(FirebaseNames.COLLECTION_USERS).add(dataUser);
+        DocumentReference userItemRef = Tasks.await(task1, 60, TimeUnit.SECONDS);
+        Thread.sleep(2000);
+        String uidUser = userItemRef.getId();
+
+        // create a chat inbox with participant 1 user name
+        Map<String, Object> dataReportedUser = new HashMap<>();
+        dataReportedUser.put(FirebaseNames.REPORT_USER_FROM, uidUser);
+        dataReportedUser.put(FirebaseNames.REPORT_USER_FROM_FIRST_NAME, "test");
+        dataReportedUser.put(FirebaseNames.REPORT_USER_FROM_LAST_NAME, "testL");
+        Task<DocumentReference> task2 = firestore.collection(FirebaseNames.COLLECTION_REPORT_USERS).add(dataReportedUser);
+        DocumentReference chatRef = Tasks.await(task2, 60, TimeUnit.SECONDS);
+        Thread.sleep(2000);
+        String uidReport = chatRef.getId();
+
+        // update the user data
+        Task<Void> task3 = firestore.collection(FirebaseNames.COLLECTION_USERS).document(uidUser).update(Map.of(
+                FirebaseNames.USERS_FIRSTNAME, "test2",
+                FirebaseNames.USERS_LASTNAME, "testl2"
+        ));
+        Tasks.await(task3, 60, TimeUnit.SECONDS);
+        Thread.sleep(2000);
+
+        // assert that the chat inbox item has new data
+        Task<DocumentSnapshot> task4 = firestore.collection(FirebaseNames.COLLECTION_REPORT_USERS).document(uidReport).get();
+        DocumentSnapshot snapshot = Tasks.await(task4, 60, TimeUnit.SECONDS);
+        String newFirstNameL = snapshot.getString(FirebaseNames.REPORT_USER_FROM_FIRST_NAME);
+        String newLastNameL = snapshot.getString(FirebaseNames.REPORT_USER_FROM_LAST_NAME);
+        Thread.sleep(2000);
+
+        Assert.assertEquals("test2", newFirstNameL );
+        Assert.assertEquals("testl2", newLastNameL );
+    }
+
+
 
     @After
     public void tearDown() throws ExecutionException, InterruptedException, TimeoutException {
