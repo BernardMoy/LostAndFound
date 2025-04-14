@@ -27,7 +27,6 @@ import java.io.OutputStream;
 import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
@@ -472,6 +471,47 @@ public class FirebaseCloudFunctionsTest extends FirebaseTestsSetUp {
         Assert.assertTrue(isRead);
     }
 
+    @Test
+    public void testReportedIssuesUpdatedOnUserUpdated() throws ExecutionException, InterruptedException, TimeoutException {
+        // create a user
+        Map<String, Object> dataUser = new HashMap<>();
+        dataUser.put(FirebaseNames.USERS_FIRSTNAME, "test");
+        dataUser.put(FirebaseNames.USERS_LASTNAME, "testL");
+
+        Task<DocumentReference> task1 = firestore.collection(FirebaseNames.COLLECTION_USERS).add(dataUser);
+        DocumentReference userItemRef = Tasks.await(task1, 60, TimeUnit.SECONDS);
+        Thread.sleep(2000);
+        String uidUser = userItemRef.getId();
+
+        // create a reported issue from that user
+        Map<String, Object> dataReportedIssue = new HashMap<>();
+        dataReportedIssue.put(FirebaseNames.REPORT_ISSUE_USER, uidUser);
+        dataReportedIssue.put(FirebaseNames.REPORT_ISSUE_USER_FIRST_NAME, "test");
+        dataReportedIssue.put(FirebaseNames.REPORT_ISSUE_USER_LAST_NAME, "testL");
+        Task<DocumentReference> task2 = firestore.collection(FirebaseNames.COLLECTION_REPORT_ISSUE).add(dataReportedIssue);
+        DocumentReference reportedIssueRef = Tasks.await(task2, 60, TimeUnit.SECONDS);
+        Thread.sleep(2000);
+        String uidReport = reportedIssueRef.getId();
+
+        // update the user data
+        Task<Void> task3 = firestore.collection(FirebaseNames.COLLECTION_USERS).document(uidUser).update(Map.of(
+                FirebaseNames.USERS_FIRSTNAME, "test2",
+                FirebaseNames.USERS_LASTNAME, "testl2"
+        ));
+        Tasks.await(task3, 60, TimeUnit.SECONDS);
+        Thread.sleep(2000);
+
+        // assert that the item has new data
+        Task<DocumentSnapshot> task4 = firestore.collection(FirebaseNames.COLLECTION_REPORT_ISSUE).document(uidReport).get();
+        DocumentSnapshot snapshot = Tasks.await(task4, 60, TimeUnit.SECONDS);
+        String newFirstNameL = snapshot.getString(FirebaseNames.REPORT_ISSUE_USER_FIRST_NAME);
+        String newLastNameL = snapshot.getString(FirebaseNames.REPORT_ISSUE_USER_LAST_NAME);
+        Thread.sleep(2000);
+
+        Assert.assertEquals("test2", newFirstNameL );
+        Assert.assertEquals("testl2", newLastNameL );
+    }
+
 
 
     @After
@@ -484,6 +524,8 @@ public class FirebaseCloudFunctionsTest extends FirebaseTestsSetUp {
         deleteCollection(FirebaseNames.COLLECTION_USERS);
         deleteCollection(FirebaseNames.COLLECTION_CHATS);
         deleteCollection(FirebaseNames.COLLECTION_CHAT_INBOXES);
+        deleteCollection(FirebaseNames.COLLECTION_REPORT_ISSUE);
+        deleteCollection(FirebaseNames.COLLECTION_REPORT_USERS);
         Thread.sleep(2000);
     }
 }

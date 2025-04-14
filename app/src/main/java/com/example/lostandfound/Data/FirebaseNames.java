@@ -13,6 +13,7 @@ public final class FirebaseNames {
     public static final String COLLECTION_LOST_ITEMS = "lost_items";
     public static final String COLLECTION_FOUND_ITEMS = "found_items";
     public static final String COLLECTION_REPORT_ISSUE = "reported_issues";
+    public static final String COLLECTION_REPORT_USERS = "reported_users";
     public static final String COLLECTION_CLAIMED_ITEMS = "claims";
     public static final String COLLECTION_CHATS = "chats";
     public static final String COLLECTION_CHAT_INBOXES = "chat_inboxes";
