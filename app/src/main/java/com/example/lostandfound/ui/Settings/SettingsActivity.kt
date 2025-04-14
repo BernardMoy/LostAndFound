@@ -83,11 +83,7 @@ class SettingsActivity : ComponentActivity() {
         setContent {
             SettingsScreen(activity = this)
         }
-    }
 
-    // load admin on start
-    override fun onStart() {
-        super.onStart()
         viewModel.loadIsAdmin()
     }
 }
