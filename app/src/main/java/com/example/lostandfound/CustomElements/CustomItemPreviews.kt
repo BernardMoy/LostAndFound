@@ -1051,10 +1051,16 @@ fun CustomReportIssuePreview(
         verticalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.content_margin))
     ) {
         // the user name and email
-        Row (
+        Row(
             horizontalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.content_margin)),
             verticalAlignment = Alignment.CenterVertically
-        ){
+        ) {
+            Text(
+                text = "From",
+                style = Typography.bodyMedium,
+                color = MaterialTheme.colorScheme.outline
+            )
+
             Icon(
                 imageVector = Icons.Outlined.PersonOutline,
                 contentDescription = "Person",
@@ -1062,9 +1068,9 @@ fun CustomReportIssuePreview(
                 tint = MaterialTheme.colorScheme.primary
             )
 
-            Column (
+            Column(
                 modifier = Modifier.weight(1f)
-            ){
+            ) {
                 Text(
                     text = reportedIssue.firstName + " " + reportedIssue.lastName,
                     style = Typography.bodyMedium,
@@ -1081,14 +1087,26 @@ fun CustomReportIssuePreview(
         }
 
         // the description
-        Text(
-            text = reportedIssue.description,
-            style = Typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onBackground,
-        )
+        Row(
+            horizontalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.content_margin)),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+
+            Text(
+                text = "Description",
+                style = Typography.bodyMedium,
+                color = MaterialTheme.colorScheme.outline
+            )
+
+            Text(
+                text = reportedIssue.description,
+                style = Typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onBackground,
+            )
+
+        }
     }
 }
-
 
 
 @Composable
@@ -1099,10 +1117,16 @@ fun CustomReportUserPreview(
         verticalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.content_margin))
     ) {
         // the user name and email
-        Row (
+        Row(
             horizontalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.content_margin)),
             verticalAlignment = Alignment.CenterVertically
-        ){
+        ) {
+            Text(
+                text = "From",
+                style = Typography.bodyMedium,
+                color = MaterialTheme.colorScheme.outline
+            )
+
             Icon(
                 imageVector = Icons.Outlined.PersonOutline,
                 contentDescription = "Person",
@@ -1110,9 +1134,9 @@ fun CustomReportUserPreview(
                 tint = MaterialTheme.colorScheme.primary
             )
 
-            Column (
+            Column(
                 modifier = Modifier.weight(1f)
-            ){
+            ) {
                 Text(
                     text = reportedUser.fromFirstName + " " + reportedUser.fromLastName,
                     style = Typography.bodyMedium,
@@ -1129,10 +1153,10 @@ fun CustomReportUserPreview(
         }
 
         // the reported user
-        Row (
+        Row(
             horizontalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.content_margin)),
             verticalAlignment = Alignment.CenterVertically
-        ){
+        ) {
 
             Text(
                 text = "Reported",
@@ -1147,9 +1171,9 @@ fun CustomReportUserPreview(
                 tint = MaterialTheme.colorScheme.error
             )
 
-            Column (
+            Column(
                 modifier = Modifier.weight(1f)
-            ){
+            ) {
                 Text(
                     text = reportedUser.toFirstName + " " + reportedUser.toLastName,
                     style = Typography.bodyMedium,
@@ -1166,10 +1190,32 @@ fun CustomReportUserPreview(
         }
 
         // the description
-        Text(
-            text = reportedUser.description,
-            style = Typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onBackground,
+        Row(
+            horizontalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.content_margin)),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+
+            Text(
+                text = "Reason",
+                style = Typography.bodyMedium,
+                color = MaterialTheme.colorScheme.outline
+            )
+
+            Text(
+                text = reportedUser.description,
+                style = Typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onBackground,
+            )
+        }
+
+        // the view activity log button
+        CustomButton(
+            text = "View user's activity log",
+            type = ButtonType.TONAL,
+            small = true,
+            onClick = {
+                
+            }
         )
     }
 }
