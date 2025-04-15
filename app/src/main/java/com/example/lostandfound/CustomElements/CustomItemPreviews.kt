@@ -1111,7 +1111,8 @@ fun CustomReportIssuePreview(
 
 @Composable
 fun CustomReportUserPreview(
-    reportedUser: ReportedUser
+    reportedUser: ReportedUser,
+    onViewActivityLogClicked: () -> Unit
 ) {
     Column(
         verticalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.content_margin))
@@ -1213,9 +1214,7 @@ fun CustomReportUserPreview(
             text = "View user's activity log",
             type = ButtonType.TONAL,
             small = true,
-            onClick = {
-
-            }
+            onClick = onViewActivityLogClicked
         )
     }
 }

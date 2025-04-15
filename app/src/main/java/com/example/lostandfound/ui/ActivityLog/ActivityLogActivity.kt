@@ -39,11 +39,11 @@ class ActivityLogActivity : ComponentActivity() {
 
         val passedUser = intent.getStringExtra(IntentExtraNames.INTENT_ACTIVITY_LOG_USER_ID)
         if (passedUser != null){
-            viewModel.userID = passedUser
+            viewModel.userID.value = passedUser
         }
 
         setContent {
-            ActivityLogScreen(activity = this)
+            ActivityLogScreen(activity = this, viewModel = viewModel)
         }
     }
 }
@@ -51,20 +51,14 @@ class ActivityLogActivity : ComponentActivity() {
 // mock activity for previews
 class MockActivity : ComponentActivity()
 
-@Preview(showBackground = true)
 @Composable
-fun Preview() {
-    ActivityLogScreen(activity = MockActivity())
-}
-
-@Composable
-fun ActivityLogScreen(activity: ComponentActivity) {
+fun ActivityLogScreen(activity: ComponentActivity, viewModel: ActivityLogViewModel) {
     ComposeTheme {
         Surface {
             Scaffold(
                 // top toolbar
                 topBar = {
-                    BackToolbar(title = "Activity Log", activity = activity)
+                    BackToolbar(title = if (viewModel.userID.value == null) "Activity Log" else "Activity Log of Other User", activity = activity)
                 }
             ) { innerPadding ->
                 Column(
@@ -74,7 +68,7 @@ fun ActivityLogScreen(activity: ComponentActivity) {
                         .padding(dimensionResource(id = R.dimen.title_margin)) // make screen scrollable
                 ) {
                     // content goes here
-                    MainContent()
+                    MainContent(viewModel = viewModel)
                 }
             }
         }
@@ -84,7 +78,7 @@ fun ActivityLogScreen(activity: ComponentActivity) {
 // content includes avatar, edit fields, reminder message and save button
 // get the view model in the function parameter
 @Composable
-fun MainContent(viewModel: ActivityLogViewModel = viewModel()) {
+fun MainContent(viewModel: ActivityLogViewModel) {
     // get the local context
     val context = LocalContext.current
 

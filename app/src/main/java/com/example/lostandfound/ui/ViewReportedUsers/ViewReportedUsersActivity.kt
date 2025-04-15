@@ -1,5 +1,6 @@
 package com.example.lostandfound.ui.ViewReportedUsers
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
@@ -29,7 +30,9 @@ import com.example.lostandfound.CustomElements.CustomCenterText
 import com.example.lostandfound.CustomElements.CustomCenteredProgressbar
 import com.example.lostandfound.CustomElements.CustomReportIssuePreview
 import com.example.lostandfound.CustomElements.CustomReportUserPreview
+import com.example.lostandfound.Data.IntentExtraNames
 import com.example.lostandfound.R
+import com.example.lostandfound.ui.ActivityLog.ActivityLogActivity
 import com.example.lostandfound.ui.theme.ComposeTheme
 
 
@@ -108,7 +111,11 @@ fun MainContent(viewModel: ViewReportedUsersViewModel = viewModel()) {
             items(
                 viewModel.reportedUserList
             ) { reportedUser ->
-                CustomReportUserPreview(reportedUser)
+                CustomReportUserPreview(reportedUser, onViewActivityLogClicked = {
+                    val i : Intent = Intent(context, ActivityLogActivity::class.java)
+                    i.putExtra(IntentExtraNames.INTENT_ACTIVITY_LOG_USER_ID, reportedUser.toUid)
+                    context.startActivity(i)
+                })
                 Spacer(modifier = Modifier.padding(dimensionResource(R.dimen.content_margin)))
                 HorizontalDivider()
             }
