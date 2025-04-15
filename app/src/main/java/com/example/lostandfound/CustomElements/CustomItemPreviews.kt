@@ -55,6 +55,7 @@ import com.example.lostandfound.Data.FoundItem
 import com.example.lostandfound.Data.IntentExtraNames
 import com.example.lostandfound.Data.LostItem
 import com.example.lostandfound.Data.ReportedIssue
+import com.example.lostandfound.Data.ReportedUser
 import com.example.lostandfound.Data.activityLogIcons
 import com.example.lostandfound.Data.activityLogTitles
 import com.example.lostandfound.Data.foundStatusText
@@ -1082,6 +1083,91 @@ fun CustomReportIssuePreview(
         // the description
         Text(
             text = reportedIssue.description,
+            style = Typography.bodyMedium,
+            color = MaterialTheme.colorScheme.onBackground,
+        )
+    }
+}
+
+
+
+@Composable
+fun CustomReportUserPreview(
+    reportedUser: ReportedUser
+) {
+    Column(
+        verticalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.content_margin))
+    ) {
+        // the user name and email
+        Row (
+            horizontalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.content_margin)),
+            verticalAlignment = Alignment.CenterVertically
+        ){
+            Icon(
+                imageVector = Icons.Outlined.PersonOutline,
+                contentDescription = "Person",
+                modifier = Modifier.width(dimensionResource(id = R.dimen.title_margin)),
+                tint = MaterialTheme.colorScheme.primary
+            )
+
+            Column (
+                modifier = Modifier.weight(1f)
+            ){
+                Text(
+                    text = reportedUser.fromFirstName + " " + reportedUser.fromLastName,
+                    style = Typography.bodyMedium,
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.onPrimaryContainer
+                )
+
+                Text(
+                    text = reportedUser.fromEmail,
+                    style = Typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.outline
+                )
+            }
+        }
+
+        // the reported user
+        Row (
+            horizontalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.content_margin)),
+            verticalAlignment = Alignment.CenterVertically
+        ){
+
+            Text(
+                text = "Reported",
+                style = Typography.bodyMedium,
+                color = MaterialTheme.colorScheme.outline
+            )
+
+            Icon(
+                imageVector = Icons.Outlined.PersonOutline,
+                contentDescription = "Person",
+                modifier = Modifier.width(dimensionResource(id = R.dimen.title_margin)),
+                tint = MaterialTheme.colorScheme.error
+            )
+
+            Column (
+                modifier = Modifier.weight(1f)
+            ){
+                Text(
+                    text = reportedUser.toFirstName + " " + reportedUser.toLastName,
+                    style = Typography.bodyMedium,
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.error
+                )
+
+                Text(
+                    text = reportedUser.toEmail,
+                    style = Typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.outline
+                )
+            }
+        }
+
+        // the description
+        Text(
+            text = reportedUser.description,
             style = Typography.bodyMedium,
             color = MaterialTheme.colorScheme.onBackground,
         )

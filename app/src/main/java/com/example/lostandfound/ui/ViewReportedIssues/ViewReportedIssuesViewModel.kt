@@ -6,9 +6,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import com.example.lostandfound.Data.FirebaseNames
 import com.example.lostandfound.Data.ReportedIssue
-import com.example.lostandfound.Data.User
-import com.example.lostandfound.FirebaseManagers.UserManager
-import com.example.lostandfound.FirebaseManagers.UserManager.GetUserCallback
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.QueryDocumentSnapshot
 
