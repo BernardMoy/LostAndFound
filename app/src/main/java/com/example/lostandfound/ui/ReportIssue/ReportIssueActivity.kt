@@ -149,6 +149,7 @@ fun MainContent(viewModel: ReportIssueViewModel = viewModel()) {
     val sp: SharedPreferences = context.getSharedPreferences(SharedPreferencesNames.NAME_USERS, Context.MODE_PRIVATE)
     viewModel.userFirstName.value = sp.getString(SharedPreferencesNames.USER_FIRSTNAME, "") ?: ""
     viewModel.userLastName.value = sp.getString(SharedPreferencesNames.USER_LASTNAME, "") ?: ""
+    viewModel.userEmail.value = sp.getString(SharedPreferencesNames.USER_EMAIL, "") ?: ""
 
     Description(viewModel = viewModel)
     ReminderMessage(viewModel = viewModel)
@@ -178,7 +179,7 @@ fun ReminderMessage(
     viewModel: ReportIssueViewModel
 ) {
     Text(
-        text = "Your user information will be visible when reviewing your reported issue.",
+        text = "Your user information will be visible when an admin reviews your reported issue.",
         style = MaterialTheme.typography.bodyMedium,
         color = Color.Gray,
         modifier = Modifier
