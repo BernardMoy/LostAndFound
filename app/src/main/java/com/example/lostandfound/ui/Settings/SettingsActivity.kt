@@ -84,7 +84,10 @@ class SettingsActivity : ComponentActivity() {
             SettingsScreen(activity = this)
         }
 
-        viewModel.loadIsAdmin()
+        // if the user is logged in, load if is admin
+        if (UserManager.isUserLoggedIn()){
+            viewModel.loadIsAdmin()
+        }
     }
 }
 
