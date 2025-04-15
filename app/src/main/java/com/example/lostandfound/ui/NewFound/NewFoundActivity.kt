@@ -229,9 +229,9 @@ fun MainContent(viewModel: NewFoundViewModel) {
 
     // load data from shared prefs to view models
     val sp: SharedPreferences = context.getSharedPreferences(SharedPreferencesNames.NAME_USERS, Context.MODE_PRIVATE)
-    viewModel.userAvatar.value = sp.getString(SharedPreferencesNames.USER_AVATAR, "") ?: ""
-    viewModel.userFirstName.value = sp.getString(SharedPreferencesNames.USER_FIRSTNAME, "") ?: ""
-    viewModel.userLastName.value = sp.getString(SharedPreferencesNames.USER_LASTNAME, "") ?: ""
+    viewModel.userAvatar = sp.getString(SharedPreferencesNames.USER_AVATAR, "") ?: ""
+    viewModel.userFirstName = sp.getString(SharedPreferencesNames.USER_FIRSTNAME, "") ?: ""
+    viewModel.userLastName = sp.getString(SharedPreferencesNames.USER_LASTNAME, "") ?: ""
 
 
     // the bottom sheet for getting image from camera or gallery options

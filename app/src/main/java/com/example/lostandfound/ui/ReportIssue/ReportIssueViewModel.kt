@@ -14,9 +14,9 @@ class ReportIssueViewModel : ViewModel() {
     val descriptionError: MutableState<String> = mutableStateOf("")
 
     // user info to be retrieved from shared pref using context
-    val userFirstName: MutableState<String> = mutableStateOf("")
-    val userLastName: MutableState<String> = mutableStateOf("")
-    val userEmail: MutableState<String> = mutableStateOf("")
+    var userFirstName: String = ""
+    var userLastName: String = ""
+    var userEmail: String = ""
 
     fun onDescriptionChanged(s: String) {
         description.value = s
@@ -41,9 +41,9 @@ class ReportIssueViewModel : ViewModel() {
         val data = mapOf(
             FirebaseNames.REPORT_ISSUE_USER to UserManager.getUserID(),
             FirebaseNames.REPORT_ISSUE_DESC to description.value,
-            FirebaseNames.REPORT_ISSUE_USER_FIRST_NAME to userFirstName.value,
-            FirebaseNames.REPORT_ISSUE_USER_LAST_NAME to userLastName.value,
-            FirebaseNames.REPORT_ISSUE_USER_EMAIL to userEmail.value
+            FirebaseNames.REPORT_ISSUE_USER_FIRST_NAME to userFirstName,
+            FirebaseNames.REPORT_ISSUE_USER_LAST_NAME to userLastName,
+            FirebaseNames.REPORT_ISSUE_USER_EMAIL to userEmail
         )
 
         val manager = FirestoreManager()

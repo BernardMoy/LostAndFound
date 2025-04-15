@@ -48,9 +48,9 @@ class NewFoundViewModel : ViewModel() {
     val securityQuestionAns: MutableState<String> = mutableStateOf("")
 
     // user info to be retrieved from shared pref using context
-    val userAvatar: MutableState<String> = mutableStateOf("")
-    val userFirstName: MutableState<String> = mutableStateOf("")
-    val userLastName: MutableState<String> = mutableStateOf("")
+    var userAvatar: String = ""
+    var userFirstName: String = ""
+    var userLastName: String = ""
 
     // initially the selected category is null
     var selectedCategory by mutableStateOf<Category?>(null)
@@ -218,9 +218,9 @@ class NewFoundViewModel : ViewModel() {
             FirebaseNames.FOUND_SECURITY_Q_ANS to securityQuestionAns.value,
             FirebaseNames.LOSTFOUND_TIMEPOSTED to currentTime,
             FirebaseNames.LOSTFOUND_LOCATION to selectedLocation.value,
-            FirebaseNames.USERS_FIRSTNAME to userFirstName.value,
-            FirebaseNames.USERS_LASTNAME to userLastName.value,
-            FirebaseNames.USERS_AVATAR to userAvatar.value
+            FirebaseNames.USERS_FIRSTNAME to userFirstName,
+            FirebaseNames.USERS_LASTNAME to userLastName,
+            FirebaseNames.USERS_AVATAR to userAvatar
         )
 
         // add to the firestore db
@@ -282,9 +282,9 @@ class NewFoundViewModel : ViewModel() {
                                         securityQuestionAns = securityQuestionAns.value,
                                         user = User(
                                             userID = UserManager.getUserID(),
-                                            avatar = userAvatar.value,
-                                            firstName = userFirstName.value,
-                                            lastName = userLastName.value
+                                            avatar = userAvatar,
+                                            firstName = userFirstName,
+                                            lastName = userLastName
                                         ),
                                     )
 
@@ -341,9 +341,9 @@ class NewFoundViewModel : ViewModel() {
                             securityQuestionAns = securityQuestionAns.value,
                             user = User(
                                 userID = UserManager.getUserID(),
-                                avatar = userAvatar.value,
-                                firstName = userFirstName.value,
-                                lastName = userLastName.value
+                                avatar = userAvatar,
+                                firstName = userFirstName,
+                                lastName = userLastName
                             ),
                         )
 

@@ -39,9 +39,9 @@ class NewLostViewModel : ViewModel() {
     val isLocationDialogShown: MutableState<Boolean> = mutableStateOf(false)
 
     // user info to be retrieved from shared pref using context
-    val userAvatar: MutableState<String> = mutableStateOf("")
-    val userFirstName: MutableState<String> = mutableStateOf("")
-    val userLastName: MutableState<String> = mutableStateOf("")
+    var userAvatar: String = ""
+    var userFirstName: String = ""
+    var userLastName: String = ""
 
     // initially the selected category is null
     var selectedCategory by mutableStateOf<Category?>(null)
@@ -192,9 +192,9 @@ class NewLostViewModel : ViewModel() {
             FirebaseNames.LOSTFOUND_DESCRIPTION to additionalDescription.value,
             FirebaseNames.LOSTFOUND_TIMEPOSTED to currentTime,
             FirebaseNames.LOST_IS_TRACKING to false, // default not tracking
-            FirebaseNames.USERS_AVATAR to userAvatar.value,
-            FirebaseNames.USERS_FIRSTNAME to userFirstName.value,
-            FirebaseNames.USERS_LASTNAME to userLastName.value
+            FirebaseNames.USERS_AVATAR to userAvatar,
+            FirebaseNames.USERS_FIRSTNAME to userFirstName,
+            FirebaseNames.USERS_LASTNAME to userLastName
         )
 
         // add to the firestore db
@@ -255,9 +255,9 @@ class NewLostViewModel : ViewModel() {
                                         isTracking = false,
                                         user = User(
                                             userID = UserManager.getUserID(),
-                                            avatar = userAvatar.value,
-                                            firstName = userFirstName.value,
-                                            lastName = userLastName.value
+                                            avatar = userAvatar,
+                                            firstName = userFirstName,
+                                            lastName = userLastName
                                         ),
                                     )
 
@@ -305,9 +305,9 @@ class NewLostViewModel : ViewModel() {
                             isTracking = false,
                             user = User(
                                 userID = UserManager.getUserID(),
-                                avatar = userAvatar.value,
-                                firstName = userFirstName.value,
-                                lastName = userLastName.value
+                                avatar = userAvatar,
+                                firstName = userFirstName,
+                                lastName = userLastName
                             ),
                         )
 
