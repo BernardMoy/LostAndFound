@@ -15,6 +15,7 @@ import com.example.lostandfound.FirebaseManagers.UserManager
 import com.example.lostandfound.FirebaseManagers.FirestoreManager
 import com.example.lostandfound.FirebaseManagers.FirestoreManager.Callback
 import com.example.lostandfound.Utility.DateTimeManager
+import com.example.lostandfound.Utility.ErrorCallback
 import com.google.firebase.firestore.DocumentChange
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ListenerRegistration
@@ -38,6 +39,7 @@ class ChatInboxViewModel : ViewModel() {
 
     // also loaded on create
     var currentUser: User = User()
+    var currentEmail: String = ""
 
     // store the current typed message content
     val typedText: MutableState<String> = mutableStateOf("")
@@ -205,8 +207,49 @@ class ChatInboxViewModel : ViewModel() {
     }
 
     // upload to database when a user is reported
+    // add the issue to the database when done button is clicked
     fun reportUser(callback: ReportUserCallback) {
+        // specifically, get the email of the user trying to report
+        // this is currently not in the User class because it should not be visible elsewhere.
+        FirebaseFirestore.getInstance().collection(FirebaseNames.COLLECTION_USERS)
+            .document(chatUser.userID)
+            .get()
+            .addOnSuccessListener { doc ->
+                val chatUserEmail = doc[FirebaseNames.USERS_EMAIL].toString()
 
+                // add the issue to database with the user id
+                val data = mapOf(
+                    FirebaseNames.REPORT_USER_FROM to currentUser.userID,
+                    FirebaseNames.REPORT_USER_FROM_FIRST_NAME to currentUser.firstName,
+                    FirebaseNames.REPORT_USER_FROM_LAST_NAME to currentUser.lastName,
+                    FirebaseNames.REPORT_USER_FROM_EMAIL to currentEmail,
+                    FirebaseNames.REPORT_USER_TO to chatUser.userID,
+                    FirebaseNames.REPORT_USER_TO_FIRST_NAME to chatUser.firstName,
+                    FirebaseNames.REPORT_USER_TO_LAST_NAME to chatUser.lastName,
+                    FirebaseNames.REPORT_USER_TO_EMAIL to chatUserEmail,
+                    FirebaseNames.REPORT_USER_DESC to reportUserInputText.value
+                )
+
+                val manager = FirestoreManager()
+                manager.putWithUniqueId(
+                    FirebaseNames.COLLECTION_REPORT_USERS,
+                    data,
+                    object : FirestoreManager.Callback<String> {
+                        override fun onComplete(result: String) {
+                            if (result.isEmpty()) {
+                                callback.onComplete(false)
+                                return
+                            }
+
+                            callback.onComplete(true)   // return no errors
+                        }
+                    })
+
+            }
+            .addOnFailureListener{ e ->
+                Log.e("Firestore error", e.message.toString())
+                callback.onComplete(false)
+            }
     }
 
     // clear the previous listener when the view model is destroyed

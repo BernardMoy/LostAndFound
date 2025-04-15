@@ -163,6 +163,7 @@ fun MainContent(viewModel: ChatInboxViewModel) {
         firstName = sp.getString(SharedPreferencesNames.USER_FIRSTNAME, "") ?: "",
         lastName = sp.getString(SharedPreferencesNames.USER_LASTNAME, "") ?: ""
     )
+    viewModel.currentEmail = sp.getString(SharedPreferencesNames.USER_EMAIL, "") ?: ""
 
 
     Column {
@@ -262,9 +263,13 @@ fun UserData(
                 // upload the report issue to db
                 viewModel.reportUser(object : ReportUserCallback {
                     override fun onComplete(result: Boolean) {
-
+                        if (!result){
+                            Toast.makeText(context, "Failed to report user", Toast.LENGTH_SHORT).show()
+                            return
+                        }
 
                         // close dialog
+                        Toast.makeText(context, "User reported", Toast.LENGTH_SHORT).show()
                         viewModel.isReportUserDialogShown.value = false
                     }
 
