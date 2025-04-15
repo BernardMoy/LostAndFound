@@ -23,6 +23,7 @@ import androidx.compose.material.icons.automirrored.outlined.ArrowForward
 import androidx.compose.material.icons.filled.Circle
 import androidx.compose.material.icons.filled.RadioButtonChecked
 import androidx.compose.material.icons.filled.Star
+import androidx.compose.material.icons.outlined.PersonOutline
 import androidx.compose.material.icons.outlined.QuestionMark
 import androidx.compose.material.icons.outlined.TrackChanges
 import androidx.compose.material3.Icon
@@ -1048,13 +1049,35 @@ fun CustomReportIssuePreview(
     Column(
         verticalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.content_margin))
     ) {
-        // the user name
-        Text(
-            text = "Reported by " + reportedIssue.firstName + " " + reportedIssue.lastName,
-            style = Typography.bodyMedium,
-            fontWeight = FontWeight.Bold,
-            color = MaterialTheme.colorScheme.onPrimaryContainer
-        )
+        // the user name and email
+        Row (
+            horizontalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.content_margin)),
+            verticalAlignment = Alignment.CenterVertically
+        ){
+            Icon(
+                imageVector = Icons.Outlined.PersonOutline,
+                contentDescription = "Person",
+                modifier = Modifier.width(dimensionResource(id = R.dimen.title_margin)),
+                tint = MaterialTheme.colorScheme.primary
+            )
+
+            Column (
+                modifier = Modifier.weight(1f)
+            ){
+                Text(
+                    text = reportedIssue.firstName + " " + reportedIssue.lastName,
+                    style = Typography.bodyMedium,
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.onPrimaryContainer
+                )
+
+                Text(
+                    text = reportedIssue.email,
+                    style = Typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.outline
+                )
+            }
+        }
 
         // the description
         Text(
