@@ -18,6 +18,9 @@ class ActivityLogViewModel : ViewModel() {
 
     val isLoading: MutableState<Boolean> = mutableStateOf(true)
 
+    // store the user to display the activity log items, or null if not exist (For current user)
+    var userID : String? = null
+
     // store a list of activity log items
     val itemData: MutableList<ActivityLogItem> = mutableListOf()
 
@@ -28,7 +31,7 @@ class ActivityLogViewModel : ViewModel() {
 
         val db = FirebaseFirestore.getInstance()
         db.collection(FirebaseNames.COLLECTION_ACTIVITY_LOG_ITEMS)
-            .whereEqualTo(FirebaseNames.ACTIVITY_LOG_ITEM_USER_ID, UserManager.getUserID())
+            .whereEqualTo(FirebaseNames.ACTIVITY_LOG_ITEM_USER_ID, userID ?: UserManager.getUserID())
             .orderBy(FirebaseNames.ACTIVITY_LOG_ITEM_TIMESTAMP, Query.Direction.DESCENDING)
             .get()
             .addOnSuccessListener { result ->

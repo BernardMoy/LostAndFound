@@ -26,4 +26,7 @@ public final class IntentExtraNames {
 
     public static final String INTENT_SCORE_DATA = "score_data";
 
+    // user id to be passed to activity log for admins
+    public static final String INTENT_ACTIVITY_LOG_USER_ID = "user_id";
+
 }

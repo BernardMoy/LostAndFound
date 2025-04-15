@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -25,13 +26,21 @@ import com.example.lostandfound.CustomElements.BackToolbar
 import com.example.lostandfound.CustomElements.CustomActivityLogItemPreview
 import com.example.lostandfound.CustomElements.CustomCenterText
 import com.example.lostandfound.CustomElements.CustomCenteredProgressbar
+import com.example.lostandfound.Data.IntentExtraNames
+import com.example.lostandfound.Data.LostItem
 import com.example.lostandfound.R
 import com.example.lostandfound.ui.theme.ComposeTheme
 
 
 class ActivityLogActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
+        val viewModel: ActivityLogViewModel by viewModels()
         super.onCreate(savedInstanceState)
+
+        val passedUser = intent.getStringExtra(IntentExtraNames.INTENT_ACTIVITY_LOG_USER_ID)
+        if (passedUser != null){
+            viewModel.userID = passedUser
+        }
 
         setContent {
             ActivityLogScreen(activity = this)

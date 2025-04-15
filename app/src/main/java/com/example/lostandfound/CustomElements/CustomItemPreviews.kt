@@ -1214,7 +1214,7 @@ fun CustomReportUserPreview(
             type = ButtonType.TONAL,
             small = true,
             onClick = {
-                
+
             }
         )
     }
