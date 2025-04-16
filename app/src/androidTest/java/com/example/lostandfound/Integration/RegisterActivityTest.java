@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 
 import androidx.test.espresso.Espresso;
 import androidx.test.espresso.action.ViewActions;
+import androidx.test.espresso.assertion.ViewAssertions;
 import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 
@@ -21,10 +22,12 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
+import org.mockito.internal.matchers.Matches;
 
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
+import java.util.regex.Matcher;
 
 
 public class RegisterActivityTest extends FirebaseTestsSetUp {
@@ -46,6 +49,45 @@ public class RegisterActivityTest extends FirebaseTestsSetUp {
      */
     @Before
     public void setUp() throws InterruptedException, ExecutionException, TimeoutException {
+
+    }
+
+    /*
+    Test that the error message appear if attempting to register not using uni email
+     */
+    @Test
+    public void testRegisterNotUniEmail() throws InterruptedException, ExecutionException, TimeoutException {
+        // fill in the credentials
+        Espresso.onView(ViewMatchers.withId(R.id.register_first_name)).perform(
+                ViewActions.typeText(firstName)
+        );
+        Espresso.onView(ViewMatchers.withId(R.id.register_last_name)).perform(
+                ViewActions.typeText(lastName)
+        );
+        Espresso.onView(ViewMatchers.withId(R.id.register_email)).perform(
+                ViewActions.typeText("holo@gmail.com")
+        );
+        Espresso.onView(ViewMatchers.withId(R.id.register_password)).perform(
+                ViewActions.typeText(password)
+        );
+        Espresso.onView(ViewMatchers.withId(R.id.register_password_confirm)).perform(
+                ViewActions.typeText(password)
+        );
+
+        // click the register button
+        Espresso.closeSoftKeyboard();  // close the keyboard first
+        Espresso.onView(ViewMatchers.withId(R.id.register_button)).perform(
+                ViewActions.click()
+        );
+
+        // check if error is shown
+        Espresso.onView(ViewMatchers.withId(R.id.register_error)).check(
+                ViewAssertions.matches(ViewMatchers.withText("Please Register with your university email (@warwick.ac.uk)"))
+        );
+
+        Thread.sleep(2000);
+
+        // assert that the error message is visible
 
     }
 
@@ -84,6 +126,7 @@ public class RegisterActivityTest extends FirebaseTestsSetUp {
         QuerySnapshot querySnapshot = Tasks.await(task, 60, TimeUnit.SECONDS);
         assertEquals(1, querySnapshot.size());
     }
+
 
 
     @After
