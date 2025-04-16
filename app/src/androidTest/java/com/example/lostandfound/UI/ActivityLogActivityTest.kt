@@ -12,6 +12,7 @@ import com.example.lostandfound.Data.FirebaseNames
 import com.example.lostandfound.Data.activityLogTitles
 import com.example.lostandfound.FirebaseTestsSetUp
 import com.example.lostandfound.ui.ActivityLog.ActivityLogScreen
+import com.example.lostandfound.ui.ActivityLog.ActivityLogViewModel
 import com.google.android.gms.tasks.Tasks
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -210,7 +211,8 @@ class ActivityLogActivityTest : FirebaseTestsSetUp() {
     fun testActivityLogItemsShown() {
         composeTestRule.setContent {
             ActivityLogScreen(
-                activity = ComponentActivity()
+                activity = ComponentActivity(),
+                viewModel = ActivityLogViewModel()
             )
         }
 
