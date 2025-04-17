@@ -1,9 +1,13 @@
 package com.example.lostandfound.UI
 
 import androidx.compose.ui.test.junit4.createComposeRule
+import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
+import androidx.compose.ui.test.performClick
 import com.example.lostandfound.Data.FirebaseNames
 import com.example.lostandfound.FirebaseTestsSetUp
+import com.example.lostandfound.ui.Home.HomeFragmentScreen
+import com.example.lostandfound.ui.Home.HomeFragmentViewModel
 import com.example.lostandfound.ui.Lost.LostFragmentScreen
 import com.example.lostandfound.ui.Lost.LostFragmentViewModel
 import com.google.android.gms.maps.model.LatLng
@@ -22,7 +26,7 @@ import java.util.concurrent.TimeUnit
 import java.util.concurrent.TimeoutException
 
 
-class LoggedoutFragmentUITest : FirebaseTestsSetUp() {
+class HomeFragmentUITest : FirebaseTestsSetUp() {
 
     // set up firestore emulator in static context
     companion object {
@@ -57,49 +61,38 @@ class LoggedoutFragmentUITest : FirebaseTestsSetUp() {
         // after user creation, the user is logged in
         // assert current user is not null
         assertNotNull(auth!!.currentUser)
-
-        // add the data to database, with the user ID above
-        val dataLost1 = mutableMapOf<String, Any>(
-            FirebaseNames.LOSTFOUND_ITEMNAME to "298heh29",
-            FirebaseNames.LOSTFOUND_USER to userID.toString(),
-            FirebaseNames.LOSTFOUND_CATEGORY to "testCat",
-            FirebaseNames.LOSTFOUND_SUBCATEGORY to "testSubCatwqq2",
-            FirebaseNames.LOSTFOUND_COLOR to mutableListOf("Black", "Red"),
-            FirebaseNames.LOSTFOUND_BRAND to "testBrand",
-            FirebaseNames.LOSTFOUND_EPOCHDATETIME to 1738819980L,
-            FirebaseNames.LOSTFOUND_LOCATION to LatLng(52.381162440739686, -1.5614377315953403),
-            FirebaseNames.LOSTFOUND_DESCRIPTION to "testDesc",
-            FirebaseNames.LOST_IS_TRACKING to false,
-            FirebaseNames.LOSTFOUND_TIMEPOSTED to 1739941511L
-        )
-
-        // Post the items
-        val task1 = firestore!!.collection(FirebaseNames.COLLECTION_LOST_ITEMS).add(dataLost1)
-        val ref1 = Tasks.await(task1, 60, TimeUnit.SECONDS)
-        Thread.sleep(2000)
-        lostID = ref1.id
     }
 
     @get:Rule
     val composeTestRule = createComposeRule()
 
-    // test that in the lost fragment, the item added is shown
+    // test that in the home fragment, two large buttons are shown
     @Test
-    fun testLostItemShown() {
-        val viewModel = LostFragmentViewModel()
+    fun testLargeLost(){
+        val viewModel = HomeFragmentViewModel()
         composeTestRule.setContent {
-            LostFragmentScreen(
-                viewModel = viewModel,
-                isTesting = true
+            HomeFragmentScreen(
+                viewModel = viewModel
             )
         }
-
         Thread.sleep(5000)
 
-        // assert the lost item preview details of the current user is shown on screen
-        composeTestRule.onNodeWithText("298heh29").assertExists()
-        composeTestRule.onNodeWithText("Category: " + "testSubCatwqq2")
-            .assertExists() // only the subcat is shown
+        composeTestRule.onNodeWithTag("largeLostButton").performClick()
+        composeTestRule.onNodeWithText("New Lost item").assertExists()
+    }
+
+    @Test
+    fun testLargeFound(){
+        val viewModel = HomeFragmentViewModel()
+        composeTestRule.setContent {
+            HomeFragmentScreen(
+                viewModel = viewModel
+            )
+        }
+        Thread.sleep(5000)
+
+        composeTestRule.onNodeWithTag("largeFoundButton").performClick()
+        composeTestRule.onNodeWithText("New Found item").assertExists()
     }
 
 
@@ -111,10 +104,6 @@ class LoggedoutFragmentUITest : FirebaseTestsSetUp() {
         TimeoutException::class
     )
     fun tearDown() {
-        // clear all data
-        deleteCollection(FirebaseNames.COLLECTION_LOST_ITEMS)
-        deleteCollection(FirebaseNames.COLLECTION_ACTIVITY_LOG_ITEMS)
-
         // delete current user at the end, as this will trigger cloud functions
         if (auth!!.currentUser != null) {
             Tasks.await(

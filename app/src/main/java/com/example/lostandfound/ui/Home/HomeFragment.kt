@@ -328,6 +328,7 @@ fun ImageAndButton(
                 ) {
                     CustomButton(
                         text = "I have lost",
+                        testTag = "largeLostButton",
                         type = ButtonType.FILLED,
                         onClick = {
                             val intent = Intent(context, NewLostActivity::class.java)
@@ -345,6 +346,7 @@ fun ImageAndButton(
                 ) {
                     CustomButton(
                         text = "I have found",
+                        testTag = "largeFoundButton",
                         type = ButtonType.TONAL,
                         onClick = {
                             val intent = Intent(context, NewFoundActivity::class.java)

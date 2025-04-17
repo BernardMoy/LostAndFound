@@ -2,6 +2,7 @@ package com.example.lostandfound.UI
 
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithText
+import androidx.compose.ui.test.performClick
 import com.example.lostandfound.Data.FirebaseNames
 import com.example.lostandfound.FirebaseTestsSetUp
 import com.example.lostandfound.ui.Lost.LostFragmentScreen
@@ -101,6 +102,29 @@ class LostFragmentUITest : FirebaseTestsSetUp() {
         composeTestRule.onNodeWithText("Category: " + "testSubCatwqq2")
             .assertExists() // only the subcat is shown
     }
+
+    // test that when the item is clicked, it is redirected to view lost item activity
+    @Test
+    fun testLostItemClicked() {
+        val viewModel = LostFragmentViewModel()
+        composeTestRule.setContent {
+            LostFragmentScreen(
+                viewModel = viewModel,
+                isTesting = true
+            )
+        }
+
+        Thread.sleep(5000)
+
+        // assert the lost item preview details of the current user is shown on screen
+        composeTestRule.onNodeWithText("298heh29").assertExists()
+        composeTestRule.onNodeWithText("View").performClick()
+
+        Thread.sleep(1000)
+        composeTestRule.onNodeWithText("View lost item").assertExists()
+        composeTestRule.onNodeWithText("Reference: #$lostID").assertExists()
+    }
+
 
 
     // clear all data in firestore after tests
