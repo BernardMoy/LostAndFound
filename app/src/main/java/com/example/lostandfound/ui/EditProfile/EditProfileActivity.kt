@@ -279,6 +279,7 @@ fun FirstAndLastNameFields(
         CustomEditText(
             fieldLabel = "First name",
             fieldContent = viewModel.firstName.value,
+            testTag = "editProfileFirstName",
             leftIcon = Icons.Outlined.AccountCircle,
             isEditable = true,
             onTextChanged = { viewModel.onFirstNameChanged(it) },
@@ -287,8 +288,10 @@ fun FirstAndLastNameFields(
         HorizontalDivider(thickness = 1.dp, color = Color.Gray)
 
         // last name field
-        CustomEditText(fieldLabel = "Last name",
+        CustomEditText(
+            fieldLabel = "Last name",
             fieldContent = viewModel.lastName.value,
+            testTag = "editProfileLastName",
             leftIcon = Icons.Outlined.AccountCircle,
             isEditable = true,
             onTextChanged = { viewModel.onLastNameChanged(it) }
