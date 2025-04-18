@@ -63,6 +63,7 @@ import com.google.firebase.FirebaseApp;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.FirebaseFirestoreSettings;
 import com.google.firebase.firestore.QuerySnapshot;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -93,6 +94,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // initialise firebase app
         FirebaseApp.initializeApp(MainActivity.this);
         db = FirebaseFirestore.getInstance();
+
+        // configure firestore settings to allow offline caching
+        FirebaseFirestoreSettings settings = new FirebaseFirestoreSettings.Builder()
+                .setPersistenceEnabled(true)
+                .build();
+        db.setFirestoreSettings(settings);
 
         // create a new notification channel
         NotificationChannel channel = new NotificationChannel(
