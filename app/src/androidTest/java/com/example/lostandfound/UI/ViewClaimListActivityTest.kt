@@ -3,15 +3,12 @@ package com.example.lostandfound.UI
 import android.content.Intent
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithText
-import androidx.compose.ui.test.performClick
-import androidx.compose.ui.test.performScrollTo
 import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.ApplicationProvider
 import com.example.lostandfound.Data.FirebaseNames
 import com.example.lostandfound.Data.FoundItem
 import com.example.lostandfound.Data.IntentExtraNames
 import com.example.lostandfound.FirebaseTestsSetUp
-
 import com.example.lostandfound.ui.ViewClaim.ViewClaimActivity
 import com.example.lostandfound.ui.ViewClaimList.ViewClaimListActivity
 import com.google.android.gms.maps.model.LatLng
@@ -19,9 +16,7 @@ import com.google.android.gms.tasks.Tasks
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import org.junit.After
-import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
-import org.junit.Assert.assertTrue
 import org.junit.Assert.fail
 import org.junit.Before
 import org.junit.Rule
@@ -35,7 +30,7 @@ class ViewClaimListActivityTest : FirebaseTestsSetUp() {
         private var firestore: FirebaseFirestore? = getFirestore()
         private var auth: FirebaseAuth? = getAuth()
 
-        private var userID :String? = null
+        private var userID: String? = null
         private var found1ID: String? = null
         private var lost1ID: String? = null
         private var lost2ID: String? = null
@@ -186,7 +181,8 @@ class ViewClaimListActivityTest : FirebaseTestsSetUp() {
         Thread.sleep(2000)
 
         // assert the correct intent has been passed
-        assertNotNull(intent.getParcelableExtra(
+        assertNotNull(
+            intent.getParcelableExtra(
                 IntentExtraNames.INTENT_FOUND_ID
             )
         )
