@@ -39,10 +39,10 @@ class SettingsActivityTest : FirebaseTestsSetUp() {
 
 
     /*
-    Test if the profile edits are reflected in the db
+    Test if admin settings show for admins
      */
     @Test
-    fun testEditProfile() {
+    fun testWithAdmin() {
         // logout current user
         if (auth!!.currentUser != null){
             auth!!.signOut()
@@ -96,6 +96,66 @@ class SettingsActivityTest : FirebaseTestsSetUp() {
         Thread.sleep(2000)
 
         composeTestRule.onNodeWithText("Admin settings").assertExists()
+    }
+
+    /*
+    Test if admin setting not show for non admins
+     */
+    @Test
+    fun testWithoutAdmin() {
+        // logout current user
+        if (auth!!.currentUser != null){
+            auth!!.signOut()
+        }
+        // create and sign in test user
+        val email = "test2@warwick"
+        val password = "1234ABCde"
+        val firstName = "fn"
+        val lastName = "ln"
+
+        val latch: CountDownLatch = CountDownLatch(1)
+        auth!!.createUserWithEmailAndPassword(email, password).addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                val user = auth!!.currentUser
+                if (user != null) {
+                    userID = user.uid
+                }
+                latch.countDown()
+            } else {
+                fail("Failed while creating a user")
+                latch.countDown()
+            }
+        }
+        latch.await()  // wait for user creation
+
+        // after user creation, the user is logged in
+        // assert current user is not null
+        assertNotNull(auth!!.currentUser)
+
+        val dataUser1 = mutableMapOf<String, Any>(
+            FirebaseNames.USERS_FIRSTNAME to firstName,
+            FirebaseNames.USERS_LASTNAME to lastName,
+            FirebaseNames.USERS_AVATAR to "",
+            FirebaseNames.USERS_EMAIL to email,
+            FirebaseNames.USERS_IS_ADMIN to false
+        )
+        val task1 = firestore!!.collection(FirebaseNames.COLLECTION_USERS).document(
+            userID.toString()
+        )
+            .set(dataUser1)
+        Tasks.await(task1, 60, TimeUnit.SECONDS)
+        Thread.sleep(2000)
+
+
+        composeTestRule.setContent {
+            SettingsScreen(
+                activity = ComponentActivity(),
+                viewModel = SettingsViewModel()
+            )
+        }
+        Thread.sleep(2000)
+
+        composeTestRule.onNodeWithText("Admin settings").assertDoesNotExist()
     }
 
     @After
