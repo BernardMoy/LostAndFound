@@ -126,7 +126,6 @@ class LostFragmentUITest : FirebaseTestsSetUp() {
     }
 
 
-
     // clear all data in firestore after tests
     @After
     @Throws(

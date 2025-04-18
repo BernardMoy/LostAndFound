@@ -16,7 +16,6 @@ import com.example.lostandfound.Data.LostItem
 import com.example.lostandfound.Data.User
 import com.example.lostandfound.Data.foundStatusText
 import com.example.lostandfound.FirebaseTestsSetUp
-import com.example.lostandfound.UI.ViewFoundUITest.Companion
 import com.example.lostandfound.ui.ViewLost.ViewLostActivity
 import com.google.android.gms.tasks.Tasks
 import com.google.firebase.auth.FirebaseAuth

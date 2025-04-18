@@ -256,7 +256,8 @@ class ItemManagerTest : FirebaseTestsSetUp() {
             outputStream.write(ByteArray(1024)) // write empty image
         }
         // upload the storage image to firebase storage
-        val ref11 = storage!!.reference.child(FirebaseNames.FOLDER_LOST_IMAGE).child(lost1ID.toString())
+        val ref11 =
+            storage!!.reference.child(FirebaseNames.FOLDER_LOST_IMAGE).child(lost1ID.toString())
         val task11: Task<UploadTask.TaskSnapshot> = ref11.putFile(Uri.fromFile(lostImg))
         Tasks.await(task11, 60, TimeUnit.SECONDS)
         Thread.sleep(2000)
@@ -271,7 +272,8 @@ class ItemManagerTest : FirebaseTestsSetUp() {
             outputStream.write(ByteArray(1024)) // write empty image
         }
         // upload the storage image to firebase storage
-        val ref12 = storage!!.reference.child(FirebaseNames.FOLDER_FOUND_IMAGE).child(found1ID.toString())
+        val ref12 =
+            storage!!.reference.child(FirebaseNames.FOLDER_FOUND_IMAGE).child(found1ID.toString())
         val task12: Task<UploadTask.TaskSnapshot> = ref12.putFile(Uri.fromFile(foundImg))
         Tasks.await(task12, 60, TimeUnit.SECONDS)
         Thread.sleep(2000)

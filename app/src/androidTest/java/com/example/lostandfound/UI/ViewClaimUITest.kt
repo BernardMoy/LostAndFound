@@ -186,8 +186,6 @@ class ViewClaimUITest : FirebaseTestsSetUp() {
         )
 
 
-
-
         // Post the items
         val task2 = firestore!!.collection(FirebaseNames.COLLECTION_FOUND_ITEMS).add(dataFound1)
         val ref2 = Tasks.await(task2, 60, TimeUnit.SECONDS)
@@ -214,8 +212,6 @@ class ViewClaimUITest : FirebaseTestsSetUp() {
         val ref8 = Tasks.await(task8, 60, TimeUnit.SECONDS)
         Thread.sleep(2000)
         found2ID = ref8.id
-
-
 
 
         // create claims based on the ids
@@ -318,11 +314,12 @@ class ViewClaimUITest : FirebaseTestsSetUp() {
             )
         )
 
-        composeTestRule.onNodeWithText("You cannot approve this item as you have already approved another item.").assertExists()
+        composeTestRule.onNodeWithText("You cannot approve this item as you have already approved another item.")
+            .assertExists()
     }
 
     @Test
-    fun testLostStatus1FoundStatus2(){
+    fun testLostStatus1FoundStatus2() {
         val intent =
             Intent(
                 ApplicationProvider.getApplicationContext(),

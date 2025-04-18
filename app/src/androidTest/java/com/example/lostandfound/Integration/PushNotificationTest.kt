@@ -20,20 +20,21 @@ import java.util.concurrent.TimeUnit
 IMPORTANT -- Launch the app and ENABLE NOTIFICATION PERMISSIONS FIRST
 Otherwise THIS TEST WILL FAIL
  */
-class PushNotificationTest : FirebaseMessagingService(){
+class PushNotificationTest : FirebaseMessagingService() {
     private lateinit var device: UiDevice
     private lateinit var context: Context
 
     @Before
-    fun setUp(){
+    fun setUp() {
         // set up the device
         device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
 
         // set up the app context
         context = InstrumentationRegistry.getInstrumentation().targetContext
     }
+
     @Test
-    fun testSendPushNotification(){
+    fun testSendPushNotification() {
         // first get the FCM token of the current device
         var token = ""
         val latch = CountDownLatch(1)
@@ -56,9 +57,9 @@ class PushNotificationTest : FirebaseMessagingService(){
             fcmToken = token,
             title = "TestTitle",
             content = "TestContent",
-            callback = object: PushNotificationCallback{
+            callback = object : PushNotificationCallback {
                 override fun onComplete(success: Boolean) {
-                    if (!success){
+                    if (!success) {
                         fail("Failed sending push notification")
                         latch2.countDown()
                         return

@@ -2,7 +2,6 @@ package com.example.lostandfound.UI
 
 import androidx.activity.ComponentActivity
 import androidx.compose.ui.test.assertAny
-import androidx.compose.ui.test.hasTestTag
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onChildren

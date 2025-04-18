@@ -212,7 +212,7 @@ public class FirebaseCloudFunctionsTest extends FirebaseTestsSetUp {
         File img = File.createTempFile(uidLost, ".jpeg");
         try (OutputStream outputStream = Files.newOutputStream(img.toPath())) {
             outputStream.write(new byte[1024]);    // write empty image
-        } catch (Exception e){
+        } catch (Exception e) {
             Assert.fail(e.getMessage());
         }
 
@@ -259,7 +259,7 @@ public class FirebaseCloudFunctionsTest extends FirebaseTestsSetUp {
         File img = File.createTempFile(uidFound, ".jpeg");
         try (OutputStream outputStream = Files.newOutputStream(img.toPath())) {
             outputStream.write(new byte[1024]);    // write empty image
-        } catch (Exception e){
+        } catch (Exception e) {
             Assert.fail(e.getMessage());
         }
 
@@ -345,10 +345,10 @@ public class FirebaseCloudFunctionsTest extends FirebaseTestsSetUp {
         String newLastNameF = snapshot2.getString(FirebaseNames.USERS_LASTNAME);
         Thread.sleep(2000);
 
-        Assert.assertEquals("test2", newFirstNameL );
-        Assert.assertEquals("testl2", newLastNameL );
-        Assert.assertEquals("test2", newFirstNameF );
-        Assert.assertEquals("testl2", newLastNameF );
+        Assert.assertEquals("test2", newFirstNameL);
+        Assert.assertEquals("testl2", newLastNameL);
+        Assert.assertEquals("test2", newFirstNameF);
+        Assert.assertEquals("testl2", newLastNameF);
     }
 
     @Test
@@ -389,8 +389,8 @@ public class FirebaseCloudFunctionsTest extends FirebaseTestsSetUp {
         String newLastNameL = snapshot.getString(FirebaseNames.CHAT_SENDER_USER_LAST_NAME);
         Thread.sleep(2000);
 
-        Assert.assertEquals("test2", newFirstNameL );
-        Assert.assertEquals("testl2", newLastNameL );
+        Assert.assertEquals("test2", newFirstNameL);
+        Assert.assertEquals("testl2", newLastNameL);
     }
 
     @Test
@@ -431,8 +431,8 @@ public class FirebaseCloudFunctionsTest extends FirebaseTestsSetUp {
         String newLastNameL = snapshot.getString(FirebaseNames.CHAT_INBOX_PARTICIPANT1_USER_LAST_NAME);
         Thread.sleep(2000);
 
-        Assert.assertEquals("test2", newFirstNameL );
-        Assert.assertEquals("testl2", newLastNameL );
+        Assert.assertEquals("test2", newFirstNameL);
+        Assert.assertEquals("testl2", newLastNameL);
     }
 
     @Test
@@ -508,8 +508,8 @@ public class FirebaseCloudFunctionsTest extends FirebaseTestsSetUp {
         String newLastNameL = snapshot.getString(FirebaseNames.REPORT_ISSUE_USER_LAST_NAME);
         Thread.sleep(2000);
 
-        Assert.assertEquals("test2", newFirstNameL );
-        Assert.assertEquals("testl2", newLastNameL );
+        Assert.assertEquals("test2", newFirstNameL);
+        Assert.assertEquals("testl2", newLastNameL);
     }
 
 
@@ -551,10 +551,9 @@ public class FirebaseCloudFunctionsTest extends FirebaseTestsSetUp {
         String newLastNameL = snapshot.getString(FirebaseNames.REPORT_USER_FROM_LAST_NAME);
         Thread.sleep(2000);
 
-        Assert.assertEquals("test2", newFirstNameL );
-        Assert.assertEquals("testl2", newLastNameL );
+        Assert.assertEquals("test2", newFirstNameL);
+        Assert.assertEquals("testl2", newLastNameL);
     }
-
 
 
     @After

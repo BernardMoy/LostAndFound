@@ -22,12 +22,10 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-import org.mockito.internal.matchers.Matches;
 
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
-import java.util.regex.Matcher;
 
 
 public class RegisterActivityTest extends FirebaseTestsSetUp {
@@ -126,7 +124,6 @@ public class RegisterActivityTest extends FirebaseTestsSetUp {
         QuerySnapshot querySnapshot = Tasks.await(task, 60, TimeUnit.SECONDS);
         assertEquals(1, querySnapshot.size());
     }
-
 
 
     @After

@@ -1,6 +1,5 @@
 package com.example.lostandfound.Unit
 
-import androidx.browser.customtabs.CustomTabsClient.getPackageName
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import com.example.lostandfound.MatchingFunctions.ImageScoreCallback
@@ -25,7 +24,7 @@ class ImageSimilarityScoreTest {
         // get the image matching scores
         val latch = CountDownLatch(1)
         var thisScore = 0.0
-        getImageScore(context, lostPath, foundPath, object: ImageScoreCallback{
+        getImageScore(context, lostPath, foundPath, object : ImageScoreCallback {
             override fun onScoreCalculated(score: Double) {
                 thisScore = score
                 latch.countDown()

@@ -2,24 +2,17 @@ package com.example.lostandfound.Integration
 
 import androidx.activity.ComponentActivity
 import androidx.compose.ui.test.junit4.createComposeRule
-import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
-import androidx.compose.ui.test.performClick
-import androidx.compose.ui.test.performTextClearance
-import androidx.compose.ui.test.performTextInput
 import com.example.lostandfound.Data.FirebaseNames
 import com.example.lostandfound.FirebaseTestsSetUp
-import com.example.lostandfound.ui.EditProfile.EditProfileScreen
 import com.example.lostandfound.ui.Settings.SettingsScreen
 import com.example.lostandfound.ui.Settings.SettingsViewModel
 import com.google.android.gms.tasks.Tasks
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import org.junit.After
-import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.fail
-import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import java.util.concurrent.CountDownLatch
@@ -37,14 +30,13 @@ class SettingsActivityTest : FirebaseTestsSetUp() {
     val composeTestRule = createComposeRule()
 
 
-
     /*
     Test if admin settings show for admins
      */
     @Test
     fun testWithAdmin() {
         // logout current user
-        if (auth!!.currentUser != null){
+        if (auth!!.currentUser != null) {
             auth!!.signOut()
         }
         // create and sign in test user
@@ -104,7 +96,7 @@ class SettingsActivityTest : FirebaseTestsSetUp() {
     @Test
     fun testWithoutAdmin() {
         // logout current user
-        if (auth!!.currentUser != null){
+        if (auth!!.currentUser != null) {
             auth!!.signOut()
         }
         // create and sign in test user

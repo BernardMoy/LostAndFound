@@ -88,7 +88,7 @@ class ViewComparisonActivityTest : FirebaseTestsSetUp() {
         dataLost = LostItem(
             itemID = "2e9j8qijwqiie",
             user = User(
-                userID= userID ?: ""
+                userID = userID ?: ""
             ),
             itemName = "TestItem",
             category = "TestCat",
@@ -106,7 +106,7 @@ class ViewComparisonActivityTest : FirebaseTestsSetUp() {
         dataFound = FoundItem(
             itemID = "2e9j8erwrwrw",
             user = User(
-                userID="jnwwwww"
+                userID = "jnwwwww"
             ),
             itemName = "TestItem",
             category = "TestCat",

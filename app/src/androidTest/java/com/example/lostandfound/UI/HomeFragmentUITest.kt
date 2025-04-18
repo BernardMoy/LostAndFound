@@ -4,13 +4,9 @@ import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
-import com.example.lostandfound.Data.FirebaseNames
 import com.example.lostandfound.FirebaseTestsSetUp
 import com.example.lostandfound.ui.Home.HomeFragmentScreen
 import com.example.lostandfound.ui.Home.HomeFragmentViewModel
-import com.example.lostandfound.ui.Lost.LostFragmentScreen
-import com.example.lostandfound.ui.Lost.LostFragmentViewModel
-import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.tasks.Tasks
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -68,7 +64,7 @@ class HomeFragmentUITest : FirebaseTestsSetUp() {
 
     // test that in the home fragment, two large buttons are shown
     @Test
-    fun testLargeLost(){
+    fun testLargeLost() {
         val viewModel = HomeFragmentViewModel()
         composeTestRule.setContent {
             HomeFragmentScreen(
@@ -82,7 +78,7 @@ class HomeFragmentUITest : FirebaseTestsSetUp() {
     }
 
     @Test
-    fun testLargeFound(){
+    fun testLargeFound() {
         val viewModel = HomeFragmentViewModel()
         composeTestRule.setContent {
             HomeFragmentScreen(

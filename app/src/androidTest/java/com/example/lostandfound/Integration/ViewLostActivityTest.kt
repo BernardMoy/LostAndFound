@@ -3,6 +3,8 @@ package com.example.lostandfound.Integration
 import android.content.Intent
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithText
+import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performScrollTo
 import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.ApplicationProvider
 import com.example.lostandfound.Data.FirebaseNames
@@ -10,12 +12,12 @@ import com.example.lostandfound.Data.IntentExtraNames
 import com.example.lostandfound.Data.LostItem
 import com.example.lostandfound.Data.User
 import com.example.lostandfound.FirebaseTestsSetUp
-import com.example.lostandfound.ui.Search.SearchActivity
-import com.google.android.gms.maps.model.LatLng
+import com.example.lostandfound.ui.ViewLost.ViewLostActivity
 import com.google.android.gms.tasks.Tasks
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import org.junit.After
+import org.junit.Assert
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.fail
@@ -25,15 +27,15 @@ import org.junit.Test
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit
 
-class SearchActivityTest : FirebaseTestsSetUp() {
+class ViewLostActivityTest : FirebaseTestsSetUp() {
     // set up firestore emulator in static context
     companion object {
         private var firestore: FirebaseFirestore? = getFirestore()
         private var auth: FirebaseAuth? = getAuth()
 
         private var userID: String? = null
-        private var dataLost: LostItem? = null
 
+        private var dataLost0: LostItem? = null  // status 0
     }
 
     @get:Rule
@@ -67,11 +69,13 @@ class SearchActivityTest : FirebaseTestsSetUp() {
 
 
         // create item details
-        dataLost = LostItem(
+        dataLost0 = LostItem(
             itemID = "2e9j8qijwqiie",
             user = User(
-                userID = userID ?: "",    // use the current user ID
-            ),
+                userID = userID ?: "",
+                firstName = "testFirstName2",
+                lastName = "testLastName2"
+            ),    // use the current user ID
             itemName = "TestItem",
             category = "TestCat",
             subCategory = "TestSubCat",
@@ -81,57 +85,92 @@ class SearchActivityTest : FirebaseTestsSetUp() {
             location = Pair(52.381162440739686, -1.5614377315953403),
             description = "TestDesc",
             isTracking = false,
-            timePosted = 1739941511L
+            timePosted = 1739941511L,
+            status = 0
         )
 
-        // post a very similar found item
-        val dataFound1 = mutableMapOf<String, Any>(
-            FirebaseNames.LOSTFOUND_ITEMNAME to "298heh29",
-            FirebaseNames.LOSTFOUND_USER to "sauqsiqis",  // different user id
-            FirebaseNames.LOSTFOUND_CATEGORY to "TestCat",
-            FirebaseNames.LOSTFOUND_SUBCATEGORY to "TestSubCat",
-            FirebaseNames.LOSTFOUND_COLOR to mutableListOf("Black", "Red"),
-            FirebaseNames.LOSTFOUND_BRAND to "TestBrand",
-            FirebaseNames.LOSTFOUND_EPOCHDATETIME to 1738819980L,
-            FirebaseNames.LOSTFOUND_LOCATION to LatLng(52.381162440739686, -1.5614377315953403),
-            FirebaseNames.LOSTFOUND_DESCRIPTION to "testDesc",
-            FirebaseNames.LOSTFOUND_TIMEPOSTED to 1739941513L
+        val task3 = firestore!!.collection(FirebaseNames.COLLECTION_LOST_ITEMS)
+            .document("2e9j8qijwqiie").set(dataLost0!!)
+        val ref3 = Tasks.await(task3, 60, TimeUnit.SECONDS)
+        Thread.sleep(2000)
+
+
+        // upload the user to firebase firestore
+        val dataLostUser = mutableMapOf<String, Any>(
+            FirebaseNames.USERS_EMAIL to email,
+            FirebaseNames.USERS_AVATAR to "",
+            FirebaseNames.USERS_FIRSTNAME to "testFirstName2",
+            FirebaseNames.USERS_LASTNAME to "testLastName2"
         )
 
-        // Post the items
-        val task1 = firestore!!.collection(FirebaseNames.COLLECTION_FOUND_ITEMS).add(dataFound1)
-        val ref1 = Tasks.await(task1, 60, TimeUnit.SECONDS)
+        // document the found user id and add it
+        val task1 = firestore!!.collection(FirebaseNames.COLLECTION_USERS)
+            .document(userID.toString())
+            .set(dataLostUser)
+        Tasks.await(task1, 60, TimeUnit.SECONDS)
         Thread.sleep(2000)
     }
 
+    /*
+    Test if the lost item can be deleted
+     */
     @Test
-    fun testSearch() {
+    fun testDeleteItem() {
         val intent =
-            Intent(ApplicationProvider.getApplicationContext(), SearchActivity::class.java).apply {
+            Intent(
+                ApplicationProvider.getApplicationContext(),
+                ViewLostActivity::class.java
+            ).apply {
                 putExtra(
                     IntentExtraNames.INTENT_LOST_ID,
-                    dataLost
+                    dataLost0
                 )
             }
 
-        ActivityScenario.launch<SearchActivity>(intent)
+        ActivityScenario.launch<ViewLostActivity>(intent)
         composeTestRule.waitForIdle()
 
         // assert the correct intent has been passed
         assertEquals(
-            dataLost, intent.getParcelableExtra(
+            dataLost0, intent.getParcelableExtra(
                 IntentExtraNames.INTENT_LOST_ID
             )
         )
 
-        // assert the search result exists
-        Thread.sleep(4000)
-        composeTestRule.onNodeWithText("298heh29").assertExists()  // the found item name
+        // assert the correct item details are posted
+        Thread.sleep(2000)
+
+        composeTestRule.onNodeWithText("Delete item").performScrollTo()
+
+        // click the delete button
+        composeTestRule.onNodeWithText("Delete item").performClick()
+        Thread.sleep(1000)
+        composeTestRule.onNodeWithText("Delete").performClick()
+        Thread.sleep(2000)
+
+        // now assert the item no longer exist in the db
+        val latch = CountDownLatch(1)
+        firestore!!.collection(FirebaseNames.COLLECTION_LOST_ITEMS)
+            .document(dataLost0!!.itemID)
+            .get()
+            .addOnSuccessListener { querySnapshot ->
+                Assert.assertFalse(querySnapshot.exists())
+                latch.countDown()
+
+            }
+            .addOnFailureListener { e ->
+                fail("Failed during db query")
+                latch.countDown()
+            }
+
+        latch.await(60, TimeUnit.SECONDS)
     }
 
     @After
     fun tearDown() {
-        deleteCollection(FirebaseNames.COLLECTION_FOUND_ITEMS)
+        deleteCollection(FirebaseNames.COLLECTION_USERS)
+        deleteCollection(FirebaseNames.COLLECTION_ACTIVITY_LOG_ITEMS)
+        deleteCollection(FirebaseNames.COLLECTION_LOST_ITEMS)
 
         // delete current user at the end, as this will trigger cloud functions
         if (auth!!.currentUser != null) {
