@@ -94,7 +94,7 @@ class ViewClaimListActivityTest : FirebaseTestsSetUp() {
 
         // create two lost items, each claimed the found item
         val dataLost1 = mutableMapOf<String, Any>(
-            FirebaseNames.LOSTFOUND_ITEMNAME to "test2",
+            FirebaseNames.LOSTFOUND_ITEMNAME to "lostname1",
             FirebaseNames.LOSTFOUND_USER to userID.toString(),
             FirebaseNames.LOSTFOUND_CATEGORY to "testCat2",
             FirebaseNames.LOSTFOUND_SUBCATEGORY to "testSubCat2",
@@ -113,7 +113,7 @@ class ViewClaimListActivityTest : FirebaseTestsSetUp() {
         Thread.sleep(2000)
 
         val dataLost2 = mutableMapOf<String, Any>(
-            FirebaseNames.LOSTFOUND_ITEMNAME to "test3",
+            FirebaseNames.LOSTFOUND_ITEMNAME to "lostname2",
             FirebaseNames.LOSTFOUND_USER to userID.toString(),
             FirebaseNames.LOSTFOUND_CATEGORY to "testCat2",
             FirebaseNames.LOSTFOUND_SUBCATEGORY to "testSubCat2",
@@ -191,6 +191,9 @@ class ViewClaimListActivityTest : FirebaseTestsSetUp() {
             )
         )
 
+        // assert the two lost items are displayed on the screen
+        composeTestRule.onNodeWithText("lostname1").assertExists()
+        composeTestRule.onNodeWithText("lostname2").assertExists()
 
     }
 
