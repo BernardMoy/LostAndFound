@@ -81,12 +81,7 @@ class SettingsActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         setContent {
-            SettingsScreen(activity = this)
-        }
-
-        // if the user is logged in, load if is admin
-        if (UserManager.isUserLoggedIn()){
-            viewModel.loadIsAdmin()
+            SettingsScreen(activity = this, viewModel = viewModel)
         }
     }
 }
@@ -94,14 +89,9 @@ class SettingsActivity : ComponentActivity() {
 // mock activity for previews
 class MockActivity : ComponentActivity()
 
-@Preview(showBackground = true)
-@Composable
-fun Preview() {
-    SettingsScreen(activity = MockActivity())
-}
 
 @Composable
-fun SettingsScreen(activity: ComponentActivity) {
+fun SettingsScreen(activity: ComponentActivity, viewModel: SettingsViewModel) {
     ComposeTheme {
         Surface {
             Scaffold(
@@ -117,7 +107,12 @@ fun SettingsScreen(activity: ComponentActivity) {
                         .verticalScroll(rememberScrollState())   // make screen scrollable
                 ) {
                     // content goes here
-                    MainContent()
+                    MainContent(viewModel = viewModel)
+
+                    // if the user is logged in, load if is admin
+                    if (UserManager.isUserLoggedIn()){
+                        viewModel.loadIsAdmin()
+                    }
                 }
             }
         }
@@ -127,7 +122,7 @@ fun SettingsScreen(activity: ComponentActivity) {
 // content includes avatar, edit fields, reminder message and save button
 // get the view model in the function parameter
 @Composable
-fun MainContent(viewModel: SettingsViewModel = viewModel()) {
+fun MainContent(viewModel: SettingsViewModel) {
     // get the local context
     val context = LocalContext.current
 
