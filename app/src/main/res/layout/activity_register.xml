@@ -61,14 +61,14 @@
 
                 <TextView
                     android:layout_gravity="start"
-                    android:text="@string/register_title"
+                    android:text="Create an account"
                     android:layout_marginTop="@dimen/content_margin"
                     style="@style/blackBoldHeader"
                     />
 
                 <TextView
                     android:layout_gravity="start"
-                    android:text="@string/register_description"
+                    android:text="Your email may only be shown to admins but not other users."
                     android:layout_marginTop="@dimen/content_margin"
                     android:layout_marginBottom="@dimen/content_margin"
                     style="@style/grayContent"

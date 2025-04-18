@@ -25,14 +25,6 @@
 
     <string name="email_or_password_incorrect_error"> The email or password provided is incorrect. If you don\'t have an account, please register below. </string>
 
-    <!-- Login activity -->
-    <string name="login_title">Welcome back!</string>
-    <string name="login_description">Please log in with your university email to continue.</string>
-
-    <!-- Register activity -->
-    <string name="register_title">Create an account</string>
-    <string name="register_description">Only your name will be visible to others.</string>
-
     <!-- VerifyEmailActivity activity -->
     <string name="verify_email_title">Verify your email</string>
     <string name="verify_email_description">Please enter the 6-digit verification code we have sent to:</string>

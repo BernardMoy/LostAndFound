@@ -62,14 +62,14 @@
 
                 <TextView
                     android:layout_gravity="start"
-                    android:text="@string/login_title"
+                    android:text="Welcome back!"
                     android:layout_marginTop="@dimen/content_margin"
                     style="@style/blackBoldHeader"
                     />
 
                 <TextView
                     android:layout_gravity="start"
-                    android:text="@string/login_description"
+                    android:text="Please login with your university email to continue. "
                     android:layout_marginTop="@dimen/content_margin"
                     android:layout_marginBottom="@dimen/content_margin"
                     style="@style/grayContent"
