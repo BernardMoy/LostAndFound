@@ -1,6 +1,7 @@
 package com.example.lostandfound.ui.ViewLost
 
 import android.app.Activity
+import android.content.ClipData
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
@@ -28,6 +29,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Circle
 import androidx.compose.material.icons.outlined.AccountCircle
 import androidx.compose.material.icons.outlined.CalendarMonth
+import androidx.compose.material.icons.outlined.CopyAll
 import androidx.compose.material.icons.outlined.DeleteOutline
 import androidx.compose.material.icons.outlined.Description
 import androidx.compose.material.icons.outlined.Edit
@@ -37,6 +39,7 @@ import androidx.compose.material.icons.outlined.Title
 import androidx.compose.material.icons.outlined.TrackChanges
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
@@ -45,6 +48,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.ClipEntry
+import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.colorResource
@@ -416,6 +421,8 @@ fun ItemDetails(viewModel: ViewLostViewModel) {
 fun LocationData(
     viewModel: ViewLostViewModel
 ) {
+    val clipboardManager = LocalClipboardManager.current
+
     Column {
         CustomGrayTitle(text = "Location")
 
@@ -431,11 +438,34 @@ fun LocationData(
                     },
                 )
 
-                Text(
-                    text = viewModel.itemData.location!!.first.toString() + "," + viewModel.itemData.location!!.second.toString(),
-                    style = Typography.bodyMedium,
-                    color = Color.Gray
-                )
+                Row (
+                    horizontalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.content_margin_half)),
+                    verticalAlignment = Alignment.CenterVertically
+                ){
+                    val locationString = viewModel.itemData.location!!.first.toString() + "," + viewModel.itemData.location!!.second.toString()
+
+                    Text(
+                        text = locationString,
+                        style = Typography.bodyMedium,
+                        color = Color.Gray
+                    )
+
+                    // the copy to clipboard button
+                    IconButton(
+                        onClick = {
+                            val clipData = ClipData.newPlainText("location", locationString)
+                            val clipEntry = ClipEntry(clipData)
+                            clipboardManager.setClip(clipEntry)
+                        },
+                    ) {
+                        Icon(
+                            imageVector = Icons.Outlined.CopyAll,
+                            contentDescription = "Copy",
+                            modifier = Modifier.size(32.dp),
+                            tint = Color.Gray
+                        )
+                    }
+                }
             }
 
         } else {
