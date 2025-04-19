@@ -318,12 +318,22 @@ fun LocationData(
 
         // if the location is not null, users can view it
         if (viewModel.itemData.location != null) {
-            CustomActionText(
-                text = "View location",
-                onClick = {
-                    viewModel.isLocationDialogShown.value = true
-                },
-            )
+            Column(
+                verticalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.content_margin))
+            ) {
+                CustomActionText(
+                    text = "View location",
+                    onClick = {
+                        viewModel.isLocationDialogShown.value = true
+                    },
+                )
+
+                Text(
+                    text = viewModel.itemData.location!!.first.toString() + "," + viewModel.itemData.location!!.second.toString(),
+                    style = Typography.bodyMedium,
+                    color = Color.Gray
+                )
+            }
         } else {
             Text(
                 text = "(Location is not provided)",
