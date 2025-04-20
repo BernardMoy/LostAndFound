@@ -7,7 +7,7 @@ class BrandScoreTest {
     @Test
     fun testGetBrandScoreValid() {
         assert(
-            getBrandScore("Tesco", "tseco") == 3.0
+            getBrandScore("Tesco", "tseco") == 1.0
         )
     }
 

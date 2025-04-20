@@ -17,7 +17,7 @@ class CategoryScoreTest {
             getCategoryScore(
                 "Personal items", "Wallet",
                 "Personal items", "Wallet"
-            ) == 3.0
+            ) == 1.0
         )
 
         assert(
@@ -31,7 +31,7 @@ class CategoryScoreTest {
             getCategoryScore(
                 "Others", "ABC",
                 "Others", "DEF"
-            ) == 3.0   // as long as both are others, 3 is returned
+            ) == 1.0   // as long as both are others, 3 is returned
         )
     }
 }

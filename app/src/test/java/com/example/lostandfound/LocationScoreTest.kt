@@ -21,9 +21,9 @@ class LocationScoreTest {
             Pair(52.383647967653, -1.5599945903312389)
         )
 
-        // the distance should be 0.84
+        // the score should be 0.28 
         assert(
-            abs(0.84 - score) <= 1e-1
+            abs(0.28 - score) <= 1e-1
         )
     }
 
