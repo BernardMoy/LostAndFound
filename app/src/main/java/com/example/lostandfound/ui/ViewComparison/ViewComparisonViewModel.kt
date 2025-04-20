@@ -13,6 +13,7 @@ import com.example.lostandfound.FirebaseManagers.FirestoreManager
 import com.example.lostandfound.FirebaseManagers.ItemManager
 import com.example.lostandfound.FirebaseManagers.NotificationManager
 import com.example.lostandfound.FirebaseManagers.UserManager
+import com.example.lostandfound.FirebaseManagers.UserManager.UpdateTimeCallback
 import com.example.lostandfound.Utility.DateTimeManager
 import com.example.lostandfound.Utility.ErrorCallback
 
@@ -105,7 +106,14 @@ class ViewComparisonViewModel : ViewModel() {
                                                 object : FirestoreManager.Callback<String> {
                                                     override fun onComplete(result: String?) {
                                                         // not necessary to throw an error if failed here
-                                                        callback.onComplete("")
+
+                                                        // set user state
+                                                        UserManager.updateClaimTimestamp(object :
+                                                            UpdateTimeCallback {
+                                                            override fun onComplete(success: Boolean) {
+                                                                callback.onComplete("")
+                                                            }
+                                                        })
                                                     }
                                                 }
                                             )

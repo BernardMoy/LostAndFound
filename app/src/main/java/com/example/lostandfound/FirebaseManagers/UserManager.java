@@ -114,7 +114,7 @@ public class UserManager {
                     @Override
                     public void onSuccess(DocumentSnapshot documentSnapshot) {
                         if (documentSnapshot.get(FirebaseNames.USERS_LAST_CLAIMED_TIMESTAMP) == null){
-                            callback.onComplete(true);
+                            callback.onComplete(false);
                         } else {
                             boolean result = (DateTimeManager.getCurrentEpochTime() - (Long) documentSnapshot.get(FirebaseNames.USERS_LAST_CLAIMED_TIMESTAMP)) < 259200;
                             callback.onComplete(result);

@@ -85,6 +85,7 @@ import com.example.lostandfound.Data.lostStatusText
 import com.example.lostandfound.Data.statusColor
 import com.example.lostandfound.Data.stringToColor
 import com.example.lostandfound.FirebaseManagers.UserManager
+import com.example.lostandfound.FirebaseManagers.UserManager.CheckIfClaimedCallback
 import com.example.lostandfound.R
 import com.example.lostandfound.Utility.DateTimeManager
 import com.example.lostandfound.Utility.ErrorCallback
@@ -837,23 +838,39 @@ fun claimItem(
     context: Context,
     viewModel: ViewComparisonViewModel
 ) {
-    // update statuses of the item
-    viewModel.putClaimedItems(context = context, object : ErrorCallback {
-        override fun onComplete(error: String) {
-            if (error.isNotEmpty()) {
-                Toast.makeText(context, error, Toast.LENGTH_SHORT).show()
+    // first check if user has claimed in past 3 days
+    UserManager.checkIfUserClaimedInLastThreeDays(object : CheckIfClaimedCallback {
+        override fun onComplete(result: Boolean) {
+            if (result) {
+                Toast.makeText(
+                    context,
+                    "You are on a 3-day claim cooldown",
+                    Toast.LENGTH_SHORT
+                ).show()
                 return
             }
 
-            // start done activity
-            val i: Intent = Intent(context, DoneActivity::class.java)
-            i.putExtra(IntentExtraNames.INTENT_DONE_ACTIVITY_TITLE, "Claim Submitted")
-            context.startActivity(i)
+            // upload claim
+            viewModel.putClaimedItems(context = context, object : ErrorCallback {
+                override fun onComplete(error: String) {
+                    if (error.isNotEmpty()) {
+                        Toast.makeText(context, error, Toast.LENGTH_SHORT).show()
+                        return
+                    }
 
-            // close current activity
-            (context as Activity).finish()
+                    // start done activity
+                    val i: Intent = Intent(context, DoneActivity::class.java)
+                    i.putExtra(IntentExtraNames.INTENT_DONE_ACTIVITY_TITLE, "Claim Submitted")
+                    context.startActivity(i)
+
+                    // close current activity
+                    (context as Activity).finish()
+                }
+            })
         }
+
     })
+
 }
 
 
