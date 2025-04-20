@@ -40,6 +40,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.lostandfound.CustomElements.BackToolbar
 import com.example.lostandfound.CustomElements.CustomCenterText
 import com.example.lostandfound.CustomElements.CustomCenteredProgressbar
+import com.example.lostandfound.CustomElements.CustomDropdownMenu
 import com.example.lostandfound.CustomElements.CustomFoundItemPreview
 import com.example.lostandfound.Data.IntentExtraNames
 import com.example.lostandfound.Data.LostItem
@@ -235,90 +236,102 @@ fun MatchingItemsColumn(
         }
 
     } else {
-        // for each data, display it as a preview
-        LazyColumn(
-            verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.title_margin))
-        ) {
-            items(
-                viewModel.matchedFoundItems
+        Column (
+            verticalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.content_margin)),
+            horizontalAlignment = Alignment.End
+        ){
+            // for each data, display it as a preview
+            CustomDropdownMenu(
+                items = listOf("Overall score", "Image score", "Attributes score"),
+                selectedText = viewModel.selectedOrderingOption,
+                isError = false
+            )
 
-            ) { foundItemAndScore ->
+            LazyColumn(
+                verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.title_margin))
+            ) {
+                items(
+                    viewModel.matchedFoundItems
 
-                // get the found item data and score data
-                val foundItemData = foundItemAndScore.first
-                val scoreData = foundItemAndScore.second
+                ) { foundItemAndScore ->
 
-                // determine if the image, details and location are considered "Close match"
-                val imageCloseMatch = scoreData.isImageCloseMatch()
-                val detailsCloseMatch = scoreData.isDetailsCloseMatch()
-                val locationCloseMatch = scoreData.isLocationCloseMatch()
+                    // get the found item data and score data
+                    val foundItemData = foundItemAndScore.first
+                    val scoreData = foundItemAndScore.second
 
-                // if lost item status = 0, then the user can claim item
-                // else if lost item status = 1 and the found item is claimed, then the user can view claim
-                // else, the user can only view the item
-                var displayedButtonText = "View"
-                if (viewModel.lostItem.user.userID == UserManager.getUserID()) {
-                    if (viewModel.lostItem.status == 0) {
-                        displayedButtonText = "View"
+                    // determine if the image, details and location are considered "Close match"
+                    val imageCloseMatch = scoreData.isImageCloseMatch()
+                    val detailsCloseMatch = scoreData.isDetailsCloseMatch()
+                    val locationCloseMatch = scoreData.isLocationCloseMatch()
 
-                    } else if (viewModel.claimedItem.foundItemID == foundItemData.itemID) {
-                        displayedButtonText = "View claim"
+                    // if lost item status = 0, then the user can claim item
+                    // else if lost item status = 1 and the found item is claimed, then the user can view claim
+                    // else, the user can only view the item
+                    var displayedButtonText = "View"
+                    if (viewModel.lostItem.user.userID == UserManager.getUserID()) {
+                        if (viewModel.lostItem.status == 0) {
+                            displayedButtonText = "View"
 
-                    }
-                }
+                        } else if (viewModel.claimedItem.foundItemID == foundItemData.itemID) {
+                            displayedButtonText = "View claim"
 
-                CustomFoundItemPreview(
-                    data = foundItemData,
-                    onViewButtonClicked = {
-                        // if the displayed button is view claim, redirect to view claim activity
-                        if (displayedButtonText == "View claim") {
-                            val intent = Intent(context, ViewClaimActivity::class.java)
-
-                            // pass the claim of lost item
-                            intent.putExtra(
-                                IntentExtraNames.INTENT_CLAIM_ITEM,
-                                viewModel.claimedItem
-                            )
-                            context.startActivity(intent)
-
-                        } else {
-                            // redirect to view comparison activity otherwise
-                            val intent = Intent(context, ViewComparisonActivity::class.java)
-
-                            // pass both the lost item and found item
-                            intent.putExtra(
-                                IntentExtraNames.INTENT_LOST_ID,
-                                viewModel.lostItem
-                            )
-                            intent.putExtra(
-                                IntentExtraNames.INTENT_FOUND_ID,
-                                foundItemData
-                            )
-
-                            // also pass the claim item of the lost item
-                            intent.putExtra(
-                                IntentExtraNames.INTENT_CLAIM_ITEM,
-                                viewModel.claimedItem
-                            )
-
-                            // pass the score data as well
-                            intent.putExtra(
-                                IntentExtraNames.INTENT_SCORE_DATA,
-                                scoreData
-                            )
-
-                            Log.d("ITEM INFO", scoreData.toString())
-                            context.startActivity(intent)
                         }
-                    },
-                    viewButtonText = displayedButtonText,
-                    isImageCloseMatch = imageCloseMatch,
-                    isDetailsCloseMatch = detailsCloseMatch,
-                    isLocationCloseMatch = locationCloseMatch,
-                    percentageSimilarity = (round((scoreData.overallScore / 3) * 1000) / 10).toString()
-                )
+                    }
+
+                    CustomFoundItemPreview(
+                        data = foundItemData,
+                        onViewButtonClicked = {
+                            // if the displayed button is view claim, redirect to view claim activity
+                            if (displayedButtonText == "View claim") {
+                                val intent = Intent(context, ViewClaimActivity::class.java)
+
+                                // pass the claim of lost item
+                                intent.putExtra(
+                                    IntentExtraNames.INTENT_CLAIM_ITEM,
+                                    viewModel.claimedItem
+                                )
+                                context.startActivity(intent)
+
+                            } else {
+                                // redirect to view comparison activity otherwise
+                                val intent = Intent(context, ViewComparisonActivity::class.java)
+
+                                // pass both the lost item and found item
+                                intent.putExtra(
+                                    IntentExtraNames.INTENT_LOST_ID,
+                                    viewModel.lostItem
+                                )
+                                intent.putExtra(
+                                    IntentExtraNames.INTENT_FOUND_ID,
+                                    foundItemData
+                                )
+
+                                // also pass the claim item of the lost item
+                                intent.putExtra(
+                                    IntentExtraNames.INTENT_CLAIM_ITEM,
+                                    viewModel.claimedItem
+                                )
+
+                                // pass the score data as well
+                                intent.putExtra(
+                                    IntentExtraNames.INTENT_SCORE_DATA,
+                                    scoreData
+                                )
+
+                                Log.d("ITEM INFO", scoreData.toString())
+                                context.startActivity(intent)
+                            }
+                        },
+                        viewButtonText = displayedButtonText,
+                        isImageCloseMatch = imageCloseMatch,
+                        isDetailsCloseMatch = detailsCloseMatch,
+                        isLocationCloseMatch = locationCloseMatch,
+                        percentageSimilarity = (round((scoreData.overallScore / 3) * 1000) / 10).toString()
+                    )
+                }
             }
         }
+
     }
 }
 

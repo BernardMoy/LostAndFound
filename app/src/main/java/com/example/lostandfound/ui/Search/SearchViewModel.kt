@@ -23,6 +23,8 @@ class SearchViewModel : ViewModel() {
     var lostItem: LostItem = LostItem()
     var claimedItem: Claim = Claim()
 
+    val selectedOrderingOption: MutableState<String> = mutableStateOf("")
+
     var matchedFoundItems: MutableList<Pair<FoundItem, ScoreData>> = mutableListOf()
 
     // initialise the list of matching found items to be displayed as empty list
