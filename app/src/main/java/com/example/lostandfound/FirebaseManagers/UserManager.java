@@ -1,11 +1,21 @@
 package com.example.lostandfound.FirebaseManagers;
 
+import android.util.Log;
+
+import androidx.annotation.NonNull;
+
 import com.example.lostandfound.Data.DevData;
 import com.example.lostandfound.Data.FirebaseNames;
 import com.example.lostandfound.Data.User;
+import com.example.lostandfound.Utility.DateTimeManager;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.HashMap;
 import java.util.Map;
 
 
@@ -16,12 +26,16 @@ public class UserManager {
     private UserManager() {
     }
 
-    public interface isAdminCallback {
+    public interface IsAdminCallback {
         void onComplete(boolean result);
     }
 
-    public interface GetUserCallback {
-        void onComplete(User user);
+    public interface UpdateTimeCallback {
+        void onComplete(boolean success);
+    }
+
+    public interface CheckIfClaimedCallback {
+        void onComplete(boolean result);
     }
 
     // get the current user's UID
@@ -51,7 +65,7 @@ public class UserManager {
     }
 
     // check if user is admin user
-    public static void isUserAdmin(isAdminCallback callback) {
+    public static void isUserAdmin(IsAdminCallback callback) {
         FirestoreManager manager = new FirestoreManager();
         manager.get(FirebaseNames.COLLECTION_USERS, UserManager.getUserID(), new FirestoreManager.Callback<Map<String, Object>>() {
             @Override
@@ -65,5 +79,55 @@ public class UserManager {
                 callback.onComplete(isAdmin);
             }
         });
+    }
+
+    // update the claim timestamp to the current time
+    public static void updateClaimTimestamp(UpdateTimeCallback callback){
+        Map<String, Long> data = new HashMap<>();
+        data.put(FirebaseNames.USERS_LAST_CLAIMED_TIMESTAMP, DateTimeManager.getCurrentEpochTime());
+
+        FirebaseFirestore.getInstance().collection(FirebaseNames.COLLECTION_USERS)
+                .document(UserManager.getUserID())
+                .set(data)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void unused) {
+                        callback.onComplete(true);
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.e("Firebase error", e.getMessage().toString());
+                        callback.onComplete(false);
+                    }
+                });
+    }
+
+
+    // check if the claim timestamp is in the last three days
+    public static void checkIfUserClaimedInLastThreeDays(CheckIfClaimedCallback callback){
+        FirebaseFirestore.getInstance().collection(FirebaseNames.COLLECTION_USERS)
+                .document(UserManager.getUserID())
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        if (documentSnapshot.get(FirebaseNames.USERS_LAST_CLAIMED_TIMESTAMP) == null){
+                            callback.onComplete(true);
+                        } else {
+                            boolean result = (Long) documentSnapshot.get(FirebaseNames.USERS_LAST_CLAIMED_TIMESTAMP) < 259200;
+                            callback.onComplete(result);
+                        }
+
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.e("Firebase error", e.getMessage().toString());
+                        callback.onComplete(false);
+                    }
+                });
     }
 }

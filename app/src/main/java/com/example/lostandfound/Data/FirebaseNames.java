@@ -29,6 +29,7 @@ public final class FirebaseNames {
     public static final String USERS_ITEM_NOTIFICATION_ENABLED = "item_notification";
     public static final String USERS_MESSAGE_NOTIFICATION_ENABLED = "message_notification";
     public static final String USERS_IS_ADMIN = "is_admin";
+    public static final String USERS_LAST_CLAIMED_TIMESTAMP = "last_claimed_timestamp";
 
     public static final String USER_VERIFICATIONS_HASHEDCODE = "hashedCode";
     public static final String USER_VERIFICATIONS_TIMESTAMP = "timestamp";

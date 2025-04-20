@@ -60,7 +60,8 @@ class SettingsViewModel : ViewModel() {
     // a async function to load if the user is admin
     // called during on create of the activity
     fun loadIsAdmin() {
-        UserManager.isUserAdmin(object : UserManager.isAdminCallback {
+        UserManager.isUserAdmin(object :
+            UserManager.IsAdminCallback {
             override fun onComplete(result: Boolean) {
                 isAdmin.value = result
             }
