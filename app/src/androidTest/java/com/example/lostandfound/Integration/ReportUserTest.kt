@@ -164,7 +164,10 @@ class ReportUserTest : FirebaseTestsSetUp() {
 
                 // verify the attributes are correct
                 assertNotNull(document)
-                assertEquals(document[FirebaseNames.REPORT_USER_DESC].toString(), "Test report reason 4")
+                assertEquals(
+                    document[FirebaseNames.REPORT_USER_DESC].toString(),
+                    "Test report reason 4"
+                )
                 // countdown
                 latch.countDown()
 

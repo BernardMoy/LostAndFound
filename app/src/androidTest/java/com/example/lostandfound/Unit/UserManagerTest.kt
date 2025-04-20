@@ -117,5 +117,11 @@ class UserManagerTest : FirebaseTestsSetUp() {
     fun tearDown() {
         // clear all data
         deleteCollection(FirebaseNames.COLLECTION_USERS)
+
+        if (auth.currentUser != null) {
+            Tasks.await(
+                auth.currentUser!!.delete(), 60, TimeUnit.SECONDS
+            )
+        }
     }
 }

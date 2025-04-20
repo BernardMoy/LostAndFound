@@ -1,6 +1,5 @@
 package com.example.lostandfound.UI
 
-import androidx.activity.ComponentActivity
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
@@ -8,7 +7,6 @@ import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTextInput
 import com.example.lostandfound.Data.categories
 import com.example.lostandfound.ui.NewLost.Category
-import com.example.lostandfound.ui.NewLost.NewLostScreen
 import com.example.lostandfound.ui.NewLost.NewLostViewModel
 import com.example.lostandfound.ui.NewLost.Subcategory
 import org.junit.Rule
