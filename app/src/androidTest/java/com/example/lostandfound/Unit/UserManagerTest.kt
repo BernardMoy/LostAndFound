@@ -2,6 +2,7 @@ package com.example.lostandfound.Unit
 
 import com.example.lostandfound.Data.FirebaseNames
 import com.example.lostandfound.FirebaseManagers.UserManager
+import com.example.lostandfound.FirebaseManagers.UserManager.CheckIfClaimedCallback
 import com.example.lostandfound.FirebaseManagers.UserManager.UpdateTimeCallback
 import com.example.lostandfound.FirebaseTestsSetUp
 import com.example.lostandfound.Utility.DateTimeManager
@@ -62,7 +63,8 @@ class UserManagerTest : FirebaseTestsSetUp() {
             FirebaseNames.USERS_FIRSTNAME to firstName,
             FirebaseNames.USERS_LASTNAME to lastName,
             FirebaseNames.USERS_AVATAR to "",
-            FirebaseNames.USERS_EMAIL to email
+            FirebaseNames.USERS_EMAIL to email,
+            FirebaseNames.USERS_LAST_CLAIMED_TIMESTAMP to DateTimeManager.getCurrentEpochTime() - 250000
         )
         val task1 = firestore!!.collection(FirebaseNames.COLLECTION_USERS).document(
             userID.toString()
@@ -105,6 +107,21 @@ class UserManagerTest : FirebaseTestsSetUp() {
             }
 
         latch2.await(60, TimeUnit.SECONDS)
+    }
+
+    @Test
+    fun testCheckIfUserClaimedInLastThreeDays(){
+        val latch = CountDownLatch(1)
+
+        UserManager.checkIfUserClaimedInLastThreeDays(object: CheckIfClaimedCallback{
+            override fun onComplete(result: Boolean) {
+                Assert.assertTrue(result)
+                latch.countDown()
+            }
+
+        })
+        latch.await(60, TimeUnit.SECONDS)
+
     }
 
     // clear all data in firestore after tests
