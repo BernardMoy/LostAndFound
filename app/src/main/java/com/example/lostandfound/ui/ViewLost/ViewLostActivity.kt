@@ -76,8 +76,8 @@ import com.example.lostandfound.Data.LostItem
 import com.example.lostandfound.Data.lostStatusText
 import com.example.lostandfound.Data.statusColor
 import com.example.lostandfound.Data.stringToColor
-import com.example.lostandfound.FirebaseManagers.UserManager
 import com.example.lostandfound.FirebaseManagers.ItemManager
+import com.example.lostandfound.FirebaseManagers.UserManager
 import com.example.lostandfound.MainActivity
 import com.example.lostandfound.R
 import com.example.lostandfound.Utility.DateTimeManager
@@ -438,11 +438,12 @@ fun LocationData(
                     },
                 )
 
-                Row (
+                Row(
                     horizontalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.content_margin_half)),
                     verticalAlignment = Alignment.CenterVertically
-                ){
-                    val locationString = viewModel.itemData.location!!.first.toString() + "," + viewModel.itemData.location!!.second.toString()
+                ) {
+                    val locationString =
+                        viewModel.itemData.location!!.first.toString() + "," + viewModel.itemData.location!!.second.toString()
 
                     Text(
                         text = locationString,

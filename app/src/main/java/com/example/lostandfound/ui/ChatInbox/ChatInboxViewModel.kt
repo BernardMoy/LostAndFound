@@ -11,11 +11,10 @@ import com.example.lostandfound.Data.User
 import com.example.lostandfound.FirebaseManagers.ChatInboxManager
 import com.example.lostandfound.FirebaseManagers.ChatInboxManager.ChatInboxUpdateCallback
 import com.example.lostandfound.FirebaseManagers.ChatMessageManager
-import com.example.lostandfound.FirebaseManagers.UserManager
 import com.example.lostandfound.FirebaseManagers.FirestoreManager
 import com.example.lostandfound.FirebaseManagers.FirestoreManager.Callback
+import com.example.lostandfound.FirebaseManagers.UserManager
 import com.example.lostandfound.Utility.DateTimeManager
-import com.example.lostandfound.Utility.ErrorCallback
 import com.google.firebase.firestore.DocumentChange
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ListenerRegistration
@@ -234,7 +233,7 @@ class ChatInboxViewModel : ViewModel() {
                 manager.putWithUniqueId(
                     FirebaseNames.COLLECTION_REPORT_USERS,
                     data,
-                    object : FirestoreManager.Callback<String> {
+                    object : Callback<String> {
                         override fun onComplete(result: String) {
                             if (result.isEmpty()) {
                                 callback.onComplete(false)
@@ -246,7 +245,7 @@ class ChatInboxViewModel : ViewModel() {
                     })
 
             }
-            .addOnFailureListener{ e ->
+            .addOnFailureListener { e ->
                 Log.e("Firestore error", e.message.toString())
                 callback.onComplete(false)
             }

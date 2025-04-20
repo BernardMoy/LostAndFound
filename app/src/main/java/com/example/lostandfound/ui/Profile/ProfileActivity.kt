@@ -151,14 +151,19 @@ fun MainContent(viewModel: ProfileViewModel) {
                 type = ButtonType.FILLED,
                 onClick = {
                     val manager: FirebaseAuthManager = FirebaseAuthManager(context)
-                    manager.logoutUser(object: LogoutCallback{
+                    manager.logoutUser(object : LogoutCallback {
                         override fun onComplete(success: Boolean) {
-                            if (!success){
-                                Toast.makeText(context, "Failed updating user data", Toast.LENGTH_SHORT).show()
+                            if (!success) {
+                                Toast.makeText(
+                                    context,
+                                    "Failed updating user data",
+                                    Toast.LENGTH_SHORT
+                                ).show()
                                 return
                             }
 
-                            Toast.makeText(context, "Logged out successfully", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(context, "Logged out successfully", Toast.LENGTH_SHORT)
+                                .show()
                             viewModel.isLogoutDialogShown.value = false
                             (context as ProfileActivity).finish()
                         }

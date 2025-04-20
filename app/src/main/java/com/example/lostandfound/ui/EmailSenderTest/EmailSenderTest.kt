@@ -2,7 +2,6 @@ package com.example.lostandfound.ui.EmailSenderTest
 
 import android.content.Context
 import android.os.Bundle
-import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Arrangement
@@ -91,7 +90,7 @@ fun MainContent(viewModel: EmailSenderTestViewModel = viewModel()) {
         verticalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.title_margin)),
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier.padding(dimensionResource(R.dimen.title_margin))
-    ){
+    ) {
         InputEmail(viewModel = viewModel)
         SendButton(context = context, viewModel = viewModel)
     }
@@ -99,7 +98,7 @@ fun MainContent(viewModel: EmailSenderTestViewModel = viewModel()) {
 }
 
 @Composable
-fun InputEmail(viewModel: EmailSenderTestViewModel){
+fun InputEmail(viewModel: EmailSenderTestViewModel) {
     CustomInputField(
         placeholder = "Your email here...",
         isEditable = true,
@@ -112,7 +111,7 @@ fun InputEmail(viewModel: EmailSenderTestViewModel){
 }
 
 @Composable
-fun SendButton(context:Context, viewModel: EmailSenderTestViewModel){
+fun SendButton(context: Context, viewModel: EmailSenderTestViewModel) {
     CustomButton(
         text = "Send email",
         type = ButtonType.FILLED,
@@ -122,7 +121,7 @@ fun SendButton(context:Context, viewModel: EmailSenderTestViewModel){
                 "Test subject",
                 "This is a test email",
                 true,
-                object: EmailCallback{
+                object : EmailCallback {
                     override fun onComplete(success: Boolean) {
 
                     }

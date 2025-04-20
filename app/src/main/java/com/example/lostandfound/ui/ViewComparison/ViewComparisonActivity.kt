@@ -173,25 +173,25 @@ fun MainContent(viewModel: ViewComparisonViewModel) {
     // boolean to determine if it is being rendered in preview
     val inPreview = LocalInspectionMode.current
 
+    Column(
+        modifier = Modifier.padding(vertical = dimensionResource(R.dimen.title_margin)),
+        verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin))
+    ) {
+        OverallSimilarity(context = context, viewModel = viewModel)
         Column(
-            modifier = Modifier.padding(vertical = dimensionResource(R.dimen.title_margin)),
+            modifier = Modifier.padding(horizontal = dimensionResource(R.dimen.title_margin)),
             verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin))
         ) {
-            OverallSimilarity(context = context, viewModel = viewModel)
-            Column(
-                modifier = Modifier.padding(horizontal = dimensionResource(R.dimen.title_margin)),
-                verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin))
-            ) {
-                Reference(context = context, viewModel = viewModel)
-                Status(viewModel = viewModel)
-                ItemImage(viewModel = viewModel)
-                ItemDetails(viewModel = viewModel)
-                DescriptionData(context = context, viewModel = viewModel)
-                LocationData(context = context, viewModel = viewModel)
-                SecurityQuestion(viewModel = viewModel)
-                UserData(context = context, viewModel = viewModel)
-                ClaimButton(context = context, viewModel = viewModel)
-            }
+            Reference(context = context, viewModel = viewModel)
+            Status(viewModel = viewModel)
+            ItemImage(viewModel = viewModel)
+            ItemDetails(viewModel = viewModel)
+            DescriptionData(context = context, viewModel = viewModel)
+            LocationData(context = context, viewModel = viewModel)
+            SecurityQuestion(viewModel = viewModel)
+            UserData(context = context, viewModel = viewModel)
+            ClaimButton(context = context, viewModel = viewModel)
+        }
 
     }
 }

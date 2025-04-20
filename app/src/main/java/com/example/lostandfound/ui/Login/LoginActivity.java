@@ -144,7 +144,7 @@ public class LoginActivity extends AppCompatActivity {
                         FCMTokenManager.INSTANCE.updateFCMToken(UserManager.getUserID(), new FCMTokenManager.FCMTokenUpdateCallback() {
                             @Override
                             public void onComplete(boolean success) {
-                                if (!success){
+                                if (!success) {
                                     loginViewModel.setLoginError("Failed generating an FCM token");
                                     return;
                                 }

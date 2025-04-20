@@ -536,8 +536,14 @@ object ItemManager {
                 FirebaseNames.LOSTFOUND_USER,
                 lostItem.user.userID
             )
-            .whereGreaterThan(FirebaseNames.LOSTFOUND_EPOCHDATETIME, lostItem.timePosted - 2592000)  // f - l > 2592000 (30 days)Dont consider items that are posted 30 days ago
-            .whereLessThan(FirebaseNames.LOSTFOUND_EPOCHDATETIME, lostItem.timePosted + 2592000)// . Dont consider items that are posted 30 days later
+            .whereGreaterThan(
+                FirebaseNames.LOSTFOUND_EPOCHDATETIME,
+                lostItem.timePosted - 2592000
+            )  // f - l > 2592000 (30 days)Dont consider items that are posted 30 days ago
+            .whereLessThan(
+                FirebaseNames.LOSTFOUND_EPOCHDATETIME,
+                lostItem.timePosted + 2592000
+            )// . Dont consider items that are posted 30 days later
             .get()   // currently there are no orderby, they are done later
             .addOnSuccessListener { result ->
 

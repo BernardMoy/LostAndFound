@@ -146,7 +146,8 @@ fun MainContent(viewModel: ReportIssueViewModel = viewModel()) {
     val inPreview = LocalInspectionMode.current
 
     // load data from shared prefs to view models
-    val sp: SharedPreferences = context.getSharedPreferences(SharedPreferencesNames.NAME_USERS, Context.MODE_PRIVATE)
+    val sp: SharedPreferences =
+        context.getSharedPreferences(SharedPreferencesNames.NAME_USERS, Context.MODE_PRIVATE)
     viewModel.userFirstName = sp.getString(SharedPreferencesNames.USER_FIRSTNAME, "") ?: ""
     viewModel.userLastName = sp.getString(SharedPreferencesNames.USER_LASTNAME, "") ?: ""
     viewModel.userEmail = sp.getString(SharedPreferencesNames.USER_EMAIL, "") ?: ""

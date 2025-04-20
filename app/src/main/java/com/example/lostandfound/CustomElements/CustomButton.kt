@@ -42,16 +42,18 @@ fun CustomButton(
                 ),
                 enabled = enabled,
                 shape = RoundedCornerShape(dimensionResource(id = R.dimen.corner_radius)),  // make the button have rounded corners
-                modifier = Modifier.testTag(testTag).background(
-                    // add the gradient to the background instead of the container color
-                    Brush.horizontalGradient(
-                        listOf(
-                            MaterialTheme.colorScheme.primary,
-                            MaterialTheme.colorScheme.secondary
-                        )
-                    ),
-                    shape = RoundedCornerShape(dimensionResource(id = R.dimen.corner_radius))   // also apply the shape to the background
-                )
+                modifier = Modifier
+                    .testTag(testTag)
+                    .background(
+                        // add the gradient to the background instead of the container color
+                        Brush.horizontalGradient(
+                            listOf(
+                                MaterialTheme.colorScheme.primary,
+                                MaterialTheme.colorScheme.secondary
+                            )
+                        ),
+                        shape = RoundedCornerShape(dimensionResource(id = R.dimen.corner_radius))   // also apply the shape to the background
+                    )
             ) {
                 CustomButtonContent(text = text, small = small)
             }
@@ -84,11 +86,13 @@ fun CustomButton(
                     disabledContainerColor = Color.Gray,
                     disabledContentColor = Color.White
                 ),
-                modifier = Modifier.testTag(testTag).border(
-                    width = 1.dp,
-                    color = MaterialTheme.colorScheme.onPrimaryContainer,
-                    shape = RoundedCornerShape(dimensionResource(id = R.dimen.corner_radius))
-                ),
+                modifier = Modifier
+                    .testTag(testTag)
+                    .border(
+                        width = 1.dp,
+                        color = MaterialTheme.colorScheme.onPrimaryContainer,
+                        shape = RoundedCornerShape(dimensionResource(id = R.dimen.corner_radius))
+                    ),
                 enabled = enabled,
                 shape = RoundedCornerShape(dimensionResource(id = R.dimen.corner_radius))  // make the button have rounded corners
             ) {
@@ -126,11 +130,13 @@ fun CustomButton(
                 ),
                 enabled = enabled,
                 shape = RoundedCornerShape(dimensionResource(id = R.dimen.corner_radius)),  // make the button have rounded corners
-                modifier = Modifier.testTag(testTag).background(
-                    // add the gradient to the background instead of the container color
-                    color = MaterialTheme.colorScheme.error,
-                    shape = RoundedCornerShape(dimensionResource(id = R.dimen.corner_radius))   // also apply the shape to the background
-                )
+                modifier = Modifier
+                    .testTag(testTag)
+                    .background(
+                        // add the gradient to the background instead of the container color
+                        color = MaterialTheme.colorScheme.error,
+                        shape = RoundedCornerShape(dimensionResource(id = R.dimen.corner_radius))   // also apply the shape to the background
+                    )
             ) {
                 CustomButtonContent(text = text, small = small)
             }

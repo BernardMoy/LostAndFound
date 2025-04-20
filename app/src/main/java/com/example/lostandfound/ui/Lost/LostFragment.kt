@@ -139,7 +139,7 @@ fun MainContent(viewModel: LostFragmentViewModel, isTesting: Boolean) {
 
     // if is testing is true, it refreshes data on launch. Otherwise it refresh during onResume
     // because onResume() wont be triggered in tests
-    if (isTesting){
+    if (isTesting) {
         LaunchedEffect(Unit) {
             refreshData(context, viewModel)
         }
@@ -178,7 +178,7 @@ fun RefreshButton(
         )
 
         // the refresh button
-        CustomTooltipBox(text = "Refresh"){
+        CustomTooltipBox(text = "Refresh") {
             IconButton(
                 onClick = {
                     // refresh the list - manually (by now)

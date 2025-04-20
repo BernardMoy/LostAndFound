@@ -34,7 +34,6 @@ import androidx.compose.material.icons.outlined.Edit
 import androidx.compose.material.icons.outlined.Folder
 import androidx.compose.material.icons.outlined.Lock
 import androidx.compose.material.icons.outlined.Palette
-import androidx.compose.material.icons.outlined.Refresh
 import androidx.compose.material.icons.outlined.Title
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -51,7 +50,6 @@ import androidx.compose.ui.platform.ClipEntry
 import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalInspectionMode
-import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.text.font.FontWeight
@@ -80,7 +78,6 @@ import com.example.lostandfound.R
 import com.example.lostandfound.Utility.DateTimeManager
 import com.example.lostandfound.Utility.ImageManager
 import com.example.lostandfound.Utility.LocationManager
-import com.example.lostandfound.ui.Lost.refreshData
 import com.example.lostandfound.ui.ViewClaimList.ViewClaimListActivity
 import com.example.lostandfound.ui.theme.ComposeTheme
 import com.example.lostandfound.ui.theme.Typography
@@ -162,7 +159,7 @@ fun MainContent(viewModel: ViewFoundViewModel) {
 
         // also display the user
     }
-    
+
 }
 
 @Composable
@@ -338,11 +335,12 @@ fun LocationData(
                     },
                 )
 
-                Row (
+                Row(
                     horizontalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.content_margin_half)),
                     verticalAlignment = Alignment.CenterVertically
-                ){
-                    val locationString = viewModel.itemData.location!!.first.toString() + "," + viewModel.itemData.location!!.second.toString()
+                ) {
+                    val locationString =
+                        viewModel.itemData.location!!.first.toString() + "," + viewModel.itemData.location!!.second.toString()
 
                     Text(
                         text = locationString,

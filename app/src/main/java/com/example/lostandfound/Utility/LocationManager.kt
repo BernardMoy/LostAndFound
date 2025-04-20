@@ -1,9 +1,6 @@
 package com.example.lostandfound.Utility
 
-import android.content.Context
-import android.location.Geocoder
 import com.google.android.gms.maps.model.LatLng
-import java.util.Locale
 import kotlin.math.cos
 import kotlin.math.sqrt
 

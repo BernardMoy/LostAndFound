@@ -16,10 +16,10 @@ import com.example.lostandfound.Data.LostItem
 import com.example.lostandfound.Data.ScoreData
 import com.example.lostandfound.Data.User
 import com.example.lostandfound.FirebaseManagers.FirebaseStorageManager
-import com.example.lostandfound.FirebaseManagers.UserManager
 import com.example.lostandfound.FirebaseManagers.FirestoreManager
 import com.example.lostandfound.FirebaseManagers.ItemManager
 import com.example.lostandfound.FirebaseManagers.NotificationManager
+import com.example.lostandfound.FirebaseManagers.UserManager
 import com.example.lostandfound.Utility.DateTimeManager
 import com.example.lostandfound.Utility.ErrorCallback
 import com.example.lostandfound.Utility.LocationManager

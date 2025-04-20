@@ -181,11 +181,13 @@ fun MainContent(
     }
 
     // the welcome dialog
-    val spUser = context.getSharedPreferences(SharedPreferencesNames.NAME_USERS, Context.MODE_PRIVATE)
-    val userName = spUser.getString(SharedPreferencesNames.USER_FIRSTNAME, "") + " " + spUser.getString(
-        SharedPreferencesNames.USER_LASTNAME,
-        ""
-    )
+    val spUser =
+        context.getSharedPreferences(SharedPreferencesNames.NAME_USERS, Context.MODE_PRIVATE)
+    val userName =
+        spUser.getString(SharedPreferencesNames.USER_FIRSTNAME, "") + " " + spUser.getString(
+            SharedPreferencesNames.USER_LASTNAME,
+            ""
+        )
 
     CustomTextDialog(
         icon = Icons.Outlined.WavingHand,
@@ -201,8 +203,13 @@ fun MainContent(
                     context.startActivity(intent)
 
                     // change the shared pref value to be false
-                    val spShowWelcome = context.getSharedPreferences(SharedPreferencesNames.NAME_SHOW_WELCOME_MESSAGE, Context.MODE_PRIVATE)
-                    spShowWelcome.edit().putBoolean(SharedPreferencesNames.SHOW_WELCOME_MESSAGE_VALUE, false).apply()
+                    val spShowWelcome = context.getSharedPreferences(
+                        SharedPreferencesNames.NAME_SHOW_WELCOME_MESSAGE,
+                        Context.MODE_PRIVATE
+                    )
+                    spShowWelcome.edit()
+                        .putBoolean(SharedPreferencesNames.SHOW_WELCOME_MESSAGE_VALUE, false)
+                        .apply()
 
                     // dismiss dialog
                     viewModel.isWelcomeDialogShown.value = false
@@ -215,8 +222,13 @@ fun MainContent(
                 type = ButtonType.OUTLINED,
                 onClick = {
                     // change the shared pref value to be false
-                    val spShowWelcome = context.getSharedPreferences(SharedPreferencesNames.NAME_SHOW_WELCOME_MESSAGE, Context.MODE_PRIVATE)
-                    spShowWelcome.edit().putBoolean(SharedPreferencesNames.SHOW_WELCOME_MESSAGE_VALUE, false).apply()
+                    val spShowWelcome = context.getSharedPreferences(
+                        SharedPreferencesNames.NAME_SHOW_WELCOME_MESSAGE,
+                        Context.MODE_PRIVATE
+                    )
+                    spShowWelcome.edit()
+                        .putBoolean(SharedPreferencesNames.SHOW_WELCOME_MESSAGE_VALUE, false)
+                        .apply()
 
                     // dismiss dialog
                     viewModel.isWelcomeDialogShown.value = false
@@ -408,7 +420,7 @@ fun HowItWorksPager(
             }
 
             // the next button
-            CustomTooltipBox(text = "Next"){
+            CustomTooltipBox(text = "Next") {
                 IconButton(
                     onClick = {
                         // trigger to scroll to next page
@@ -514,7 +526,7 @@ fun RecentlyLostItem(
             )
 
             // the refresh button
-            CustomTooltipBox(text = "Refresh"){
+            CustomTooltipBox(text = "Refresh") {
                 IconButton(
                     modifier = Modifier.size(dimensionResource(R.dimen.image_button_size_small)),
                     onClick = {
@@ -606,7 +618,7 @@ fun FoundItemData(
             )
 
             // the refresh button
-            CustomTooltipBox(text = "Refresh"){
+            CustomTooltipBox(text = "Refresh") {
                 IconButton(
                     modifier = Modifier.size(dimensionResource(R.dimen.image_button_size_small)),
                     onClick = {

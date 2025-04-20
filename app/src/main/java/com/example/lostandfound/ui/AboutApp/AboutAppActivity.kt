@@ -174,7 +174,7 @@ fun PrivacyPolicy(context: Context, viewModel: AboutAppViewModel) {
 
 // display the device info of the user
 @Composable
-fun DeviceInfo(context: Context, viewModel: AboutAppViewModel){
+fun DeviceInfo(context: Context, viewModel: AboutAppViewModel) {
     Box(
         modifier = Modifier.padding(horizontal = dimensionResource(R.dimen.content_margin))
     ) {

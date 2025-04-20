@@ -29,7 +29,6 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -111,19 +110,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         manager.createNotificationChannel(channel);
 
         // request notification permission
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU){
-           boolean hasPermission = ContextCompat.checkSelfPermission(
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            boolean hasPermission = ContextCompat.checkSelfPermission(
                     this,
                     Manifest.permission.POST_NOTIFICATIONS
             ) == PackageManager.PERMISSION_GRANTED;
 
-           if (!hasPermission){
-               ActivityCompat.requestPermissions(
-                       this,
-                       new String[]{Manifest.permission.POST_NOTIFICATIONS},
-                       0
-               );
-           }
+            if (!hasPermission) {
+                ActivityCompat.requestPermissions(
+                        this,
+                        new String[]{Manifest.permission.POST_NOTIFICATIONS},
+                        0
+                );
+            }
         }
 
         // load the theme from theme manager
@@ -182,7 +181,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         drawerMenuButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (!drawerLayout.isDrawerOpen(GravityCompat.START)){
+                if (!drawerLayout.isDrawerOpen(GravityCompat.START)) {
                     drawerLayout.open();
                 }
             }
@@ -196,7 +195,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         closeDrawerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (drawerLayout.isDrawerOpen(GravityCompat.START)){
+                if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
                     drawerLayout.closeDrawer(GravityCompat.START);
                 }
             }
@@ -231,50 +230,50 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 int clickedId = item.getItemId();
 
-                if (clickedId == R.id.nav_drawer_my_lost){
+                if (clickedId == R.id.nav_drawer_my_lost) {
                     navView.setSelectedItemId(R.id.navigation_lost);
 
                 } else if (clickedId == R.id.nav_drawer_my_found) {
                     navView.setSelectedItemId(R.id.navigation_found);
 
-                } else if (clickedId == R.id.nav_drawer_chat){
+                } else if (clickedId == R.id.nav_drawer_chat) {
                     navView.setSelectedItemId(R.id.navigation_chat);
 
-                } else if (clickedId == R.id.nav_drawer_notifications){
+                } else if (clickedId == R.id.nav_drawer_notifications) {
                     Intent i = new Intent(MainActivity.this, NotificationsActivity.class);
                     startActivity(i);
 
-                } else if (clickedId == R.id.nav_drawer_new_lost){
+                } else if (clickedId == R.id.nav_drawer_new_lost) {
                     Intent i = new Intent(MainActivity.this, NewLostActivity.class);
                     startActivity(i);
 
-                } else if (clickedId == R.id.nav_drawer_new_found){
+                } else if (clickedId == R.id.nav_drawer_new_found) {
                     Intent i = new Intent(MainActivity.this, NewFoundActivity.class);
                     startActivity(i);
 
-                } else if (clickedId == R.id.nav_drawer_activity_log){
+                } else if (clickedId == R.id.nav_drawer_activity_log) {
                     Intent i = new Intent(MainActivity.this, ActivityLogActivity.class);
                     startActivity(i);
 
-                } else if (clickedId == R.id.nav_drawer_settings){
+                } else if (clickedId == R.id.nav_drawer_settings) {
                     Intent i = new Intent(MainActivity.this, SettingsActivity.class);
                     startActivity(i);
 
-                } else if (clickedId == R.id.nav_drawer_profile){
+                } else if (clickedId == R.id.nav_drawer_profile) {
                     Intent i = new Intent(MainActivity.this, ProfileActivity.class);
                     startActivity(i);
 
-                } else if (clickedId == R.id.nav_drawer_take_a_tour){
+                } else if (clickedId == R.id.nav_drawer_take_a_tour) {
                     // make the first step of the tutorial show
                     binding.tutorial1.setVisibility(VISIBLE);
                     binding.tutorial2.setVisibility(GONE);
                     binding.tutorial3.setVisibility(GONE);
 
-                } else if (clickedId == R.id.nav_drawer_how_it_works){
+                } else if (clickedId == R.id.nav_drawer_how_it_works) {
                     Intent i = new Intent(MainActivity.this, HowItWorksActivity.class);
                     startActivity(i);
 
-                } else if (clickedId == R.id.nav_drawer_report_an_issue){
+                } else if (clickedId == R.id.nav_drawer_report_an_issue) {
                     Intent i = new Intent(MainActivity.this, ReportIssueActivity.class);
                     startActivity(i);
                 }
@@ -321,7 +320,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         binding.floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (!isMenuExpanded){
+                if (!isMenuExpanded) {
                     expandMenu();
 
                 } else {
@@ -367,13 +366,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
                     public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
-                        if (error != null){
+                        if (error != null) {
                             Toast.makeText(MainActivity.this, "Failed to listen for new notifications", Toast.LENGTH_SHORT).show();
                             return;
                         }
 
                         // check if the query is not empty
-                        if (value != null && !value.isEmpty()){
+                        if (value != null && !value.isEmpty()) {
                             binding.notificationsDot.setVisibility(VISIBLE);
                         } else {
                             binding.notificationsDot.setVisibility(GONE);
@@ -389,7 +388,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 .get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                        if (!queryDocumentSnapshots.isEmpty()){
+                        if (!queryDocumentSnapshots.isEmpty()) {
                             binding.notificationsDot.setVisibility(VISIBLE);
                         } else {
                             binding.notificationsDot.setVisibility(GONE);
@@ -410,17 +409,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
                     public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
-                        if (error != null){
+                        if (error != null) {
                             Toast.makeText(MainActivity.this, "Failed to listen for chats", Toast.LENGTH_SHORT).show();
                             return;
                         }
 
                         // check if the query is not empty
-                        if (value != null && !value.isEmpty()){
-                            badgeDrawable.setVisible(true);
-                        } else {
-                            badgeDrawable.setVisible(false);
-                        }
+                        badgeDrawable.setVisible(value != null && !value.isEmpty());
                     }
                 });
     }
@@ -438,7 +433,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     // methods to set up animation to open and close the floating action button
-    public void expandMenu(){
+    public void expandMenu() {
         isMenuExpanded = true;
 
         // get dimensions in the form of dp, they do not have to be converted to px.
@@ -468,7 +463,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         binding.floatingActionButton.setImageResource(R.drawable.cross_icon);
     }
 
-    public void collapseMenu(){
+    public void collapseMenu() {
         isMenuExpanded = false;
 
         // make the overlay not appear
@@ -496,8 +491,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
     // method to update the displayed data depending on whether they are logged in
-    public void updateUserDisplayedData(){
-        if (UserManager.isUserLoggedIn()){ // user is signed in
+    public void updateUserDisplayedData() {
+        if (UserManager.isUserLoggedIn()) { // user is signed in
             // hide the log in button
             binding.loginButton.setEnabled(false);
             binding.loginButton.setVisibility(GONE);
@@ -524,18 +519,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
             // get the user's avatar if they are logged in
             // set the toolbar avatar
-            if (avatar.isEmpty()){
+            if (avatar.isEmpty()) {
                 binding.toolbarProfileIcon.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.profile_icon));
             } else {
                 binding.toolbarProfileIcon.setImageURI(ImageManager.INSTANCE.stringToUri(this, avatar));
             }
 
             // set the nav drawer avatar
-            if (avatar.isEmpty()){
-                ((ShapeableImageView)navHeader.findViewById(R.id.nav_drawer_profile_icon))
+            if (avatar.isEmpty()) {
+                ((ShapeableImageView) navHeader.findViewById(R.id.nav_drawer_profile_icon))
                         .setImageDrawable(ContextCompat.getDrawable(this, R.drawable.profile_icon));
             } else {
-                ((ShapeableImageView)navHeader.findViewById(R.id.nav_drawer_profile_icon))
+                ((ShapeableImageView) navHeader.findViewById(R.id.nav_drawer_profile_icon))
                         .setImageURI(ImageManager.INSTANCE.stringToUri(this, avatar));
             }
 

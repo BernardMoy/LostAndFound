@@ -504,7 +504,7 @@ fun CustomSearchField(
         },
         shape = RoundedCornerShape(dimensionResource(id = R.dimen.corner_radius_small)),
         trailingIcon = {
-            CustomTooltipBox(text = "Clear"){
+            CustomTooltipBox(text = "Clear") {
                 IconButton(
                     onClick = {
                         fieldContent.value = ""

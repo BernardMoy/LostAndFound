@@ -1,7 +1,6 @@
 package com.example.lostandfound.ui.ViewReportedIssues
 
 import android.os.Bundle
-import android.widget.Space
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -12,8 +11,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
@@ -31,7 +28,6 @@ import com.example.lostandfound.CustomElements.CustomCenteredProgressbar
 import com.example.lostandfound.CustomElements.CustomReportIssuePreview
 import com.example.lostandfound.R
 import com.example.lostandfound.ui.theme.ComposeTheme
-import java.util.Locale
 
 
 class ViewReportedIssuesActivity : ComponentActivity() {
@@ -90,18 +86,18 @@ fun MainContent(viewModel: ViewReportedIssuesViewModel = viewModel()) {
 
     // load data
     LaunchedEffect(Unit) {
-        viewModel.loadData(object : ViewReportedIssuesViewModel.LoadReportedIssuesCallback{
+        viewModel.loadData(object : ViewReportedIssuesViewModel.LoadReportedIssuesCallback {
             override fun onComplete(success: Boolean) {
-                if (!success){
+                if (!success) {
                     Toast.makeText(context, "Fetching data failed", Toast.LENGTH_SHORT).show()
                 }
             }
         })
     }
     // contents
-    if (viewModel.isLoading.value){
+    if (viewModel.isLoading.value) {
         CustomCenteredProgressbar()
-    } else if (viewModel.reportedIssueList.isNotEmpty()){
+    } else if (viewModel.reportedIssueList.isNotEmpty()) {
         LazyColumn(
             verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.title_margin)),
             modifier = Modifier.padding(horizontal = dimensionResource(R.dimen.title_margin))

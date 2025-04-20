@@ -310,7 +310,7 @@ fun Items(
 
 
             // the refresh button
-            CustomTooltipBox(text = "Refresh"){
+            CustomTooltipBox(text = "Refresh") {
                 IconButton(
                     onClick = {
                         // refresh the list - manually (by now)
@@ -359,11 +359,14 @@ fun Items(
                             // get scores
                             val passedScoreData = ScoreData(
                                 imageScore = notification[FirebaseNames.NOTIFICATION_IMAGE_SCORE] as? Double,
-                                categoryScore = notification[FirebaseNames.NOTIFICATION_CATEGORY_SCORE] as? Double ?: 0.0,
-                                colorScore = notification[FirebaseNames.NOTIFICATION_COLOR_SCORE] as? Double ?: 0.0,
+                                categoryScore = notification[FirebaseNames.NOTIFICATION_CATEGORY_SCORE] as? Double
+                                    ?: 0.0,
+                                colorScore = notification[FirebaseNames.NOTIFICATION_COLOR_SCORE] as? Double
+                                    ?: 0.0,
                                 brandScore = notification[FirebaseNames.NOTIFICATION_BRAND_SCORE] as? Double,
                                 locationScore = notification[FirebaseNames.NOTIFICATION_LOCATION_SCORE] as? Double,
-                                overallScore = notification[FirebaseNames.NOTIFICATION_OVERALL_SCORE] as? Double ?: 0.0
+                                overallScore = notification[FirebaseNames.NOTIFICATION_OVERALL_SCORE] as? Double
+                                    ?: 0.0
                             )
 
                             ItemManager.getLostItemFromId(

@@ -42,9 +42,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.dimensionResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.lostandfound.CustomElements.BackToolbar
 import com.example.lostandfound.CustomElements.CustomActionRow
 import com.example.lostandfound.CustomElements.CustomGrayTitle
@@ -110,7 +108,7 @@ fun SettingsScreen(activity: ComponentActivity, viewModel: SettingsViewModel) {
                     MainContent(viewModel = viewModel)
 
                     // if the user is logged in, load if is admin
-                    if (UserManager.isUserLoggedIn()){
+                    if (UserManager.isUserLoggedIn()) {
                         viewModel.loadIsAdmin()
                     }
                 }
@@ -137,9 +135,9 @@ fun MainContent(viewModel: SettingsViewModel) {
     AboutTheApp(context = context)
 
     // if the user is admin, enable these
-    if (viewModel.isAdmin.value){
+    if (viewModel.isAdmin.value) {
         HorizontalDivider(thickness = 1.dp, color = Color.Gray)
-        Admin(context=context, viewModel=viewModel)
+        Admin(context = context, viewModel = viewModel)
     }
 
     // if the user is developer and dev settings are enabled, enable these
@@ -211,7 +209,7 @@ fun Appearance(
 
         // only available when the user is logged in
         // whether to send push notifications
-        if (UserManager.isUserLoggedIn()){
+        if (UserManager.isUserLoggedIn()) {
             CustomActionRow(text = "Push notifications",
                 leftIcon = Icons.Outlined.Notifications,
                 onClick = {
@@ -299,7 +297,7 @@ fun AboutTheApp(
 fun Admin(
     context: Context,
     viewModel: SettingsViewModel
-){
+) {
     Box(
         modifier = Modifier.padding(
             horizontal = dimensionResource(id = R.dimen.content_margin)

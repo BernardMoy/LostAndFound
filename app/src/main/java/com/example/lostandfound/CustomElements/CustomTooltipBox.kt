@@ -16,21 +16,21 @@ import androidx.compose.ui.Modifier
 fun CustomTooltipBox(
     text: String,
     content: @Composable () -> Unit
-){
+) {
     // customise tooltip styles here
     TooltipBox(
         positionProvider = TooltipDefaults.rememberPlainTooltipPositionProvider(),
         tooltip = {
-            PlainTooltip (
+            PlainTooltip(
                 modifier = Modifier.background(color = MaterialTheme.colorScheme.background)
-            ){
+            ) {
                 Text(
                     text = text,
                 )
             }
         },
         state = TooltipState(initialIsVisible = false)
-    ){
+    ) {
         content()
     }
 }

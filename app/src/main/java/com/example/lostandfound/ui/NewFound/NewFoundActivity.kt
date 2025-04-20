@@ -186,7 +186,7 @@ fun NewFoundScreen(activity: ComponentActivity, viewModel: NewFoundViewModel) {
             // the dialog when the back button is pressed
             CustomTextDialog(
                 icon = Icons.Outlined.Cancel,
-                isWarning = true ,
+                isWarning = true,
                 title = "Discard changes?",
                 content = "All your changes will be lost.",
                 confirmButton = {
@@ -228,7 +228,8 @@ fun MainContent(viewModel: NewFoundViewModel) {
     val inPreview = LocalInspectionMode.current
 
     // load data from shared prefs to view models
-    val sp: SharedPreferences = context.getSharedPreferences(SharedPreferencesNames.NAME_USERS, Context.MODE_PRIVATE)
+    val sp: SharedPreferences =
+        context.getSharedPreferences(SharedPreferencesNames.NAME_USERS, Context.MODE_PRIVATE)
     viewModel.userAvatar = sp.getString(SharedPreferencesNames.USER_AVATAR, "") ?: ""
     viewModel.userFirstName = sp.getString(SharedPreferencesNames.USER_FIRSTNAME, "") ?: ""
     viewModel.userLastName = sp.getString(SharedPreferencesNames.USER_LASTNAME, "") ?: ""

@@ -13,8 +13,8 @@ import com.example.lostandfound.Data.FirebaseNames
 import com.example.lostandfound.Data.LostItem
 import com.example.lostandfound.Data.User
 import com.example.lostandfound.FirebaseManagers.FirebaseStorageManager
-import com.example.lostandfound.FirebaseManagers.UserManager
 import com.example.lostandfound.FirebaseManagers.FirestoreManager
+import com.example.lostandfound.FirebaseManagers.UserManager
 import com.example.lostandfound.Utility.DateTimeManager
 import com.example.lostandfound.Utility.LocationManager
 import com.google.android.gms.maps.model.LatLng

@@ -1,7 +1,6 @@
 package com.example.lostandfound.ui.VerifyEmail;
 
 import android.content.Context;
-import android.widget.Toast;
 
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;

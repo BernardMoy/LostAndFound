@@ -9,7 +9,7 @@ import com.example.lostandfound.Data.ReportedUser
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.QueryDocumentSnapshot
 
-class ViewReportedUsersViewModel : ViewModel(){
+class ViewReportedUsersViewModel : ViewModel() {
     interface LoadReportedUsersCallback {
         fun onComplete(success: Boolean)
     }
@@ -24,17 +24,20 @@ class ViewReportedUsersViewModel : ViewModel(){
             .addOnSuccessListener { doc ->
                 val count = doc.size()
                 var n = 0
-                if (count == 0){
+                if (count == 0) {
                     isLoading.value = false
                     callback.onComplete(true)
                 }
                 for (snapshot: QueryDocumentSnapshot in doc) {
                     val fromUser = snapshot[FirebaseNames.REPORT_USER_FROM].toString()
-                    val fromUserFirstName = snapshot[FirebaseNames.REPORT_USER_FROM_FIRST_NAME].toString()
-                    val fromUserLastName = snapshot[FirebaseNames.REPORT_USER_FROM_LAST_NAME].toString()
+                    val fromUserFirstName =
+                        snapshot[FirebaseNames.REPORT_USER_FROM_FIRST_NAME].toString()
+                    val fromUserLastName =
+                        snapshot[FirebaseNames.REPORT_USER_FROM_LAST_NAME].toString()
                     val fromUserEmail = snapshot[FirebaseNames.REPORT_USER_FROM_EMAIL].toString()
                     val toUser = snapshot[FirebaseNames.REPORT_USER_TO].toString()
-                    val toUserFirstName = snapshot[FirebaseNames.REPORT_USER_TO_FIRST_NAME].toString()
+                    val toUserFirstName =
+                        snapshot[FirebaseNames.REPORT_USER_TO_FIRST_NAME].toString()
                     val toUserLastName = snapshot[FirebaseNames.REPORT_USER_TO_LAST_NAME].toString()
                     val toUserEmail = snapshot[FirebaseNames.REPORT_USER_TO_EMAIL].toString()
                     val desc = snapshot[FirebaseNames.REPORT_USER_DESC].toString()

@@ -184,7 +184,7 @@ fun NewLostScreen(activity: ComponentActivity, viewModel: NewLostViewModel) {
             // the dialog when the back button is pressed
             CustomTextDialog(
                 icon = Icons.Outlined.Cancel,
-                isWarning = true ,
+                isWarning = true,
                 title = "Discard changes?",
                 content = "All your changes will be lost.",
                 confirmButton = {
@@ -229,7 +229,8 @@ fun MainContent(viewModel: NewLostViewModel) {
     ImageBottomSheet(isSheetOpen = viewModel.isSheetOpen, viewModel = viewModel, context = context)
 
     // load data from shared prefs to view models
-    val sp: SharedPreferences = context.getSharedPreferences(SharedPreferencesNames.NAME_USERS, Context.MODE_PRIVATE)
+    val sp: SharedPreferences =
+        context.getSharedPreferences(SharedPreferencesNames.NAME_USERS, Context.MODE_PRIVATE)
     viewModel.userAvatar = sp.getString(SharedPreferencesNames.USER_AVATAR, "") ?: ""
     viewModel.userFirstName = sp.getString(SharedPreferencesNames.USER_FIRSTNAME, "") ?: ""
     viewModel.userLastName = sp.getString(SharedPreferencesNames.USER_LASTNAME, "") ?: ""
@@ -682,7 +683,10 @@ fun ImageBottomSheet(
 ) {
     // stores the file of the image taken by camera
     val cameraImageFile = remember {
-        File(context.externalCacheDir, "capture_${System.currentTimeMillis()}.jpg")   // make each file a unique name so that new images can override the old one
+        File(
+            context.externalCacheDir,
+            "capture_${System.currentTimeMillis()}.jpg"
+        )   // make each file a unique name so that new images can override the old one
     }
 
     // stores the image uri of the image taken by the camera

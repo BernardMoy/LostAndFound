@@ -20,14 +20,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.dimensionResource
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.lostandfound.CustomElements.BackToolbar
 import com.example.lostandfound.CustomElements.CustomActivityLogItemPreview
 import com.example.lostandfound.CustomElements.CustomCenterText
 import com.example.lostandfound.CustomElements.CustomCenteredProgressbar
 import com.example.lostandfound.Data.IntentExtraNames
-import com.example.lostandfound.Data.LostItem
 import com.example.lostandfound.R
 import com.example.lostandfound.ui.theme.ComposeTheme
 
@@ -38,7 +35,7 @@ class ActivityLogActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         val passedUser = intent.getStringExtra(IntentExtraNames.INTENT_ACTIVITY_LOG_USER_ID)
-        if (passedUser != null){
+        if (passedUser != null) {
             viewModel.userID.value = passedUser
         }
 
@@ -58,7 +55,10 @@ fun ActivityLogScreen(activity: ComponentActivity, viewModel: ActivityLogViewMod
             Scaffold(
                 // top toolbar
                 topBar = {
-                    BackToolbar(title = if (viewModel.userID.value == null) "Activity Log" else "Activity Log of Other User", activity = activity)
+                    BackToolbar(
+                        title = if (viewModel.userID.value == null) "Activity Log" else "Activity Log of Other User",
+                        activity = activity
+                    )
                 }
             ) { innerPadding ->
                 Column(

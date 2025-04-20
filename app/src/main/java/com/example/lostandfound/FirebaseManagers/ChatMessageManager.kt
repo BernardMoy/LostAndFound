@@ -1,6 +1,5 @@
 package com.example.lostandfound.FirebaseManagers
 
-import com.example.lostandfound.Data.ChatMessage
 import com.example.lostandfound.Data.FirebaseNames
 import com.example.lostandfound.FirebaseManagers.FirestoreManager.Callback
 

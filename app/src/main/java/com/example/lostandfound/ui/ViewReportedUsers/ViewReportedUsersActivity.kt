@@ -12,8 +12,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
@@ -28,7 +26,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.lostandfound.CustomElements.BackToolbar
 import com.example.lostandfound.CustomElements.CustomCenterText
 import com.example.lostandfound.CustomElements.CustomCenteredProgressbar
-import com.example.lostandfound.CustomElements.CustomReportIssuePreview
 import com.example.lostandfound.CustomElements.CustomReportUserPreview
 import com.example.lostandfound.Data.IntentExtraNames
 import com.example.lostandfound.R
@@ -92,18 +89,18 @@ fun MainContent(viewModel: ViewReportedUsersViewModel = viewModel()) {
 
     // load data
     LaunchedEffect(Unit) {
-        viewModel.loadData(object : ViewReportedUsersViewModel.LoadReportedUsersCallback{
+        viewModel.loadData(object : ViewReportedUsersViewModel.LoadReportedUsersCallback {
             override fun onComplete(success: Boolean) {
-                if (!success){
+                if (!success) {
                     Toast.makeText(context, "Fetching data failed", Toast.LENGTH_SHORT).show()
                 }
             }
         })
     }
     // contents
-    if (viewModel.isLoading.value){
+    if (viewModel.isLoading.value) {
         CustomCenteredProgressbar()
-    } else if (viewModel.reportedUserList.isNotEmpty()){
+    } else if (viewModel.reportedUserList.isNotEmpty()) {
         LazyColumn(
             verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.title_margin)),
             modifier = Modifier.padding(horizontal = dimensionResource(R.dimen.title_margin))
@@ -112,7 +109,7 @@ fun MainContent(viewModel: ViewReportedUsersViewModel = viewModel()) {
                 viewModel.reportedUserList
             ) { reportedUser ->
                 CustomReportUserPreview(reportedUser, onViewActivityLogClicked = {
-                    val i : Intent = Intent(context, ActivityLogActivity::class.java)
+                    val i: Intent = Intent(context, ActivityLogActivity::class.java)
                     i.putExtra(IntentExtraNames.INTENT_ACTIVITY_LOG_USER_ID, reportedUser.toUid)
                     context.startActivity(i)
                 })

@@ -265,7 +265,7 @@ fun Distance(context: Context, viewModel: ImageComparisonViewModel) {
 }
 
 @Composable
-fun isMatch(context: Context, viewModel: ImageComparisonViewModel){
+fun isMatch(context: Context, viewModel: ImageComparisonViewModel) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.content_margin_half))

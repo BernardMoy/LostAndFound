@@ -1,7 +1,5 @@
 package com.example.lostandfound.FirebaseManagers;
 
-import android.util.Log;
-
 import com.example.lostandfound.Data.DevData;
 import com.example.lostandfound.Data.FirebaseNames;
 import com.example.lostandfound.Data.User;

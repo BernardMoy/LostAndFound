@@ -263,8 +263,9 @@ fun UserData(
                 // upload the report issue to db
                 viewModel.reportUser(object : ReportUserCallback {
                     override fun onComplete(result: Boolean) {
-                        if (!result){
-                            Toast.makeText(context, "Failed to report user", Toast.LENGTH_SHORT).show()
+                        if (!result) {
+                            Toast.makeText(context, "Failed to report user", Toast.LENGTH_SHORT)
+                                .show()
                             return
                         }
 
