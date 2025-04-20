@@ -233,15 +233,16 @@ fun UserData(
                 viewModel.isReportUserDialogShown.value = true
             },
             modifier = Modifier  // add the background circle
-                .testTag("ReportButton")
+                .testTag("ReportUserButton")
         ) {
             Icon(
                 imageVector = Icons.Outlined.Report,
                 contentDescription = "Report user",
                 tint = MaterialTheme.colorScheme.primary,
-                modifier = Modifier.size(
-                    dimensionResource(R.dimen.image_button_size)
-                )
+                modifier = Modifier
+                    .size(
+                        dimensionResource(R.dimen.image_button_size)
+                    )
             )
         }
 
@@ -279,7 +280,8 @@ fun UserData(
             },
             onDismissButtonClicked = {
                 viewModel.isReportUserDialogShown.value = false
-            }
+            },
+            testTag = "ReportUserInput"
         )
 
 

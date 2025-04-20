@@ -1102,7 +1102,8 @@ fun CustomReportUserDialog(
                 CustomButton(
                     text = "Report",
                     type = ButtonType.WARNING,
-                    onClick = onConfirmButtonClicked
+                    onClick = onConfirmButtonClicked,
+                    testTag = "ReportButtonConfirm"
                 )
             },
             dismissButton = {
