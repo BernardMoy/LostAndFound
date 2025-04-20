@@ -8,8 +8,8 @@ fun getColorScore(lostColors: List<String>, foundColors: List<String>): Double {
     val foundSet = foundColors.toSet()
 
     // the score is defined as the number of intersection / length of the smaller set
-    // so that subsets would still give a full score of 3
+    // so that subsets would still give a full score of 1
     // as some people may recognise an object as red, while others red and blue.
     val numIntersection = lostSet.intersect(foundSet).size
-    return 3 * numIntersection / min(lostSet.size, foundSet.size).toDouble()
+    return numIntersection / min(lostSet.size, foundSet.size).toDouble()
 }

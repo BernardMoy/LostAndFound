@@ -377,7 +377,7 @@ fun ItemImage(viewModel: ViewComparisonViewModel) {
             centerLabel = {
                 if (viewModel.scoreData.imageScore != null) {
                     Text(
-                        text = "Image Similarity\n" + (round((viewModel.scoreData.imageScore!! / 3) * 1000) / 10).toString() + "%",
+                        text = "Image Similarity\n" + (round((viewModel.scoreData.imageScore!!) * 1000) / 10).toString() + "%",
                         style = Typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onPrimaryContainer,
                         fontWeight = FontWeight.Bold,

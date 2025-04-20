@@ -16,7 +16,7 @@ nullable values are those that users can leave the input empty and will not be c
 
 
 Used to be passed to view comparison activity to display the metrics
-(Each score has a range of 0 to 3 inclusive)
+(Each score has a range of 0 to 1 inclusive)
  */
 @Parcelize
 data class ScoreData(
@@ -35,7 +35,7 @@ data class ScoreData(
     fun isImageCloseMatch(): Boolean {
         if (imageScore == null) {
             return false
-        } else return imageScore!! >= 1.5
+        } else return imageScore!! >= 0.6
     }
 
     fun isDetailsCloseMatch(): Boolean {
@@ -50,32 +50,32 @@ data class ScoreData(
 
     fun isLocationCloseMatch(): Boolean {
         // locations are considered close if they are around <83m apart
-        // i.e. score larger than 2.5
+        // i.e. score larger than 0.8
         if (locationScore == null) {
             return false
         }
-        return locationScore!! >= 2.5
+        return locationScore!! >= 0.8
     }
 
     // is category / color / brand match: Used to display in the view comparison activity
     fun isCategoryCloseMatch(): Boolean {
-        return categoryScore == 3.0
+        return categoryScore == 1.0
     }
 
     fun isColorCloseMatch(): Boolean {
-        return colorScore == 3.0
+        return colorScore == 1.0
     }
 
     fun isBrandCloseMatch(): Boolean {
         if (brandScore == null) {
             return false
         }
-        return brandScore!! == 3.0
+        return brandScore!! == 1.0
     }
 
     // return the overall similarity in a percentage.
     fun getOverallSimilarity(): Double {
-        val similarity = overallScore / 3.0
+        val similarity = overallScore
         val similarityRounded = String.format(Locale.UK, "%.3f", similarity)
             .toDouble()   // get the last 3 decimal digits
         return similarityRounded

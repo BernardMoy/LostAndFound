@@ -30,8 +30,7 @@ val WEIGHT_COLOR = 3 // Higher: Less likely to make mistakes with the intelligen
 val WEIGHT_BRAND = 2 // Medium: The same brand may have different representations (Future work)
 val WEIGHT_LOCATION = 2         // Medium: The item might be brought elsewhere
 
-val SCORE_THRESHOLD =
-    1.5  // items will be considered matching if their score is larger than this threshold
+val SCORE_THRESHOLD = 0.5 // items will be considered matching if their score is larger than this threshold
 
 /*
 Given a lost item and found item, return the map containing an overall score

@@ -41,7 +41,7 @@ fun getScoreFromDistance(d: Double, N: Double = 2.2): Double {
     // Designed by flipping horizontally the sigmoid function and than making the y intercept 3 -> Smooth relation
 
     // The function would ideally give score = 1.5 when distance = 0.5
-    val score = 6 / (1 + Math.E.pow(N * d))
+    val score = 2 / (1 + Math.E.pow(N * d))
 
     return score
 }

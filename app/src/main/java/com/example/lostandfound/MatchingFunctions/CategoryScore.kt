@@ -9,12 +9,12 @@ fun getCategoryScore(
     if (lostCategory == foundCategory) {
         // if both are others, return a score of 3
         if (lostCategory == "Others") {
-            return 3.0
+            return 1.0
         }
 
         // else depend on their subcategory
         if (lostSubCategory == foundSubcategory) {
-            return 3.0
+            return 1.0
         } else {
             return 0.0    // Unlikely to make mistakes here
         }

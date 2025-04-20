@@ -14,5 +14,5 @@ fun getLocationScore(location1: Pair<Double, Double>, location2: Pair<Double, Do
         return 0.0
     }
 
-    return -3 * distance / THRESHOLD + 3
+    return -1 * distance / THRESHOLD + 1
 }
