@@ -92,6 +92,9 @@ fun getMatchingScores(
     if (lostItem.image.isNotEmpty() && foundItem.image.isNotEmpty()) {
         getImageScore(context, lostItem.image, foundItem.image, object : ImageScoreCallback {
             override fun onScoreCalculated(score: Double) {
+                // before doing image, add its attributes score
+                result.attributesScore = sum / weights
+
                 sum += score * WEIGHT_IMAGE
                 weights += WEIGHT_IMAGE
                 result.imageScore = score
@@ -104,6 +107,7 @@ fun getMatchingScores(
 
     } else {
         // also add the OVERALL SCORE AT THE END
+        result.attributesScore = sum / weights
         result.overallScore = sum / weights
         scoreDataCallback.onScoreCalculated(result)
     }

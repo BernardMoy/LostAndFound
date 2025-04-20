@@ -236,15 +236,17 @@ fun MatchingItemsColumn(
         }
 
     } else {
-        Column (
+        Column(
             verticalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.content_margin)),
             horizontalAlignment = Alignment.End
-        ){
+        ) {
             // for each data, display it as a preview
             CustomDropdownMenu(
-                items = listOf("Overall score", "Image score", "Attributes score"),
+                items = viewModel.orderingOptions,
                 selectedText = viewModel.selectedOrderingOption,
-                isError = false
+                isError = false,
+                placeholder = "Order by...",
+                onValueChange = { viewModel.onOrderingOptionSelected(it) }
             )
 
             LazyColumn(

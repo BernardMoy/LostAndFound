@@ -25,7 +25,8 @@ data class ScoreData(
     var colorScore: Double = 0.0,
     var brandScore: Double? = null,
     var locationScore: Double? = null,
-    var overallScore: Double = 0.0
+    var overallScore: Double = 0.0,
+    var attributesScore: Double = 0.0
 
 ) : Parcelable {
     // used to determine if their images are considered close match from the scores

@@ -23,9 +23,27 @@ class SearchViewModel : ViewModel() {
     var lostItem: LostItem = LostItem()
     var claimedItem: Claim = Claim()
 
+    val orderingOptions: List<String> = listOf("Overall score", "Image score", "Attributes score")
     val selectedOrderingOption: MutableState<String> = mutableStateOf("")
 
     var matchedFoundItems: MutableList<Pair<FoundItem, ScoreData>> = mutableListOf()
+
+    // function to be called when the ordering changes
+    fun onOrderingOptionSelected(option: String){
+        if (option == "Overall score"){
+            matchedFoundItems.sortByDescending { key ->
+                key.second.overallScore
+            }
+        } else if (option == "Image score") {
+            matchedFoundItems.sortByDescending { key ->
+                key.second.imageScore
+            }
+        } else if (option == "Attributes score"){
+            matchedFoundItems.sortByDescending { key ->
+                key.second.attributesScore
+            }
+        }
+    }
 
     // initialise the list of matching found items to be displayed as empty list
     // return true if successful, false otherwise

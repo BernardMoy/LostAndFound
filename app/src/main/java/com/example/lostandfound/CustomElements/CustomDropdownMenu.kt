@@ -30,7 +30,8 @@ fun CustomDropdownMenu(
     items: List<String>,      // a list of items to show up in the menu
     selectedText: MutableState<String>, // placeholder is displayed if this value is ""
     placeholder: String = "Select an item...",
-    isError: Boolean = false
+    isError: Boolean = false,
+    onValueChange: (String) -> Unit = {}
 ) {
     var isExpanded by remember {
         mutableStateOf(false)
@@ -49,7 +50,7 @@ fun CustomDropdownMenu(
                     .fillMaxWidth()
                     .menuAnchor(MenuAnchorType.PrimaryEditable, true),
                 value = if (selectedText.value != "") selectedText.value else placeholder,
-                onValueChange = {},
+                onValueChange = onValueChange,
                 readOnly = true,
                 trailingIcon = {
                     ExposedDropdownMenuDefaults.TrailingIcon(expanded = isExpanded)  // show the icon on the right
