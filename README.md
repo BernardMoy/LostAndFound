@@ -17,13 +17,17 @@ A lost and found mobile application for the third year dissertation project at t
 - Receive push notifications when there is a change to the status of user's items
 - A UI following usability principles
 - Accessibility settings to assist users with special needs
+- Admin system to allow other users to be reported
 
 # Deployment
+This is an app mainly developed for Android devices, so it can be run in an emulator in Android Studio with the following steps:
 
-This is an app mainly developed for Android devices, so it can be run in an emulator in Android Studio:
+1. Open the project in Android Studio
+2. Perform a Gradle sync
+3. Run on the following emulator:
 
 Android Studio version: `Android Studio Ladybug Feature Drop | 2-24.2.2`
-
 Emulator: `Medium Phone API 35`
 
+# Secrets
 Include the ```SENDER_EMAIL```, ```SENDER_PASSWORD```, ```MAPS_API_KEY```, the ```google-services.json``` and the ```service-account.json``` for the full functionality.
