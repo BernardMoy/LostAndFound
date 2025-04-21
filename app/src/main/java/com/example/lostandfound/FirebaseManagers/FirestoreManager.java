@@ -200,7 +200,7 @@ public class FirestoreManager {
         });
     }
 
-    // method to check if user has internet connection
+    // method to check if user has internet connection - to be implemented
     /*
     Designed based on this post:
     https://stackoverflow.com/questions/50594146/firestore-timeout-for-android

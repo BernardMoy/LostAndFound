@@ -6,7 +6,6 @@ import androidx.annotation.NonNull;
 
 import com.example.lostandfound.Data.DevData;
 import com.example.lostandfound.Data.FirebaseNames;
-import com.example.lostandfound.Data.User;
 import com.example.lostandfound.Utility.DateTimeManager;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -38,7 +37,7 @@ public class UserManager {
         void onComplete(boolean result);
     }
 
-    // get the current user's UID
+    // get the current user's UID, or empty string if user is not logged in
     public static String getUserID() {
         // if logged in, get the current user's UID
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
@@ -82,7 +81,7 @@ public class UserManager {
     }
 
     // update the claim timestamp to the current time
-    public static void updateClaimTimestamp(UpdateTimeCallback callback){
+    public static void updateClaimTimestamp(UpdateTimeCallback callback) {
         Map<String, Long> data = new HashMap<>();
         data.put(FirebaseNames.USERS_LAST_CLAIMED_TIMESTAMP, DateTimeManager.getCurrentEpochTime());
 
@@ -98,7 +97,7 @@ public class UserManager {
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Log.e("Firebase error", e.getMessage().toString());
+                        Log.e("Firebase error", e.getMessage());
                         callback.onComplete(false);
                     }
                 });
@@ -106,14 +105,14 @@ public class UserManager {
 
 
     // check if the claim timestamp is in the last three days
-    public static void checkIfUserClaimedInLastThreeDays(CheckIfClaimedCallback callback){
+    public static void checkIfUserClaimedInLastThreeDays(CheckIfClaimedCallback callback) {
         FirebaseFirestore.getInstance().collection(FirebaseNames.COLLECTION_USERS)
                 .document(UserManager.getUserID())
                 .get()
                 .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                     @Override
                     public void onSuccess(DocumentSnapshot documentSnapshot) {
-                        if (documentSnapshot.get(FirebaseNames.USERS_LAST_CLAIMED_TIMESTAMP) == null){
+                        if (documentSnapshot.get(FirebaseNames.USERS_LAST_CLAIMED_TIMESTAMP) == null) {
                             callback.onComplete(false);
                         } else {
                             boolean result = (DateTimeManager.getCurrentEpochTime() - (Long) documentSnapshot.get(FirebaseNames.USERS_LAST_CLAIMED_TIMESTAMP)) < 259200;
@@ -125,7 +124,7 @@ public class UserManager {
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Log.e("Firebase error", e.getMessage().toString());
+                        Log.e("Firebase error", e.getMessage());
                         callback.onComplete(false);
                     }
                 });

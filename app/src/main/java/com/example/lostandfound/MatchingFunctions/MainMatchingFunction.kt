@@ -22,13 +22,13 @@ Location (If both are not NULL)
 In the worst case only the category and color will contribute to the final score.
  */
 
-// each of the score will have a range between 0 to 3, where 1.5 is the midpoint
+// each of the score will have a range between 0 to 1, where 0.5 is the threshold
 // the overall score is the weighted mean of score of each attribute
-val WEIGHT_IMAGE = 2              // Low: 1 is the default here
-val WEIGHT_CATEGORY = 3          // Higher: Less likely to make mistakes
-val WEIGHT_COLOR = 3 // Higher: Less likely to make mistakes with the intelligent algorithm
-val WEIGHT_BRAND = 2 // Medium: The same brand may have different representations (Future work)
-val WEIGHT_LOCATION = 2         // Medium: The item might be brought elsewhere
+val WEIGHT_IMAGE = 2
+val WEIGHT_CATEGORY = 3
+val WEIGHT_COLOR = 3
+val WEIGHT_BRAND = 2
+val WEIGHT_LOCATION = 2
 
 val SCORE_THRESHOLD = 0.5 // items will be considered matching if their score is larger than this threshold
 
