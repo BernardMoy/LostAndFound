@@ -109,7 +109,7 @@ class SearchActivityTest : FirebaseTestsSetUp() {
         val intent =
             Intent(ApplicationProvider.getApplicationContext(), SearchActivity::class.java).apply {
                 putExtra(
-                    IntentExtraNames.INTENT_LOST_ID,
+                    IntentExtraNames.INTENT_LOST_ITEM,
                     dataLost
                 )
             }
@@ -120,7 +120,7 @@ class SearchActivityTest : FirebaseTestsSetUp() {
         // assert the correct intent has been passed
         assertEquals(
             dataLost, intent.getParcelableExtra(
-                IntentExtraNames.INTENT_LOST_ID
+                IntentExtraNames.INTENT_LOST_ITEM
             )
         )
 

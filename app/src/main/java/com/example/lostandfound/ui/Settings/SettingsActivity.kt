@@ -588,11 +588,11 @@ fun Developer(
             onClick = {
                 val i: Intent = Intent(context, ViewComparisonActivity::class.java)
                 i.putExtra(
-                    IntentExtraNames.INTENT_LOST_ID,
+                    IntentExtraNames.INTENT_LOST_ITEM,
                     viewModel.placeholderLostItem
                 )
                 i.putExtra(
-                    IntentExtraNames.INTENT_FOUND_ID,
+                    IntentExtraNames.INTENT_FOUND_ITEM,
                     viewModel.placeholderFoundItem
                 )
                 context.startActivity(i)
@@ -604,7 +604,7 @@ fun Developer(
             onClick = {
                 val i: Intent = Intent(context, SearchActivity::class.java)
                 i.putExtra(
-                    IntentExtraNames.INTENT_LOST_ID,
+                    IntentExtraNames.INTENT_LOST_ITEM,
                     viewModel.placeholderLostItem
                 )
                 context.startActivity(i)

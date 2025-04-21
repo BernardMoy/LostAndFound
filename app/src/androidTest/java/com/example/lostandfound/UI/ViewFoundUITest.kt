@@ -205,7 +205,7 @@ class ViewFoundUITest : FirebaseTestsSetUp() {
                 ViewFoundActivity::class.java
             ).apply {
                 putExtra(
-                    IntentExtraNames.INTENT_FOUND_ID,
+                    IntentExtraNames.INTENT_FOUND_ITEM,
                     dataFound0
                 )
             }
@@ -216,7 +216,7 @@ class ViewFoundUITest : FirebaseTestsSetUp() {
         // assert the correct intent has been passed
         assertEquals(
             dataFound0, intent.getParcelableExtra(
-                IntentExtraNames.INTENT_FOUND_ID
+                IntentExtraNames.INTENT_FOUND_ITEM
             )
         )
 
@@ -257,7 +257,7 @@ class ViewFoundUITest : FirebaseTestsSetUp() {
                 ViewFoundActivity::class.java
             ).apply {
                 putExtra(
-                    IntentExtraNames.INTENT_FOUND_ID,
+                    IntentExtraNames.INTENT_FOUND_ITEM,
                     dataFound0
                 )
             }
@@ -266,7 +266,7 @@ class ViewFoundUITest : FirebaseTestsSetUp() {
         // assert the correct intent has been passed
         assertEquals(
             dataFound0, intent.getParcelableExtra(
-                IntentExtraNames.INTENT_FOUND_ID
+                IntentExtraNames.INTENT_FOUND_ITEM
             )
         )
         // assert the correct item details are posted
@@ -285,7 +285,7 @@ class ViewFoundUITest : FirebaseTestsSetUp() {
                 ViewFoundActivity::class.java
             ).apply {
                 putExtra(
-                    IntentExtraNames.INTENT_FOUND_ID,
+                    IntentExtraNames.INTENT_FOUND_ITEM,
                     dataFound1
                 )
             }
@@ -294,7 +294,7 @@ class ViewFoundUITest : FirebaseTestsSetUp() {
         // assert the correct intent has been passed
         assertEquals(
             dataFound1, intent.getParcelableExtra(
-                IntentExtraNames.INTENT_FOUND_ID
+                IntentExtraNames.INTENT_FOUND_ITEM
             )
         )
         // assert the correct item details are posted
@@ -313,7 +313,7 @@ class ViewFoundUITest : FirebaseTestsSetUp() {
                 ViewFoundActivity::class.java
             ).apply {
                 putExtra(
-                    IntentExtraNames.INTENT_FOUND_ID,
+                    IntentExtraNames.INTENT_FOUND_ITEM,
                     dataFound2
                 )
             }
@@ -322,7 +322,7 @@ class ViewFoundUITest : FirebaseTestsSetUp() {
         // assert the correct intent has been passed
         assertEquals(
             dataFound2, intent.getParcelableExtra(
-                IntentExtraNames.INTENT_FOUND_ID
+                IntentExtraNames.INTENT_FOUND_ITEM
             )
         )
         // assert the correct item details are posted

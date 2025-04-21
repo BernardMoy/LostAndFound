@@ -415,11 +415,11 @@ fun Items(
                                                                     )
                                                                     // pass both the lost item and found item
                                                                     intent.putExtra(
-                                                                        IntentExtraNames.INTENT_LOST_ID,
+                                                                        IntentExtraNames.INTENT_LOST_ITEM,
                                                                         lostItem
                                                                     )
                                                                     intent.putExtra(
-                                                                        IntentExtraNames.INTENT_FOUND_ID,
+                                                                        IntentExtraNames.INTENT_FOUND_ITEM,
                                                                         foundItem
                                                                     )
                                                                     // also pass the claim item of the lost item
@@ -442,11 +442,11 @@ fun Items(
                                                         )
                                                         // pass both the lost item and found item
                                                         intent.putExtra(
-                                                            IntentExtraNames.INTENT_LOST_ID,
+                                                            IntentExtraNames.INTENT_LOST_ITEM,
                                                             lostItem
                                                         )
                                                         intent.putExtra(
-                                                            IntentExtraNames.INTENT_FOUND_ID,
+                                                            IntentExtraNames.INTENT_FOUND_ITEM,
                                                             foundItem
                                                         )
                                                         // also pass the claim item of the lost item

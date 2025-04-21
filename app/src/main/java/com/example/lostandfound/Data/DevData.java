@@ -14,9 +14,7 @@ public final class DevData {
     These users also have access to the developer settings if enabled.
      */
     public static final Set<String> DEV_EMAILS = Set.of(
-            "testdevholo@warwick.ac.uk",   // u2256784 is not a dev
-            "testdevholo2@warwick.ac.uk",
-            "testdevholo3@warwick.ac.uk"
+
     );
 
     // whether the dev settings are shown to dev users.

@@ -97,7 +97,7 @@ class ViewLostActivity : ComponentActivity() {
         val viewModel: ViewLostViewModel by viewModels()
 
         // load the passed intent data into the view model
-        val passedItem = intent.getParcelableExtra<LostItem>(IntentExtraNames.INTENT_LOST_ID)
+        val passedItem = intent.getParcelableExtra<LostItem>(IntentExtraNames.INTENT_LOST_ITEM)
         if (passedItem != null) {
             viewModel.itemData = passedItem  // update the item data
             viewModel.isItemTracking.value =
@@ -613,7 +613,7 @@ fun ActionButtons(
 
                             // pass the lost item to the intent
                             intent.putExtra(
-                                IntentExtraNames.INTENT_LOST_ID,
+                                IntentExtraNames.INTENT_LOST_ITEM,
                                 viewModel.itemData
                             )
                             context.startActivity(intent)

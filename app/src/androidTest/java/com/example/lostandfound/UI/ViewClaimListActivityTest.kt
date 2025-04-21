@@ -169,7 +169,7 @@ class ViewClaimListActivityTest : FirebaseTestsSetUp() {
                 ViewClaimListActivity::class.java
             ).apply {
                 putExtra(
-                    IntentExtraNames.INTENT_FOUND_ID,
+                    IntentExtraNames.INTENT_FOUND_ITEM,
                     FoundItem(
                         itemID = found1ID.toString()  // only the string is needed
                     )
@@ -183,7 +183,7 @@ class ViewClaimListActivityTest : FirebaseTestsSetUp() {
         // assert the correct intent has been passed
         assertNotNull(
             intent.getParcelableExtra(
-                IntentExtraNames.INTENT_FOUND_ID
+                IntentExtraNames.INTENT_FOUND_ITEM
             )
         )
 

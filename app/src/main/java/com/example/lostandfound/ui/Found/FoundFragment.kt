@@ -246,7 +246,7 @@ fun FoundItemsColumn(
 
                                 // pass only the item id as the extra value
                                 intent.putExtra(
-                                    IntentExtraNames.INTENT_FOUND_ID,
+                                    IntentExtraNames.INTENT_FOUND_ITEM,
                                     itemData
                                 )
                                 context.startActivity(intent)
@@ -264,7 +264,7 @@ fun FoundItemsColumn(
 
                             // pass only the item id as the extra value
                             intent.putExtra(
-                                IntentExtraNames.INTENT_FOUND_ID,
+                                IntentExtraNames.INTENT_FOUND_ITEM,
                                 itemData
                             )
                             context.startActivity(intent)

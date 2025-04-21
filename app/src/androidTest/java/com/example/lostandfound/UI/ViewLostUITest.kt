@@ -204,7 +204,7 @@ class ViewLostUITest : FirebaseTestsSetUp() {
                 ViewLostActivity::class.java
             ).apply {
                 putExtra(
-                    IntentExtraNames.INTENT_LOST_ID,
+                    IntentExtraNames.INTENT_LOST_ITEM,
                     dataLost0
                 )
             }
@@ -215,7 +215,7 @@ class ViewLostUITest : FirebaseTestsSetUp() {
         // assert the correct intent has been passed
         assertEquals(
             dataLost0, intent.getParcelableExtra(
-                IntentExtraNames.INTENT_LOST_ID
+                IntentExtraNames.INTENT_LOST_ITEM
             )
         )
 
@@ -260,7 +260,7 @@ class ViewLostUITest : FirebaseTestsSetUp() {
                 ViewLostActivity::class.java
             ).apply {
                 putExtra(
-                    IntentExtraNames.INTENT_LOST_ID,
+                    IntentExtraNames.INTENT_LOST_ITEM,
                     dataLost0
                 )
             }
@@ -269,7 +269,7 @@ class ViewLostUITest : FirebaseTestsSetUp() {
         // assert the correct intent has been passed
         assertEquals(
             dataLost0, intent.getParcelableExtra(
-                IntentExtraNames.INTENT_LOST_ID
+                IntentExtraNames.INTENT_LOST_ITEM
             )
         )
         // assert the correct item details are posted
@@ -289,7 +289,7 @@ class ViewLostUITest : FirebaseTestsSetUp() {
                 ViewLostActivity::class.java
             ).apply {
                 putExtra(
-                    IntentExtraNames.INTENT_LOST_ID,
+                    IntentExtraNames.INTENT_LOST_ITEM,
                     dataLost1
                 )
             }
@@ -298,7 +298,7 @@ class ViewLostUITest : FirebaseTestsSetUp() {
         // assert the correct intent has been passed
         assertEquals(
             dataLost1, intent.getParcelableExtra(
-                IntentExtraNames.INTENT_LOST_ID
+                IntentExtraNames.INTENT_LOST_ITEM
             )
         )
         // assert the correct item details are posted
@@ -318,7 +318,7 @@ class ViewLostUITest : FirebaseTestsSetUp() {
                 ViewLostActivity::class.java
             ).apply {
                 putExtra(
-                    IntentExtraNames.INTENT_LOST_ID,
+                    IntentExtraNames.INTENT_LOST_ITEM,
                     dataLost2
                 )
             }
@@ -327,7 +327,7 @@ class ViewLostUITest : FirebaseTestsSetUp() {
         // assert the correct intent has been passed
         assertEquals(
             dataLost2, intent.getParcelableExtra(
-                IntentExtraNames.INTENT_LOST_ID
+                IntentExtraNames.INTENT_LOST_ITEM
             )
         )
         // assert the correct item details are posted
@@ -347,7 +347,7 @@ class ViewLostUITest : FirebaseTestsSetUp() {
                 ViewLostActivity::class.java
             ).apply {
                 putExtra(
-                    IntentExtraNames.INTENT_LOST_ID,
+                    IntentExtraNames.INTENT_LOST_ITEM,
                     dataLostOtherUser
                 )
             }
@@ -356,7 +356,7 @@ class ViewLostUITest : FirebaseTestsSetUp() {
         // assert the correct intent has been passed
         assertEquals(
             dataLostOtherUser, intent.getParcelableExtra(
-                IntentExtraNames.INTENT_LOST_ID
+                IntentExtraNames.INTENT_LOST_ITEM
             )
         )
         // assert the correct item details are posted

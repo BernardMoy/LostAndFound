@@ -23,6 +23,4 @@ public final class SharedPreferencesNames {
     public static final String ANIMATION_VALUE = "value";   // false or true whether animations are enabled
     public static final String AUTO_LOADING_VALUE = "value";
     public static final String SHOW_WELCOME_MESSAGE_VALUE = "value";
-    public static final String ITEM_PUSH_NOTIFICATION_VALUE = "value";
-    public static final String MESSAGE_PUSH_NOTIFICATION_VALUE = "value";
 }

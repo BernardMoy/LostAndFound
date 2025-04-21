@@ -316,11 +316,11 @@ class ViewComparisonUITest : FirebaseTestsSetUp() {
                 ViewComparisonActivity::class.java
             ).apply {
                 putExtra(
-                    IntentExtraNames.INTENT_LOST_ID,
+                    IntentExtraNames.INTENT_LOST_ITEM,
                     dataLost0
                 )
                 putExtra(
-                    IntentExtraNames.INTENT_FOUND_ID,
+                    IntentExtraNames.INTENT_FOUND_ITEM,
                     dataFound0
                 )
                 putExtra(
@@ -340,12 +340,12 @@ class ViewComparisonUITest : FirebaseTestsSetUp() {
         // assert the correct intent has been passed
         assertEquals(
             dataLost0, intent.getParcelableExtra(
-                IntentExtraNames.INTENT_LOST_ID
+                IntentExtraNames.INTENT_LOST_ITEM
             )
         )
         assertEquals(
             dataFound0, intent.getParcelableExtra(
-                IntentExtraNames.INTENT_FOUND_ID
+                IntentExtraNames.INTENT_FOUND_ITEM
             )
         )
         assertEquals(
@@ -371,11 +371,11 @@ class ViewComparisonUITest : FirebaseTestsSetUp() {
                 ViewComparisonActivity::class.java
             ).apply {
                 putExtra(
-                    IntentExtraNames.INTENT_LOST_ID,
+                    IntentExtraNames.INTENT_LOST_ITEM,
                     dataLost1
                 )
                 putExtra(
-                    IntentExtraNames.INTENT_FOUND_ID,
+                    IntentExtraNames.INTENT_FOUND_ITEM,
                     dataFound1
                 )
                 putExtra(
@@ -395,12 +395,12 @@ class ViewComparisonUITest : FirebaseTestsSetUp() {
         // assert the correct intent has been passed
         assertEquals(
             dataLost1, intent.getParcelableExtra(
-                IntentExtraNames.INTENT_LOST_ID
+                IntentExtraNames.INTENT_LOST_ITEM
             )
         )
         assertEquals(
             dataFound1, intent.getParcelableExtra(
-                IntentExtraNames.INTENT_FOUND_ID
+                IntentExtraNames.INTENT_FOUND_ITEM
             )
         )
         assertEquals(
@@ -426,11 +426,11 @@ class ViewComparisonUITest : FirebaseTestsSetUp() {
                 ViewComparisonActivity::class.java
             ).apply {
                 putExtra(
-                    IntentExtraNames.INTENT_LOST_ID,
+                    IntentExtraNames.INTENT_LOST_ITEM,
                     dataLost2
                 )
                 putExtra(
-                    IntentExtraNames.INTENT_FOUND_ID,
+                    IntentExtraNames.INTENT_FOUND_ITEM,
                     dataFound2
                 )
                 putExtra(
@@ -450,12 +450,12 @@ class ViewComparisonUITest : FirebaseTestsSetUp() {
         // assert the correct intent has been passed
         assertEquals(
             dataLost2, intent.getParcelableExtra(
-                IntentExtraNames.INTENT_LOST_ID
+                IntentExtraNames.INTENT_LOST_ITEM
             )
         )
         assertEquals(
             dataFound2, intent.getParcelableExtra(
-                IntentExtraNames.INTENT_FOUND_ID
+                IntentExtraNames.INTENT_FOUND_ITEM
             )
         )
         assertEquals(
@@ -479,11 +479,11 @@ class ViewComparisonUITest : FirebaseTestsSetUp() {
                 ViewComparisonActivity::class.java
             ).apply {
                 putExtra(
-                    IntentExtraNames.INTENT_LOST_ID,
+                    IntentExtraNames.INTENT_LOST_ITEM,
                     dataLost3
                 )
                 putExtra(
-                    IntentExtraNames.INTENT_FOUND_ID,
+                    IntentExtraNames.INTENT_FOUND_ITEM,
                     dataFound3
                 )
                 putExtra(
@@ -503,12 +503,12 @@ class ViewComparisonUITest : FirebaseTestsSetUp() {
         // assert the correct intent has been passed
         assertEquals(
             dataLost3, intent.getParcelableExtra(
-                IntentExtraNames.INTENT_LOST_ID
+                IntentExtraNames.INTENT_LOST_ITEM
             )
         )
         assertEquals(
             dataFound3, intent.getParcelableExtra(
-                IntentExtraNames.INTENT_FOUND_ID
+                IntentExtraNames.INTENT_FOUND_ITEM
             )
         )
         assertEquals(

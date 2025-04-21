@@ -61,7 +61,7 @@ class SearchActivity : ComponentActivity() {
         val viewModel: SearchViewModel by viewModels()
 
         // load the passed lost item
-        val passedItem = intent.getParcelableExtra<LostItem>(IntentExtraNames.INTENT_LOST_ID)
+        val passedItem = intent.getParcelableExtra<LostItem>(IntentExtraNames.INTENT_LOST_ITEM)
         if (passedItem != null) {
             viewModel.lostItem = passedItem
         }
@@ -300,11 +300,11 @@ fun MatchingItemsColumn(
 
                                 // pass both the lost item and found item
                                 intent.putExtra(
-                                    IntentExtraNames.INTENT_LOST_ID,
+                                    IntentExtraNames.INTENT_LOST_ITEM,
                                     viewModel.lostItem
                                 )
                                 intent.putExtra(
-                                    IntentExtraNames.INTENT_FOUND_ID,
+                                    IntentExtraNames.INTENT_FOUND_ITEM,
                                     foundItemData
                                 )
 

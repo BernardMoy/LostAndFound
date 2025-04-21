@@ -107,8 +107,8 @@ class ViewComparisonActivity : ComponentActivity() {
         val viewModel: ViewComparisonViewModel by viewModels()
 
         // load the passed intent data into the view model
-        val passedLostItem = intent.getParcelableExtra<LostItem>(IntentExtraNames.INTENT_LOST_ID)
-        val passedFoundItem = intent.getParcelableExtra<FoundItem>(IntentExtraNames.INTENT_FOUND_ID)
+        val passedLostItem = intent.getParcelableExtra<LostItem>(IntentExtraNames.INTENT_LOST_ITEM)
+        val passedFoundItem = intent.getParcelableExtra<FoundItem>(IntentExtraNames.INTENT_FOUND_ITEM)
         val passedClaimItem = intent.getParcelableExtra<Claim>(IntentExtraNames.INTENT_CLAIM_ITEM)
         val passedScoreData =
             intent.getParcelableExtra<ScoreData>(IntentExtraNames.INTENT_SCORE_DATA)
@@ -252,7 +252,7 @@ fun Reference(
                     modifier = Modifier.clickable {
                         val intent = Intent(context, ViewLostActivity::class.java)
                         intent.putExtra(
-                            IntentExtraNames.INTENT_LOST_ID,
+                            IntentExtraNames.INTENT_LOST_ITEM,
                             viewModel.lostItemData
                         )
                         context.startActivity(intent)
@@ -270,7 +270,7 @@ fun Reference(
                     modifier = Modifier.clickable {
                         val intent = Intent(context, ViewFoundActivity::class.java)
                         intent.putExtra(
-                            IntentExtraNames.INTENT_FOUND_ID,
+                            IntentExtraNames.INTENT_FOUND_ITEM,
                             viewModel.foundItemData
                         )
                         context.startActivity(intent)

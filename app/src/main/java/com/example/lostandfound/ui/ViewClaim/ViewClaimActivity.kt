@@ -253,7 +253,7 @@ fun Reference(
                     modifier = Modifier.clickable {
                         val intent = Intent(context, ViewLostActivity::class.java)
                         intent.putExtra(
-                            IntentExtraNames.INTENT_LOST_ID,
+                            IntentExtraNames.INTENT_LOST_ITEM,
                             viewModel.lostItemData
                         )
                         context.startActivity(intent)
@@ -271,7 +271,7 @@ fun Reference(
                     modifier = Modifier.clickable {
                         val intent = Intent(context, ViewFoundActivity::class.java)
                         intent.putExtra(
-                            IntentExtraNames.INTENT_FOUND_ID,
+                            IntentExtraNames.INTENT_FOUND_ITEM,
                             viewModel.foundItemData
                         )
                         context.startActivity(intent)

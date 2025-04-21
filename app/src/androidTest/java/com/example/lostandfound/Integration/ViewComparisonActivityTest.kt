@@ -192,11 +192,11 @@ class ViewComparisonActivityTest : FirebaseTestsSetUp() {
                 ViewComparisonActivity::class.java
             ).apply {
                 putExtra(
-                    IntentExtraNames.INTENT_LOST_ID,
+                    IntentExtraNames.INTENT_LOST_ITEM,
                     dataLost
                 )
                 putExtra(
-                    IntentExtraNames.INTENT_FOUND_ID,
+                    IntentExtraNames.INTENT_FOUND_ITEM,
                     dataFound
                 )
                 putExtra(
@@ -216,12 +216,12 @@ class ViewComparisonActivityTest : FirebaseTestsSetUp() {
         // assert the correct intent has been passed
         assertEquals(
             dataLost, intent.getParcelableExtra(
-                IntentExtraNames.INTENT_LOST_ID
+                IntentExtraNames.INTENT_LOST_ITEM
             )
         )
         assertEquals(
             dataFound, intent.getParcelableExtra(
-                IntentExtraNames.INTENT_FOUND_ID
+                IntentExtraNames.INTENT_FOUND_ITEM
             )
         )
 

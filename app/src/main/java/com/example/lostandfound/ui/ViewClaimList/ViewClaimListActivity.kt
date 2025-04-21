@@ -53,7 +53,7 @@ class ViewClaimListActivity : ComponentActivity() {
         // load the passed intent data into the view model
         // found item is passed here instead of a list of claim items
         // to allow the refresh button to work in this activity
-        val passedFoundItem = intent.getParcelableExtra<FoundItem>(IntentExtraNames.INTENT_FOUND_ID)
+        val passedFoundItem = intent.getParcelableExtra<FoundItem>(IntentExtraNames.INTENT_FOUND_ITEM)
         if (passedFoundItem != null) {
             viewModel.foundItem = passedFoundItem
         }

@@ -91,7 +91,7 @@ class ViewFoundActivity : ComponentActivity() {
         val viewModel: ViewFoundViewModel by viewModels()
 
         // load the passed intent data into the view model
-        val passedItem = intent.getParcelableExtra<FoundItem>(IntentExtraNames.INTENT_FOUND_ID)
+        val passedItem = intent.getParcelableExtra<FoundItem>(IntentExtraNames.INTENT_FOUND_ITEM)
         if (passedItem != null) {
             viewModel.itemData = passedItem
         }
@@ -487,7 +487,7 @@ fun ActionButtons(
                             val intent = Intent(context, ViewClaimListActivity::class.java)
 
                             // pass only the found item to the claim list activity
-                            intent.putExtra(IntentExtraNames.INTENT_FOUND_ID, viewModel.itemData)
+                            intent.putExtra(IntentExtraNames.INTENT_FOUND_ITEM, viewModel.itemData)
 
                             context.startActivity(intent)
                         }

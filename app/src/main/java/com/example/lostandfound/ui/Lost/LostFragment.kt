@@ -252,7 +252,7 @@ fun LostItemsColumn(
 
                                 // pass the lost item object to another activity
                                 intent.putExtra(
-                                    IntentExtraNames.INTENT_LOST_ID,
+                                    IntentExtraNames.INTENT_LOST_ITEM,
                                     lostItem
                                 )
                                 context.startActivity(intent)
@@ -269,7 +269,7 @@ fun LostItemsColumn(
 
                             // pass the lost item object to another activity
                             intent.putExtra(
-                                IntentExtraNames.INTENT_LOST_ID,
+                                IntentExtraNames.INTENT_LOST_ITEM,
                                 lostItem
                             )
                             context.startActivity(intent)

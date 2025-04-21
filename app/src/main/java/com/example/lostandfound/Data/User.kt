@@ -9,6 +9,7 @@ data class User(
     val avatar: String = "",
     val firstName: String = "",
     val lastName: String = "",
-    // does not contain isAdmin, notificationEnable etc
+    // does not contain isAdmin, notificationEnable etc.
+    // They are not necessary and are only used in specific cases
 
 ) : Parcelable

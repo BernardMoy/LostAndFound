@@ -583,7 +583,7 @@ fun RecentlyLostItem(
                     // launch view lost activity
                     val intent: Intent = Intent(context, ViewLostActivity::class.java)
                     intent.putExtra(
-                        IntentExtraNames.INTENT_LOST_ID,
+                        IntentExtraNames.INTENT_LOST_ITEM,
                         viewModel.latestLostItem.value
                     )
                     context.startActivity(intent)

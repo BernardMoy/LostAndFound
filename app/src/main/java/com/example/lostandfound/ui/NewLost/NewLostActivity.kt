@@ -658,7 +658,7 @@ fun DoneButton(
                             val intent = Intent(context, SearchActivity::class.java)
                             // pass the generated lost item to the intent
                             intent.putExtra(
-                                IntentExtraNames.INTENT_LOST_ID,
+                                IntentExtraNames.INTENT_LOST_ITEM,
                                 result
                             )
                             context.startActivity(intent)

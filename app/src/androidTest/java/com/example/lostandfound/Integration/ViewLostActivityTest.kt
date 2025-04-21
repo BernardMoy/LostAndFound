@@ -122,7 +122,7 @@ class ViewLostActivityTest : FirebaseTestsSetUp() {
                 ViewLostActivity::class.java
             ).apply {
                 putExtra(
-                    IntentExtraNames.INTENT_LOST_ID,
+                    IntentExtraNames.INTENT_LOST_ITEM,
                     dataLost0
                 )
             }
@@ -133,7 +133,7 @@ class ViewLostActivityTest : FirebaseTestsSetUp() {
         // assert the correct intent has been passed
         assertEquals(
             dataLost0, intent.getParcelableExtra(
-                IntentExtraNames.INTENT_LOST_ID
+                IntentExtraNames.INTENT_LOST_ITEM
             )
         )
 
