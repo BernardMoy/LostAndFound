@@ -117,8 +117,6 @@ fun CustomLostItemPreview(
     data: LostItem,
     onViewButtonClicked: () -> Unit = {},
 ) {
-    val isOwner: Boolean = UserManager.getUserID() == data.user.userID
-
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -147,15 +145,6 @@ fun CustomLostItemPreview(
                     modifier = Modifier.weight(1f)
                 )
 
-                /*
-                Text(
-                    text = "#" + data.itemID,
-                    style = Typography.bodyMedium,
-                    color = Color.Gray
-                )
-
-                 */
-
                 // tracking data is only shown for lost items with status = 0 or 1
                 if (data.status == 0 || data.status == 1) {
                     Row(
@@ -178,8 +167,6 @@ fun CustomLostItemPreview(
                     }
                 }
             }
-
-
 
             Row {
                 Row(
@@ -269,20 +256,6 @@ fun CustomLostItemPreview(
                 horizontalArrangement = Arrangement.End
 
             ) {
-                /*
-                if (isOwner && data.status == 0) {
-                    CustomButton(
-                        text = "Delete",
-                        type = ButtonType.WARNING,
-                        onClick = {
-                            onDeleteButtonClicked()
-                        },
-                        small = true
-                    )
-                }
-
-                 */
-
                 Spacer(modifier = Modifier.width(dimensionResource(id = R.dimen.content_margin)))
 
                 CustomButton(
@@ -402,8 +375,6 @@ fun CustomFoundItemPreview(
     isLocationCloseMatch: Boolean = false,
     percentageSimilarity: String = ""
 ) {
-    val isOwner: Boolean = UserManager.getUserID() == data.user.userID
-
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -431,14 +402,6 @@ fun CustomFoundItemPreview(
                     fontWeight = FontWeight.Bold,
                     modifier = Modifier.weight(1f)
                 )
-                /*
-                Text(
-                    text = "#" + data.itemID,
-                    style = Typography.bodyMedium,
-                    color = Color.Gray
-                )
-
-                 */
 
                 if (percentageSimilarity.isNotEmpty()) {
                     Icon(
@@ -609,19 +572,6 @@ fun CustomFoundItemPreview(
                 horizontalArrangement = Arrangement.End
 
             ) {
-                /*
-                if (isOwner && data.status == 0) {
-                    CustomButton(
-                        text = "Delete",
-                        type = ButtonType.WARNING,
-                        onClick = {
-                            onDeleteButtonClicked()
-                        },
-                        small = true
-                    )
-                }
-
-                 */
 
                 Spacer(modifier = Modifier.width(dimensionResource(id = R.dimen.content_margin)))
 
