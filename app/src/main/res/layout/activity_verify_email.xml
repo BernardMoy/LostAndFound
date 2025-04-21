@@ -60,14 +60,14 @@
 
                 <TextView
                     android:layout_gravity="start"
-                    android:text="@string/verify_email_title"
+                    android:text="Verify your email"
                     android:layout_marginTop="@dimen/content_margin"
                     style="@style/blackBoldHeader"
                     />
 
                 <TextView
                     android:layout_gravity="start"
-                    android:text="@string/verify_email_description"
+                    android:text="Please enter the 6-digit verification code we have sent to:"
                     android:layout_marginTop="@dimen/content_margin"
                     android:layout_marginBottom="@dimen/content_margin"
                     style="@style/grayContent"

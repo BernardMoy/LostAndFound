@@ -22,16 +22,7 @@
     <string name="password_no_number_error">Password must have at least one numerical character</string>
     <string name="password_no_special_characters_error">Password must have at least one special character</string>
     <string name="email_exists_error">An account with this email already exists, please login.</string>
-
     <string name="email_or_password_incorrect_error"> The email or password provided is incorrect. If you don\'t have an account, please register below. </string>
-
-    <!-- VerifyEmailActivity activity -->
-    <string name="verify_email_title">Verify your email</string>
-    <string name="verify_email_description">Please enter the 6-digit verification code we have sent to:</string>
-
-    <!-- Forgot password activity -->
-    <string name="forgot_password_title"> Forgot password </string>
-    <string name="forgot_password_description"> Please enter your email that is used to register your account. </string>
 
     <!-- Variables used for sending emails -->
     <string name="sender_host">smtp.gmail.com</string>

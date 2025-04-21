@@ -77,7 +77,7 @@ class ImageClassifier(private val context: Context) {
         }
     }
 
-    // method to resize bitmap (Not used) 
+    // method to resize bitmap (Not used)
     private suspend fun resizeBitmap(image: Bitmap): Bitmap {
         return withContext(Dispatchers.Default) {
             Bitmap.createScaledBitmap(image, imageSize, imageSize, false)
