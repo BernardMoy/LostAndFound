@@ -5,6 +5,7 @@ import com.example.lostandfound.Data.FirebaseNames
 import com.example.lostandfound.Data.User
 import com.google.firebase.firestore.FirebaseFirestore
 
+// Firebase methods to change the chat inbox object when a new chat is sent in that inbox
 object ChatInboxManager {
 
     interface ChatInboxUpdateCallback {

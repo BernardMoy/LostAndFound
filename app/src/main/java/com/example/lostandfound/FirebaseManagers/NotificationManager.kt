@@ -8,7 +8,10 @@ import com.example.lostandfound.PushNotificationManagers.PushNotificationCallbac
 import com.example.lostandfound.PushNotificationManagers.PushNotificationManager
 import com.example.lostandfound.Utility.DateTimeManager
 import com.google.firebase.firestore.FirebaseFirestore
-
+/*
+Firebase methods for sending notifications, consisting of adding the notification to the firstore database
+and sending a push notification to the corresponding user
+ */
 object NotificationManager {
 
     interface NotificationSendCallback {

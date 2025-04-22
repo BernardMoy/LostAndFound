@@ -21,7 +21,9 @@ import java.util.Map;
 
 
 /*
-This class only stores methods that involves using the context
+This class only stores authentication methods that involves using the context,
+that merges multiple sequence of actions at once, such as adding db, and local caching
+
 If not, use that in firestore manager!
  */
 public class FirebaseAuthManager {

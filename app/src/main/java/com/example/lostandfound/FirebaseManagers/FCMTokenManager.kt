@@ -6,6 +6,11 @@ import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.messaging.FirebaseMessaging
 
+/*
+Firebase methods to handle generating a FCM token for push notifs
+Whenever a user signs in or signs out, the token is stored in the user collection of the db.
+ */
+
 object FCMTokenManager {
 
     interface FCMTokenUpdateCallback {

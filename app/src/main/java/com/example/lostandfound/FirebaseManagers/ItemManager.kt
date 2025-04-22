@@ -17,6 +17,9 @@ import com.example.lostandfound.MatchingFunctions.getMatchingScores
 import com.example.lostandfound.Utility.LocationManager
 import com.google.firebase.firestore.FirebaseFirestore
 
+/*
+General firebase methods (That does not involve context) in retrieving and updating items
+ */
 object ItemManager {
     interface LostItemCallback {
         fun onComplete(lostItem: LostItem?)  // return the lost item generated, or null if failed

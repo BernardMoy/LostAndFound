@@ -4,6 +4,10 @@ import com.example.lostandfound.Data.FirebaseNames
 import com.example.lostandfound.FirebaseManagers.FirestoreManager.Callback
 
 
+
+/*
+Firebase methods to change the state of a chat message
+ */
 object ChatMessageManager {
 
     interface UpdateMessageCallback {

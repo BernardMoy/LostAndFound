@@ -17,6 +17,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+/*
+ Contains utility firebase firestore methods
+ Provides extra functionality such as putting error messages to logs
+
+ */
 public class FirestoreManager {
 
     private final FirebaseFirestore db;

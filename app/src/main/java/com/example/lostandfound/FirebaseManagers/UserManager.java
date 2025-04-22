@@ -18,8 +18,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 
-/**
- * For firebase functions that does not require any input parameters.
+/*
+ Firebase utility methods involving the user
  */
 public class UserManager {
     private UserManager() {

@@ -11,6 +11,10 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+/*
+ Contains utility firebase storage methods that are used for handling item images
+
+ */
 public class FirebaseStorageManager {
     private final FirebaseStorage storage;
     private final StorageReference storageReference;
