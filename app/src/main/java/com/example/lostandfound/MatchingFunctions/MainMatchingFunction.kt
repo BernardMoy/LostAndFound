@@ -11,6 +11,8 @@ interface ScoreDataCallback {
 }
 
 /*
+Contains a method to get scores (in the format of ScoreData class) when given a lost and found item.
+
 The following attributes will be considered (From top to bottom of the app UI)
 
 Image (If both are not empty string)

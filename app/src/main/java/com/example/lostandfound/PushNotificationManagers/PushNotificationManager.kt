@@ -19,6 +19,10 @@ interface PushNotificationCallback {
     fun onComplete(success: Boolean)
 }
 
+/*
+Contains the methods to send push notifications of different types
+called in notification manager
+ */
 object PushNotificationManager {
     val fcmApi: FCMApi = Retrofit.Builder()
         .baseUrl("https://fcm.googleapis.com/")

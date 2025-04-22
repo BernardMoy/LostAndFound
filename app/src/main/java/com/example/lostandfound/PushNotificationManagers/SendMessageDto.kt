@@ -1,6 +1,8 @@
 package com.example.lostandfound.PushNotificationManagers
 
 /*
+Contains a dto object used for sending push notifications
+
 These formats must be exactly followed
 the names of variables also cannot be changed
 otherwise it 400 bad request

@@ -23,6 +23,10 @@ interface PredictCallback {
     fun onComplete(distance: Float)
 }
 
+/*
+Methods to interact directly with the tflite model to generate a predicted distance
+when given two images in the Uri format
+ */
 class ImageClassifier(private val context: Context) {
     val model = SiameseModel.newInstance(context)
     private val imageSize = 224

@@ -4,6 +4,8 @@ import java.util.Locale
 import kotlin.math.abs
 
 /*
+Provides a comparison method between two strings, used in matching brand names.
+
 Two words are similar if one can be constructed from the other by an addition, deletion, substitution or a swap of characters.
 Time complexity: O(n)
  */
