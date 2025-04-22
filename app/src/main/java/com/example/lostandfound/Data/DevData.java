@@ -2,6 +2,7 @@ package com.example.lostandfound.Data;
 
 import java.util.Set;
 
+// stores all data related to developers (Test purposes only)
 public final class DevData {
     private DevData() {
     }

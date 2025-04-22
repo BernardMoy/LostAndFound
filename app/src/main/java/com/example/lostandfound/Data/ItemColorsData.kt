@@ -2,7 +2,7 @@ package com.example.lostandfound.Data
 
 import androidx.compose.ui.graphics.Color
 
-
+// hardcoded map for color strings to actual colors that can be displayed
 val stringToColor = mapOf(
     "Red" to Color.Red,
     "Orange" to Color(0xFFFF9D47),

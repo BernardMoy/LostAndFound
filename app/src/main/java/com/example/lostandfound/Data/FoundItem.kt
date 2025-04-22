@@ -3,6 +3,7 @@ package com.example.lostandfound.Data
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
 
+// Found item class that is loaded when the item is fetched from the db, including a user object
 @Parcelize
 data class FoundItem(
     // ids

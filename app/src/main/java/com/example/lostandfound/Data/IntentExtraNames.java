@@ -1,16 +1,10 @@
 package com.example.lostandfound.Data;
 
+// hardcoded intent extra names for consistency
 public final class IntentExtraNames {
     private IntentExtraNames() {
     }
 
-    // strings that represent all collection names
-    /*
-    Despite they are named after lost ids and found ids, the LostItem (Object) and FoundItem (Object)
-    are instead passed.
-    This is because the items have to be already loaded to generate the previews of the items.
-    Then, it is unnecessary to load the items again when viewing a specific item.
-     */
     public static final String INTENT_LOST_ITEM = "lost_item";
     public static final String INTENT_FOUND_ITEM = "found_item";
 

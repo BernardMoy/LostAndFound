@@ -3,10 +3,7 @@ package com.example.lostandfound.Data
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
 
-/*
-Currently a map is used for passing data between classes, as all other firebase data are stored in a map.
-It is possible to convert to storing LostItem classes instead of the map by modifying FirestoreManager
- */
+// Lost item class that is loaded when the item is fetched from the db, including a user object
 @Parcelize
 data class LostItem(
     // ids

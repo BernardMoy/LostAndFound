@@ -1,5 +1,7 @@
 package com.example.lostandfound.Data;
 
+// stores a list of hardcoded firebase names
+// when changed, they must be updated in the firebase index.js file accordingly
 public final class FirebaseNames {
     private FirebaseNames() {
     }

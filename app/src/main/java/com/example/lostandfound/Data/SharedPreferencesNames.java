@@ -1,5 +1,6 @@
 package com.example.lostandfound.Data;
 
+// stores a list of hardcoded shared preference names
 public final class SharedPreferencesNames {
     private SharedPreferencesNames() {
     }

@@ -1,5 +1,6 @@
 package com.example.lostandfound.Data
 
+// stores a general chat message
 data class ChatMessage(
     val messageID: String = "",
     val senderUser: User = User(),

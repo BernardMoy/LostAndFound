@@ -2,6 +2,7 @@ package com.example.lostandfound.Data
 
 import com.example.lostandfound.R
 
+// stores a list of hardcoded status text and color to their types
 val lostStatusText: Map<Int, String> = mapOf(
     0 to "This item has not been found",    // 0 is the default
     1 to "This item has a claim pending approval",

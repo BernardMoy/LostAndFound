@@ -1,5 +1,6 @@
 package com.example.lostandfound.Data
 
+// Stores a reported user class that are rendered in viewing users (Admin view only)
 data class ReportedUser(
     val fromUid: String,
     val fromFirstName: String,

@@ -1,5 +1,6 @@
 package com.example.lostandfound.Data
 
+// stores a chat inbox preview that is rendered in chat fragment (Main activity)
 data class ChatInboxPreview(
     val recipientUser: User = User(),  // the sender is always the current user - to be passed as intent
 

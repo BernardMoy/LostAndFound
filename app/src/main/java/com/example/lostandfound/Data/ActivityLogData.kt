@@ -7,6 +7,7 @@ import androidx.compose.material.icons.outlined.DeleteOutline
 import androidx.compose.material.icons.outlined.TrackChanges
 import androidx.compose.ui.graphics.vector.ImageVector
 
+// hardcoded activity lgo title, content and icons
 val activityLogTitles: Map<Int, String> = mapOf(
     0 to "You posted a new lost item",
     1 to "You posted a new found item",

@@ -11,6 +11,7 @@ import androidx.compose.material.icons.outlined.ShoppingBag
 import androidx.compose.material.icons.outlined.SportsBasketball
 import androidx.compose.ui.graphics.vector.ImageVector
 
+// A wrapper around categories with predefined subcategories (Including others)
 data class Category(
     val name: String,
     val subCategories: List<String>,

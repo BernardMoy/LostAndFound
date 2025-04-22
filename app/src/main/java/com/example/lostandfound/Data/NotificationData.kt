@@ -8,6 +8,7 @@ import androidx.compose.material.icons.outlined.SentimentSatisfied
 import androidx.compose.ui.graphics.vector.ImageVector
 
 /*
+Contains hardcoded notification title, content, and icon depending on their type
     A notification is identified by an id (0,1,2)
     as Image vectors cannot be stored in firebase
     the numbers are stored instead
