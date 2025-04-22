@@ -12,6 +12,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import com.example.lostandfound.ui.theme.Typography
 
+// A single chip used to select colors
 @Composable
 fun CustomFilterChip(
     label: String,

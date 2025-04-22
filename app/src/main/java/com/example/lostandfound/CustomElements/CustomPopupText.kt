@@ -25,6 +25,7 @@ import com.example.lostandfound.R
 import com.example.lostandfound.ui.theme.ComposeTheme
 import com.example.lostandfound.ui.theme.Typography
 
+// Pop up text is used in FAQs to expand the answer when clicked
 @Preview(showBackground = true)
 @Composable
 fun Previews() {

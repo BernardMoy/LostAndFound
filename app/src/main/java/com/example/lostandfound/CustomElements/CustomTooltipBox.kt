@@ -11,6 +11,7 @@ import androidx.compose.material3.TooltipState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 
+// By wrapping in this tooltip box, elements show their tooltip when long clicked 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CustomTooltipBox(

@@ -35,6 +35,7 @@ import com.example.lostandfound.Utility.DateTimeManager
 import com.example.lostandfound.ui.theme.ComposeTheme
 import com.example.lostandfound.ui.theme.Typography
 
+// A container with some default styles such as styles
 // if time is available, change all item previews to use cards
 @Preview(showBackground = true)
 @Composable

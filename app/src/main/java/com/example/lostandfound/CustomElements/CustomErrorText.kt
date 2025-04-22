@@ -14,6 +14,7 @@ import androidx.compose.ui.text.style.TextAlign
 import com.example.lostandfound.R
 import com.example.lostandfound.ui.theme.Typography
 
+// An error text that has a background and occupy the entire row
 @Composable
 fun CustomErrorText(
     text: String

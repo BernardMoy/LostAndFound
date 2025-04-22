@@ -18,6 +18,7 @@ import androidx.compose.ui.text.style.TextDecoration
 import com.example.lostandfound.R
 import com.example.lostandfound.ui.theme.Typography
 
+// contains custom styled text, and an action text that is underlined that the user can click on
 @Composable
 fun CustomGrayTitle(
     text: String

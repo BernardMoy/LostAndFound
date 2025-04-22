@@ -20,6 +20,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import com.example.lostandfound.R
 
+// stores the toolbar present in every activity, with a back button by default
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BackToolbar(

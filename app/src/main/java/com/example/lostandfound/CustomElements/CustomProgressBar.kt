@@ -13,6 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import com.example.lostandfound.R
 
+// regular progress bar and a progress bar that covers the entire screen
 @Composable
 fun CustomProgressBar() {
     Box(

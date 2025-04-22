@@ -74,6 +74,7 @@ import com.example.lostandfound.ui.ChatInbox.ChatInboxActivity
 import com.example.lostandfound.ui.theme.ComposeTheme
 import com.example.lostandfound.ui.theme.Typography
 
+// Item previews that are displayed in fragments or viewing matching items 
 @Preview(showBackground = true)
 @Composable
 fun Preview() {

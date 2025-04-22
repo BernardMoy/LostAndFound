@@ -127,6 +127,7 @@ fun NotificationsScreen(
 
 
 // tabs are no longer shown
+// initially new messages are also shown here
 /*
 @Composable
 fun Tabs(viewModel: NotificationsViewModel){

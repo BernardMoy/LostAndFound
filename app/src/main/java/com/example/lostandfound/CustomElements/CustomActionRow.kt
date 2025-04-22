@@ -18,6 +18,9 @@ import androidx.compose.ui.unit.dp
 import com.example.lostandfound.R
 import com.example.lostandfound.ui.theme.Typography
 
+
+// Reusable action row that forms the settings activity etc.
+// It performs some action (Navigate to another activity) when clicked
 @Composable
 fun CustomActionRow(
     text: String,

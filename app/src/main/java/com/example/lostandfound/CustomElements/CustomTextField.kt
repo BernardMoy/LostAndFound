@@ -48,6 +48,8 @@ import com.example.lostandfound.R
 import com.example.lostandfound.Utility.DateTimeManager
 import com.example.lostandfound.ui.theme.Typography
 
+// contains text fields that the user can interact with
+// including typing, picking date etc.
 @Composable
 fun CustomEditText(
     fieldLabel: String,

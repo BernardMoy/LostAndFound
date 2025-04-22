@@ -87,7 +87,7 @@ import com.google.maps.android.compose.Marker
 import com.google.maps.android.compose.MarkerState
 import com.google.maps.android.compose.rememberCameraPositionState
 
-
+// contains all dialog composables used 
 @Preview(showBackground = true)
 @Composable
 fun LoginDialogPreview() {

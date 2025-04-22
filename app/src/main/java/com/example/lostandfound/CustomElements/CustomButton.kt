@@ -18,6 +18,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.example.lostandfound.R
 
+// A button with type filled (Gradient), tonal, outline, error, with the option of being small
 @Composable
 fun CustomButton(
     text: String,
