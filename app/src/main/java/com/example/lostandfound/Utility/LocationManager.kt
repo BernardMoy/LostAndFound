@@ -4,6 +4,10 @@ import com.google.android.gms.maps.model.LatLng
 import kotlin.math.cos
 import kotlin.math.sqrt
 
+/*
+Utility method to convert between location formats
+of latlng and pair of double
+ */
 object LocationManager {
     // stores the default location to be used when location is null
     val DEFAULT_LOCATION = LatLng(52.37930763817003, -1.5614912710215834)

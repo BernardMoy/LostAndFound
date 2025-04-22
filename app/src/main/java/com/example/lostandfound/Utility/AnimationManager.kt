@@ -4,6 +4,10 @@ import android.content.Context
 import androidx.compose.runtime.mutableStateOf
 import com.example.lostandfound.Data.SharedPreferencesNames
 
+/*
+Methods to interact with the device's local database
+to control whether animations are enabled
+ */
 object AnimationManager {
     // observe this variable to determine if animations should be shown
     val animationEnabled = mutableStateOf(true)

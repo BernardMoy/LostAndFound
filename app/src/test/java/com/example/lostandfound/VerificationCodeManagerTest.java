@@ -9,7 +9,7 @@ import com.example.lostandfound.Data.FirebaseNames;
 import com.example.lostandfound.FirebaseManagers.FirestoreManager;
 import com.example.lostandfound.Utility.ErrorCallback;
 import com.example.lostandfound.Utility.Hasher;
-import com.example.lostandfound.Utility.VerificationCodeManager;
+import com.example.lostandfound.FirebaseManagers.VerificationCodeManager;
 
 import org.junit.Before;
 import org.junit.Test;

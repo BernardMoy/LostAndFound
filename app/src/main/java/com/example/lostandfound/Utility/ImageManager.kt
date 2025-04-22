@@ -8,6 +8,11 @@ import java.io.FileOutputStream
 import kotlin.io.encoding.Base64
 import kotlin.io.encoding.ExperimentalEncodingApi
 
+/*
+Utility method to convert between an image and a string
+Used for the user's avatar
+May be moved to firebase storage in the future
+ */
 object ImageManager {
     // stores the url to the default image
     val PLACEHOLDER_IMAGE_STRING =

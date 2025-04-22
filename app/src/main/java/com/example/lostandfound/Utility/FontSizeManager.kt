@@ -8,6 +8,10 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import com.example.lostandfound.Data.SharedPreferencesNames
 
+/*
+Methods to interact with the device's local database
+to control the font size (regular or large)
+ */
 object FontSizeManager {
     val isLargeFontSizeValue: MutableState<Boolean> = mutableStateOf(false)
 

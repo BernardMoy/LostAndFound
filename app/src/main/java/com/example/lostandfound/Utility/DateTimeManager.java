@@ -10,6 +10,10 @@ import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.Locale;
 
+/*
+Utility methods to convert between date time formats
+which are primarily stored in epoch seconds
+ */
 public class DateTimeManager {
     private DateTimeManager() {
     }

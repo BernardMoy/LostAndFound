@@ -4,8 +4,12 @@ import android.content.Context
 import androidx.compose.runtime.mutableStateOf
 import com.example.lostandfound.Data.SharedPreferencesNames
 
+/*
+Methods to interact with the device's local database
+to control whether auto loading is enabled
+ */
 object AutoLoadingManager {
-    // observe this variable to determine if animations should be shown
+    // observe this variable to determine if auto loadings should be performed
     val autoLoadingEnabled = mutableStateOf(true)
 
     fun setAutoLoadingEnabled(

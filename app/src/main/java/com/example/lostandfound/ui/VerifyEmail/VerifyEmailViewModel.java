@@ -10,7 +10,7 @@ import com.example.lostandfound.FirebaseManagers.FirebaseAuthManager;
 import com.example.lostandfound.FirebaseManagers.FirestoreManager;
 import com.example.lostandfound.Utility.EmailSender;
 import com.example.lostandfound.Utility.ErrorCallback;
-import com.example.lostandfound.Utility.VerificationCodeManager;
+import com.example.lostandfound.FirebaseManagers.VerificationCodeManager;
 
 public class VerifyEmailViewModel extends ViewModel {
 

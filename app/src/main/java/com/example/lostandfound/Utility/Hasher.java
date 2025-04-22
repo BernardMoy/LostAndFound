@@ -4,7 +4,10 @@ import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
-// class to hash an String with SHA256
+/*
+Utility class to hash a string using sha 256
+used to hash verification codes for registration
+ */
 public final class Hasher {
 
     private Hasher() {

@@ -5,6 +5,10 @@ import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.runtime.mutableIntStateOf
 import com.example.lostandfound.Data.SharedPreferencesNames
 
+/*
+Methods to interact with the device's local database
+to control theme (light, dark, device theme)
+ */
 object DeviceThemeManager {
     val themeValue = mutableIntStateOf(2)  // to be observed
 

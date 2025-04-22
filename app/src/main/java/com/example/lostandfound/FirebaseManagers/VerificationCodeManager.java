@@ -1,13 +1,19 @@
-package com.example.lostandfound.Utility;
+package com.example.lostandfound.FirebaseManagers;
 
 import com.example.lostandfound.Data.FirebaseNames;
-import com.example.lostandfound.FirebaseManagers.FirestoreManager;
+import com.example.lostandfound.Utility.ErrorCallback;
+import com.example.lostandfound.Utility.Hasher;
 
 import java.security.SecureRandom;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
+/*
+Firebase method to generate a new verification code, and to validate one
+One can only generate one code per minute,
+and a code is only valid for 10 minutes
+ */
 public class VerificationCodeManager {
 
     private final String emailAddress;

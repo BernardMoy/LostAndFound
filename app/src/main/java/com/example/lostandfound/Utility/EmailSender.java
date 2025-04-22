@@ -19,6 +19,10 @@ import jakarta.mail.Transport;
 import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
 
+/*
+Utility methods to send emails using Java Mail API
+for the 6 digit register code
+ */
 public class EmailSender {
     private final Context ctx;
     private final String emailAddress;

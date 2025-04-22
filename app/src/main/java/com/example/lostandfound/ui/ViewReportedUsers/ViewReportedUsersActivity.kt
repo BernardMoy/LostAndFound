@@ -33,7 +33,7 @@ import com.example.lostandfound.ui.ActivityLog.ActivityLogActivity
 import com.example.lostandfound.ui.theme.ComposeTheme
 
 /*
-Admin screen to view all reported users, where they can then view the user's activity log 
+Admin screen to view all reported users, where they can then view the user's activity log
  */
 class ViewReportedUsersActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
