@@ -74,7 +74,10 @@ import com.example.lostandfound.R
 import com.example.lostandfound.Utility.ImageManager
 import com.example.lostandfound.ui.theme.ComposeTheme
 
-
+/*
+Screen for users to edit their avatar, first name, and last name
+changes are only committed when the done button is clicked
+ */
 class EditProfileActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

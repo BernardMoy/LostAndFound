@@ -49,7 +49,10 @@ import com.example.lostandfound.R
 import com.example.lostandfound.ui.theme.ComposeTheme
 import com.example.lostandfound.ui.theme.Typography
 
-
+/*
+A coloured screen with a done icon and a title
+After clicking the done button, it is always redirected to the main activity
+ */
 class DoneActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

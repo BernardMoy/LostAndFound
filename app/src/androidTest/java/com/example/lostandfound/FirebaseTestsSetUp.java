@@ -17,6 +17,12 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
+/*
+Set up class for firebase services tests
+By inheriting this class, it gains methods to get firestore, auth and storage
+that are using the firebase emulator.
+It also provides methods to delete a collection after the test
+ */
 public class FirebaseTestsSetUp {
     private static FirebaseFirestore firestore;
     private static FirebaseAuth auth;

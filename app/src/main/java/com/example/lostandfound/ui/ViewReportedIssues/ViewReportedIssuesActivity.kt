@@ -29,7 +29,9 @@ import com.example.lostandfound.CustomElements.CustomReportIssuePreview
 import com.example.lostandfound.R
 import com.example.lostandfound.ui.theme.ComposeTheme
 
-
+/*
+Admin screen to view all user reported issues
+ */
 class ViewReportedIssuesActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

@@ -86,6 +86,10 @@ import com.example.lostandfound.ui.ViewLost.ViewLostActivity
 import com.example.lostandfound.ui.theme.ComposeTheme
 import com.example.lostandfound.ui.theme.Typography
 
+/*
+Screen to view claim, showing comparison between two items
+but without the score data
+ */
 class ViewClaimActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

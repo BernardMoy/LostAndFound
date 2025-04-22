@@ -18,6 +18,9 @@ import com.example.lostandfound.Utility.FontSizeManager;
 import com.example.lostandfound.databinding.ActivityRegisterBinding;
 import com.example.lostandfound.ui.VerifyEmail.VerifyEmailActivity;
 
+/*
+Screen to register user
+ */
 public class RegisterActivity extends AppCompatActivity {
 
     private ActivityRegisterBinding binding;

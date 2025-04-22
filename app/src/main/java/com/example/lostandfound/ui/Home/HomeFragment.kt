@@ -94,7 +94,11 @@ import com.example.lostandfound.ui.theme.ComposeTheme
 import com.example.lostandfound.ui.theme.Typography
 import kotlinx.coroutines.delay
 
-
+/*
+The landing page.
+The latest lost item and statistics are only displayed when a user is logged in
+Else it displays a card to prompt the user to login
+ */
 class HomeFragment : Fragment() {
 
     // create the view model here

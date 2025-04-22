@@ -71,7 +71,9 @@ import com.example.lostandfound.Utility.ImageManager
 import com.example.lostandfound.ui.theme.ComposeTheme
 import com.example.lostandfound.ui.theme.Typography
 
-
+/*
+Stores a chat screen with a specific user. Users send messages in this screen
+ */
 class ChatInboxActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

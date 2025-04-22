@@ -105,7 +105,9 @@ import com.example.lostandfound.ui.theme.ComposeTheme
 import com.example.lostandfound.ui.theme.Typography
 import java.io.File
 
-
+/*
+Screen to create a new found item
+ */
 class NewFoundActivity : ComponentActivity() {
     val viewModel: NewFoundViewModel by viewModels()
 

@@ -36,7 +36,9 @@ import com.example.lostandfound.R
 import com.example.lostandfound.Utility.FontSizeManager
 import com.example.lostandfound.ui.theme.ComposeTheme
 
-
+/*
+Setting screen of choosing regular or large font size
+ */
 class SettingsFontSizeActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

@@ -58,7 +58,9 @@ import com.example.lostandfound.ui.theme.ComposeTheme
 import com.example.lostandfound.ui.theme.Typography
 import java.util.Locale
 
-
+/*
+Displays a list of found items as found item previews
+ */
 class FoundFragment : Fragment() {
 
     // variable to keep track of whether the user is logged in

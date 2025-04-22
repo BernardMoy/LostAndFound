@@ -46,7 +46,9 @@ import com.example.lostandfound.R
 import com.example.lostandfound.Utility.ErrorCallback
 import com.example.lostandfound.ui.theme.ComposeTheme
 
-
+/*
+Screen to report an issue (App bug) to admins, when given a dscription
+ */
 class ReportIssueActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

@@ -32,7 +32,10 @@ import com.example.lostandfound.Utility.EmailSender.EmailCallback
 import com.example.lostandfound.ui.AboutApp.EmailSenderTestViewModel
 import com.example.lostandfound.ui.theme.ComposeTheme
 
-
+/*
+Test activity to send an email
+used to test the java mail API for 6 digit verification code
+ */
 class EmailSenderTestActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

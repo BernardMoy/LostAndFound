@@ -32,7 +32,9 @@ import com.example.lostandfound.PushNotificationManagers.PushNotificationManager
 import com.example.lostandfound.R
 import com.example.lostandfound.ui.theme.ComposeTheme
 
-
+/*
+Developer test activity to test if a push notification can be sent to the current device
+ */
 class PushNotificationsTestActivity : ComponentActivity() {
 
     val viewModel: PushNotificationsTestViewModel by viewModels()

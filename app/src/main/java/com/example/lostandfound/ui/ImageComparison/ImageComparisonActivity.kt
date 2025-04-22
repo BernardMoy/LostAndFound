@@ -51,7 +51,10 @@ import com.example.lostandfound.TFLiteManager.PredictCallback
 import com.example.lostandfound.ui.theme.ComposeTheme
 import com.example.lostandfound.ui.theme.Typography
 
-
+/*
+Test activity to allow upload two images
+then use the model to predict the distance between the two images
+ */
 class ImageComparisonActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

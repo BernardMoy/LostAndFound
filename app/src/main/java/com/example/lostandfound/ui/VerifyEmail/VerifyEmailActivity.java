@@ -27,6 +27,9 @@ import com.example.lostandfound.Utility.ErrorCallback;
 import com.example.lostandfound.Utility.FontSizeManager;
 import com.example.lostandfound.databinding.ActivityVerifyEmailBinding;
 
+/*
+Screen to prompt user to enter 6 digit verification code
+ */
 public class VerifyEmailActivity extends AppCompatActivity {
 
     private ActivityVerifyEmailBinding binding;

@@ -98,7 +98,10 @@ import com.example.lostandfound.ui.theme.ComposeTheme
 import com.example.lostandfound.ui.theme.Typography
 import kotlin.math.round
 
-
+/*
+Screen to view comparison between a lost and found item
+including score data is shown
+ */
 class ViewComparisonActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

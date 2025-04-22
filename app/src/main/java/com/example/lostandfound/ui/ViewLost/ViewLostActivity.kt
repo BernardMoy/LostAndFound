@@ -88,7 +88,9 @@ import com.example.lostandfound.ui.ViewClaim.ViewClaimActivity
 import com.example.lostandfound.ui.theme.ComposeTheme
 import com.example.lostandfound.ui.theme.Typography
 
-
+/*
+Screen to view details of a lost item
+ */
 class ViewLostActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

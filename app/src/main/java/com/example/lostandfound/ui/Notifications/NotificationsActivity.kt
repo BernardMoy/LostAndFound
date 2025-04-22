@@ -51,6 +51,10 @@ import com.example.lostandfound.ui.ViewClaim.ViewClaimActivity
 import com.example.lostandfound.ui.ViewComparison.ViewComparisonActivity
 import com.example.lostandfound.ui.theme.ComposeTheme
 
+/*
+Display a list of in-app notifications, with indications of unread ones
+Users can click on notifications to interact with them
+ */
 class NotificationsActivity : ComponentActivity() { // Use ComponentActivity here
 
     val viewModel: NotificationsViewModel by viewModels()

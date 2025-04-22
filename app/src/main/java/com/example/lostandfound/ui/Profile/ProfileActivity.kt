@@ -62,7 +62,9 @@ import com.example.lostandfound.ui.EditProfile.EditProfileActivity
 import com.example.lostandfound.ui.theme.ComposeTheme
 import com.example.lostandfound.ui.theme.Typography
 
-
+/*
+Screen to view user profile, including logout and change password options
+ */
 class ProfileActivity : ComponentActivity() {
 
     val viewModel: ProfileViewModel by viewModels()

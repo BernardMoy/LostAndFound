@@ -42,7 +42,9 @@ import com.example.lostandfound.R
 import com.example.lostandfound.ui.theme.ComposeTheme
 import com.example.lostandfound.ui.theme.Typography
 
-
+/*
+Stores the app info, device info, and privacy policy (To be implemented)
+ */
 class AboutAppActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

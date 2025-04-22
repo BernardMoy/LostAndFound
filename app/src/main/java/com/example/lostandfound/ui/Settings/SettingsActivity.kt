@@ -71,7 +71,9 @@ import com.example.lostandfound.ui.ViewReportedUsers.ViewReportedUsersActivity
 import com.example.lostandfound.ui.theme.ComposeTheme
 import com.google.firebase.firestore.FirebaseFirestore
 
-
+/*
+Settings that are classified into regular, admin settings, developer settings
+ */
 class SettingsActivity : ComponentActivity() {
     val viewModel: SettingsViewModel by viewModels()
 

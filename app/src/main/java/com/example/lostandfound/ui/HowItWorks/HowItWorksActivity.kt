@@ -51,7 +51,10 @@ import com.example.lostandfound.ui.ReportIssue.HowItWorksViewModel
 import com.example.lostandfound.ui.theme.ComposeTheme
 import com.example.lostandfound.ui.theme.Typography
 
-
+/*
+Stores detailed instructions on how the service works,
+and FAQs
+ */
 class HowItWorksActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

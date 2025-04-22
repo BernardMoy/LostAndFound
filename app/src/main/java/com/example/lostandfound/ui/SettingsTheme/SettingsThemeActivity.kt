@@ -27,7 +27,9 @@ import com.example.lostandfound.Utility.DeviceThemeManager
 import com.example.lostandfound.ui.AboutApp.SettingsThemeViewModel
 import com.example.lostandfound.ui.theme.ComposeTheme
 
-
+/*
+Setting screen of light theme, dark theme, or device theme
+ */
 class SettingsThemeActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

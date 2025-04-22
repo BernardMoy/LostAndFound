@@ -30,7 +30,9 @@ import com.example.lostandfound.Utility.AutoLoadingManager
 import com.example.lostandfound.ui.AboutApp.SettingsAutoLoadingViewModel
 import com.example.lostandfound.ui.theme.ComposeTheme
 
-
+/*
+Setting screen of whether to enable auto loading of items in on resume
+ */
 class SettingsAutoLoadingActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

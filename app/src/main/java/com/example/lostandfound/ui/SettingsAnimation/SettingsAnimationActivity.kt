@@ -25,7 +25,9 @@ import com.example.lostandfound.Utility.AnimationManager
 import com.example.lostandfound.ui.AboutApp.SettingsAnimationViewModel
 import com.example.lostandfound.ui.theme.ComposeTheme
 
-
+/*
+Setting screen of whether to enable animations
+ */
 class SettingsAnimationActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

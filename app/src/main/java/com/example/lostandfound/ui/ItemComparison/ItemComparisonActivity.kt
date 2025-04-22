@@ -34,7 +34,10 @@ import com.example.lostandfound.R
 import com.example.lostandfound.ui.theme.ComposeTheme
 import com.example.lostandfound.ui.theme.Typography
 
-
+/*
+Test item comparison to test the score data returned
+when given two item IDs for the lost item and found item
+ */
 class ItemComparisonActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

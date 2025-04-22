@@ -41,7 +41,9 @@ import com.example.lostandfound.R
 import com.example.lostandfound.ui.theme.ComposeTheme
 import com.example.lostandfound.ui.theme.Typography
 
-
+/*
+Setting screen of whether to enable push notifications for items (type 0 to 3) and chat messages
+ */
 class SettingsPushNotificationsActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

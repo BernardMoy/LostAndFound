@@ -28,7 +28,10 @@ import com.example.lostandfound.Data.IntentExtraNames
 import com.example.lostandfound.R
 import com.example.lostandfound.ui.theme.ComposeTheme
 
-
+/*
+Displays a list of activity log, which is of the current user if not intent extra is providd
+else it displays the activity log of other users
+ */
 class ActivityLogActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         val viewModel: ActivityLogViewModel by viewModels()

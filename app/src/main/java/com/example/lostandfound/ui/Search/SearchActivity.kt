@@ -52,7 +52,10 @@ import com.example.lostandfound.ui.theme.ComposeTheme
 import com.example.lostandfound.ui.theme.Typography
 import kotlin.math.round
 
-
+/*
+Screen to display a list of matching found items whn "searching" with the lost item
+It is navigated from viewing a lost item or immediately after posting one
+ */
 class SearchActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

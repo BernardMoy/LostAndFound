@@ -60,7 +60,9 @@ import com.example.lostandfound.ui.theme.ComposeTheme
 import com.example.lostandfound.ui.theme.Typography
 import java.util.Locale
 
-
+/*
+View a list of lost items rendered into lost item previews
+ */
 class LostFragment : Fragment() {
 
     // variable to keep track of whether the user is logged in

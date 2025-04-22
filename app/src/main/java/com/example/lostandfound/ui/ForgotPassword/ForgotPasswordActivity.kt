@@ -43,7 +43,9 @@ import com.example.lostandfound.Utility.ErrorCallback
 import com.example.lostandfound.ui.theme.ComposeTheme
 import com.example.lostandfound.ui.theme.Typography
 
-
+/*
+When the user enters an email, firebase auth sends a password reset email
+ */
 class ForgotPasswordActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

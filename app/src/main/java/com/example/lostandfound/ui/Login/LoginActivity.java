@@ -25,6 +25,9 @@ import com.example.lostandfound.databinding.ActivityLoginBinding;
 import com.example.lostandfound.ui.ForgotPassword.ForgotPasswordActivity;
 import com.example.lostandfound.ui.Register.RegisterActivity;
 
+/*
+Login activity that contains directions to register and forgot password
+ */
 public class LoginActivity extends AppCompatActivity {
 
     private ActivityLoginBinding binding;

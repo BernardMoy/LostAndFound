@@ -32,7 +32,9 @@ import com.example.lostandfound.FirebaseManagers.UserManager
 import com.example.lostandfound.R
 import com.example.lostandfound.ui.theme.ComposeTheme
 
-
+/*
+Stores a list of chat inbox recipients that the user can click to chat with
+ */
 class ChatFragment : Fragment() {
     // variable to keep track of whether the user is logged in
     val isLoggedIn = mutableStateOf(UserManager.isUserLoggedIn())

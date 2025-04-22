@@ -49,7 +49,9 @@ import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.model.LatLng
 import java.io.File
 
-
+/*
+A developer screen to test if device permissions can be successfully granted
+ */
 class PermissionsTestActivity : ComponentActivity() {
 
     val viewModel: PermissionsTestViewModel by viewModels()
