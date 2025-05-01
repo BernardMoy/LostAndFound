@@ -9,15 +9,14 @@ A lost and found mobile application for the third year dissertation project at t
 # Features
 
 - User account creation with university emails
-- Uploading lost and found items with comprehensive details
-- After reporting a lost item, users can search for similar found items
-- Claim an item and the found user can approve claims
+- Uploading items with comprehensive details
+- After reporting a lost item, users can search for similar found items with it 
+- Claim an item and the found user can approve or ignore claims
 - Image recognition is used for the general scoring algorithm to compare two items
 - Chat with each other in app and receive push notifications
 - Receive push notifications when there is a change to the status of user's items
-- A UI following usability principles
-- Accessibility settings to assist users with special needs
-- Admin system to allow other users to be reported
+- A UI following usabilityand accessibility principles
+- Admin system to report another user, or report an issue in the app 
 
 # Deployment
 This is an app mainly developed for Android devices, so it can be run in an emulator in Android Studio with the following steps:
@@ -27,6 +26,7 @@ This is an app mainly developed for Android devices, so it can be run in an emul
 3. Run on the following emulator:
 
 Android Studio version: `Android Studio Ladybug Feature Drop | 2-24.2.2`
+
 Emulator: `Medium Phone API 35`
 
 # Secrets
